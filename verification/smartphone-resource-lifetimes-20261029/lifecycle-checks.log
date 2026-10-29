@@ -1,0 +1,39 @@
+✔ actual Canvas cleanup refuses a pending consumer, releases the idle surface and allows fresh preparation (235.564069ms)
+✔ all visible clocks stay native; duration, easing inside keyframes and playback controls are preserved (11.869113ms)
+✔ configured progress spacing never exceeds 60 steps per real second at positive/negative authored rates (5.442083ms)
+✔ nonlinear curve samples the original easing before quantization, including overshoot (0.688488ms)
+✔ nonlinear native sampling uses only a detached, timeline-free temporary probe, then cancels it (17.314935ms)
+✔ native finish/cancel releases references once and restores only owned timing (0.874703ms)
+✔ cleanup compares the browser canonical easing, including steps(n,end) serialized as steps(n) (0.530703ms)
+✔ CSS, transition and late pseudo-element events register only once, including portal descendants (0.530601ms)
+✔ explicit Web Animations and paused effects retain native playback ownership (0.421771ms)
+✔ unavailable/invalid timing APIs retain native playback and do not strand content (2.410586ms)
+✔ native pacing schedules no JavaScript frame, interval, visibility polling or visible time/rate writes (1.552108ms)
+✔ real texture loader reports load dimensions while sharing the same image promise (3.57252ms)
+✔ a faulty diagnostic subscriber cannot interrupt texture loading and unsubscribe releases it (0.64463ms)
+✔ game audio plays effects without scheduling background music (7.602623ms)
+✔ boss warning uses only the recorded alarm, without the old synthesized tones (20.904363ms)
+✔ boss explosion is louder than player destruction while both obey the effects slider (4.634109ms)
+✔ effects remain recoverable when the initial fullscreen audio resume never settles (1.174283ms)
+✔ mobile effects decode no more than three samples concurrently (6.366457ms)
+✔ boss voices reuse eighteen boss buffers plus eight enemy single/double buffers, obey mute and pause, and stay below twenty voices (518.599601ms)
+✔ enemy shots use their own cached buffer and share the boss voice cap, slider and pause (414.838206ms)
+✔ hostile volleys reserve mix headroom including fading voices, while warning recordings bypass the weapon bus (774.457084ms)
+✔ simultaneous doubles reuse their layered buffers and obey the same mute, headroom and pause controls (354.915065ms)
+✔ one-off tones disconnect, preserve all overlapping voices and allocate nothing while muted (42.657161ms)
+✔ standard effects never oversample CSS pixels, including fractional and invalid device ratios (0.958664ms)
+✔ unused LRU variants retire on release without touching mounted or preparing consumers (3.661293ms)
+✔ pins may exceed the soft budget but are trimmed immediately after release (1.157266ms)
+✔ read-only retention counters reflect pins without exposing keys (2.29218ms)
+✔ cache remains bounded across 500 sectors and protects mounted variants (33.120709ms)
+✔ boss blast mounts after the original fall delay and keeps its timeline (1.024761ms)
+✔ outbox coalesces only unsent consecutive checkpoints without crossing reward barriers (2.872311ms)
+✔ restart markers distinguish foreground, hidden, manual reload and orderly exit (1.281686ms)
+ℹ tests 31
+ℹ suites 0
+ℹ pass 31
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2743.247362

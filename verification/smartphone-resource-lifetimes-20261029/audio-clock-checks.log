@@ -1,0 +1,14 @@
+✔ negative control retains 2086 silent sources; frozen-clock candidate stops growth and coalesces recovery (7672.015541ms)
+✔ advancing audio clock reaps missing-ended effects and fading weapons without cutting live sounds (470.922906ms)
+✔ successful same-context recovery resumes new sounds without replaying queued sources (142.845845ms)
+✔ pause releases all weapons including retired fades when ended never arrives (138.440843ms)
+✔ delayed extra-life notes retain their complete original envelope before fallback cleanup (106.071033ms)
+✔ healthy completed sounds match preceding runtime parameters and leave no retained voices (388.771386ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 10952.266788

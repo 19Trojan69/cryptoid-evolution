@@ -1,0 +1,2498 @@
+{
+  "schemaVersion": 1,
+  "analysis": "offline resource-lifetime audit of previously captured Linux guest Boss-2 scenes",
+  "sourcePins": {
+    "frontend/src/pages/gameAudio.ts": "3aeb4ca63260573b38d2b753bda61461eb2d4191beae2aac072ce722657077a8",
+    "frontend/src/pages/musicPlayback.ts": "adfd371b7afff15c45ceefd71a71d993a4f5d5dc30f7ab43de001e0168b813eb",
+    "frontend/src/pages/CanvasEffects.tsx": "a3175a169a00e6269c02a16393f09d93fd77834efac816763f2cdb50e7255eeb",
+    "frontend/src/pages/resourceCache.ts": "952fb2d2517898a4aaf6d94091fd1506bcea547ca642d77ccc919a9965bc8ff1",
+    "frontend/src/pages/paintedShip.ts": "d05431e5655b3b1a46d989da7bf19599163be93f00d54401354f7952cac61682",
+    "frontend/src/pages/bossWeaponTextures.ts": "4c7b35ba5ed92ca1e8694562929fe9b9bd2d588f9fe937a555e120c55ed8dec0",
+    "frontend/src/pages/bossWeaponRenderer.ts": "fe9a3004aa0125f04f1f442e73e4cd087ab3edaf9312a6fc2e7c8c5ff03be579",
+    "frontend/src/pages/BossWeaponsView.tsx": "1b1ddbbaa33d400804a1f4e12e4413a08fdcc6e6e49699a0824c1e8cfcaf511c",
+    "frontend/src/pages/Starfield.tsx": "a3857a6452f79a16a645df8b1e4e29c52dba3f0ef4a8fbd08e92c015214ff638",
+    "frontend/src/lib/cssFramePacing.ts": "4155660b00d827922168660c313f9d625ee120222e008d02f795c34418f35846",
+    "frontend/src/lib/nativeFrameEasing.ts": "ef4af28072849c78d464b9022bb625daf3db0cf5427429c551576280e125a702",
+    "frontend/src/pages/GamePage.tsx": "6b500123cb1443bbcb52809f0dbd06520ea0aee02a550ec346ab5ce1f186f277"
+  },
+  "inputs": [
+    {
+      "kind": "duration",
+      "path": "verification/boss2-return-duration-20261029/evidence/synthetic-duration-evidence.json.gz",
+      "bytes": 59743,
+      "sha256": "b1913273cf5c5275a945a09c4972d7ed05865105b738d141b9cea3a521b3a983"
+    },
+    {
+      "kind": "heap",
+      "path": "verification/boss2-heap-retention-20261029/evidence/synthetic-heap-summaries.json.gz",
+      "bytes": 317167,
+      "sha256": "65ff0c00483abb2623bd455c795ee59d37de05c8282c5e61bf83945b6c3f3f18"
+    },
+    {
+      "kind": "filters",
+      "path": "verification/boss2-css-filter-attribution-20261029/evidence/synthetic-filter-measurements.json.gz",
+      "bytes": 53698,
+      "sha256": "9945d119edd8387e316dbf4fa1eda04fcc70cb2fb2ae4acba9038b2a2da7db5e"
+    },
+    {
+      "kind": "built-filter-preview",
+      "path": "verification/boss2-css-filter-attribution-20261029/evidence/synthetic-built-preview-verifications.json.gz",
+      "bytes": 13518,
+      "sha256": "c2401151627cfea0a0bac66f1719d754e10c1a522f86ffdbd97fefbea123b073"
+    }
+  ],
+  "newBrowserRuns": 0,
+  "applicationChanges": false,
+  "deploymentChanges": false,
+  "physicalDeviceMeasurement": false,
+  "whiteScreenCauseEstablished": false,
+  "whiteScreenFixed": false,
+  "pendingPhysicalControl": {
+    "sourceCommit": "417cc1b0242d5cb11ca3d2ab826111e542523774",
+    "url": "https://cryptoid-evolution-testnet-eb5f8lafa-19-trojan69.vercel.app/",
+    "outcome": "pending; no owner observation supplied for this complete-filter-off control"
+  },
+  "aggregate": {
+    "completedCaptures": 14,
+    "samples": 1941,
+    "allSampleBufferCountsConstant": true,
+    "allSampleBufferBytesConstant": true,
+    "sampleBufferCounts": [
+      46
+    ],
+    "decodedEffectsBufferBytesByEngine": {
+      "chromium": [
+        6925568
+      ],
+      "webkit": [
+        7083800
+      ]
+    },
+    "maximumObservedAudioVoices": 6,
+    "maximumObservedCanvasCacheBytes": 1059028,
+    "maximumObservedCanvasSurfaceBytes": 79728,
+    "maximumObservedCanvasImages": 3,
+    "maximumObservedCanvasTextureEntries": 2,
+    "maximumObservedRegisteredEffects": 1,
+    "maximumObservedRetainedHullUsers": 1,
+    "maximumObservedRockBuffers": 0,
+    "observedAudioClockStalls": 0,
+    "observedBlockedSounds": 0
+  },
+  "limitations": [
+    "Only the protected Boss-2 reactor fixture is covered; unseeded workload and simulated progress differ across runs.",
+    "Resource counters cover registered effect buffers and the ordinary-impact Canvas cache/surface, not all game images or all graphics allocations.",
+    "Music decoding/media state, browser image/compositor/driver caches, total native phone memory and temperature are outside these counters.",
+    "Do not subtract these overlapping logical counters from process PSS to invent a residual GPU or leak size.",
+    "Cumulative hullLoads, hullEvictions and draws count completed work, not live retained objects.",
+    "Approximately one-second observations can miss short peaks; stable sampled counts cannot rule out browser-internal retention or device-specific faults.",
+    "Heap-capture runs were collected only after the active interval and are not untouched post-observation process measurements.",
+    "No new physical test, universal smartphone stability, campaign acceptance or White Screen fix is established."
+  ],
+  "excluded": [
+    {
+      "group": "duration",
+      "engine": "chromium",
+      "condition": "on-360",
+      "runId": 40865230360,
+      "originalComplete": false,
+      "input": "verification/boss2-return-duration-20261029/evidence/synthetic-duration-evidence.json.gz",
+      "sampleCount": 347,
+      "reason": "original overall failure preserved; not a completed control"
+    },
+    {
+      "group": "duration",
+      "engine": "webkit",
+      "condition": "on-360",
+      "runId": 40865230360,
+      "originalComplete": false,
+      "input": "verification/boss2-return-duration-20261029/evidence/synthetic-duration-evidence.json.gz",
+      "sampleCount": 321,
+      "reason": "original overall failure preserved; not a completed control"
+    },
+    {
+      "group": "duration",
+      "engine": "chromium",
+      "condition": "on-30",
+      "runId": 40867284745,
+      "originalComplete": true,
+      "input": "verification/boss2-return-duration-20261029/evidence/synthetic-duration-evidence.json.gz",
+      "sampleCount": 30,
+      "reason": "recording-on control outside this recording-off resource analysis"
+    },
+    {
+      "group": "duration",
+      "engine": "webkit",
+      "condition": "on-30",
+      "runId": 40867284745,
+      "originalComplete": true,
+      "input": "verification/boss2-return-duration-20261029/evidence/synthetic-duration-evidence.json.gz",
+      "sampleCount": 28,
+      "reason": "recording-on control outside this recording-off resource analysis"
+    },
+    {
+      "group": "filters",
+      "engine": "webkit",
+      "condition": "webkit-standard",
+      "runId": 40903826744,
+      "originalComplete": false,
+      "input": "verification/boss2-css-filter-attribution-20261029/evidence/synthetic-filter-measurements.json.gz",
+      "sampleCount": 0,
+      "reason": "original overall failure preserved; not a completed control"
+    },
+    {
+      "group": "filters",
+      "engine": "webkit",
+      "condition": "webkit-all-css-filters-off",
+      "runId": 40903826744,
+      "originalComplete": false,
+      "input": "verification/boss2-css-filter-attribution-20261029/evidence/synthetic-filter-measurements.json.gz",
+      "sampleCount": 0,
+      "reason": "original overall failure preserved; not a completed control"
+    },
+    {
+      "group": "filters",
+      "engine": "chromium",
+      "condition": "chromium-boss-hull-filter-off",
+      "runId": 40903826744,
+      "originalComplete": false,
+      "input": "verification/boss2-css-filter-attribution-20261029/evidence/synthetic-filter-measurements.json.gz",
+      "sampleCount": 0,
+      "reason": "original overall failure preserved; not a completed control"
+    },
+    {
+      "group": "filters",
+      "engine": "webkit",
+      "condition": "webkit-boss-hull-filter-off",
+      "runId": 40903826744,
+      "originalComplete": false,
+      "input": "verification/boss2-css-filter-attribution-20261029/evidence/synthetic-filter-measurements.json.gz",
+      "sampleCount": 0,
+      "reason": "original overall failure preserved; not a completed control"
+    },
+    {
+      "group": "filters",
+      "engine": "chromium",
+      "condition": "chromium-all-css-filters-off",
+      "runId": 40903826744,
+      "originalComplete": false,
+      "input": "verification/boss2-css-filter-attribution-20261029/evidence/synthetic-filter-measurements.json.gz",
+      "sampleCount": 0,
+      "reason": "original overall failure preserved; not a completed control"
+    },
+    {
+      "group": "filters",
+      "engine": "chromium",
+      "condition": "chromium-standard",
+      "runId": 40903826744,
+      "originalComplete": false,
+      "input": "verification/boss2-css-filter-attribution-20261029/evidence/synthetic-filter-measurements.json.gz",
+      "sampleCount": 0,
+      "reason": "original overall failure preserved; not a completed control"
+    },
+    {
+      "group": "filters",
+      "engine": "webkit",
+      "condition": "webkit-hud-backdrop-off",
+      "runId": 40903826744,
+      "originalComplete": false,
+      "input": "verification/boss2-css-filter-attribution-20261029/evidence/synthetic-filter-measurements.json.gz",
+      "sampleCount": 0,
+      "reason": "original overall failure preserved; not a completed control"
+    },
+    {
+      "group": "filters",
+      "engine": "chromium",
+      "condition": "chromium-hud-backdrop-off",
+      "runId": 40903826744,
+      "originalComplete": false,
+      "input": "verification/boss2-css-filter-attribution-20261029/evidence/synthetic-filter-measurements.json.gz",
+      "sampleCount": 0,
+      "reason": "original overall failure preserved; not a completed control"
+    }
+  ],
+  "cases": [
+    {
+      "group": "duration",
+      "engine": "chromium",
+      "condition": "off-360",
+      "runId": 40867284745,
+      "originalComplete": true,
+      "input": "verification/boss2-return-duration-20261029/evidence/synthetic-duration-evidence.json.gz",
+      "activeSeconds": 360.865,
+      "sampleCount": 350,
+      "lastSampleSeconds": 359.833,
+      "volleyProgress": {
+        "first": 0,
+        "last": 128
+      },
+      "resourceSampling": "approximately once per second; sampled maxima, not continuous peaks",
+      "audio": {
+        "audioVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 5,
+          "last": 2,
+          "constantAcrossSamples": false
+        },
+        "audioWeaponVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1,
+          "last": 0,
+          "constantAcrossSamples": false
+        },
+        "audioBossVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1,
+          "last": 0,
+          "constantAcrossSamples": false
+        },
+        "audioEffectVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 5,
+          "last": 2,
+          "constantAcrossSamples": false
+        },
+        "audioSampleBuffers": {
+          "first": 46,
+          "minimum": 46,
+          "maximum": 46,
+          "last": 46,
+          "constantAcrossSamples": true
+        },
+        "audioBufferBytes": {
+          "first": 6925568,
+          "minimum": 6925568,
+          "maximum": 6925568,
+          "last": 6925568,
+          "constantAcrossSamples": true
+        },
+        "audioRockBuffers": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 0,
+          "last": 0,
+          "constantAcrossSamples": true
+        },
+        "audioClockStalls": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 0,
+          "last": 0,
+          "constantAcrossSamples": true
+        },
+        "audioBlockedSounds": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 0,
+          "last": 0,
+          "constantAcrossSamples": true
+        },
+        "audioReapedVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 0,
+          "last": 0,
+          "constantAcrossSamples": true
+        }
+      },
+      "canvas": {
+        "registeredEffects": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1,
+          "last": 1,
+          "constantAcrossSamples": false
+        },
+        "retainedHullUsers": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1,
+          "last": 1,
+          "constantAcrossSamples": false
+        },
+        "sourceImages": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 3,
+          "last": 3,
+          "constantAcrossSamples": false
+        },
+        "textureEntries": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 2,
+          "last": 2,
+          "constantAcrossSamples": false
+        },
+        "cacheBytes": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1059028,
+          "last": 1059028,
+          "constantAcrossSamples": false
+        },
+        "imageBytes": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 954288,
+          "last": 954288,
+          "constantAcrossSamples": false
+        },
+        "textureBytes": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 104740,
+          "last": 104740,
+          "constantAcrossSamples": false
+        },
+        "surfaceBytes": {
+          "first": 4,
+          "minimum": 4,
+          "maximum": 78672,
+          "last": 64400,
+          "constantAcrossSamples": false
+        },
+        "hullLoads": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 23,
+          "last": 23,
+          "constantAcrossSamples": false
+        },
+        "hullEvictions": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 20,
+          "last": 20,
+          "constantAcrossSamples": false
+        }
+      },
+      "last30MedianLinuxDescendantPssKiB": 507316.5,
+      "postObservationCollection": false,
+      "sampledResourcesAreNotTotalProcessRam": true
+    },
+    {
+      "group": "duration",
+      "engine": "webkit",
+      "condition": "off-360",
+      "runId": 40867284745,
+      "originalComplete": true,
+      "input": "verification/boss2-return-duration-20261029/evidence/synthetic-duration-evidence.json.gz",
+      "activeSeconds": 360.315,
+      "sampleCount": 322,
+      "lastSampleSeconds": 359.008,
+      "volleyProgress": {
+        "first": 0,
+        "last": 55
+      },
+      "resourceSampling": "approximately once per second; sampled maxima, not continuous peaks",
+      "audio": {
+        "audioVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 4,
+          "last": 2,
+          "constantAcrossSamples": false
+        },
+        "audioWeaponVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1,
+          "last": 0,
+          "constantAcrossSamples": false
+        },
+        "audioBossVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1,
+          "last": 0,
+          "constantAcrossSamples": false
+        },
+        "audioEffectVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 4,
+          "last": 2,
+          "constantAcrossSamples": false
+        },
+        "audioSampleBuffers": {
+          "first": 46,
+          "minimum": 46,
+          "maximum": 46,
+          "last": 46,
+          "constantAcrossSamples": true
+        },
+        "audioBufferBytes": {
+          "first": 7083800,
+          "minimum": 7083800,
+          "maximum": 7083800,
+          "last": 7083800,
+          "constantAcrossSamples": true
+        },
+        "audioRockBuffers": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 0,
+          "last": 0,
+          "constantAcrossSamples": true
+        },
+        "audioClockStalls": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 0,
+          "last": 0,
+          "constantAcrossSamples": true
+        },
+        "audioBlockedSounds": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 0,
+          "last": 0,
+          "constantAcrossSamples": true
+        },
+        "audioReapedVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 0,
+          "last": 0,
+          "constantAcrossSamples": true
+        }
+      },
+      "canvas": {
+        "registeredEffects": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1,
+          "last": 0,
+          "constantAcrossSamples": false
+        },
+        "retainedHullUsers": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1,
+          "last": 0,
+          "constantAcrossSamples": false
+        },
+        "sourceImages": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 3,
+          "last": 2,
+          "constantAcrossSamples": false
+        },
+        "textureEntries": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 2,
+          "last": 2,
+          "constantAcrossSamples": false
+        },
+        "cacheBytes": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1059028,
+          "last": 740932,
+          "constantAcrossSamples": false
+        },
+        "imageBytes": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 954288,
+          "last": 636192,
+          "constantAcrossSamples": false
+        },
+        "textureBytes": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 104740,
+          "last": 104740,
+          "constantAcrossSamples": false
+        },
+        "surfaceBytes": {
+          "first": 4,
+          "minimum": 4,
+          "maximum": 72864,
+          "last": 4,
+          "constantAcrossSamples": false
+        },
+        "hullLoads": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 8,
+          "last": 8,
+          "constantAcrossSamples": false
+        },
+        "hullEvictions": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 6,
+          "last": 6,
+          "constantAcrossSamples": false
+        }
+      },
+      "last30MedianLinuxDescendantPssKiB": 1104352,
+      "postObservationCollection": false,
+      "sampledResourcesAreNotTotalProcessRam": true
+    },
+    {
+      "group": "heap",
+      "engine": "chromium",
+      "condition": "60",
+      "runId": 40880149703,
+      "originalComplete": true,
+      "input": "verification/boss2-heap-retention-20261029/evidence/synthetic-heap-summaries.json.gz",
+      "activeSeconds": 60.098,
+      "sampleCount": 59,
+      "lastSampleSeconds": 59.081,
+      "volleyProgress": {
+        "first": 0,
+        "last": 21
+      },
+      "resourceSampling": "approximately once per second; sampled maxima, not continuous peaks",
+      "audio": {
+        "audioVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 5,
+          "last": 3,
+          "constantAcrossSamples": false
+        },
+        "audioWeaponVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1,
+          "last": 0,
+          "constantAcrossSamples": false
+        },
+        "audioBossVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1,
+          "last": 0,
+          "constantAcrossSamples": false
+        },
+        "audioEffectVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 5,
+          "last": 3,
+          "constantAcrossSamples": false
+        },
+        "audioSampleBuffers": {
+          "first": 46,
+          "minimum": 46,
+          "maximum": 46,
+          "last": 46,
+          "constantAcrossSamples": true
+        },
+        "audioBufferBytes": {
+          "first": 6925568,
+          "minimum": 6925568,
+          "maximum": 6925568,
+          "last": 6925568,
+          "constantAcrossSamples": true
+        },
+        "audioRockBuffers": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 0,
+          "last": 0,
+          "constantAcrossSamples": true
+        },
+        "audioClockStalls": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 0,
+          "last": 0,
+          "constantAcrossSamples": true
+        },
+        "audioBlockedSounds": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 0,
+          "last": 0,
+          "constantAcrossSamples": true
+        },
+        "audioReapedVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 0,
+          "last": 0,
+          "constantAcrossSamples": true
+        }
+      },
+      "canvas": {
+        "registeredEffects": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1,
+          "last": 0,
+          "constantAcrossSamples": false
+        },
+        "retainedHullUsers": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1,
+          "last": 0,
+          "constantAcrossSamples": false
+        },
+        "sourceImages": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 3,
+          "last": 2,
+          "constantAcrossSamples": false
+        },
+        "textureEntries": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 2,
+          "last": 2,
+          "constantAcrossSamples": false
+        },
+        "cacheBytes": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1059028,
+          "last": 740932,
+          "constantAcrossSamples": false
+        },
+        "imageBytes": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 954288,
+          "last": 636192,
+          "constantAcrossSamples": false
+        },
+        "textureBytes": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 104740,
+          "last": 104740,
+          "constantAcrossSamples": false
+        },
+        "surfaceBytes": {
+          "first": 4,
+          "minimum": 4,
+          "maximum": 77616,
+          "last": 77616,
+          "constantAcrossSamples": false
+        },
+        "hullLoads": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 4,
+          "last": 4,
+          "constantAcrossSamples": false
+        },
+        "hullEvictions": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 2,
+          "last": 2,
+          "constantAcrossSamples": false
+        }
+      },
+      "last30MedianLinuxDescendantPssKiB": 520977,
+      "postObservationCollection": true,
+      "sampledResourcesAreNotTotalProcessRam": true
+    },
+    {
+      "group": "heap",
+      "engine": "chromium",
+      "condition": "360",
+      "runId": 40880149703,
+      "originalComplete": true,
+      "input": "verification/boss2-heap-retention-20261029/evidence/synthetic-heap-summaries.json.gz",
+      "activeSeconds": 360.09,
+      "sampleCount": 350,
+      "lastSampleSeconds": 359.06,
+      "volleyProgress": {
+        "first": 0,
+        "last": 128
+      },
+      "resourceSampling": "approximately once per second; sampled maxima, not continuous peaks",
+      "audio": {
+        "audioVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 5,
+          "last": 3,
+          "constantAcrossSamples": false
+        },
+        "audioWeaponVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1,
+          "last": 0,
+          "constantAcrossSamples": false
+        },
+        "audioBossVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1,
+          "last": 0,
+          "constantAcrossSamples": false
+        },
+        "audioEffectVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 4,
+          "last": 3,
+          "constantAcrossSamples": false
+        },
+        "audioSampleBuffers": {
+          "first": 46,
+          "minimum": 46,
+          "maximum": 46,
+          "last": 46,
+          "constantAcrossSamples": true
+        },
+        "audioBufferBytes": {
+          "first": 6925568,
+          "minimum": 6925568,
+          "maximum": 6925568,
+          "last": 6925568,
+          "constantAcrossSamples": true
+        },
+        "audioRockBuffers": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 0,
+          "last": 0,
+          "constantAcrossSamples": true
+        },
+        "audioClockStalls": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 0,
+          "last": 0,
+          "constantAcrossSamples": true
+        },
+        "audioBlockedSounds": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 0,
+          "last": 0,
+          "constantAcrossSamples": true
+        },
+        "audioReapedVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 0,
+          "last": 0,
+          "constantAcrossSamples": true
+        }
+      },
+      "canvas": {
+        "registeredEffects": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1,
+          "last": 1,
+          "constantAcrossSamples": false
+        },
+        "retainedHullUsers": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1,
+          "last": 1,
+          "constantAcrossSamples": false
+        },
+        "sourceImages": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 3,
+          "last": 3,
+          "constantAcrossSamples": false
+        },
+        "textureEntries": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 2,
+          "last": 2,
+          "constantAcrossSamples": false
+        },
+        "cacheBytes": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1059028,
+          "last": 1059028,
+          "constantAcrossSamples": false
+        },
+        "imageBytes": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 954288,
+          "last": 954288,
+          "constantAcrossSamples": false
+        },
+        "textureBytes": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 104740,
+          "last": 104740,
+          "constantAcrossSamples": false
+        },
+        "surfaceBytes": {
+          "first": 4,
+          "minimum": 4,
+          "maximum": 79200,
+          "last": 63020,
+          "constantAcrossSamples": false
+        },
+        "hullLoads": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 23,
+          "last": 23,
+          "constantAcrossSamples": false
+        },
+        "hullEvictions": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 20,
+          "last": 20,
+          "constantAcrossSamples": false
+        }
+      },
+      "last30MedianLinuxDescendantPssKiB": 510153,
+      "postObservationCollection": true,
+      "sampledResourcesAreNotTotalProcessRam": true
+    },
+    {
+      "group": "filters",
+      "engine": "chromium",
+      "condition": "chromium-hud-backdrop-off",
+      "runId": 40904550899,
+      "originalComplete": true,
+      "input": "verification/boss2-css-filter-attribution-20261029/evidence/synthetic-filter-measurements.json.gz",
+      "activeSeconds": 90.99,
+      "sampleCount": 88,
+      "lastSampleSeconds": 89.958,
+      "volleyProgress": {
+        "first": 0,
+        "last": 32
+      },
+      "resourceSampling": "approximately once per second; sampled maxima, not continuous peaks",
+      "audio": {
+        "audioVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 6,
+          "last": 3,
+          "constantAcrossSamples": false
+        },
+        "audioWeaponVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1,
+          "last": 0,
+          "constantAcrossSamples": false
+        },
+        "audioBossVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1,
+          "last": 0,
+          "constantAcrossSamples": false
+        },
+        "audioEffectVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 5,
+          "last": 3,
+          "constantAcrossSamples": false
+        },
+        "audioSampleBuffers": {
+          "first": 46,
+          "minimum": 46,
+          "maximum": 46,
+          "last": 46,
+          "constantAcrossSamples": true
+        },
+        "audioBufferBytes": {
+          "first": 6925568,
+          "minimum": 6925568,
+          "maximum": 6925568,
+          "last": 6925568,
+          "constantAcrossSamples": true
+        },
+        "audioRockBuffers": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 0,
+          "last": 0,
+          "constantAcrossSamples": true
+        },
+        "audioClockStalls": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 0,
+          "last": 0,
+          "constantAcrossSamples": true
+        },
+        "audioBlockedSounds": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 0,
+          "last": 0,
+          "constantAcrossSamples": true
+        },
+        "audioReapedVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 0,
+          "last": 0,
+          "constantAcrossSamples": true
+        }
+      },
+      "canvas": {
+        "registeredEffects": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1,
+          "last": 0,
+          "constantAcrossSamples": false
+        },
+        "retainedHullUsers": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1,
+          "last": 0,
+          "constantAcrossSamples": false
+        },
+        "sourceImages": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 3,
+          "last": 2,
+          "constantAcrossSamples": false
+        },
+        "textureEntries": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 2,
+          "last": 2,
+          "constantAcrossSamples": false
+        },
+        "cacheBytes": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1059028,
+          "last": 740932,
+          "constantAcrossSamples": false
+        },
+        "imageBytes": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 954288,
+          "last": 636192,
+          "constantAcrossSamples": false
+        },
+        "textureBytes": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 104740,
+          "last": 104740,
+          "constantAcrossSamples": false
+        },
+        "surfaceBytes": {
+          "first": 4,
+          "minimum": 4,
+          "maximum": 77616,
+          "last": 4,
+          "constantAcrossSamples": false
+        },
+        "hullLoads": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 6,
+          "last": 6,
+          "constantAcrossSamples": false
+        },
+        "hullEvictions": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 4,
+          "last": 4,
+          "constantAcrossSamples": false
+        }
+      },
+      "last30MedianLinuxDescendantPssKiB": 504201,
+      "postObservationCollection": false,
+      "sampledResourcesAreNotTotalProcessRam": true
+    },
+    {
+      "group": "filters",
+      "engine": "webkit",
+      "condition": "webkit-boss-hull-filter-off",
+      "runId": 40904550899,
+      "originalComplete": true,
+      "input": "verification/boss2-css-filter-attribution-20261029/evidence/synthetic-filter-measurements.json.gz",
+      "activeSeconds": 90.728,
+      "sampleCount": 83,
+      "lastSampleSeconds": 89.695,
+      "volleyProgress": {
+        "first": 0,
+        "last": 11
+      },
+      "resourceSampling": "approximately once per second; sampled maxima, not continuous peaks",
+      "audio": {
+        "audioVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 3,
+          "last": 0,
+          "constantAcrossSamples": false
+        },
+        "audioWeaponVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1,
+          "last": 0,
+          "constantAcrossSamples": false
+        },
+        "audioBossVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1,
+          "last": 0,
+          "constantAcrossSamples": false
+        },
+        "audioEffectVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 3,
+          "last": 0,
+          "constantAcrossSamples": false
+        },
+        "audioSampleBuffers": {
+          "first": 46,
+          "minimum": 46,
+          "maximum": 46,
+          "last": 46,
+          "constantAcrossSamples": true
+        },
+        "audioBufferBytes": {
+          "first": 7083800,
+          "minimum": 7083800,
+          "maximum": 7083800,
+          "last": 7083800,
+          "constantAcrossSamples": true
+        },
+        "audioRockBuffers": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 0,
+          "last": 0,
+          "constantAcrossSamples": true
+        },
+        "audioClockStalls": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 0,
+          "last": 0,
+          "constantAcrossSamples": true
+        },
+        "audioBlockedSounds": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 0,
+          "last": 0,
+          "constantAcrossSamples": true
+        },
+        "audioReapedVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 0,
+          "last": 0,
+          "constantAcrossSamples": true
+        }
+      },
+      "canvas": {
+        "registeredEffects": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1,
+          "last": 0,
+          "constantAcrossSamples": false
+        },
+        "retainedHullUsers": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1,
+          "last": 0,
+          "constantAcrossSamples": false
+        },
+        "sourceImages": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 2,
+          "last": 2,
+          "constantAcrossSamples": false
+        },
+        "textureEntries": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 2,
+          "last": 2,
+          "constantAcrossSamples": false
+        },
+        "cacheBytes": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 740932,
+          "last": 740932,
+          "constantAcrossSamples": false
+        },
+        "imageBytes": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 636192,
+          "last": 636192,
+          "constantAcrossSamples": false
+        },
+        "textureBytes": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 104740,
+          "last": 104740,
+          "constantAcrossSamples": false
+        },
+        "surfaceBytes": {
+          "first": 4,
+          "minimum": 4,
+          "maximum": 67056,
+          "last": 4,
+          "constantAcrossSamples": false
+        },
+        "hullLoads": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 2,
+          "last": 2,
+          "constantAcrossSamples": false
+        },
+        "hullEvictions": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 0,
+          "last": 0,
+          "constantAcrossSamples": true
+        }
+      },
+      "last30MedianLinuxDescendantPssKiB": 1096581,
+      "postObservationCollection": false,
+      "sampledResourcesAreNotTotalProcessRam": true
+    },
+    {
+      "group": "filters",
+      "engine": "webkit",
+      "condition": "webkit-standard",
+      "runId": 40904550899,
+      "originalComplete": true,
+      "input": "verification/boss2-css-filter-attribution-20261029/evidence/synthetic-filter-measurements.json.gz",
+      "activeSeconds": 90.278,
+      "sampleCount": 83,
+      "lastSampleSeconds": 89.239,
+      "volleyProgress": {
+        "first": 0,
+        "last": 17
+      },
+      "resourceSampling": "approximately once per second; sampled maxima, not continuous peaks",
+      "audio": {
+        "audioVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 3,
+          "last": 2,
+          "constantAcrossSamples": false
+        },
+        "audioWeaponVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1,
+          "last": 1,
+          "constantAcrossSamples": false
+        },
+        "audioBossVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1,
+          "last": 1,
+          "constantAcrossSamples": false
+        },
+        "audioEffectVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 3,
+          "last": 1,
+          "constantAcrossSamples": false
+        },
+        "audioSampleBuffers": {
+          "first": 46,
+          "minimum": 46,
+          "maximum": 46,
+          "last": 46,
+          "constantAcrossSamples": true
+        },
+        "audioBufferBytes": {
+          "first": 7083800,
+          "minimum": 7083800,
+          "maximum": 7083800,
+          "last": 7083800,
+          "constantAcrossSamples": true
+        },
+        "audioRockBuffers": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 0,
+          "last": 0,
+          "constantAcrossSamples": true
+        },
+        "audioClockStalls": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 0,
+          "last": 0,
+          "constantAcrossSamples": true
+        },
+        "audioBlockedSounds": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 0,
+          "last": 0,
+          "constantAcrossSamples": true
+        },
+        "audioReapedVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 0,
+          "last": 0,
+          "constantAcrossSamples": true
+        }
+      },
+      "canvas": {
+        "registeredEffects": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1,
+          "last": 0,
+          "constantAcrossSamples": false
+        },
+        "retainedHullUsers": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1,
+          "last": 0,
+          "constantAcrossSamples": false
+        },
+        "sourceImages": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 3,
+          "last": 2,
+          "constantAcrossSamples": false
+        },
+        "textureEntries": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 2,
+          "last": 2,
+          "constantAcrossSamples": false
+        },
+        "cacheBytes": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1059028,
+          "last": 740932,
+          "constantAcrossSamples": false
+        },
+        "imageBytes": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 954288,
+          "last": 636192,
+          "constantAcrossSamples": false
+        },
+        "textureBytes": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 104740,
+          "last": 104740,
+          "constantAcrossSamples": false
+        },
+        "surfaceBytes": {
+          "first": 4,
+          "minimum": 4,
+          "maximum": 66528,
+          "last": 4,
+          "constantAcrossSamples": false
+        },
+        "hullLoads": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 3,
+          "last": 3,
+          "constantAcrossSamples": false
+        },
+        "hullEvictions": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1,
+          "last": 1,
+          "constantAcrossSamples": false
+        }
+      },
+      "last30MedianLinuxDescendantPssKiB": 1160005,
+      "postObservationCollection": false,
+      "sampledResourcesAreNotTotalProcessRam": true
+    },
+    {
+      "group": "filters",
+      "engine": "webkit",
+      "condition": "webkit-all-css-filters-off",
+      "runId": 40904550899,
+      "originalComplete": true,
+      "input": "verification/boss2-css-filter-attribution-20261029/evidence/synthetic-filter-measurements.json.gz",
+      "activeSeconds": 90.007,
+      "sampleCount": 86,
+      "lastSampleSeconds": 88.96,
+      "volleyProgress": {
+        "first": 0,
+        "last": 25
+      },
+      "resourceSampling": "approximately once per second; sampled maxima, not continuous peaks",
+      "audio": {
+        "audioVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 4,
+          "last": 3,
+          "constantAcrossSamples": false
+        },
+        "audioWeaponVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1,
+          "last": 0,
+          "constantAcrossSamples": false
+        },
+        "audioBossVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1,
+          "last": 0,
+          "constantAcrossSamples": false
+        },
+        "audioEffectVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 4,
+          "last": 3,
+          "constantAcrossSamples": false
+        },
+        "audioSampleBuffers": {
+          "first": 46,
+          "minimum": 46,
+          "maximum": 46,
+          "last": 46,
+          "constantAcrossSamples": true
+        },
+        "audioBufferBytes": {
+          "first": 7083800,
+          "minimum": 7083800,
+          "maximum": 7083800,
+          "last": 7083800,
+          "constantAcrossSamples": true
+        },
+        "audioRockBuffers": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 0,
+          "last": 0,
+          "constantAcrossSamples": true
+        },
+        "audioClockStalls": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 0,
+          "last": 0,
+          "constantAcrossSamples": true
+        },
+        "audioBlockedSounds": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 0,
+          "last": 0,
+          "constantAcrossSamples": true
+        },
+        "audioReapedVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 0,
+          "last": 0,
+          "constantAcrossSamples": true
+        }
+      },
+      "canvas": {
+        "registeredEffects": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1,
+          "last": 0,
+          "constantAcrossSamples": false
+        },
+        "retainedHullUsers": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1,
+          "last": 0,
+          "constantAcrossSamples": false
+        },
+        "sourceImages": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 3,
+          "last": 2,
+          "constantAcrossSamples": false
+        },
+        "textureEntries": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 2,
+          "last": 2,
+          "constantAcrossSamples": false
+        },
+        "cacheBytes": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1059028,
+          "last": 740932,
+          "constantAcrossSamples": false
+        },
+        "imageBytes": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 954288,
+          "last": 636192,
+          "constantAcrossSamples": false
+        },
+        "textureBytes": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 104740,
+          "last": 104740,
+          "constantAcrossSamples": false
+        },
+        "surfaceBytes": {
+          "first": 4,
+          "minimum": 4,
+          "maximum": 69696,
+          "last": 4,
+          "constantAcrossSamples": false
+        },
+        "hullLoads": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 4,
+          "last": 4,
+          "constantAcrossSamples": false
+        },
+        "hullEvictions": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 2,
+          "last": 2,
+          "constantAcrossSamples": false
+        }
+      },
+      "last30MedianLinuxDescendantPssKiB": 1039052,
+      "postObservationCollection": false,
+      "sampledResourcesAreNotTotalProcessRam": true
+    },
+    {
+      "group": "filters",
+      "engine": "webkit",
+      "condition": "webkit-hud-backdrop-off",
+      "runId": 40904550899,
+      "originalComplete": true,
+      "input": "verification/boss2-css-filter-attribution-20261029/evidence/synthetic-filter-measurements.json.gz",
+      "activeSeconds": 90.084,
+      "sampleCount": 81,
+      "lastSampleSeconds": 89.03,
+      "volleyProgress": {
+        "first": 0,
+        "last": 11
+      },
+      "resourceSampling": "approximately once per second; sampled maxima, not continuous peaks",
+      "audio": {
+        "audioVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 3,
+          "last": 1,
+          "constantAcrossSamples": false
+        },
+        "audioWeaponVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1,
+          "last": 0,
+          "constantAcrossSamples": false
+        },
+        "audioBossVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1,
+          "last": 0,
+          "constantAcrossSamples": false
+        },
+        "audioEffectVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 3,
+          "last": 1,
+          "constantAcrossSamples": false
+        },
+        "audioSampleBuffers": {
+          "first": 46,
+          "minimum": 46,
+          "maximum": 46,
+          "last": 46,
+          "constantAcrossSamples": true
+        },
+        "audioBufferBytes": {
+          "first": 7083800,
+          "minimum": 7083800,
+          "maximum": 7083800,
+          "last": 7083800,
+          "constantAcrossSamples": true
+        },
+        "audioRockBuffers": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 0,
+          "last": 0,
+          "constantAcrossSamples": true
+        },
+        "audioClockStalls": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 0,
+          "last": 0,
+          "constantAcrossSamples": true
+        },
+        "audioBlockedSounds": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 0,
+          "last": 0,
+          "constantAcrossSamples": true
+        },
+        "audioReapedVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 0,
+          "last": 0,
+          "constantAcrossSamples": true
+        }
+      },
+      "canvas": {
+        "registeredEffects": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1,
+          "last": 0,
+          "constantAcrossSamples": false
+        },
+        "retainedHullUsers": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1,
+          "last": 0,
+          "constantAcrossSamples": false
+        },
+        "sourceImages": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 2,
+          "last": 2,
+          "constantAcrossSamples": false
+        },
+        "textureEntries": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 2,
+          "last": 2,
+          "constantAcrossSamples": false
+        },
+        "cacheBytes": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 740932,
+          "last": 740932,
+          "constantAcrossSamples": false
+        },
+        "imageBytes": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 636192,
+          "last": 636192,
+          "constantAcrossSamples": false
+        },
+        "textureBytes": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 104740,
+          "last": 104740,
+          "constantAcrossSamples": false
+        },
+        "surfaceBytes": {
+          "first": 4,
+          "minimum": 4,
+          "maximum": 67056,
+          "last": 4,
+          "constantAcrossSamples": false
+        },
+        "hullLoads": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 2,
+          "last": 2,
+          "constantAcrossSamples": false
+        },
+        "hullEvictions": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 0,
+          "last": 0,
+          "constantAcrossSamples": true
+        }
+      },
+      "last30MedianLinuxDescendantPssKiB": 1127521,
+      "postObservationCollection": false,
+      "sampledResourcesAreNotTotalProcessRam": true
+    },
+    {
+      "group": "filters",
+      "engine": "chromium",
+      "condition": "chromium-boss-hull-filter-off",
+      "runId": 40904550899,
+      "originalComplete": true,
+      "input": "verification/boss2-css-filter-attribution-20261029/evidence/synthetic-filter-measurements.json.gz",
+      "activeSeconds": 90.979,
+      "sampleCount": 88,
+      "lastSampleSeconds": 89.949,
+      "volleyProgress": {
+        "first": 0,
+        "last": 32
+      },
+      "resourceSampling": "approximately once per second; sampled maxima, not continuous peaks",
+      "audio": {
+        "audioVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 6,
+          "last": 3,
+          "constantAcrossSamples": false
+        },
+        "audioWeaponVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1,
+          "last": 0,
+          "constantAcrossSamples": false
+        },
+        "audioBossVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1,
+          "last": 0,
+          "constantAcrossSamples": false
+        },
+        "audioEffectVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 5,
+          "last": 3,
+          "constantAcrossSamples": false
+        },
+        "audioSampleBuffers": {
+          "first": 46,
+          "minimum": 46,
+          "maximum": 46,
+          "last": 46,
+          "constantAcrossSamples": true
+        },
+        "audioBufferBytes": {
+          "first": 6925568,
+          "minimum": 6925568,
+          "maximum": 6925568,
+          "last": 6925568,
+          "constantAcrossSamples": true
+        },
+        "audioRockBuffers": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 0,
+          "last": 0,
+          "constantAcrossSamples": true
+        },
+        "audioClockStalls": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 0,
+          "last": 0,
+          "constantAcrossSamples": true
+        },
+        "audioBlockedSounds": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 0,
+          "last": 0,
+          "constantAcrossSamples": true
+        },
+        "audioReapedVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 0,
+          "last": 0,
+          "constantAcrossSamples": true
+        }
+      },
+      "canvas": {
+        "registeredEffects": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1,
+          "last": 0,
+          "constantAcrossSamples": false
+        },
+        "retainedHullUsers": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1,
+          "last": 0,
+          "constantAcrossSamples": false
+        },
+        "sourceImages": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 3,
+          "last": 2,
+          "constantAcrossSamples": false
+        },
+        "textureEntries": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 2,
+          "last": 2,
+          "constantAcrossSamples": false
+        },
+        "cacheBytes": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1059028,
+          "last": 740932,
+          "constantAcrossSamples": false
+        },
+        "imageBytes": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 954288,
+          "last": 636192,
+          "constantAcrossSamples": false
+        },
+        "textureBytes": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 104740,
+          "last": 104740,
+          "constantAcrossSamples": false
+        },
+        "surfaceBytes": {
+          "first": 4,
+          "minimum": 4,
+          "maximum": 77616,
+          "last": 4,
+          "constantAcrossSamples": false
+        },
+        "hullLoads": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 6,
+          "last": 6,
+          "constantAcrossSamples": false
+        },
+        "hullEvictions": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 4,
+          "last": 4,
+          "constantAcrossSamples": false
+        }
+      },
+      "last30MedianLinuxDescendantPssKiB": 496076,
+      "postObservationCollection": false,
+      "sampledResourcesAreNotTotalProcessRam": true
+    },
+    {
+      "group": "filters",
+      "engine": "chromium",
+      "condition": "chromium-all-css-filters-off",
+      "runId": 40904550899,
+      "originalComplete": true,
+      "input": "verification/boss2-css-filter-attribution-20261029/evidence/synthetic-filter-measurements.json.gz",
+      "activeSeconds": 90.523,
+      "sampleCount": 88,
+      "lastSampleSeconds": 89.494,
+      "volleyProgress": {
+        "first": 0,
+        "last": 32
+      },
+      "resourceSampling": "approximately once per second; sampled maxima, not continuous peaks",
+      "audio": {
+        "audioVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 5,
+          "last": 2,
+          "constantAcrossSamples": false
+        },
+        "audioWeaponVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1,
+          "last": 0,
+          "constantAcrossSamples": false
+        },
+        "audioBossVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1,
+          "last": 0,
+          "constantAcrossSamples": false
+        },
+        "audioEffectVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 4,
+          "last": 2,
+          "constantAcrossSamples": false
+        },
+        "audioSampleBuffers": {
+          "first": 46,
+          "minimum": 46,
+          "maximum": 46,
+          "last": 46,
+          "constantAcrossSamples": true
+        },
+        "audioBufferBytes": {
+          "first": 6925568,
+          "minimum": 6925568,
+          "maximum": 6925568,
+          "last": 6925568,
+          "constantAcrossSamples": true
+        },
+        "audioRockBuffers": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 0,
+          "last": 0,
+          "constantAcrossSamples": true
+        },
+        "audioClockStalls": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 0,
+          "last": 0,
+          "constantAcrossSamples": true
+        },
+        "audioBlockedSounds": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 0,
+          "last": 0,
+          "constantAcrossSamples": true
+        },
+        "audioReapedVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 0,
+          "last": 0,
+          "constantAcrossSamples": true
+        }
+      },
+      "canvas": {
+        "registeredEffects": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1,
+          "last": 0,
+          "constantAcrossSamples": false
+        },
+        "retainedHullUsers": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1,
+          "last": 0,
+          "constantAcrossSamples": false
+        },
+        "sourceImages": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 3,
+          "last": 2,
+          "constantAcrossSamples": false
+        },
+        "textureEntries": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 2,
+          "last": 2,
+          "constantAcrossSamples": false
+        },
+        "cacheBytes": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1059028,
+          "last": 740932,
+          "constantAcrossSamples": false
+        },
+        "imageBytes": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 954288,
+          "last": 636192,
+          "constantAcrossSamples": false
+        },
+        "textureBytes": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 104740,
+          "last": 104740,
+          "constantAcrossSamples": false
+        },
+        "surfaceBytes": {
+          "first": 4,
+          "minimum": 4,
+          "maximum": 77616,
+          "last": 4,
+          "constantAcrossSamples": false
+        },
+        "hullLoads": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 6,
+          "last": 6,
+          "constantAcrossSamples": false
+        },
+        "hullEvictions": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 4,
+          "last": 4,
+          "constantAcrossSamples": false
+        }
+      },
+      "last30MedianLinuxDescendantPssKiB": 457024,
+      "postObservationCollection": false,
+      "sampledResourcesAreNotTotalProcessRam": true
+    },
+    {
+      "group": "filters",
+      "engine": "chromium",
+      "condition": "chromium-standard",
+      "runId": 40904550899,
+      "originalComplete": true,
+      "input": "verification/boss2-css-filter-attribution-20261029/evidence/synthetic-filter-measurements.json.gz",
+      "activeSeconds": 90.957,
+      "sampleCount": 89,
+      "lastSampleSeconds": 89.941,
+      "volleyProgress": {
+        "first": 0,
+        "last": 32
+      },
+      "resourceSampling": "approximately once per second; sampled maxima, not continuous peaks",
+      "audio": {
+        "audioVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 5,
+          "last": 3,
+          "constantAcrossSamples": false
+        },
+        "audioWeaponVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1,
+          "last": 0,
+          "constantAcrossSamples": false
+        },
+        "audioBossVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1,
+          "last": 0,
+          "constantAcrossSamples": false
+        },
+        "audioEffectVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 5,
+          "last": 3,
+          "constantAcrossSamples": false
+        },
+        "audioSampleBuffers": {
+          "first": 46,
+          "minimum": 46,
+          "maximum": 46,
+          "last": 46,
+          "constantAcrossSamples": true
+        },
+        "audioBufferBytes": {
+          "first": 6925568,
+          "minimum": 6925568,
+          "maximum": 6925568,
+          "last": 6925568,
+          "constantAcrossSamples": true
+        },
+        "audioRockBuffers": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 0,
+          "last": 0,
+          "constantAcrossSamples": true
+        },
+        "audioClockStalls": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 0,
+          "last": 0,
+          "constantAcrossSamples": true
+        },
+        "audioBlockedSounds": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 0,
+          "last": 0,
+          "constantAcrossSamples": true
+        },
+        "audioReapedVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 0,
+          "last": 0,
+          "constantAcrossSamples": true
+        }
+      },
+      "canvas": {
+        "registeredEffects": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1,
+          "last": 0,
+          "constantAcrossSamples": false
+        },
+        "retainedHullUsers": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1,
+          "last": 0,
+          "constantAcrossSamples": false
+        },
+        "sourceImages": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 3,
+          "last": 2,
+          "constantAcrossSamples": false
+        },
+        "textureEntries": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 2,
+          "last": 2,
+          "constantAcrossSamples": false
+        },
+        "cacheBytes": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1059028,
+          "last": 740932,
+          "constantAcrossSamples": false
+        },
+        "imageBytes": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 954288,
+          "last": 636192,
+          "constantAcrossSamples": false
+        },
+        "textureBytes": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 104740,
+          "last": 104740,
+          "constantAcrossSamples": false
+        },
+        "surfaceBytes": {
+          "first": 4,
+          "minimum": 4,
+          "maximum": 76032,
+          "last": 4,
+          "constantAcrossSamples": false
+        },
+        "hullLoads": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 6,
+          "last": 6,
+          "constantAcrossSamples": false
+        },
+        "hullEvictions": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 4,
+          "last": 4,
+          "constantAcrossSamples": false
+        }
+      },
+      "last30MedianLinuxDescendantPssKiB": 590571,
+      "postObservationCollection": false,
+      "sampledResourcesAreNotTotalProcessRam": true
+    },
+    {
+      "group": "built-filter-preview",
+      "engine": "webkit",
+      "condition": "all-css-filters-off",
+      "runId": 40906805249,
+      "originalComplete": true,
+      "input": "verification/boss2-css-filter-attribution-20261029/evidence/synthetic-built-preview-verifications.json.gz",
+      "activeSeconds": 90.283,
+      "sampleCount": 86,
+      "lastSampleSeconds": 89.245,
+      "volleyProgress": {
+        "first": 0,
+        "last": 25
+      },
+      "resourceSampling": "approximately once per second; sampled maxima, not continuous peaks",
+      "audio": {
+        "audioVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 4,
+          "last": 1,
+          "constantAcrossSamples": false
+        },
+        "audioWeaponVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1,
+          "last": 0,
+          "constantAcrossSamples": false
+        },
+        "audioBossVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1,
+          "last": 0,
+          "constantAcrossSamples": false
+        },
+        "audioEffectVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 4,
+          "last": 1,
+          "constantAcrossSamples": false
+        },
+        "audioSampleBuffers": {
+          "first": 46,
+          "minimum": 46,
+          "maximum": 46,
+          "last": 46,
+          "constantAcrossSamples": true
+        },
+        "audioBufferBytes": {
+          "first": 7083800,
+          "minimum": 7083800,
+          "maximum": 7083800,
+          "last": 7083800,
+          "constantAcrossSamples": true
+        },
+        "audioRockBuffers": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 0,
+          "last": 0,
+          "constantAcrossSamples": true
+        },
+        "audioClockStalls": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 0,
+          "last": 0,
+          "constantAcrossSamples": true
+        },
+        "audioBlockedSounds": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 0,
+          "last": 0,
+          "constantAcrossSamples": true
+        },
+        "audioReapedVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 0,
+          "last": 0,
+          "constantAcrossSamples": true
+        }
+      },
+      "canvas": {
+        "registeredEffects": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1,
+          "last": 1,
+          "constantAcrossSamples": false
+        },
+        "retainedHullUsers": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1,
+          "last": 1,
+          "constantAcrossSamples": false
+        },
+        "sourceImages": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 3,
+          "last": 3,
+          "constantAcrossSamples": false
+        },
+        "textureEntries": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 2,
+          "last": 2,
+          "constantAcrossSamples": false
+        },
+        "cacheBytes": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1059028,
+          "last": 1059028,
+          "constantAcrossSamples": false
+        },
+        "imageBytes": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 954288,
+          "last": 954288,
+          "constantAcrossSamples": false
+        },
+        "textureBytes": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 104740,
+          "last": 104740,
+          "constantAcrossSamples": false
+        },
+        "surfaceBytes": {
+          "first": 4,
+          "minimum": 4,
+          "maximum": 79728,
+          "last": 76680,
+          "constantAcrossSamples": false
+        },
+        "hullLoads": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 5,
+          "last": 5,
+          "constantAcrossSamples": false
+        },
+        "hullEvictions": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 2,
+          "last": 2,
+          "constantAcrossSamples": false
+        }
+      },
+      "last30MedianLinuxDescendantPssKiB": 994058,
+      "postObservationCollection": false,
+      "sampledResourcesAreNotTotalProcessRam": true
+    },
+    {
+      "group": "built-filter-preview",
+      "engine": "chromium",
+      "condition": "all-css-filters-off",
+      "runId": 40906805249,
+      "originalComplete": true,
+      "input": "verification/boss2-css-filter-attribution-20261029/evidence/synthetic-built-preview-verifications.json.gz",
+      "activeSeconds": 90.605,
+      "sampleCount": 88,
+      "lastSampleSeconds": 89.575,
+      "volleyProgress": {
+        "first": 0,
+        "last": 32
+      },
+      "resourceSampling": "approximately once per second; sampled maxima, not continuous peaks",
+      "audio": {
+        "audioVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 6,
+          "last": 3,
+          "constantAcrossSamples": false
+        },
+        "audioWeaponVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1,
+          "last": 0,
+          "constantAcrossSamples": false
+        },
+        "audioBossVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1,
+          "last": 0,
+          "constantAcrossSamples": false
+        },
+        "audioEffectVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 5,
+          "last": 3,
+          "constantAcrossSamples": false
+        },
+        "audioSampleBuffers": {
+          "first": 46,
+          "minimum": 46,
+          "maximum": 46,
+          "last": 46,
+          "constantAcrossSamples": true
+        },
+        "audioBufferBytes": {
+          "first": 6925568,
+          "minimum": 6925568,
+          "maximum": 6925568,
+          "last": 6925568,
+          "constantAcrossSamples": true
+        },
+        "audioRockBuffers": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 0,
+          "last": 0,
+          "constantAcrossSamples": true
+        },
+        "audioClockStalls": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 0,
+          "last": 0,
+          "constantAcrossSamples": true
+        },
+        "audioBlockedSounds": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 0,
+          "last": 0,
+          "constantAcrossSamples": true
+        },
+        "audioReapedVoices": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 0,
+          "last": 0,
+          "constantAcrossSamples": true
+        }
+      },
+      "canvas": {
+        "registeredEffects": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1,
+          "last": 0,
+          "constantAcrossSamples": false
+        },
+        "retainedHullUsers": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1,
+          "last": 0,
+          "constantAcrossSamples": false
+        },
+        "sourceImages": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 3,
+          "last": 2,
+          "constantAcrossSamples": false
+        },
+        "textureEntries": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 2,
+          "last": 2,
+          "constantAcrossSamples": false
+        },
+        "cacheBytes": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 1059028,
+          "last": 740932,
+          "constantAcrossSamples": false
+        },
+        "imageBytes": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 954288,
+          "last": 636192,
+          "constantAcrossSamples": false
+        },
+        "textureBytes": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 104740,
+          "last": 104740,
+          "constantAcrossSamples": false
+        },
+        "surfaceBytes": {
+          "first": 4,
+          "minimum": 4,
+          "maximum": 76560,
+          "last": 4,
+          "constantAcrossSamples": false
+        },
+        "hullLoads": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 6,
+          "last": 6,
+          "constantAcrossSamples": false
+        },
+        "hullEvictions": {
+          "first": 0,
+          "minimum": 0,
+          "maximum": 4,
+          "last": 4,
+          "constantAcrossSamples": false
+        }
+      },
+      "last30MedianLinuxDescendantPssKiB": 434678,
+      "postObservationCollection": false,
+      "sampledResourcesAreNotTotalProcessRam": true
+    }
+  ]
+}

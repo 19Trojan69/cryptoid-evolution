@@ -1,0 +1,29 @@
+{
+  "sourceScopePassed": true,
+  "focusedExistingTests": [
+    {
+      "file": "lifecycle-checks.log",
+      "passed": 31,
+      "failed": 0,
+      "command": "node --experimental-strip-types --test frontend/src/lib/cssFramePacing.test.mjs frontend/src/pages/gameAudio.test.mjs frontend/src/pages/resourceCacheDiagnostics.test.mjs frontend/src/pages/resourceStability.test.mjs frontend/src/pages/bossResourceDiagnostics.test.mjs frontend/src/pages/renderMemory.test.mjs frontend/scripts/canvasIdleCleanup.test.mjs",
+      "bytes": 3353,
+      "sha256": "7555a70b28c6ac612dfee6d2fc9db38d405ed3bd83b640300c6a22ea7358bc8e"
+    },
+    {
+      "file": "audio-clock-checks.log",
+      "passed": 6,
+      "failed": 0,
+      "command": "node --experimental-strip-types --test --test-name-pattern='negative control retains 2086|advancing audio clock reaps|pause releases all weapons|delayed extra-life notes|healthy completed sounds|successful same-context recovery' frontend/src/pages/audioClockRecovery.test.mjs",
+      "bytes": 773,
+      "sha256": "478d2c8cc7530596cc88013584a961f2bc16888f28e05f9b327dab42810f0ff4"
+    }
+  ],
+  "independentPythonRecomputation": {
+    "passed": true,
+    "completedCaptures": 14,
+    "samples": 1941
+  },
+  "originalOverallFailuresPreserved": true,
+  "physicalAcceptance": false,
+  "whiteScreenFixed": false
+}
