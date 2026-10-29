@@ -1,0 +1,868 @@
+{
+  "version": 1,
+  "purpose": "Private Boss 2 report export of existing current-tab return evidence",
+  "source": {
+    "commit": "c610e7cb2bde2891dd04721c530c5b1bbead2215",
+    "tree": "044a9aa1cd058009ced317c8ec9bd5d452c1ea71",
+    "baseCommit": "bef18e6303799e81b2f7ab279a3f8e70306e1265"
+  },
+  "scope": {
+    "passed": true,
+    "privateMenuHunks": 2,
+    "existingReaderReused": true,
+    "newCollectors": false,
+    "frontendIncludingControllerAndInputUnchangedFromAcceptedWindowFocus": true
+  },
+  "local": {
+    "exportAndIsolationCases": 45,
+    "passed": true,
+    "transformedControllerTypes": true
+  },
+  "external": {
+    "runId": 40854908853,
+    "url": "https://github.com/19Trojan69/cryptoid-evolution/actions/runs/40854908853",
+    "status": "completed",
+    "conclusion": "success",
+    "jobs": [
+      {
+        "id": 123383341030,
+        "name": "input (webkit)",
+        "conclusion": "success"
+      },
+      {
+        "id": 123383341445,
+        "name": "input (chromium)",
+        "conclusion": "success"
+      }
+    ],
+    "runtimeCasesPerEngine": 78,
+    "exportAndIsolationCasesPerEngine": 45,
+    "chromium": {
+      "version": "151.0.7922.34",
+      "originalChecks": 18,
+      "elementFocusPassed": true,
+      "neutralCases": 9,
+      "repeatedSequence": {
+        "cycles": 12,
+        "cancelledCycles": 6,
+        "releasedCycles": 6,
+        "complete": true,
+        "nativeEvents": [
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "primary": true,
+            "controlTarget": false
+          },
+          {
+            "type": "touchstart",
+            "trusted": true,
+            "touches": 1,
+            "controlTarget": false
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "primary": false,
+            "controlTarget": true
+          },
+          {
+            "type": "touchstart",
+            "trusted": true,
+            "touches": 2,
+            "controlTarget": true
+          },
+          {
+            "type": "pointerup",
+            "trusted": true,
+            "primary": true,
+            "controlTarget": false
+          },
+          {
+            "type": "lostpointercapture",
+            "trusted": true,
+            "primary": true,
+            "controlTarget": false
+          },
+          {
+            "type": "touchend",
+            "trusted": true,
+            "touches": 1,
+            "controlTarget": false
+          },
+          {
+            "type": "pointerup",
+            "trusted": true,
+            "primary": false,
+            "controlTarget": true
+          },
+          {
+            "type": "lostpointercapture",
+            "trusted": true,
+            "primary": false,
+            "controlTarget": true
+          },
+          {
+            "type": "touchend",
+            "trusted": true,
+            "touches": 0,
+            "controlTarget": true
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "primary": true,
+            "controlTarget": false
+          },
+          {
+            "type": "touchstart",
+            "trusted": true,
+            "touches": 1,
+            "controlTarget": false
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "primary": false,
+            "controlTarget": true
+          },
+          {
+            "type": "touchstart",
+            "trusted": true,
+            "touches": 2,
+            "controlTarget": true
+          },
+          {
+            "type": "pointercancel",
+            "trusted": true,
+            "primary": true,
+            "controlTarget": false
+          },
+          {
+            "type": "lostpointercapture",
+            "trusted": true,
+            "primary": true,
+            "controlTarget": false
+          },
+          {
+            "type": "pointercancel",
+            "trusted": true,
+            "primary": false,
+            "controlTarget": true
+          },
+          {
+            "type": "lostpointercapture",
+            "trusted": true,
+            "primary": false,
+            "controlTarget": true
+          },
+          {
+            "type": "touchcancel",
+            "trusted": true,
+            "touches": 0,
+            "controlTarget": true
+          },
+          {
+            "type": "touchcancel",
+            "trusted": true,
+            "touches": 0,
+            "controlTarget": false
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "primary": true,
+            "controlTarget": false
+          },
+          {
+            "type": "touchstart",
+            "trusted": true,
+            "touches": 1,
+            "controlTarget": false
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "primary": false,
+            "controlTarget": true
+          },
+          {
+            "type": "touchstart",
+            "trusted": true,
+            "touches": 2,
+            "controlTarget": true
+          },
+          {
+            "type": "pointerup",
+            "trusted": true,
+            "primary": true,
+            "controlTarget": false
+          },
+          {
+            "type": "lostpointercapture",
+            "trusted": true,
+            "primary": true,
+            "controlTarget": false
+          },
+          {
+            "type": "touchend",
+            "trusted": true,
+            "touches": 1,
+            "controlTarget": false
+          },
+          {
+            "type": "pointerup",
+            "trusted": true,
+            "primary": false,
+            "controlTarget": true
+          },
+          {
+            "type": "lostpointercapture",
+            "trusted": true,
+            "primary": false,
+            "controlTarget": true
+          },
+          {
+            "type": "touchend",
+            "trusted": true,
+            "touches": 0,
+            "controlTarget": true
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "primary": true,
+            "controlTarget": false
+          },
+          {
+            "type": "touchstart",
+            "trusted": true,
+            "touches": 1,
+            "controlTarget": false
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "primary": false,
+            "controlTarget": true
+          },
+          {
+            "type": "touchstart",
+            "trusted": true,
+            "touches": 2,
+            "controlTarget": true
+          },
+          {
+            "type": "pointercancel",
+            "trusted": true,
+            "primary": true,
+            "controlTarget": false
+          },
+          {
+            "type": "lostpointercapture",
+            "trusted": true,
+            "primary": true,
+            "controlTarget": false
+          },
+          {
+            "type": "pointercancel",
+            "trusted": true,
+            "primary": false,
+            "controlTarget": true
+          },
+          {
+            "type": "lostpointercapture",
+            "trusted": true,
+            "primary": false,
+            "controlTarget": true
+          },
+          {
+            "type": "touchcancel",
+            "trusted": true,
+            "touches": 0,
+            "controlTarget": true
+          },
+          {
+            "type": "touchcancel",
+            "trusted": true,
+            "touches": 0,
+            "controlTarget": false
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "primary": true,
+            "controlTarget": false
+          },
+          {
+            "type": "touchstart",
+            "trusted": true,
+            "touches": 1,
+            "controlTarget": false
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "primary": false,
+            "controlTarget": true
+          },
+          {
+            "type": "touchstart",
+            "trusted": true,
+            "touches": 2,
+            "controlTarget": true
+          },
+          {
+            "type": "pointerup",
+            "trusted": true,
+            "primary": true,
+            "controlTarget": false
+          },
+          {
+            "type": "lostpointercapture",
+            "trusted": true,
+            "primary": true,
+            "controlTarget": false
+          },
+          {
+            "type": "touchend",
+            "trusted": true,
+            "touches": 1,
+            "controlTarget": false
+          },
+          {
+            "type": "pointerup",
+            "trusted": true,
+            "primary": false,
+            "controlTarget": true
+          },
+          {
+            "type": "lostpointercapture",
+            "trusted": true,
+            "primary": false,
+            "controlTarget": true
+          },
+          {
+            "type": "touchend",
+            "trusted": true,
+            "touches": 0,
+            "controlTarget": true
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "primary": true,
+            "controlTarget": false
+          },
+          {
+            "type": "touchstart",
+            "trusted": true,
+            "touches": 1,
+            "controlTarget": false
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "primary": false,
+            "controlTarget": true
+          },
+          {
+            "type": "touchstart",
+            "trusted": true,
+            "touches": 2,
+            "controlTarget": true
+          },
+          {
+            "type": "pointercancel",
+            "trusted": true,
+            "primary": true,
+            "controlTarget": false
+          },
+          {
+            "type": "lostpointercapture",
+            "trusted": true,
+            "primary": true,
+            "controlTarget": false
+          },
+          {
+            "type": "pointercancel",
+            "trusted": true,
+            "primary": false,
+            "controlTarget": true
+          },
+          {
+            "type": "lostpointercapture",
+            "trusted": true,
+            "primary": false,
+            "controlTarget": true
+          },
+          {
+            "type": "touchcancel",
+            "trusted": true,
+            "touches": 0,
+            "controlTarget": true
+          },
+          {
+            "type": "touchcancel",
+            "trusted": true,
+            "touches": 0,
+            "controlTarget": false
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "primary": true,
+            "controlTarget": false
+          },
+          {
+            "type": "touchstart",
+            "trusted": true,
+            "touches": 1,
+            "controlTarget": false
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "primary": false,
+            "controlTarget": true
+          },
+          {
+            "type": "touchstart",
+            "trusted": true,
+            "touches": 2,
+            "controlTarget": true
+          },
+          {
+            "type": "pointerup",
+            "trusted": true,
+            "primary": true,
+            "controlTarget": false
+          },
+          {
+            "type": "lostpointercapture",
+            "trusted": true,
+            "primary": true,
+            "controlTarget": false
+          },
+          {
+            "type": "touchend",
+            "trusted": true,
+            "touches": 1,
+            "controlTarget": false
+          },
+          {
+            "type": "pointerup",
+            "trusted": true,
+            "primary": false,
+            "controlTarget": true
+          },
+          {
+            "type": "lostpointercapture",
+            "trusted": true,
+            "primary": false,
+            "controlTarget": true
+          },
+          {
+            "type": "touchend",
+            "trusted": true,
+            "touches": 0,
+            "controlTarget": true
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "primary": true,
+            "controlTarget": false
+          },
+          {
+            "type": "touchstart",
+            "trusted": true,
+            "touches": 1,
+            "controlTarget": false
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "primary": false,
+            "controlTarget": true
+          },
+          {
+            "type": "touchstart",
+            "trusted": true,
+            "touches": 2,
+            "controlTarget": true
+          },
+          {
+            "type": "pointercancel",
+            "trusted": true,
+            "primary": true,
+            "controlTarget": false
+          },
+          {
+            "type": "lostpointercapture",
+            "trusted": true,
+            "primary": true,
+            "controlTarget": false
+          },
+          {
+            "type": "pointercancel",
+            "trusted": true,
+            "primary": false,
+            "controlTarget": true
+          },
+          {
+            "type": "lostpointercapture",
+            "trusted": true,
+            "primary": false,
+            "controlTarget": true
+          },
+          {
+            "type": "touchcancel",
+            "trusted": true,
+            "touches": 0,
+            "controlTarget": true
+          },
+          {
+            "type": "touchcancel",
+            "trusted": true,
+            "touches": 0,
+            "controlTarget": false
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "primary": true,
+            "controlTarget": false
+          },
+          {
+            "type": "touchstart",
+            "trusted": true,
+            "touches": 1,
+            "controlTarget": false
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "primary": false,
+            "controlTarget": true
+          },
+          {
+            "type": "touchstart",
+            "trusted": true,
+            "touches": 2,
+            "controlTarget": true
+          },
+          {
+            "type": "pointerup",
+            "trusted": true,
+            "primary": true,
+            "controlTarget": false
+          },
+          {
+            "type": "lostpointercapture",
+            "trusted": true,
+            "primary": true,
+            "controlTarget": false
+          },
+          {
+            "type": "touchend",
+            "trusted": true,
+            "touches": 1,
+            "controlTarget": false
+          },
+          {
+            "type": "pointerup",
+            "trusted": true,
+            "primary": false,
+            "controlTarget": true
+          },
+          {
+            "type": "lostpointercapture",
+            "trusted": true,
+            "primary": false,
+            "controlTarget": true
+          },
+          {
+            "type": "touchend",
+            "trusted": true,
+            "touches": 0,
+            "controlTarget": true
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "primary": true,
+            "controlTarget": false
+          },
+          {
+            "type": "touchstart",
+            "trusted": true,
+            "touches": 1,
+            "controlTarget": false
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "primary": false,
+            "controlTarget": true
+          },
+          {
+            "type": "touchstart",
+            "trusted": true,
+            "touches": 2,
+            "controlTarget": true
+          },
+          {
+            "type": "pointercancel",
+            "trusted": true,
+            "primary": true,
+            "controlTarget": false
+          },
+          {
+            "type": "lostpointercapture",
+            "trusted": true,
+            "primary": true,
+            "controlTarget": false
+          },
+          {
+            "type": "pointercancel",
+            "trusted": true,
+            "primary": false,
+            "controlTarget": true
+          },
+          {
+            "type": "lostpointercapture",
+            "trusted": true,
+            "primary": false,
+            "controlTarget": true
+          },
+          {
+            "type": "touchcancel",
+            "trusted": true,
+            "touches": 0,
+            "controlTarget": true
+          },
+          {
+            "type": "touchcancel",
+            "trusted": true,
+            "touches": 0,
+            "controlTarget": false
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "primary": true,
+            "controlTarget": false
+          },
+          {
+            "type": "touchstart",
+            "trusted": true,
+            "touches": 1,
+            "controlTarget": false
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "primary": false,
+            "controlTarget": true
+          },
+          {
+            "type": "touchstart",
+            "trusted": true,
+            "touches": 2,
+            "controlTarget": true
+          },
+          {
+            "type": "pointerup",
+            "trusted": true,
+            "primary": true,
+            "controlTarget": false
+          },
+          {
+            "type": "lostpointercapture",
+            "trusted": true,
+            "primary": true,
+            "controlTarget": false
+          },
+          {
+            "type": "touchend",
+            "trusted": true,
+            "touches": 1,
+            "controlTarget": false
+          },
+          {
+            "type": "pointerup",
+            "trusted": true,
+            "primary": false,
+            "controlTarget": true
+          },
+          {
+            "type": "lostpointercapture",
+            "trusted": true,
+            "primary": false,
+            "controlTarget": true
+          },
+          {
+            "type": "touchend",
+            "trusted": true,
+            "touches": 0,
+            "controlTarget": true
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "primary": true,
+            "controlTarget": false
+          },
+          {
+            "type": "touchstart",
+            "trusted": true,
+            "touches": 1,
+            "controlTarget": false
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "primary": false,
+            "controlTarget": true
+          },
+          {
+            "type": "touchstart",
+            "trusted": true,
+            "touches": 2,
+            "controlTarget": true
+          },
+          {
+            "type": "pointercancel",
+            "trusted": true,
+            "primary": true,
+            "controlTarget": false
+          },
+          {
+            "type": "lostpointercapture",
+            "trusted": true,
+            "primary": true,
+            "controlTarget": false
+          },
+          {
+            "type": "pointercancel",
+            "trusted": true,
+            "primary": false,
+            "controlTarget": true
+          },
+          {
+            "type": "lostpointercapture",
+            "trusted": true,
+            "primary": false,
+            "controlTarget": true
+          },
+          {
+            "type": "touchcancel",
+            "trusted": true,
+            "touches": 0,
+            "controlTarget": true
+          },
+          {
+            "type": "touchcancel",
+            "trusted": true,
+            "touches": 0,
+            "controlTarget": false
+          }
+        ]
+      }
+    },
+    "webkit": {
+      "version": "26.5",
+      "originalChecks": 11,
+      "elementFocusPassed": true,
+      "nativeMultitouch": false,
+      "fullCombatScene": false
+    },
+    "actualBoss2": {
+      "engine": "chromium",
+      "activeSeconds": 30.173,
+      "report": {
+        "downloaded": true,
+        "bytes": 544051,
+        "records": 329,
+        "contiguous": true,
+        "optionsMatched": true,
+        "recoveredAfterControlledReload": true,
+        "contactEvidence": {
+          "records": 144,
+          "nativeSecondaryPointer": true,
+          "nativeTwoTouchCount": true,
+          "rawInputFields": false,
+          "nativeCancellation": true,
+          "elementFocusPreservesContactCount": true,
+          "noFalseWindowBlurInFocusCase": true,
+          "suppressedCountReported": true
+        },
+        "returnEvidence": {
+          "currentTabOnly": true,
+          "currentDocumentSeparated": true,
+          "distinctBootIds": true,
+          "controlledReloadObserved": true,
+          "previousGamePreserved": true,
+          "nativeCauseKnown": false,
+          "whitePixelsObserved": false,
+          "limitedExportAlsoIncludesReturn": true
+        }
+      },
+      "unexpectedExternalRequests": []
+    }
+  },
+  "artifacts": [
+    {
+      "id": 12889260976,
+      "name": "device-return-evidence-chromium",
+      "bytes": 1528614,
+      "sha256": "122eac84cd4652bc859c3042c6e5f4554cbd3130a77562c96fc9eaa94cc8fdc1",
+      "zipDigestAndIntegrityVerified": true
+    },
+    {
+      "id": 12888074907,
+      "name": "device-return-evidence-webkit",
+      "bytes": 20253,
+      "sha256": "30b16afcf8999af9172b1c198f52d873acdea6e9329a5dde1e33df3ac4e20186",
+      "zipDigestAndIntegrityVerified": true
+    }
+  ],
+  "deployment": {
+    "created": false,
+    "blockedBy": "automatic-approval-review",
+    "action": "Create Preview Deployment",
+    "reason": "The review requires explicit user approval for this specific private Vercel Preview deployment.",
+    "preparedCommit": "c610e7cb2bde2891dd04721c530c5b1bbead2215",
+    "target": "Existing cryptoid-evolution-testnet project, Preview environment only",
+    "preparedScreenshot": "evidence/prepared-private-preview.jpg",
+    "screenshotSha256": "399196bfb79eaf81520371336233de8119bf5e2778b84d1c7d6c4a91009eeba4",
+    "existingPreviewUnchanged": "https://cryptoid-evolution-testnet-hde4nlh2r-19-trojan69.vercel.app/",
+    "existingPreviewSource": "68c33d15f6f591477508cc9e0497d6c8a4c100c0",
+    "protectionObserved": {
+      "requireLogIn": true,
+      "type": "Standard Protection",
+      "settingsChanged": false
+    },
+    "publicSourceBefore": "ce073547cf573375d141bf846f70e294138dbd73",
+    "publicDeploymentBefore": "239zEifRV84KCpbyHumnuHmSGm9T",
+    "automaticDeploymentEnabled": false,
+    "mainnetContacted": false
+  },
+  "limits": [
+    "Observed device symptom: unattended return to the test menu; White Screen unconfirmed.",
+    "The historic device report predates this new export field; missing next-document metadata cannot be reconstructed.",
+    "Controlled reload while paused is not an OS kill, heat test, physical iPhone or Pi Browser acceptance.",
+    "No native termination cause, total native/GPU memory, temperature or White Screen fix is established."
+  ],
+  "exclusions": [
+    {
+      "action": "First workflow collection lookup",
+      "result": "Unsupported workflow-path request; corrected to the repository actions/runs collection without rerunning any job."
+    },
+    {
+      "action": "Preview deployment submission",
+      "result": "Rejected by automatic approval review; not retried or bypassed."
+    }
+  ]
+}
