@@ -33,6 +33,8 @@ export function observeContactDiagnostics(field: HTMLElement, options: Options) 
       if (stopped) return;
       if (!options.active()) { clear(); windowAt = -Infinity; ordinaryCount = criticalCount = suppressed = 0; return; }
       let type = event.type;
+      // Captured element blur is not a Window focus loss.
+      if (type === 'blur' && event.target !== win) return;
       if (type === 'visibilitychange') {
         if (doc.visibilityState !== 'hidden') return;
         type = 'hidden';

@@ -4,6 +4,7 @@ import {resolve,dirname} from 'node:path';
 import {fileURLToPath,pathToFileURL} from 'node:url';
 import {mkdirSync,writeFileSync} from 'node:fs';
 import {verifyNeutralContacts} from '../contact-diagnostics-20261029/verifyNeutralContacts.mjs';
+import {verifyElementFocus} from '../window-focus-diagnostics-20261029/verifyElementFocus.mjs';
 const directory=dirname(fileURLToPath(import.meta.url)),root=resolve(directory,'../..');
 const req=createRequire(resolve(root,'frontend/package.json'));
 const {createServer}=await import(pathToFileURL(req.resolve('vite')).href);
@@ -35,6 +36,10 @@ try {
   await page.goto(url);await page.getByRole('heading',{name:'Single-finger input boundary QA',exact:true}).waitFor();
   await page.waitForFunction(()=>window.__singleFingerQA);
   const state=()=>page.evaluate(()=>window.__singleFingerQA.inspect());
+  result.elementFocus=await verifyElementFocus(page,context,{firstSelector:'#home',secondSelector:'#pause',nativeMultitouch:engine==='chromium',
+    assertPlaying:async()=>assert.equal((await state()).playing,true),
+    assertTwoContacts:async()=>assert.ok((await state()).contactOrder.some(r=>r.event==='pointerdown'&&r.trackedPointers===2&&r.primaryFlag===false)),
+    assertNoDiagnosticWindowBlur:async()=>assert.equal((await state()).contactOrder.filter(r=>r.stage==='contact'&&r.event==='blur').length,0)});
   const check=async(name,expected)=>{assert.ok(await expected,name);result.checks.push(name);};
   const resume=async()=>{await page.locator('#resume').tap();await page.waitForFunction(()=>window.__singleFingerQA.inspect().playing);};
   const touch=async(selector)=>{const b=await page.locator(selector).boundingBox();await page.touchscreen.tap(b.x+b.width/2,b.y+b.height/2);

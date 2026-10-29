@@ -1,8 +1,8 @@
 name: Protected contact evidence and single-finger Boss 2 acceptance
-run-name: Verify observed native release order, neutral contacts and recovered cancellation report
+run-name: Verify window-only blur evidence and preserved native contact counts
 on:
   push:
-    branches: [codex/boss2-contact-diagnostics-20261029]
+    branches: [codex/boss2-window-focus-diagnostics-20261029]
     paths: ['.github/workflows/cryptoid-single-finger.yml']
 permissions:
   contents: read
@@ -27,7 +27,7 @@ jobs:
           npx playwright install --with-deps ${{ matrix.engine }}
       - name: Verify input, viewport and controller scope
         run: |
-          node verification/contact-diagnostics-20261029/verifyRuntimePin.mjs
+          node verification/window-focus-diagnostics-20261029/verifyScope.mjs
           node --experimental-strip-types --test frontend/src/pages/gameInput.test.mjs frontend/src/pages/contactDiagnostics.test.mjs frontend/src/pages/inputDiagnostics.test.mjs frontend/src/pages/fullSessionRecorder.test.mjs frontend/src/lib/gameViewport.test.mjs
           cd frontend
           node_modules/.bin/tsc -b
@@ -54,7 +54,7 @@ jobs:
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: contact-evidence-${{ matrix.engine }}
+          name: window-focus-evidence-${{ matrix.engine }}
           path: |
             verification/single-finger-controls-20261029/results/${{ matrix.engine }}/
             verification/boss2-forensics-20261028/results/device-chromium-30/verification.json

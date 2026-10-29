@@ -56,12 +56,26 @@ test('capture loss preserves contact, cancel releases it and lifecycle reset is 
   f.fire('pointerdown', pointer(1)); f.steering(true);
   f.fire('lostpointercapture', pointer(1)); assert.equal(f.rows.at(-1).trackedPointers, 1);
   f.fire('pointercancel', pointer(1)); assert.equal(f.rows.at(-1).trackedPointers, 0);
-  f.fire('pointerdown', pointer(2)); f.fire('blur');
+  f.fire('pointerdown', pointer(2)); f.fire('blur', {}, f.win);
   assert.equal(f.rows.at(-1).event, 'blur'); assert.equal(f.rows.at(-1).trackedPointers, 1);
   f.fire('pointerdown', pointer(3)); assert.equal(f.rows.at(-1).trackedPointers, 1);
   f.doc.visibilityState = 'hidden'; f.fire('visibilitychange');
   assert.equal(f.rows.at(-1).event, 'hidden');
   f.fire('pointerdown', pointer(4)); assert.equal(f.rows.at(-1).trackedPointers, 1); stop();
+});
+test('element blur neither reports a browser interruption nor clears live contacts', () => {
+  const f = fixture(), stop = observeContactDiagnostics(f.field, f.options);
+  const button = { inside: true, closest: () => null };
+  f.fire('pointerdown', pointer(1));
+  const count = f.rows.length;
+  f.fire('blur', {}, button); f.fire('blur', {}, f.field);
+  assert.equal(f.rows.length, count, 'element focus changes are not window interruptions');
+  f.fire('pointerdown', pointer(2, false));
+  assert.equal(f.rows.at(-1).trackedPointers, 2, 'the first contact survives an element blur');
+  f.fire('blur', {}, f.win);
+  assert.equal(f.rows.at(-1).event, 'blur'); assert.equal(f.rows.at(-1).trackedPointers, 2);
+  f.fire('pointerdown', pointer(3)); assert.equal(f.rows.at(-1).trackedPointers, 1);
+  stop();
 });
 test('native touch counts also work without Pointer Events and no stale count is emitted for gestures', () => {
   const f = fixture(), stop = observeContactDiagnostics(f.field, f.options);

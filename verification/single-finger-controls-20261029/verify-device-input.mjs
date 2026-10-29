@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { verifyNeutralContacts } from '../contact-diagnostics-20261029/verifyNeutralContacts.mjs';
+import { verifyElementFocus } from '../window-focus-diagnostics-20261029/verifyElementFocus.mjs';
 
 // Real Chromium touch events against the original, isolated Boss-2 game UI.
 // This is not a physical Pi Browser or a reproduction of an OS White Screen.
@@ -11,6 +12,8 @@ export async function verifyDeviceInput(page,context){
   const over={id:1,x:button.x+button.width/2,y:button.y+button.height/2};
   const send=(type,touchPoints)=>cdp.send('Input.dispatchTouchEvent',{type,touchPoints});
   const stillPlaying=async()=>{const s=await state();assert.equal(s.status,'playing');assert.equal(s.weaponMenuOpen,false);assert.equal(s.technicalPause,false);};
+  const elementFocus=await verifyElementFocus(page,context,{firstSelector:'.home-control',secondSelector:'.pause-control',
+    nativeMultitouch:true,assertPlaying:stillPlaying});
   const before=await state();await send('touchStart',[from]);
   for(let n=1;n<=12;n++)await send('touchMove',[{id:1,x:from.x+(over.x-from.x)*n/12,y:from.y+(over.y-from.y)*n/12}]);
   await stillPlaying();await send('touchEnd',[]);await stillPlaying();
@@ -38,5 +41,5 @@ export async function verifyDeviceInput(page,context){
       await page.waitForFunction(()=>window.__crossDeviceTest.inspect().status==='playing'&&!window.__crossDeviceTest.inspect().weaponMenuOpen,{},{timeout:10000});
     }});
   assert.ok(neutralContacts.repeatedSequence.after.frameAt>neutralContacts.repeatedSequence.before.frameAt,'frames continue across the repeated native contacts');
-  return {complete:true,physicalDevice:false,nativeChromiumTouch:true,checks,neutralContacts};
+  return {complete:true,physicalDevice:false,nativeChromiumTouch:true,checks,neutralContacts,elementFocus};
 }

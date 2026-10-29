@@ -73,6 +73,10 @@ try{
  assert.ok(report.fullSession.records.some(row=>row.kind==='pause'&&row.data.pauseReason==='manual-pause'));
  assert.equal(report.testOptions.scene,'reactor');assert.equal(report.testOptionsMatchedByStartTime,true);
  const contacts=report.fullSession.records.filter(row=>row.kind==='input'&&row.data.operation==='contact-state');
+ const focus=summary.singleFingerInput.elementFocus;
+ const focusRows=contacts.filter(row=>row.at>=focus.startedAt&&row.at<=focus.endedAt);
+ assert.ok(focusRows.some(row=>row.data.event==='pointerdown'&&row.data.trackedPointers===2&&row.data.primaryFlag===false),'element focus must preserve the first tracked contact');
+ assert.ok(!focusRows.some(row=>row.data.event==='blur'),'element blur must not be exported as window blur');
  assert.ok(contacts.some(row=>row.data.event==='pointerdown'&&row.data.trackedPointers===2&&row.data.primaryFlag===false),'ignored native second pointer reaches the recovered full report');
  assert.ok(contacts.some(row=>row.data.event==='touchstart'&&row.data.reportedTouches===2),'native two-contact count reaches the recovered full report');
  assert.ok(contacts.some(row=>row.data.event==='click'&&row.data.target==='weapons'&&row.data.playing===true),'pre-handler weapon click remains distinct from the actual pause event');
@@ -82,6 +86,8 @@ try{
  summary.report={downloaded:true,bytes:JSON.stringify(report).length,records:report.fullSession.integrity.records,contiguous:true,optionsMatched:true,recoveredAfterControlledReload:true};
  summary.report.contactEvidence={records:contacts.length,nativeSecondaryPointer:true,nativeTwoTouchCount:true,rawInputFields:false};
  summary.report.contactEvidence.nativeCancellation=true;
+ summary.report.contactEvidence.elementFocusPreservesContactCount=true;
+ summary.report.contactEvidence.noFalseWindowBlurInFocusCase=true;
  summary.report.contactEvidence.suppressedCountReported=contacts.some(row=>row.data.suppressed>0);
  await page.getByRole('button',{name:'Begrenzten lokalen Bericht vorbereiten',exact:true}).click();
  await page.getByRole('button',{name:'Bericht speichern',exact:true}).waitFor();
