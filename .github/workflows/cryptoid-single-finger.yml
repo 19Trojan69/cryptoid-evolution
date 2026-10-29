@@ -1,8 +1,8 @@
 name: Protected contact evidence and single-finger Boss 2 acceptance
-run-name: Verify window-only blur evidence and preserved native contact counts
+run-name: Verify separate current-document evidence in private Boss 2 reports
 on:
   push:
-    branches: [codex/boss2-window-focus-diagnostics-20261029]
+    branches: [codex/boss2-return-evidence-20261029]
     paths: ['.github/workflows/cryptoid-single-finger.yml']
 permissions:
   contents: read
@@ -27,7 +27,7 @@ jobs:
           npx playwright install --with-deps ${{ matrix.engine }}
       - name: Verify input, viewport and controller scope
         run: |
-          node verification/window-focus-diagnostics-20261029/verifyScope.mjs
+          node verification/device-return-evidence-20261029/verifyScope.mjs
           node --experimental-strip-types --test frontend/src/pages/gameInput.test.mjs frontend/src/pages/contactDiagnostics.test.mjs frontend/src/pages/inputDiagnostics.test.mjs frontend/src/pages/fullSessionRecorder.test.mjs frontend/src/lib/gameViewport.test.mjs
           cd frontend
           node_modules/.bin/tsc -b
@@ -38,7 +38,7 @@ jobs:
         run: node --experimental-strip-types verification/single-finger-controls-20261029/verify-browser.mjs
       - name: Verify protected artifact isolation and controller types
         run: |
-          node --experimental-strip-types --test verification/boss2-forensics-20261028/devicePreview.test.mjs private-preview/isolation.test.mjs private-preview/lifecycle.test.mjs
+          node --experimental-strip-types --test verification/boss2-forensics-20261028/devicePreview.test.mjs verification/boss2-forensics-20261028/deviceReturnEvidence.test.mjs frontend/scripts/stabilityReport.test.mjs private-preview/isolation.test.mjs private-preview/lifecycle.test.mjs
           node --experimental-strip-types verification/boss2-forensics-20261028/devicePreviewPreflight.mjs
       - name: Verify actual Boss 2 controls and recoverable report
         if: matrix.engine == 'chromium'
@@ -54,7 +54,7 @@ jobs:
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: window-focus-evidence-${{ matrix.engine }}
+          name: device-return-evidence-${{ matrix.engine }}
           path: |
             verification/single-finger-controls-20261029/results/${{ matrix.engine }}/
             verification/boss2-forensics-20261028/results/device-chromium-30/verification.json

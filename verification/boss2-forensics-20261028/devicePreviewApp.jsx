@@ -1,6 +1,7 @@
 import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { createBrowserRouter, RouterProvider, useNavigate } from 'react-router-dom';
 import { browserDeviceOptions, readDeviceRuns, recordDeviceRun, DEVICE_OPTIONS_KEY } from './devicePreviewAuth.mjs';
+import { readDeviceReturnEvidence } from './deviceReturnEvidence.mjs';
 import { readFullSessionSummaries, exportFullSession, settleFullSessionWrites } from '../../frontend/src/pages/fullSessionStore.ts';
 import { readFlightRecorders } from '../../frontend/src/pages/flightRecorderReport.mjs';
 import { readCrashTails } from '../../frontend/src/pages/crashTail.ts';
@@ -84,7 +85,8 @@ function Menu() {
         testOptionsHistory: history, testOptionsMatchedByStartTime: !!matched,
         truePiAuthentication: false, actualPhysicalDeviceVerified: false,
         automaticTransmission: false, nativeTerminationCauseMeasured: false,
-        flightRecorders: readFlightRecorders(window), crashTails: readCrashTails(window) };
+        flightRecorders: readFlightRecorders(window), crashTails: readCrashTails(window),
+        returnEvidence: readDeviceReturnEvidence(window) };
       const blob = new Blob([JSON.stringify(details).slice(0, -1), ',"fullSession":', full || 'null', '}'], { type: 'application/json' });
       setPrepared({ blob, id: id || 'isolated-boss2', name: 'cryptoid-boss2-diagnose.json' });
       setMessage('Bericht bereit. Speichern oder über „Teilen“ manuell senden.');

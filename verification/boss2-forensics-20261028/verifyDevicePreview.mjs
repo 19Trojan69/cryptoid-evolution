@@ -61,6 +61,7 @@ try{
  assert.ok(Number.isSafeInteger(committedThrough)&&committedThrough>0);
  await page.waitForFunction(sequence=>{try{const value=JSON.parse(localStorage.getItem('cryptoid_owner_full_status_v1')||'null');return value?.lastCommittedSeq>=sequence;}catch{return false;}},committedThrough,{timeout:10000});
  await page.screenshot({path:output+'/paused.png'});
+ const previousDocumentStartedAt = await page.evaluate(() => performance.timeOrigin);
  // Deliberately reload while paused to verify local report recovery, not a simulated native kill.
  await page.reload({waitUntil:'domcontentloaded'});
  await page.getByRole('button',{name:'Testszene vorbereiten',exact:true}).waitFor();
@@ -72,6 +73,21 @@ try{
  assert.equal(report.isolatedGuest,true);assert.equal(report.automaticTransmission,false);assert.equal(report.fullSession.integrity.contiguous,true);
  assert.ok(report.fullSession.records.some(row=>row.kind==='pause'&&row.data.pauseReason==='manual-pause'));
  assert.equal(report.testOptions.scene,'reactor');assert.equal(report.testOptionsMatchedByStartTime,true);
+ const returned = report.returnEvidence;
+ assert.equal(returned.format, 'cryptoid-device-return-evidence');
+ assert.equal(returned.evidenceSource, 'current-tab');
+ assert.ok(returned.activeDocument.startedAt > previousDocumentStartedAt);
+ assert.equal(returned.activeDocument.navigationType, 'reload');
+ assert.equal(returned.activeDocument.route, 'home');
+ const oldTail = report.crashTails.sessions.find(tail => tail.id === report.fullSession.summary.id);
+ assert.equal(oldTail.evidenceSource, 'current-tab');
+ assert.equal(oldTail.documentStartedAt, previousDocumentStartedAt);
+ const newBoot = returned.reloadTrace.events.filter(row => row.kind === 'app-boot').at(-1);
+ assert.equal(newBoot.navigationType, 'reload');assert.equal(newBoot.route, 'home');
+ assert.ok(returned.reloadTrace.events.some(row => row.bootId && row.bootId !== newBoot.bootId));
+ assert.ok(newBoot.at >= report.fullSession.summary.lastAt);
+ assert.ok(!report.fullSession.records.some(row => row.kind === 'lifecycle' && row.data.signal === 'app-boot'),
+   'new-document evidence stays separate from the saved game rows');
  const contacts=report.fullSession.records.filter(row=>row.kind==='input'&&row.data.operation==='contact-state');
  const focus=summary.singleFingerInput.elementFocus;
  const focusRows=contacts.filter(row=>row.at>=focus.startedAt&&row.at<=focus.endedAt);
@@ -89,8 +105,17 @@ try{
  summary.report.contactEvidence.elementFocusPreservesContactCount=true;
  summary.report.contactEvidence.noFalseWindowBlurInFocusCase=true;
  summary.report.contactEvidence.suppressedCountReported=contacts.some(row=>row.data.suppressed>0);
+ summary.report.returnEvidence={currentTabOnly:true,currentDocumentSeparated:true,distinctBootIds:true,
+  controlledReloadObserved:true,previousGamePreserved:true,nativeCauseKnown:false,whitePixelsObserved:false};
  await page.getByRole('button',{name:'Begrenzten lokalen Bericht vorbereiten',exact:true}).click();
  await page.getByRole('button',{name:'Bericht speichern',exact:true}).waitFor();
+ const limitedPending=page.waitForEvent('download');
+ await page.getByRole('button',{name:'Bericht speichern',exact:true}).click();
+ const limited=JSON.parse(readFileSync(await (await limitedPending).path(),'utf8'));
+ assert.equal(limited.fullSession,null);
+ assert.equal(limited.returnEvidence.activeDocument.startedAt,returned.activeDocument.startedAt);
+ assert.ok(limited.returnEvidence.reloadTrace.events.some(row=>row.kind==='app-boot'&&row.bootId===newBoot.bootId));
+ summary.report.returnEvidence.limitedExportAlsoIncludesReturn=true;
  await page.screenshot({path:output+'/recovered-report.png'});
  assert.deepEqual(external,[]);summary.unexpectedExternalRequests=external;
  assert.ok(!fatal,fatal);summary.complete=true;
