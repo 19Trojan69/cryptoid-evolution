@@ -36,3 +36,29 @@ termination cause and cannot exclude behavior in the embedding browser.
 
 The existing protected device test link and public Testnet/Mainnet remain as
 before. Verification results are recorded only after the external jobs finish.
+
+The first external attempt observed 360.738 active seconds in Chromium and
+360.754 in WebKit without an unexpected document change or technical pause.
+Both overall jobs then failed at the report step: the native-tap helper did not
+scroll a below-viewport menu button into view. A visible DOM element need not
+lie inside the touchscreen viewport. This is a verifier failure, not evidence
+of the owner's White Screen. Its six-minute process samples remain valid
+observations; neither job is counted as complete end-to-end acceptance.
+
+The helper now scrolls through the normal browser action and checks the tap
+center against the viewport before sending the native touch. The follow-up
+workflow first runs only 30 active seconds to validate this repaired report
+path. It is not a second six-minute observation. The original six-minute traces
+and failed overall statuses are retained separately; no application runtime
+change, new device deployment or native crash fix is claimed.
+
+A fresh browser context then runs another360 active seconds with the existing
+menu's additional-recording checkbox off. The controller must report
+`ownerDiagnostics:false`, and its additional full-session marker must remain
+absent. The graphics, audio, native clocks, scene, protection, viewport and DPR
+are retained. The existing core recovery/session safeguards and bounded test
+pause observer are not removed, so this is additional owner recording off, not
+all diagnostic code removed. Existing UI exports the limited report afterward;
+no full recording is expected for that condition. Results are separated by
+engine, recording condition and requested duration. This is a Linux process
+comparison, not a measured iPhone thermal or native memory result.

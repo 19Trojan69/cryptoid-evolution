@@ -9,13 +9,14 @@ import { sampleBrowserMemory } from '../boss2-forensics-20261028/processMemory.m
 const pw = createRequire(new URL('../boss2-forensics-20261028/package.json', import.meta.url))('playwright');
 const engine = process.env.CRYPTOID_DURATION_ENGINE;
 const seconds = Number(process.env.CRYPTOID_DURATION_SECONDS || 360);
+const diagnostics = process.env.CRYPTOID_DURATION_DIAGNOSTICS !== 'off';
 assert.ok(['chromium', 'webkit'].includes(engine));
-assert.ok(Number.isInteger(seconds) && seconds >= 360 && seconds <= 900);
-const output = resolve(root, 'verification/boss2-return-duration-20261029/results', engine);
+assert.ok(Number.isInteger(seconds) && seconds >= 30 && seconds <= 900);
+const output = resolve(root, 'verification/boss2-return-duration-20261029/results', `${engine}-${diagnostics ? 'on' : 'off'}-${seconds}`);
 mkdirSync(output, { recursive: true });
-const summary = { complete: false, engine, requestedSeconds: seconds, physicalDevice: false,
+const summary = { complete: false, engine, requestedSeconds: seconds, sixMinuteObservation: seconds >= 360, physicalDevice: false,
   physicalPiBrowser: false, nativeTerminationCauseMeasured: false, whiteScreenFixed: false,
-  actualHostOS: process.platform, buildMode: 'production', diagnostics: true,
+  actualHostOS: process.platform, buildMode: 'production', diagnostics,
   protection: true, scene: 'reactor', activeScreenshots: false, forcedGc: false,
   heapSnapshots: false, extraGameCollectors: false, control: 'native single touchscreen taps',
   memoryMetric: 'Linux browser descendant PSS; not iOS/Android or GPU-resident memory', points: [] };
@@ -25,7 +26,12 @@ const median = values => { const sorted = [...values].sort((a, b) => a - b); con
 async function tap(locator) {
   await locator.waitFor({ state: 'visible', timeout: 45000 });
   assert.ok(await locator.isEnabled());
+  await locator.scrollIntoViewIfNeeded();
   const box = await locator.boundingBox(); assert.ok(box);
+  const viewport = page.viewportSize(); assert.ok(viewport);
+  assert.ok(box.x + box.width / 2 >= 0 && box.x + box.width / 2 <= viewport.width
+    && box.y + box.height / 2 >= 0 && box.y + box.height / 2 <= viewport.height,
+  'native tap must land inside the viewport');
   await page.touchscreen.tap(box.x + box.width / 2, box.y + box.height / 2);
 }
 try {
@@ -45,6 +51,9 @@ try {
   page.on('pageerror', () => { fatal ||= 'javascript-error'; });
   page.on('crash', () => { fatal ||= 'renderer-crash'; });
   await page.goto(server.origin, { waitUntil: 'domcontentloaded' }); await page.bringToFront();
+  const diagnosticToggle = page.getByRole('checkbox', { name: 'Diagnose lokal aufzeichnen', exact: true });
+  assert.equal(await diagnosticToggle.isChecked(), true);
+  if (!diagnostics) { await tap(diagnosticToggle); assert.equal(await diagnosticToggle.isChecked(), false); }
   await tap(page.getByRole('button', { name: 'Testszene vorbereiten', exact: true }));
   await tap(page.getByRole('button', { name: 'Boss-2-Test öffnen', exact: true }));
   await page.waitForFunction(() => window.__crossDeviceTest?.inspect().status === 'paused');
@@ -53,7 +62,7 @@ try {
   await page.waitForFunction(() => window.__crossDeviceTest?.inspect().status === 'playing'
     && window.__crossDeviceTest.inspect().encounter === 'boss-fight', {}, { timeout: 40000 });
   const first = await page.evaluate(() => ({ scene: window.__crossDeviceTest.inspect(), documentStartedAt: performance.timeOrigin }));
-  assert.equal(first.scene.sector, 20); assert.equal(first.scene.reactorOpen, true); assert.equal(first.scene.ownerDiagnostics, true);
+  assert.equal(first.scene.sector, 20); assert.equal(first.scene.reactorOpen, true); assert.equal(first.scene.ownerDiagnostics, diagnostics);
   assert.deepEqual(first.scene.buildFlags, { development: false, production: true });
   summary.initialSetupPause = { expected: true, technical: false, manualResumeRequired: true };
   const started = Date.now(); let lastProgress = started, frameAt, lastPrinted = started;
@@ -70,7 +79,9 @@ try {
     const row = { elapsedSeconds: (now - started) / 1000, frameAt, coreVolley: scene.coreVolley,
       status: scene.status, shots: scene.shots, hostileShots: scene.hostileShots, effects: scene.effects,
       canvas: scene.canvas, audio: scene.audio, summedPssKiB: memory.summedPssKiB, summedRssKiB: memory.summedRssKiB,
-      processRoles: memory.processes.map(p => p.role) };
+      processRoles: memory.processes.map(p => p.role),
+      processMemoryByRole: Object.fromEntries([...new Set(memory.processes.map(p => p.role))].map(role => [role,
+        memory.processes.filter(p => p.role === role).reduce((sum, p) => sum + p.pssKiB, 0)])) };
     summary.points.push(row); appendFileSync(output + '/process-counters.jsonl', JSON.stringify(row) + '\n');
     if (now - lastPrinted >= 60000) { lastPrinted = now; console.log('CRYPTOID_DURATION_PROGRESS ' + JSON.stringify({ engine, activeSeconds: Math.round(row.elapsedSeconds), pssMiB: row.summedPssKiB / 1024 })); }
     await page.waitForTimeout(1000);
@@ -86,28 +97,42 @@ try {
     lastMinuteMedianPssKiB: median(summary.points.filter(p => p.elapsedSeconds >= seconds - 60).map(p => p.summedPssKiB)) };
   await tap(page.getByRole('button', { name: /^(Pause|Pausieren)$/, exact: true }));
   await page.waitForFunction(() => window.__crossDeviceTest.inspect().status === 'paused');
-  const pause = await page.evaluate(() => window.__bossLabPauseEvents.at(-1)); assert.equal(pause.pauseReason, 'manual-pause');
-  const through = await page.evaluate(() => JSON.parse(localStorage.getItem('cryptoid_owner_full_status_v1') || 'null')?.lastObservedSeq);
-  assert.ok(Number.isSafeInteger(through) && through > 0);
-  await page.waitForFunction(seq => { try { return JSON.parse(localStorage.getItem('cryptoid_owner_full_status_v1'))?.lastCommittedSeq >= seq; } catch { return false; } }, through);
+  if (diagnostics) {
+    const pause = await page.evaluate(() => window.__bossLabPauseEvents.at(-1)); assert.equal(pause.pauseReason, 'manual-pause');
+    const through = await page.evaluate(() => JSON.parse(localStorage.getItem('cryptoid_owner_full_status_v1') || 'null')?.lastObservedSeq);
+    assert.ok(Number.isSafeInteger(through) && through > 0);
+    await page.waitForFunction(seq => { try { return JSON.parse(localStorage.getItem('cryptoid_owner_full_status_v1'))?.lastCommittedSeq >= seq; } catch { return false; } }, through);
+  } else {
+    assert.equal(await page.evaluate(() => localStorage.getItem('cryptoid_owner_full_status_v1')), null);
+    summary.additionalFullRecordingAbsent = true;
+  }
   await page.screenshot({ path: output + '/paused-after-duration.png' });
   await page.reload({ waitUntil: 'domcontentloaded' });
   await page.getByRole('button', { name: 'Testszene vorbereiten', exact: true }).waitFor();
   assert.equal(new URL(page.url()).pathname, '/'); assert.equal(await page.locator('.game-shell').count(), 0);
-  await tap(page.getByRole('button', { name: /^Bericht vorbereiten ·/ }).first());
+  if (diagnostics) await tap(page.getByRole('button', { name: /^Bericht vorbereiten ·/ }).first());
+  else await tap(page.getByRole('button', { name: 'Begrenzten lokalen Bericht vorbereiten', exact: true }));
   const pending = page.waitForEvent('download');
   const [download] = await Promise.all([pending, tap(page.getByRole('button', { name: 'Bericht speichern', exact: true }))]);
   const report = JSON.parse(readFileSync(await download.path(), 'utf8'));
   assert.equal(report.isolatedGuest, true); assert.equal(report.automaticTransmission, false);
-  assert.equal(report.fullSession.integrity.contiguous, true); assert.deepEqual(report.fullSession.integrity.errors, []);
-  assert.equal(report.testOptionsMatchedByStartTime, true); assert.equal(report.testOptions.protection, true); assert.equal(report.testOptions.diagnostics, true);
+  if (diagnostics) {
+    assert.equal(report.fullSession.integrity.contiguous, true); assert.deepEqual(report.fullSession.integrity.errors, []);
+    assert.equal(report.testOptionsMatchedByStartTime, true); assert.equal(report.testOptions.protection, true); assert.equal(report.testOptions.diagnostics, true);
+  } else {
+    assert.equal(report.fullSession, null); assert.equal(report.testOptionsHistory.at(-1).diagnostics, false);
+    assert.equal(report.testOptionsHistory.at(-1).protection, true);
+  }
   const returned = report.returnEvidence; assert.equal(returned.evidenceSource, 'current-tab');
   assert.equal(returned.activeDocument.navigationType, 'reload'); assert.ok(returned.activeDocument.startedAt > first.documentStartedAt);
-  const tail = report.crashTails.sessions.find(t => t.id === report.fullSession.summary.id); assert.equal(tail.documentStartedAt, first.documentStartedAt);
-  summary.report = { source: report.source, records: report.fullSession.integrity.records, bytes: JSON.stringify(report).length,
-    contiguous: true, recoveredAfterControlledPausedReload: true, separateNewDocumentEvidence: true,
-    pauseReasons: report.fullSession.records.filter(r => r.kind === 'pause').map(r => r.data.pauseReason) };
-  assert.deepEqual(summary.report.pauseReasons, ['manual-pause']);
+  if (diagnostics) {
+    const tail = report.crashTails.sessions.find(t => t.id === report.fullSession.summary.id); assert.equal(tail.documentStartedAt, first.documentStartedAt);
+  }
+  summary.report = { source: report.source, fullRecording: diagnostics,
+    records: diagnostics ? report.fullSession.integrity.records : null, bytes: JSON.stringify(report).length,
+    contiguous: diagnostics ? true : null, recoveredAfterControlledPausedReload: true, separateNewDocumentEvidence: true,
+    pauseReasons: diagnostics ? report.fullSession.records.filter(r => r.kind === 'pause').map(r => r.data.pauseReason) : null };
+  if (diagnostics) assert.deepEqual(summary.report.pauseReasons, ['manual-pause']);
   assert.deepEqual(external, []); summary.unexpectedExternalRequests = external;
   await page.screenshot({ path: output + '/recovered-report.png' });
   assert.ok(!fatal, fatal); summary.complete = true;
@@ -121,6 +146,7 @@ try {
 } finally {
   summary.finishedAt = new Date().toISOString(); writeFileSync(output + '/verification.json', JSON.stringify(summary, null, 2) + '\n');
   console.log('CRYPTOID_DURATION_RESULT ' + JSON.stringify({ complete: summary.complete, engine,
+    requestedSeconds: seconds, diagnostics, sixMinuteObservation: summary.sixMinuteObservation,
     observedActiveSeconds: summary.observedActiveSeconds, processMemory: summary.processMemory, report: summary.report, failure: summary.failure }));
   if (browser) await browser.close(); if (server) await server.close();
 }

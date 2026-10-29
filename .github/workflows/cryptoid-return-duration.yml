@@ -1,5 +1,5 @@
 name: Private Boss 2 six-minute return investigation
-run-name: Six-minute active Boss 2 and Linux process-memory comparison
+run-name: Validate native report export and compare six minutes without extra recording
 on:
   push:
     branches: [codex/boss2-return-duration-20261029]
@@ -34,15 +34,21 @@ jobs:
         env:
           VERCEL_ENV: preview
         run: node verification/boss2-forensics-20261028/buildDevicePreview.mjs
-      - name: Observe six minutes without in-game interaction
+      - name: Validate the repaired report path after 30 active seconds
+        env:
+          CRYPTOID_DURATION_ENGINE: ${{ matrix.engine }}
+          CRYPTOID_DURATION_SECONDS: '30'
+        run: node --experimental-strip-types verification/boss2-return-duration-20261029/verifyDuration.mjs
+      - name: Compare six minutes with additional owner recording off
         env:
           CRYPTOID_DURATION_ENGINE: ${{ matrix.engine }}
           CRYPTOID_DURATION_SECONDS: '360'
+          CRYPTOID_DURATION_DIAGNOSTICS: 'off'
         run: node --experimental-strip-types verification/boss2-return-duration-20261029/verifyDuration.mjs
       - name: Preserve synthetic duration evidence
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: boss2-return-duration-${{ matrix.engine }}
-          path: verification/boss2-return-duration-20261029/results/${{ matrix.engine }}/
+          path: verification/boss2-return-duration-20261029/results/${{ matrix.engine }}-*/
           retention-days: 3
