@@ -149,3 +149,102 @@ test('verified observer sees one coarse cancellation without changing captured s
   assert.ok(rows.every(row => !('clientX' in row) && !('pointerId' in row)));
   stop(); const count = rows.length; h.down(); h.input.dispose(); assert.equal(rows.length, count);
 });
+
+const button = () => { const node = { closest: () => node }; return node; };
+const controlClick = (h, target, data = {}) => fire(h.field, 'click', { target, detail: 1, ...data });
+
+test('a second finger cannot open controls during steering; lift then a new tap can', () => {
+  const h = harness(), target = button(); h.down();
+  h.down({ target, pointerId: 2, isPrimary: false });
+  fire(h.win, 'pointerup', { target, pointerId: 2, isPrimary: false });
+  assert.equal(controlClick(h, target, { pointerId: 2, isPrimary: false }).defaultPrevented, true);
+  assert.equal(h.pointer.current, 1);
+  fire(h.win, 'pointerup');
+  h.down({ target, pointerId: 3 }); fire(h.win, 'pointerup', { target, pointerId: 3 });
+  fire(h.field, 'lostpointercapture', { target, pointerId: 3 });
+  assert.equal(controlClick(h, target, { pointerId: 3 }).defaultPrevented, false);
+  assert.equal(controlClick(h, target, { pointerId: 3 }).defaultPrevented, true, 'one press permits one activation');
+  assert.deepEqual(h.faults, []); h.input.dispose();
+});
+test('crossing a control while steering cannot activate it, including after release', () => {
+  const h = harness(), target = button(); h.down();
+  h.move({ target, clientX: 50 }); assert.equal(h.pointer.current, 1);
+  assert.equal(controlClick(h, target).defaultPrevented, true);
+  fire(h.win, 'pointerup', { target, clientX: 50 });
+  assert.equal(controlClick(h, target).defaultPrevented, true);
+  assert.ok(h.moves.length > 1); h.input.dispose();
+});
+test('a control press dragged away and back is not a fresh tap', () => {
+  const h = harness(), target = button(); h.down({ target });
+  h.move({ target, clientX: 250 }); h.move({ target, clientX: 300 });
+  fire(h.win, 'pointerup', { target });
+  assert.equal(controlClick(h, target).defaultPrevented, true);
+  h.down({ target }); fire(h.win, 'pointerup', { target, clientX: 308 });
+  assert.equal(controlClick(h, target).defaultPrevented, false, 'small tap jitter is allowed');
+  assert.equal(h.moves.length, 0); h.input.dispose();
+});
+test('release checks final displacement even if the host omitted motion events', () => {
+  const h = harness(), target = button(); h.down({ target });
+  fire(h.win, 'pointerup', { target, clientX: 350 });
+  assert.equal(controlClick(h, target).defaultPrevented, true); h.input.dispose();
+});
+test('another contact invalidates a pending control tap until a fresh single contact', () => {
+  const h = harness(), target = button(); h.down({ target });
+  h.down({ pointerId: 2, isPrimary: false });
+  fire(h.win, 'pointerup', { target });
+  assert.equal(controlClick(h, target).defaultPrevented, true);
+  fire(h.win, 'pointerup', { pointerId: 2, isPrimary: false });
+  h.down({ target, pointerId: 3 }); fire(h.win, 'pointerup', { target, pointerId: 3 });
+  assert.equal(controlClick(h, target, { pointerId: 3 }).defaultPrevented, false); h.input.dispose();
+});
+for (const type of ['pointercancel', 'lostpointercapture']) {
+  test(`a ${type} before release cannot leave a control armed`, () => {
+    const h = harness(), target = button(); h.down({ target });
+    fire(type === 'lostpointercapture' ? h.field : h.win, type, { target });
+    fire(h.win, 'pointerup', { target });
+    assert.equal(controlClick(h, target).defaultPrevented, true); h.input.dispose();
+  });
+}
+test('controls require the matching button and pointer, without blocking keyboard activation', () => {
+  const h = harness(), target = button(), other = button();
+  h.down({ target }); fire(h.win, 'pointerup', { target });
+  assert.equal(controlClick(h, other).defaultPrevented, true);
+  h.down({ target }); fire(h.win, 'pointerup', { target });
+  assert.equal(controlClick(h, target, { pointerId: 2 }).defaultPrevented, true);
+  h.down();
+  assert.equal(controlClick(h, target, { detail: 0, pointerId: undefined, pointerType: undefined }).defaultPrevented, false);
+  assert.equal(controlClick(h, target, { detail: 0 }).defaultPrevented, true, 'a touch click is still physical input');
+  h.input.dispose();
+});
+test('page loss and explicit reset discard a released tap; paused menus retain normal clicks', () => {
+  const h = harness(), target = button();
+  for (const clear of [() => fire(h.win, 'blur'), () => h.input.reset()]) {
+    h.down({ target }); fire(h.win, 'pointerup', { target }); clear();
+    assert.equal(controlClick(h, target).defaultPrevented, true);
+  }
+  h.setPlaying(false);
+  assert.equal(controlClick(h, target).defaultPrevented, false); h.input.dispose();
+});
+test('mouse buttons keep deliberate clicks and reject dragged control presses', () => {
+  const h = harness(), target = button();
+  h.down({ target, pointerType: 'mouse' }); fire(h.win, 'pointerup', { target, pointerType: 'mouse' });
+  assert.equal(controlClick(h, target, { pointerType: 'mouse' }).defaultPrevented, false);
+  h.down({ target, pointerType: 'mouse' }); h.move({ target, pointerType: 'mouse', clientX: 200 });
+  fire(h.win, 'pointerup', { target, pointerType: 'mouse', clientX: 200 });
+  assert.equal(controlClick(h, target, { pointerType: 'mouse' }).defaultPrevented, true); h.input.dispose();
+});
+test('legacy touch controls reject additional contacts and compatibility mouse re-arming', () => {
+  const h = harness({ legacy: true }), target = button();
+  const first = { identifier: 8, clientX: 60, clientY: 650 }, second = { ...first, identifier: 9 };
+  fire(h.field, 'touchstart', { touches: [first], changedTouches: [first] });
+  fire(h.field, 'touchstart', { target, touches: [first, second], changedTouches: [second] });
+  fire(h.win, 'touchend', { target, touches: [first], changedTouches: [second] });
+  fire(h.field, 'mousedown', { target, pointerType: 'mouse' });
+  fire(h.win, 'mouseup', { target, pointerType: 'mouse' });
+  assert.equal(controlClick(h, target, { pointerType: undefined, pointerId: undefined }).defaultPrevented, true);
+  fire(h.win, 'touchend', { touches: [], changedTouches: [first] });
+  fire(h.field, 'touchstart', { target, touches: [second], changedTouches: [second] });
+  fire(h.win, 'touchend', { target, touches: [], changedTouches: [second] });
+  assert.equal(controlClick(h, target, { pointerType: undefined, pointerId: undefined }).defaultPrevented, false);
+  h.input.dispose();
+});

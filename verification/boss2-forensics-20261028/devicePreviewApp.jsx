@@ -123,7 +123,7 @@ function Menu() {
     {preparation !== 'ready' && <button onClick={() => void prepareScene()} disabled={preparation === 'preparing'}>{preparation === 'preparing' ? 'Testszene wird vorbereitet …' : preparation === 'failed' ? 'Vorbereitung erneut versuchen' : 'Testszene vorbereiten'}</button>}
     {preparation === 'ready' && <button className="device-preview-primary" onClick={start}>Boss-2-Test öffnen</button>}
     <p className="device-preview-note">Bilder und Testszene werden vor dem Spielen geladen. Der Bosskampf öffnet zunächst angehalten. Tippe dort auf „Fortsetzen“, um ihn zu starten.</p>
-    <p>Prüfe die Aktionen einzeln: normal spielen, schnell nach links wischen, Screenshot, App-Wechsel. Echte Pausen werden nur von dir fortgesetzt.</p>
+    <p>Einfinger-Steuerung: Steuern, loslassen und die Waffentaste neu antippen. Über die Taste hinwegziehen öffnet kein Menü. Zusätzliche Kontakte öffnen während der Steuerung kein Menü. Echte Pausen werden nur von dir fortgesetzt.</p>
     <h2>Nach einer Pause oder einem Abbruch</h2>
     <p>Diese Testadresse erneut öffnen. Vor dem nächsten Test den letzten Bericht vorbereiten und speichern oder teilen. Die Aufzeichnung bleibt auf diesem Gerät; es gibt keinen automatischen Upload.</p>
     <p role="status">{message}</p>

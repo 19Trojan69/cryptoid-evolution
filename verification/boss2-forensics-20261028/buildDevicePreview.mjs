@@ -41,7 +41,7 @@ writeFileSync(output + '/device-preview-info.json', JSON.stringify({ type: 'prot
   controllerSha256: createHash('sha256').update(original).digest('hex'), normalizedControllerSha256: createHash('sha256').update(baselineController(original)).digest('hex'),
   actualPiAuthentication: false, liveBackend: false, realAccounts: false, payments: false, automaticUpload: false,
   guestOnly: true, syntheticDiagnosticCapability: true, collisionProtectionOptional: true, bossHealthFloorOptional: .4,
-  nativeGameClocks: true, automaticResume: false, reloadOpensMenu: true, explicitMenuPreparation:true,initialSetupPause:true,
+  singleFingerControls: true, controlsRequireFreshTap: true, nativeGameClocks: true, automaticResume: false, reloadOpensMenu: true, explicitMenuPreparation:true,initialSetupPause:true,
   coldDirectWebkitStartup:'Unresolved loop-stall before first frame; retained separately. Prepared start is a different condition.',
   sourceGameEditedByBuilder: false, buildOnlyTransforms: ['isolated menu/auth/transport', 'direct boss seed', 'optional protection/health floor', 'bounded pause observation'],
   nativeDeviceAccepted: false, whiteScreenFixed: false }, null, 2) + '\n');

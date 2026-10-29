@@ -1,3 +1,8 @@
+> Historischer Prüfstand vom 28. Oktober. Die Einfinger-Fortsetzung wird getrennt
+> in [single-finger-controls-20261029](../single-finger-controls-20261029/README.md)
+> dokumentiert. Die untenstehenden alten Lauf- und Deploymentdaten bleiben Belege
+> für ihren jeweiligen Quellstand.
+
 # Getrennte Boss-2-Testversion
 
 Die geschützte Diagnosevorschau ist bereit:

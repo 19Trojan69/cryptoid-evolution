@@ -5,6 +5,7 @@ import { resolve } from 'node:path';
 import { root,configuration } from './fixture.mjs';
 import { serveDevicePreview } from './devicePreviewServer.mjs';
 import { sampleBrowserMemory } from './processMemory.mjs';
+import { verifyDeviceInput } from '../single-finger-controls-20261029/verify-device-input.mjs';
 const pw=createRequire(import.meta.url)('playwright');
 const engine=process.env.CRYPTOID_DEVICE_ENGINE||'chromium',seconds=Number(process.env.CRYPTOID_DEVICE_SECONDS||8);
 assert.ok(['chromium','webkit'].includes(engine));assert.ok(Number.isInteger(seconds)&&seconds>=5&&seconds<=900);
@@ -35,6 +36,7 @@ try{
  await page.locator('.pause-resume-button').click();
  await page.waitForFunction(()=>window.__crossDeviceTest?.inspect().status==='playing'&&window.__crossDeviceTest.inspect().encounter==='boss-fight',{},{timeout:40000});
  const first=await page.evaluate(()=>window.__crossDeviceTest.inspect());assert.equal(first.sector,20);assert.equal(first.reactorOpen,true);assert.equal(first.ownerDiagnostics,true);
+ if(engine==='chromium')summary.singleFingerInput=await verifyDeviceInput(page,context);
  const started=Date.now();let last,frameAt,frameChanged=Date.now(),progress=0;
  while(Date.now()-started<seconds*1000){
   assert.ok(!fatal,fatal);last=await page.evaluate(()=>window.__crossDeviceTest.inspect());

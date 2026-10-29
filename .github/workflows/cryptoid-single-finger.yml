@@ -1,0 +1,60 @@
+name: Protected single-finger Boss 2 acceptance
+on:
+  push:
+    branches: [codex/boss2-single-finger-preview-20261029]
+    paths: ['.github/workflows/cryptoid-single-finger.yml']
+permissions:
+  contents: read
+jobs:
+  input:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        engine: [chromium, webkit]
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with:
+          node-version: '24'
+      - name: Install tools
+        run: |
+          npm install --prefix frontend --ignore-scripts --no-audit --no-fund
+          npm install --prefix verification/single-finger-controls-20261029 --ignore-scripts --no-audit --no-fund
+          cd verification/single-finger-controls-20261029
+          npx playwright install --with-deps ${{ matrix.engine }}
+      - name: Verify input, viewport and controller scope
+        run: |
+          node --experimental-strip-types --test frontend/src/pages/gameInput.test.mjs frontend/src/lib/gameViewport.test.mjs
+          cd frontend
+          node_modules/.bin/tsc -b
+          node_modules/.bin/eslint src/pages/gameInput.ts src/pages/singleFingerControls.ts
+      - name: Verify real browser event propagation
+        env:
+          CRYPTOID_INPUT_ENGINE: ${{ matrix.engine }}
+        run: node --experimental-strip-types verification/single-finger-controls-20261029/verify-browser.mjs
+      - name: Verify protected artifact isolation and controller types
+        run: |
+          node --experimental-strip-types --test verification/boss2-forensics-20261028/devicePreview.test.mjs private-preview/isolation.test.mjs private-preview/lifecycle.test.mjs
+          node --experimental-strip-types verification/boss2-forensics-20261028/devicePreviewPreflight.mjs
+      - name: Verify actual Boss 2 controls and recoverable report
+        if: matrix.engine == 'chromium'
+        env:
+          VERCEL_ENV: preview
+          CRYPTOID_DEVICE_ENGINE: chromium
+          CRYPTOID_DEVICE_SECONDS: '30'
+        run: |
+          npm install --prefix verification/boss2-forensics-20261028 --ignore-scripts --no-audit --no-fund
+          node verification/boss2-forensics-20261028/buildDevicePreview.mjs
+          node --experimental-strip-types verification/boss2-forensics-20261028/verifyDevicePreview.mjs
+      - name: Keep bounded synthetic verification
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: single-finger-${{ matrix.engine }}
+          path: |
+            verification/single-finger-controls-20261029/results/${{ matrix.engine }}/
+            verification/boss2-forensics-20261028/results/device-chromium-30/verification.json
+            verification/boss2-forensics-20261028/results/device-chromium-30/*.png
+          retention-days: 3
