@@ -18,7 +18,7 @@ unmittelbar folgende Kompatibilitäts-Mausereignisse. Kein neuer Timer, RAF,
 Speicher-/Netzwerkzugriff oder Eingabedaten-Upload. Spieluhren, Rendering,
 Originalgrafik und -audio, Wirtschaft und GamePage sind unverändert.
 
-Lokal bestanden: 33 Eingabetests, Typprüfung, Lint der beiden Laufzeitmodule und
+Lokal bestanden: 35 Eingabetests, Typprüfung, Lint der beiden Laufzeitmodule und
 der vollständige Frontend-Releasebuild. Die zusätzliche Prüfung nutzt echte
 Browser-Ereignisweiterleitung mit dem tatsächlichen Eingabemodul, der vorhandenen
 Viewport-Sperre und React-Klickdelegation. Ihre Spielsituation ist synthetisch;
@@ -52,3 +52,36 @@ Originalmenü/Countdown/Fortsetzen und einen lückenlosen Bericht nach Reload.
 WebKit erhält hier die Eingabe-/React-Grenzprüfung; der bekannte ältere
 WebKit-Startstillstand im vollständigen Spiel bleibt getrennt offen und wird
 nicht durch eine grüne Eingabeprüfung als behoben bezeichnet.
+
+## Abgeschlossener Stand
+
+Die Einfinger-Eingabe besteht auf Quellstand `8242667f` in Chromium und WebKit
+(CI40823378548: 14 bzw. 9 Browser-Grenzprüfungen). 35 direkte Eingabetests und
+510 Release-Prüfungen inklusive Typprüfung/Vite sind grün. Die private Variante
+hat zusätzlich den bisherigen Diagnosetest, insgesamt 36 Eingabefälle, und behält
+24 Isolations-/Verpackungsprüfungen sowie den instrumentierten Controller-Check.
+
+Die tatsächliche geschützte Boss-2-Vorschau ist READY auf `79d4f24b`, Tree
+`d38517c8b94fac6c1c304780987a0f88bcb16154`, Build45s:
+https://cryptoid-evolution-testnet-mspthwlj1-19-trojan69.vercel.app/
+
+Der Vorschau-Lauf CI40823387246 besteht insgesamt. Chromium prüft zusätzlich
+vier native Touch-Abläufe im tatsächlichen isolierten Bosskampf, dann 30,951
+aktive Sekunden und den lückenlosen Export mit139 Einträgen nach Reload.
+WebKit besteht die Eingabe-Grenzprüfung; der vollständige WebKit-Spielstart wurde
+in diesem Lauf nicht erneut abgenommen. Die ältere Startstörung bleibt offen.
+Die vier heruntergeladenen Prüfarchive wurden gegen ihre SHA256-Digests geprüft.
+
+Auf der tatsächlichen Vercel-Adresse bestehen außerdem Vorbereitung, manueller
+Start, Hinüberziehen per Maus ohne Menüöffnung, neuer Klick zum Öffnen, regulärer
+Rückweg/Countdown, fortgesetzter Kampf und Berichtsexport nach neuem Dokument.
+Dieser Cloud-Prüflauf ist kein physischer Smartphone-Test. Der unveröffentlichte
+Release-Kandidat ist als Draft-PR200 gesichert; die Gast-API bleibt ausschließlich
+im separaten Vorschauzweig. Main und öffentliche Testnet-/Mainnet-Versionen
+wurden nicht veröffentlicht oder verändert. Die vorhandene Vercel-Authentifizierung
+bleibt bei Standard Protection; kein Bypasslink und keine Einstellungsänderung.
+
+Die genauen Quellen, Prüfumfänge, verworfenen Zwischenversuche und Grenzen stehen
+in [results.json](results.json). Die frühen Lade-/Klick-Prüffehler sind dort als
+nicht akzeptierte Versuche aufgeführt. Ein grüner Eingabetest beweist weiterhin
+keinen behobenen ursprünglichen White Screen.
