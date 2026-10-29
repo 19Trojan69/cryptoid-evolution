@@ -46,6 +46,10 @@ export async function verifyNeutralContacts(page, context, options) {
       assert.ok(events.some(row => row.type === 'pointercancel'), name + ': pointer cancellation observed');
       assert.ok(events.some(row => row.type === 'touchcancel'), name + ': touch cancellation observed');
     }
+    if (typeof expected.firstUpPrimary === 'boolean')
+      assert.equal(events.find(row => row.type === 'pointerup')?.primary, expected.firstUpPrimary, name + ': release order');
+    if (expected.thirdSecondary)
+      assert.equal(events.filter(row => row.type === 'pointerdown').at(-1)?.primary, false, name + ': third contact remains secondary');
     const terminal = events.filter(row => ['touchend', 'touchcancel'].includes(row.type)).at(-1);
     assert.equal(terminal?.touches, 0, name + ': browser reports all contacts ended');
     result.cases.push({ name, passed: true, startedWithoutExistingContact: true,
@@ -58,16 +62,16 @@ export async function verifyNeutralContacts(page, context, options) {
     await run('simultaneous control then field contact; primary lifts first', async () => {
       await send('touchStart', [control, second]); await send('touchEnd', [second]);
       await send('touchMove', [{ ...control, id: 72 }]); await options.assertPlaying(); await send('touchEnd', []);
-    }, { two: true });
+    }, { two: true, firstUpPrimary: true });
     await run('simultaneous field then control contact; secondary lifts first', async () => {
       await send('touchStart', [start, { ...control, id: 72 }]); await send('touchEnd', [start]);
       await options.assertPlaying(); await send('touchEnd', []);
-    }, { two: true });
+    }, { two: true, firstUpPrimary: false });
     await run('remaining secondary contact cannot re-arm controls with a third contact', async () => {
       await send('touchStart', [control, second]); await send('touchEnd', [second]);
       await send('touchStart', [second, { ...control, id: 73 }]); await options.assertPlaying();
       await send('touchEnd', [second]); await send('touchEnd', []);
-    }, { two: true });
+    }, { two: true, firstUpPrimary: true, thirdSecondary: true });
     await run('one supplied wide contact crosses the weapons button', async () => {
       const shape = { radiusX: 80, radiusY: 12, rotationAngle: 80, force: .5 };
       await send('touchStart', [{ ...start, ...shape }]);

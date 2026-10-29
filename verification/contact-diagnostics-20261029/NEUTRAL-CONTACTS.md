@@ -43,3 +43,10 @@ existing WebKit input boundary checks remain distinct from full-game acceptance.
 
 Completed results and any excluded attempts are recorded separately in
 neutral-contact-results.json so the earlier deployment receipt stays intact.
+
+The first external run40828824176 stopped before any browser case: npm rewrote
+frontend/yarn.lock after checkout. The committed frontend tree (including that
+lock) remains strictly pinned. The working-tree check now discloses only that
+exact installation rewrite and rejects every other pinned-source change.
+Release-order assertions also inspect the native first pointer-up primary flag;
+the third contact must remain secondary while an earlier secondary stays held.

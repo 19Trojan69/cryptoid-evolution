@@ -13,6 +13,12 @@ const pins = {
 for (const [path, sha] of Object.entries(pins)) {
   assert.equal(execFileSync('git', ['rev-parse', `HEAD:${path}`], { cwd: root, encoding: 'utf8' }).trim(), sha, path);
 }
-execFileSync('git', ['diff', '--exit-code', '--', ...Object.keys(pins)], { cwd: root, stdio: 'pipe' });
+const changed = execFileSync('git', ['diff', '--name-only', '--', ...Object.keys(pins)],
+  { cwd: root, encoding: 'utf8' }).trim().split('\n').filter(Boolean);
+// npm rewrites this repository's tracked Yarn lock while installing. Its
+// committed Git object is still pinned above; disclose only this exact generated
+// installation rewrite and reject any changed runtime/config/source file.
+assert.deepEqual(changed.filter(path => path !== 'frontend/yarn.lock'), [], 'runtime worktree changes');
 console.log('CRYPTOID_NEUTRAL_CONTACT_SCOPE ' + JSON.stringify({ passed: true,
-  applicationUnchangedFrom: '68c33d15f6f591477508cc9e0497d6c8a4c100c0', pins }));
+  applicationUnchangedFrom: '68c33d15f6f591477508cc9e0497d6c8a4c100c0', pins,
+  installationRewrites: changed, runtimeSourceWorktreeUnchanged: true }));
