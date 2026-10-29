@@ -17,7 +17,7 @@ export async function verifyDeviceInput(page,context){
   assert.notEqual((await state()).player.x,before.player.x);checks.push('native steering crosses the actual weapons button without opening it');
   await page.waitForTimeout(1100);
   await send('touchStart',[from]);await send('touchStart',[from,{...over,id:2}]);
-  await send('touchEnd',[from]);await stillPlaying();
+  await send('touchEnd',[{...over,id:2}]);await stillPlaying();
   await send('touchEnd',[]);await stillPlaying();checks.push('native second touch on weapons does not pause active steering');
   await page.waitForTimeout(1100);
   await page.touchscreen.tap(over.x,over.y);

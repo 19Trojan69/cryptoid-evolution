@@ -11,6 +11,10 @@ export async function verifyNeutralContacts(page, context, options) {
   const second = { id: 72, x: field.x + field.width * .48, y: start.y + 5 };
   const control = { id: 71, x: button.x + button.width / 2, y: button.y + button.height / 2 };
   const send = (type, touchPoints) => cdp.send('Input.dispatchTouchEvent', { type, touchPoints });
+  // This runner's native trace shows that a nonempty touchEnd list identifies
+  // contacts to release, not contacts to keep. Assertions below verify which
+  // primary/secondary contact actually lifts instead of trusting the command.
+  const lift = point => send('touchEnd', [point]);
   const result = { complete: false, nativeChromiumTouch: true, physicalDevice: false,
     physicalPalmReproduced: false, osInterruptionReproduced: false, cases: [] };
   await page.evaluate(selector => {
@@ -60,17 +64,17 @@ export async function verifyNeutralContacts(page, context, options) {
       await send('touchStart', [start, second]); await options.assertPlaying(); await send('touchEnd', []);
     }, { two: true });
     await run('simultaneous control then field contact; primary lifts first', async () => {
-      await send('touchStart', [control, second]); await send('touchEnd', [second]);
+      await send('touchStart', [control, second]); await lift(control);
       await send('touchMove', [{ ...control, id: 72 }]); await options.assertPlaying(); await send('touchEnd', []);
     }, { two: true, firstUpPrimary: true });
     await run('simultaneous field then control contact; secondary lifts first', async () => {
-      await send('touchStart', [start, { ...control, id: 72 }]); await send('touchEnd', [start]);
+      await send('touchStart', [start, { ...control, id: 72 }]); await lift({ ...control, id: 72 });
       await options.assertPlaying(); await send('touchEnd', []);
     }, { two: true, firstUpPrimary: false });
     await run('remaining secondary contact cannot re-arm controls with a third contact', async () => {
-      await send('touchStart', [control, second]); await send('touchEnd', [second]);
+      await send('touchStart', [control, second]); await lift(control);
       await send('touchStart', [second, { ...control, id: 73 }]); await options.assertPlaying();
-      await send('touchEnd', [second]); await send('touchEnd', []);
+      await lift({ ...control, id: 73 }); await send('touchEnd', []);
     }, { two: true, firstUpPrimary: true, thirdSecondary: true });
     await run('one supplied wide contact crosses the weapons button', async () => {
       const shape = { radiusX: 80, radiusY: 12, rotationAngle: 80, force: .5 };

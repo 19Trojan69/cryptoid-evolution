@@ -75,8 +75,8 @@ try {
     const contacts=(await state()).contactOrder;
     await check('ignored native secondary contact is recorded before the input guard',contacts.some(row=>row.event==='pointerdown'&&row.trackedPointers===2&&row.primaryFlag===false));
     await check('native two-contact TouchEvent count is recorded',contacts.some(row=>row.event==='touchstart'&&row.reportedTouches===2));
-    await send('touchEnd',[start]);
-    await check('native second touch on weapons cannot pause the held steering contact',(await state()).playing&&(await state()).opens===before.opens);
+    await send('touchEnd',[{...end,id:2}]);
+    await check('native second touch on weapons cannot pause the held steering contact',(await state()).playing&&(await state()).opens===before.opens&&(await state()).pointer!==null);
     await send('touchEnd',[]);await touch('#weapons');
     await check('native multitouch release restores the next one-finger menu tap',!(await state()).playing);await resume();
     await send('touchStart',[end]);await send('touchMove',[{...end,x:end.x+80}]);await send('touchMove',[end]);await send('touchEnd',[]);

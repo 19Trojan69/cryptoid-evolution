@@ -1,5 +1,5 @@
 name: Protected contact evidence and single-finger Boss 2 acceptance
-run-name: Verify native neutral-contact release order, cancellation and recovered Boss 2 report
+run-name: Verify observed native release order, neutral contacts and recovered cancellation report
 on:
   push:
     branches: [codex/boss2-contact-diagnostics-20261029]

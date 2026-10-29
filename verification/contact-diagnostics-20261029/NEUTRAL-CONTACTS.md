@@ -50,3 +50,12 @@ lock) remains strictly pinned. The working-tree check now discloses only that
 exact installation rewrite and rejects every other pinned-source change.
 Release-order assertions also inspect the native first pointer-up primary flag;
 the third contact must remain secondary while an earlier secondary stays held.
+
+The second run40829271482 passed WebKit but failed the new Chromium release-order
+assertion before reaching the actual Boss 2 scene. The browser trace shows a
+secondary pointer lifting where a primary lift was intended; play remained
+active without a menu, JavaScript error or input fault. The driver had interpreted
+a nonempty touchEnd array as remaining contacts, whereas this Chromium runner
+releases the listed contact. The driver now explicitly names the contact to lift
+and keeps the primary-flag assertions. The two earlier secondary-release steps
+are corrected as well; their old receipts are not retroactively changed.
