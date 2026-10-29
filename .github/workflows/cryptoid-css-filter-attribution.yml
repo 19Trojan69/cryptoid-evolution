@@ -1,0 +1,49 @@
+name: Private smartphone CSS filter attribution
+run-name: Isolate HUD blur and boss filtering across smartphone browser engines
+on:
+  push:
+    branches: [codex/boss2-css-filter-attribution-20261029]
+    paths: ['.github/workflows/cryptoid-css-filter-attribution.yml']
+permissions:
+  contents: read
+jobs:
+  filter-attribution:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        engine: [chromium, webkit]
+        condition: [standard, hud-backdrop-off, boss-hull-filter-off, all-css-filters-off]
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with:
+          node-version: '24'
+      - name: Install existing pinned tools
+        run: |
+          npm install --prefix frontend --ignore-scripts --no-audit --no-fund
+          npm install --prefix verification/boss2-forensics-20261028 --ignore-scripts --no-audit --no-fund
+          cd verification/boss2-forensics-20261028
+          npx playwright install --with-deps ${{ matrix.engine }}
+      - name: Check unchanged application and diagnostic driver
+        run: |
+          node --check verification/boss2-css-filter-attribution-20261029/verifyFilters.mjs
+          node verification/boss2-return-duration-20261029/verifyScope.mjs
+          node --experimental-strip-types verification/boss2-forensics-20261028/devicePreviewPreflight.mjs
+      - name: Build the unchanged private application
+        env:
+          VERCEL_ENV: preview
+        run: node verification/boss2-forensics-20261028/buildDevicePreview.mjs
+      - name: Observe isolated CSS-filter condition
+        env:
+          CRYPTOID_FILTER_ENGINE: ${{ matrix.engine }}
+          CRYPTOID_FILTER_CASE: ${{ matrix.condition }}
+        run: node --experimental-strip-types verification/boss2-css-filter-attribution-20261029/verifyFilters.mjs
+      - name: Preserve synthetic filter evidence
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: css-filter-${{ matrix.engine }}-${{ matrix.condition }}
+          path: verification/boss2-css-filter-attribution-20261029/results/${{ matrix.engine }}-${{ matrix.condition }}/
+          retention-days: 3
