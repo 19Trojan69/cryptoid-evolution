@@ -1,0 +1,48 @@
+name: Protected reactor visual control
+run-name: Verify isolated SVG reactor display control and preserved game lifecycle
+on:
+  push:
+    branches: [codex/boss2-reactor-visual-control-20261029]
+    paths: ['.github/workflows/cryptoid-reactor-visual-control.yml', 'verification/boss2-reactor-visual-control-20261029/**']
+permissions:
+  contents: read
+jobs:
+  reactor-control:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        engine: [chromium, webkit]
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with:
+          node-version: '24'
+      - name: Install existing pinned browser tools
+        run: |
+          npm install --prefix frontend --ignore-scripts --no-audit --no-fund
+          npm install --prefix verification/boss2-forensics-20261028 --ignore-scripts --no-audit --no-fund
+          cd verification/boss2-forensics-20261028
+          npx playwright install --with-deps ${{ matrix.engine }}
+      - name: Verify unchanged source and controller types
+        run: |
+          node --check verification/boss2-reactor-visual-control-20261029/buildReactorControl.mjs
+          node --check verification/boss2-reactor-visual-control-20261029/verifyReactorControl.mjs
+          node verification/boss2-return-duration-20261029/verifyScope.mjs
+          node --experimental-strip-types verification/boss2-forensics-20261028/devicePreviewPreflight.mjs
+      - name: Build protected reactor display control
+        env:
+          VERCEL_ENV: preview
+        run: node verification/boss2-reactor-visual-control-20261029/buildReactorControl.mjs
+      - name: Verify native game and stopwatch lifecycle with reactor drawing disabled
+        env:
+          CRYPTOID_REACTOR_CONTROL_ENGINE: ${{ matrix.engine }}
+        run: node --experimental-strip-types verification/boss2-reactor-visual-control-20261029/verifyReactorControl.mjs
+      - name: Preserve synthetic control evidence
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: reactor-control-${{ matrix.engine }}
+          path: verification/boss2-reactor-visual-control-20261029/results/${{ matrix.engine }}/
+          retention-days: 3

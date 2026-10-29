@@ -1,0 +1,2 @@
+.game-shell .boss-special-weapon { display: none !important; }
+.device-preview-menu section::before { content: "GRAFIKTEST: SVG-Reaktor ausgeblendet; CSS-Filter ausgeschaltet" !important; }
