@@ -1,0 +1,123 @@
+{
+  "version": 1,
+  "status": "completed",
+  "approval": {
+    "date": "2026-10-29",
+    "userInstruction": "Du darfst, ich gebe frei",
+    "scope": "Prepared protected Vercel Preview at reviewed commit c610e7c."
+  },
+  "deployment": {
+    "id": "EkJsAPJX6JPjvbqbKArqo1Lxzey6",
+    "url": "https://cryptoid-evolution-testnet-kskkz5hnw-19-trojan69.vercel.app/",
+    "dashboard": "https://vercel.com/19-trojan69/cryptoid-evolution-testnet/EkJsAPJX6JPjvbqbKArqo1Lxzey6",
+    "project": "cryptoid-evolution-testnet",
+    "team": "19-trojan69",
+    "environment": "preview",
+    "state": "READY",
+    "buildDurationSeconds": 44,
+    "sourceCommit": "c610e7cb2bde2891dd04721c530c5b1bbead2215",
+    "sourceTree": "044a9aa1cd058009ced317c8ec9bd5d452c1ea71",
+    "createdAtVisibleVienna": "29.10.2026 11:51:49 MEZ",
+    "workingTreeDirtyInActualExport": true,
+    "publicDomainAssignment": "Skipped",
+    "automaticGitDeploymentEnabled": false,
+    "protectionSettingsChanged": false,
+    "shareOrBypassLinkCreated": false
+  },
+  "verification": {
+    "ciRun": 40854908853,
+    "ciConclusion": "success",
+    "deployedBrowser": "Cloud Chromium with mouse UI controls; not a physical iPhone or Pi Browser.",
+    "preparedBeforeSceneMount": true,
+    "initialPause": true,
+    "manualResumeAndCountdown": true,
+    "freshWeaponClickOpensOriginalPausedMenu": true,
+    "manualReturnAndCountdown": true,
+    "manualPauseAndResume": true,
+    "reloadWhileDOMUnpaused": true,
+    "reloadReturnsRootMenu": true,
+    "report": {
+      "passed": true,
+      "source": {
+        "sourceCommit": "c610e7cb2bde2891dd04721c530c5b1bbead2215",
+        "sourceTree": "044a9aa1cd058009ced317c8ec9bd5d452c1ea71",
+        "workingTreeDirty": true
+      },
+      "bytes": 232100,
+      "sha256": "e7d926eba3ea4ef264d3cebf9f20ecb177d1fb7926beb5a345d50c52572494bd",
+      "evidenceAcquiredThrough": "all 3 visible text export parts; the browser download tool failed",
+      "reportRecords": 86,
+      "contiguous": true,
+      "sessionState": "recording",
+      "durationMs": 87506,
+      "pauseReasons": [
+        "weapon-menu",
+        "manual-pause"
+      ],
+      "contactRecords": 15,
+      "actualFullSessionKindCounts": {
+        "sample": 16,
+        "resource": 20,
+        "pause": 2,
+        "lifecycle": 9,
+        "input": 18
+      },
+      "currentDocument": {
+        "startedAt": 1793271251048.9,
+        "ageMs": 9654.10009765625,
+        "navigationType": "reload",
+        "route": "home"
+      },
+      "previousDocumentStartedAt": 1793271143207.6,
+      "currentTabOnly": true,
+      "distinctBootIds": true,
+      "currentDocumentSeparatedFromSavedGame": true,
+      "newBootRecorded": true,
+      "newBootAfterActiveSession": true,
+      "reloadSignals": [
+        "main-thread-gap",
+        "beforeunload",
+        "pagehide",
+        "visibility-hidden",
+        "app-boot",
+        "boot-after-active-session"
+      ],
+      "privateGuest": true,
+      "automaticTransmission": false,
+      "controlledReloadIsNotNativeCrash": true,
+      "whiteScreenFixed": false
+    },
+    "existingReloadTraceGap": {
+      "gapMs": 737,
+      "status": "playing",
+      "nativeCauseEstablished": false
+    }
+  },
+  "boundary": {
+    "publicGitMainAfter": "ce073547cf573375d141bf846f70e294138dbd73",
+    "publicDeploymentAfter": "239zEifRV84KCpbyHumnuHmSGm9T",
+    "publicSourceAfter": "ce073547cf573375d141bf846f70e294138dbd73",
+    "publicAliasUnchanged": true,
+    "mainnetContacted": false,
+    "actualOwnerReportsUploaded": false,
+    "accountOrPaymentOrSaveMutation": false
+  },
+  "evidence": {
+    "screenshot": "evidence/deployed-return-preview.jpg",
+    "screenshotBytes": 100913,
+    "screenshotSha256": "5fb5b8299c9209db0160f509f00e99c59b70afd26d176f560e02bc243f7f7cfc",
+    "reportMethod": "Three visible text parts were read; sequence/total/character count, JSON and technical evidence independently checked.",
+    "downloadToolAttempt": {
+      "success": false,
+      "error": "Download failed; browser automation kernel reset.",
+      "retryOrBypass": false
+    },
+    "historicalBlockedAttempt": "results.json preserves the prior automatic-review rejection; this file records the subsequently approved successful deployment."
+  },
+  "limits": [
+    "No physical-device, sustained heat, total process/GPU memory or native termination-cause measurement.",
+    "Controlled reload and recovery are not a reproduction of the unexpected White Screen.",
+    "The cloud download handoff failed; deployed report content was verified through its existing text-export alternative.",
+    "The private URL serves a diagnostic improvement, not an established White Screen fix."
+  ]
+}

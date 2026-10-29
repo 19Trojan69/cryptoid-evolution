@@ -56,10 +56,38 @@ after an explicit paused reload. There were no unexpected external requests.
 Both artifact ZIP digests and ZIP integrity were independently verified; their
 IDs, hashes, scope and limitations are in `results.json`.
 
-Deployment was **not** created. Automatic approval review rejected the specific
+The initial deployment attempt was **not** executed. Automatic approval review rejected the specific
 Vercel Create Preview Deployment submission because it requires explicit user
 approval. The prepared dialog shows the exact accepted commit and Preview
 environment in `evidence/prepared-private-preview.jpg`. No retry, bypass,
 protection/settings change, public alias change or Mainnet action followed.
 The existing hde4nlh2r Preview still serves source 68c33d1; it does not yet contain
 this export addition or the separately accepted window-blur correction.
+
+After the owner's explicit “Du darfst, ich gebe frei” authorization, the same
+accepted application commit was deployed to the existing project's **Preview**
+environment. Deployment `EkJsAPJX6JPjvbqbKArqo1Lxzey6` is READY after 44 seconds:
+<https://cryptoid-evolution-testnet-kskkz5hnw-19-trojan69.vercel.app/>.
+Its actual exported source/tree match c610e7c/044a9aa1. The Vercel export's
+`workingTreeDirty: true` is retained as observed. No protection or sharing change
+was made. Public Testnet remains deployment 239zEifRV84KCpbyHumnuHmSGm9T/source
+ce07354, also checked in the project overview after the private deployment.
+
+The deployed UI was checked through preparation, the initial pause, deliberate
+Resume/countdown, a fresh weapon click, manual Return/countdown and Pause/Resume.
+Reloading while the game DOM was unpaused opened the root menu. The recovered
+report has 86 contiguous rows and 15 contact rows. Its 87.506 seconds are the
+recorded wall interval, not a claim of continuous active play. The new current
+document is separate from the prior tab-correlated game tail, with distinct boot
+IDs and an actual `boot-after-active-session` entry. The existing reload trace
+also contains a 737ms foreground gap; this establishes no native or White Screen
+cause. The expected manual weapon and pause rows remain distinct.
+
+The cloud browser's download handoff failed and reset the automation kernel.
+This was not counted as a successful deployed download. The existing text-export
+alternative supplied all three visible parts; sequence, total character count,
+JSON, recorded source/tree, record integrity and document/boot correlation were
+verified independently. The prepared report remains available in the deployed
+menu; its screenshot is saved here. See `deployment-results.json` and
+`evidence/deployed-return-preview.jpg` for the final result and limitations.
+`results.json` intentionally retains the historical pre-approval result.
