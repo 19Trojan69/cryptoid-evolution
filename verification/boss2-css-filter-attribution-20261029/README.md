@@ -22,7 +22,10 @@ condition. Individual cases are unseeded; progress must be reported, not assumed
 equal. No physical-device memory/temperature/FPS or crash acceptance is claimed.
 
 Overrides exist only as page.addStyleTag in the automated browser after the
-original prepared pause. They deliberately alter the diagnostic image. They are
+original scene is prepared. Native Resume advances the initial boss-intro until
+BossHullView actually mounts its hull; native Pause then permits style probes
+and injection. This short preparation interval is outside the90-second window.
+The overrides deliberately alter the diagnostic image. They are
 not written to frontend/app sources, the compiled game, public previews, saved
 preferences or a proposed production quality mode. No gameplay/clock/input/audio/
 auth/payment/progression implementation changes. There is no new native profiler,
@@ -39,3 +42,12 @@ emulator cannot rule out physical-device or other native rendering failures.
 
 Initial external results are pending. No runtime change, new device link,
 deployment, heat result, identified termination cause or White Screen fix.
+
+First workflow40903826744 (source e561362/tree a932a4e) failed before any active
+measurement: the new style probe expected boss-hull during initial boss-intro,
+but the original BossHullView mounts it only during boss-fight. All eight original
+failed conclusions are preserved and excluded from memory comparisons. This is
+a test preparation error, not an observed application crash. The corrected
+driver uses the actual Resume/Pause sequence before measurement and gives an
+explicit selector error for any missing expected element. All eight conditions
+must be repeated; there are no completed first-attempt observations to reuse.

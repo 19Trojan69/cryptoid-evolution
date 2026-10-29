@@ -50,7 +50,9 @@ const appearance = () => {
       display: s.display, visibility: s.visibility, content: s.content };
   };
   const read = selector => {
-    const node = shell.querySelector(selector), r = node.getBoundingClientRect();
+    const node = shell.querySelector(selector);
+    if (!node) throw Error('Missing expected prepared node: ' + selector);
+    const r = node.getBoundingClientRect();
     return { ...inspect(node), width: r.width, height: r.height };
   };
   const filtered = []; let filterCount = 0, backdropCount = 0, filteredEntryCount = 0;
@@ -97,6 +99,16 @@ try {
   await tap(page.getByRole('button', { name: 'Boss-2-Test öffnen', exact: true }));
   await page.waitForFunction(() => window.__crossDeviceTest?.inspect().status === 'paused');
   await page.waitForFunction(() => window.__crossDeviceTest.inspect().audio?.audioSampleBuffers === 46, {}, { timeout: 45000 });
+  // The initial setup pause is boss-intro; BossHullView mounts its hull only
+  // after boss-fight begins. Use actual Resume/Pause before probing/injection.
+  // This short preparation interval is outside the measured observation.
+  await tap(page.locator('.pause-resume-button'));
+  await page.waitForFunction(() => { const s = window.__crossDeviceTest?.inspect();
+    return s?.status === 'playing' && s.encounter === 'boss-fight'; }, {}, { timeout: 40000 });
+  await page.locator('.boss-hull').waitFor({ state: 'visible' });
+  await tap(page.getByRole('button', { name: /^(Pause|Pausieren)$/, exact: true }));
+  await page.waitForFunction(() => window.__crossDeviceTest.inspect().status === 'paused');
+  summary.preparationResumeOutsideObservation = true;
   summary.originalPausedAppearance = await page.evaluate(appearance);
   assert.equal(summary.originalPausedAppearance.hud.backdropFilter, 'blur(10px)');
   assert.match(summary.originalPausedAppearance.bossHull.filter, /drop-shadow\(/);

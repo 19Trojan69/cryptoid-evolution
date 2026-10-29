@@ -1,5 +1,5 @@
 name: Private smartphone CSS filter attribution
-run-name: Isolate HUD blur and boss filtering across smartphone browser engines
+run-name: Compare CSS filters after native boss-fight preparation
 on:
   push:
     branches: [codex/boss2-css-filter-attribution-20261029]
