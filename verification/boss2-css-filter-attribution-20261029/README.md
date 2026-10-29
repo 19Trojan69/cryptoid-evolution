@@ -40,8 +40,56 @@ external process samples reuse the existing fixture inspection. Both actual
 filters and process memory must be considered; zero filter workload in an
 emulator cannot rule out physical-device or other native rendering failures.
 
-Initial external results are pending. No runtime change, new device link,
-deployment, heat result, identified termination cause or White Screen fix.
+## Completed external comparison
+
+Corrected source f6928ef/tree988e8b2 completed workflow40904550899 successfully:
+all eight jobs passed, with90.007–90.990 active seconds, expected filter states,
+same-document play, real Pause, no page error/crash/unexpected external request,
+and no additional full recording. Frontend/private source pins and transformed
+controller types passed. All16 artifact ZIPs across both attempts matched their
+GitHub digests and passed ZIP integrity. The original failed records remain.
+
+| Linux browser condition | Chromium last30s median PSS | Core volleys | WebKit last30s median PSS | Core volleys |
+| --- | ---: | ---: | ---: | ---: |
+| Original | 576.729 MiB | 32 | 1132.817 MiB | 17 |
+| HUD backdrop only off | 492.384 MiB | 32 | 1101.095 MiB | 11 |
+| Outer boss-hull filter only off | 484.449 MiB | 32 | 1070.880 MiB | 11 |
+| All CSS filters/backdrop filters off | 446.313 MiB | 32 | 1014.699 MiB | 25 |
+
+The CSS cascade issue is reproduced in both engines: the original mobile HUD
+really has blur(10px). Complete filter removal produces zero computed filter/
+backdrop counts at preparation and after play. The full-off process median is
+130.417MiB lower in Chromium and118.118MiB lower in WebKit than each single
+baseline. These are observed single-run differences, not a causal estimate or
+physical-phone saving. WebKit simulated work differs substantially, and even
+full-off retains a large process footprint. No crash cause, temperature effect,
+unbounded leak, universal stability or White Screen fix is established.
+
+All16 original records and all active process/resource points are preserved in
+evidence/synthetic-filter-measurements.json.gz, with ZIP/evidence SHA256 digests
+in artifacts.json. summarizeEvidence.mjs reproduces results.json, verifies the
+applied treatments and excludes the eight zero-sample preparation failures.
+No physical owner report is in these artifacts.
+
+## Protected physical-device control preparation
+
+The complete-filter control is prepared as a separate preview so the owner can
+test it on the actual smartphone. buildFilterPreview.mjs calls the unchanged
+private builder and appends one static stylesheet link to the generated HTML.
+The experiment uses exactly the same CSS treatment hash as the completed
+full-off runs. Original compiled game modules, frontend, private runtime inputs,
+assets, clocks, input, audio and account isolation stay intact. The menu gains
+the visible label GRAFIKTEST: CSS-Filter ausgeschaltet. No new application JS,
+collector, saved preference or auto-Resume is added. The diagnostic image is
+deliberately changed; it is not a production quality setting or proposed fix.
+
+Only this work branch's Vercel build command selects the additional preview
+wrapper; automatic deployment remains disabled. The wrapper refuses production
+builds. Before any new protected preview, two fresh native-touch jobs must
+verify the actual built-in stylesheet, menu label, metadata and90 active seconds
+without page.addStyleTag. The previous eight treatments remain separate and
+are not rerun or relabeled as built-in-preview tests. Preview verification and
+deployment are pending. Existing delivered c610e7c and public aliases stay intact.
 
 First workflow40903826744 (source e561362/tree a932a4e) failed before any active
 measurement: the new style probe expected boss-hull during initial boss-intro,

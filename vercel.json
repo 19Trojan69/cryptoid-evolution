@@ -2,7 +2,7 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": null,
   "installCommand": "npm install --prefix frontend --include=optional --no-audit --no-fund",
-  "buildCommand": "node verification/boss2-forensics-20261028/buildDevicePreview.mjs",
+  "buildCommand": "node verification/boss2-css-filter-attribution-20261029/buildFilterPreview.mjs",
   "outputDirectory": "verification/boss2-forensics-20261028/results/device-preview/site",
   "redirects": [
     {

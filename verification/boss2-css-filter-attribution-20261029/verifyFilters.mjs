@@ -7,20 +7,15 @@ import { resolve } from 'node:path';
 import { root, configuration } from '../boss2-forensics-20261028/fixture.mjs';
 import { serveDevicePreview } from '../boss2-forensics-20261028/devicePreviewServer.mjs';
 import { sampleBrowserMemory } from '../boss2-forensics-20261028/processMemory.mjs';
+import { diagnosticCssByCase as styles, filterPreviewLabel } from './filterStyles.mjs';
 
 const engine = process.env.CRYPTOID_FILTER_ENGINE, condition = process.env.CRYPTOID_FILTER_CASE;
 assert.ok(['chromium', 'webkit'].includes(engine));
 // Browser-injected diagnostic ablations only. These deliberately change the
 // test's appearance and are not a production quality setting or proposed fix.
-const styles = {
-  standard: '',
-  'hud-backdrop-off': '.game-shell .game-hud { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }',
-  'boss-hull-filter-off': '.game-shell .boss-hull { filter: none !important; }',
-  'all-css-filters-off': ['.game-shell', '.game-shell::before', '.game-shell::after',
-    '.game-shell *', '.game-shell *::before', '.game-shell *::after'].join(',') +
-    ' { filter: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }',
-};
 assert.ok(Object.hasOwn(styles, condition));
+const builtInControl = process.env.CRYPTOID_FILTER_BUILT_IN === '1';
+if (builtInControl) assert.equal(condition, 'all-css-filters-off');
 const pw = createRequire(new URL('../boss2-forensics-20261028/package.json', import.meta.url))('playwright');
 const output = resolve(root, 'verification/boss2-css-filter-attribution-20261029/results', engine + '-' + condition);
 mkdirSync(output, { recursive: true });
@@ -30,7 +25,7 @@ const summary = { complete: false, engine, condition,
   temperatureMeasured: false, whiteScreenFixed: false, diagnostics: false, protection: true,
   requestedActiveSeconds: 90, activeScreenshots: false, activeProfiler: false,
   forcedGc: false, heapSnapshots: false, reducedEffects: false, seededRandomness: false,
-  applicationSourceChanged: false, diagnosticStylesPublished: false,
+  applicationSourceChanged: false, diagnosticStylesBuiltIn: builtInControl, publicDeploymentChanged: false,
   injectedCss: styles[condition], injectedCssSha256: createHash('sha256').update(styles[condition]).digest('hex'), points: [] };
 let server, browser, page, fatal;
 async function tap(locator) {
@@ -93,6 +88,14 @@ try {
   page = await context.newPage(); page.setDefaultTimeout(20000);
   page.on('pageerror', () => { fatal ||= 'javascript-error'; }); page.on('crash', () => { fatal ||= 'renderer-crash'; });
   await page.goto(server.origin, { waitUntil: 'domcontentloaded' }); await page.bringToFront();
+  if (builtInControl) {
+    assert.equal(await page.evaluate(() => getComputedStyle(document.querySelector('.device-preview-menu section'), '::before').content), JSON.stringify(filterPreviewLabel));
+    const infoResponse = await context.request.get(server.origin + '/device-preview-info.json');
+    assert.equal(infoResponse.status(), 200); const info = await infoResponse.json();
+    assert.equal(info.diagnosticCssControl.kind, 'all-css-filters-off');
+    assert.equal(info.diagnosticCssControl.controlSha256, summary.injectedCssSha256);
+    summary.builtInControlVerified = info.diagnosticCssControl;
+  }
   const recording = page.getByRole('checkbox', { name: 'Diagnose lokal aufzeichnen', exact: true });
   assert.equal(await recording.isChecked(), true); await tap(recording); assert.equal(await recording.isChecked(), false);
   await tap(page.getByRole('button', { name: 'Testszene vorbereiten', exact: true }));
@@ -110,9 +113,12 @@ try {
   await page.waitForFunction(() => window.__crossDeviceTest.inspect().status === 'paused');
   summary.preparationResumeOutsideObservation = true;
   summary.originalPausedAppearance = await page.evaluate(appearance);
-  assert.equal(summary.originalPausedAppearance.hud.backdropFilter, 'blur(10px)');
-  assert.match(summary.originalPausedAppearance.bossHull.filter, /drop-shadow\(/);
-  if (styles[condition]) await page.addStyleTag({ content: styles[condition] });
+  if (builtInControl) verifyAppearance(summary.originalPausedAppearance);
+  else {
+    assert.equal(summary.originalPausedAppearance.hud.backdropFilter, 'blur(10px)');
+    assert.match(summary.originalPausedAppearance.bossHull.filter, /drop-shadow\(/);
+  }
+  if (styles[condition] && !builtInControl) await page.addStyleTag({ content: styles[condition] });
   summary.preparedAppearance = await page.evaluate(appearance); verifyAppearance(summary.preparedAppearance);
   for (const key of ['width', 'height', 'dpr', 'motion', 'nodeCount'])
     assert.equal(summary.preparedAppearance[key], summary.originalPausedAppearance[key], key + ' unaffected by style ablation');

@@ -1,0 +1,3633 @@
+{
+  "schemaVersion": 1,
+  "sourceCommit": "f6928ef6277cd14eaa6d4aaea8caae0c92fa6aff",
+  "sourceTree": "988e8b25d430c12373a1ae02c186899500271db5",
+  "workflowRunId": 40904550899,
+  "workflowConclusion": "success",
+  "syntheticOnly": true,
+  "applicationSourceChanged": false,
+  "deploymentChanged": false,
+  "physicalDeviceMeasured": false,
+  "physicalReducedEffectsResult": "pending",
+  "nativeTerminationCauseMeasured": false,
+  "temperatureMeasured": false,
+  "whiteScreenFixed": false,
+  "evidence": {
+    "file": "evidence/synthetic-filter-measurements.json.gz",
+    "bytes": 53698,
+    "sha256": "9945d119edd8387e316dbf4fa1eda04fcc70cb2fb2ae4acba9038b2a2da7db5e"
+  },
+  "acceptedObservations": 8,
+  "excludedPreparationAttempt": {
+    "runId": 40903826744,
+    "sourceCommit": "e561362818fa2537a563bcf51905641589684e25",
+    "originalConclusion": "failure",
+    "activeSamples": 0,
+    "cases": [
+      {
+        "case": "webkit-standard",
+        "jobId": 123553034187,
+        "artifactId": 12911250559,
+        "originalFailure": {
+          "code": "filter-verification-failed",
+          "message": "page.evaluate: TypeError: null is not an object (evaluating 'node.getBoundingClientRect')"
+        },
+        "originalVerificationComplete": false
+      },
+      {
+        "case": "webkit-all-css-filters-off",
+        "jobId": 123553033948,
+        "artifactId": 12910567399,
+        "originalFailure": {
+          "code": "filter-verification-failed",
+          "message": "page.evaluate: TypeError: null is not an object (evaluating 'node.getBoundingClientRect')"
+        },
+        "originalVerificationComplete": false
+      },
+      {
+        "case": "chromium-boss-hull-filter-off",
+        "jobId": 123553034149,
+        "artifactId": 12910033334,
+        "originalFailure": {
+          "code": "filter-verification-failed",
+          "message": "page.evaluate: TypeError: Cannot read properties of null (reading 'getBoundingClientRect')\n    at read (eval at evaluate (:311:30), <anonymous>:11:58)\n    at eval (eval at evaluate (:311:30), <anonymous>:30:39)\n    at UtilityScript.evaluate (<anonymous>:313:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+        },
+        "originalVerificationComplete": false
+      },
+      {
+        "case": "webkit-boss-hull-filter-off",
+        "jobId": 123553034566,
+        "artifactId": 12910003372,
+        "originalFailure": {
+          "code": "filter-verification-failed",
+          "message": "page.evaluate: TypeError: null is not an object (evaluating 'node.getBoundingClientRect')"
+        },
+        "originalVerificationComplete": false
+      },
+      {
+        "case": "chromium-all-css-filters-off",
+        "jobId": 123553034146,
+        "artifactId": 12909874065,
+        "originalFailure": {
+          "code": "filter-verification-failed",
+          "message": "page.evaluate: TypeError: Cannot read properties of null (reading 'getBoundingClientRect')\n    at read (eval at evaluate (:311:30), <anonymous>:11:58)\n    at eval (eval at evaluate (:311:30), <anonymous>:30:39)\n    at UtilityScript.evaluate (<anonymous>:313:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+        },
+        "originalVerificationComplete": false
+      },
+      {
+        "case": "chromium-standard",
+        "jobId": 123553034371,
+        "artifactId": 12909869728,
+        "originalFailure": {
+          "code": "filter-verification-failed",
+          "message": "page.evaluate: TypeError: Cannot read properties of null (reading 'getBoundingClientRect')\n    at read (eval at evaluate (:311:30), <anonymous>:11:58)\n    at eval (eval at evaluate (:311:30), <anonymous>:30:39)\n    at UtilityScript.evaluate (<anonymous>:313:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+        },
+        "originalVerificationComplete": false
+      },
+      {
+        "case": "webkit-hud-backdrop-off",
+        "jobId": 123553034439,
+        "artifactId": 12909638780,
+        "originalFailure": {
+          "code": "filter-verification-failed",
+          "message": "page.evaluate: TypeError: null is not an object (evaluating 'node.getBoundingClientRect')"
+        },
+        "originalVerificationComplete": false
+      },
+      {
+        "case": "chromium-hud-backdrop-off",
+        "jobId": 123553034217,
+        "artifactId": 12909174512,
+        "originalFailure": {
+          "code": "filter-verification-failed",
+          "message": "page.evaluate: TypeError: Cannot read properties of null (reading 'getBoundingClientRect')\n    at read (eval at evaluate (:311:30), <anonymous>:11:58)\n    at eval (eval at evaluate (:311:30), <anonymous>:30:39)\n    at UtilityScript.evaluate (<anonymous>:313:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+        },
+        "originalVerificationComplete": false
+      }
+    ]
+  },
+  "expectedObservations": 8,
+  "scope": "Original protected reactor fixture; CSS overrides only in automated browser; 90 active seconds.",
+  "limits": [
+    "Single unseeded run per condition; compare volley progress and do not infer equal simulated work.",
+    "Linux process PSS is not physical iOS/Android RAM or graphics residency.",
+    "Paused computed-style probes establish applied CSS, not a GPU allocation stack.",
+    "No CSS-filter setting is deployed; all-off deliberately alters appearance and retains non-filter graphics."
+  ],
+  "rows": [
+    {
+      "case": "chromium-standard",
+      "engine": "chromium",
+      "condition": "standard",
+      "acceptedCompleteObservation": true,
+      "originalVerificationComplete": true,
+      "originalJobConclusion": "success",
+      "originalFailure": null,
+      "jobId": 123555644107,
+      "artifactId": 12910453529,
+      "activeSeconds": 90.957,
+      "volleys": {
+        "first": 0,
+        "last": 32
+      },
+      "initialAppearance": {
+        "width": 430,
+        "height": 825,
+        "dpr": 3,
+        "motion": "standard",
+        "nodeCount": 567,
+        "filterCount": 14,
+        "backdropCount": 1,
+        "filtered": [
+          {
+            "tag": "DIV",
+            "class": "milky-band",
+            "pseudo": null,
+            "filter": "blur(11px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-distant planet-rock",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-secondary planet-ice",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-primary planet-crystal",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-near planet-desert",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "SPAN",
+            "class": "space-world-surface",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(217, 170, 121, 0.314) -1px -1px 1px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "HEADER",
+            "class": "game-hud",
+            "pseudo": null,
+            "filter": "none",
+            "backdropFilter": "blur(10px)"
+          },
+          {
+            "tag": "svg",
+            "class": "game-control-icon",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(241, 215, 157) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "svg",
+            "class": "",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(255, 121, 175) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "svg",
+            "class": "game-control-icon",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(184, 235, 255) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "I",
+            "class": "boss-engine-flame ship-thruster",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(82, 164, 255, 0.68) 0px 2px 2px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "I",
+            "class": "boss-engine-flame ship-thruster",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(82, 164, 255, 0.68) 0px 2px 2px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "IMG",
+            "class": "boss-hull",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(2, 7, 24) 0px 5px 7px) drop-shadow(rgba(114, 220, 255, 0.46) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "path",
+            "class": "boss-reactor-pulse",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(124, 232, 242) 0px 0px 3px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "svg",
+            "class": "game-control-icon",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(255, 240, 202) 0px 0px 5px)",
+            "backdropFilter": "none"
+          }
+        ],
+        "filteredDetailsTruncated": false,
+        "hud": {
+          "filter": "none",
+          "backdropFilter": "blur(10px)",
+          "display": "grid",
+          "visibility": "visible",
+          "content": "normal",
+          "width": 430,
+          "height": 71
+        },
+        "bossHull": {
+          "filter": "drop-shadow(rgb(2, 7, 24) 0px 5px 7px) drop-shadow(rgba(114, 220, 255, 0.46) 0px 0px 5px)",
+          "backdropFilter": "none",
+          "display": "block",
+          "visibility": "visible",
+          "content": "normal",
+          "width": 378.390625,
+          "height": 141.890625
+        },
+        "player": {
+          "filter": "none",
+          "backdropFilter": "none",
+          "display": "block",
+          "visibility": "hidden",
+          "content": "normal",
+          "width": 107.5,
+          "height": 107.5
+        },
+        "runningAnimations": 2
+      },
+      "preparedAppearance": {
+        "width": 430,
+        "height": 825,
+        "dpr": 3,
+        "motion": "standard",
+        "nodeCount": 567,
+        "filterCount": 14,
+        "backdropCount": 1,
+        "filtered": [
+          {
+            "tag": "DIV",
+            "class": "milky-band",
+            "pseudo": null,
+            "filter": "blur(11px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-distant planet-rock",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-secondary planet-ice",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-primary planet-crystal",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-near planet-desert",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "SPAN",
+            "class": "space-world-surface",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(217, 170, 121, 0.314) -1px -1px 1px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "HEADER",
+            "class": "game-hud",
+            "pseudo": null,
+            "filter": "none",
+            "backdropFilter": "blur(10px)"
+          },
+          {
+            "tag": "svg",
+            "class": "game-control-icon",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(241, 215, 157) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "svg",
+            "class": "",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(255, 121, 175) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "svg",
+            "class": "game-control-icon",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(184, 235, 255) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "I",
+            "class": "boss-engine-flame ship-thruster",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(82, 164, 255, 0.68) 0px 2px 2px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "I",
+            "class": "boss-engine-flame ship-thruster",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(82, 164, 255, 0.68) 0px 2px 2px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "IMG",
+            "class": "boss-hull",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(2, 7, 24) 0px 5px 7px) drop-shadow(rgba(114, 220, 255, 0.46) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "path",
+            "class": "boss-reactor-pulse",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(124, 232, 242) 0px 0px 3px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "svg",
+            "class": "game-control-icon",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(255, 240, 202) 0px 0px 5px)",
+            "backdropFilter": "none"
+          }
+        ],
+        "filteredDetailsTruncated": false,
+        "hud": {
+          "filter": "none",
+          "backdropFilter": "blur(10px)",
+          "display": "grid",
+          "visibility": "visible",
+          "content": "normal",
+          "width": 430,
+          "height": 71
+        },
+        "bossHull": {
+          "filter": "drop-shadow(rgb(2, 7, 24) 0px 5px 7px) drop-shadow(rgba(114, 220, 255, 0.46) 0px 0px 5px)",
+          "backdropFilter": "none",
+          "display": "block",
+          "visibility": "visible",
+          "content": "normal",
+          "width": 378.390625,
+          "height": 141.890625
+        },
+        "player": {
+          "filter": "none",
+          "backdropFilter": "none",
+          "display": "block",
+          "visibility": "hidden",
+          "content": "normal",
+          "width": 107.5,
+          "height": 107.5
+        },
+        "runningAnimations": 2
+      },
+      "finalAppearance": {
+        "width": 430,
+        "height": 825,
+        "dpr": 3,
+        "motion": "standard",
+        "nodeCount": 597,
+        "filterCount": 20,
+        "backdropCount": 1,
+        "filtered": [
+          {
+            "tag": "DIV",
+            "class": "milky-band",
+            "pseudo": null,
+            "filter": "blur(11px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-distant planet-rock",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-secondary planet-ice",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-primary planet-crystal",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-near planet-desert",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "SPAN",
+            "class": "space-world-surface",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(217, 170, 121, 0.314) -1px -1px 1px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "HEADER",
+            "class": "game-hud",
+            "pseudo": null,
+            "filter": "none",
+            "backdropFilter": "blur(10px)"
+          },
+          {
+            "tag": "svg",
+            "class": "game-control-icon",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(241, 215, 157) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "svg",
+            "class": "",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(255, 121, 175) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "svg",
+            "class": "game-control-icon",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(184, 235, 255) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "I",
+            "class": "boss-engine-flame ship-thruster",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(82, 164, 255, 0.68) 0px 2px 2px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "I",
+            "class": "boss-engine-flame ship-thruster",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(82, 164, 255, 0.68) 0px 2px 2px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "IMG",
+            "class": "boss-hull",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(2, 7, 24) 0px 5px 7px) drop-shadow(rgba(114, 220, 255, 0.46) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "path",
+            "class": "boss-reactor-pulse",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(124, 232, 242) 0px 0px 3px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "ship-visual",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(1, 7, 25) 0px 2px 1px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "SPAN",
+            "class": "exhaust ship-thruster",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(82, 164, 255, 0.68) 0px 2px 2px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "SPAN",
+            "class": "exhaust ship-thruster",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(82, 164, 255, 0.68) 0px 2px 2px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "ship-visual",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(1, 7, 25) 0px 2px 1px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "SPAN",
+            "class": "exhaust ship-thruster",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(82, 164, 255, 0.68) 0px 2px 2px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "SPAN",
+            "class": "exhaust ship-thruster",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(82, 164, 255, 0.68) 0px 2px 2px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "svg",
+            "class": "game-control-icon",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(255, 240, 202) 0px 0px 5px)",
+            "backdropFilter": "none"
+          }
+        ],
+        "filteredDetailsTruncated": false,
+        "hud": {
+          "filter": "none",
+          "backdropFilter": "blur(10px)",
+          "display": "grid",
+          "visibility": "visible",
+          "content": "normal",
+          "width": 430,
+          "height": 71
+        },
+        "bossHull": {
+          "filter": "drop-shadow(rgb(2, 7, 24) 0px 5px 7px) drop-shadow(rgba(114, 220, 255, 0.46) 0px 0px 5px)",
+          "backdropFilter": "none",
+          "display": "block",
+          "visibility": "visible",
+          "content": "normal",
+          "width": 378.390625,
+          "height": 141.890625
+        },
+        "player": {
+          "filter": "none",
+          "backdropFilter": "none",
+          "display": "block",
+          "visibility": "hidden",
+          "content": "normal",
+          "width": 107.5,
+          "height": 107.5
+        },
+        "runningAnimations": 2
+      },
+      "last30SecondMedianPssMiB": 576.7294921875,
+      "last30SecondPssRangeMiB": [
+        542.4013671875,
+        587.2529296875
+      ],
+      "last30SecondMedianContentPssMiB": 400.2763671875,
+      "sampleCount": 89,
+      "audioSampleBufferCount": 46,
+      "audioBufferByteRange": [
+        6925568,
+        6925568
+      ],
+      "maxTrackedCanvasCacheBytes": 1059028,
+      "observedCanvasFailures": [],
+      "singleRunDifferenceFromBaselineMiB": 0
+    },
+    {
+      "case": "chromium-hud-backdrop-off",
+      "engine": "chromium",
+      "condition": "hud-backdrop-off",
+      "acceptedCompleteObservation": true,
+      "originalVerificationComplete": true,
+      "originalJobConclusion": "success",
+      "originalFailure": null,
+      "jobId": 123555643962,
+      "artifactId": 12911860506,
+      "activeSeconds": 90.99,
+      "volleys": {
+        "first": 0,
+        "last": 32
+      },
+      "initialAppearance": {
+        "width": 430,
+        "height": 825,
+        "dpr": 3,
+        "motion": "standard",
+        "nodeCount": 567,
+        "filterCount": 14,
+        "backdropCount": 1,
+        "filtered": [
+          {
+            "tag": "DIV",
+            "class": "milky-band",
+            "pseudo": null,
+            "filter": "blur(11px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-distant planet-rock",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-secondary planet-ice",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-primary planet-crystal",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-near planet-desert",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "SPAN",
+            "class": "space-world-surface",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(217, 170, 121, 0.314) -1px -1px 1px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "HEADER",
+            "class": "game-hud",
+            "pseudo": null,
+            "filter": "none",
+            "backdropFilter": "blur(10px)"
+          },
+          {
+            "tag": "svg",
+            "class": "game-control-icon",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(241, 215, 157) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "svg",
+            "class": "",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(255, 121, 175) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "svg",
+            "class": "game-control-icon",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(184, 235, 255) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "I",
+            "class": "boss-engine-flame ship-thruster",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(82, 164, 255, 0.68) 0px 2px 2px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "I",
+            "class": "boss-engine-flame ship-thruster",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(82, 164, 255, 0.68) 0px 2px 2px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "IMG",
+            "class": "boss-hull",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(2, 7, 24) 0px 5px 7px) drop-shadow(rgba(114, 220, 255, 0.46) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "path",
+            "class": "boss-reactor-pulse",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(124, 232, 242) 0px 0px 3px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "svg",
+            "class": "game-control-icon",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(255, 240, 202) 0px 0px 5px)",
+            "backdropFilter": "none"
+          }
+        ],
+        "filteredDetailsTruncated": false,
+        "hud": {
+          "filter": "none",
+          "backdropFilter": "blur(10px)",
+          "display": "grid",
+          "visibility": "visible",
+          "content": "normal",
+          "width": 430,
+          "height": 71
+        },
+        "bossHull": {
+          "filter": "drop-shadow(rgb(2, 7, 24) 0px 5px 7px) drop-shadow(rgba(114, 220, 255, 0.46) 0px 0px 5px)",
+          "backdropFilter": "none",
+          "display": "block",
+          "visibility": "visible",
+          "content": "normal",
+          "width": 378.390625,
+          "height": 141.890625
+        },
+        "player": {
+          "filter": "none",
+          "backdropFilter": "none",
+          "display": "block",
+          "visibility": "hidden",
+          "content": "normal",
+          "width": 107.5,
+          "height": 107.5
+        },
+        "runningAnimations": 2
+      },
+      "preparedAppearance": {
+        "width": 430,
+        "height": 825,
+        "dpr": 3,
+        "motion": "standard",
+        "nodeCount": 567,
+        "filterCount": 14,
+        "backdropCount": 0,
+        "filtered": [
+          {
+            "tag": "DIV",
+            "class": "milky-band",
+            "pseudo": null,
+            "filter": "blur(11px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-distant planet-rock",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-secondary planet-ice",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-primary planet-crystal",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-near planet-desert",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "SPAN",
+            "class": "space-world-surface",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(217, 170, 121, 0.314) -1px -1px 1px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "svg",
+            "class": "game-control-icon",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(241, 215, 157) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "svg",
+            "class": "",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(255, 121, 175) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "svg",
+            "class": "game-control-icon",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(184, 235, 255) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "I",
+            "class": "boss-engine-flame ship-thruster",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(82, 164, 255, 0.68) 0px 2px 2px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "I",
+            "class": "boss-engine-flame ship-thruster",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(82, 164, 255, 0.68) 0px 2px 2px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "IMG",
+            "class": "boss-hull",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(2, 7, 24) 0px 5px 7px) drop-shadow(rgba(114, 220, 255, 0.46) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "path",
+            "class": "boss-reactor-pulse",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(124, 232, 242) 0px 0px 3px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "svg",
+            "class": "game-control-icon",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(255, 240, 202) 0px 0px 5px)",
+            "backdropFilter": "none"
+          }
+        ],
+        "filteredDetailsTruncated": false,
+        "hud": {
+          "filter": "none",
+          "backdropFilter": "none",
+          "display": "grid",
+          "visibility": "visible",
+          "content": "normal",
+          "width": 430,
+          "height": 71
+        },
+        "bossHull": {
+          "filter": "drop-shadow(rgb(2, 7, 24) 0px 5px 7px) drop-shadow(rgba(114, 220, 255, 0.46) 0px 0px 5px)",
+          "backdropFilter": "none",
+          "display": "block",
+          "visibility": "visible",
+          "content": "normal",
+          "width": 378.390625,
+          "height": 141.890625
+        },
+        "player": {
+          "filter": "none",
+          "backdropFilter": "none",
+          "display": "block",
+          "visibility": "hidden",
+          "content": "normal",
+          "width": 107.5,
+          "height": 107.5
+        },
+        "runningAnimations": 2
+      },
+      "finalAppearance": {
+        "width": 430,
+        "height": 825,
+        "dpr": 3,
+        "motion": "standard",
+        "nodeCount": 597,
+        "filterCount": 20,
+        "backdropCount": 0,
+        "filtered": [
+          {
+            "tag": "DIV",
+            "class": "milky-band",
+            "pseudo": null,
+            "filter": "blur(11px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-distant planet-rock",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-secondary planet-ice",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-primary planet-crystal",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-near planet-desert",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "SPAN",
+            "class": "space-world-surface",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(217, 170, 121, 0.314) -1px -1px 1px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "svg",
+            "class": "game-control-icon",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(241, 215, 157) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "svg",
+            "class": "",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(255, 121, 175) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "svg",
+            "class": "game-control-icon",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(184, 235, 255) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "I",
+            "class": "boss-engine-flame ship-thruster",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(82, 164, 255, 0.68) 0px 2px 2px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "I",
+            "class": "boss-engine-flame ship-thruster",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(82, 164, 255, 0.68) 0px 2px 2px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "IMG",
+            "class": "boss-hull",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(2, 7, 24) 0px 5px 7px) drop-shadow(rgba(114, 220, 255, 0.46) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "path",
+            "class": "boss-reactor-pulse",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(124, 232, 242) 0px 0px 3px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "ship-visual",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(1, 7, 25) 0px 2px 1px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "SPAN",
+            "class": "exhaust ship-thruster",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(82, 164, 255, 0.68) 0px 2px 2px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "SPAN",
+            "class": "exhaust ship-thruster",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(82, 164, 255, 0.68) 0px 2px 2px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "ship-visual",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(1, 7, 25) 0px 2px 1px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "SPAN",
+            "class": "exhaust ship-thruster",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(82, 164, 255, 0.68) 0px 2px 2px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "SPAN",
+            "class": "exhaust ship-thruster",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(82, 164, 255, 0.68) 0px 2px 2px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "svg",
+            "class": "game-control-icon",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(255, 240, 202) 0px 0px 5px)",
+            "backdropFilter": "none"
+          }
+        ],
+        "filteredDetailsTruncated": false,
+        "hud": {
+          "filter": "none",
+          "backdropFilter": "none",
+          "display": "grid",
+          "visibility": "visible",
+          "content": "normal",
+          "width": 430,
+          "height": 71
+        },
+        "bossHull": {
+          "filter": "drop-shadow(rgb(2, 7, 24) 0px 5px 7px) drop-shadow(rgba(114, 220, 255, 0.46) 0px 0px 5px)",
+          "backdropFilter": "none",
+          "display": "block",
+          "visibility": "visible",
+          "content": "normal",
+          "width": 378.390625,
+          "height": 141.890625
+        },
+        "player": {
+          "filter": "none",
+          "backdropFilter": "none",
+          "display": "block",
+          "visibility": "hidden",
+          "content": "normal",
+          "width": 107.5,
+          "height": 107.5
+        },
+        "runningAnimations": 2
+      },
+      "last30SecondMedianPssMiB": 492.3837890625,
+      "last30SecondPssRangeMiB": [
+        480.3740234375,
+        498.5380859375
+      ],
+      "last30SecondMedianContentPssMiB": 314.400390625,
+      "sampleCount": 88,
+      "audioSampleBufferCount": 46,
+      "audioBufferByteRange": [
+        6925568,
+        6925568
+      ],
+      "maxTrackedCanvasCacheBytes": 1059028,
+      "observedCanvasFailures": [],
+      "singleRunDifferenceFromBaselineMiB": -84.345703125
+    },
+    {
+      "case": "chromium-boss-hull-filter-off",
+      "engine": "chromium",
+      "condition": "boss-hull-filter-off",
+      "acceptedCompleteObservation": true,
+      "originalVerificationComplete": true,
+      "originalJobConclusion": "success",
+      "originalFailure": null,
+      "jobId": 123555643420,
+      "artifactId": 12910817613,
+      "activeSeconds": 90.979,
+      "volleys": {
+        "first": 0,
+        "last": 32
+      },
+      "initialAppearance": {
+        "width": 430,
+        "height": 825,
+        "dpr": 3,
+        "motion": "standard",
+        "nodeCount": 567,
+        "filterCount": 14,
+        "backdropCount": 1,
+        "filtered": [
+          {
+            "tag": "DIV",
+            "class": "milky-band",
+            "pseudo": null,
+            "filter": "blur(11px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-distant planet-rock",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-secondary planet-ice",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-primary planet-crystal",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-near planet-desert",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "SPAN",
+            "class": "space-world-surface",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(217, 170, 121, 0.314) -1px -1px 1px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "HEADER",
+            "class": "game-hud",
+            "pseudo": null,
+            "filter": "none",
+            "backdropFilter": "blur(10px)"
+          },
+          {
+            "tag": "svg",
+            "class": "game-control-icon",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(241, 215, 157) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "svg",
+            "class": "",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(255, 121, 175) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "svg",
+            "class": "game-control-icon",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(184, 235, 255) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "I",
+            "class": "boss-engine-flame ship-thruster",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(82, 164, 255, 0.68) 0px 2px 2px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "I",
+            "class": "boss-engine-flame ship-thruster",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(82, 164, 255, 0.68) 0px 2px 2px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "IMG",
+            "class": "boss-hull",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(2, 7, 24) 0px 5px 7px) drop-shadow(rgba(114, 220, 255, 0.46) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "path",
+            "class": "boss-reactor-pulse",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(124, 232, 242) 0px 0px 3px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "svg",
+            "class": "game-control-icon",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(255, 240, 202) 0px 0px 5px)",
+            "backdropFilter": "none"
+          }
+        ],
+        "filteredDetailsTruncated": false,
+        "hud": {
+          "filter": "none",
+          "backdropFilter": "blur(10px)",
+          "display": "grid",
+          "visibility": "visible",
+          "content": "normal",
+          "width": 430,
+          "height": 71
+        },
+        "bossHull": {
+          "filter": "drop-shadow(rgb(2, 7, 24) 0px 5px 7px) drop-shadow(rgba(114, 220, 255, 0.46) 0px 0px 5px)",
+          "backdropFilter": "none",
+          "display": "block",
+          "visibility": "visible",
+          "content": "normal",
+          "width": 378.390625,
+          "height": 141.890625
+        },
+        "player": {
+          "filter": "none",
+          "backdropFilter": "none",
+          "display": "block",
+          "visibility": "hidden",
+          "content": "normal",
+          "width": 107.5,
+          "height": 107.5
+        },
+        "runningAnimations": 2
+      },
+      "preparedAppearance": {
+        "width": 430,
+        "height": 825,
+        "dpr": 3,
+        "motion": "standard",
+        "nodeCount": 567,
+        "filterCount": 13,
+        "backdropCount": 1,
+        "filtered": [
+          {
+            "tag": "DIV",
+            "class": "milky-band",
+            "pseudo": null,
+            "filter": "blur(11px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-distant planet-rock",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-secondary planet-ice",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-primary planet-crystal",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-near planet-desert",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "SPAN",
+            "class": "space-world-surface",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(217, 170, 121, 0.314) -1px -1px 1px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "HEADER",
+            "class": "game-hud",
+            "pseudo": null,
+            "filter": "none",
+            "backdropFilter": "blur(10px)"
+          },
+          {
+            "tag": "svg",
+            "class": "game-control-icon",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(241, 215, 157) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "svg",
+            "class": "",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(255, 121, 175) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "svg",
+            "class": "game-control-icon",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(184, 235, 255) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "I",
+            "class": "boss-engine-flame ship-thruster",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(82, 164, 255, 0.68) 0px 2px 2px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "I",
+            "class": "boss-engine-flame ship-thruster",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(82, 164, 255, 0.68) 0px 2px 2px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "path",
+            "class": "boss-reactor-pulse",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(124, 232, 242) 0px 0px 3px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "svg",
+            "class": "game-control-icon",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(255, 240, 202) 0px 0px 5px)",
+            "backdropFilter": "none"
+          }
+        ],
+        "filteredDetailsTruncated": false,
+        "hud": {
+          "filter": "none",
+          "backdropFilter": "blur(10px)",
+          "display": "grid",
+          "visibility": "visible",
+          "content": "normal",
+          "width": 430,
+          "height": 71
+        },
+        "bossHull": {
+          "filter": "none",
+          "backdropFilter": "none",
+          "display": "block",
+          "visibility": "visible",
+          "content": "normal",
+          "width": 378.390625,
+          "height": 141.890625
+        },
+        "player": {
+          "filter": "none",
+          "backdropFilter": "none",
+          "display": "block",
+          "visibility": "hidden",
+          "content": "normal",
+          "width": 107.5,
+          "height": 107.5
+        },
+        "runningAnimations": 2
+      },
+      "finalAppearance": {
+        "width": 430,
+        "height": 825,
+        "dpr": 3,
+        "motion": "standard",
+        "nodeCount": 597,
+        "filterCount": 19,
+        "backdropCount": 1,
+        "filtered": [
+          {
+            "tag": "DIV",
+            "class": "milky-band",
+            "pseudo": null,
+            "filter": "blur(11px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-distant planet-rock",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-secondary planet-ice",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-primary planet-crystal",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-near planet-desert",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "SPAN",
+            "class": "space-world-surface",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(217, 170, 121, 0.314) -1px -1px 1px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "HEADER",
+            "class": "game-hud",
+            "pseudo": null,
+            "filter": "none",
+            "backdropFilter": "blur(10px)"
+          },
+          {
+            "tag": "svg",
+            "class": "game-control-icon",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(241, 215, 157) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "svg",
+            "class": "",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(255, 121, 175) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "svg",
+            "class": "game-control-icon",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(184, 235, 255) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "I",
+            "class": "boss-engine-flame ship-thruster",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(82, 164, 255, 0.68) 0px 2px 2px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "I",
+            "class": "boss-engine-flame ship-thruster",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(82, 164, 255, 0.68) 0px 2px 2px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "path",
+            "class": "boss-reactor-pulse",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(124, 232, 242) 0px 0px 3px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "ship-visual",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(1, 7, 25) 0px 2px 1px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "SPAN",
+            "class": "exhaust ship-thruster",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(82, 164, 255, 0.68) 0px 2px 2px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "SPAN",
+            "class": "exhaust ship-thruster",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(82, 164, 255, 0.68) 0px 2px 2px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "ship-visual",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(1, 7, 25) 0px 2px 1px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "SPAN",
+            "class": "exhaust ship-thruster",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(82, 164, 255, 0.68) 0px 2px 2px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "SPAN",
+            "class": "exhaust ship-thruster",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(82, 164, 255, 0.68) 0px 2px 2px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "svg",
+            "class": "game-control-icon",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(255, 240, 202) 0px 0px 5px)",
+            "backdropFilter": "none"
+          }
+        ],
+        "filteredDetailsTruncated": false,
+        "hud": {
+          "filter": "none",
+          "backdropFilter": "blur(10px)",
+          "display": "grid",
+          "visibility": "visible",
+          "content": "normal",
+          "width": 430,
+          "height": 71
+        },
+        "bossHull": {
+          "filter": "none",
+          "backdropFilter": "none",
+          "display": "block",
+          "visibility": "visible",
+          "content": "normal",
+          "width": 378.390625,
+          "height": 141.890625
+        },
+        "player": {
+          "filter": "none",
+          "backdropFilter": "none",
+          "display": "block",
+          "visibility": "hidden",
+          "content": "normal",
+          "width": 107.5,
+          "height": 107.5
+        },
+        "runningAnimations": 2
+      },
+      "last30SecondMedianPssMiB": 484.44921875,
+      "last30SecondPssRangeMiB": [
+        468.54296875,
+        501.97265625
+      ],
+      "last30SecondMedianContentPssMiB": 308.64453125,
+      "sampleCount": 88,
+      "audioSampleBufferCount": 46,
+      "audioBufferByteRange": [
+        6925568,
+        6925568
+      ],
+      "maxTrackedCanvasCacheBytes": 1059028,
+      "observedCanvasFailures": [],
+      "singleRunDifferenceFromBaselineMiB": -92.2802734375
+    },
+    {
+      "case": "chromium-all-css-filters-off",
+      "engine": "chromium",
+      "condition": "all-css-filters-off",
+      "acceptedCompleteObservation": true,
+      "originalVerificationComplete": true,
+      "originalJobConclusion": "success",
+      "originalFailure": null,
+      "jobId": 123555644278,
+      "artifactId": 12910553495,
+      "activeSeconds": 90.523,
+      "volleys": {
+        "first": 0,
+        "last": 32
+      },
+      "initialAppearance": {
+        "width": 430,
+        "height": 825,
+        "dpr": 3,
+        "motion": "standard",
+        "nodeCount": 567,
+        "filterCount": 15,
+        "backdropCount": 1,
+        "filtered": [
+          {
+            "tag": "DIV",
+            "class": "milky-band",
+            "pseudo": null,
+            "filter": "blur(11px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-distant planet-rock",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-secondary planet-ice",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-primary planet-crystal",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-near planet-desert",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "SPAN",
+            "class": "space-world-surface",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(217, 170, 121, 0.314) -1px -1px 1px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "HEADER",
+            "class": "game-hud",
+            "pseudo": null,
+            "filter": "none",
+            "backdropFilter": "blur(10px)"
+          },
+          {
+            "tag": "svg",
+            "class": "game-control-icon",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(241, 215, 157) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "svg",
+            "class": "",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(255, 121, 175) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "BUTTON",
+            "class": "game-control pause-control",
+            "pseudo": null,
+            "filter": "brightness(1)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "svg",
+            "class": "game-control-icon",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(184, 235, 255) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "I",
+            "class": "boss-engine-flame ship-thruster",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(82, 164, 255, 0.68) 0px 2px 2px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "I",
+            "class": "boss-engine-flame ship-thruster",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(82, 164, 255, 0.68) 0px 2px 2px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "IMG",
+            "class": "boss-hull",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(2, 7, 24) 0px 5px 7px) drop-shadow(rgba(114, 220, 255, 0.46) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "path",
+            "class": "boss-reactor-pulse",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(124, 232, 242) 0px 0px 3px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "svg",
+            "class": "game-control-icon",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(255, 240, 202) 0px 0px 5px)",
+            "backdropFilter": "none"
+          }
+        ],
+        "filteredDetailsTruncated": false,
+        "hud": {
+          "filter": "none",
+          "backdropFilter": "blur(10px)",
+          "display": "grid",
+          "visibility": "visible",
+          "content": "normal",
+          "width": 430,
+          "height": 71
+        },
+        "bossHull": {
+          "filter": "drop-shadow(rgb(2, 7, 24) 0px 5px 7px) drop-shadow(rgba(114, 220, 255, 0.46) 0px 0px 5px)",
+          "backdropFilter": "none",
+          "display": "block",
+          "visibility": "visible",
+          "content": "normal",
+          "width": 378.390625,
+          "height": 141.890625
+        },
+        "player": {
+          "filter": "none",
+          "backdropFilter": "none",
+          "display": "block",
+          "visibility": "hidden",
+          "content": "normal",
+          "width": 107.5,
+          "height": 107.5
+        },
+        "runningAnimations": 9
+      },
+      "preparedAppearance": {
+        "width": 430,
+        "height": 825,
+        "dpr": 3,
+        "motion": "standard",
+        "nodeCount": 567,
+        "filterCount": 0,
+        "backdropCount": 0,
+        "filtered": [],
+        "filteredDetailsTruncated": false,
+        "hud": {
+          "filter": "none",
+          "backdropFilter": "none",
+          "display": "grid",
+          "visibility": "visible",
+          "content": "normal",
+          "width": 430,
+          "height": 71
+        },
+        "bossHull": {
+          "filter": "none",
+          "backdropFilter": "none",
+          "display": "block",
+          "visibility": "visible",
+          "content": "normal",
+          "width": 378.390625,
+          "height": 141.890625
+        },
+        "player": {
+          "filter": "none",
+          "backdropFilter": "none",
+          "display": "block",
+          "visibility": "hidden",
+          "content": "normal",
+          "width": 107.5,
+          "height": 107.5
+        },
+        "runningAnimations": 2
+      },
+      "finalAppearance": {
+        "width": 430,
+        "height": 825,
+        "dpr": 3,
+        "motion": "standard",
+        "nodeCount": 599,
+        "filterCount": 0,
+        "backdropCount": 0,
+        "filtered": [],
+        "filteredDetailsTruncated": false,
+        "hud": {
+          "filter": "none",
+          "backdropFilter": "none",
+          "display": "grid",
+          "visibility": "visible",
+          "content": "normal",
+          "width": 430,
+          "height": 71
+        },
+        "bossHull": {
+          "filter": "none",
+          "backdropFilter": "none",
+          "display": "block",
+          "visibility": "visible",
+          "content": "normal",
+          "width": 378.390625,
+          "height": 141.890625
+        },
+        "player": {
+          "filter": "none",
+          "backdropFilter": "none",
+          "display": "block",
+          "visibility": "hidden",
+          "content": "normal",
+          "width": 107.5,
+          "height": 107.5
+        },
+        "runningAnimations": 2
+      },
+      "last30SecondMedianPssMiB": 446.3125,
+      "last30SecondPssRangeMiB": [
+        442.11328125,
+        449.06640625
+      ],
+      "last30SecondMedianContentPssMiB": 268.169921875,
+      "sampleCount": 88,
+      "audioSampleBufferCount": 46,
+      "audioBufferByteRange": [
+        6925568,
+        6925568
+      ],
+      "maxTrackedCanvasCacheBytes": 1059028,
+      "observedCanvasFailures": [],
+      "singleRunDifferenceFromBaselineMiB": -130.4169921875
+    },
+    {
+      "case": "webkit-standard",
+      "engine": "webkit",
+      "condition": "standard",
+      "acceptedCompleteObservation": true,
+      "originalVerificationComplete": true,
+      "originalJobConclusion": "success",
+      "originalFailure": null,
+      "jobId": 123555644339,
+      "artifactId": 12911626053,
+      "activeSeconds": 90.278,
+      "volleys": {
+        "first": 0,
+        "last": 17
+      },
+      "initialAppearance": {
+        "width": 430,
+        "height": 825,
+        "dpr": 3,
+        "motion": "standard",
+        "nodeCount": 567,
+        "filterCount": 15,
+        "backdropCount": 1,
+        "filtered": [
+          {
+            "tag": "DIV",
+            "class": "milky-band",
+            "pseudo": null,
+            "filter": "blur(11px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-distant planet-rock",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-secondary planet-ice",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-primary planet-crystal",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-near planet-desert",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "SPAN",
+            "class": "space-world-surface",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(217, 170, 121, 0.314) -1px -1px 1px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "HEADER",
+            "class": "game-hud",
+            "pseudo": null,
+            "filter": "none",
+            "backdropFilter": "blur(10px)"
+          },
+          {
+            "tag": "svg",
+            "class": "game-control-icon",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(241, 215, 157) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "svg",
+            "class": "",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(255, 121, 175) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "BUTTON",
+            "class": "game-control pause-control",
+            "pseudo": null,
+            "filter": "brightness(1)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "svg",
+            "class": "game-control-icon",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(184, 235, 255) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "I",
+            "class": "boss-engine-flame ship-thruster",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(82, 164, 255, 0.68) 0px 2px 2px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "I",
+            "class": "boss-engine-flame ship-thruster",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(82, 164, 255, 0.68) 0px 2px 2px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "IMG",
+            "class": "boss-hull",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(2, 7, 24) 0px 5px 7px) drop-shadow(rgba(114, 220, 255, 0.46) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "path",
+            "class": "boss-reactor-pulse",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(124, 232, 242) 0px 0px 3px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "svg",
+            "class": "game-control-icon",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(255, 240, 202) 0px 0px 5px)",
+            "backdropFilter": "none"
+          }
+        ],
+        "filteredDetailsTruncated": false,
+        "hud": {
+          "filter": "none",
+          "backdropFilter": "blur(10px)",
+          "display": "grid",
+          "visibility": "visible",
+          "content": "normal",
+          "width": 430,
+          "height": 71
+        },
+        "bossHull": {
+          "filter": "drop-shadow(rgb(2, 7, 24) 0px 5px 7px) drop-shadow(rgba(114, 220, 255, 0.46) 0px 0px 5px)",
+          "backdropFilter": "none",
+          "display": "block",
+          "visibility": "visible",
+          "content": "normal",
+          "width": 378.390625,
+          "height": 141.890625
+        },
+        "player": {
+          "filter": "none",
+          "backdropFilter": "none",
+          "display": "block",
+          "visibility": "hidden",
+          "content": "normal",
+          "width": 107.50001525878906,
+          "height": 107.5
+        },
+        "runningAnimations": 9
+      },
+      "preparedAppearance": {
+        "width": 430,
+        "height": 825,
+        "dpr": 3,
+        "motion": "standard",
+        "nodeCount": 567,
+        "filterCount": 15,
+        "backdropCount": 1,
+        "filtered": [
+          {
+            "tag": "DIV",
+            "class": "milky-band",
+            "pseudo": null,
+            "filter": "blur(11px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-distant planet-rock",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-secondary planet-ice",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-primary planet-crystal",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-near planet-desert",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "SPAN",
+            "class": "space-world-surface",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(217, 170, 121, 0.314) -1px -1px 1px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "HEADER",
+            "class": "game-hud",
+            "pseudo": null,
+            "filter": "none",
+            "backdropFilter": "blur(10px)"
+          },
+          {
+            "tag": "svg",
+            "class": "game-control-icon",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(241, 215, 157) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "svg",
+            "class": "",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(255, 121, 175) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "BUTTON",
+            "class": "game-control pause-control",
+            "pseudo": null,
+            "filter": "brightness(1)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "svg",
+            "class": "game-control-icon",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(184, 235, 255) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "I",
+            "class": "boss-engine-flame ship-thruster",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(82, 164, 255, 0.68) 0px 2px 2px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "I",
+            "class": "boss-engine-flame ship-thruster",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(82, 164, 255, 0.68) 0px 2px 2px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "IMG",
+            "class": "boss-hull",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(2, 7, 24) 0px 5px 7px) drop-shadow(rgba(114, 220, 255, 0.46) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "path",
+            "class": "boss-reactor-pulse",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(124, 232, 242) 0px 0px 3px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "svg",
+            "class": "game-control-icon",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(255, 240, 202) 0px 0px 5px)",
+            "backdropFilter": "none"
+          }
+        ],
+        "filteredDetailsTruncated": false,
+        "hud": {
+          "filter": "none",
+          "backdropFilter": "blur(10px)",
+          "display": "grid",
+          "visibility": "visible",
+          "content": "normal",
+          "width": 430,
+          "height": 71
+        },
+        "bossHull": {
+          "filter": "drop-shadow(rgb(2, 7, 24) 0px 5px 7px) drop-shadow(rgba(114, 220, 255, 0.46) 0px 0px 5px)",
+          "backdropFilter": "none",
+          "display": "block",
+          "visibility": "visible",
+          "content": "normal",
+          "width": 378.390625,
+          "height": 141.890625
+        },
+        "player": {
+          "filter": "none",
+          "backdropFilter": "none",
+          "display": "block",
+          "visibility": "hidden",
+          "content": "normal",
+          "width": 107.50001525878906,
+          "height": 107.5
+        },
+        "runningAnimations": 9
+      },
+      "finalAppearance": {
+        "width": 430,
+        "height": 825,
+        "dpr": 3,
+        "motion": "standard",
+        "nodeCount": 601,
+        "filterCount": 18,
+        "backdropCount": 1,
+        "filtered": [
+          {
+            "tag": "DIV",
+            "class": "milky-band",
+            "pseudo": null,
+            "filter": "blur(11px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-distant planet-rock",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-secondary planet-ice",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-primary planet-crystal",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-near planet-desert",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "SPAN",
+            "class": "space-world-surface",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(217, 170, 121, 0.314) -1px -1px 1px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "HEADER",
+            "class": "game-hud",
+            "pseudo": null,
+            "filter": "none",
+            "backdropFilter": "blur(10px)"
+          },
+          {
+            "tag": "svg",
+            "class": "game-control-icon",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(241, 215, 157) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "svg",
+            "class": "",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(255, 121, 175) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "BUTTON",
+            "class": "game-control pause-control",
+            "pseudo": null,
+            "filter": "brightness(1)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "svg",
+            "class": "game-control-icon",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(184, 235, 255) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "I",
+            "class": "boss-engine-flame ship-thruster",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(82, 164, 255, 0.68) 0px 2px 2px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "I",
+            "class": "boss-engine-flame ship-thruster",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(82, 164, 255, 0.68) 0px 2px 2px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "IMG",
+            "class": "boss-hull",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(2, 7, 24) 0px 5px 7px) drop-shadow(rgba(114, 220, 255, 0.46) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "path",
+            "class": "boss-reactor-pulse",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(124, 232, 242) 0px 0px 3px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "ship-visual",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(1, 7, 25) 0px 2px 1px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "SPAN",
+            "class": "exhaust ship-thruster",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(82, 164, 255, 0.68) 0px 2px 2px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "SPAN",
+            "class": "exhaust ship-thruster",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(82, 164, 255, 0.68) 0px 2px 2px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "svg",
+            "class": "game-control-icon",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(255, 240, 202) 0px 0px 5px)",
+            "backdropFilter": "none"
+          }
+        ],
+        "filteredDetailsTruncated": false,
+        "hud": {
+          "filter": "none",
+          "backdropFilter": "blur(10px)",
+          "display": "grid",
+          "visibility": "visible",
+          "content": "normal",
+          "width": 430,
+          "height": 71
+        },
+        "bossHull": {
+          "filter": "drop-shadow(rgb(2, 7, 24) 0px 5px 7px) drop-shadow(rgba(114, 220, 255, 0.46) 0px 0px 5px)",
+          "backdropFilter": "none",
+          "display": "block",
+          "visibility": "visible",
+          "content": "normal",
+          "width": 378.390625,
+          "height": 141.890625
+        },
+        "player": {
+          "filter": "none",
+          "backdropFilter": "none",
+          "display": "block",
+          "visibility": "hidden",
+          "content": "normal",
+          "width": 107.50001525878906,
+          "height": 107.5
+        },
+        "runningAnimations": 9
+      },
+      "last30SecondMedianPssMiB": 1132.8173828125,
+      "last30SecondPssRangeMiB": [
+        1074.6826171875,
+        1143.5185546875
+      ],
+      "last30SecondMedianContentPssMiB": 986.865234375,
+      "sampleCount": 83,
+      "audioSampleBufferCount": 46,
+      "audioBufferByteRange": [
+        7083800,
+        7083800
+      ],
+      "maxTrackedCanvasCacheBytes": 1059028,
+      "observedCanvasFailures": [],
+      "singleRunDifferenceFromBaselineMiB": 0
+    },
+    {
+      "case": "webkit-hud-backdrop-off",
+      "engine": "webkit",
+      "condition": "hud-backdrop-off",
+      "acceptedCompleteObservation": true,
+      "originalVerificationComplete": true,
+      "originalJobConclusion": "success",
+      "originalFailure": null,
+      "jobId": 123555644092,
+      "artifactId": 12910981862,
+      "activeSeconds": 90.084,
+      "volleys": {
+        "first": 0,
+        "last": 11
+      },
+      "initialAppearance": {
+        "width": 430,
+        "height": 825,
+        "dpr": 3,
+        "motion": "standard",
+        "nodeCount": 568,
+        "filterCount": 15,
+        "backdropCount": 1,
+        "filtered": [
+          {
+            "tag": "DIV",
+            "class": "milky-band",
+            "pseudo": null,
+            "filter": "blur(11px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-distant planet-rock",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-secondary planet-ice",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-primary planet-crystal",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-near planet-desert",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "SPAN",
+            "class": "space-world-surface",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(217, 170, 121, 0.314) -1px -1px 1px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "HEADER",
+            "class": "game-hud",
+            "pseudo": null,
+            "filter": "none",
+            "backdropFilter": "blur(10px)"
+          },
+          {
+            "tag": "svg",
+            "class": "game-control-icon",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(241, 215, 157) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "svg",
+            "class": "",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(255, 121, 175) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "BUTTON",
+            "class": "game-control pause-control",
+            "pseudo": null,
+            "filter": "brightness(1)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "svg",
+            "class": "game-control-icon",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(184, 235, 255) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "I",
+            "class": "boss-engine-flame ship-thruster",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(82, 164, 255, 0.68) 0px 2px 2px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "I",
+            "class": "boss-engine-flame ship-thruster",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(82, 164, 255, 0.68) 0px 2px 2px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "IMG",
+            "class": "boss-hull",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(2, 7, 24) 0px 5px 7px) drop-shadow(rgba(114, 220, 255, 0.46) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "path",
+            "class": "boss-reactor-pulse",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(124, 232, 242) 0px 0px 3px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "svg",
+            "class": "game-control-icon",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(255, 240, 202) 0px 0px 5px)",
+            "backdropFilter": "none"
+          }
+        ],
+        "filteredDetailsTruncated": false,
+        "hud": {
+          "filter": "none",
+          "backdropFilter": "blur(10px)",
+          "display": "grid",
+          "visibility": "visible",
+          "content": "normal",
+          "width": 430,
+          "height": 71
+        },
+        "bossHull": {
+          "filter": "drop-shadow(rgb(2, 7, 24) 0px 5px 7px) drop-shadow(rgba(114, 220, 255, 0.46) 0px 0px 5px)",
+          "backdropFilter": "none",
+          "display": "block",
+          "visibility": "visible",
+          "content": "normal",
+          "width": 378.390625,
+          "height": 141.890625
+        },
+        "player": {
+          "filter": "none",
+          "backdropFilter": "none",
+          "display": "block",
+          "visibility": "hidden",
+          "content": "normal",
+          "width": 107.50001525878906,
+          "height": 107.5
+        },
+        "runningAnimations": 9
+      },
+      "preparedAppearance": {
+        "width": 430,
+        "height": 825,
+        "dpr": 3,
+        "motion": "standard",
+        "nodeCount": 568,
+        "filterCount": 15,
+        "backdropCount": 0,
+        "filtered": [
+          {
+            "tag": "DIV",
+            "class": "milky-band",
+            "pseudo": null,
+            "filter": "blur(11px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-distant planet-rock",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-secondary planet-ice",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-primary planet-crystal",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-near planet-desert",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "SPAN",
+            "class": "space-world-surface",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(217, 170, 121, 0.314) -1px -1px 1px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "svg",
+            "class": "game-control-icon",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(241, 215, 157) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "svg",
+            "class": "",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(255, 121, 175) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "BUTTON",
+            "class": "game-control pause-control",
+            "pseudo": null,
+            "filter": "brightness(1)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "svg",
+            "class": "game-control-icon",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(184, 235, 255) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "I",
+            "class": "boss-engine-flame ship-thruster",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(82, 164, 255, 0.68) 0px 2px 2px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "I",
+            "class": "boss-engine-flame ship-thruster",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(82, 164, 255, 0.68) 0px 2px 2px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "IMG",
+            "class": "boss-hull",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(2, 7, 24) 0px 5px 7px) drop-shadow(rgba(114, 220, 255, 0.46) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "path",
+            "class": "boss-reactor-pulse",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(124, 232, 242) 0px 0px 3px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "svg",
+            "class": "game-control-icon",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(255, 240, 202) 0px 0px 5px)",
+            "backdropFilter": "none"
+          }
+        ],
+        "filteredDetailsTruncated": false,
+        "hud": {
+          "filter": "none",
+          "backdropFilter": "none",
+          "display": "grid",
+          "visibility": "visible",
+          "content": "normal",
+          "width": 430,
+          "height": 71
+        },
+        "bossHull": {
+          "filter": "drop-shadow(rgb(2, 7, 24) 0px 5px 7px) drop-shadow(rgba(114, 220, 255, 0.46) 0px 0px 5px)",
+          "backdropFilter": "none",
+          "display": "block",
+          "visibility": "visible",
+          "content": "normal",
+          "width": 378.390625,
+          "height": 141.890625
+        },
+        "player": {
+          "filter": "none",
+          "backdropFilter": "none",
+          "display": "block",
+          "visibility": "hidden",
+          "content": "normal",
+          "width": 107.50001525878906,
+          "height": 107.5
+        },
+        "runningAnimations": 9
+      },
+      "finalAppearance": {
+        "width": 430,
+        "height": 825,
+        "dpr": 3,
+        "motion": "standard",
+        "nodeCount": 607,
+        "filterCount": 21,
+        "backdropCount": 0,
+        "filtered": [
+          {
+            "tag": "DIV",
+            "class": "milky-band",
+            "pseudo": null,
+            "filter": "blur(11px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-distant planet-rock",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-secondary planet-ice",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-primary planet-crystal",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-near planet-desert",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "SPAN",
+            "class": "space-world-surface",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(217, 170, 121, 0.314) -1px -1px 1px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "svg",
+            "class": "game-control-icon",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(241, 215, 157) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "svg",
+            "class": "",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(255, 121, 175) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "BUTTON",
+            "class": "game-control pause-control",
+            "pseudo": null,
+            "filter": "brightness(1)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "svg",
+            "class": "game-control-icon",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(184, 235, 255) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "I",
+            "class": "boss-engine-flame ship-thruster",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(82, 164, 255, 0.68) 0px 2px 2px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "I",
+            "class": "boss-engine-flame ship-thruster",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(82, 164, 255, 0.68) 0px 2px 2px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "IMG",
+            "class": "boss-hull",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(2, 7, 24) 0px 5px 7px) drop-shadow(rgba(114, 220, 255, 0.46) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "path",
+            "class": "boss-reactor-pulse",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(124, 232, 242) 0px 0px 3px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "ship-visual",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(1, 7, 25) 0px 2px 1px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "SPAN",
+            "class": "exhaust ship-thruster",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(82, 164, 255, 0.68) 0px 2px 2px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "SPAN",
+            "class": "exhaust ship-thruster",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(82, 164, 255, 0.68) 0px 2px 2px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "ship-visual",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(1, 7, 25) 0px 2px 1px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "SPAN",
+            "class": "exhaust ship-thruster",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(82, 164, 255, 0.68) 0px 2px 2px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "SPAN",
+            "class": "exhaust ship-thruster",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(82, 164, 255, 0.68) 0px 2px 2px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "svg",
+            "class": "game-control-icon",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(255, 240, 202) 0px 0px 5px)",
+            "backdropFilter": "none"
+          }
+        ],
+        "filteredDetailsTruncated": false,
+        "hud": {
+          "filter": "none",
+          "backdropFilter": "none",
+          "display": "grid",
+          "visibility": "visible",
+          "content": "normal",
+          "width": 430,
+          "height": 71
+        },
+        "bossHull": {
+          "filter": "drop-shadow(rgb(2, 7, 24) 0px 5px 7px) drop-shadow(rgba(114, 220, 255, 0.46) 0px 0px 5px)",
+          "backdropFilter": "none",
+          "display": "block",
+          "visibility": "visible",
+          "content": "normal",
+          "width": 378.390625,
+          "height": 141.890625
+        },
+        "player": {
+          "filter": "none",
+          "backdropFilter": "none",
+          "display": "block",
+          "visibility": "hidden",
+          "content": "normal",
+          "width": 107.50001525878906,
+          "height": 107.5
+        },
+        "runningAnimations": 9
+      },
+      "last30SecondMedianPssMiB": 1101.0947265625,
+      "last30SecondPssRangeMiB": [
+        1045.8525390625,
+        1151.6416015625
+      ],
+      "last30SecondMedianContentPssMiB": 954.052734375,
+      "sampleCount": 81,
+      "audioSampleBufferCount": 46,
+      "audioBufferByteRange": [
+        7083800,
+        7083800
+      ],
+      "maxTrackedCanvasCacheBytes": 740932,
+      "observedCanvasFailures": [],
+      "singleRunDifferenceFromBaselineMiB": -31.72265625
+    },
+    {
+      "case": "webkit-boss-hull-filter-off",
+      "engine": "webkit",
+      "condition": "boss-hull-filter-off",
+      "acceptedCompleteObservation": true,
+      "originalVerificationComplete": true,
+      "originalJobConclusion": "success",
+      "originalFailure": null,
+      "jobId": 123555643989,
+      "artifactId": 12911795767,
+      "activeSeconds": 90.728,
+      "volleys": {
+        "first": 0,
+        "last": 11
+      },
+      "initialAppearance": {
+        "width": 430,
+        "height": 825,
+        "dpr": 3,
+        "motion": "standard",
+        "nodeCount": 568,
+        "filterCount": 15,
+        "backdropCount": 1,
+        "filtered": [
+          {
+            "tag": "DIV",
+            "class": "milky-band",
+            "pseudo": null,
+            "filter": "blur(11px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-distant planet-rock",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-secondary planet-ice",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-primary planet-crystal",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-near planet-desert",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "SPAN",
+            "class": "space-world-surface",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(217, 170, 121, 0.314) -1px -1px 1px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "HEADER",
+            "class": "game-hud",
+            "pseudo": null,
+            "filter": "none",
+            "backdropFilter": "blur(10px)"
+          },
+          {
+            "tag": "svg",
+            "class": "game-control-icon",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(241, 215, 157) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "svg",
+            "class": "",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(255, 121, 175) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "BUTTON",
+            "class": "game-control pause-control",
+            "pseudo": null,
+            "filter": "brightness(1)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "svg",
+            "class": "game-control-icon",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(184, 235, 255) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "I",
+            "class": "boss-engine-flame ship-thruster",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(82, 164, 255, 0.68) 0px 2px 2px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "I",
+            "class": "boss-engine-flame ship-thruster",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(82, 164, 255, 0.68) 0px 2px 2px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "IMG",
+            "class": "boss-hull",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(2, 7, 24) 0px 5px 7px) drop-shadow(rgba(114, 220, 255, 0.46) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "path",
+            "class": "boss-reactor-pulse",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(124, 232, 242) 0px 0px 3px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "svg",
+            "class": "game-control-icon",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(255, 240, 202) 0px 0px 5px)",
+            "backdropFilter": "none"
+          }
+        ],
+        "filteredDetailsTruncated": false,
+        "hud": {
+          "filter": "none",
+          "backdropFilter": "blur(10px)",
+          "display": "grid",
+          "visibility": "visible",
+          "content": "normal",
+          "width": 430,
+          "height": 71
+        },
+        "bossHull": {
+          "filter": "drop-shadow(rgb(2, 7, 24) 0px 5px 7px) drop-shadow(rgba(114, 220, 255, 0.46) 0px 0px 5px)",
+          "backdropFilter": "none",
+          "display": "block",
+          "visibility": "visible",
+          "content": "normal",
+          "width": 378.390625,
+          "height": 141.890625
+        },
+        "player": {
+          "filter": "none",
+          "backdropFilter": "none",
+          "display": "block",
+          "visibility": "hidden",
+          "content": "normal",
+          "width": 107.50001525878906,
+          "height": 107.5
+        },
+        "runningAnimations": 9
+      },
+      "preparedAppearance": {
+        "width": 430,
+        "height": 825,
+        "dpr": 3,
+        "motion": "standard",
+        "nodeCount": 568,
+        "filterCount": 14,
+        "backdropCount": 1,
+        "filtered": [
+          {
+            "tag": "DIV",
+            "class": "milky-band",
+            "pseudo": null,
+            "filter": "blur(11px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-distant planet-rock",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-secondary planet-ice",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-primary planet-crystal",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-near planet-desert",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "SPAN",
+            "class": "space-world-surface",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(217, 170, 121, 0.314) -1px -1px 1px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "HEADER",
+            "class": "game-hud",
+            "pseudo": null,
+            "filter": "none",
+            "backdropFilter": "blur(10px)"
+          },
+          {
+            "tag": "svg",
+            "class": "game-control-icon",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(241, 215, 157) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "svg",
+            "class": "",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(255, 121, 175) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "BUTTON",
+            "class": "game-control pause-control",
+            "pseudo": null,
+            "filter": "brightness(1)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "svg",
+            "class": "game-control-icon",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(184, 235, 255) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "I",
+            "class": "boss-engine-flame ship-thruster",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(82, 164, 255, 0.68) 0px 2px 2px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "I",
+            "class": "boss-engine-flame ship-thruster",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(82, 164, 255, 0.68) 0px 2px 2px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "path",
+            "class": "boss-reactor-pulse",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(124, 232, 242) 0px 0px 3px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "svg",
+            "class": "game-control-icon",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(255, 240, 202) 0px 0px 5px)",
+            "backdropFilter": "none"
+          }
+        ],
+        "filteredDetailsTruncated": false,
+        "hud": {
+          "filter": "none",
+          "backdropFilter": "blur(10px)",
+          "display": "grid",
+          "visibility": "visible",
+          "content": "normal",
+          "width": 430,
+          "height": 71
+        },
+        "bossHull": {
+          "filter": "none",
+          "backdropFilter": "none",
+          "display": "block",
+          "visibility": "visible",
+          "content": "normal",
+          "width": 378.390625,
+          "height": 141.890625
+        },
+        "player": {
+          "filter": "none",
+          "backdropFilter": "none",
+          "display": "block",
+          "visibility": "hidden",
+          "content": "normal",
+          "width": 107.50001525878906,
+          "height": 107.5
+        },
+        "runningAnimations": 9
+      },
+      "finalAppearance": {
+        "width": 430,
+        "height": 825,
+        "dpr": 3,
+        "motion": "standard",
+        "nodeCount": 585,
+        "filterCount": 14,
+        "backdropCount": 1,
+        "filtered": [
+          {
+            "tag": "DIV",
+            "class": "milky-band",
+            "pseudo": null,
+            "filter": "blur(11px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-distant planet-rock",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-secondary planet-ice",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-primary planet-crystal",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-near planet-desert",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "SPAN",
+            "class": "space-world-surface",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(217, 170, 121, 0.314) -1px -1px 1px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "HEADER",
+            "class": "game-hud",
+            "pseudo": null,
+            "filter": "none",
+            "backdropFilter": "blur(10px)"
+          },
+          {
+            "tag": "svg",
+            "class": "game-control-icon",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(241, 215, 157) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "svg",
+            "class": "",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(255, 121, 175) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "BUTTON",
+            "class": "game-control pause-control",
+            "pseudo": null,
+            "filter": "brightness(1)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "svg",
+            "class": "game-control-icon",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(184, 235, 255) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "I",
+            "class": "boss-engine-flame ship-thruster",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(82, 164, 255, 0.68) 0px 2px 2px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "I",
+            "class": "boss-engine-flame ship-thruster",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(82, 164, 255, 0.68) 0px 2px 2px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "path",
+            "class": "boss-reactor-pulse",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(124, 232, 242) 0px 0px 3px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "svg",
+            "class": "game-control-icon",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(255, 240, 202) 0px 0px 5px)",
+            "backdropFilter": "none"
+          }
+        ],
+        "filteredDetailsTruncated": false,
+        "hud": {
+          "filter": "none",
+          "backdropFilter": "blur(10px)",
+          "display": "grid",
+          "visibility": "visible",
+          "content": "normal",
+          "width": 430,
+          "height": 71
+        },
+        "bossHull": {
+          "filter": "none",
+          "backdropFilter": "none",
+          "display": "block",
+          "visibility": "visible",
+          "content": "normal",
+          "width": 378.390625,
+          "height": 141.890625
+        },
+        "player": {
+          "filter": "none",
+          "backdropFilter": "none",
+          "display": "block",
+          "visibility": "hidden",
+          "content": "normal",
+          "width": 107.50001525878906,
+          "height": 107.5
+        },
+        "runningAnimations": 9
+      },
+      "last30SecondMedianPssMiB": 1070.8798828125,
+      "last30SecondPssRangeMiB": [
+        1017.7548828125,
+        1096.4228515625
+      ],
+      "last30SecondMedianContentPssMiB": 918.392578125,
+      "sampleCount": 83,
+      "audioSampleBufferCount": 46,
+      "audioBufferByteRange": [
+        7083800,
+        7083800
+      ],
+      "maxTrackedCanvasCacheBytes": 740932,
+      "observedCanvasFailures": [],
+      "singleRunDifferenceFromBaselineMiB": -61.9375
+    },
+    {
+      "case": "webkit-all-css-filters-off",
+      "engine": "webkit",
+      "condition": "all-css-filters-off",
+      "acceptedCompleteObservation": true,
+      "originalVerificationComplete": true,
+      "originalJobConclusion": "success",
+      "originalFailure": null,
+      "jobId": 123555644159,
+      "artifactId": 12911546052,
+      "activeSeconds": 90.007,
+      "volleys": {
+        "first": 0,
+        "last": 25
+      },
+      "initialAppearance": {
+        "width": 430,
+        "height": 825,
+        "dpr": 3,
+        "motion": "standard",
+        "nodeCount": 567,
+        "filterCount": 15,
+        "backdropCount": 1,
+        "filtered": [
+          {
+            "tag": "DIV",
+            "class": "milky-band",
+            "pseudo": null,
+            "filter": "blur(11px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-distant planet-rock",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-secondary planet-ice",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-primary planet-crystal",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "DIV",
+            "class": "space-world space-world-near planet-desert",
+            "pseudo": null,
+            "filter": "brightness(0.78)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "SPAN",
+            "class": "space-world-surface",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(217, 170, 121, 0.314) -1px -1px 1px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "HEADER",
+            "class": "game-hud",
+            "pseudo": null,
+            "filter": "none",
+            "backdropFilter": "blur(10px)"
+          },
+          {
+            "tag": "svg",
+            "class": "game-control-icon",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(241, 215, 157) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "svg",
+            "class": "",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(255, 121, 175) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "BUTTON",
+            "class": "game-control pause-control",
+            "pseudo": null,
+            "filter": "brightness(1)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "svg",
+            "class": "game-control-icon",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(184, 235, 255) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "I",
+            "class": "boss-engine-flame ship-thruster",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(82, 164, 255, 0.68) 0px 2px 2px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "I",
+            "class": "boss-engine-flame ship-thruster",
+            "pseudo": null,
+            "filter": "drop-shadow(rgba(82, 164, 255, 0.68) 0px 2px 2px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "IMG",
+            "class": "boss-hull",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(2, 7, 24) 0px 5px 7px) drop-shadow(rgba(114, 220, 255, 0.46) 0px 0px 5px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "path",
+            "class": "boss-reactor-pulse",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(124, 232, 242) 0px 0px 3px)",
+            "backdropFilter": "none"
+          },
+          {
+            "tag": "svg",
+            "class": "game-control-icon",
+            "pseudo": null,
+            "filter": "drop-shadow(rgb(255, 240, 202) 0px 0px 5px)",
+            "backdropFilter": "none"
+          }
+        ],
+        "filteredDetailsTruncated": false,
+        "hud": {
+          "filter": "none",
+          "backdropFilter": "blur(10px)",
+          "display": "grid",
+          "visibility": "visible",
+          "content": "normal",
+          "width": 430,
+          "height": 71
+        },
+        "bossHull": {
+          "filter": "drop-shadow(rgb(2, 7, 24) 0px 5px 7px) drop-shadow(rgba(114, 220, 255, 0.46) 0px 0px 5px)",
+          "backdropFilter": "none",
+          "display": "block",
+          "visibility": "visible",
+          "content": "normal",
+          "width": 378.390625,
+          "height": 141.890625
+        },
+        "player": {
+          "filter": "none",
+          "backdropFilter": "none",
+          "display": "block",
+          "visibility": "hidden",
+          "content": "normal",
+          "width": 107.50001525878906,
+          "height": 107.5
+        },
+        "runningAnimations": 9
+      },
+      "preparedAppearance": {
+        "width": 430,
+        "height": 825,
+        "dpr": 3,
+        "motion": "standard",
+        "nodeCount": 567,
+        "filterCount": 0,
+        "backdropCount": 0,
+        "filtered": [],
+        "filteredDetailsTruncated": false,
+        "hud": {
+          "filter": "none",
+          "backdropFilter": "none",
+          "display": "grid",
+          "visibility": "visible",
+          "content": "normal",
+          "width": 430,
+          "height": 71
+        },
+        "bossHull": {
+          "filter": "none",
+          "backdropFilter": "none",
+          "display": "block",
+          "visibility": "visible",
+          "content": "normal",
+          "width": 378.390625,
+          "height": 141.890625
+        },
+        "player": {
+          "filter": "none",
+          "backdropFilter": "none",
+          "display": "block",
+          "visibility": "hidden",
+          "content": "normal",
+          "width": 107.50001525878906,
+          "height": 107.5
+        },
+        "runningAnimations": 8
+      },
+      "finalAppearance": {
+        "width": 430,
+        "height": 825,
+        "dpr": 3,
+        "motion": "standard",
+        "nodeCount": 611,
+        "filterCount": 0,
+        "backdropCount": 0,
+        "filtered": [],
+        "filteredDetailsTruncated": false,
+        "hud": {
+          "filter": "none",
+          "backdropFilter": "none",
+          "display": "grid",
+          "visibility": "visible",
+          "content": "normal",
+          "width": 430,
+          "height": 71
+        },
+        "bossHull": {
+          "filter": "none",
+          "backdropFilter": "none",
+          "display": "block",
+          "visibility": "visible",
+          "content": "normal",
+          "width": 378.390625,
+          "height": 141.890625
+        },
+        "player": {
+          "filter": "none",
+          "backdropFilter": "none",
+          "display": "block",
+          "visibility": "hidden",
+          "content": "normal",
+          "width": 107.50001525878906,
+          "height": 107.5
+        },
+        "runningAnimations": 9
+      },
+      "last30SecondMedianPssMiB": 1014.69921875,
+      "last30SecondPssRangeMiB": [
+        1007.013671875,
+        1020.478515625
+      ],
+      "last30SecondMedianContentPssMiB": 868.025390625,
+      "sampleCount": 86,
+      "audioSampleBufferCount": 46,
+      "audioBufferByteRange": [
+        7083800,
+        7083800
+      ],
+      "maxTrackedCanvasCacheBytes": 1059028,
+      "observedCanvasFailures": [],
+      "singleRunDifferenceFromBaselineMiB": -118.1181640625
+    }
+  ]
+}

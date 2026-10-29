@@ -1,5 +1,5 @@
 name: Private smartphone CSS filter attribution
-run-name: Compare CSS filters after native boss-fight preparation
+run-name: Verify built-in filter control for protected smartphone preview
 on:
   push:
     branches: [codex/boss2-css-filter-attribution-20261029]
@@ -14,7 +14,7 @@ jobs:
       fail-fast: false
       matrix:
         engine: [chromium, webkit]
-        condition: [standard, hud-backdrop-off, boss-hull-filter-off, all-css-filters-off]
+        condition: [all-css-filters-off]
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
       - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
@@ -31,19 +31,20 @@ jobs:
           node --check verification/boss2-css-filter-attribution-20261029/verifyFilters.mjs
           node verification/boss2-return-duration-20261029/verifyScope.mjs
           node --experimental-strip-types verification/boss2-forensics-20261028/devicePreviewPreflight.mjs
-      - name: Build the unchanged private application
+      - name: Build the diagnostic filter control over the unchanged private game
         env:
           VERCEL_ENV: preview
-        run: node verification/boss2-forensics-20261028/buildDevicePreview.mjs
+        run: node verification/boss2-css-filter-attribution-20261029/buildFilterPreview.mjs
       - name: Observe isolated CSS-filter condition
         env:
           CRYPTOID_FILTER_ENGINE: ${{ matrix.engine }}
           CRYPTOID_FILTER_CASE: ${{ matrix.condition }}
+          CRYPTOID_FILTER_BUILT_IN: '1'
         run: node --experimental-strip-types verification/boss2-css-filter-attribution-20261029/verifyFilters.mjs
       - name: Preserve synthetic filter evidence
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: css-filter-${{ matrix.engine }}-${{ matrix.condition }}
+          name: css-filter-preview-${{ matrix.engine }}
           path: verification/boss2-css-filter-attribution-20261029/results/${{ matrix.engine }}-${{ matrix.condition }}/
           retention-days: 3
