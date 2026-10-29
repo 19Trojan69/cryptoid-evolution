@@ -1,0 +1,47 @@
+name: Private Boss 2 heap retention investigation
+run-name: Compare paused heap after one and six minutes without extra recording
+on:
+  push:
+    branches: [codex/boss2-heap-retention-20261029]
+    paths: ['.github/workflows/cryptoid-heap-retention.yml']
+permissions:
+  contents: read
+jobs:
+  retention:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    strategy:
+      fail-fast: false
+      matrix:
+        seconds: [60, 360]
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with:
+          node-version: '24'
+      - name: Install existing pinned tools and Chromium
+        run: |
+          npm install --prefix frontend --ignore-scripts --no-audit --no-fund
+          npm install --prefix verification/boss2-forensics-20261028 --ignore-scripts --no-audit --no-fund
+          cd verification/boss2-forensics-20261028
+          npx playwright install --with-deps chromium
+      - name: Preserve the existing application and validate snapshot analysis
+        run: |
+          node verification/boss2-return-duration-20261029/verifyScope.mjs
+          node --test verification/boss2-heap-retention-20261029/heapSummary.test.mjs
+          node --experimental-strip-types verification/boss2-forensics-20261028/devicePreviewPreflight.mjs
+      - name: Build the unchanged isolated application
+        env:
+          VERCEL_ENV: preview
+        run: node verification/boss2-forensics-20261028/buildDevicePreview.mjs
+      - name: Observe play then capture paused and unmounted heaps
+        env:
+          CRYPTOID_HEAP_SECONDS: ${{ matrix.seconds }}
+        run: node --experimental-strip-types verification/boss2-heap-retention-20261029/verifyHeap.mjs
+      - name: Preserve synthetic snapshots and results
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: boss2-heap-retention-${{ matrix.seconds }}
+          path: verification/boss2-heap-retention-20261029/results/chromium-${{ matrix.seconds }}/
+          retention-days: 3
