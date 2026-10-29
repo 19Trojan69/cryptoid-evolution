@@ -1,0 +1,1133 @@
+{
+  "schemaVersion": 1,
+  "syntheticOnly": true,
+  "physicalDeviceMeasured": false,
+  "deliveredApplicationCommit": "c610e7cb2bde2891dd04721c530c5b1bbead2215",
+  "applicationRuntimeChanged": false,
+  "deploymentChanged": false,
+  "smartphoneReducedEffectsPhysicalOutcome": null,
+  "nativeTerminationCauseMeasured": false,
+  "temperatureMeasured": false,
+  "whiteScreenFixed": false,
+  "evidence": {
+    "measurements": "evidence/synthetic-native-measurements.json.gz",
+    "sha256": "c778bd8db1897da1b660d3989d6fce39ef67c60d59ab23fd35736efbcdca9e85",
+    "captures": 6,
+    "acceptedCompleteWebKitProfiles": 2,
+    "offlineRecoveredChromiumTraces": 2,
+    "originallyFailedChromiumJobs": 4,
+    "originalWorkflowFailuresPreserved": true
+  },
+  "workflowSources": [
+    {
+      "runId": 40892628729,
+      "commit": "fbb0fe3295b7ce4614295bb6acd882bb381d8637",
+      "tree": "2924a5f064a7e2882ecb77f2d61df29cad6f9b8f"
+    },
+    {
+      "runId": 40893919633,
+      "commit": "3f6373200307e4dd7006273da7e5c22dc1814a49",
+      "tree": "5cb56abab5baca49c8412dbad012dc31b01b9c54"
+    }
+  ],
+  "constraints": [
+    "Linux browser emulation and invasive profiling, not physical iOS/Android RAM or GPU limits.",
+    "Only 90 active seconds, one unseeded run per condition and unequal WebKit simulated work.",
+    "Native allocator rows overlap across parents and processes; do not sum them into RAM.",
+    "WebKit other is unclassified; zero layers/page does not establish zero graphics memory.",
+    "Three seconds after unmount without requested GC does not establish retained-object reachability.",
+    "Reduced effects leaves some blur/shadows active and is not a graphics-off condition."
+  ],
+  "captures": [
+    {
+      "attempt": 1,
+      "case": "chromium-reduced",
+      "sourceCommit": "fbb0fe3295b7ce4614295bb6acd882bb381d8637",
+      "workflow": {
+        "runId": 40892628729,
+        "jobId": 123513209803,
+        "originalRunConclusion": "failure",
+        "originalJobConclusion": "failure",
+        "originalVerificationComplete": false,
+        "originalFailure": {
+          "code": "trace-event-bound",
+          "message": "The expression evaluated to a falsy value:\n\n  assert.ok(dump.matchedProcessDumps > 0)\n"
+        },
+        "url": "https://github.com/19Trojan69/cryptoid-evolution/actions/runs/40892628729/job/123513209803"
+      },
+      "artifact": {
+        "id": 12906445928,
+        "bytes": 7907859,
+        "sha256": "529a5589aade56b89f8e9b03ddfe9d521cc9aba6a88731dd5dd90d13e5156c45",
+        "zipIntegrityVerified": true
+      },
+      "activeSeconds": 90.914,
+      "volleys": {
+        "first": 0,
+        "last": 32
+      },
+      "engineVersion": "151.0.7922.34",
+      "last30SecondsMedianProcessPssMiB": 662.6025390625,
+      "checkpoints": [
+        {
+          "label": "initial-paused",
+          "processPssMiB": 368.9189453125,
+          "jsHeap": {
+            "usedSize": 10230944,
+            "totalSize": 14569472,
+            "embedderHeapUsedSize": 7007928,
+            "backingStorageSize": 2550066
+          },
+          "dom": {
+            "documents": 4,
+            "nodes": 901,
+            "jsEventListeners": 403
+          },
+          "categories": null,
+          "canvasBytes": null,
+          "canvasCount": null
+        },
+        {
+          "label": "after-active-paused",
+          "processPssMiB": 670.2236328125,
+          "jsHeap": {
+            "usedSize": 12490036,
+            "totalSize": 25862144,
+            "embedderHeapUsedSize": 14020512,
+            "backingStorageSize": 2528494
+          },
+          "dom": {
+            "documents": 3,
+            "nodes": 971,
+            "jsEventListeners": 410
+          },
+          "categories": null,
+          "canvasBytes": null,
+          "canvasCount": null
+        },
+        {
+          "label": "unmounted",
+          "processPssMiB": 659.8369140625,
+          "jsHeap": {
+            "usedSize": 14594296,
+            "totalSize": 25862144,
+            "embedderHeapUsedSize": 16866352,
+            "backingStorageSize": 2529287
+          },
+          "dom": {
+            "documents": 3,
+            "nodes": 1137,
+            "jsEventListeners": 634
+          },
+          "categories": null,
+          "canvasBytes": null,
+          "canvasCount": null
+        }
+      ],
+      "nativeAttributionUsable": false,
+      "exclusionReason": "Unrelated default trace events exhausted the collector bound; requested dumps were dropped."
+    },
+    {
+      "attempt": 1,
+      "case": "webkit-standard",
+      "sourceCommit": "fbb0fe3295b7ce4614295bb6acd882bb381d8637",
+      "workflow": {
+        "runId": 40892628729,
+        "jobId": 123513209688,
+        "originalRunConclusion": "failure",
+        "originalJobConclusion": "success",
+        "originalVerificationComplete": true,
+        "originalFailure": null,
+        "url": "https://github.com/19Trojan69/cryptoid-evolution/actions/runs/40892628729/job/123513209688"
+      },
+      "artifact": {
+        "id": 12906161250,
+        "bytes": 324828,
+        "sha256": "ec65c12bd30c56e72149caddffaa5504da2c64119721896392f43faecb05980f",
+        "zipIntegrityVerified": true
+      },
+      "activeSeconds": 90.369,
+      "volleys": {
+        "first": 0,
+        "last": 9
+      },
+      "engineVersion": "26.5",
+      "last30SecondsMedianProcessPssMiB": 1116.8173828125,
+      "checkpoints": [
+        {
+          "label": "initial-paused",
+          "processPssMiB": 720.8056640625,
+          "jsHeap": null,
+          "dom": null,
+          "categories": [
+            {
+              "type": "javascript",
+              "size": 35587679
+            },
+            {
+              "type": "jit",
+              "size": 0
+            },
+            {
+              "type": "images",
+              "size": 3408576
+            },
+            {
+              "type": "layers",
+              "size": 0
+            },
+            {
+              "type": "page",
+              "size": 0
+            },
+            {
+              "type": "other",
+              "size": 331953889
+            }
+          ],
+          "canvasBytes": 0,
+          "canvasCount": 1
+        },
+        {
+          "label": "after-active-paused",
+          "processPssMiB": 1155.8544921875,
+          "jsHeap": null,
+          "dom": null,
+          "categories": [
+            {
+              "type": "javascript",
+              "size": 32016204
+            },
+            {
+              "type": "jit",
+              "size": 0
+            },
+            {
+              "type": "images",
+              "size": 16149760
+            },
+            {
+              "type": "layers",
+              "size": 0
+            },
+            {
+              "type": "page",
+              "size": 0
+            },
+            {
+              "type": "other",
+              "size": 858278836
+            }
+          ],
+          "canvasBytes": 1880312,
+          "canvasCount": 11
+        },
+        {
+          "label": "unmounted",
+          "processPssMiB": 1031.5068359375,
+          "jsHeap": null,
+          "dom": null,
+          "categories": [
+            {
+              "type": "javascript",
+              "size": 29561618
+            },
+            {
+              "type": "jit",
+              "size": 0
+            },
+            {
+              "type": "images",
+              "size": 4258288
+            },
+            {
+              "type": "layers",
+              "size": 0
+            },
+            {
+              "type": "page",
+              "size": 0
+            },
+            {
+              "type": "other",
+              "size": 742351614
+            }
+          ],
+          "canvasBytes": 1032192,
+          "canvasCount": 11
+        }
+      ],
+      "uniqueNativeUpdates": 80,
+      "last30SecondsMedianCategoryBytes": {
+        "javascript": 30370173,
+        "images": 15831664,
+        "layers": 0,
+        "page": 0,
+        "other": 784709236
+      },
+      "maximumObservedCanvasBytes": 1947368,
+      "acceptedCompleteProfile": true
+    },
+    {
+      "attempt": 1,
+      "case": "chromium-standard",
+      "sourceCommit": "fbb0fe3295b7ce4614295bb6acd882bb381d8637",
+      "workflow": {
+        "runId": 40892628729,
+        "jobId": 123513209121,
+        "originalRunConclusion": "failure",
+        "originalJobConclusion": "failure",
+        "originalVerificationComplete": false,
+        "originalFailure": {
+          "code": "trace-event-bound",
+          "message": "The expression evaluated to a falsy value:\n\n  assert.ok(dump.matchedProcessDumps > 0)\n"
+        },
+        "url": "https://github.com/19Trojan69/cryptoid-evolution/actions/runs/40892628729/job/123513209121"
+      },
+      "artifact": {
+        "id": 12905847224,
+        "bytes": 8080057,
+        "sha256": "85e6c2d0bb136b67ae4d854501efda5479673451c97b1671ad3e7d4c5c202c20",
+        "zipIntegrityVerified": true
+      },
+      "activeSeconds": 90.122,
+      "volleys": {
+        "first": 0,
+        "last": 31
+      },
+      "engineVersion": "151.0.7922.34",
+      "last30SecondsMedianProcessPssMiB": 705.814453125,
+      "checkpoints": [
+        {
+          "label": "initial-paused",
+          "processPssMiB": 374.44921875,
+          "jsHeap": {
+            "usedSize": 9791080,
+            "totalSize": 14045184,
+            "embedderHeapUsedSize": 6007440,
+            "backingStorageSize": 7018812
+          },
+          "dom": {
+            "documents": 4,
+            "nodes": 859,
+            "jsEventListeners": 348
+          },
+          "categories": null,
+          "canvasBytes": null,
+          "canvasCount": null
+        },
+        {
+          "label": "after-active-paused",
+          "processPssMiB": 719.96875,
+          "jsHeap": {
+            "usedSize": 12599132,
+            "totalSize": 26648576,
+            "embedderHeapUsedSize": 19870848,
+            "backingStorageSize": 2528745
+          },
+          "dom": {
+            "documents": 3,
+            "nodes": 992,
+            "jsEventListeners": 451
+          },
+          "categories": null,
+          "canvasBytes": null,
+          "canvasCount": null
+        },
+        {
+          "label": "unmounted",
+          "processPssMiB": 710.8154296875,
+          "jsHeap": {
+            "usedSize": 14745692,
+            "totalSize": 26910720,
+            "embedderHeapUsedSize": 23113992,
+            "backingStorageSize": 2529937
+          },
+          "dom": {
+            "documents": 3,
+            "nodes": 1159,
+            "jsEventListeners": 682
+          },
+          "categories": null,
+          "canvasBytes": null,
+          "canvasCount": null
+        }
+      ],
+      "nativeAttributionUsable": false,
+      "exclusionReason": "Unrelated default trace events exhausted the collector bound; requested dumps were dropped."
+    },
+    {
+      "attempt": 1,
+      "case": "webkit-reduced",
+      "sourceCommit": "fbb0fe3295b7ce4614295bb6acd882bb381d8637",
+      "workflow": {
+        "runId": 40892628729,
+        "jobId": 123513209703,
+        "originalRunConclusion": "failure",
+        "originalJobConclusion": "success",
+        "originalVerificationComplete": true,
+        "originalFailure": null,
+        "url": "https://github.com/19Trojan69/cryptoid-evolution/actions/runs/40892628729/job/123513209703"
+      },
+      "artifact": {
+        "id": 12904973941,
+        "bytes": 325190,
+        "sha256": "9cb40125b3a4f7fa181362fd65fb40b0384a13940005fc5f32735711a972a6d3",
+        "zipIntegrityVerified": true
+      },
+      "activeSeconds": 91.095,
+      "volleys": {
+        "first": 0,
+        "last": 11
+      },
+      "engineVersion": "26.5",
+      "last30SecondsMedianProcessPssMiB": 1081.705078125,
+      "checkpoints": [
+        {
+          "label": "initial-paused",
+          "processPssMiB": 1111.7841796875,
+          "jsHeap": null,
+          "dom": null,
+          "categories": [
+            {
+              "type": "javascript",
+              "size": 28727327
+            },
+            {
+              "type": "jit",
+              "size": 0
+            },
+            {
+              "type": "images",
+              "size": 12845760
+            },
+            {
+              "type": "layers",
+              "size": 0
+            },
+            {
+              "type": "page",
+              "size": 0
+            },
+            {
+              "type": "other",
+              "size": 805545249
+            }
+          ],
+          "canvasBytes": 1032192,
+          "canvasCount": 8
+        },
+        {
+          "label": "after-active-paused",
+          "processPssMiB": 1149.724609375,
+          "jsHeap": null,
+          "dom": null,
+          "categories": [
+            {
+              "type": "javascript",
+              "size": 32610754
+            },
+            {
+              "type": "jit",
+              "size": 0
+            },
+            {
+              "type": "images",
+              "size": 16467856
+            },
+            {
+              "type": "layers",
+              "size": 0
+            },
+            {
+              "type": "page",
+              "size": 0
+            },
+            {
+              "type": "other",
+              "size": 842419886
+            }
+          ],
+          "canvasBytes": 1880312,
+          "canvasCount": 11
+        },
+        {
+          "label": "unmounted",
+          "processPssMiB": 1118.154296875,
+          "jsHeap": null,
+          "dom": null,
+          "categories": [
+            {
+              "type": "javascript",
+              "size": 33043027
+            },
+            {
+              "type": "jit",
+              "size": 0
+            },
+            {
+              "type": "images",
+              "size": 4576384
+            },
+            {
+              "type": "layers",
+              "size": 0
+            },
+            {
+              "type": "page",
+              "size": 0
+            },
+            {
+              "type": "other",
+              "size": 822040877
+            }
+          ],
+          "canvasBytes": 1032192,
+          "canvasCount": 11
+        }
+      ],
+      "uniqueNativeUpdates": 83,
+      "last30SecondsMedianCategoryBytes": {
+        "javascript": 31544430,
+        "images": 15831664,
+        "layers": 0,
+        "page": 0,
+        "other": 772355121
+      },
+      "maximumObservedCanvasBytes": 1947368,
+      "acceptedCompleteProfile": true
+    },
+    {
+      "attempt": 2,
+      "case": "chromium-reduced",
+      "sourceCommit": "3f6373200307e4dd7006273da7e5c22dc1814a49",
+      "workflow": {
+        "runId": 40893919633,
+        "jobId": 123517736575,
+        "originalRunConclusion": "failure",
+        "originalJobConclusion": "failure",
+        "originalVerificationComplete": false,
+        "originalFailure": {
+          "code": "profiling-verification-failed",
+          "message": "The expression evaluated to a falsy value:\n\n  assert.ok(Number.isSafeInteger(value) && value >= 0)\n"
+        },
+        "url": "https://github.com/19Trojan69/cryptoid-evolution/actions/runs/40893919633/job/123517736575"
+      },
+      "artifact": {
+        "id": 12906352236,
+        "bytes": 1005302,
+        "sha256": "7a08f0b9f6881d0797f0d8823b4573f66f97224ee707146941d980d9094368f8",
+        "zipIntegrityVerified": true
+      },
+      "activeSeconds": 90.566,
+      "volleys": {
+        "first": 0,
+        "last": 32
+      },
+      "engineVersion": "151.0.7922.34",
+      "last30SecondsMedianProcessPssMiB": 432.333984375,
+      "checkpoints": [
+        {
+          "label": "initial-paused",
+          "processPssMiB": 364.6298828125,
+          "jsHeap": {
+            "usedSize": 10260984,
+            "totalSize": 13520896,
+            "embedderHeapUsedSize": 7068512,
+            "backingStorageSize": 2539488
+          },
+          "dom": {
+            "documents": 4,
+            "nodes": 900,
+            "jsEventListeners": 403
+          },
+          "categories": null,
+          "canvasBytes": null,
+          "canvasCount": null
+        },
+        {
+          "label": "after-active-paused",
+          "processPssMiB": 439.279296875,
+          "jsHeap": {
+            "usedSize": 14310492,
+            "totalSize": 24289280,
+            "embedderHeapUsedSize": 21010720,
+            "backingStorageSize": 2529028
+          },
+          "dom": {
+            "documents": 3,
+            "nodes": 1168,
+            "jsEventListeners": 575
+          },
+          "categories": null,
+          "canvasBytes": null,
+          "canvasCount": null
+        },
+        {
+          "label": "unmounted",
+          "processPssMiB": 372.685546875,
+          "jsHeap": {
+            "usedSize": 10117884,
+            "totalSize": 11247616,
+            "embedderHeapUsedSize": 3134872,
+            "backingStorageSize": 2525420
+          },
+          "dom": {
+            "documents": 3,
+            "nodes": 234,
+            "jsEventListeners": 190
+          },
+          "categories": null,
+          "canvasBytes": null,
+          "canvasCount": null
+        }
+      ],
+      "recovery": {
+        "offlinePostprocessingComplete": true,
+        "originalEndToEndJobPassed": false,
+        "originalPostParserAssertionsVerified": false,
+        "traceFile": "evidence/chromium-reduced-trace.json.gz",
+        "traceSha256": "1faa0cb2a907bdc4bc76ce416751b1bcd3de1418f00c416dd2ae353fd3457634",
+        "traceEvents": 45,
+        "traceDataLossOccurred": false,
+        "nativeCheckpoints": [
+          {
+            "label": "initial-paused",
+            "timestampUs": 104609132,
+            "requestDumpGuid": "0x1",
+            "exportedTraceDumpId": "0",
+            "association": "chronological-explicit-requests-exported-snapshot-ids",
+            "matchedProcessDumps": 6,
+            "matchedDumpEvents": 13,
+            "fragments": [
+              {
+                "processId": 2948,
+                "processName": "Renderer",
+                "allocatorCount": 8163,
+                "categories": {
+                  "blink_gc": 8471336,
+                  "blink_objects": 6437904,
+                  "v8": 15896548,
+                  "malloc": 53801664,
+                  "partition_alloc": 25419776,
+                  "cc": 43896832,
+                  "cc/image_memory": 15994880,
+                  "skia": 16782821,
+                  "discardable": 17702912,
+                  "canvas": 884736,
+                  "media": 2227640,
+                  "web_cache": 9127590,
+                  "shared_memory": 53428224
+                },
+                "outsideSafeIntegerRange": [],
+                "sharedOwnershipEdges": 1923,
+                "reportedSizesMustNotBeSummed": true
+              },
+              {
+                "processId": 2923,
+                "processName": "GPU Process",
+                "allocatorCount": 477,
+                "categories": {
+                  "gpu": 27901952,
+                  "gpu/shared_images": 27901952,
+                  "cc": 5865472,
+                  "malloc": 8374832,
+                  "shared_memory": 28696576
+                },
+                "outsideSafeIntegerRange": [],
+                "sharedOwnershipEdges": 349,
+                "reportedSizesMustNotBeSummed": true
+              }
+            ]
+          },
+          {
+            "label": "after-active-paused",
+            "timestampUs": 204483545,
+            "requestDumpGuid": "0x2",
+            "exportedTraceDumpId": "1",
+            "association": "chronological-explicit-requests-exported-snapshot-ids",
+            "matchedProcessDumps": 6,
+            "matchedDumpEvents": 13,
+            "fragments": [
+              {
+                "processId": 2948,
+                "processName": "Renderer",
+                "allocatorCount": 13822,
+                "categories": {
+                  "blink_gc": 43024544,
+                  "blink_objects": 20746456,
+                  "v8": 26695604,
+                  "malloc": 64996400,
+                  "partition_alloc": 35053568,
+                  "cc": 48689152,
+                  "cc/image_memory": 28389376,
+                  "skia": 16852287,
+                  "discardable": 29249536,
+                  "canvas": 1880312,
+                  "media": 4471112,
+                  "web_cache": 6870644,
+                  "shared_memory": 58257408
+                },
+                "outsideSafeIntegerRange": [
+                  {
+                    "path": "malloc/partitions/allocator",
+                    "attributes": {
+                      "max_committed_size": {
+                        "rawHex": "0xfffffffffffff000",
+                        "reason": "outside-safe-integer-range"
+                      },
+                      "virtual_committed_size": {
+                        "rawHex": "0xfffffffffd470000",
+                        "reason": "outside-safe-integer-range"
+                      },
+                      "wasted": {
+                        "rawHex": "0xfffffffff9c564f0",
+                        "reason": "outside-safe-integer-range"
+                      }
+                    }
+                  }
+                ],
+                "sharedOwnershipEdges": 1918,
+                "reportedSizesMustNotBeSummed": true
+              },
+              {
+                "processId": 2923,
+                "processName": "GPU Process",
+                "allocatorCount": 473,
+                "categories": {
+                  "gpu": 26484560,
+                  "gpu/shared_images": 26484560,
+                  "cc": 9590740,
+                  "malloc": 8463088,
+                  "shared_memory": 27287552
+                },
+                "outsideSafeIntegerRange": [
+                  {
+                    "path": "malloc/partitions/allocator",
+                    "attributes": {
+                      "max_committed_size": {
+                        "rawHex": "0xfffffffffffff000",
+                        "reason": "outside-safe-integer-range"
+                      },
+                      "virtual_committed_size": {
+                        "rawHex": "0xfffffffff2942000",
+                        "reason": "outside-safe-integer-range"
+                      },
+                      "wasted": {
+                        "rawHex": "0xfffffffff225f130",
+                        "reason": "outside-safe-integer-range"
+                      }
+                    }
+                  }
+                ],
+                "sharedOwnershipEdges": 342,
+                "reportedSizesMustNotBeSummed": true
+              }
+            ]
+          },
+          {
+            "label": "unmounted",
+            "timestampUs": 211121425,
+            "requestDumpGuid": "0x3",
+            "exportedTraceDumpId": "2",
+            "association": "chronological-explicit-requests-exported-snapshot-ids",
+            "matchedProcessDumps": 6,
+            "matchedDumpEvents": 13,
+            "fragments": [
+              {
+                "processId": 2948,
+                "processName": "Renderer",
+                "allocatorCount": 7606,
+                "categories": {
+                  "blink_gc": 9629776,
+                  "blink_objects": 3054632,
+                  "v8": 13500332,
+                  "malloc": 46061392,
+                  "partition_alloc": 25190400,
+                  "cc": 42971136,
+                  "cc/image_memory": 28389376,
+                  "skia": 18929483,
+                  "discardable": 29249536,
+                  "canvas": 1032192,
+                  "media": null,
+                  "web_cache": 6640694,
+                  "shared_memory": 49549312
+                },
+                "outsideSafeIntegerRange": [
+                  {
+                    "path": "malloc/partitions/allocator",
+                    "attributes": {
+                      "max_committed_size": {
+                        "rawHex": "0xfffffffffffff000",
+                        "reason": "outside-safe-integer-range"
+                      },
+                      "virtual_committed_size": {
+                        "rawHex": "0xfffffffffc252000",
+                        "reason": "outside-safe-integer-range"
+                      },
+                      "wasted": {
+                        "rawHex": "0xfffffffff9bcb6fc",
+                        "reason": "outside-safe-integer-range"
+                      }
+                    }
+                  }
+                ],
+                "sharedOwnershipEdges": 1623,
+                "reportedSizesMustNotBeSummed": true
+              },
+              {
+                "processId": 2923,
+                "processName": "GPU Process",
+                "allocatorCount": 358,
+                "categories": {
+                  "gpu": 14581760,
+                  "gpu/shared_images": 14581760,
+                  "cc": 2326528,
+                  "malloc": 6474592,
+                  "shared_memory": 15376384
+                },
+                "outsideSafeIntegerRange": [
+                  {
+                    "path": "malloc/partitions/allocator",
+                    "attributes": {
+                      "max_committed_size": {
+                        "rawHex": "0xfffffffffffff000",
+                        "reason": "outside-safe-integer-range"
+                      },
+                      "virtual_committed_size": {
+                        "rawHex": "0xfffffffff24c7000",
+                        "reason": "outside-safe-integer-range"
+                      },
+                      "wasted": {
+                        "rawHex": "0xfffffffff1f8a2c0",
+                        "reason": "outside-safe-integer-range"
+                      }
+                    }
+                  }
+                ],
+                "sharedOwnershipEdges": 225,
+                "reportedSizesMustNotBeSummed": true
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "attempt": 2,
+      "case": "chromium-standard",
+      "sourceCommit": "3f6373200307e4dd7006273da7e5c22dc1814a49",
+      "workflow": {
+        "runId": 40893919633,
+        "jobId": 123517735916,
+        "originalRunConclusion": "failure",
+        "originalJobConclusion": "failure",
+        "originalVerificationComplete": false,
+        "originalFailure": {
+          "code": "profiling-verification-failed",
+          "message": "The expression evaluated to a falsy value:\n\n  assert.ok(Number.isSafeInteger(value) && value >= 0)\n"
+        },
+        "url": "https://github.com/19Trojan69/cryptoid-evolution/actions/runs/40893919633/job/123517735916"
+      },
+      "artifact": {
+        "id": 12905588170,
+        "bytes": 1132983,
+        "sha256": "c85ded5ca2aeecf3854e132006cdbd82b7e94934cbdd65ac704a0c7a725d1b27",
+        "zipIntegrityVerified": true
+      },
+      "activeSeconds": 90.465,
+      "volleys": {
+        "first": 0,
+        "last": 32
+      },
+      "engineVersion": "151.0.7922.34",
+      "last30SecondsMedianProcessPssMiB": 459.0546875,
+      "checkpoints": [
+        {
+          "label": "initial-paused",
+          "processPssMiB": 368.333984375,
+          "jsHeap": {
+            "usedSize": 9194792,
+            "totalSize": 15880192,
+            "embedderHeapUsedSize": 6329792,
+            "backingStorageSize": 6935867
+          },
+          "dom": {
+            "documents": 4,
+            "nodes": 912,
+            "jsEventListeners": 349
+          },
+          "categories": null,
+          "canvasBytes": null,
+          "canvasCount": null
+        },
+        {
+          "label": "after-active-paused",
+          "processPssMiB": 468.0712890625,
+          "jsHeap": {
+            "usedSize": 12656988,
+            "totalSize": 26124288,
+            "embedderHeapUsedSize": 16199752,
+            "backingStorageSize": 2528538
+          },
+          "dom": {
+            "documents": 3,
+            "nodes": 1008,
+            "jsEventListeners": 453
+          },
+          "categories": null,
+          "canvasBytes": null,
+          "canvasCount": null
+        },
+        {
+          "label": "unmounted",
+          "processPssMiB": 464.021484375,
+          "jsHeap": {
+            "usedSize": 14812808,
+            "totalSize": 26648576,
+            "embedderHeapUsedSize": 19364648,
+            "backingStorageSize": 2529320
+          },
+          "dom": {
+            "documents": 3,
+            "nodes": 1173,
+            "jsEventListeners": 685
+          },
+          "categories": null,
+          "canvasBytes": null,
+          "canvasCount": null
+        }
+      ],
+      "recovery": {
+        "offlinePostprocessingComplete": true,
+        "originalEndToEndJobPassed": false,
+        "originalPostParserAssertionsVerified": false,
+        "traceFile": "evidence/chromium-standard-trace.json.gz",
+        "traceSha256": "48dcce4138593138ec5ba1f5a0a18af96f9da138ff70d243d20f8f46e8ae4ebf",
+        "traceEvents": 45,
+        "traceDataLossOccurred": false,
+        "nativeCheckpoints": [
+          {
+            "label": "initial-paused",
+            "timestampUs": 163154852,
+            "requestDumpGuid": "0x1",
+            "exportedTraceDumpId": "0",
+            "association": "chronological-explicit-requests-exported-snapshot-ids",
+            "matchedProcessDumps": 6,
+            "matchedDumpEvents": 13,
+            "fragments": [
+              {
+                "processId": 2948,
+                "processName": "Renderer",
+                "allocatorCount": 7551,
+                "categories": {
+                  "blink_gc": 7422760,
+                  "blink_objects": 5847784,
+                  "v8": 18255844,
+                  "malloc": 68737584,
+                  "partition_alloc": 26009600,
+                  "cc": 49631232,
+                  "cc/image_memory": 15994880,
+                  "skia": 27222523,
+                  "discardable": 17702912,
+                  "canvas": 294912,
+                  "media": 3276216,
+                  "web_cache": 9127590,
+                  "shared_memory": 59158528
+                },
+                "outsideSafeIntegerRange": [],
+                "sharedOwnershipEdges": 1904,
+                "reportedSizesMustNotBeSummed": true
+              },
+              {
+                "processId": 2927,
+                "processName": "GPU Process",
+                "allocatorCount": 570,
+                "categories": {
+                  "gpu": 33636352,
+                  "gpu/shared_images": 33636352,
+                  "cc": 10977280,
+                  "malloc": 11075808,
+                  "shared_memory": 34430976
+                },
+                "outsideSafeIntegerRange": [],
+                "sharedOwnershipEdges": 440,
+                "reportedSizesMustNotBeSummed": true
+              }
+            ]
+          },
+          {
+            "label": "after-active-paused",
+            "timestampUs": 262873499,
+            "requestDumpGuid": "0x2",
+            "exportedTraceDumpId": "1",
+            "association": "chronological-explicit-requests-exported-snapshot-ids",
+            "matchedProcessDumps": 6,
+            "matchedDumpEvents": 13,
+            "fragments": [
+              {
+                "processId": 2948,
+                "processName": "Renderer",
+                "allocatorCount": 13477,
+                "categories": {
+                  "blink_gc": 69435552,
+                  "blink_objects": 15575040,
+                  "v8": 28535724,
+                  "malloc": 62191168,
+                  "partition_alloc": 35745792,
+                  "cc": 55283712,
+                  "cc/image_memory": 28381184,
+                  "skia": 16824845,
+                  "discardable": 29249536,
+                  "canvas": 1880312,
+                  "media": 4405480,
+                  "web_cache": 6955561,
+                  "shared_memory": 64860160
+                },
+                "outsideSafeIntegerRange": [
+                  {
+                    "path": "malloc/partitions/allocator",
+                    "attributes": {
+                      "max_committed_size": {
+                        "rawHex": "0xfffffffffffff000",
+                        "reason": "outside-safe-integer-range"
+                      },
+                      "virtual_committed_size": {
+                        "rawHex": "0xfffffffffd27e000",
+                        "reason": "outside-safe-integer-range"
+                      },
+                      "wasted": {
+                        "rawHex": "0xfffffffff9c17ad0",
+                        "reason": "outside-safe-integer-range"
+                      }
+                    }
+                  }
+                ],
+                "sharedOwnershipEdges": 1976,
+                "reportedSizesMustNotBeSummed": true
+              },
+              {
+                "processId": 2927,
+                "processName": "GPU Process",
+                "allocatorCount": 595,
+                "categories": {
+                  "gpu": 30039888,
+                  "gpu/shared_images": 30039888,
+                  "cc": 15701972,
+                  "malloc": 9571680,
+                  "shared_memory": 30842880
+                },
+                "outsideSafeIntegerRange": [
+                  {
+                    "path": "malloc/partitions/allocator",
+                    "attributes": {
+                      "max_committed_size": {
+                        "rawHex": "0xfffffffffffff000",
+                        "reason": "outside-safe-integer-range"
+                      },
+                      "virtual_committed_size": {
+                        "rawHex": "0xffffffffeafe9000",
+                        "reason": "outside-safe-integer-range"
+                      },
+                      "wasted": {
+                        "rawHex": "0xffffffffea80b460",
+                        "reason": "outside-safe-integer-range"
+                      }
+                    }
+                  }
+                ],
+                "sharedOwnershipEdges": 464,
+                "reportedSizesMustNotBeSummed": true
+              }
+            ]
+          },
+          {
+            "label": "unmounted",
+            "timestampUs": 269518015,
+            "requestDumpGuid": "0x3",
+            "exportedTraceDumpId": "2",
+            "association": "chronological-explicit-requests-exported-snapshot-ids",
+            "matchedProcessDumps": 6,
+            "matchedDumpEvents": 13,
+            "fragments": [
+              {
+                "processId": 2948,
+                "processName": "Renderer",
+                "allocatorCount": 15115,
+                "categories": {
+                  "blink_gc": 69370016,
+                  "blink_objects": 18788112,
+                  "v8": 29060012,
+                  "malloc": 57384400,
+                  "partition_alloc": 35700736,
+                  "cc": 52449280,
+                  "cc/image_memory": 28381184,
+                  "skia": 18902041,
+                  "discardable": 29249536,
+                  "canvas": 1032192,
+                  "media": null,
+                  "web_cache": 6955561,
+                  "shared_memory": 59035648
+                },
+                "outsideSafeIntegerRange": [
+                  {
+                    "path": "malloc/partitions/allocator",
+                    "attributes": {
+                      "max_committed_size": {
+                        "rawHex": "0xfffffffffffff000",
+                        "reason": "outside-safe-integer-range"
+                      },
+                      "virtual_committed_size": {
+                        "rawHex": "0xfffffffffccc8000",
+                        "reason": "outside-safe-integer-range"
+                      },
+                      "wasted": {
+                        "rawHex": "0xfffffffff9a49be4",
+                        "reason": "outside-safe-integer-range"
+                      }
+                    }
+                  }
+                ],
+                "sharedOwnershipEdges": 2008,
+                "reportedSizesMustNotBeSummed": true
+              },
+              {
+                "processId": 2927,
+                "processName": "GPU Process",
+                "allocatorCount": 490,
+                "categories": {
+                  "gpu": 24068096,
+                  "gpu/shared_images": 24068096,
+                  "cc": 2785280,
+                  "malloc": 6696128,
+                  "shared_memory": 24862720
+                },
+                "outsideSafeIntegerRange": [
+                  {
+                    "path": "malloc/partitions/allocator",
+                    "attributes": {
+                      "max_committed_size": {
+                        "rawHex": "0xfffffffffffff000",
+                        "reason": "outside-safe-integer-range"
+                      },
+                      "virtual_committed_size": {
+                        "rawHex": "0xffffffffeaa53000",
+                        "reason": "outside-safe-integer-range"
+                      },
+                      "wasted": {
+                        "rawHex": "0xffffffffea4e66d0",
+                        "reason": "outside-safe-integer-range"
+                      }
+                    }
+                  }
+                ],
+                "sharedOwnershipEdges": 357,
+                "reportedSizesMustNotBeSummed": true
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

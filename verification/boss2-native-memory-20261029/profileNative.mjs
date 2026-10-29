@@ -61,7 +61,7 @@ async function stopTrace() {
   summary.trace = { events: traceEvents.length, bytes: raw.length, gzipBytes: compressed.length, dataLossOccurred: completion.dataLossOccurred,
     sha256: createHash('sha256').update(compressed).digest('hex') };
   assert.equal(completion.dataLossOccurred, false, 'memory trace is complete');
-  summary.nativeAllocators = summarizeMemoryTrace(traceEvents, summary.dumpRequests);
+  summary.nativeAllocators = summarizeMemoryTrace(traceEvents, summary.dumpRequests, { exportedSnapshotIds: true });
   for (const dump of summary.nativeAllocators) {
     assert.ok(dump.matchedProcessDumps > 0);
     assert.ok(dump.processes.some(p => /renderer/i.test(p.processName) && p.allocatorCount > 0), 'renderer allocator attribution present');
