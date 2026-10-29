@@ -52,7 +52,7 @@ path. It is not a second six-minute observation. The original six-minute traces
 and failed overall statuses are retained separately; no application runtime
 change, new device deployment or native crash fix is claimed.
 
-A fresh browser context then runs another360 active seconds with the existing
+A fresh browser context then runs another 360 active seconds with the existing
 menu's additional-recording checkbox off. The controller must report
 `ownerDiagnostics:false`, and its additional full-session marker must remain
 absent. The graphics, audio, native clocks, scene, protection, viewport and DPR
@@ -62,3 +62,47 @@ all diagnostic code removed. Existing UI exports the limited report afterward;
 no full recording is expected for that condition. Results are separated by
 engine, recording condition and requested duration. This is a Linux process
 comparison, not a measured iPhone thermal or native memory result.
+
+## Completed comparison
+
+Application runtime remains the delivered c610e7c. The first QA source was
+6a966d1/tree c192cf0, run 40865230360. Its overall result is failed as documented
+above, while both six-minute active observations and process traces completed.
+The repaired source faec552/tree bcfb6d8 passed run 40867284745 in both engines:
+the 30-second full-report check and the separate 360-second recording-off check.
+All four ZIP digests and ZIP integrity were independently verified. Full
+synthetic traces are retained as CI artifacts; curated results and artifact
+IDs/digests are in `results.json`. All 26 local isolation/tool/export cases and
+the transformed controller type check passed. Strict runtime pins passed in
+both external runs. No additional frontend release-build claim is made.
+
+| Linux engine | Recording on, last-minute median PSS | Recording off, last-minute median PSS | Difference |
+| --- | ---: | ---: | ---: |
+| Chromium 151.0.7922.34 | 752.0 MiB | 494.1 MiB | 257.9 MiB |
+| WebKit 26.5 | 1137.8 MiB | 1077.3 MiB | 60.4 MiB |
+
+These are browser descendant process measurements, not the game's small tracked
+cache subset and not an iPhone/GPU memory measurement. Core-volley progression
+was 128 versus 128 in Chromium and 56 versus 55 in WebKit. WebKit's Linux simulation
+progresses much more slowly, so its wall interval does not establish equivalent
+iPhone performance or cumulative simulation work. The first recording-on
+Chromium curve rises most strongly before minute 4 and then flattens. No
+unbounded leak or physical memory-pressure termination is established.
+
+The existing additional owner recording contributes measurable memory in these
+single-run comparisons. The next physical control is the unchanged private link
+with its existing additional-recording checkbox off and test protection on.
+The outcome must be assessed from the owner's observation; an additional full
+recording is intentionally absent for that condition. This does not remove the
+original recovery/session safeguards or the bounded private test pause observer.
+
+No unexpected White Screen was reproduced externally. The corrected driver,
+bounded synthetic evidence and failed first overall results are all preserved.
+The device link and public Testnet/Mainnet are unchanged, with main still
+ce073547cf573375d141bf846f70e294138dbd73. No owner attachment, account operation,
+payment or real progress mutation was included.
+
+All six synthetic verification records, including every sampled process point,
+are also preserved in `evidence/synthetic-duration-evidence.json.gz` beyond the
+short CI artifact retention. The archive contains no owner device attachment.
+Its hash, size, case count and process-sample count are in `results.json`.

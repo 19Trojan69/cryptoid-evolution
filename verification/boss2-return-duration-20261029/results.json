@@ -1,0 +1,676 @@
+{
+  "version": 1,
+  "scope": "Private diagnostic investigation; no application runtime or deployment change.",
+  "deployedRuntime": "c610e7cb2bde2891dd04721c530c5b1bbead2215",
+  "runtimePins": {
+    "frontendGuard": "Existing complete frontend pin plus window-only blur normalization",
+    "privateInputsSha256": "47d4ae20cdca984b121a3fe31aecb55bfe26ee06c2abee7ca6218df923cb0d5b",
+    "privateEntries": 24
+  },
+  "local": {
+    "isolationToolsAndExportTests": 26,
+    "passed": true,
+    "transformedControllerTypes": true
+  },
+  "firstRun": {
+    "id": 40865230360,
+    "url": "https://github.com/19Trojan69/cryptoid-evolution/actions/runs/40865230360",
+    "sha": "6a966d198184abd39e3f42a1277ee0b590755ffc",
+    "tree": "c192cf08a75ad4651cde76e6687ab2b2b670d227",
+    "conclusion": "failure",
+    "jobs": [
+      {
+        "id": 123418189195,
+        "name": "duration (chromium)",
+        "conclusion": "failure"
+      },
+      {
+        "id": 123418189602,
+        "name": "duration (webkit)",
+        "conclusion": "failure"
+      }
+    ],
+    "acceptedScope": "Six-minute active observation and process trace only; not complete end-to-end acceptance.",
+    "failure": "Native helper did not scroll the report menu control inside the touchscreen viewport; both later download waits timed out.",
+    "chromium": {
+      "artifactVerified": true,
+      "sha256": "68c4c3f0819cfe838d391d2ddd6e263ef7a58788ad565273a2cf23236cc53932",
+      "bytes": 1547648,
+      "engine": "chromium",
+      "complete": false,
+      "activeSeconds": 360.738,
+      "processMemory": {
+        "samples": 347,
+        "firstPssKiB": 373006,
+        "lastPssKiB": 777820,
+        "minimumPssKiB": 373006,
+        "maximumPssKiB": 786234,
+        "firstMinuteMedianPssKiB": 481004,
+        "lastMinuteMedianPssKiB": 770082
+      },
+      "minutePss": [
+        {
+          "minute": 1,
+          "count": 59,
+          "medianPssMiB": 469.73046875,
+          "minPssMiB": 364.263671875,
+          "maxPssMiB": 482.0810546875
+        },
+        {
+          "minute": 2,
+          "count": 57,
+          "medianPssMiB": 513.6865234375,
+          "minPssMiB": 483.6083984375,
+          "maxPssMiB": 553.14453125
+        },
+        {
+          "minute": 3,
+          "count": 58,
+          "medianPssMiB": 649.9228515625,
+          "minPssMiB": 546.046875,
+          "maxPssMiB": 739.5068359375
+        },
+        {
+          "minute": 4,
+          "count": 58,
+          "medianPssMiB": 733.2265625,
+          "minPssMiB": 726.11328125,
+          "maxPssMiB": 739.796875
+        },
+        {
+          "minute": 5,
+          "count": 57,
+          "medianPssMiB": 734.08203125,
+          "minPssMiB": 727.685546875,
+          "maxPssMiB": 746.990234375
+        },
+        {
+          "minute": 6,
+          "count": 58,
+          "medianPssMiB": 752.033203125,
+          "minPssMiB": 740.302734375,
+          "maxPssMiB": 767.806640625
+        }
+      ],
+      "volleyProgress": {
+        "first": 0,
+        "last": 128
+      },
+      "firstResources": {
+        "audio": {
+          "audioState": "running",
+          "audioVoices": 0,
+          "audioWeaponVoices": 0,
+          "audioBossVoices": 0,
+          "audioEffectVoices": 0,
+          "audioSampleBuffers": 46,
+          "audioRockBuffers": 0,
+          "audioBufferBytes": 6925568,
+          "audioClockMs": 8792,
+          "audioClockStalls": 0,
+          "audioRecoveries": 1,
+          "audioBlockedSounds": 0,
+          "audioReapedVoices": 0
+        },
+        "canvas": {
+          "activeDrawFrame": false,
+          "registeredEffects": 0,
+          "sourceImages": 0,
+          "textureEntries": 0,
+          "cacheBytes": 0,
+          "surfaceBytes": 4,
+          "imageBytes": 0,
+          "textureBytes": 0,
+          "hullLoads": 0,
+          "hullEvictions": 0,
+          "retainedHullUsers": 0,
+          "draws": 0,
+          "fragmentDraws": 0,
+          "failures": []
+        }
+      },
+      "lastResources": {
+        "audio": {
+          "audioState": "running",
+          "audioVoices": 3,
+          "audioWeaponVoices": 0,
+          "audioBossVoices": 0,
+          "audioEffectVoices": 3,
+          "audioSampleBuffers": 46,
+          "audioRockBuffers": 0,
+          "audioBufferBytes": 6925568,
+          "audioClockMs": 368480,
+          "audioClockStalls": 0,
+          "audioRecoveries": 1,
+          "audioBlockedSounds": 0,
+          "audioReapedVoices": 0
+        },
+        "canvas": {
+          "activeDrawFrame": true,
+          "registeredEffects": 1,
+          "sourceImages": 3,
+          "textureEntries": 2,
+          "cacheBytes": 1059028,
+          "surfaceBytes": 63020,
+          "imageBytes": 954288,
+          "textureBytes": 104740,
+          "hullLoads": 23,
+          "hullEvictions": 20,
+          "retainedHullUsers": 1,
+          "draws": 2882,
+          "fragmentDraws": 11528,
+          "failures": []
+        }
+      },
+      "failureCode": "verification-failed",
+      "failure": "page.waitForEvent: Timeout 15000ms exceeded while waiting for event \"download\"\n=========================== logs ===========================\nwaiting for event \"download\"\n============================================================"
+    },
+    "webkit": {
+      "artifactVerified": true,
+      "sha256": "b7b04b5a90694549df839b4b26ce39d88e03ac7cd7f65b2cb1b40b1c7ca4b8c6",
+      "bytes": 1091956,
+      "engine": "webkit",
+      "complete": false,
+      "activeSeconds": 360.754,
+      "processMemory": {
+        "samples": 321,
+        "firstPssKiB": 1101128,
+        "lastPssKiB": 1144757,
+        "minimumPssKiB": 983131,
+        "maximumPssKiB": 1214805,
+        "firstMinuteMedianPssKiB": 1104449,
+        "lastMinuteMedianPssKiB": 1165069
+      },
+      "minutePss": [
+        {
+          "minute": 1,
+          "count": 54,
+          "medianPssMiB": 1078.5634765625,
+          "minPssMiB": 1028.6904296875,
+          "maxPssMiB": 1124.2802734375
+        },
+        {
+          "minute": 2,
+          "count": 54,
+          "medianPssMiB": 1095.6904296875,
+          "minPssMiB": 1054.5615234375,
+          "maxPssMiB": 1117.6943359375
+        },
+        {
+          "minute": 3,
+          "count": 54,
+          "medianPssMiB": 1102.6748046875,
+          "minPssMiB": 960.0888671875,
+          "maxPssMiB": 1138.0224609375
+        },
+        {
+          "minute": 4,
+          "count": 54,
+          "medianPssMiB": 1129.1083984375,
+          "minPssMiB": 1075.9794921875,
+          "maxPssMiB": 1161.4833984375
+        },
+        {
+          "minute": 5,
+          "count": 52,
+          "medianPssMiB": 1157.2529296875,
+          "minPssMiB": 1011.8564453125,
+          "maxPssMiB": 1186.3330078125
+        },
+        {
+          "minute": 6,
+          "count": 53,
+          "medianPssMiB": 1137.7626953125,
+          "minPssMiB": 1103.4033203125,
+          "maxPssMiB": 1176.5478515625
+        }
+      ],
+      "volleyProgress": {
+        "first": 0,
+        "last": 56
+      },
+      "firstResources": {
+        "audio": {
+          "audioState": "running",
+          "audioVoices": 0,
+          "audioWeaponVoices": 0,
+          "audioBossVoices": 0,
+          "audioEffectVoices": 0,
+          "audioSampleBuffers": 46,
+          "audioRockBuffers": 0,
+          "audioBufferBytes": 7083800,
+          "audioClockMs": 13973,
+          "audioClockStalls": 0,
+          "audioRecoveries": 1,
+          "audioBlockedSounds": 0,
+          "audioReapedVoices": 0
+        },
+        "canvas": {
+          "activeDrawFrame": false,
+          "registeredEffects": 0,
+          "sourceImages": 0,
+          "textureEntries": 0,
+          "cacheBytes": 0,
+          "surfaceBytes": 4,
+          "imageBytes": 0,
+          "textureBytes": 0,
+          "hullLoads": 0,
+          "hullEvictions": 0,
+          "retainedHullUsers": 0,
+          "draws": 0,
+          "fragmentDraws": 0,
+          "failures": []
+        }
+      },
+      "lastResources": {
+        "audio": {
+          "audioState": "running",
+          "audioVoices": 1,
+          "audioWeaponVoices": 0,
+          "audioBossVoices": 0,
+          "audioEffectVoices": 1,
+          "audioSampleBuffers": 46,
+          "audioRockBuffers": 0,
+          "audioBufferBytes": 7083800,
+          "audioClockMs": 373525,
+          "audioClockStalls": 0,
+          "audioRecoveries": 1,
+          "audioBlockedSounds": 0,
+          "audioReapedVoices": 0
+        },
+        "canvas": {
+          "activeDrawFrame": false,
+          "registeredEffects": 0,
+          "sourceImages": 2,
+          "textureEntries": 2,
+          "cacheBytes": 740932,
+          "surfaceBytes": 4,
+          "imageBytes": 636192,
+          "textureBytes": 104740,
+          "hullLoads": 8,
+          "hullEvictions": 6,
+          "retainedHullUsers": 0,
+          "draws": 63,
+          "fragmentDraws": 252,
+          "failures": []
+        }
+      },
+      "failure": "page.waitForEvent: Timeout 15000ms exceeded while waiting for event \"download\"\n=========================== logs ===========================\nwaiting for event \"download\"\n============================================================"
+    }
+  },
+  "followupRun": {
+    "id": 40867284745,
+    "url": "https://github.com/19Trojan69/cryptoid-evolution/actions/runs/40867284745",
+    "sha": "faec55294b443c88427ff2b226c2978d8d4db66a",
+    "tree": "bcfb6d8bb336082e297578cbae75a4f64344fcb6",
+    "conclusion": "success",
+    "jobs": [
+      {
+        "id": 123425131003,
+        "name": "duration (webkit)",
+        "conclusion": "success"
+      },
+      {
+        "id": 123425131525,
+        "name": "duration (chromium)",
+        "conclusion": "success"
+      }
+    ],
+    "conditions": [
+      "30 seconds additional recording on, repaired native tap/export path",
+      "360 seconds additional recording off in a fresh context"
+    ],
+    "repairedDriver": "scrollIntoViewIfNeeded and explicit tap-center viewport bounds; no game changes"
+  },
+  "comparison": [
+    {
+      "engine": "chromium",
+      "version": "151.0.7922.34",
+      "metric": "Linux summed browser descendant PSS, median of final active minute",
+      "recordingOnMiB": 752.033203125,
+      "recordingOffMiB": 494.1171875,
+      "differenceMiB": 257.916015625,
+      "reductionPercent": 34.29582823647352,
+      "recordingOnObservedActiveSeconds": 360.738,
+      "recordingOffObservedActiveSeconds": 360.865,
+      "recordingOnMinuteMedians": [
+        {
+          "minute": 1,
+          "count": 59,
+          "medianPssMiB": 469.73046875,
+          "minPssMiB": 364.263671875,
+          "maxPssMiB": 482.0810546875
+        },
+        {
+          "minute": 2,
+          "count": 57,
+          "medianPssMiB": 513.6865234375,
+          "minPssMiB": 483.6083984375,
+          "maxPssMiB": 553.14453125
+        },
+        {
+          "minute": 3,
+          "count": 58,
+          "medianPssMiB": 649.9228515625,
+          "minPssMiB": 546.046875,
+          "maxPssMiB": 739.5068359375
+        },
+        {
+          "minute": 4,
+          "count": 58,
+          "medianPssMiB": 733.2265625,
+          "minPssMiB": 726.11328125,
+          "maxPssMiB": 739.796875
+        },
+        {
+          "minute": 5,
+          "count": 57,
+          "medianPssMiB": 734.08203125,
+          "minPssMiB": 727.685546875,
+          "maxPssMiB": 746.990234375
+        },
+        {
+          "minute": 6,
+          "count": 58,
+          "medianPssMiB": 752.033203125,
+          "minPssMiB": 740.302734375,
+          "maxPssMiB": 767.806640625
+        }
+      ],
+      "recordingOffMinuteMedians": [
+        {
+          "minute": 1,
+          "samples": 59,
+          "medianPssMiB": 415.1796875
+        },
+        {
+          "minute": 2,
+          "samples": 58,
+          "medianPssMiB": 441.75537109375
+        },
+        {
+          "minute": 3,
+          "samples": 58,
+          "medianPssMiB": 463.7451171875
+        },
+        {
+          "minute": 4,
+          "samples": 58,
+          "medianPssMiB": 476.8359375
+        },
+        {
+          "minute": 5,
+          "samples": 59,
+          "medianPssMiB": 489.5888671875
+        },
+        {
+          "minute": 6,
+          "samples": 58,
+          "medianPssMiB": 494.1171875
+        }
+      ],
+      "coreVolleysOn": {
+        "first": 0,
+        "last": 128
+      },
+      "coreVolleysOff": {
+        "first": 0,
+        "last": 128
+      },
+      "recordingOnOverallJobAccepted": false,
+      "recordingOnActiveObservationCompleted": true,
+      "recordingOffOverallJobAccepted": true,
+      "exportRepairCheck": {
+        "requestedActiveSeconds": 30,
+        "observedActiveSeconds": 30.847,
+        "complete": true,
+        "fullReport": {
+          "source": {
+            "sourceCommit": "faec55294b443c88427ff2b226c2978d8d4db66a",
+            "sourceTree": "bcfb6d8bb336082e297578cbae75a4f64344fcb6",
+            "workingTreeDirty": true
+          },
+          "fullRecording": true,
+          "records": 142,
+          "bytes": 427235,
+          "contiguous": true,
+          "recoveredAfterControlledPausedReload": true,
+          "separateNewDocumentEvidence": true,
+          "pauseReasons": [
+            "manual-pause"
+          ]
+        }
+      },
+      "recordingOffFullMarkerAbsent": true,
+      "recordingOffLimitedReport": {
+        "source": {
+          "sourceCommit": "faec55294b443c88427ff2b226c2978d8d4db66a",
+          "sourceTree": "bcfb6d8bb336082e297578cbae75a4f64344fcb6",
+          "workingTreeDirty": true
+        },
+        "fullRecording": false,
+        "records": null,
+        "bytes": 1982,
+        "contiguous": null,
+        "recoveredAfterControlledPausedReload": true,
+        "separateNewDocumentEvidence": true,
+        "pauseReasons": null
+      },
+      "recordingOffLastMinutePssByRoleMiB": {
+        "chromium-gpu": 37.33203125,
+        "chromium-renderer": 319.8984375,
+        "browser-other": 137.392578125
+      },
+      "limitations": [
+        "One run per six-minute condition; no random seed or forced collection.",
+        "The recording-on six-minute job failed only in its later native report-menu tap; its overall end-to-end result stays failed.",
+        "WebKit Linux progresses more slowly than Chromium; this is not physical iPhone frame-rate or RAM evidence."
+      ]
+    },
+    {
+      "engine": "webkit",
+      "version": "26.5",
+      "metric": "Linux summed browser descendant PSS, median of final active minute",
+      "recordingOnMiB": 1137.7626953125,
+      "recordingOffMiB": 1077.333984375,
+      "differenceMiB": 60.4287109375,
+      "reductionPercent": 5.311187577731448,
+      "recordingOnObservedActiveSeconds": 360.754,
+      "recordingOffObservedActiveSeconds": 360.315,
+      "recordingOnMinuteMedians": [
+        {
+          "minute": 1,
+          "count": 54,
+          "medianPssMiB": 1078.5634765625,
+          "minPssMiB": 1028.6904296875,
+          "maxPssMiB": 1124.2802734375
+        },
+        {
+          "minute": 2,
+          "count": 54,
+          "medianPssMiB": 1095.6904296875,
+          "minPssMiB": 1054.5615234375,
+          "maxPssMiB": 1117.6943359375
+        },
+        {
+          "minute": 3,
+          "count": 54,
+          "medianPssMiB": 1102.6748046875,
+          "minPssMiB": 960.0888671875,
+          "maxPssMiB": 1138.0224609375
+        },
+        {
+          "minute": 4,
+          "count": 54,
+          "medianPssMiB": 1129.1083984375,
+          "minPssMiB": 1075.9794921875,
+          "maxPssMiB": 1161.4833984375
+        },
+        {
+          "minute": 5,
+          "count": 52,
+          "medianPssMiB": 1157.2529296875,
+          "minPssMiB": 1011.8564453125,
+          "maxPssMiB": 1186.3330078125
+        },
+        {
+          "minute": 6,
+          "count": 53,
+          "medianPssMiB": 1137.7626953125,
+          "minPssMiB": 1103.4033203125,
+          "maxPssMiB": 1176.5478515625
+        }
+      ],
+      "recordingOffMinuteMedians": [
+        {
+          "minute": 1,
+          "samples": 54,
+          "medianPssMiB": 1087.9345703125
+        },
+        {
+          "minute": 2,
+          "samples": 53,
+          "medianPssMiB": 1065.1611328125
+        },
+        {
+          "minute": 3,
+          "samples": 54,
+          "medianPssMiB": 1074.3759765625
+        },
+        {
+          "minute": 4,
+          "samples": 53,
+          "medianPssMiB": 1084.560546875
+        },
+        {
+          "minute": 5,
+          "samples": 54,
+          "medianPssMiB": 1102.55078125
+        },
+        {
+          "minute": 6,
+          "samples": 54,
+          "medianPssMiB": 1077.333984375
+        }
+      ],
+      "coreVolleysOn": {
+        "first": 0,
+        "last": 56
+      },
+      "coreVolleysOff": {
+        "first": 0,
+        "last": 55
+      },
+      "recordingOnOverallJobAccepted": false,
+      "recordingOnActiveObservationCompleted": true,
+      "recordingOffOverallJobAccepted": true,
+      "exportRepairCheck": {
+        "requestedActiveSeconds": 30,
+        "observedActiveSeconds": 30.896,
+        "complete": true,
+        "fullReport": {
+          "source": {
+            "sourceCommit": "faec55294b443c88427ff2b226c2978d8d4db66a",
+            "sourceTree": "bcfb6d8bb336082e297578cbae75a4f64344fcb6",
+            "workingTreeDirty": true
+          },
+          "fullRecording": true,
+          "records": 138,
+          "bytes": 339478,
+          "contiguous": true,
+          "recoveredAfterControlledPausedReload": true,
+          "separateNewDocumentEvidence": true,
+          "pauseReasons": [
+            "manual-pause"
+          ]
+        }
+      },
+      "recordingOffFullMarkerAbsent": true,
+      "recordingOffLimitedReport": {
+        "source": {
+          "sourceCommit": "faec55294b443c88427ff2b226c2978d8d4db66a",
+          "sourceTree": "bcfb6d8bb336082e297578cbae75a4f64344fcb6",
+          "workingTreeDirty": true
+        },
+        "fullRecording": false,
+        "records": null,
+        "bytes": 1978,
+        "contiguous": null,
+        "recoveredAfterControlledPausedReload": true,
+        "separateNewDocumentEvidence": true,
+        "pauseReasons": null
+      },
+      "recordingOffLastMinutePssByRoleMiB": {
+        "webkit-content": 927.98828125,
+        "browser-other": 108.595703125,
+        "webkit-network": 40.765625
+      },
+      "limitations": [
+        "One run per six-minute condition; no random seed or forced collection.",
+        "The recording-on six-minute job failed only in its later native report-menu tap; its overall end-to-end result stays failed.",
+        "WebKit Linux progresses more slowly than Chromium; this is not physical iPhone frame-rate or RAM evidence."
+      ]
+    }
+  ],
+  "artifacts": [
+    {
+      "id": 12894320767,
+      "name": "boss2-return-duration-webkit",
+      "bytes": 1091956,
+      "sha256": "b7b04b5a90694549df839b4b26ce39d88e03ac7cd7f65b2cb1b40b1c7ca4b8c6",
+      "zipDigestAndIntegrityVerified": true
+    },
+    {
+      "id": 12893338345,
+      "name": "boss2-return-duration-chromium",
+      "bytes": 1547648,
+      "sha256": "68c4c3f0819cfe838d391d2ddd6e263ef7a58788ad565273a2cf23236cc53932",
+      "zipDigestAndIntegrityVerified": true
+    },
+    {
+      "id": 12893954979,
+      "name": "boss2-return-duration-webkit",
+      "bytes": 2183391,
+      "sha256": "1b9a0934505872a34352af149ed4943b73643aaca009d5f73a86d424dc7d0de2",
+      "zipDigestAndIntegrityVerified": true
+    },
+    {
+      "id": 12893734324,
+      "name": "boss2-return-duration-chromium",
+      "bytes": 3067770,
+      "sha256": "399b2a403d67c79736c9866977b3cba5407586c9f2acbf80731779a81708f32a",
+      "zipDigestAndIntegrityVerified": true
+    }
+  ],
+  "boundary": {
+    "publicMainAfter": "ce073547cf573375d141bf846f70e294138dbd73",
+    "deploymentCreated": false,
+    "existingPrivateURL": "https://cryptoid-evolution-testnet-kskkz5hnw-19-trojan69.vercel.app/",
+    "existingPrivateSource": "c610e7cb2bde2891dd04721c530c5b1bbead2215",
+    "mainnetContacted": false,
+    "ownerAttachmentsUploaded": false,
+    "accountsPaymentsOrRealSavesChanged": false
+  },
+  "conclusion": {
+    "unexpectedWhiteScreenReproduced": false,
+    "extraRecordingIncreasesMemoryInTheseRuns": true,
+    "nativeDeviceRootCauseKnown": false,
+    "unboundedLeakProved": false,
+    "nextDeviceComparison": "Use the existing private URL with Diagnose lokal aufzeichnen off and protection on; observe six minutes. Assess by the owner's visual observation because additional recording is off."
+  },
+  "limits": [
+    "No iPhone/Android native process or GPU-resident memory or temperature measured.",
+    "PSS counts browser descendants on separate Linux runners; RSS can double-count shared pages.",
+    "A lower process footprint in this comparison does not prove or resolve the physical White Screen.",
+    "Existing core recovery/session safeguards and the bounded private test pause observer remain in the recording-off condition."
+  ],
+  "rawSyntheticEvidence": {
+    "path": "evidence/synthetic-duration-evidence.json.gz",
+    "bytes": 59743,
+    "uncompressedBytes": 1239174,
+    "sha256": "b1913273cf5c5275a945a09c4972d7ed05865105b738d141b9cea3a521b3a983",
+    "cases": 6,
+    "processSamples": 1398,
+    "ownerDataIncluded": false
+  }
+}
