@@ -1,0 +1,134 @@
+{
+  "version": 1,
+  "physicalDeviceAccepted": false,
+  "whiteScreenFixed": false,
+  "firstAttempt": {
+    "source": "7b761ed2ab53350e37e219e9376dfdd44923fc77",
+    "tree": "6641e483d372332353e92be31fbda1d69957403a",
+    "workflow": 40946788697,
+    "conclusion": "failure",
+    "reason": "Verifier did not await re-enabled external stylesheet before reading computed display; failed before active observation."
+  },
+  "accepted": {
+    "source": "e9f1f9694c50ff356a094440970349e52ee220b1",
+    "tree": "2f36ca25f31a71e1918c6a331098b1efbdffaea8",
+    "workflow": 40947295720,
+    "conclusion": "success",
+    "nativeInput": "Playwright touchscreen taps in Linux Chromium and WebKit, not physical phones",
+    "cases": [
+      {
+        "engine": "chromium",
+        "engineVersion": "151.0.7922.34",
+        "complete": true,
+        "activeObservation": {
+          "durationMs": 20385,
+          "initialCoreVolley": 0,
+          "finalCoreVolley": 7,
+          "initialFrameAt": 12805.6,
+          "finalFrameAt": 33188.1,
+          "coreStillOpen": true,
+          "sameDocument": true
+        },
+        "realPauseFreezes": true,
+        "explicitReloadRestoresTime": true,
+        "limitedTextExportAfterDeliberateReload": true,
+        "unchangedOutputFiles": 2215,
+        "stylesheetSha256": "de9ff28595f7d84b732896ff0115d50f64c48374d5062c908087a926b35c5849"
+      },
+      {
+        "engine": "webkit",
+        "engineVersion": "26.5",
+        "complete": true,
+        "activeObservation": {
+          "durationMs": 21001,
+          "initialCoreVolley": 0,
+          "finalCoreVolley": 5,
+          "initialFrameAt": 0,
+          "finalFrameAt": 47136,
+          "coreStillOpen": true,
+          "sameDocument": true
+        },
+        "realPauseFreezes": true,
+        "explicitReloadRestoresTime": true,
+        "limitedTextExportAfterDeliberateReload": true,
+        "unchangedOutputFiles": 2215,
+        "stylesheetSha256": "de9ff28595f7d84b732896ff0115d50f64c48374d5062c908087a926b35c5849"
+      }
+    ]
+  },
+  "evidence": {
+    "file": "evidence/synthetic-reactor-control-verifications.json.gz",
+    "bytes": 3079,
+    "sha256": "858ff6b58a7ad1758a383db3041d8d809845c4225401f902f78af0992fcbcfe3",
+    "records": 4
+  },
+  "artifacts": [
+    {
+      "id": 12928918247,
+      "name": "reactor-control-initial-chromium.zip",
+      "bytes": 1271695,
+      "sha256": "23a2603e09d61f4685588b3be76d302a02fa51ec99e6e123e0982344b49d4ec0",
+      "zipIntegrityVerified": true
+    },
+    {
+      "id": 12928748967,
+      "name": "reactor-control-initial-webkit.zip",
+      "bytes": 815120,
+      "sha256": "d4d155f4d0f3f5595d89223b3137f362498040b20d03cbd78f03c3cb33cd2146",
+      "zipIntegrityVerified": true
+    },
+    {
+      "id": 12928714256,
+      "name": "reactor-control-webkit-accepted.zip",
+      "bytes": 497309,
+      "sha256": "5bf9431b7000340cd51c0746ccbcab71508d62d8ad78d28d96bdd39415c3d7d2",
+      "zipIntegrityVerified": true
+    },
+    {
+      "id": 12928369972,
+      "name": "reactor-control-chromium-accepted.zip",
+      "bytes": 1274098,
+      "sha256": "e37ee17bdd906a2bc2b61c155ba140d50b48a64b019808d5e720caea01a279df",
+      "zipIntegrityVerified": true
+    }
+  ],
+  "deployment": {
+    "id": "dpl_3KpfY5PpVbFtsWfWALXn9Ci2QeFv",
+    "url": "https://cryptoid-evolution-testnet-3vl1rcooj-19-trojan69.vercel.app/",
+    "target": "preview",
+    "status": "READY",
+    "durationSeconds": 40,
+    "sourceCommit": "e9f1f9694c50ff356a094440970349e52ee220b1",
+    "sourceTree": "2f36ca25f31a71e1918c6a331098b1efbdffaea8",
+    "workBranch": "codex/boss2-reactor-visual-control-20261029",
+    "pinnedDeviceBranch": "codex/boss2-reactor-device-20261029",
+    "verifiedVia": "Vercel deployment details UI; hosted menu, source footer, game DOM and native controls",
+    "existingProtection": "Vercel Authentication enabled; Standard Protection observed before creation; no settings modified",
+    "publicCustomDomainAssignment": "Skipped",
+    "connectorInspection": "Existing project/deployment reads returned404; already-authorized browser fallback used",
+    "hostedDesktopSmoke": {
+      "physicalPhone": false,
+      "recordingOff": true,
+      "testProtectionOn": true,
+      "sourceFooter": "e9f1f969",
+      "visibleControlLabel": true,
+      "reactorCount": 1,
+      "reactorDisplay": "none",
+      "reactorPaintBoxes": 0,
+      "bossHullNaturalWidth": 1000,
+      "hudBackdrop": "none",
+      "observedTechnicalPauseAtDisplayedTime": "00:34",
+      "technicalPauseCauseEstablished": false,
+      "whiteScreenCauseEstablished": false,
+      "normalHomeAfterManualResume": true,
+      "finalMenuTime": "00:37",
+      "hostedReloadNotRetested": true,
+      "limits": "Desktop cloud-browser observation includes an unexpected technical pause. It is not continuous stability or a physical smartphone result."
+    },
+    "labelScreenshot": {
+      "file": "evidence/protected-reactor-preview-label.jpg",
+      "bytes": 21634,
+      "sha256": "d2e3af4c2c491ff953ab0396ad9395a550df770c5bc2ac79a2fcdcf92f941ba9"
+    }
+  }
+}
