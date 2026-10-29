@@ -1,5 +1,5 @@
 name: Protected single-finger Boss 2 acceptance
-run-name: Verify primary tap ownership in the isolated Boss 2 game
+run-name: Verify translated one-finger clicks and native Boss 2 controls
 on:
   push:
     branches: [codex/boss2-single-finger-preview-20261029]

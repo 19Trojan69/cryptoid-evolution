@@ -253,3 +253,12 @@ test('a verified primary tap does not depend on a repeated primary flag on click
   assert.equal(controlClick(h, target, { isPrimary: false }).defaultPrevented, false);
   h.input.dispose();
 });
+test('WebKit mouse-click translation can consume only a verified single primary touch', () => {
+  const h = harness(), target = button(); h.down({ target, pointerId: 2 });
+  fire(h.win, 'pointerup', { target, pointerId: 2 });
+  assert.equal(controlClick(h, target, { pointerId: 1, pointerType: 'mouse' }).defaultPrevented, false);
+  h.down(); h.down({ target, pointerId: 3, isPrimary: false });
+  fire(h.win, 'pointerup', { target, pointerId: 3, isPrimary: false });
+  assert.equal(controlClick(h, target, { pointerId: 1, pointerType: 'mouse' }).defaultPrevented, true);
+  h.input.dispose();
+});
