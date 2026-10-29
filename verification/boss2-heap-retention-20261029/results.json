@@ -2,7 +2,7 @@
   "format": "cryptoid-private-heap-retention-results",
   "version": 1,
   "status": "completed",
-  "generatedAt": "2026-10-29T13:25:43.325921+00:00",
+  "generatedAt": "2026-10-29T13:39:58.267896+00:00",
   "runtime": {
     "deliveredApplicationCommit": "c610e7cb2bde2891dd04721c530c5b1bbead2215",
     "deliveredApplicationTree": "044a9aa1cd058009ced317c8ec9bd5d452c1ea71",
@@ -241,7 +241,468 @@
       "webkit"
     ],
     "qaActiveSecondsPerCase": 30,
-    "qaStatus": "pending",
-    "newDeviceDeployment": false
+    "qaStatus": "completed",
+    "newDeviceDeployment": false,
+    "qaCommit": "2bb9adc4acb8ed3b07112ddc67fdc6943615de36",
+    "qaTree": "461cc941c44ea38b6917e3189c7f5d32b70ea753"
+  },
+  "renderComparison": {
+    "runId": 40882780961,
+    "url": "https://github.com/19Trojan69/cryptoid-evolution/actions/runs/40882780961",
+    "conclusion": "success",
+    "jobs": [
+      {
+        "id": 123478436201,
+        "engine": "chromium",
+        "conclusion": "success"
+      },
+      {
+        "id": 123478436879,
+        "engine": "webkit",
+        "conclusion": "success"
+      }
+    ],
+    "engineVersions": {
+      "chromium": "151.0.7922.34",
+      "webkit": "26.5"
+    },
+    "cases": [
+      {
+        "engine": "chromium",
+        "condition": "phone-standard-dpr3",
+        "observedActiveSeconds": 30.474,
+        "processSamples": 30,
+        "lastTenSecondMedianProcessPssKiB": 496434.0,
+        "coreVolleys": {
+          "first": 0,
+          "last": 10
+        },
+        "appearance": {
+          "width": 430,
+          "height": 825,
+          "dpr": 3,
+          "motion": "standard",
+          "reducedMedia": false,
+          "runningAnimations": 11,
+          "playerReflection": {
+            "display": "block",
+            "filter": "none",
+            "backdropFilter": "none",
+            "animationName": "none",
+            "animationPlayState": "running"
+          },
+          "haze": {
+            "display": "block",
+            "filter": "none",
+            "backdropFilter": "none",
+            "animationName": "none",
+            "animationPlayState": "running"
+          },
+          "bossHull": {
+            "display": "block",
+            "filter": "drop-shadow(rgb(2, 7, 24) 0px 5px 7px) drop-shadow(rgba(114, 220, 255, 0.46) 0px 0px 5px)",
+            "backdropFilter": "none",
+            "animationName": "none",
+            "animationPlayState": "running"
+          },
+          "hud": {
+            "display": "grid",
+            "filter": "none",
+            "backdropFilter": "blur(10px)",
+            "animationName": "none",
+            "animationPlayState": "running"
+          }
+        },
+        "additionalFullRecordingAbsent": true,
+        "unexpectedExternalRequests": []
+      },
+      {
+        "engine": "chromium",
+        "condition": "phone-standard-dpr1",
+        "observedActiveSeconds": 30.445,
+        "processSamples": 30,
+        "lastTenSecondMedianProcessPssKiB": 455567.0,
+        "coreVolleys": {
+          "first": 0,
+          "last": 10
+        },
+        "appearance": {
+          "width": 430,
+          "height": 825,
+          "dpr": 1,
+          "motion": "standard",
+          "reducedMedia": false,
+          "runningAnimations": 11,
+          "playerReflection": {
+            "display": "block",
+            "filter": "none",
+            "backdropFilter": "none",
+            "animationName": "none",
+            "animationPlayState": "running"
+          },
+          "haze": {
+            "display": "block",
+            "filter": "none",
+            "backdropFilter": "none",
+            "animationName": "none",
+            "animationPlayState": "running"
+          },
+          "bossHull": {
+            "display": "block",
+            "filter": "drop-shadow(rgb(2, 7, 24) 0px 5px 7px) drop-shadow(rgba(114, 220, 255, 0.46) 0px 0px 5px)",
+            "backdropFilter": "none",
+            "animationName": "none",
+            "animationPlayState": "running"
+          },
+          "hud": {
+            "display": "grid",
+            "filter": "none",
+            "backdropFilter": "blur(10px)",
+            "animationName": "none",
+            "animationPlayState": "running"
+          }
+        },
+        "additionalFullRecordingAbsent": true,
+        "unexpectedExternalRequests": []
+      },
+      {
+        "engine": "chromium",
+        "condition": "phone-reduced-dpr3",
+        "observedActiveSeconds": 30.438,
+        "processSamples": 30,
+        "lastTenSecondMedianProcessPssKiB": 430795.0,
+        "coreVolleys": {
+          "first": 0,
+          "last": 10
+        },
+        "appearance": {
+          "width": 430,
+          "height": 825,
+          "dpr": 3,
+          "motion": "reduced",
+          "reducedMedia": false,
+          "runningAnimations": 8,
+          "playerReflection": {
+            "display": "none",
+            "filter": "none",
+            "backdropFilter": "none",
+            "animationName": "none",
+            "animationPlayState": "running"
+          },
+          "haze": {
+            "display": "block",
+            "filter": "none",
+            "backdropFilter": "none",
+            "animationName": "none",
+            "animationPlayState": "running"
+          },
+          "bossHull": {
+            "display": "block",
+            "filter": "drop-shadow(rgb(2, 7, 24) 0px 5px 7px) drop-shadow(rgba(114, 220, 255, 0.46) 0px 0px 5px)",
+            "backdropFilter": "none",
+            "animationName": "none",
+            "animationPlayState": "running"
+          },
+          "hud": {
+            "display": "grid",
+            "filter": "none",
+            "backdropFilter": "blur(10px)",
+            "animationName": "none",
+            "animationPlayState": "running"
+          }
+        },
+        "additionalFullRecordingAbsent": true,
+        "unexpectedExternalRequests": []
+      },
+      {
+        "engine": "chromium",
+        "condition": "wide-standard-dpr3",
+        "observedActiveSeconds": 30.642,
+        "processSamples": 30,
+        "lastTenSecondMedianProcessPssKiB": 723578.0,
+        "coreVolleys": {
+          "first": 0,
+          "last": 10
+        },
+        "appearance": {
+          "width": 820,
+          "height": 825,
+          "dpr": 3,
+          "motion": "standard",
+          "reducedMedia": false,
+          "runningAnimations": 11,
+          "playerReflection": {
+            "display": "block",
+            "filter": "none",
+            "backdropFilter": "none",
+            "animationName": "none",
+            "animationPlayState": "running"
+          },
+          "haze": {
+            "display": "block",
+            "filter": "blur(23px)",
+            "backdropFilter": "none",
+            "animationName": "none",
+            "animationPlayState": "running"
+          },
+          "bossHull": {
+            "display": "block",
+            "filter": "drop-shadow(rgb(2, 7, 24) 0px 5px 7px) drop-shadow(rgba(114, 220, 255, 0.46) 0px 0px 5px)",
+            "backdropFilter": "none",
+            "animationName": "none",
+            "animationPlayState": "running"
+          },
+          "hud": {
+            "display": "grid",
+            "filter": "none",
+            "backdropFilter": "blur(10px)",
+            "animationName": "none",
+            "animationPlayState": "running"
+          }
+        },
+        "additionalFullRecordingAbsent": true,
+        "unexpectedExternalRequests": []
+      },
+      {
+        "engine": "webkit",
+        "condition": "phone-standard-dpr3",
+        "observedActiveSeconds": 30.592,
+        "processSamples": 28,
+        "lastTenSecondMedianProcessPssKiB": 1127898.0,
+        "coreVolleys": {
+          "first": 0,
+          "last": 4
+        },
+        "appearance": {
+          "width": 430,
+          "height": 825,
+          "dpr": 3,
+          "motion": "standard",
+          "reducedMedia": false,
+          "runningAnimations": 9,
+          "playerReflection": {
+            "display": "block",
+            "filter": "none",
+            "backdropFilter": "none",
+            "animationName": "none",
+            "animationPlayState": "running"
+          },
+          "haze": {
+            "display": "block",
+            "filter": "none",
+            "backdropFilter": "none",
+            "animationName": "none",
+            "animationPlayState": "running"
+          },
+          "bossHull": {
+            "display": "block",
+            "filter": "drop-shadow(rgb(2, 7, 24) 0px 5px 7px) drop-shadow(rgba(114, 220, 255, 0.46) 0px 0px 5px)",
+            "backdropFilter": "none",
+            "animationName": "none",
+            "animationPlayState": "running"
+          },
+          "hud": {
+            "display": "grid",
+            "filter": "none",
+            "backdropFilter": "blur(10px)",
+            "animationName": "none",
+            "animationPlayState": "running"
+          }
+        },
+        "additionalFullRecordingAbsent": true,
+        "unexpectedExternalRequests": []
+      },
+      {
+        "engine": "webkit",
+        "condition": "phone-standard-dpr1",
+        "observedActiveSeconds": 30.073,
+        "processSamples": 29,
+        "lastTenSecondMedianProcessPssKiB": 761657,
+        "coreVolleys": {
+          "first": 0,
+          "last": 10
+        },
+        "appearance": {
+          "width": 430,
+          "height": 825,
+          "dpr": 1,
+          "motion": "standard",
+          "reducedMedia": false,
+          "runningAnimations": 18,
+          "playerReflection": {
+            "display": "block",
+            "filter": "none",
+            "backdropFilter": "none",
+            "animationName": "none",
+            "animationPlayState": "running"
+          },
+          "haze": {
+            "display": "block",
+            "filter": "none",
+            "backdropFilter": "none",
+            "animationName": "none",
+            "animationPlayState": "running"
+          },
+          "bossHull": {
+            "display": "block",
+            "filter": "drop-shadow(rgb(2, 7, 24) 0px 5px 7px) drop-shadow(rgba(114, 220, 255, 0.46) 0px 0px 5px)",
+            "backdropFilter": "none",
+            "animationName": "none",
+            "animationPlayState": "running"
+          },
+          "hud": {
+            "display": "grid",
+            "filter": "none",
+            "backdropFilter": "blur(10px)",
+            "animationName": "none",
+            "animationPlayState": "running"
+          }
+        },
+        "additionalFullRecordingAbsent": true,
+        "unexpectedExternalRequests": []
+      },
+      {
+        "engine": "webkit",
+        "condition": "phone-reduced-dpr3",
+        "observedActiveSeconds": 30.386,
+        "processSamples": 27,
+        "lastTenSecondMedianProcessPssKiB": 950380,
+        "coreVolleys": {
+          "first": 0,
+          "last": 4
+        },
+        "appearance": {
+          "width": 430,
+          "height": 825,
+          "dpr": 3,
+          "motion": "reduced",
+          "reducedMedia": false,
+          "runningAnimations": 8,
+          "playerReflection": {
+            "display": "none",
+            "filter": "none",
+            "backdropFilter": "none",
+            "animationName": "none",
+            "animationPlayState": "running"
+          },
+          "haze": {
+            "display": "block",
+            "filter": "none",
+            "backdropFilter": "none",
+            "animationName": "none",
+            "animationPlayState": "running"
+          },
+          "bossHull": {
+            "display": "block",
+            "filter": "drop-shadow(rgb(2, 7, 24) 0px 5px 7px) drop-shadow(rgba(114, 220, 255, 0.46) 0px 0px 5px)",
+            "backdropFilter": "none",
+            "animationName": "none",
+            "animationPlayState": "running"
+          },
+          "hud": {
+            "display": "grid",
+            "filter": "none",
+            "backdropFilter": "blur(10px)",
+            "animationName": "none",
+            "animationPlayState": "running"
+          }
+        },
+        "additionalFullRecordingAbsent": true,
+        "unexpectedExternalRequests": []
+      },
+      {
+        "engine": "webkit",
+        "condition": "wide-standard-dpr3",
+        "observedActiveSeconds": 30.088,
+        "processSamples": 25,
+        "lastTenSecondMedianProcessPssKiB": 1290832.0,
+        "coreVolleys": {
+          "first": 0,
+          "last": 2
+        },
+        "appearance": {
+          "width": 820,
+          "height": 825,
+          "dpr": 3,
+          "motion": "standard",
+          "reducedMedia": false,
+          "runningAnimations": 11,
+          "playerReflection": {
+            "display": "block",
+            "filter": "none",
+            "backdropFilter": "none",
+            "animationName": "none",
+            "animationPlayState": "running"
+          },
+          "haze": {
+            "display": "block",
+            "filter": "blur(23px)",
+            "backdropFilter": "none",
+            "animationName": "none",
+            "animationPlayState": "running"
+          },
+          "bossHull": {
+            "display": "block",
+            "filter": "drop-shadow(rgb(2, 7, 24) 0px 5px 7px) drop-shadow(rgba(114, 220, 255, 0.46) 0px 0px 5px)",
+            "backdropFilter": "none",
+            "animationName": "none",
+            "animationPlayState": "running"
+          },
+          "hud": {
+            "display": "grid",
+            "filter": "none",
+            "backdropFilter": "blur(10px)",
+            "animationName": "none",
+            "animationPlayState": "running"
+          }
+        },
+        "additionalFullRecordingAbsent": true,
+        "unexpectedExternalRequests": []
+      }
+    ],
+    "artifacts": [
+      {
+        "id": 12900563926,
+        "engine": "chromium",
+        "bytes": 4446320,
+        "sha256": "5c3cf2df345e46232f6eb42e567c3f676a870a98668e667772cd9b79b81af899",
+        "githubDigestMatched": true,
+        "zipIntegrityPassed": true
+      },
+      {
+        "id": 12901616177,
+        "engine": "webkit",
+        "bytes": 2924228,
+        "sha256": "f7c0277a7c072a4f3e7666a99b2e54d19aedd2be5fbebdfab0928ca302cc8d76",
+        "githubDigestMatched": true,
+        "zipIntegrityPassed": true
+      }
+    ],
+    "durableEvidence": {
+      "file": "evidence/synthetic-render-evidence.json.gz",
+      "bytes": 6973,
+      "uncompressedBytes": 155046,
+      "sha256": "e89f975423e8d3276bf6ee298a2650414fe3ac40d3f5fde06083e9df75163f73",
+      "cases": 8,
+      "processSamples": 229,
+      "ownerReportsIncluded": false
+    },
+    "interpretation": [
+      "The existing reduced-effects option lowered observed process PSS in both engines in this short comparison.",
+      "Reduced effects is partial: hull shadows and HUD blur remain, so it does not isolate all graphics/GPU work.",
+      "DPR affects observed process footprint and WebKit progress; Linux WebKit simulated volleys differ across conditions.",
+      "No physical smartphone/tablet/PC acceptance, heat measurement or crash cause is established; one unseeded 30-second run per condition."
+    ]
+  },
+  "nextPhysicalControl": {
+    "scope": "shared smartphone problem; keep same phone and same browser",
+    "samePrivateUrl": true,
+    "scene": "reactor",
+    "diagnostics": false,
+    "protection": true,
+    "displayOption": "Reduced effects using the existing native settings button",
+    "observeSeconds": 360,
+    "newFullReportExpected": false,
+    "purpose": "Assess whether the observed abort changes when an existing subset of visual effects is reduced; this is not a complete graphics-off condition."
   }
 }

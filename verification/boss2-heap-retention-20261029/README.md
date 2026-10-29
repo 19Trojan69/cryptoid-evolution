@@ -99,8 +99,49 @@ Reduced effects setting, and wide 820x825/DPR3. Each observes only 30 active
 seconds; it verifies the real setting, frame/volley progress, appearance and
 private export gate, not six-minute physical stability. Profiling/collection
 remain off during these runs. The Reduced effects control changes the existing
-display preference, not combat clocks. Results are pending and cannot yet be
-treated as passing or as a phone fix.
+display preference, not combat clocks.
+
+## Completed shared rendering comparison
+
+Source 2bb9adc/tree 461cc94 passed both Chromium and WebKit jobs in run
+40882780961. All eight conditions completed 30.073–30.642 active seconds with
+same-document play, frame and volley progress, absent additional recording,
+native manual Pause and no page error/crash/unexpected external request. Scope
+pins and transformed-controller types passed. The existing setting was changed
+through its actual paused Control Center / Display button in both engines;
+aria-pressed, stored preference, applied dataset and hidden reflection matched.
+
+| Short Linux condition | Chromium last-10-second median PSS | WebKit last-10-second median PSS |
+| --- | ---: | ---: |
+| Phone 430x825, DPR3, standard | 484.8 MiB | 1101.5 MiB |
+| Same phone dimensions, DPR1, standard | 444.9 MiB | 743.8 MiB |
+| Phone 430x825, DPR3, reduced effects | 420.7 MiB | 928.1 MiB |
+| Wide 820x825, DPR3, standard | 706.6 MiB | 1260.6 MiB |
+
+The reduced option lowers observed process PSS in both short runs. Pixel density
+also matters, but these are one unseeded run per condition, not native-device
+memory limits or an isolated allocation cause. Crucially the wide condition
+uses more process memory externally, while the owner's tablet/PC runs are
+stable. Do not infer that small width alone causes the physical failure.
+Linux WebKit core volleys are 4/10/4/2 across these conditions, versus Chromium
+10/10/10/10. The conditions do not establish equal simulated work or physical
+phone FPS. They reveal emulator workload differences, not an iPhone slowdown fix.
+
+Reduced effects is only a partial control: running animations and reflections
+are reduced, but the native HUD backdrop blur(10px) and boss-hull drop shadows
+remain. Therefore a failure with this setting cannot rule out all graphics,
+native media or browser-container allocations. Both artifact ZIP hashes match
+GitHub and pass integrity. The full eight synthetic records and all process
+points are preserved in evidence/synthetic-render-evidence.json.gz, with digests
+and case details in results.json. No raw owner device input is included.
+
+The next phone control keeps the same smartphone and browser, existing private
+URL, reactor scene, recording off and protection on. Use the existing paused
+Control Center / Display button to select Reduced effects; manually Resume and
+observe six minutes. This targets a shared graphics/resource condition rather
+than only iOS or Pi Browser. No new full report is expected with recording off.
+The physical outcome remains pending; none of these external runs establishes
+that the White Screen is fixed.
 
 The delivered device link, public main ce073547 and Testnet/Mainnet deployments
 are unchanged. No runtime fix, deployment, payment or real-progress mutation.
