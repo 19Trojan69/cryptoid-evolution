@@ -41,3 +41,12 @@ the two reported controls. No result from this new visual condition has yet
 been observed on the owner's phone. A stable result here would implicate this
 rendering path under the changed workload, not by itself establish a specific
 browser allocation or a production repair.
+
+The first synthetic workflow40946788697/source7b761ed/tree6641e48 failed in both
+engines before its measured active observation. The paused comparison confirmed
+that the SVG was initially hidden and became visible when the added stylesheet
+was disabled. It then sampled immediately after re-enabling that external
+stylesheet, before the browser had applied it again. The verifier now waits for
+the actual computed display state at both transitions. This corrects the
+measurement sequence; no application, stylesheet, builder or controller change
+is required. Both original failed conclusions and artifacts remain separate.

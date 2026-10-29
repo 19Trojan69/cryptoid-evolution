@@ -78,9 +78,11 @@ try {
   const hidden = await paintSnapshot(); assert.equal(hidden.reactorCount, 1); assert.equal(hidden.reactorDisplay, 'none');
   assert.equal(hidden.reactorRects, 0); assert.equal(hidden.phase, 'boss-fight');
   await page.locator('#diagnostic-reactor-control').evaluate(link => { link.disabled = true; });
+  await page.waitForFunction(() => getComputedStyle(document.querySelector('.boss-special-weapon')).display !== 'none');
   const original = await paintSnapshot(); assert.notEqual(original.reactorDisplay, 'none'); assert.equal(original.reactorRects, 1);
   assert.deepEqual(original.boxes, hidden.boxes);
   await page.locator('#diagnostic-reactor-control').evaluate(link => { link.disabled = false; });
+  await page.waitForFunction(() => getComputedStyle(document.querySelector('.boss-special-weapon')).display === 'none');
   assert.deepEqual(await paintSnapshot(), hidden);
   result.pausedSameBuildComparison = { original, hidden };
   await resume();
