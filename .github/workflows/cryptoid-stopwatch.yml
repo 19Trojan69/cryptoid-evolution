@@ -1,5 +1,5 @@
 name: Protected smartphone stopwatch
-run-name: Verify native start, frozen end and restored stopwatch checkpoint
+run-name: Verify final stopwatch display, frozen end and restored checkpoint
 on:
   push:
     branches: [codex/boss2-stopwatch-20261029]

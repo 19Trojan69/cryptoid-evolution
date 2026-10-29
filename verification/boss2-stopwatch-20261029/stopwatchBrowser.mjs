@@ -13,8 +13,9 @@ export function mountStopwatch(host = window) {
   };
   const clock = createStopwatch({ source: SOURCE, storage: store,
     now: () => host.performance.now(), wallNow: () => Date.now() });
-  const panel = doc.createElement('section');
+  const panel = doc.createElement('div');
   panel.className = 'diagnostic-stopwatch';
+  panel.setAttribute('role', 'group');
   panel.setAttribute('data-diagnostic-stopwatch', '1');
   panel.setAttribute('aria-label', 'Test-Stoppuhr');
   const heading = doc.createElement('strong'), value = doc.createElement('span');
