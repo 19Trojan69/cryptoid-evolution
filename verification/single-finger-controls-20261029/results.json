@@ -1,0 +1,299 @@
+{
+  "schemaVersion": 1,
+  "recordedDateVienna": "2026-10-29",
+  "purpose": "Requested single-finger input behavior; not a confirmed White Screen fix.",
+  "publicCandidate": {
+    "branch": "codex/single-finger-controls-20261029",
+    "head": "8242667f880e576a0ced5836586b579bee33f6fe",
+    "tree": "8a1e1ddc9aac95caf9a65e0f5b8b0e5a0d0b406f",
+    "base": "ce073547cf573375d141bf846f70e294138dbd73",
+    "pullRequest": 200,
+    "draft": true,
+    "publicRelease": false
+  },
+  "policy": {
+    "onePrimarySteeringContact": true,
+    "controlsNeedSeparateFreshPrimaryPressAndRelease": true,
+    "secondaryControlsBlocked": true,
+    "crossingControlsWhileSteeringDoesNotOpenMenus": true,
+    "controlDragToleranceCssPx": 12,
+    "primaryOwnershipCheckedOnDown": true,
+    "webkitTouchToMouseTranslationSupported": true,
+    "keyboardAndAssistiveActivationPreserved": true,
+    "pausedMenuScrollingPreserved": true,
+    "newProductionTimers": 0,
+    "newNetworkOrStorage": false
+  },
+  "local": {
+    "releaseTestCases": 510,
+    "groups": 22,
+    "allGroupsPassed": true,
+    "viteBuildPassed": true,
+    "controllerUnchanged": true,
+    "inputSha256": "bc5c83a78c898790c7ae86daa6da02b6643e1ec2d9578afcdb8468ca2dc315e5",
+    "gateSha256": "477a1087f3146ab53ba6a1c828c623b09f0652a1ee821773addf6da4bf293d2c"
+  },
+  "inputCases": 35,
+  "previewInputCasesIncludingExistingDiagnostics": 36,
+  "negativeControl": {
+    "baseline": "ce073547cf573375d141bf846f70e294138dbd73",
+    "case": "a second finger cannot open controls during steering; lift then a new tap can",
+    "scope": "Synthetic native-listener harness; not a reproduced White Screen or real device gesture",
+    "baselineFailedAsExpected": true,
+    "returncode": 1,
+    "baselineInputSha256": "6c79d811af89620eda11b95f8bb91ead1a7ce30624f6580f6ed67796729c1d3b"
+  },
+  "nativeInputBoundary": {
+    "runId": 40823378548,
+    "head": "8242667f880e576a0ced5836586b579bee33f6fe",
+    "overall": "success",
+    "jobs": {
+      "chromium": 123280740874,
+      "webkit": 123280741094
+    },
+    "results": {
+      "chromium": {
+        "complete": true,
+        "engine": "chromium",
+        "physicalDevice": false,
+        "fullCombatScene": false,
+        "scope": "Actual game input binding, viewport lock and React click boundary. No simulated native crash or memory acceptance.",
+        "checks": [
+          "native touch opens weapons after a fresh single tap",
+          "native touch opens pause after a fresh single tap",
+          "native touch opens home after a fresh single tap",
+          "native mouse click reaches the React handler",
+          "keyboard Enter retains deliberate control activation",
+          "explicit retargeted drag click cannot open a React control",
+          "explicit secondary touch click is stopped before React",
+          "release then native fresh tap opens the same control",
+          "native touch crosses weapons and releases without opening it",
+          "native second touch on weapons cannot pause the held steering contact",
+          "native multitouch release restores the next one-finger menu tap",
+          "native control drag away and back is not interpreted as a tap",
+          "paused menu retains native one-finger scrolling with the document locked",
+          "no JavaScript or recoverable input fault occurred"
+        ],
+        "nativeMultitouch": true,
+        "engineVersion": "151.0.7922.34",
+        "final": {
+          "playing": true,
+          "opens": 8,
+          "moves": 17,
+          "pointer": null,
+          "faults": []
+        }
+      },
+      "webkit": {
+        "complete": true,
+        "engine": "webkit",
+        "physicalDevice": false,
+        "fullCombatScene": false,
+        "scope": "Actual game input binding, viewport lock and React click boundary. No simulated native crash or memory acceptance.",
+        "checks": [
+          "native touch opens weapons after a fresh single tap",
+          "native touch opens pause after a fresh single tap",
+          "native touch opens home after a fresh single tap",
+          "native mouse click reaches the React handler",
+          "keyboard Enter retains deliberate control activation",
+          "explicit retargeted drag click cannot open a React control",
+          "explicit secondary touch click is stopped before React",
+          "release then native fresh tap opens the same control",
+          "no JavaScript or recoverable input fault occurred"
+        ],
+        "nativeMultitouch": false,
+        "engineVersion": "26.5",
+        "final": {
+          "playing": true,
+          "opens": 6,
+          "moves": 3,
+          "pointer": null,
+          "faults": []
+        }
+      }
+    },
+    "scope": "Real input module, viewport lock and React event delegation; game state synthetic. Native multitouch only in Chromium. No physical Pi Browser test."
+  },
+  "protectedPreview": {
+    "branch": "codex/boss2-single-finger-preview-20261029",
+    "head": "79d4f24b8b1c9a93a56567695adecad7887b9c30",
+    "tree": "d38517c8b94fac6c1c304780987a0f88bcb16154",
+    "ciRunId": 40823387246,
+    "overall": "success",
+    "jobs": {
+      "chromium": 123280770617,
+      "webkit": 123280770372
+    },
+    "isolationCases": 24,
+    "controllerPreflightPassed": true,
+    "actualBoss2Chromium": {
+      "complete": true,
+      "engine": "chromium",
+      "seconds": 30,
+      "physicalPiBrowser": false,
+      "osScreenshot": false,
+      "snapshots": false,
+      "explicitGc": false,
+      "actualHostOS": "linux",
+      "playwrightConnectionPresent": true,
+      "processMemoryIsNotNativeDeviceMemory": true,
+      "whiteScreenFixed": false,
+      "engineVersion": "151.0.7922.34",
+      "initialSetupPause": {
+        "expected": true,
+        "technical": false,
+        "manualResumeRequired": true
+      },
+      "singleFingerInput": {
+        "complete": true,
+        "physicalDevice": false,
+        "nativeChromiumTouch": true,
+        "checks": [
+          "native steering crosses the actual weapons button without opening it",
+          "native second touch on weapons does not pause active steering",
+          "release then a fresh native tap opens the actual paused weapons drawer",
+          "explicit one-finger return completes the original countdown and resumes combat"
+        ]
+      },
+      "volleyProgress": {
+        "first": 0,
+        "last": 10
+      },
+      "observedActiveSeconds": 30.951,
+      "pause": {
+        "at": 44096.5,
+        "operation": "pause-enter",
+        "pauseReason": "manual-pause",
+        "status": "playing",
+        "targetStatus": "paused",
+        "sector": 20,
+        "phase": "ATTACK_CYCLE",
+        "encounter": "boss-fight",
+        "frameGapMs": 11,
+        "hidden": false,
+        "focused": true,
+        "suppressed": 0
+      },
+      "report": {
+        "downloaded": true,
+        "bytes": 409285,
+        "records": 139,
+        "contiguous": true,
+        "optionsMatched": true,
+        "recoveredAfterControlledReload": true
+      },
+      "unexpectedExternalRequests": [],
+      "finishedAt": "2026-10-29T05:28:40.437Z",
+      "pointCount": 30
+    },
+    "fullWebkitGameAccepted": false,
+    "deployment": {
+      "status": "READY",
+      "environment": "Preview",
+      "id": "AbXqJzja36d6qQsjB15qWNYuVSWV",
+      "url": "https://cryptoid-evolution-testnet-mspthwlj1-19-trojan69.vercel.app/",
+      "buildDurationSeconds": 45,
+      "existingVercelAuthenticationRequired": true,
+      "protection": "Standard Protection",
+      "settingsChanged": false,
+      "bypassLinksCreated": false
+    },
+    "liveBrowserVerification": {
+      "status": "passed",
+      "environment": "Signed-in remote cloud Chromium with native mouse input; not a physical iPhone/Pi Browser or native multi-finger test.",
+      "source": {
+        "sourceCommit": "79d4f24b8b1c9a93a56567695adecad7887b9c30",
+        "sourceTree": "d38517c8b94fac6c1c304780987a0f88bcb16154",
+        "workingTreeDirty": true
+      },
+      "steps": [
+        "explicit menu preparation",
+        "expected setup pause",
+        "manual Resume",
+        "native mouse drag across weapons button keeps combat running",
+        "fresh mouse click opens original paused weapons menu",
+        "manual Return -> original countdown -> resumed combat",
+        "regular manual Pause",
+        "new document opens menu",
+        "prepare/download local report"
+      ],
+      "reportBytes": 657172,
+      "integrity": {
+        "contiguous": true,
+        "records": 263,
+        "chunks": 104,
+        "errors": []
+      },
+      "optionsMatched": true,
+      "recordedPauseReasons": [
+        "weapon-menu",
+        "manual-pause"
+      ],
+      "screenshot": {
+        "branch": "codex/boss2-single-finger-preview-20261029",
+        "path": "verification/single-finger-controls-20261029/evidence/deployed-single-finger-preview.jpg",
+        "sha256": "b668ac84296221c03c6f6a2c56e39012755d531f0c6dea16e421cc672c25a952"
+      }
+    }
+  },
+  "artifacts": [
+    {
+      "id": 12874934996,
+      "sha256": "bf7737276fd9c64bafa06662f06994e5c5a3a1c8d033925a711b0ab03214f971",
+      "zipVerified": true
+    },
+    {
+      "id": 12875567534,
+      "sha256": "eab0aa29099b335b821675eef9e7e1da634c93613391b8417137fae9af95d67c",
+      "zipVerified": true
+    },
+    {
+      "id": 12875647227,
+      "sha256": "21404896ad32402432667fd4cbb586ad11a3ceb100fe0ac668957fd06135b4fb",
+      "zipVerified": true
+    },
+    {
+      "id": 12875647289,
+      "sha256": "799fe7038ee047e96f61d7deff737ef66bd98bfebb913a5321ee0bd980fcee2b",
+      "zipVerified": true
+    }
+  ],
+  "earlierAttemptsExcluded": [
+    {
+      "runId": 40821944010,
+      "head": "26192b2f7b42e54d322d2f67994e5c24ad9d7c32",
+      "scope": "QA entry placed after Vite HTML fallback; no browser input accepted."
+    },
+    {
+      "runId": 40822445324,
+      "head": "9807c6dde3365522c44d52e3c9fa99d58f843733",
+      "scope": "Initial native touch blocked by relying on primary metadata at click instead of validating the press; corrected before deployment."
+    },
+    {
+      "runId": 40822844642,
+      "head": "a35f9878447c24625054b8c9682f54e09dcd7144",
+      "scope": "Chromium completed thirteen input checks but final tap during menu momentum had no click. WebKit exposed touch pointer 2 -> mouse click pointer 1; translation handling and the native-scroll settling check were corrected."
+    },
+    {
+      "runId": 40822614187,
+      "head": "f849b99567a50a5f761bf0329a3b86c014d6e7d5",
+      "scope": "Earlier protected candidate used the not-yet-corrected click metadata assumptions."
+    },
+    {
+      "runId": 40822851790,
+      "head": "dac7740119298559bba0fbed2e94d9e81dbc78ce",
+      "scope": "Same pre-compatibility boundary findings; actual Boss 2 flow not accepted in that job."
+    }
+  ],
+  "releaseBoundary": {
+    "main": "ce073547cf573375d141bf846f70e294138dbd73",
+    "testnetProductionId": "239zEifRV84KCpbyHumnuHmSGm9T",
+    "productionAliasesChanged": false,
+    "mainnetTouched": false,
+    "realAccountsOrPaymentsUsed": false,
+    "rawOwnerAttachmentsCommitted": false,
+    "physicalDeviceAccepted": false,
+    "whiteScreenFixed": false,
+    "priorWebkitFullGameStartupFindingStillOpen": true
+  }
+}
