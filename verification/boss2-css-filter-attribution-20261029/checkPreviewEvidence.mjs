@@ -25,5 +25,18 @@ for (const c of evidence.captures) {
   assert.equal(v.finalPausedAppearance.filterCount, 0); assert.equal(v.finalPausedAppearance.backdropCount, 0);
 }
 assert.equal(receipt.whiteScreenFixed, false);
+if (receipt.deployment.status === 'READY') {
+  const d = receipt.deployment;
+  assert.equal(d.sourceCommit, receipt.sourceCommit); assert.equal(d.sourceTree, receipt.sourceTree);
+  assert.equal(d.apiTarget, null); assert.equal(d.protection.enabled, true);
+  assert.equal(d.protectionChanges, false); assert.equal(d.publicAliasChanges, false);
+  assert.equal(d.browserFallbackAuthorized, true); assert.equal(d.priorApiBlock.httpStatus, 403);
+  assert.equal(d.liveBrowserCheck.gameOpenedPaused, true);
+  assert.equal(d.liveBrowserCheck.renderedCssFilters, 0); assert.equal(d.liveBrowserCheck.renderedBackdropFilters, 0);
+  assert.equal(d.liveBrowserCheck.physicalDevice, false);
+  const screenshot = readFileSync(directory + d.screenshot.file);
+  assert.equal(screenshot.length, d.screenshot.bytes);
+  assert.equal(createHash('sha256').update(screenshot).digest('hex'), d.screenshot.sha256);
+}
 console.log(JSON.stringify({ builtPreviewVerifications: 2, passed: true,
   sourceCommit: receipt.sourceCommit, controlHash, deploymentStatus: receipt.deployment.status }));

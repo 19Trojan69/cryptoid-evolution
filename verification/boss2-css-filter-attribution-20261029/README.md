@@ -101,7 +101,7 @@ the stylesheet including the visible label is
 1b510cc64aa39376811743b9613f158d4389d85c9db43ac80a7346e58c17a99b.
 No physical-device outcome or White Screen fix is claimed.
 
-## Preview deployment blocked
+## API permission block and authorized browser deployment
 
 The reviewed target is the existing cryptoid-evolution-testnet project
 prj_JpvzU9ZS8bFkn9jZgE51Gct8TZpF, account team_KzJmtl0QyoYZAOu5RQKsAR2i,
@@ -118,15 +118,39 @@ CLI context, VERCEL_TOKEN or existing deployment workflow is available. No secre
 protection, account, automatic deployment or public alias setting was changed.
 There is no repeated unchanged request, no production attempt to work around the
 preview refusal, and no claim that reconnecting would fix the permission error.
-Browser fallback has not been initialized and needs the owner's approval.
+The owner subsequently explicitly approved the browser fallback. The existing
+signed-in Vercel account was used; no authentication/access settings changed.
 
 The original c610e7c device deployment dpl_EkJsAPJX6JPjvbqbKArqo1Lxzey6 remains
 READY, public main is still ce073547, and project protection is unchanged. The
-old device URL does not contain this filter control. The concrete pending action
-is to deploy the tested417cc1b source as a protected Preview, then verify its
-READY/source/label before providing the new URL. The intended physical test is
-the same smartphone/browser, recording off, protection on, manual start and six
-observed minutes; no new full report is expected with recording off.
+old device URL does not contain this filter control.
+
+The browser UI resolved417cc1b but could not determine a branch. The work branch
+had meanwhile advanced with evidence-only receipts. A separate device branch,
+codex/boss2-css-filter-device-20261029, is pinned to the exact tested417cc1b source
+and was verified through GitHub. The UI then explicitly showed Preview and the
+correct commit before Create Preview Deployment was used. Automatic deployment
+stays disabled; no public alias or production deployment was changed.
+
+The new deployment dpl_7WPyprxCUx4BRL4XfRygboG9oHhY is READY, target=null (Preview),
+with source417cc1b0242d5cb11ca3d2ab826111e542523774/tree69cba8e. Dashboard and
+read-only deployment API agree. The unchanged project Standard Protection was
+verified again. The exact browser-verified entry URL is:
+https://cryptoid-evolution-testnet-eb5f8lafa-19-trojan69.vercel.app/.
+
+The actual hosted menu shows GRAFIKTEST: CSS-Filter ausgeschaltet and source
+417cc1b0. Recording was switched off, protection remained on, preparation
+completed and the original game opened paused. A DOM-backed read of that paused
+field confirmed zero CSS filters, zero backdrop filters and HUD backdrop none.
+This was a1363px desktop browser smoke check, not a physical smartphone or a
+new90-second/six-minute acceptance run. The page was returned to the test menu.
+The menu screenshot is preserved in evidence/protected-preview-menu-20261029.jpg;
+its SHA256 and the previous API failure are retained in preview-results.json.
+
+The remaining physical control uses this new URL on the same smartphone/browser,
+recording off, protection on, manual start and six observed minutes. No new full
+report is expected with recording off. This deliberate graphics isolation does
+not establish a White Screen fix; the physical outcome remains pending.
 
 Official API reference: https://vercel.com/docs/rest-api/deployments/create-a-new-deployment.
 
