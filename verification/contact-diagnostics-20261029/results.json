@@ -1,0 +1,223 @@
+{
+  "format": "cryptoid-protected-contact-verification-v1",
+  "status": "complete-protected-preview-verified",
+  "parentPreviewSource": "a50b68e0d5739eab3bf844460c728a877e300a8a",
+  "acceptedApplicationSource": {
+    "commit": "68c33d15f6f591477508cc9e0497d6c8a4c100c0",
+    "tree": "ac2f4a8da05f1f0631495112da131b344d196277"
+  },
+  "localVerification": {
+    "frontendBuild": {
+      "passed": true,
+      "cases": 538,
+      "groups": 22,
+      "typescript": true,
+      "vite": true,
+      "existingLargeChunkWarning": true
+    },
+    "changedModulesEslint": true,
+    "isolatedPreviewCases": 24,
+    "transformedControllerTypes": true
+  },
+  "unchangedFromAcceptedSingleFingerPreview": [
+    "frontend/src/pages/GamePage.tsx",
+    "frontend/src/pages/singleFingerControls.ts"
+  ],
+  "controlsSha256": "477a1087f3146ab53ba6a1c828c623b09f0652a1ee821773addf6da4bf293d2c",
+  "scope": {
+    "protectedPreviewOnly": true,
+    "publicMainChanged": false,
+    "pr200Changed": false,
+    "mainnetChanged": false,
+    "nativeClocks": true,
+    "automaticResume": false,
+    "automaticTransmission": false,
+    "rawOwnerReportCommitted": false
+  },
+  "measurementLimits": {
+    "nativeRamGpuOrProcessCauseMeasured": false,
+    "physicalDeviceAccepted": false,
+    "naturalWhiteScreenReproduced": false,
+    "fullCombatWebkitAccepted": false,
+    "eventBurstSuppressionDeclared": true,
+    "finalUnwrittenIntervalMayBeLost": true
+  },
+  "excludedAttempts": [
+    {
+      "kind": "local-full-session-before-required-prebuild",
+      "cases": 106,
+      "pass": 103,
+      "fail": 3,
+      "files": [
+        "hullPreparationDiagnostics.test.mjs"
+      ],
+      "subsequentAcceptedCheck": "Full npm run build includes required painted hull prebuild and passes all 538 cases; no runtime loader change."
+    }
+  ],
+  "ci": {
+    "run": 40826490687,
+    "url": "https://github.com/19Trojan69/cryptoid-evolution/actions/runs/40826490687",
+    "head": "68c33d15f6f591477508cc9e0497d6c8a4c100c0",
+    "status": "completed",
+    "conclusion": "success",
+    "jobs": [
+      {
+        "id": 123290624027,
+        "engine": "webkit",
+        "complete": true,
+        "engineVersion": "26.5",
+        "checks": [
+          "native touch opens weapons after a fresh single tap",
+          "native touch opens pause after a fresh single tap",
+          "native touch opens home after a fresh single tap",
+          "contact observation precedes React root capture for a native touch",
+          "native touch totals are distinct from tracked pointer totals",
+          "native mouse click reaches the React handler",
+          "keyboard Enter retains deliberate control activation",
+          "explicit retargeted drag click cannot open a React control",
+          "explicit secondary touch click is stopped before React",
+          "release then native fresh tap opens the same control",
+          "no JavaScript or recoverable input fault occurred"
+        ],
+        "fullCombatScene": false,
+        "nativeMultitouch": false
+      },
+      {
+        "id": 123290624255,
+        "engine": "chromium",
+        "complete": true,
+        "engineVersion": "151.0.7922.34",
+        "checks": [
+          "native touch opens weapons after a fresh single tap",
+          "native touch opens pause after a fresh single tap",
+          "native touch opens home after a fresh single tap",
+          "contact observation precedes React root capture for a native touch",
+          "native touch totals are distinct from tracked pointer totals",
+          "native mouse click reaches the React handler",
+          "keyboard Enter retains deliberate control activation",
+          "explicit retargeted drag click cannot open a React control",
+          "explicit secondary touch click is stopped before React",
+          "release then native fresh tap opens the same control",
+          "native touch crosses weapons and releases without opening it",
+          "ignored native secondary contact is recorded before the input guard",
+          "native two-contact TouchEvent count is recorded",
+          "native second touch on weapons cannot pause the held steering contact",
+          "native multitouch release restores the next one-finger menu tap",
+          "native control drag away and back is not interpreted as a tap",
+          "paused menu retains native one-finger scrolling with the document locked",
+          "no JavaScript or recoverable input fault occurred"
+        ],
+        "fullCombatSceneAlsoChecked": true,
+        "nativeMultitouch": true
+      }
+    ],
+    "artifacts": [
+      {
+        "id": 12877195473,
+        "name": "contact-evidence-chromium",
+        "bytes": 1526931,
+        "digest": "sha256:b8d68419ebc682149ef6dff247ac82dd3d4bdf991b356d680e0cf24dd3febfb4",
+        "downloaded": true,
+        "zipIntegrityAndSha256Verified": true
+      },
+      {
+        "id": 12876373971,
+        "name": "contact-evidence-webkit",
+        "bytes": 20169,
+        "digest": "sha256:1b665a8e85554837405871795cfba367d197e06f9d56bfb6f25306fea8c680ad",
+        "downloaded": true,
+        "zipIntegrityAndSha256Verified": true
+      }
+    ],
+    "actualBossScene": {
+      "complete": true,
+      "engine": "chromium",
+      "physicalPiBrowser": false,
+      "observedActiveSeconds": 30.108,
+      "singleFingerInput": {
+        "complete": true,
+        "physicalDevice": false,
+        "nativeChromiumTouch": true,
+        "checks": [
+          "native steering crosses the actual weapons button without opening it",
+          "native second touch on weapons does not pause active steering",
+          "release then a fresh native tap opens the actual paused weapons drawer",
+          "explicit one-finger return completes the original countdown and resumes combat"
+        ]
+      },
+      "report": {
+        "downloaded": true,
+        "bytes": 426684,
+        "records": 179,
+        "contiguous": true,
+        "optionsMatched": true,
+        "recoveredAfterControlledReload": true,
+        "contactEvidence": {
+          "records": 39,
+          "nativeSecondaryPointer": true,
+          "nativeTwoTouchCount": true,
+          "rawInputFields": false
+        }
+      },
+      "unexpectedExternalRequests": [],
+      "whiteScreenFixed": false
+    }
+  },
+  "deployment": {
+    "target": "preview",
+    "team": "19-trojan69",
+    "project": "cryptoid-evolution-testnet",
+    "deploymentId": "6AG4NJpP5eWm44Ze927kLR8A6FvE",
+    "status": "READY",
+    "buildSeconds": 35,
+    "commit": "68c33d15f6f591477508cc9e0497d6c8a4c100c0",
+    "url": "https://cryptoid-evolution-testnet-hde4nlh2r-19-trojan69.vercel.app/",
+    "protection": "Existing Vercel Authentication, Standard Protection; unchanged",
+    "publicProductionIdBefore": "239zEifRV84KCpbyHumnuHmSGm9T",
+    "publicSourceBefore": "ce073547cf573375d141bf846f70e294138dbd73",
+    "manualDashboardFallbackPreviouslyAuthorized": true,
+    "publicProductionIdAfter": "239zEifRV84KCpbyHumnuHmSGm9T",
+    "publicSourceAfter": "ce073547cf573375d141bf846f70e294138dbd73",
+    "publicAliasAfter": "https://cryptoid-evolution-testnet.vercel.app/",
+    "publicAssignmentVerifiedInDashboardOverview": true
+  },
+  "deployedUiVerification": {
+    "sameSourceCommitAndTree": true,
+    "reportedBuild": {
+      "sourceCommit": "68c33d15f6f591477508cc9e0497d6c8a4c100c0",
+      "sourceTree": "ac2f4a8da05f1f0631495112da131b344d196277",
+      "workingTreeDirty": true
+    },
+    "physicalDevice": false,
+    "nativeCloudMouseOnly": true,
+    "checks": [
+      "prepared scene opens initially paused",
+      "explicit Resume and original countdown",
+      "drag crosses actual weapons button without opening",
+      "release then fresh click opens original paused drawer",
+      "explicit Return resumes original combat",
+      "manual Pause recorded",
+      "controlled reload returns to test menu",
+      "complete report recovered and downloaded"
+    ],
+    "report": {
+      "bytes": 276363,
+      "sha256": "4614c9457ddd93c05dfd6f996fcd5732db348a2ca0cb628f86e5f521980273e8",
+      "records": 119,
+      "chunks": 34,
+      "contiguous": true,
+      "contactRows": 21,
+      "preHandlerWeaponsClickPresent": true,
+      "pauseReasons": [
+        "weapon-menu",
+        "manual-pause"
+      ],
+      "rawContactFields": false
+    },
+    "screenshot": {
+      "path": "evidence/deployed-contact-preview.jpg",
+      "bytes": 100692,
+      "sha256": "b1737dadeb9797ddbd3fc88d5e46f7828c3a19405133bfe3d8a65d4f11bffb76"
+    }
+  }
+}
