@@ -1,5 +1,5 @@
 name: Private smartphone native memory attribution
-run-name: Attribute native browser memory with standard and reduced effects
+run-name: Complete restricted Chromium memory attribution after verified WebKit profiles
 on:
   push:
     branches: [codex/boss2-native-memory-20261029]
@@ -13,7 +13,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        engine: [chromium, webkit]
+        engine: [chromium]
         effects: [standard, reduced]
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803

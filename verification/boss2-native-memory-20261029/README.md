@@ -36,4 +36,23 @@ already be released. All evidence is synthetic; owner raw reports stay private.
 
 References: Chromium DevTools Tracing.requestMemoryDump, Chromium MemoryInfra
 GPU documentation, and WebKit's Memory protocol/Memory Debugging documentation.
-Results are pending. No native cause, heat result or White Screen fix is claimed.
+## First attempt and profiler correction
+
+Source fbb0fe3/tree 2924a5f ran workflow 40892628729. WebKit standard/reduced
+completed 90.369/91.095 active seconds and 80/83 unique native tracking updates.
+Their attribution is complete. Both Chromium active observations also completed
+(90.122/90.914 seconds, 31/32 core volleys), but overall jobs failed in trace
+finalization. The initial category configuration allowed unrelated default
+events; the fixed event limit then dropped batches containing the requested
+dumps. This is a profiler configuration/collection failure, not an observed game
+crash, and zero matched dumps must not be presented as zero native memory.
+
+The corrected tracing excludes default categories, retains only memory-dump and
+process-name events, uses a 32MiB trace buffer, validates the trace's data-loss
+flag, and bounds finalization. A regression case includes a batch exceeding the
+old event limit with a memory dump at its end. Only Chromium standard/reduced
+are repeated. Completed WebKit runs are preserved separately. No application
+runtime, game setting, public deployment or physical-device result is changed.
+
+Final corrected results are pending. No native cause, heat result or White
+Screen fix is claimed.

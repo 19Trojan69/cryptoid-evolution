@@ -9,7 +9,7 @@ import { root, configuration } from '../boss2-forensics-20261028/fixture.mjs';
 import { serveDevicePreview } from '../boss2-forensics-20261028/devicePreviewServer.mjs';
 import { sampleBrowserMemory } from '../boss2-forensics-20261028/processMemory.mjs';
 import { armNativeProfile } from '../save-retry/fixture/nativeProfile.mjs';
-import { summarizeMemoryTrace } from './nativeSummary.mjs';
+import { summarizeMemoryTrace, memoryTraceEvents } from './nativeSummary.mjs';
 
 const engine = process.env.CRYPTOID_NATIVE_ENGINE, effects = process.env.CRYPTOID_NATIVE_EFFECTS;
 assert.ok(['chromium', 'webkit'].includes(engine)); assert.ok(['standard', 'reduced'].includes(effects));
@@ -48,12 +48,19 @@ async function endpoint(label) {
 }
 async function stopTrace() {
   if (!tracing) return;
-  const completed = new Promise(resolve => client.once('Tracing.tracingComplete', resolve));
-  await client.send('Tracing.end'); await completed; tracing = false;
+  let timer;
+  const completed = new Promise((resolve, reject) => {
+    client.once('Tracing.tracingComplete', resolve);
+    timer = setTimeout(() => reject(new Error('Memory trace finalization timed out')), 15000);
+  });
+  let completion;
+  try { await client.send('Tracing.end'); completion = await completed; }
+  finally { clearTimeout(timer); tracing = false; }
   const raw = Buffer.from(JSON.stringify({ traceEvents })); const compressed = gzipSync(raw, { level: 6 });
   writeFileSync(output + '/memory-infra.json.gz', compressed);
-  summary.trace = { events: traceEvents.length, bytes: raw.length, gzipBytes: compressed.length,
+  summary.trace = { events: traceEvents.length, bytes: raw.length, gzipBytes: compressed.length, dataLossOccurred: completion.dataLossOccurred,
     sha256: createHash('sha256').update(compressed).digest('hex') };
+  assert.equal(completion.dataLossOccurred, false, 'memory trace is complete');
   summary.nativeAllocators = summarizeMemoryTrace(traceEvents, summary.dumpRequests);
   for (const dump of summary.nativeAllocators) {
     assert.ok(dump.matchedProcessDumps > 0);
@@ -90,11 +97,13 @@ try {
   } else {
     client = await browser.newBrowserCDPSession();
     client.on('Tracing.dataCollected', event => {
-      if (traceEvents.length + event.value.length > 300000) { fatal ||= 'trace-event-bound'; return; }
-      traceEvents.push(...event.value);
+      const memory = memoryTraceEvents(event.value);
+      if (traceEvents.length + memory.length > 10000) { fatal ||= 'trace-event-bound'; return; }
+      traceEvents.push(...memory);
     });
     await client.send('Tracing.start', { transferMode: 'ReportEvents', traceConfig: {
-      recordMode: 'recordUntilFull', includedCategories: ['disabled-by-default-memory-infra'], memoryDumpConfig: { triggers: [] } } });
+      recordMode: 'recordUntilFull', traceBufferSizeInKb: 32768,
+      excludedCategories: ['*'], includedCategories: ['disabled-by-default-memory-infra'], memoryDumpConfig: { triggers: [] } } });
     tracing = true;
     // Renderer-specific queries use the page session; tracing is browser-wide.
     const tracingClient = client, pageClient = await context.newCDPSession(page);

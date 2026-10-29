@@ -10,6 +10,8 @@ export function byteScalar(attribute) {
   const value = Number.parseInt(attribute.value.replace(/^0x/i, ''), 16);
   assert.ok(Number.isSafeInteger(value) && value >= 0); return value;
 }
+export const memoryTraceEvents = events => events.filter(event =>
+  event.ph === 'M' && event.name === 'process_name' || event.ph === 'v' && event.args?.dumps);
 // Explicit allocator sizes are kept separate. Parent/child and cross-process
 // aliasing make a sum of these rows an invalid total RAM/GPU measurement.
 export function summarizeMemoryTrace(events, requests) {
