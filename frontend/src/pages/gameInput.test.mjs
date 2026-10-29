@@ -222,6 +222,11 @@ test('mouse buttons keep deliberate clicks and reject dragged control presses', 
   fire(h.win, 'pointerup', { target, pointerType: 'mouse', clientX: 200 });
   assert.equal(controlClick(h, target, { pointerType: 'mouse' }).defaultPrevented, true); h.input.dispose();
 });
+test('a verified primary tap does not depend on a repeated primary flag on click', () => {
+  const h = harness(), target = button(); h.down({ target }); fire(h.win, 'pointerup', { target });
+  assert.equal(controlClick(h, target, { isPrimary: false }).defaultPrevented, false);
+  h.input.dispose();
+});
 test('legacy touch controls reject additional contacts and compatibility mouse re-arming', () => {
   const h = harness({ legacy: true }), target = button();
   const first = { identifier: 8, clientX: 60, clientY: 650 }, second = { ...first, identifier: 9 };

@@ -1,5 +1,5 @@
 name: Single-finger control acceptance
-run-name: Verify the explicit QA entry before native single-finger interactions
+run-name: Verify primary tap ownership through native click dispatch
 on:
   push:
     branches: [codex/single-finger-controls-20261029]

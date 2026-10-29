@@ -38,7 +38,9 @@ export function createSingleFingerControls(playing: () => boolean, steering: () 
       if (event.detail === 0 && !event.pointerType) return true;
       const current = tap;
       tap = null;
-      return Boolean(current?.released && current.target === target && event.isPrimary !== false &&
+      // Primary ownership was verified on pointerdown. A later click need not
+      // repeat that flag after the pointer has already been released.
+      return Boolean(current?.released && current.target === target &&
         (event.pointerId === undefined || event.pointerType === undefined || event.pointerId === current.id));
     },
   };
