@@ -14,21 +14,25 @@ const output=resolve(directory,'results',engine);mkdirSync(output,{recursive:tru
 const result={complete:false,engine,physicalDevice:false,fullCombatScene:false,
   scope:'Actual game input binding, viewport lock and React click boundary. No simulated native crash or memory acceptance.',checks:[],nativeMultitouch:engine==='chromium'};
 let server,browser,page;
+const errors=[];
 try {
-  server=await createServer({configFile:false,root:resolve(root,'frontend'),plugins:[react()],
+  const entry={name:'single-finger-test-entry',configureServer(server){
+    server.middlewares.use(async (request,response,next)=>{
+      if(request.url!=='/__single-finger')return next();
+      response.setHeader('Content-Type','text/html');
+      response.end(await server.transformIndexHtml(request.url,`<html><head><meta name="viewport" content="width=device-width,initial-scale=1"></head><body style="margin:0;overflow:hidden"><div id="root"></div><script type="module" src="/@fs/${directory}/harness.jsx"></script></body></html>`));
+    });
+  }};
+  server=await createServer({configFile:false,root:resolve(root,'frontend'),plugins:[react(),entry],
     resolve:{alias:['react-dom/client','react/jsx-dev-runtime','react/jsx-runtime','react'].map(find=>({find,replacement:req.resolve(find)}))},
     server:{host:'127.0.0.1',port:0,fs:{allow:[root]}}});
-  server.middlewares.use(async (request,response,next)=>{
-    if(request.url!=='/__single-finger')return next();
-    response.setHeader('Content-Type','text/html');
-    response.end(await server.transformIndexHtml(request.url,`<html><head><meta name="viewport" content="width=device-width,initial-scale=1"></head><body style="margin:0;overflow:hidden"><div id="root"></div><script type="module" src="/@fs/${directory}/harness.jsx"></script></body></html>`));
-  });
   await server.listen();const address=server.httpServer.address(),url=`http://127.0.0.1:${address.port}/__single-finger`;
   browser=await ({chromium,webkit}[engine]).launch({headless:true});result.engineVersion=browser.version();
   const context=await browser.newContext({viewport:{width:430,height:825},hasTouch:true,isMobile:true});
   page=await context.newPage();page.setDefaultTimeout(10000);
-  const errors=[];page.on('pageerror',error=>errors.push(error.message));
-  await page.goto(url);await page.waitForFunction(()=>window.__singleFingerQA);
+  page.on('pageerror',error=>errors.push(error.message));
+  await page.goto(url);await page.getByRole('heading',{name:'Single-finger input boundary QA',exact:true}).waitFor();
+  await page.waitForFunction(()=>window.__singleFingerQA);
   const state=()=>page.evaluate(()=>window.__singleFingerQA.inspect());
   const check=async(name,expected)=>{assert.ok(await expected,name);result.checks.push(name);};
   const resume=async()=>{await page.locator('#resume').tap();await page.waitForFunction(()=>window.__singleFingerQA.inspect().playing);};
@@ -76,5 +80,5 @@ try {
   }
   await check('no JavaScript or recoverable input fault occurred',errors.length===0&&(await state()).faults.length===0);
   result.final=await state();await page.screenshot({path:output+'/input-boundary.png'});result.complete=true;
-}catch(error){result.failure=error.message;process.exitCode=1;if(page)try{result.last=await page.evaluate(()=>window.__singleFingerQA?.inspect());await page.screenshot({path:output+'/failure.png',timeout:5000});}catch{}}
+}catch(error){result.failure=error.message;result.errors=errors.slice(-8);process.exitCode=1;if(page)try{result.last=await page.evaluate(()=>window.__singleFingerQA?.inspect());result.visible=await page.locator('body').innerText();await page.screenshot({path:output+'/failure.png',timeout:5000});}catch{}}
 finally{writeFileSync(output+'/verification.json',JSON.stringify(result,null,2)+'\n');console.log('CRYPTOID_SINGLE_FINGER_RESULT '+JSON.stringify(result));if(browser)await browser.close();if(server)await server.close();}

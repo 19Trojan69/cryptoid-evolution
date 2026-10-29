@@ -1,4 +1,5 @@
 name: Single-finger control acceptance
+run-name: Verify the explicit QA entry before native single-finger interactions
 on:
   push:
     branches: [codex/single-finger-controls-20261029]
