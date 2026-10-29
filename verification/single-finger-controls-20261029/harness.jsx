@@ -6,16 +6,21 @@ import {lockGameViewport} from '../../frontend/src/lib/gameViewport';
 function InputBoundary() {
   const field = useRef(null), input = useRef(null), pointer = useRef(null), origin = useRef(null);
   const running = useRef(true), opens = useRef(0), moves = useRef(0), faults = useRef([]);
+  const trace = useRef([]);
   const [playing, setPlaying] = useState(true), [position, setPosition] = useState({x:.7,y:.8});
   const open = () => { opens.current++; running.current = false; input.current.reset(); setPlaying(false); };
   useLayoutEffect(() => {
+    const observe=event=>{const row={type:event.type,id:event.pointerId,source:event.pointerType,primary:event.isPrimary,
+      detail:event.detail,target:event.target.id};queueMicrotask(()=>{row.prevented=event.defaultPrevented;trace.current.push(row);trace.current=trace.current.slice(-24);});};
+    const events=['pointerdown','pointerup','pointercancel','lostpointercapture','click'];
+    events.forEach(type=>window.addEventListener(type,observe,true));
     const release = lockGameViewport(field.current);
     input.current = bindGameInput(field.current, {pointer, origin, playing:() => running.current,
       aboveFinger:() => false, sensitivity:() => 1, area:() => 'wide',
       position:p => {moves.current++;setPosition(p);}, fault:e => faults.current.push(e.name)});
     window.__singleFingerQA = {inspect:() => ({playing:running.current,opens:opens.current,moves:moves.current,
-      pointer:pointer.current,faults:faults.current.slice()})};
-    return () => {input.current.dispose();release();delete window.__singleFingerQA;};
+      pointer:pointer.current,faults:faults.current.slice(),trace:trace.current.slice()})};
+    return () => {events.forEach(type=>window.removeEventListener(type,observe,true));input.current.dispose();release();delete window.__singleFingerQA;};
   }, []);
   return <main ref={field} className="game-field" style={{position:'fixed',inset:0,touchAction:playing?'none':'pan-y',background:'#061726',color:'white'}}>
     <h1 style={{font:'20px sans-serif',margin:20}}>Single-finger input boundary QA</h1>

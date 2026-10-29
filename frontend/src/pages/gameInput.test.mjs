@@ -248,3 +248,8 @@ test('legacy touch controls reject additional contacts and compatibility mouse r
   assert.equal(controlClick(h, target, { pointerType: undefined, pointerId: undefined }).defaultPrevented, false);
   h.input.dispose();
 });
+test('a verified primary tap does not depend on a repeated primary flag on click', () => {
+  const h = harness(), target = button(); h.down({ target }); fire(h.win, 'pointerup', { target });
+  assert.equal(controlClick(h, target, { isPrimary: false }).defaultPrevented, false);
+  h.input.dispose();
+});

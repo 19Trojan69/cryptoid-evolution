@@ -36,7 +36,8 @@ try {
   const state=()=>page.evaluate(()=>window.__singleFingerQA.inspect());
   const check=async(name,expected)=>{assert.ok(await expected,name);result.checks.push(name);};
   const resume=async()=>{await page.locator('#resume').tap();await page.waitForFunction(()=>window.__singleFingerQA.inspect().playing);};
-  const touch=async(selector)=>{const b=await page.locator(selector).boundingBox();await page.touchscreen.tap(b.x+b.width/2,b.y+b.height/2);};
+  const touch=async(selector)=>{const b=await page.locator(selector).boundingBox();await page.touchscreen.tap(b.x+b.width/2,b.y+b.height/2);
+    await page.waitForFunction(()=>!window.__singleFingerQA.inspect().playing);};
   for(const id of ['weapons','pause','home']){
     await touch('#'+id);await check('native touch opens '+id+' after a fresh single tap',!(await state()).playing);await resume();
   }
