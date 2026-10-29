@@ -1,0 +1,352 @@
+{
+  "format": "cryptoid-neutral-contact-verification-v1",
+  "status": "completed-browser-checks-passed",
+  "applicationSourceUnchangedFrom": "68c33d15f6f591477508cc9e0497d6c8a4c100c0",
+  "hostedPreview": "https://cryptoid-evolution-testnet-hde4nlh2r-19-trojan69.vercel.app/",
+  "newDeploymentPerformed": false,
+  "verificationSource": {
+    "commit": "4d40b43301bb7f4ebb07e047c16f2f2c540056c8",
+    "tree": "da8079038f5a14e8b194f3500896ca2dc1308a62"
+  },
+  "ci": {
+    "run": 40829668509,
+    "url": "https://github.com/19Trojan69/cryptoid-evolution/actions/runs/40829668509",
+    "conclusion": "success",
+    "head": "4d40b43301bb7f4ebb07e047c16f2f2c540056c8",
+    "jobs": [
+      {
+        "id": 123300713863,
+        "engine": "chromium",
+        "conclusion": "success"
+      },
+      {
+        "id": 123300714269,
+        "engine": "webkit",
+        "conclusion": "success"
+      }
+    ],
+    "artifacts": [
+      {
+        "id": 12878266028,
+        "name": "contact-evidence-webkit",
+        "bytes": 20169,
+        "digest": "sha256:b9f414b7d46869e1a2e49d0ad43688ca19341a80624a71e9a57bbaac4449e07b",
+        "downloaded": true,
+        "sha256AndZipIntegrityVerified": true
+      },
+      {
+        "id": 12878162542,
+        "name": "contact-evidence-chromium",
+        "bytes": 1528679,
+        "digest": "sha256:f42b1405ab5025098a76787005733c7ecf9671d1ca5bc7d32698f2c44a614ed0",
+        "downloaded": true,
+        "sha256AndZipIntegrityVerified": true
+      }
+    ],
+    "relevantCasesPerEngine": 77,
+    "isolationCasesPerEngine": 24,
+    "typescriptAndChangedModuleLint": true
+  },
+  "localChecks": {
+    "mjsSyntax": true,
+    "runtimeGitPins": true,
+    "workingTreeRuntimeUnchanged": true,
+    "diffCheck": true
+  },
+  "excludedAttempts": [
+    {
+      "run": 40828824176,
+      "commit": "a936125eabb2c0bdeaca4e62179c76c099a81889",
+      "reason": "New scope check rejected npm-generated frontend/yarn.lock rewrite before any browser case. Committed frontend tree remains pinned; only that exact working-tree installation rewrite is now separately disclosed."
+    },
+    {
+      "run": 40829271482,
+      "commit": "9926d48c6a7629d75e20b73c9b0180e1f4cce323",
+      "webkitBoundaryPassed": true,
+      "chromiumComplete": false,
+      "reason": "New native release-order assertion caught driver lifting the secondary contact instead of the intended primary. Browser remained playing without a menu, JavaScript error or input fault. Partial touchEnd calls now identify contacts to release; primary-order assertions are retained."
+    }
+  ],
+  "limits": {
+    "physicalDevice": false,
+    "physicalPalmReproduced": false,
+    "osScreenshotOrTerminationReproduced": false,
+    "nativeIphoneRamMeasured": false,
+    "whiteScreenFixed": false,
+    "fullGameWebkitAccepted": false,
+    "suppliedWideRadiusIsBrowserInputOnly": true
+  },
+  "publicBoundary": {
+    "mainUpdated": false,
+    "pr200Updated": false,
+    "mainnetChanged": false,
+    "previewProtectionChanged": false,
+    "rawOwnerReportCommitted": false
+  },
+  "chromiumBoundary": {
+    "complete": true,
+    "version": "151.0.7922.34",
+    "existingChecks": [
+      "native touch opens weapons after a fresh single tap",
+      "native touch opens pause after a fresh single tap",
+      "native touch opens home after a fresh single tap",
+      "contact observation precedes React root capture for a native touch",
+      "native touch totals are distinct from tracked pointer totals",
+      "native mouse click reaches the React handler",
+      "keyboard Enter retains deliberate control activation",
+      "explicit retargeted drag click cannot open a React control",
+      "explicit secondary touch click is stopped before React",
+      "release then native fresh tap opens the same control",
+      "native touch crosses weapons and releases without opening it",
+      "ignored native secondary contact is recorded before the input guard",
+      "native two-contact TouchEvent count is recorded",
+      "native second touch on weapons cannot pause the held steering contact",
+      "native multitouch release restores the next one-finger menu tap",
+      "native control drag away and back is not interpreted as a tap",
+      "paused menu retains native one-finger scrolling with the document locked",
+      "no JavaScript or recoverable input fault occurred"
+    ],
+    "neutralContactCases": [
+      {
+        "name": "simultaneous field contacts without a previous steering finger",
+        "passed": true,
+        "twoContactsObserved": true,
+        "nativeCancellationObserved": false,
+        "nativeEventsTrusted": true,
+        "firstPointerPrimary": true,
+        "firstPointerUpPrimary": true
+      },
+      {
+        "name": "simultaneous control then field contact; primary lifts first",
+        "passed": true,
+        "twoContactsObserved": true,
+        "nativeCancellationObserved": false,
+        "nativeEventsTrusted": true,
+        "firstPointerPrimary": true,
+        "firstPointerUpPrimary": true
+      },
+      {
+        "name": "simultaneous field then control contact; secondary lifts first",
+        "passed": true,
+        "twoContactsObserved": true,
+        "nativeCancellationObserved": false,
+        "nativeEventsTrusted": true,
+        "firstPointerPrimary": true,
+        "firstPointerUpPrimary": false
+      },
+      {
+        "name": "remaining secondary contact cannot re-arm controls with a third contact",
+        "passed": true,
+        "twoContactsObserved": true,
+        "nativeCancellationObserved": false,
+        "nativeEventsTrusted": true,
+        "firstPointerPrimary": true,
+        "firstPointerUpPrimary": true
+      },
+      {
+        "name": "one supplied wide contact crosses the weapons button",
+        "passed": true,
+        "twoContactsObserved": false,
+        "nativeCancellationObserved": false,
+        "nativeEventsTrusted": true,
+        "firstPointerPrimary": true,
+        "firstPointerUpPrimary": true
+      },
+      {
+        "name": "one fast left crossing with a single motion event",
+        "passed": true,
+        "twoContactsObserved": false,
+        "nativeCancellationObserved": false,
+        "nativeEventsTrusted": true,
+        "firstPointerPrimary": true,
+        "firstPointerUpPrimary": true
+      },
+      {
+        "name": "native cancellation of a steering contact",
+        "passed": true,
+        "twoContactsObserved": false,
+        "nativeCancellationObserved": true,
+        "nativeEventsTrusted": true,
+        "firstPointerPrimary": true,
+        "firstPointerUpPrimary": null
+      },
+      {
+        "name": "native cancellation of a pending control tap",
+        "passed": true,
+        "twoContactsObserved": false,
+        "nativeCancellationObserved": true,
+        "nativeEventsTrusted": true,
+        "firstPointerPrimary": true,
+        "firstPointerUpPrimary": null
+      },
+      {
+        "name": "native cancellation of simultaneous contacts",
+        "passed": true,
+        "twoContactsObserved": true,
+        "nativeCancellationObserved": true,
+        "nativeEventsTrusted": true,
+        "firstPointerPrimary": true,
+        "firstPointerUpPrimary": null
+      }
+    ],
+    "repeatedCycles": 12,
+    "freshTapAfterAllCases": true
+  },
+  "actualBossScene": {
+    "complete": true,
+    "version": "151.0.7922.34",
+    "observedActiveSecondsAfterContacts": 30.264,
+    "neutralContactCases": [
+      {
+        "name": "simultaneous field contacts without a previous steering finger",
+        "passed": true,
+        "twoContactsObserved": true,
+        "nativeCancellationObserved": false,
+        "nativeEventsTrusted": true,
+        "firstPointerPrimary": true,
+        "firstPointerUpPrimary": true
+      },
+      {
+        "name": "simultaneous control then field contact; primary lifts first",
+        "passed": true,
+        "twoContactsObserved": true,
+        "nativeCancellationObserved": false,
+        "nativeEventsTrusted": true,
+        "firstPointerPrimary": true,
+        "firstPointerUpPrimary": true
+      },
+      {
+        "name": "simultaneous field then control contact; secondary lifts first",
+        "passed": true,
+        "twoContactsObserved": true,
+        "nativeCancellationObserved": false,
+        "nativeEventsTrusted": true,
+        "firstPointerPrimary": true,
+        "firstPointerUpPrimary": false
+      },
+      {
+        "name": "remaining secondary contact cannot re-arm controls with a third contact",
+        "passed": true,
+        "twoContactsObserved": true,
+        "nativeCancellationObserved": false,
+        "nativeEventsTrusted": true,
+        "firstPointerPrimary": true,
+        "firstPointerUpPrimary": true
+      },
+      {
+        "name": "one supplied wide contact crosses the weapons button",
+        "passed": true,
+        "twoContactsObserved": false,
+        "nativeCancellationObserved": false,
+        "nativeEventsTrusted": true,
+        "firstPointerPrimary": true,
+        "firstPointerUpPrimary": true
+      },
+      {
+        "name": "one fast left crossing with a single motion event",
+        "passed": true,
+        "twoContactsObserved": false,
+        "nativeCancellationObserved": false,
+        "nativeEventsTrusted": true,
+        "firstPointerPrimary": true,
+        "firstPointerUpPrimary": true
+      },
+      {
+        "name": "native cancellation of a steering contact",
+        "passed": true,
+        "twoContactsObserved": false,
+        "nativeCancellationObserved": true,
+        "nativeEventsTrusted": true,
+        "firstPointerPrimary": true,
+        "firstPointerUpPrimary": null
+      },
+      {
+        "name": "native cancellation of a pending control tap",
+        "passed": true,
+        "twoContactsObserved": false,
+        "nativeCancellationObserved": true,
+        "nativeEventsTrusted": true,
+        "firstPointerPrimary": true,
+        "firstPointerUpPrimary": null
+      },
+      {
+        "name": "native cancellation of simultaneous contacts",
+        "passed": true,
+        "twoContactsObserved": true,
+        "nativeCancellationObserved": true,
+        "nativeEventsTrusted": true,
+        "firstPointerPrimary": true,
+        "firstPointerUpPrimary": null
+      }
+    ],
+    "repeatedSequence": {
+      "cycles": 12,
+      "cancelledCycles": 6,
+      "releasedCycles": 6,
+      "complete": true,
+      "before": {
+        "frameAt": 26587.8,
+        "audioBuffers": 46,
+        "audioBufferBytes": 6925568,
+        "audioState": "running"
+      },
+      "after": {
+        "frameAt": 27404.4,
+        "audioBuffers": 46,
+        "audioBufferBytes": 6925568,
+        "audioState": "running"
+      }
+    },
+    "freshTapAfterAllCases": true,
+    "report": {
+      "downloaded": true,
+      "bytes": 520071,
+      "records": 325,
+      "contiguous": true,
+      "optionsMatched": true,
+      "recoveredAfterControlledReload": true,
+      "contactEvidence": {
+        "records": 143,
+        "nativeSecondaryPointer": true,
+        "nativeTwoTouchCount": true,
+        "rawInputFields": false,
+        "nativeCancellation": true,
+        "suppressedCountReported": true
+      }
+    },
+    "unexpectedExternalRequests": []
+  },
+  "webkitBoundary": {
+    "complete": true,
+    "version": "26.5",
+    "checks": [
+      "native touch opens weapons after a fresh single tap",
+      "native touch opens pause after a fresh single tap",
+      "native touch opens home after a fresh single tap",
+      "contact observation precedes React root capture for a native touch",
+      "native touch totals are distinct from tracked pointer totals",
+      "native mouse click reaches the React handler",
+      "keyboard Enter retains deliberate control activation",
+      "explicit retargeted drag click cannot open a React control",
+      "explicit secondary touch click is stopped before React",
+      "release then native fresh tap opens the same control",
+      "no JavaScript or recoverable input fault occurred"
+    ],
+    "nativeMultitouch": false,
+    "fullCombatScene": false
+  },
+  "runtimeScope": {
+    "passed": true,
+    "applicationUnchangedFrom": "68c33d15f6f591477508cc9e0497d6c8a4c100c0",
+    "pins": {
+      "frontend": "e5d3ed85862fac8cea354b572939d622ce7be13c",
+      "api": "ccac7cd576a079771d7d7fe4f0085492ebbe6813",
+      "private-preview": "b733d4dc70b4ac407391720eab131dbaf1d60e37",
+      "verification/boss2-forensics-20261028/buildDevicePreview.mjs": "2e3b15025fc9dd721f13399bbdfbb1edd70a5efa"
+    },
+    "installationRewrites": [
+      "frontend/yarn.lock"
+    ],
+    "runtimeSourceWorktreeUnchanged": true
+  }
+}
