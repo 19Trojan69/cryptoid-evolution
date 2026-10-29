@@ -1,0 +1,148 @@
+{
+  "format": "cryptoid-window-only-blur-verification-v1",
+  "status": "passed-prepared-not-deployed",
+  "source": {
+    "commit": "dc2d7b76b23555e5c516aaa585f40519307af45c",
+    "tree": "4335db40b26971345370b7d785864c76195899e7"
+  },
+  "parent": "aba962553769e8ed7195f82f9295cf068d6effe0",
+  "counterexample": {
+    "oldObserverFailedNewElementBlurCase": true,
+    "actualRows": 3,
+    "expectedRows": 1,
+    "correctedLocalInputCases": 56,
+    "typescript": true,
+    "changedModuleLint": true
+  },
+  "ci": {
+    "run": 40848947984,
+    "url": "https://github.com/19Trojan69/cryptoid-evolution/actions/runs/40848947984",
+    "conclusion": "success",
+    "relevantCasesPerEngine": 78,
+    "isolatedPreviewCasesPerEngine": 24,
+    "typescriptAndChangedModuleLint": true,
+    "artifacts": [
+      {
+        "id": 12885997426,
+        "name": "window-focus-evidence-chromium",
+        "bytes": 1529272,
+        "digest": "sha256:5961e4b01bf34445e732a84003a3ddf2046cf62d106d38e29daa605e2d784238",
+        "downloaded": true,
+        "sha256AndZipIntegrityVerified": true
+      },
+      {
+        "id": 12885973684,
+        "name": "window-focus-evidence-webkit",
+        "bytes": 20253,
+        "digest": "sha256:442ca4395081daac58f78901bdbd27820008d7ede6f71e4ac5bee6814ae9a5c1",
+        "downloaded": true,
+        "sha256AndZipIntegrityVerified": true
+      }
+    ]
+  },
+  "scope": {
+    "passed": true,
+    "exactDiagnosticHunks": 1,
+    "gameControllerAndSingleFingerControlsUnchanged": true,
+    "installationRewrites": [
+      "frontend/yarn.lock"
+    ],
+    "frontendInventoryChecked": true
+  },
+  "chromium": {
+    "job": 123363311186,
+    "version": "151.0.7922.34",
+    "complete": true,
+    "originalBoundaryChecks": 18,
+    "elementFocus": {
+      "complete": true,
+      "physicalDevice": false,
+      "nativeMultitouch": true,
+      "startedAt": 1793265752291,
+      "events": [
+        {
+          "window": false,
+          "element": true,
+          "trusted": true
+        }
+      ],
+      "endedAt": 1793265752352
+    },
+    "neutralCases": 9,
+    "neutralComplete": true,
+    "repeatedCycles": 12
+  },
+  "webkit": {
+    "job": 123363311727,
+    "version": "26.5",
+    "complete": true,
+    "originalBoundaryChecks": 11,
+    "elementFocus": {
+      "complete": true,
+      "physicalDevice": false,
+      "nativeMultitouch": false,
+      "startedAt": 1793265759783,
+      "events": [
+        {
+          "window": false,
+          "element": true,
+          "trusted": true
+        }
+      ],
+      "endedAt": 1793265759801
+    },
+    "fullGameAccepted": false
+  },
+  "actualBossScene": {
+    "complete": true,
+    "elementFocus": {
+      "complete": true,
+      "physicalDevice": false,
+      "nativeMultitouch": true,
+      "startedAt": 1793265810009,
+      "events": [
+        {
+          "window": false,
+          "element": true,
+          "trusted": true
+        }
+      ],
+      "endedAt": 1793265810085
+    },
+    "neutralCases": 9,
+    "observedActiveSecondsAfterInput": 30.204,
+    "report": {
+      "downloaded": true,
+      "bytes": 516182,
+      "records": 328,
+      "contiguous": true,
+      "optionsMatched": true,
+      "recoveredAfterControlledReload": true,
+      "contactEvidence": {
+        "records": 144,
+        "nativeSecondaryPointer": true,
+        "nativeTwoTouchCount": true,
+        "rawInputFields": false,
+        "nativeCancellation": true,
+        "elementFocusPreservesContactCount": true,
+        "noFalseWindowBlurInFocusCase": true,
+        "suppressedCountReported": true
+      }
+    },
+    "unexpectedExternalRequests": []
+  },
+  "limits": {
+    "whiteScreenCauseEstablished": false,
+    "physicalDeviceAccepted": false,
+    "nativeRamOrGpuCauseMeasured": false,
+    "finalUnwrittenIntervalCanBeLost": true
+  },
+  "publication": {
+    "deployed": false,
+    "previousProtectedPreviewStillSource": "68c33d15f6f591477508cc9e0497d6c8a4c100c0",
+    "mainUpdated": false,
+    "pr200Updated": false,
+    "mainnetChanged": false,
+    "rawOwnerReportCopiedToRepository": false
+  }
+}
