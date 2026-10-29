@@ -1,6 +1,7 @@
 // Coarse owner-only evidence. Coordinates exist only in the live accumulator;
 // they are never emitted, stored or sent. Existing input callbacks drive it.
-export const INPUT_OPERATIONS = ['gesture-start', 'gesture-motion', 'gesture-end', 'navigation'] as const;
+import { CONTACT_EVENTS, CONTACT_TARGETS, CONTACT_LIMITS } from './contactDiagnostics.ts';
+export const INPUT_OPERATIONS = ['gesture-start', 'gesture-motion', 'gesture-end', 'navigation', 'contact-state'] as const;
 const reasons = ['released', 'cancelled', 'capture-lost', 'blur', 'pagehide', 'resize', 'fullscreen',
   'hidden', 'touch-ended', 'touch-cancelled', 'replaced', 'not-playing', 'geometry', 'fault', 'disposed', 'reset'] as const;
 type Contact = { clientX: number; clientY: number; pointerType: string };
@@ -11,6 +12,19 @@ export function cleanInputDiagnostic(input: unknown): Details | null {
   const value = input as Details;
   if (!INPUT_OPERATIONS.includes(value.operation as typeof INPUT_OPERATIONS[number])) return null;
   const result: Details = { operation: value.operation };
+  if (value.operation === 'contact-state') {
+    if (!CONTACT_EVENTS.includes(value.event as typeof CONTACT_EVENTS[number])) return null;
+    result.event = value.event;
+    if (CONTACT_TARGETS.includes(value.target as typeof CONTACT_TARGETS[number])) result.target = value.target;
+    if (typeof value.inputSource === 'string' && ['touch', 'mouse', 'pen', 'other'].includes(value.inputSource)) result.inputSource = value.inputSource;
+    for (const key of ['trackedPointers', 'reportedTouches', 'suppressed']) {
+      const n = value[key], maximum = key === 'suppressed' ? 60_000 : CONTACT_LIMITS.pointers;
+      if (Number.isSafeInteger(n) && Number(n) >= 0 && Number(n) <= maximum) result[key] = n;
+    }
+    for (const key of ['primaryFlag', 'steeringActive', 'playing', 'cancelable', 'truncated'])
+      if (typeof value[key] === 'boolean') result[key] = value[key];
+    return result;
+  }
   const enums = value.operation === 'navigation'
     ? { navigation: ['popstate', 'hashchange'] }
     : { inputSource: ['touch', 'mouse', 'pen', 'other'], startRegion: ['left', 'right', 'top', 'bottom', 'interior'],

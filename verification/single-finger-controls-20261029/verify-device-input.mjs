@@ -14,9 +14,11 @@ export async function verifyDeviceInput(page,context){
   for(let n=1;n<=12;n++)await send('touchMove',[{id:1,x:from.x+(over.x-from.x)*n/12,y:from.y+(over.y-from.y)*n/12}]);
   await stillPlaying();await send('touchEnd',[]);await stillPlaying();
   assert.notEqual((await state()).player.x,before.player.x);checks.push('native steering crosses the actual weapons button without opening it');
+  await page.waitForTimeout(1100);
   await send('touchStart',[from]);await send('touchStart',[from,{...over,id:2}]);
   await send('touchEnd',[from]);await stillPlaying();
   await send('touchEnd',[]);await stillPlaying();checks.push('native second touch on weapons does not pause active steering');
+  await page.waitForTimeout(1100);
   await page.touchscreen.tap(over.x,over.y);
   await page.waitForFunction(()=>window.__crossDeviceTest.inspect().weaponMenuOpen);
   assert.equal((await state()).status,'paused');assert.equal(await page.evaluate(()=>window.__bossLabPauseEvents.at(-1).pauseReason),'weapon-menu');

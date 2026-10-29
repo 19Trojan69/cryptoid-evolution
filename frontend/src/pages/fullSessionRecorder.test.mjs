@@ -70,6 +70,19 @@ test('non-owner creation, reading and download never obtain a storage host', asy
   assert.equal(await exportOwnerFullSession(async () => ({ canAdmin: true }), forbidden, 'run-1', () => false), null);
   assert.equal(touched, 0); assert.equal(sessionDiagnosticsActive(), false);
 });
+test('secondary-contact evidence round-trips through the full local report without raw inputs', async () => {
+  const f = fixture(), recorder = f.recorder(); recorder.start();
+  sessionDiagnostic('input', { operation: 'contact-state', event: 'touchstart', target: 'field',
+    trackedPointers: 2, reportedTouches: 2, inputSource: 'touch', playing: true, steeringActive: false,
+    truncated: false, suppressed: 0, pointerId: 907, clientX: 444, pressure: .6, token: 'private-token' });
+  recorder.finish();
+  const [summary] = await captures(f), data = await contents(f, summary.id);
+  assert.equal(data.integrity.contiguous, true);
+  assert.deepEqual(data.records.filter(r => r.kind === 'input').map(r => r.data), [{
+    operation: 'contact-state', event: 'touchstart', target: 'field', inputSource: 'touch',
+    trackedPointers: 2, reportedTouches: 2, suppressed: 0, steeringActive: false, playing: true, truncated: false }]);
+  assert.ok(!JSON.stringify(data).includes('private-token')); assert.ok(!JSON.stringify(data).includes('pointerId'));
+});
 test('a whole 500-stage timeline retains its start and all intermediate phases beyond the old rolling window', async () => {
   const f = fixture(), recorder = f.recorder(); recorder.start();
   for (let sector = 1; sector <= 500; sector++) {

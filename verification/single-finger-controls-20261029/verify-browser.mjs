@@ -41,6 +41,10 @@ try {
   for(const id of ['weapons','pause','home']){
     await touch('#'+id);await check('native touch opens '+id+' after a fresh single tap',!(await state()).playing);await resume();
   }
+  const order=(await state()).contactOrder;
+  const firstDown=order.findIndex(row=>row.stage==='contact'&&row.event==='pointerdown');
+  await check('contact observation precedes React root capture for a native touch',firstDown>=0&&order[firstDown+1]?.stage==='root-capture');
+  await check('native touch totals are distinct from tracked pointer totals',order.some(row=>row.event==='touchstart'&&row.reportedTouches===1));
   await page.locator('#weapons').click();await check('native mouse click reaches the React handler',!(await state()).playing);await resume();
   await page.locator('#weapons').focus();await page.keyboard.press('Enter');await check('keyboard Enter retains deliberate control activation',!(await state()).playing);await resume();
   const dispatch=async(target,type,data)=>page.evaluate(({target,type,data})=>document.querySelector(target).dispatchEvent(new PointerEvent(type,
@@ -61,11 +65,15 @@ try {
     const cdp=await context.newCDPSession(page),box=await page.locator('#weapons').boundingBox();
     const end={x:box.x+box.width/2,y:box.y+box.height/2,id:1},start={x:320,y:700,id:1};
     const send=(type,touchPoints)=>cdp.send('Input.dispatchTouchEvent',{type,touchPoints});
+    await page.waitForTimeout(1100);
     before=await state();await send('touchStart',[start]);
     for(let n=1;n<=12;n++)await send('touchMove',[{x:start.x+(end.x-start.x)*n/12,y:start.y+(end.y-start.y)*n/12,id:1}]);
     await send('touchEnd',[]);
     await check('native touch crosses weapons and releases without opening it',(await state()).playing&&(await state()).opens===before.opens&&(await state()).moves>before.moves);
     await send('touchStart',[start]);await send('touchStart',[start,{...end,id:2}]);
+    const contacts=(await state()).contactOrder;
+    await check('ignored native secondary contact is recorded before the input guard',contacts.some(row=>row.event==='pointerdown'&&row.trackedPointers===2&&row.primaryFlag===false));
+    await check('native two-contact TouchEvent count is recorded',contacts.some(row=>row.event==='touchstart'&&row.reportedTouches===2));
     await send('touchEnd',[start]);
     await check('native second touch on weapons cannot pause the held steering contact',(await state()).playing&&(await state()).opens===before.opens);
     await send('touchEnd',[]);await touch('#weapons');

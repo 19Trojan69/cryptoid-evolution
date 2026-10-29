@@ -124,6 +124,7 @@ function Menu() {
     {preparation === 'ready' && <button className="device-preview-primary" onClick={start}>Boss-2-Test öffnen</button>}
     <p className="device-preview-note">Bilder und Testszene werden vor dem Spielen geladen. Der Bosskampf öffnet zunächst angehalten. Tippe dort auf „Fortsetzen“, um ihn zu starten.</p>
     <p>Einfinger-Steuerung: Steuern, loslassen und die Waffentaste neu antippen. Über die Taste hinwegziehen öffnet kein Menü. Zusätzliche Kontakte öffnen während der Steuerung kein Menü. Echte Pausen werden nur von dir fortgesetzt.</p>
+    <p>Kontakt-Diagnose aktiv: Zusätzliche Berührungen und Abbruchsignale werden begrenzt im lokalen Bericht erfasst. Kontaktkoordinaten und Fingerdruck werden nicht gespeichert. Das misst keinen iPhone-Arbeitsspeicher.</p>
     <h2>Nach einer Pause oder einem Abbruch</h2>
     <p>Diese Testadresse erneut öffnen. Vor dem nächsten Test den letzten Bericht vorbereiten und speichern oder teilen. Die Aufzeichnung bleibt auf diesem Gerät; es gibt keinen automatischen Upload.</p>
     <p role="status">{message}</p>

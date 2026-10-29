@@ -72,7 +72,13 @@ try{
  assert.equal(report.isolatedGuest,true);assert.equal(report.automaticTransmission,false);assert.equal(report.fullSession.integrity.contiguous,true);
  assert.ok(report.fullSession.records.some(row=>row.kind==='pause'&&row.data.pauseReason==='manual-pause'));
  assert.equal(report.testOptions.scene,'reactor');assert.equal(report.testOptionsMatchedByStartTime,true);
+ const contacts=report.fullSession.records.filter(row=>row.kind==='input'&&row.data.operation==='contact-state');
+ assert.ok(contacts.some(row=>row.data.event==='pointerdown'&&row.data.trackedPointers===2&&row.data.primaryFlag===false),'ignored native second pointer reaches the recovered full report');
+ assert.ok(contacts.some(row=>row.data.event==='touchstart'&&row.data.reportedTouches===2),'native two-contact count reaches the recovered full report');
+ assert.ok(contacts.some(row=>row.data.event==='click'&&row.data.target==='weapons'&&row.data.playing===true),'pre-handler weapon click remains distinct from the actual pause event');
+ assert.ok(contacts.every(row=>!['pointerId','clientX','clientY','width','height','pressure','token','targetText'].some(key=>key in row.data)));
  summary.report={downloaded:true,bytes:JSON.stringify(report).length,records:report.fullSession.integrity.records,contiguous:true,optionsMatched:true,recoveredAfterControlledReload:true};
+ summary.report.contactEvidence={records:contacts.length,nativeSecondaryPointer:true,nativeTwoTouchCount:true,rawInputFields:false};
  await page.getByRole('button',{name:'Begrenzten lokalen Bericht vorbereiten',exact:true}).click();
  await page.getByRole('button',{name:'Bericht speichern',exact:true}).waitFor();
  await page.screenshot({path:output+'/recovered-report.png'});

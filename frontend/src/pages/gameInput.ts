@@ -3,6 +3,7 @@ import { controlAreaTop, type ControlZone } from './controlPreferences.ts';
 import { createInputDiagnostics } from './inputDiagnostics.ts';
 import { sessionDiagnostic, sessionDiagnosticsActive } from '../lib/sessionDiagnosticEvents.ts';
 import { createSingleFingerControls } from './singleFingerControls.ts';
+import { observeContactDiagnostics } from './contactDiagnostics.ts';
 
 type Ref<T> = { current: T };
 export type TouchOrigin = { x: number; y: number; player: PlayerPosition };
@@ -30,6 +31,9 @@ export const canStartSteering = (x: number, y: number, bounds: Bounds, area: Con
 export function bindGameInput(field: HTMLElement, options: Options) {
   const doc = field.ownerDocument;
   const win = doc.defaultView!;
+  const stopContacts = observeContactDiagnostics(field, { active: sessionDiagnosticsActive,
+    playing: options.playing, steering: () => options.pointer.current !== null,
+    emit: data => sessionDiagnostic('input', data) });
   const evidence = createInputDiagnostics(sessionDiagnosticsActive, data => sessionDiagnostic('input', data));
   const controlTap = createSingleFingerControls(options.playing, () => options.pointer.current !== null);
   const reset = (reason: Parameters<typeof evidence.end>[0] = 'reset') => {
@@ -156,5 +160,5 @@ export function bindGameInput(field: HTMLElement, options: Options) {
       if (performance.now() - lastTouch > 1500) controlTap.up(mouse(event));
     }) as EventListener, true);
   }
-  return { reset: () => reset(), dispose: () => { reset('disposed'); listeners.forEach(remove => remove()); } };
+  return { reset: () => reset(), dispose: () => { stopContacts(); reset('disposed'); listeners.forEach(remove => remove()); } };
 }
