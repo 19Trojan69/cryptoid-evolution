@@ -77,6 +77,14 @@ try {
     const point={x:scroll.x+scroll.width/2,y:scroll.y+scroll.height-30,id:1};
     await send('touchStart',[point]);for(let n=1;n<=12;n++)await send('touchMove',[{...point,y:point.y-n*15}]);await send('touchEnd',[]);
     await check('paused menu retains native one-finger scrolling with the document locked',await page.locator('[data-game-scroll]').evaluate(node=>node.scrollTop>40)&&await page.evaluate(()=>scrollY===0));
+    const settled=await page.locator('[data-game-scroll]').evaluate(node=>new Promise(resolve=>{
+      let previous=node.scrollTop,stableAt=performance.now();
+      const deadline=setTimeout(()=>resolve(false),4000);
+      const poll=()=>{const at=performance.now();if(node.scrollTop!==previous){previous=node.scrollTop;stableAt=at;}
+        if(at-stableAt>=350){clearTimeout(deadline);resolve(true);}else requestAnimationFrame(poll);};
+      requestAnimationFrame(poll);
+    }));
+    assert.ok(settled,'native menu momentum settles before the next deliberate tap');
     await resume();
   }
   await check('no JavaScript or recoverable input fault occurred',errors.length===0&&(await state()).faults.length===0);

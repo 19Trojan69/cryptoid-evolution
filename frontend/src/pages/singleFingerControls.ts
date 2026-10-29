@@ -7,7 +7,7 @@ const control = (target: EventTarget | null) => (target as Element | null)?.clos
 // Crossing it during a drag or touching it with another finger cannot activate it.
 // Paused menus keep their normal scrolling and keyboard/assistive activation.
 export function createSingleFingerControls(playing: () => boolean, steering: () => boolean) {
-  let tap: { id: number; target: Element; x: number; y: number; released: boolean } | null = null;
+  let tap: { id: number; source: string; target: Element; x: number; y: number; released: boolean } | null = null;
   const move = (event: Contact) => {
     if (tap?.id === event.pointerId && (!Number.isFinite(event.clientX) || !Number.isFinite(event.clientY) ||
       Math.hypot(event.clientX - tap.x, event.clientY - tap.y) > 12)) tap = null;
@@ -21,7 +21,7 @@ export function createSingleFingerControls(playing: () => boolean, steering: () 
         event.pointerType === 'mouse' && event.buttons !== 1 ||
         !Number.isFinite(event.clientX) || !Number.isFinite(event.clientY)) return;
       const target = control(event.target);
-      if (target) tap = { id: event.pointerId, target, x: event.clientX, y: event.clientY, released: false };
+      if (target) tap = { id: event.pointerId, source: event.pointerType, target, x: event.clientX, y: event.clientY, released: false };
     },
     move,
     up(event: Contact) {
@@ -40,8 +40,11 @@ export function createSingleFingerControls(playing: () => boolean, steering: () 
       tap = null;
       // Primary ownership was verified on pointerdown. A later click need not
       // repeat that flag after the pointer has already been released.
+      // WebKit can translate the validated touch into a mouse click with a
+      // different ID. A second contact still cannot arm or retain this tap.
       return Boolean(current?.released && current.target === target &&
-        (event.pointerId === undefined || event.pointerType === undefined || event.pointerId === current.id));
+        (event.pointerId === undefined || !event.pointerType || event.pointerId === current.id ||
+          current.source === 'touch' && event.pointerType === 'mouse'));
     },
   };
 }

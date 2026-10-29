@@ -1,5 +1,5 @@
 name: Single-finger control acceptance
-run-name: Verify primary tap ownership through native click dispatch
+run-name: Verify one-finger taps across Chromium and WebKit click translation
 on:
   push:
     branches: [codex/single-finger-controls-20261029]
