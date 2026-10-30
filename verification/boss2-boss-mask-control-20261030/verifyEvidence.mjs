@@ -5,7 +5,18 @@ const read = path => JSON.parse(readFileSync(new URL(path, import.meta.url), 'ut
 const r = read('./results.json'), c = read('./evidence/synthetic-mask-comparison.json');
 assert.equal(r.runtime.source, 'eb018b2b5e422aaf65beb66a64c77b870b3c156e');
 assert.equal(r.runtime.tree, 'caf5d0fd529b58911b88294afc9b52e118d35bdd');
-assert.equal(r.whiteScreenFixed, false); assert.equal(r.physicalDeviceResult, null);
+assert.equal(r.whiteScreenFixed, false);
+const owner = read('./evidence/owner-mask-control-completion.json');
+assert.equal(owner.runtimeSource, r.runtime.source); assert.equal(owner.runtimeTree, r.runtime.tree);
+assert.equal(owner.ownerObservation.browser, 'Pi Browser'); assert.equal(owner.ownerObservation.browserConfirmedByOwner, true);
+assert.equal(owner.ownerObservation.whiteScreenReported, false); assert.equal(owner.ownerObservation.normalExitReported, true);
+assert.equal(owner.ownerObservation.fingerSlipAndRapidPositionChangesWithoutFailureReported, true);
+assert.equal(owner.savedActiveMs, 634532); assert.equal(owner.displayedTime, '10:34'); assert.equal(owner.savedMode, 'ended');
+assert.equal(owner.clockAndBriefRunMatch, true); assert.equal(owner.fullRecording, false); assert.equal(owner.protection, true);
+assert.equal(owner.fullSession, null); assert.equal(owner.normalHomeConfirmationEndRecorded, true);
+assert.equal(owner.collectorDrops, 395); assert.equal(owner.activeDocumentStartedBeforeRun, true);
+assert.equal(owner.allRetainedBootsBeforeRunStart, true); assert.equal(owner.nativeTerminationCauseMeasured, false);
+assert.equal(r.physicalDeviceResult.evidence, 'evidence/owner-mask-control-completion.json');
 assert.equal(r.runtime.deviceBranch, 'codex/boss2-boss-mask-device-20261030');
 assert.equal(r.publicMainSource, 'ce073547cf573375d141bf846f70e294138dbd73');
 for (const key of ['weaponSimulationRetained', 'originalBossHullImageRetained', 'originalElementsAndMaskStylesRetained', 'originalPresentationComponentsAndHooksRetained'])
@@ -63,4 +74,4 @@ assert.equal(h.screenshotIsOwnerPhoneResult, false);
 assert.equal(createHash('sha256').update(readFileSync(new URL(h.screenshot, import.meta.url))).digest('hex'), h.screenshotSha256);
 assert.equal(r.nextPhoneProtocol.targetActiveMinutes, 10);
 console.log('CRYPTOID_BOSS_MASK_EVIDENCE ' + JSON.stringify({ passed: true, source: r.runtime.source,
-  syntheticComparisons: 4, physicalDeviceResult: null, whiteScreenFixed: false }));
+  syntheticComparisons: 4, physicalDeviceResult: r.physicalDeviceResult, whiteScreenFixed: false }));

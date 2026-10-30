@@ -1,0 +1,43 @@
+{
+  "ownerObservation": {
+    "browser": "Pi Browser",
+    "browserConfirmedByOwner": true,
+    "whiteScreenReported": false,
+    "normalExitReported": true,
+    "problemsReported": false,
+    "fingerSlipAndRapidPositionChangesWithoutFailureReported": true,
+    "verbatim": "Das Spiel lief nun ohne Probleme. Man konnte von einem Punkt zum anderen springen, auch mit dem Finger abrutschen. Es gab wirklich keine Probleme. Whitescreen kam auch keiner. Ich bin ganz normal ausgestiegen und habe auf den Pi-Browser gespielt"
+  },
+  "runtimeSource": "eb018b2b5e422aaf65beb66a64c77b870b3c156e",
+  "runtimeTree": "caf5d0fd529b58911b88294afc9b52e118d35bdd",
+  "configuredTreatment": "flat-live-scene-original-background-original-boss-no-weapon-canvas-hidden-hull-masks",
+  "reportFilename": "cryptoid-diagnose-2026-10-30T14-12-11-089Z-f30935ec.json",
+  "reportBytes": 7990,
+  "reportSha256": "ff5d4cafadd77be2bef99d4124a4357bbe699699a8bf28b56c4101c28852b412",
+  "rawOwnerReportCommitted": false,
+  "savedActiveMs": 634532,
+  "displayedTime": "10:34",
+  "savedMode": "ended",
+  "unobservedGaps": 0,
+  "clockAndBriefRunMatch": true,
+  "fullRecording": false,
+  "protection": true,
+  "fullSession": null,
+  "retainedEvents": 32,
+  "collectorDrops": 395,
+  "normalHomeConfirmationEndRecorded": true,
+  "activeDocumentStartedBeforeRun": true,
+  "allRetainedBootsBeforeRunStart": true,
+  "lastSessionActive": false,
+  "browserIdentityMeasuredByReport": false,
+  "physicalSceneDomMeasuredByReport": false,
+  "nativeTerminationCauseMeasured": false,
+  "whiteScreenFixed": false,
+  "limits": [
+    "Owner explicitly reports no White Screen/problems, including finger slips and rapid position changes, and normal exit in Pi Browser; white pixels, physical gestures and browser identity are not measured by this JSON.",
+    "The retained tail has only 32 events with 395 collector drops/evictions/rate limits; dropped records are not crashes or errors. This is not a complete contact or pause history.",
+    "The original boss masked layers are configured hidden by this frozen source and validated in desktop DOM checks; the phone report has no independent DOM count.",
+    "One successful 10:34 run against the prior visible-mask failure at 08:30 is a promising group comparison, not proof of a native mechanism, necessity/sufficiency or permanent repair. Other native/device conditions were not controlled."
+  ],
+  "conclusion": "Owner-confirmed Pi Browser completion at 10:34, source-paired normal Home/confirmation/end and no reported White Screen despite finger slips/rapid contact changes. Preserve this frozen successful condition and address. Next isolate the two masked layers by restoring only the original boss reflection while keeping hull heat hidden and all previous controls/game behavior."
+}

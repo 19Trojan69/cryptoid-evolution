@@ -2,7 +2,18 @@
   "version": 1,
   "kind": "private-boss-masked-layer-comparison",
   "whiteScreenFixed": false,
-  "physicalDeviceResult": null,
+  "physicalDeviceResult": {
+    "evidence": "evidence/owner-mask-control-completion.json",
+    "browser": "Pi Browser",
+    "ownerConfirmedBrowser": true,
+    "savedActiveMs": 634532,
+    "displayedTime": "10:34",
+    "savedMode": "ended",
+    "whiteScreenReported": false,
+    "normalExitReported": true,
+    "fingerSlipAndRapidPositionChangesWithoutFailureReported": true,
+    "nativeTerminationCauseMeasured": false
+  },
   "runtime": {
     "source": "eb018b2b5e422aaf65beb66a64c77b870b3c156e",
     "tree": "caf5d0fd529b58911b88294afc9b52e118d35bdd",
@@ -153,6 +164,13 @@
     "targetActiveMinutes": 10,
     "recordUnexpectedPauseSeparatelyFromWhiteScreen": true,
     "crashAction": "Reopen exact address and save/share latest report before a new run",
-    "ownerOutcomeForThisCondition": null
+    "ownerOutcomeForThisCondition": "Pi Browser, 10:34, no problems/White Screen even with finger slips/rapid position changes; normal exit"
+  },
+  "nextComparison": {
+    "kind": "boss-reflection-only-toggle",
+    "restoreOnly": ".sector-boss .hull-reflection",
+    "keepHidden": ".sector-boss .hull-heat-layer",
+    "retainSuccessfulFrozenSourceAndAddress": true,
+    "nativeCauseProven": false
   }
 }
