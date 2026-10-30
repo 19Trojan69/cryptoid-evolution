@@ -1,0 +1,60 @@
+{
+  "kind": "assistant-cloud-Chromium-observation",
+  "source": "089d2267dc504611ecbf912b4422f3fb5f5cecf2",
+  "physicalDevice": false,
+  "fullRecording": false,
+  "unrequestedTechnicalPauseObserved": true,
+  "technicalAlertVisible": true,
+  "whiteScreenObserved": false,
+  "pausedActiveMs": 48551.10000000149,
+  "briefSequence": [
+    {
+      "mode": "running",
+      "elapsedMs": 0
+    },
+    {
+      "mode": "stalled",
+      "elapsedMs": 42578.60000000149
+    },
+    {
+      "mode": "running",
+      "elapsedMs": 42578.60000000149
+    },
+    {
+      "mode": "stalled",
+      "elapsedMs": 48551.10000000149
+    },
+    {
+      "mode": "paused",
+      "elapsedMs": 48551.10000000149
+    }
+  ],
+  "briefDrops": 0,
+  "windowErrorOrBlurInRetainedTail": false,
+  "pauseReasonPreserved": false,
+  "appConsoleErrorObserved": false,
+  "unrelatedBrowserExtensionErrorsObserved": true,
+  "extensionAsCauseProven": false,
+  "manualResumeWorked": true,
+  "normalHomeExitWorked": true,
+  "finalSavedMs": 61237.20000000298,
+  "finalTime": "01:01",
+  "unobservedGaps": 1,
+  "reportSourceMatches": true,
+  "pairedBriefAndClock": true,
+  "fullSession": null,
+  "visualDom": {
+    "sceneCanvases": 1,
+    "bossCanvasPixels": 590976,
+    "originalBossImages": 1,
+    "bossImageReady": true,
+    "flatBosses": 0,
+    "flatShips": 1,
+    "detailedNonBossShips": 0,
+    "backgroundStarCircles": 227,
+    "backgroundPlanets": 4,
+    "reactorDisplay": "none",
+    "reactorRects": 0
+  },
+  "limits": "This is a technical pause observed in the assistant's cloud desktop browser during UI inspection, not an owner phone White Screen, native termination cause or established application bug. The exact interruption reason is not retained after later normal performance checkpoints. Preserve this result alongside the passing short CI comparisons."
+}
