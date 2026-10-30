@@ -20,7 +20,11 @@ export function flatVisualModule(path) {
 export const originalImpact = `const ImpactEffectView = memo(({effect}:{effect:Effect}) => combatVarietyEnabled && (effect.kind === "explosion" || effect.kind === "shatter") && effect.sprite !== undefined && effect.debrisColor
   ? <CanvasImpact effect={effect} debris={shipDebris(effect)} original={<OriginalImpactEffectView effect={effect}/>} />
   : <OriginalImpactEffectView effect={effect}/>);`;
-export const flatImpact = `const ImpactEffectView = memo(({effect}:{effect:Effect}) => <i className="diagnostic-flat-impact" style={{ left: effect.x, top: effect.y }} aria-hidden="true" />);`;
+export const flatImpact = `const ImpactEffectView = memo(({effect}:{effect:Effect}) => {
+  // Preserve the original definitions for exact reversal without mounting them.
+  void CanvasImpact; void OriginalImpactEffectView;
+  return <i className="diagnostic-flat-impact" style={{ left: effect.x, top: effect.y }} aria-hidden="true" />;
+});`;
 const oldRoot = '<main className="game-shell" data-effects-paused=';
 const newRoot = '<main className="game-shell diagnostic-flat-scene" data-effects-paused=';
 export function flatGameScene(source) {
