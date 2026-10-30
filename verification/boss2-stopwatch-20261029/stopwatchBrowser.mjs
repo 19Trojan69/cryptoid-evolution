@@ -74,7 +74,9 @@ export function mountStopwatch(host = window) {
           visible: doc.visibilityState !== 'hidden' };
       } catch { /* A diagnostic clock cannot interrupt the game. */ }
     }
-    render(clock.observe(snapshot));
+    const view = clock.observe(snapshot);
+    render(view);
+    host.dispatchEvent(new host.CustomEvent('cryptoid:diagnostic-clock', { detail: view }));
   }
   const pagehide = () => sample();
   const visibility = () => sample();
@@ -93,3 +95,4 @@ export function mountStopwatch(host = window) {
 }
 
 if (typeof window !== 'undefined' && typeof document !== 'undefined') mountStopwatch();
+

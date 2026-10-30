@@ -5,7 +5,9 @@ import { readDeviceReturnEvidence } from './deviceReturnEvidence.mjs';
 import { readFullSessionSummaries, exportFullSession, settleFullSessionWrites } from '../../frontend/src/pages/fullSessionStore.ts';
 import { readFlightRecorders } from '../../frontend/src/pages/flightRecorderReport.mjs';
 import { readCrashTails } from '../../frontend/src/pages/crashTail.ts';
-import { fullSessionText, fullSessionTextPart, shareableFullSessionFile } from '../../frontend/src/pages/fullSessionTransfer.ts';
+import { fullSessionText, fullSessionTextPart } from '../../frontend/src/pages/fullSessionTransfer.ts';
+import { readBrief, readSavedStopwatch, reportIdentity, shareReportFile } from '../boss2-brief-report-20261030/briefState.mjs';
+import { installBriefDiagnostics } from '../boss2-brief-report-20261030/briefBrowser.mjs';
 import { recordApplicationBoot } from '../../frontend/src/pages/reloadDiagnostics.ts';
 import { primeGameAudio } from '../../frontend/src/pages/gameAudio.ts';
 import { requestGameFullscreen } from '../../frontend/src/pages/gameFullscreen.ts';
@@ -21,7 +23,7 @@ recordApplicationBoot(window);
 
 function Menu() {
   const navigate = useNavigate();
-  const [options, setOptions] = useState(browserDeviceOptions);
+  const [options, setOptions] = useState(() => ({ ...browserDeviceOptions(), diagnostics: false }));
   const downloadUrl = useRef(null);
   const warmLease = useRef(null), mounted = useRef(true);
   const [preparation, setPreparation] = useState('cold');
@@ -40,8 +42,10 @@ function Menu() {
       setSessions(result.sessions);
       const tails = readCrashTails(window);
       const lastPause = tails.sessions.flatMap(tail => tail.events || []).filter(event => event.kind === 'pause').sort((a, b) => a.at - b.at).at(-1);
-      setMessage(result.sessions.length ? `${result.sessions.length} Diagnosebericht(e) vorhanden${lastPause ? ' · Letzte Pause: ' + lastPause.data.pauseReason : ''}`
-        : result.storage !== 'available' ? 'Vollständige Speicherung nicht verfügbar. Der begrenzte lokale Bericht bleibt abrufbar, soweit gespeichert.' : 'Bereit. Noch kein Testlauf gespeichert.');
+      const brief = readBrief({ getItem: key => window.localStorage.getItem(key) });
+      setMessage(result.sessions.length ? `${result.sessions.length} Vollbericht(e) vorhanden${lastPause ? ' · Letzte Pause: ' + lastPause.data.pauseReason : ''}`
+        : brief.latest ? 'Kurzbericht für den letzten Test vorhanden. Vollaufzeichnung für diesen Lauf: ' + (brief.latest.options.fullRecording ? 'ein.' : 'aus.')
+        : 'Bereit. Die Kurzdiagnose startet mit „Fortsetzen“.');
     }).catch(() => { if (active) setMessage('Lokaler Speicher nicht verfügbar. Ein Bericht kann nach einem Abbruch fehlen.'); });
     return () => { active = false; };
   }, []);
@@ -80,7 +84,12 @@ function Menu() {
       const history = (() => { try { return readDeviceRuns(localStorage); } catch { return []; } })();
       const startedAt = sessions.find(session => session.id === id)?.startedAt;
       const matched = startedAt ? history.filter(row => row.at <= startedAt).at(-1) : null;
-      const details = { version: 1, format: 'cryptoid-isolated-boss2-device-report',
+      const store = { getItem: key => window.localStorage.getItem(key) };
+      const stopwatch = readSavedStopwatch(store), briefDiagnostics = readBrief(store), identity = reportIdentity(window);
+      const details = { version: 2, format: 'cryptoid-isolated-boss2-device-report',
+        reportId: identity.reportId, preparedAt: identity.preparedAt, selectedFullSessionId: id || null,
+        stopwatch, briefDiagnostics, stopwatchLinkedToSelectedFullSession: false,
+        briefMatchesLatestStopwatch: !!stopwatch.latest && stopwatch.latest.id === briefDiagnostics.latest?.clock.id,
         source: __CRYPTOID_BUILD__, isolatedGuest: true, testOptions: matched,
         testOptionsHistory: history, testOptionsMatchedByStartTime: !!matched,
         truePiAuthentication: false, actualPhysicalDeviceVerified: false,
@@ -88,8 +97,8 @@ function Menu() {
         flightRecorders: readFlightRecorders(window), crashTails: readCrashTails(window),
         returnEvidence: readDeviceReturnEvidence(window) };
       const blob = new Blob([JSON.stringify(details).slice(0, -1), ',"fullSession":', full || 'null', '}'], { type: 'application/json' });
-      setPrepared({ blob, id: id || 'isolated-boss2', name: 'cryptoid-boss2-diagnose.json' });
-      setMessage('Bericht bereit. Speichern oder über „Teilen“ manuell senden.');
+      setPrepared({ blob, id: identity.reportId, name: identity.filename });
+      setMessage('Bericht bereit' + (stopwatch.displayedTime ? ' · gesicherte Testzeit ' + stopwatch.displayedTime : ' · noch keine Testzeit gespeichert') + '. Datei: ' + identity.filename);
     } catch { setMessage('Vollständiger Bericht nicht lesbar. Bitte den begrenzten Bericht vorbereiten.'); }
   };
   const download = () => {
@@ -103,7 +112,7 @@ function Menu() {
   };
   const share = () => {
     if (!prepared) return;
-    const file = shareableFullSessionFile(prepared.blob, prepared.id, navigator);
+    const file = shareReportFile(prepared.blob, prepared.name, window);
     if (!file) { setMessage('Dateifreigabe hier nicht verfügbar. Bitte „Speichern“ oder den Berichtstext verwenden.'); return; }
     void navigator.share({ files: [file] }).catch(() => setMessage('Teilen abgebrochen. Der Bericht bleibt vorbereitet.'));
   };
@@ -119,19 +128,19 @@ function Menu() {
     <label>Startszene<select value={options.scene} onChange={event => setOptions({ ...options, scene: event.target.value })}>
       <option value="reactor">Boss 2 · Reaktor offen</option><option value="turrets">Boss 2 · Mit Geschützen</option>
     </select></label>
-    <label className="device-preview-check"><input type="checkbox" checked={options.diagnostics} onChange={event => setOptions({ ...options, diagnostics: event.target.checked })} />Diagnose lokal aufzeichnen</label>
+    <label className="device-preview-check"><input type="checkbox" checked={options.diagnostics} onChange={event => setOptions({ ...options, diagnostics: event.target.checked })} />Vollaufzeichnung zusätzlich aktivieren</label>
     <label className="device-preview-check"><input type="checkbox" checked={options.protection} onChange={event => setOptions({ ...options, protection: event.target.checked })} />Testschutz: Tod und Bossende verhindern</label>
     <p className="device-preview-note">Testschutz ist eine künstliche Hilfe für längere Messungen. Der Reaktorstart entfernt Geschütze und setzt die Bossgesundheit auf die Hälfte.</p>
     {preparation !== 'ready' && <button onClick={() => void prepareScene()} disabled={preparation === 'preparing'}>{preparation === 'preparing' ? 'Testszene wird vorbereitet …' : preparation === 'failed' ? 'Vorbereitung erneut versuchen' : 'Testszene vorbereiten'}</button>}
     {preparation === 'ready' && <button className="device-preview-primary" onClick={start}>Boss-2-Test öffnen</button>}
     <p className="device-preview-note">Bilder und Testszene werden vor dem Spielen geladen. Der Bosskampf öffnet zunächst angehalten. Tippe dort auf „Fortsetzen“, um ihn zu starten.</p>
     <p>Einfinger-Steuerung: Steuern, loslassen und die Waffentaste neu antippen. Über die Taste hinwegziehen öffnet kein Menü. Zusätzliche Kontakte öffnen während der Steuerung kein Menü. Echte Pausen werden nur von dir fortgesetzt.</p>
-    <p>Kontakt-Diagnose aktiv: Zusätzliche Berührungen und Abbruchsignale werden begrenzt im lokalen Bericht erfasst. Kontaktkoordinaten und Fingerdruck werden nicht gespeichert. Das misst keinen iPhone-Arbeitsspeicher.</p>
+    <p>Kurzdiagnose aktiv: Testzeit und die letzten begrenzten Kontakt-, Pausen- und Fehlersignale werden lokal gesichert, auch bei ausgeschalteter Vollaufzeichnung. Kontaktkoordinaten und Fingerdruck werden nicht gespeichert. Das misst keinen iPhone-Arbeitsspeicher.</p>
     <h2>Nach einer Pause oder einem Abbruch</h2>
     <p>Diese Testadresse erneut öffnen. Vor dem nächsten Test den letzten Bericht vorbereiten und speichern oder teilen. Die Aufzeichnung bleibt auf diesem Gerät; es gibt keinen automatischen Upload.</p>
     <p role="status">{message}</p>
     {sessions.map(session => <button key={session.id} onClick={() => void prepare(session.id)}>Bericht vorbereiten · {new Date(session.startedAt).toLocaleString('de-AT')}</button>)}
-    <button onClick={() => void prepare(null)}>Begrenzten lokalen Bericht vorbereiten</button>
+    <button onClick={() => void prepare(null)}>Letzten Testbericht vorbereiten</button>
     {prepared && <div><button onClick={download}>Bericht speichern</button><button onClick={share}>Bericht teilen</button><button onClick={() => void showText()}>Berichtstext in Teilen anzeigen</button></div>}
     {textCapture && <div><p>Teil {part + 1} von {textCapture.offsets.length - 1}. Für den vollständigen Bericht sind alle Teile nötig.</p><button disabled={part === 0} onClick={() => showPart(part - 1)}>Vorheriger Teil</button><button disabled={part >= textCapture.offsets.length - 2} onClick={() => showPart(part + 1)}>Nächster Teil</button></div>}
     {text && <textarea aria-label="Diagnosebericht" value={text} readOnly />}
@@ -139,4 +148,9 @@ function Menu() {
   </section></main>;
 }
 const router = createBrowserRouter([{ path: '/game', element: <Suspense fallback={<p>Testszene wird geladen …</p>}><Game /></Suspense> }, { path: '*', element: <Menu /> }]);
-export default function DevicePreviewApp() { useEffect(watchMenuViewport, []); return <RouterProvider router={router} />; }
+export default function DevicePreviewApp() {
+  useEffect(watchMenuViewport, []);
+  useEffect(() => installBriefDiagnostics(window, __CRYPTOID_BUILD__.sourceCommit), []);
+  return <RouterProvider router={router} />;
+}
+
