@@ -10,7 +10,14 @@ export const bossMaskedLayersHidden = () => bossWeaponCanvasDisabled() && proces
 export const bossReflectionComparisonEnabled = () => bossWeaponCanvasDisabled()
   && process.env.CRYPTOID_BOSS_MASK_LAYERS_OFF !== '1' && process.env.CRYPTOID_BOSS_REFLECTION_CONTROL === '1';
 export const bossReflectionRestored = () => bossReflectionComparisonEnabled() && process.env.CRYPTOID_BOSS_REFLECTION_ON === '1';
+export const bossHeatComparisonEnabled = () => bossWeaponCanvasDisabled()
+  && process.env.CRYPTOID_BOSS_MASK_LAYERS_OFF !== '1' && process.env.CRYPTOID_BOSS_REFLECTION_CONTROL !== '1'
+  && process.env.CRYPTOID_BOSS_HEAT_CONTROL === '1';
+export const bossHullHeatRestored = () => bossHeatComparisonEnabled() && process.env.CRYPTOID_BOSS_HEAT_ON === '1';
 export const diagnosticSceneName = () => !flatSceneEnabled() ? 'original-artwork'
+  : bossHeatComparisonEnabled() ? bossHullHeatRestored()
+    ? 'flat-live-scene-original-background-original-boss-no-weapon-canvas-hidden-hull-reflection'
+    : 'flat-live-scene-original-background-original-boss-no-weapon-canvas-hidden-hull-masks'
   : bossReflectionComparisonEnabled() ? bossReflectionRestored()
     ? 'flat-live-scene-original-background-original-boss-no-weapon-canvas-hidden-hull-heat'
     : 'flat-live-scene-original-background-original-boss-no-weapon-canvas-hidden-hull-masks'

@@ -1,0 +1,68 @@
+name: Protected boss heat-layer control
+run-name: Compare only boss hull heat off and on while reflection stays hidden
+on:
+  push:
+    branches: [codex/boss2-boss-heat-control-20261030]
+    paths: ['.github/workflows/cryptoid-boss-heat-control.yml', 'verification/boss2-boss-heat-control-20261030/**', 'verification/boss2-flat-scene-control-20261030/**', 'verification/boss2-boss-weapon-control-20261030/**', 'vercel.json']
+permissions:
+  contents: read
+jobs:
+  boss-heat:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        engine: [chromium, webkit]
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with:
+          node-version: '24'
+      - name: Install existing browser tools
+        run: |
+          npm install --prefix frontend --ignore-scripts --no-audit --no-fund
+          npm install --prefix verification/boss2-forensics-20261028 --ignore-scripts --no-audit --no-fund
+          git restore --worktree -- frontend/yarn.lock
+          cd verification/boss2-forensics-20261028
+          npx playwright install --with-deps ${{ matrix.engine }}
+      - name: Verify visual boundary and original source pins
+        run: |
+          node --test verification/boss2-flat-scene-control-20261030/flatTransform.test.mjs verification/boss2-flat-scene-control-20261030/flatComponents.test.mjs verification/boss2-background-control-20261030/backgroundControl.test.mjs verification/boss2-boss-visual-control-20261030/bossControl.test.mjs verification/boss2-boss-weapon-control-20261030/weaponControl.test.mjs verification/boss2-boss-mask-control-20261030/maskControl.test.mjs verification/boss2-boss-reflection-control-20261030/reflectionControl.test.mjs verification/boss2-boss-heat-control-20261030/heatControl.test.mjs
+          node verification/boss2-boss-heat-control-20261030/verifyScope.mjs
+          node --experimental-strip-types verification/boss2-flat-scene-control-20261030/preflight.mjs
+      - name: Build and observe both masked layers hidden
+        env:
+          VERCEL_ENV: preview
+          CRYPTOID_FLAT_SCENE: '1'
+          CRYPTOID_FLAT_BACKGROUND: '1'
+          CRYPTOID_ORIGINAL_BOSS: '1'
+          CRYPTOID_BOSS_WEAPON_CANVAS_OFF: '1'
+          CRYPTOID_BOSS_HEAT_ON: '0'
+          CRYPTOID_BOSS_HEAT_COMPARISON: '1'
+          CRYPTOID_FLAT_ENGINE: ${{ matrix.engine }}
+        run: |
+          node verification/boss2-boss-heat-control-20261030/buildHeatPreview.mjs
+          node --experimental-strip-types verification/boss2-flat-scene-control-20261030/verifyFlatPreview.mjs
+      - name: Build and observe only hull heat restored
+        env:
+          VERCEL_ENV: preview
+          CRYPTOID_FLAT_SCENE: '1'
+          CRYPTOID_FLAT_BACKGROUND: '1'
+          CRYPTOID_ORIGINAL_BOSS: '1'
+          CRYPTOID_BOSS_WEAPON_CANVAS_OFF: '1'
+          CRYPTOID_BOSS_HEAT_ON: '1'
+          CRYPTOID_BOSS_HEAT_COMPARISON: '1'
+          CRYPTOID_FLAT_ENGINE: ${{ matrix.engine }}
+        run: |
+          node verification/boss2-boss-heat-control-20261030/buildHeatPreview.mjs
+          node --experimental-strip-types verification/boss2-flat-scene-control-20261030/verifyFlatPreview.mjs
+      - name: Preserve comparison evidence
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: boss-heat-${{ matrix.engine }}
+          path: verification/boss2-boss-heat-control-20261030/results/${{ matrix.engine }}/
+          retention-days: 3
