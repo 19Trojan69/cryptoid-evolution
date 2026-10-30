@@ -2,7 +2,19 @@
   "version": 1,
   "kind": "private-boss-reflection-only-comparison",
   "whiteScreenFixed": false,
-  "physicalDeviceResult": null,
+  "physicalDeviceResult": {
+    "evidence": "evidence/owner-reflection-control-completion.json",
+    "browser": "Pi Browser",
+    "browserInterpretedFromOwnerWording": true,
+    "savedActiveMs": 600962,
+    "displayedTime": "10:00",
+    "savedMode": "ended",
+    "whiteScreenReported": false,
+    "normalExitReported": true,
+    "noDeviceWarmthReported": true,
+    "temperatureMeasured": false,
+    "nativeTerminationCauseMeasured": false
+  },
   "runtime": {
     "source": "fc688cb812395a9c3ce9e91a064a0b25406224f5",
     "tree": "c24d287298c000457de70482f031f37aef6d3314",
@@ -157,6 +169,13 @@
     "targetActiveMinutes": 10,
     "recordUnexpectedPauseSeparatelyFromWhiteScreen": true,
     "crashAction": "Reopen exact address and save/share latest report before a new run",
-    "ownerOutcomeForThisCondition": null
+    "ownerOutcomeForThisCondition": "10:00, normal exit, no problems/White Screen, no perceived device warmth; browser interpreted as Pi Browser from Piper wording"
+  },
+  "nextComparison": {
+    "kind": "boss-heat-only-toggle",
+    "restoreOnly": ".sector-boss .hull-heat-layer",
+    "keepHidden": ".sector-boss .hull-reflection",
+    "preserveSuccessfulSourcesAndAddresses": true,
+    "nativeCauseProven": false
   }
 }
