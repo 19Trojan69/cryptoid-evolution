@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
+import { diagnosticSceneName } from '../boss2-flat-scene-control-20261030/flatTransform.mjs';
 assert.equal(process.env.VERCEL_ENV, 'preview', 'Boss weapon component comparison is protected-preview only');
 const disabled = process.env.CRYPTOID_BOSS_WEAPON_CANVAS_OFF !== '0';
 process.env.CRYPTOID_BOSS_WEAPON_CANVAS_OFF = disabled ? '1' : '0';
@@ -15,8 +16,7 @@ const htmlPath = output + '/index.html', html = readFileSync(htmlPath, 'utf8');
 assert.equal(html.split('</head>').length, 2);
 writeFileSync(htmlPath, html.replace('</head>', '<link rel="stylesheet" href="/diagnostic-boss-weapon-control.css"></head>'));
 const infoPath = output + '/device-preview-info.json', info = JSON.parse(readFileSync(infoPath, 'utf8'));
-assert.equal(info.diagnosticScene, disabled ? 'flat-live-scene-original-background-original-boss-no-weapon-canvas'
-  : 'flat-live-scene-original-background-original-boss');
+assert.equal(info.diagnosticScene, diagnosticSceneName());
 info.bossVisualControl.originalBossWeaponCanvasRestored = !disabled;
 info.bossWeaponControl = { version: 1, disabled, label,
   baselineFailedPhoneSource: '089d2267dc504611ecbf912b4422f3fb5f5cecf2',

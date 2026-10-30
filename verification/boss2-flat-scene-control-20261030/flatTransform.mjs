@@ -6,7 +6,9 @@ export const flatSceneEnabled = () => process.env.CRYPTOID_FLAT_SCENE === '1';
 export const originalBackgroundEnabled = () => flatSceneEnabled() && process.env.CRYPTOID_FLAT_BACKGROUND === '1';
 export const originalBossEnabled = () => originalBackgroundEnabled() && process.env.CRYPTOID_ORIGINAL_BOSS === '1';
 export const bossWeaponCanvasDisabled = () => originalBossEnabled() && process.env.CRYPTOID_BOSS_WEAPON_CANVAS_OFF === '1';
+export const bossMaskedLayersHidden = () => bossWeaponCanvasDisabled() && process.env.CRYPTOID_BOSS_MASK_LAYERS_OFF === '1';
 export const diagnosticSceneName = () => !flatSceneEnabled() ? 'original-artwork'
+  : bossMaskedLayersHidden() ? 'flat-live-scene-original-background-original-boss-no-weapon-canvas-hidden-hull-masks'
   : bossWeaponCanvasDisabled() ? 'flat-live-scene-original-background-original-boss-no-weapon-canvas'
   : originalBossEnabled() ? 'flat-live-scene-original-background-original-boss'
   : originalBackgroundEnabled() ? 'flat-live-scene-original-background' : 'flat-live-scene';

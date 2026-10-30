@@ -1,0 +1,4 @@
+.diagnostic-flat-scene .sector-boss .hull-reflection,
+.diagnostic-flat-scene .sector-boss .hull-heat-layer {
+  display: none !important;
+}
