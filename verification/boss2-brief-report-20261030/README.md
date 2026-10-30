@@ -32,4 +32,6 @@ The branch-scoped workflow `.github/workflows/cryptoid-brief-report.yml` checks 
 
 ## Limitations
 
+Accepted source and protected deployment are recorded in `results.json`; `evidence/synthetic-browser-results.json` preserves the two successful engine records. `node verification/boss2-brief-report-20261030/verifyEvidence.mjs` checks those records and the hosted screenshot. Evidence-only commits after the source pin are not the tested runtime. The screenshot's 00:44 belongs to the assistant's normal desktop test, not an owner's phone crash.
+
 No JavaScript observer can guarantee a final write after a native termination. Exported time remains the last saved active-time checkpoint, not a guaranteed crash second. Contacts are observed events, not direct measurement of a knuckle or intent. Rate limiting and hard exits can omit events. A missing error or pagehide event does not prove an OS/GPU/memory cause. The extra small local checkpoint is a new test condition and may affect timing; preserve exact source/build identity when comparing owner runs. No cause is confirmed and no public release is authorized by this change.

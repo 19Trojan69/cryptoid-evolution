@@ -1,0 +1,52 @@
+{
+  "version": 1,
+  "workflowRun": 40999390022,
+  "source": "10b30981ac02c63f32dfc829a17e6a36743c0160",
+  "sourceTree": "a8cd6bc61b7a2b8674c30071bbef282a3d3f79eb",
+  "records": [
+    {
+      "jobId": 123879979565,
+      "status": "success",
+      "result": {
+        "complete": true,
+        "engine": "webkit",
+        "physicalDevice": false,
+        "physicalCrashSimulated": false,
+        "fullRecording": false,
+        "multiContactsSynthetic": true,
+        "whiteScreenFixed": false,
+        "engineVersion": "26.5",
+        "source": "10b30981ac02c63f32dfc829a17e6a36743c0160",
+        "syntheticContactCapture": true,
+        "activeObservedMs": 20080,
+        "pauseFreezes": true,
+        "activeReloadRestoresReport": true,
+        "uniqueFilenameDownloadTextAndShareAgree": true,
+        "previousRunPreservedAndNormalEnd": true,
+        "finishedAt": "2026-10-30T03:50:44.393Z"
+      }
+    },
+    {
+      "jobId": 123879979803,
+      "status": "success",
+      "result": {
+        "complete": true,
+        "engine": "chromium",
+        "physicalDevice": false,
+        "physicalCrashSimulated": false,
+        "fullRecording": false,
+        "multiContactsSynthetic": true,
+        "whiteScreenFixed": false,
+        "engineVersion": "151.0.7922.34",
+        "source": "10b30981ac02c63f32dfc829a17e6a36743c0160",
+        "syntheticContactCapture": true,
+        "activeObservedMs": 20557.399999999994,
+        "pauseFreezes": true,
+        "activeReloadRestoresReport": true,
+        "uniqueFilenameDownloadTextAndShareAgree": true,
+        "previousRunPreservedAndNormalEnd": true,
+        "finishedAt": "2026-10-30T03:50:22.938Z"
+      }
+    }
+  ]
+}
