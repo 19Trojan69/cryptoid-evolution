@@ -7,16 +7,20 @@ import { serveDevicePreview } from '../boss2-forensics-20261028/devicePreviewSer
 import { STOPWATCH_KEY } from '../boss2-stopwatch-20261029/stopwatchState.mjs';
 const engine = process.env.CRYPTOID_FLAT_ENGINE, controlled = process.env.CRYPTOID_FLAT_SCENE === '1';
 const backgroundComparison = process.env.CRYPTOID_BACKGROUND_COMPARISON === '1';
-const originalBackground = backgroundComparison && process.env.CRYPTOID_FLAT_BACKGROUND === '1';
+const bossComparison = process.env.CRYPTOID_BOSS_COMPARISON === '1';
+const originalBoss = bossComparison && process.env.CRYPTOID_ORIGINAL_BOSS === '1';
+const originalBackground = bossComparison || backgroundComparison && process.env.CRYPTOID_FLAT_BACKGROUND === '1';
 assert.ok(['chromium', 'webkit'].includes(engine));
 const pw = createRequire(new URL('../boss2-forensics-20261028/package.json', import.meta.url))('playwright');
-const directory = backgroundComparison
+const directory = bossComparison
+  ? resolve(root, 'verification/boss2-boss-visual-control-20261030/results', engine, originalBoss ? 'boss-on' : 'boss-off')
+  : backgroundComparison
   ? resolve(root, 'verification/boss2-background-control-20261030/results', engine, originalBackground ? 'background-on' : 'background-off')
   : resolve(root, 'verification/boss2-flat-scene-control-20261030/results', engine, controlled ? 'flat' : 'artwork');
 mkdirSync(directory, { recursive: true });
 const result = { complete: false, engine, controlled, physicalDevice: false, physicalCrashSimulated: false,
   whiteScreenFixed: false, fullRecording: false, steeringEventsSynthetic: true, visualPreparationRetained: true,
-  comparison: backgroundComparison ? 'original-background-toggle' : 'original-artwork-vs-flat', originalBackground };
+  comparison: bossComparison ? 'original-boss-toggle' : backgroundComparison ? 'original-background-toggle' : 'original-artwork-vs-flat', originalBackground, originalBoss };
 let server, browser, page, fatal;
 const inspect = () => page.evaluate(() => window.__crossDeviceTest.inspect());
 const clock = () => page.evaluate(key => JSON.parse(localStorage.getItem(key)), STOPWATCH_KEY);
@@ -56,8 +60,13 @@ try {
     assert.equal(controlled, true); assert.equal(info.backgroundControl.originalBackgroundRestored, originalBackground);
     assert.equal(info.backgroundControl.simpleForegroundRetained, true);
   }
+  if (bossComparison) {
+    assert.equal(controlled, true); assert.equal(info.bossVisualControl.originalBossRestored, originalBoss);
+    assert.equal(info.backgroundControl.originalBackgroundRestored, true);
+    assert.equal(info.bossVisualControl.simplePlayerEnemyShipsRetained, true);
+  }
   const label = await page.locator('.device-preview-menu section').evaluate(n => getComputedStyle(n, '::before').content);
-  assert.ok(label.includes(controlled ? 'Einfache Formen' : 'Originaldarstellung')); result.bannerMatches = true;
+  assert.ok(label.includes(bossComparison ? originalBoss ? 'Bossgrafik wieder an' : 'Bossgrafik aus' : controlled ? 'Einfache Formen' : 'Originaldarstellung')); result.bannerMatches = true;
   assert.equal(await page.getByRole('checkbox', { name: 'Vollaufzeichnung zusätzlich aktivieren', exact: true }).isChecked(), false);
   assert.equal(await page.getByRole('checkbox', { name: 'Testschutz: Tod und Bossende verhindern', exact: true }).isChecked(), true);
   await tap(page.getByRole('button', { name: 'Testszene vorbereiten', exact: true }));
@@ -65,8 +74,8 @@ try {
   await page.waitForFunction(() => window.__crossDeviceTest?.inspect().status === 'paused');
   await page.evaluate(() => document.fonts.ready); result.initialPausedGeometry = await initialGeometry();
   assert.equal(await page.locator('[data-stopwatch-value]').innerText(), '00:00');
-  if (controlled && (!backgroundComparison || originalBackground)) {
-    const before = JSON.parse(readFileSync(resolve(directory, backgroundComparison ? '../background-off/verification.json' : '../artwork/verification.json'), 'utf8'));
+  if (bossComparison ? originalBoss : controlled && (!backgroundComparison || originalBackground)) {
+    const before = JSON.parse(readFileSync(resolve(directory, bossComparison ? '../boss-off/verification.json' : backgroundComparison ? '../background-off/verification.json' : '../artwork/verification.json'), 'utf8'));
     assert.equal(before.complete, true);
     for (const [selector, rect] of Object.entries(before.initialPausedGeometry)) for (const key of ['x', 'y', 'width', 'height'])
       assert.ok(Math.abs(rect[key] - result.initialPausedGeometry[selector][key]) <= 1, selector + ' ' + key);
@@ -78,6 +87,10 @@ try {
   const active = await inspect(); assert.equal(active.status, 'playing'); assert.ok(active.frameAt > first.frameAt);
   assert.ok(active.coreVolley > first.coreVolley); assert.equal(active.ownerDiagnostics, false);
   assert.equal(await page.evaluate(() => performance.timeOrigin), origin);
+  if (originalBoss) await page.waitForFunction(() => {
+    const image = document.querySelector('.sector-boss img.boss-hull'), canvas = document.querySelector('.sector-boss canvas');
+    return image?.complete && image.naturalWidth > 0 && canvas && !canvas.hidden && canvas.width > 1 && canvas.height > 1;
+  });
   const art = await page.evaluate(() => ({
     canvases: document.querySelectorAll('.game-field canvas').length,
     images: document.querySelectorAll('.game-field img').length,
@@ -86,13 +99,29 @@ try {
     backgroundStarCircles: document.querySelectorAll('.game-field .starfield circle').length,
     backgroundPlanets: document.querySelectorAll('.game-field .space-scene .space-world').length,
     detailedShips: document.querySelectorAll('.game-field .fleet-sprite, .game-field .ship-thruster, .game-field .hull-heat-layer').length,
+    detailedNonBossShips: [...document.querySelectorAll('.game-field .fleet-sprite, .game-field .ship-thruster, .game-field .hull-heat-layer')].filter(n => !n.closest('.sector-boss')).length,
     flatBosses: document.querySelectorAll('.diagnostic-flat-boss').length,
+    originalBosses: document.querySelectorAll('.sector-boss:not(.diagnostic-flat-boss)').length,
+    bossImages: document.querySelectorAll('.sector-boss img.boss-hull').length,
+    bossCanvases: document.querySelectorAll('.sector-boss canvas').length,
+    bossRect: (() => { const n = document.querySelector('.sector-boss'); if (!n) return null; const r = n.getBoundingClientRect(); return { width: r.width, height: r.height }; })(),
     flatShips: document.querySelectorAll('.diagnostic-flat-ship').length,
     playerShotCount: document.querySelectorAll('.player-laser').length,
     playerShotBackground: document.querySelector('.player-laser') ? getComputedStyle(document.querySelector('.player-laser')).backgroundImage : null,
   }));
   if (controlled) {
-    for (const key of ['canvases', 'foregroundImages', 'detailedShips']) assert.equal(art[key], 0, key);
+    if (originalBoss) {
+      assert.equal(art.canvases, 1); assert.equal(art.bossCanvases, 1); assert.equal(art.bossImages, 1);
+      assert.equal(art.originalBosses, 1); assert.equal(art.foregroundImages, 1); assert.equal(art.flatBosses, 0);
+      assert.equal(art.detailedNonBossShips, 0);
+      assert.equal(await page.locator('.sector-boss img.boss-hull').isVisible(), true);
+      const before = JSON.parse(readFileSync(resolve(directory, '../boss-off/verification.json'), 'utf8'));
+      for (const key of ['width', 'height']) assert.ok(Math.abs(art.bossRect[key] - before.activeObservation.scene.bossRect[key]) <= 1, 'boss ' + key);
+      result.originalBossOuterSizePreserved = true; result.originalBossVisible = true;
+    } else {
+      for (const key of ['canvases', 'foregroundImages', 'detailedShips']) assert.equal(art[key], 0, key);
+      assert.equal(art.flatBosses, 1);
+    }
     if (originalBackground) {
       assert.equal(art.starfields, 2); assert.ok(art.backgroundStarCircles >= 215); assert.equal(art.backgroundPlanets, 4);
       assert.equal(await page.locator('.game-field .starfield').isVisible(), true);
@@ -100,7 +129,7 @@ try {
       assert.equal(await page.locator('.game-field .space-scene .space-world').first().isVisible(), true);
       result.originalBackgroundVisible = true;
     } else { assert.equal(art.images, 0); assert.equal(art.starfields, 0); }
-    assert.equal(art.flatBosses, 1); assert.ok(art.flatShips > 0); assert.equal(art.playerShotBackground, 'none');
+    assert.ok(art.flatShips > 0); assert.equal(art.playerShotBackground, 'none');
   } else { assert.ok(art.canvases > 0); assert.ok(art.images > 0); assert.ok(art.starfields > 0); }
   result.activeObservation = { activeMs: (await clock()).latest.elapsedMs, coreVolley: active.coreVolley,
     frameAt: active.frameAt, scene: art, sameDocument: true };
@@ -130,7 +159,7 @@ try {
   const part = JSON.parse(await page.getByRole('textbox', { name: 'Diagnosebericht', exact: true }).inputValue());
   assert.equal(part.total, 1); const report = JSON.parse(part.data);
   assert.equal(report.source.sourceCommit, info.sourceCommit);
-  assert.equal(report.source.diagnosticScene, originalBackground ? 'flat-live-scene-original-background' : controlled ? 'flat-live-scene' : 'original-artwork');
+  assert.equal(report.source.diagnosticScene, originalBoss ? 'flat-live-scene-original-background-original-boss' : originalBackground ? 'flat-live-scene-original-background' : controlled ? 'flat-live-scene' : 'original-artwork');
   assert.equal(report.briefMatchesLatestStopwatch, true); assert.equal(report.fullSession, null);
   assert.equal(report.briefDiagnostics.latest.options.fullRecording, false); result.normalExitAndReportPreserved = true;
   assert.deepEqual(external, []); assert.ok(!fatal, fatal); result.complete = true;
@@ -139,6 +168,6 @@ try {
   if (page && !page.isClosed()) try { await page.screenshot({ path: directory + '/failure.png', timeout: 5000 }); } catch { /* Preserve first failure. */ }
 } finally {
   result.finishedAt = new Date().toISOString(); writeFileSync(directory + '/verification.json', JSON.stringify(result, null, 2) + '\n');
-  console.log((backgroundComparison ? 'CRYPTOID_BACKGROUND_RESULT ' : 'CRYPTOID_FLAT_SCENE_RESULT ') + JSON.stringify(result));
+  console.log((bossComparison ? 'CRYPTOID_BOSS_VISUAL_RESULT ' : backgroundComparison ? 'CRYPTOID_BACKGROUND_RESULT ' : 'CRYPTOID_FLAT_SCENE_RESULT ') + JSON.stringify(result));
   if (browser) await browser.close(); if (server) await server.close();
 }
