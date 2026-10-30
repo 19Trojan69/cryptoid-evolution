@@ -1,0 +1,99 @@
+{
+  "version": 1,
+  "kind": "private-original-reflection-with-unmasked-heat-comparison",
+  "whiteScreenFixed": false,
+  "physicalDeviceTested": false,
+  "runtime": {
+    "source": "e16befbb1251b14b0f2742f8a984c29a00173c41",
+    "tree": "b09af3b2dec4f19e17e37485759b19fda79fb6f5",
+    "workBranch": "codex/boss2-unmasked-heat-reflection-20261030",
+    "deviceBranch": "codex/boss2-unmasked-heat-reflection-device-20261030"
+  },
+  "baselineOwner": {
+    "source": "67dabc714907be6d3ae99ccf9ebeab170eb34b06",
+    "savedActiveMs": 656318,
+    "displayedTime": "10:56",
+    "normalExitReported": true,
+    "receipt": "../boss2-boss-heat-unmasked-20261030/evidence/owner-mask-candidate-completion.json",
+    "unchanged": true
+  },
+  "treatment": {
+    "restoreOnly": "original .sector-boss .hull-reflection by removing its diagnostic display:none rule",
+    "originalReflectionMaskLightAndCascadeRetained": true,
+    "originalHeatHotspotsVisible": true,
+    "heatStandardAndWebkitImageMasks": "none",
+    "bossWeaponsViewStillExcluded": true,
+    "priorFilterReactorOrdinaryExplosionCanvasControlsRetained": true,
+    "originalImageHealthMiniExplosionsBackgroundAndPreparationRetained": true,
+    "gameplayClocksInputAudioUnchanged": true,
+    "extraRuntimeTimersOrFrames": false
+  },
+  "verification": {
+    "status": "passed",
+    "statusScope": "source, types, builds and four completed desktop flows from job logs",
+    "sourceComponentTests": 14,
+    "typePreflight": "passed",
+    "originalSourcePins": "passed",
+    "shortDesktopFlows": 4,
+    "runId": 41100206610,
+    "workflow": "https://github.com/19Trojan69/cryptoid-evolution/actions/runs/41100206610",
+    "jobs": [
+      {
+        "id": 124216003272,
+        "engine": "webkit",
+        "completedChecksFromLogs": true
+      },
+      {
+        "id": 124216003505,
+        "engine": "chromium",
+        "completedChecksFromLogs": true
+      }
+    ],
+    "workflowApiStatusAtInitialCollection": "in_progress",
+    "workflowApiConclusionAtInitialCollection": null,
+    "workflowStatusLimit": "The job/run status APIs were still in_progress with empty steps at collection while both fetched job logs already contain completed checks, both complete:true flows, artifact finalization and cleanup. Test pass claims refer to these actual completed checks, not a fabricated terminal workflow status.",
+    "evidence": "evidence/synthetic-reflection-comparison.json"
+  },
+  "deployment": {
+    "status": "READY",
+    "id": "dpl_3cxcMngWKPLgzzusVmWBdXDhKoLQ",
+    "url": "https://cryptoid-evolution-testnet-tzaa9n8px-19-trojan69.vercel.app/",
+    "dashboard": "https://vercel.com/19-trojan69/cryptoid-evolution-testnet/3cxcMngWKPLgzzusVmWBdXDhKoLQ",
+    "source": "e16befbb1251b14b0f2742f8a984c29a00173c41",
+    "buildSeconds": 38,
+    "environment": "Preview",
+    "previewOnly": true,
+    "customDomainAssignment": "Skipped",
+    "publicReleaseAuthorized": false,
+    "gitAutomaticDeploymentEnabled": false,
+    "protection": "Standard Protection (deployment settings observed after READY; not changed)"
+  },
+  "newOwnerPhoneResult": null,
+  "publicMainSource": "ce073547cf573375d141bf846f70e294138dbd73",
+  "limits": [
+    "Short assistant desktop flows do not establish physical iPhone/Pi Browser endurance or native cause.",
+    "Original heat image-mask removal still allows changed clipping at transparent hull edges.",
+    "The preceding owner 10:56 completion is the hidden-reflection baseline, not a result for this new reflection-restored source."
+  ],
+  "hostedCheck": {
+    "receipt": "evidence/hosted-reflection-candidate.json",
+    "screenshot": "evidence/hosted-preview-ready.jpg",
+    "physicalDevice": false,
+    "displayedTime": "01:11",
+    "savedActiveMs": 71137.70000001043,
+    "normalExit": true,
+    "pairedReport": true,
+    "manualPauseFreezes": true,
+    "lastTimeRestoredAfterReload": true,
+    "stalledStateEntries": 3,
+    "positiveReflectionPulseCapturedInHostedSamples": false,
+    "positiveReflectionPulsesMeasuredInBothCiEngines": true
+  },
+  "preservedRefs": {
+    "main": "ce073547cf573375d141bf846f70e294138dbd73",
+    "precedingSuccessfulDeviceBranch": "codex/boss2-boss-heat-unmasked-device-20261030",
+    "precedingSuccessfulRuntime": "67dabc714907be6d3ae99ccf9ebeab170eb34b06",
+    "newFrozenDeviceBranch": "codex/boss2-unmasked-heat-reflection-device-20261030",
+    "newFrozenRuntime": "e16befbb1251b14b0f2742f8a984c29a00173c41"
+  }
+}
