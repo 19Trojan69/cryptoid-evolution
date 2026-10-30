@@ -23,6 +23,7 @@ const waitMode = mode => page.waitForFunction(({ key, mode }) => JSON.parse(loca
   { key: STOPWATCH_KEY, mode }, { timeout: 45000 });
 async function tap(locator) {
   await locator.waitFor({ state: 'visible', timeout: 45000 }); assert.ok(await locator.isEnabled());
+  await locator.scrollIntoViewIfNeeded();
   const box = await locator.boundingBox(); assert.ok(box);
   await page.touchscreen.tap(box.x + box.width / 2, box.y + box.height / 2);
 }
