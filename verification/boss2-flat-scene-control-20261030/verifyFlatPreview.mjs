@@ -192,6 +192,19 @@ try {
       else { assert.equal(layer.display, 'none'); assert.equal(layer.rects, 0); }
     }
     result.hullHeatStillHidden = true; result.originalReflectionVisible = reflectionOn;
+    if (reflectionOn) {
+      // Original illumination lasts only 115 ms after a volley; verify a real
+      // naturally occurring pulse instead of mistaking a zero-alpha frame for paint.
+      const pulse = await page.waitForFunction(() => {
+        const node = document.querySelector('.sector-boss .hull-reflection'); if (!node) return false;
+        const style = getComputedStyle(node), opacity = Number(style.opacity);
+        return style.display !== 'none' && node.getClientRects().length > 0 && opacity > 0
+          ? { opacity, display: style.display, rects: node.getClientRects().length } : false;
+      }, null, { timeout: 15000, polling: 'raf' });
+      result.originalReflectionPulse = await pulse.jsonValue(); await pulse.dispose();
+      assert.ok(result.originalReflectionPulse.opacity > 0); result.naturalReflectionPulseObserved = true;
+    }
+
   }
   result.activeObservation = { activeMs: (await clock()).latest.elapsedMs, coreVolley: active.coreVolley,
     frameAt: active.frameAt, scene: art, sameDocument: true };
