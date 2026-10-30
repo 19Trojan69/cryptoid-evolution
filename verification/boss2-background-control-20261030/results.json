@@ -2,7 +2,15 @@
   "version": 1,
   "kind": "private-original-background-comparison",
   "whiteScreenFixed": false,
-  "physicalDeviceResult": null,
+  "physicalDeviceResult": {
+    "evidence": "evidence/owner-background-completion.json",
+    "status": "owner-reported-no-failures-with-recorded-normal-end",
+    "savedActiveMs": 638167,
+    "displayedTime": "10:38",
+    "browser": null,
+    "browserConfirmationPending": true,
+    "notAnAcceptedRepair": true
+  },
   "runtime": {
     "source": "8e34152c5552f0ed02101566190ae68620105434",
     "tree": "b520b9fe62e6636dcf7e047c1b3aa011a9bec8fc",
@@ -128,6 +136,9 @@
     "targetActiveMinutes": 8,
     "recordBrowserBarVisibility": true,
     "crashAction": "Reopen this exact address and save/share the latest report before another run",
-    "firstOwnerResultForThisBackgroundCondition": null
+    "firstOwnerResultForThisBackgroundCondition": "evidence/owner-background-completion.json",
+    "status": "first-owner-run-completed; browser-confirmation-pending",
+    "identicalRepeatRequested": false,
+    "nextStep": "Confirm whether the owner used Pi Browser or Safari; the report does not identify the browser. Then select a narrower foreground-artwork comparison, keeping completed controls frozen."
   }
 }

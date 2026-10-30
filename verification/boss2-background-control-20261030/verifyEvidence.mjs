@@ -6,7 +6,22 @@ const r = read('./results.json'), c = read('./evidence/synthetic-background-comp
 assert.equal(r.runtime.source, '8e34152c5552f0ed02101566190ae68620105434');
 assert.equal(r.runtime.tree, 'b520b9fe62e6636dcf7e047c1b3aa011a9bec8fc');
 assert.equal(r.runtime.deviceBranch, 'codex/boss2-background-device-20261030');
-assert.equal(r.whiteScreenFixed, false); assert.equal(r.physicalDeviceResult, null);
+assert.equal(r.whiteScreenFixed, false);
+const owner = read('./evidence/owner-background-completion.json');
+assert.equal(r.physicalDeviceResult.evidence, 'evidence/owner-background-completion.json');
+assert.equal(r.physicalDeviceResult.status, 'owner-reported-no-failures-with-recorded-normal-end');
+assert.equal(owner.runtimeSource, r.runtime.source); assert.equal(owner.runtimeTree, r.runtime.tree);
+assert.equal(owner.reportSha256, 'dfab75e85e8eaaabf340fb52a00ba65274dba0fd674417e3f26289d8218a3bcf');
+assert.equal(owner.configuredTreatment, 'flat-live-scene-original-background');
+assert.equal(owner.savedActiveMs, 638167); assert.equal(owner.displayedTime, '10:38'); assert.equal(owner.savedMode, 'ended');
+assert.equal(owner.ownerObservation.noFailuresReported, true); assert.equal(owner.ownerObservation.whiteScreenReported, false);
+assert.equal(owner.ownerObservation.browser, null); assert.equal(r.physicalDeviceResult.browserConfirmationPending, true);
+assert.equal(owner.clockAndBriefRunMatch, true); assert.equal(owner.normalHomeConfirmationEndRecorded, true);
+assert.equal(owner.fullRecording, false); assert.equal(owner.protection, true); assert.equal(owner.fullSession, null);
+assert.equal(owner.unobservedGaps, 0); assert.equal(owner.collectorDrops, 66); assert.equal(owner.retainedEvents, 32);
+assert.deepEqual(owner.lastContextField, { width: 430, height: 711 });
+assert.equal(owner.browserIdentityMeasuredByReport, false); assert.equal(owner.rawOwnerReportCommitted, false);
+assert.equal(owner.reloadTracePresent, false); assert.equal(owner.whiteScreenFixed, false);
 assert.equal(r.publicMainSource, 'ce073547cf573375d141bf846f70e294138dbd73');
 assert.equal(r.deployment.environment, 'preview'); assert.equal(r.deployment.status, 'Ready');
 assert.equal(r.deployment.requireLogin, true); assert.equal(r.deployment.protection, 'Standard Protection');
@@ -42,4 +57,4 @@ assert.equal(h.sceneCanvases, 0); assert.equal(h.foregroundImages, 0); assert.eq
 assert.ok(h.backgroundStarCircles >= 215); assert.ok(h.savedActiveMs > 0);
 assert.equal(createHash('sha256').update(readFileSync(new URL('./evidence/hosted-background-control.jpg', import.meta.url))).digest('hex'), h.screenshotSha256);
 console.log('CRYPTOID_BACKGROUND_EVIDENCE ' + JSON.stringify({ passed: true, source: r.runtime.source,
-  syntheticComparisons: 4, physicalDeviceResult: null, whiteScreenFixed: false }));
+  syntheticComparisons: 4, physicalDeviceResult: r.physicalDeviceResult.status, browserConfirmationPending: true, whiteScreenFixed: false }));

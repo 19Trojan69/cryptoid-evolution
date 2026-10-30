@@ -1,0 +1,39 @@
+{
+  "ownerObservation": {
+    "noFailuresReported": true,
+    "whiteScreenReported": false,
+    "browser": null,
+    "browserNotRestatedInThisMessage": true,
+    "deviceNotRestatedInThisMessage": true
+  },
+  "runtimeSource": "8e34152c5552f0ed02101566190ae68620105434",
+  "runtimeTree": "b520b9fe62e6636dcf7e047c1b3aa011a9bec8fc",
+  "configuredTreatment": "flat-live-scene-original-background",
+  "reportFilename": "cryptoid-diagnose-2026-10-30T11-38-06-048Z-731c84dd.json",
+  "reportSha256": "dfab75e85e8eaaabf340fb52a00ba65274dba0fd674417e3f26289d8218a3bcf",
+  "rawOwnerReportCommitted": false,
+  "savedActiveMs": 638167,
+  "displayedTime": "10:38",
+  "savedMode": "ended",
+  "unobservedGaps": 0,
+  "clockAndBriefRunMatch": true,
+  "fullRecording": false,
+  "protection": true,
+  "fullSession": null,
+  "retainedEvents": 32,
+  "collectorDrops": 66,
+  "normalHomeConfirmationEndRecorded": true,
+  "savedTailBlurEvents": 0,
+  "savedTailErrorEvents": 0,
+  "lastContextField": {
+    "width": 430,
+    "height": 711
+  },
+  "browserIdentityMeasuredByReport": false,
+  "browserChromeVisibilityMeasured": false,
+  "returnEvidenceSource": "absent-or-unavailable",
+  "reloadTracePresent": false,
+  "nativeTerminationCauseMeasured": false,
+  "whiteScreenFixed": false,
+  "conclusion": "The owner reports no failures/White Screen in the original-background-restored flat-foreground scene. Matched report records a normal Home/confirmation/ended exit at 10:38 active time. Browser is not restated or measured, and 430x711 field dimensions cannot identify Safari or Pi Browser. Confirm browser before assigning this result to a browser or choosing the next foreground-artwork comparison. One successful run does not establish a cause or repair."
+}
