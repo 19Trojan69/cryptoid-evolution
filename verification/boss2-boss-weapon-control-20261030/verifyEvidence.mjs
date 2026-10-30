@@ -5,7 +5,17 @@ const read = path => JSON.parse(readFileSync(new URL(path, import.meta.url), 'ut
 const r = read('./results.json'), c = read('./evidence/synthetic-weapon-comparison.json');
 assert.equal(r.runtime.source, '68bbf03220a868762606136308844aa24a8a2a75');
 assert.equal(r.runtime.tree, '720ab2d65fbdf386ab39e7f9fb909799e74370ee');
-assert.equal(r.whiteScreenFixed, false); assert.equal(r.physicalDeviceResult, null);
+assert.equal(r.whiteScreenFixed, false);
+const owner = read('./evidence/owner-weapon-control-failure.json');
+assert.equal(owner.runtimeSource, r.runtime.source); assert.equal(owner.runtimeTree, r.runtime.tree);
+assert.equal(owner.ownerObservation.browser, 'Pi Browser'); assert.equal(owner.ownerObservation.whiteScreenReported, true);
+assert.equal(owner.ownerObservation.browserConfirmedByOwner, true); assert.equal(owner.savedActiveMs, 510289);
+assert.equal(owner.displayedTime, '08:30'); assert.equal(owner.savedMode, 'running');
+assert.equal(owner.fullRecording, false); assert.equal(owner.protection, true); assert.equal(owner.fullSession, null);
+assert.equal(owner.clockAndBriefRunMatch, true); assert.equal(owner.normalExitRecorded, false);
+assert.equal(owner.newDocumentMsAfterLastCheckpoint, 943); assert.equal(owner.lastRetainedInputActiveMsBeforeCheckpoint, 11043);
+assert.equal(owner.nativeTerminationCauseMeasured, false); assert.equal(owner.physicalSceneDomMeasuredByReport, false);
+assert.equal(r.physicalDeviceResult.evidence, 'evidence/owner-weapon-control-failure.json');
 assert.equal(r.runtime.deviceBranch, 'codex/boss2-boss-weapon-device-20261030');
 assert.equal(r.publicMainSource, 'ce073547cf573375d141bf846f70e294138dbd73');
 assert.equal(r.treatment.weaponSimulationRetained, true); assert.equal(r.treatment.inputChanged, false);
@@ -56,4 +66,4 @@ assert.equal(h.screenshotIsOwnerPhoneResult, false);
 assert.equal(createHash('sha256').update(readFileSync(new URL(h.screenshot, import.meta.url))).digest('hex'), h.screenshotSha256);
 assert.equal(r.nextPhoneProtocol.targetActiveMinutes, 10);
 console.log('CRYPTOID_BOSS_WEAPON_EVIDENCE ' + JSON.stringify({ passed: true, source: r.runtime.source,
-  syntheticComparisons: 4, physicalDeviceResult: null, whiteScreenFixed: false }));
+  syntheticComparisons: 4, physicalDeviceResult: r.physicalDeviceResult, whiteScreenFixed: false }));

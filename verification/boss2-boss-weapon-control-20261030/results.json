@@ -2,7 +2,16 @@
   "version": 1,
   "kind": "private-boss-weapon-component-comparison",
   "whiteScreenFixed": false,
-  "physicalDeviceResult": null,
+  "physicalDeviceResult": {
+    "evidence": "evidence/owner-weapon-control-failure.json",
+    "browser": "Pi Browser",
+    "ownerConfirmedBrowser": true,
+    "savedActiveMs": 510289,
+    "displayedTime": "08:30",
+    "savedMode": "running",
+    "whiteScreenReported": true,
+    "nativeTerminationCauseMeasured": false
+  },
   "runtime": {
     "source": "68bbf03220a868762606136308844aa24a8a2a75",
     "tree": "720ab2d65fbdf386ab39e7f9fb909799e74370ee",
@@ -136,6 +145,15 @@
     "targetActiveMinutes": 10,
     "recordUnexpectedPauseSeparatelyFromWhiteScreen": true,
     "crashAction": "Reopen exact address and save/share latest report before a new run",
-    "ownerOutcomeForThisCondition": null
+    "ownerOutcomeForThisCondition": "White Screen in owner-confirmed Pi Browser; saved running checkpoint 08:30"
+  },
+  "nextComparison": {
+    "kind": "boss-masked-layer-toggle",
+    "hideVisualLayers": [
+      ".sector-boss .hull-reflection",
+      ".sector-boss .hull-heat-layer"
+    ],
+    "retainOriginalBossHullImageBackgroundAndSimulation": true,
+    "nativeCauseProven": false
   }
 }
