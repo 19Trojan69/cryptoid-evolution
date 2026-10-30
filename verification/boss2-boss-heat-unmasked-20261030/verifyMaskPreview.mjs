@@ -7,13 +7,17 @@ import { serveDevicePreview } from '../boss2-forensics-20261028/devicePreviewSer
 import { STOPWATCH_KEY } from '../boss2-stopwatch-20261029/stopwatchState.mjs';
 
 const engine = process.env.CRYPTOID_FLAT_ENGINE;
-const unmasked = process.env.CRYPTOID_BOSS_HEAT_UNMASKED === '1';
+const reflectionComparison = process.env.CRYPTOID_UNMASKED_HEAT_REFLECTION_COMPARISON === '1';
+const reflectionOn = reflectionComparison && process.env.CRYPTOID_UNMASKED_HEAT_REFLECTION === '1';
+const unmasked = reflectionComparison || process.env.CRYPTOID_BOSS_HEAT_UNMASKED === '1';
 assert.ok(['chromium', 'webkit'].includes(engine));
 const pw = createRequire(new URL('../boss2-forensics-20261028/package.json', import.meta.url))('playwright');
-const directory = resolve(root, 'verification/boss2-boss-heat-unmasked-20261030/results', engine, unmasked ? 'unmasked' : 'original-mask');
+const directory = reflectionComparison
+  ? resolve(root, 'verification/boss2-unmasked-heat-reflection-20261030/results', engine, reflectionOn ? 'reflection-on' : 'reflection-off')
+  : resolve(root, 'verification/boss2-boss-heat-unmasked-20261030/results', engine, unmasked ? 'unmasked' : 'original-mask');
 mkdirSync(directory, { recursive: true });
 const result = {
-  complete: false, engine, unmasked, physicalDevice: false, physicalCrashSimulated: false,
+  complete: false, engine, unmasked, reflectionComparison, reflectionOn, physicalDevice: false, physicalCrashSimulated: false,
   fullRecording: false, whiteScreenFixed: false, steeringEventsSynthetic: true,
 };
 let server, browser, page, fatal;
@@ -50,12 +54,17 @@ try {
   const info = await (await context.request.get(server.origin + '/device-preview-info.json')).json();
   result.source = info.sourceCommit; result.sourceTree = info.sourceTree; result.scene = info.diagnosticScene;
   assert.equal(info.bossHeatMaskCandidate.enabled, unmasked);
-  assert.equal(info.bossHeatMaskCandidate.reflectionHidden, true);
+  assert.equal(info.bossHeatMaskCandidate.reflectionHidden, !reflectionOn);
+  if (reflectionComparison) {
+    assert.equal(info.bossUnmaskedHeatReflection.enabled, reflectionOn);
+    assert.equal(info.bossUnmaskedHeatReflection.heatImageMaskStillRemoved, true);
+    assert.equal(info.bossUnmaskedHeatReflection.originalReflectionCascadeMaskAndLightRetained, true);
+  }
   assert.equal(info.bossWeaponControl.disabled, true);
   for (const key of ['actualPiAuthentication', 'liveBackend', 'realAccounts', 'payments', 'automaticUpload', 'automaticResume']) assert.equal(info[key], false, key);
   assert.equal(info.guestOnly, true); assert.equal(info.nativeGameClocks, true);
   const label = await page.locator('.device-preview-menu section').evaluate(n => getComputedStyle(n, '::before').content);
-  assert.ok(label.includes(unmasked ? 'MASKENKANDIDAT' : 'MASKENVERGLEICH')); result.bannerMatches = true;
+  assert.ok(label.includes(reflectionComparison ? reflectionOn ? 'REFLEXIONSTEST' : 'REFLEXIONSVERGLEICH' : unmasked ? 'MASKENKANDIDAT' : 'MASKENVERGLEICH')); result.bannerMatches = true;
   assert.equal(await page.getByRole('checkbox', { name: 'Vollaufzeichnung zusätzlich aktivieren', exact: true }).isChecked(), false);
   assert.equal(await page.getByRole('checkbox', { name: 'Testschutz: Tod und Bossende verhindern', exact: true }).isChecked(), true);
   await tap(page.getByRole('button', { name: 'Testszene vorbereiten', exact: true }));
@@ -65,8 +74,8 @@ try {
   result.initialPausedGeometry = await geometry();
   assert.equal(await page.locator('[data-stopwatch-value]').innerText(), '00:00');
   let baseline;
-  if (unmasked) {
-    baseline = JSON.parse(readFileSync(resolve(directory, '../original-mask/verification.json'), 'utf8'));
+  if (reflectionComparison ? reflectionOn : unmasked) {
+    baseline = JSON.parse(readFileSync(resolve(directory, reflectionComparison ? '../reflection-off/verification.json' : '../original-mask/verification.json'), 'utf8'));
     assert.equal(baseline.complete, true); assert.equal(baseline.source, result.source);
     for (const [selector, rect] of Object.entries(baseline.initialPausedGeometry)) for (const key of ['x', 'y', 'width', 'height'])
       assert.ok(Math.abs(rect[key] - result.initialPausedGeometry[selector][key]) <= 1, selector + ' ' + key);
@@ -80,6 +89,20 @@ try {
   assert.ok(active.coreVolley > first.coreVolley); assert.equal(active.ownerDiagnostics, false);
   assert.equal(await page.evaluate(() => performance.timeOrigin), origin);
   result.activeObservation = { activeMs: (await clock()).latest.elapsedMs, coreVolley: active.coreVolley, sameDocument: true };
+
+  if (reflectionOn) {
+    // Original reflection is a short naturally triggered pulse. A visible DOM
+    // box with zero alpha alone is insufficient evidence that it can paint.
+    const pulse = await page.waitForFunction(() => {
+      const node = document.querySelector('.sector-boss .hull-reflection'); if (!node) return false;
+      const s = getComputedStyle(node), opacity = Number(s.opacity);
+      return s.display !== 'none' && node.getClientRects().length > 0 && opacity > 0
+        ? { opacity, display: s.display, rects: node.getClientRects().length, mask: s.maskImage } : false;
+    }, null, { timeout: 15000, polling: 'raf' });
+    result.originalReflectionPulse = await pulse.jsonValue(); await pulse.dispose();
+    assert.ok(result.originalReflectionPulse.opacity > 0);
+    assert.ok(result.originalReflectionPulse.mask.includes('url('));
+  }
 
   await tap(page.getByRole('button', { name: 'Pause', exact: true })); await waitMode('paused');
   const paused = await clock(); await page.waitForTimeout(2100);
@@ -118,7 +141,8 @@ try {
     return {
       heat: { display: restored.display, rects: heat.getClientRects().length, mask: restored.maskImage,
         webkitMask: restored.webkitMaskImage, inlineMask: originalMask, opacity: restored.opacity, overflow: restored.overflow },
-      reflection: { display: rs.display, rects: reflection.getClientRects().length, inlineMask: reflection.style.maskImage },
+      reflection: { display: rs.display, rects: reflection.getClientRects().length, inlineMask: reflection.style.maskImage,
+        mask: rs.maskImage, webkitMask: rs.webkitMaskImage, opacity: Number(rs.opacity) },
       hotspots, cascadeOnlyProbe: { nonMaskPropertiesIdentical: JSON.stringify(before) === JSON.stringify(after), oppositeMask, exactInlineStyleRestored: heat.style.cssText === cssText },
       bossRect: { width: rect.width, height: rect.height }, bossImageReady: image.complete && image.naturalWidth > 0,
       sceneCanvases: document.querySelectorAll('.game-field canvas').length,
@@ -133,8 +157,9 @@ try {
   for (const key of ['mask', 'webkitMask']) {
     if (unmasked) assert.equal(scene.heat[key], 'none', key); else assert.ok(scene.heat[key].includes('url('), key);
   }
-  assert.equal(scene.reflection.display, 'none'); assert.equal(scene.reflection.rects, 0);
+  assert.equal(scene.reflection.display, reflectionOn ? 'block' : 'none'); assert.equal(scene.reflection.rects, reflectionOn ? 1 : 0);
   assert.ok(scene.reflection.inlineMask.includes('url('));
+  assert.ok(scene.reflection.mask.includes('url(')); assert.ok(scene.reflection.webkitMask.includes('url('));
   assert.ok(scene.hotspots.length > 0 && scene.hotspots.length <= 8);
   for (const spot of scene.hotspots) {
     assert.equal(spot.rects, 1); assert.ok(Number(spot.opacity) > 0); assert.ok(spot.background.includes('radial-gradient'));
@@ -184,6 +209,6 @@ try {
   if (page && !page.isClosed()) try { await page.screenshot({ path: directory + '/failure.png', timeout: 5000 }); } catch { /* Retain first error. */ }
 } finally {
   result.finishedAt = new Date().toISOString(); writeFileSync(directory + '/verification.json', JSON.stringify(result, null, 2) + '\n');
-  console.log('CRYPTOID_HEAT_MASK_RESULT ' + JSON.stringify(result));
+  console.log((reflectionComparison ? 'CRYPTOID_UNMASKED_HEAT_REFLECTION_RESULT ' : 'CRYPTOID_HEAT_MASK_RESULT ') + JSON.stringify(result));
   if (browser) await browser.close(); if (server) await server.close();
 }
