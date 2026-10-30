@@ -1,0 +1,60 @@
+{
+  "ownerObservation": {
+    "whiteScreen": false,
+    "normalExit": true,
+    "unplannedPausesReported": 2,
+    "triggerReported": "Finger absetzen",
+    "browserAndDeviceNotRestatedInThisMessage": true
+  },
+  "runtimeSource": "9b38b695fc3f9b81407dfe97c5feb8128ca95767",
+  "runtimeTree": "994db1d2a9daaf63eed6ecdf2a24af01a08baa5d",
+  "configuredTreatment": "flat-live-scene",
+  "reportFilename": "cryptoid-diagnose-2026-10-30T10-03-43-348Z-9c31e447.json",
+  "reportSha256": "b5442c4693c56113a45d3d44d516cd730cc73c382b6238ed5c53de757b924c49",
+  "rawOwnerReportCommitted": false,
+  "savedActiveMs": 530855,
+  "displayedTime": "08:50",
+  "savedMode": "ended",
+  "unobservedGaps": 0,
+  "clockAndBriefRunMatch": true,
+  "fullRecording": false,
+  "protection": true,
+  "fullSession": null,
+  "retainedEvents": 32,
+  "collectorDrops": 199,
+  "collectorDropsCanIncludeEvictionAndRateLimits": true,
+  "retainedNonExitPause": {
+    "sequence": [
+      "touchend",
+      "blur",
+      "state"
+    ],
+    "touchendToBlurMs": 5,
+    "blurToPausedMs": 2,
+    "pausedActiveMs": 527013,
+    "contactsAtPrecedingRelease": 0,
+    "nativeFocusLossReasonMeasured": false
+  },
+  "bothOwnerReportedPausesFullyRetained": false,
+  "normalEndSequenceRecorded": true,
+  "currentDocumentStartedBeforeRun": true,
+  "lastContextField": {
+    "width": 430,
+    "height": 711
+  },
+  "precedingFailureLastContextField": {
+    "width": 430,
+    "height": 825
+  },
+  "browserChromeVisibilityMeasured": false,
+  "pauseHandlerReview": {
+    "controllerBlob": "d73579b3f9abe575adacfa978259aec9bdb0e7fd",
+    "file": "frontend/src/pages/GamePage.tsx",
+    "line": 1489,
+    "finding": "Existing window blur handler pauses a playing game and requires manual resume. Finger release alone is not an explicit pause command. Why the browser emitted blur is unknown.",
+    "runtimeCodeChanged": false
+  },
+  "nativeTerminationCauseMeasured": false,
+  "whiteScreenFixed": false,
+  "conclusion": "One owner-reported normal completion at 08:50 in the flat-live-scene condition. Encouraging comparison, not a causal proof: two unwanted pauses remain and the reported field height differs from the preceding failed run. Clarify browser/chrome state before choosing the next comparison."
+}

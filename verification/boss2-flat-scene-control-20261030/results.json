@@ -2,7 +2,14 @@
   "version": 1,
   "kind": "private-flat-live-scene-comparison",
   "whiteScreenFixed": false,
-  "physicalDeviceResult": null,
+  "physicalDeviceResult": {
+    "evidence": "evidence/owner-flat-scene-completion.json",
+    "status": "owner-reported-normal-end-without-white-screen",
+    "savedActiveMs": 530855,
+    "displayedTime": "08:50",
+    "unplannedPausesReported": 2,
+    "notAnAcceptedRepair": true
+  },
   "runtime": {
     "source": "9b38b695fc3f9b81407dfe97c5feb8128ca95767",
     "tree": "994db1d2a9daaf63eed6ecdf2a24af01a08baa5d",
@@ -116,6 +123,9 @@
     "ownerResult": null
   },
   "nextPhoneProtocol": {
+    "status": "completed-once-without-owner-reported-white-screen",
+    "repeatRequested": false,
+    "nextStep": "Clarify browser and browser-chrome state because the last recorded field was 430x711 instead of the preceding failure's 430x825; then choose a narrower rendering comparison.",
     "browser": "same Pi Browser on affected phone",
     "fullRecording": false,
     "protection": true,
