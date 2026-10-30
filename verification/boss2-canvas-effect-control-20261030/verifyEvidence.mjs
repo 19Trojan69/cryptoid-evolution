@@ -20,9 +20,16 @@ for (const engine of ['chromium', 'webkit']) {
     } else assert.ok(r.activeObservation.canvasResources.draws > 0);
   }
 }
-assert.equal(result.physicalOwnerResultForNewControl, null); assert.equal(result.whiteScreenFixed, false);
+const owner = read('./evidence/owner-canvas-control-failure.json');
+assert.deepEqual(result.physicalOwnerResultForNewControl, owner);
+assert.equal(owner.runtimeSource, result.runtimeSource);
+assert.equal(owner.ownerObservation, 'White Screen');
+assert.equal(owner.configuredTreatment, 'existing-original-impact-fallback');
+assert.equal(owner.displayedTime, '05:27'); assert.equal(owner.savedActiveMs, 327312);
+assert.equal(owner.clockAndBriefRunMatch, true); assert.equal(owner.finalFingerReleaseKnown, false);
+assert.equal(owner.nativeTerminationCauseMeasured, false); assert.equal(result.whiteScreenFixed, false);
 assert.equal(result.preview.publicRelease, false); assert.equal(result.preview.protectionChanged, false);
 const image = readFileSync(new URL('./' + result.hostedDesktopCheck.screenshot, import.meta.url));
 assert.equal(image.length, result.hostedDesktopCheck.screenshotBytes);
 assert.equal(createHash('sha256').update(image).digest('hex'), result.hostedDesktopCheck.screenshotSha256);
-console.log('CRYPTOID_CANVAS_EVIDENCE ' + JSON.stringify({ passed: true, source: result.runtimeSource, syntheticConditions: 4, physicalResultForNewControl: false, whiteScreenFixed: false }));
+console.log('CRYPTOID_CANVAS_EVIDENCE ' + JSON.stringify({ passed: true, source: result.runtimeSource, syntheticConditions: 4, ownerReportedWhiteScreen: true, savedOwnerTime: owner.displayedTime, whiteScreenFixed: false }));

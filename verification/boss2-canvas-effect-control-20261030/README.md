@@ -1,5 +1,13 @@
 # Protected ordinary-explosion Canvas control — 2026-10-30
 
+## Device outcome: White Screen at saved 05:27
+
+The owner subsequently attached `cryptoid-diagnose-2026-10-30T08-08-34-331Z-28e2fda6.json` and reported White Screen. Its source is the deployed control, with treatment `existing-original-impact-fallback`. Stopwatch and brief trace match: 327,312 ms, displayed 05:27, mode running, full recording off and protection on. The configured ordinary explosion Canvas fallback did not prevent the failure. This does not exclude other graphics paths, establish a memory leak, or identify a native cause.
+
+The saved tail ends in a single-contact touchstart about 71 seconds before the final checkpoint, without a saved subsequent release. Do not describe this run as untouched or assume no movement while that contact was held; pointermove is not collected. No multiple-contact, JavaScript error or rejection event appears in the saved tail. One stalled entry occurred 71 ms after the initial running record and returned to running roughly one second later; it was not a final pre-return stall. The new document starts 890 ms after the final saved checkpoint. None of these intervals is an exact physical crash-time measurement. The raw owner report stays local; a derived technical summary and its hash are in `evidence/owner-canvas-control-failure.json`. The browser is not measured by this report; the test procedure requested the same Pi Browser used previously.
+
+The earlier proposed eight-minute test condition was not completed successfully. Short automated successes below remain implementation evidence only. Do not ask the owner for an identical repeat or create another preview without a distinct justified change. Preserve the current frozen device branch and deployment; this receipt update is not a runtime change.
+
 This is a single rendering-path comparison, not a White Screen repair. Base evidence commit: `b47488fb754bf8454311bf1d7f5026aad9caff6d`. The preceding tested device runtime is `10b30981ac02c63f32dfc829a17e6a36743c0160`, at the protected brief-report preview. Keep its frozen branch and URL unchanged.
 
 ## New owner evidence

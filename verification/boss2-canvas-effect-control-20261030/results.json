@@ -4,7 +4,36 @@
   "runtimeTree": "b16420f15f17cac3d0123b8c11245c52d08df3d5",
   "deviceBranch": "codex/boss2-canvas-device-20261030",
   "workBranch": "codex/boss2-canvas-effect-control-20261030",
-  "physicalOwnerResultForNewControl": null,
+  "physicalOwnerResultForNewControl": {
+    "ownerObservation": "White Screen",
+    "runtimeSource": "8fc4077ec6d08bca955e0d8d306a34084ee8753f",
+    "configuredTreatment": "existing-original-impact-fallback",
+    "reportFilename": "cryptoid-diagnose-2026-10-30T08-08-34-331Z-28e2fda6.json",
+    "reportSha256": "22f5e8f24e6fb0853968f2dd71a361cc6803185c5307e4f0148207ee10a8120b",
+    "savedActiveMs": 327312,
+    "displayedTime": "05:27",
+    "savedMode": "running",
+    "unobservedGaps": 1,
+    "collectorDrops": 0,
+    "fullRecording": false,
+    "protection": true,
+    "clockAndBriefRunMatch": true,
+    "savedTailEndsWithSingleContactDown": true,
+    "lastContactEventToCheckpointMs": 71009,
+    "finalFingerReleaseKnown": false,
+    "savedErrorOrRejectionEvents": 0,
+    "savedMultipleContactEvents": 0,
+    "stalledEventOffsetsFromStartMs": [
+      73
+    ],
+    "newDocumentNavigationType": "navigate",
+    "checkpointToNewDocumentMs": 890,
+    "nativeTerminationCauseMeasured": false,
+    "exactCrashTimeMeasured": false,
+    "rawOwnerReportCommitted": false,
+    "browserMeasuredByReport": false,
+    "conclusion": "The configured ordinary explosion Canvas fallback did not prevent the owner-reported White Screen. This renderer is not a necessary condition for this failure; other rendering paths remain untested by this control."
+  },
   "whiteScreenFixed": false,
   "nativeTerminationCauseMeasured": false,
   "precedingOwnerFailure": {
@@ -44,9 +73,15 @@
   "verification": {
     "sourceTransformChecksPassed": 3,
     "workflowRun": 41006776928,
-    "jobs": [123903355149, 123903355321],
+    "jobs": [
+      123903355149,
+      123903355321
+    ],
     "syntheticConditions": 4,
-    "originalAndFallbackEngines": ["chromium", "webkit"],
+    "originalAndFallbackEngines": [
+      "chromium",
+      "webkit"
+    ],
     "minimumActiveObservationMs": 20000,
     "naturalEscortDestructionRequired": true,
     "originalCanvasDrawingActuallyObserved": true,
@@ -83,7 +118,7 @@
     "This changes the ordinary explosion rendering path; it does not disable every Canvas or remove all effects.",
     "The original DOM fallback may create more DOM and animation work.",
     "Short automated checks do not establish smartphone endurance or a native failure cause.",
-    "The new device comparison should cover eight active minutes because the preceding failed checkpoint was 06:40.",
-    "A hard termination can omit final events and leave only the last saved stopwatch checkpoint."
+    "A hard termination can omit final events and leave only the last saved stopwatch checkpoint.",
+    "The owner reported White Screen in the new control at saved 05:27. Do not present the short automated successes as a smartphone repair."
   ]
 }

@@ -1,0 +1,30 @@
+{
+  "ownerObservation": "White Screen",
+  "runtimeSource": "8fc4077ec6d08bca955e0d8d306a34084ee8753f",
+  "configuredTreatment": "existing-original-impact-fallback",
+  "reportFilename": "cryptoid-diagnose-2026-10-30T08-08-34-331Z-28e2fda6.json",
+  "reportSha256": "22f5e8f24e6fb0853968f2dd71a361cc6803185c5307e4f0148207ee10a8120b",
+  "savedActiveMs": 327312,
+  "displayedTime": "05:27",
+  "savedMode": "running",
+  "unobservedGaps": 1,
+  "collectorDrops": 0,
+  "fullRecording": false,
+  "protection": true,
+  "clockAndBriefRunMatch": true,
+  "savedTailEndsWithSingleContactDown": true,
+  "lastContactEventToCheckpointMs": 71009,
+  "finalFingerReleaseKnown": false,
+  "savedErrorOrRejectionEvents": 0,
+  "savedMultipleContactEvents": 0,
+  "stalledEventOffsetsFromStartMs": [
+    73
+  ],
+  "newDocumentNavigationType": "navigate",
+  "checkpointToNewDocumentMs": 890,
+  "nativeTerminationCauseMeasured": false,
+  "exactCrashTimeMeasured": false,
+  "rawOwnerReportCommitted": false,
+  "browserMeasuredByReport": false,
+  "conclusion": "The configured ordinary explosion Canvas fallback did not prevent the owner-reported White Screen. This renderer is not a necessary condition for this failure; other rendering paths remain untested by this control."
+}
