@@ -1,0 +1,506 @@
+{
+  "kind": "assistant-short-desktop-mask-comparison",
+  "physicalDevice": false,
+  "workflow": "https://github.com/19Trojan69/cryptoid-evolution/actions/runs/41089492243",
+  "whiteScreenFixed": false,
+  "observations": [
+    {
+      "complete": true,
+      "engine": "chromium",
+      "unmasked": false,
+      "physicalDevice": false,
+      "physicalCrashSimulated": false,
+      "fullRecording": false,
+      "whiteScreenFixed": false,
+      "steeringEventsSynthetic": true,
+      "engineVersion": "151.0.7922.34",
+      "source": "67dabc714907be6d3ae99ccf9ebeab170eb34b06",
+      "sourceTree": "72de7664d3ef9dcd21ddd407b081bb647885f4f7",
+      "scene": {
+        "heat": {
+          "display": "block",
+          "rects": 1,
+          "mask": "url(\"http://127.0.0.1:45187/ships/bosses/evolved/boss-02-hull.webp\")",
+          "webkitMask": "url(\"http://127.0.0.1:45187/ships/bosses/evolved/boss-02-hull.webp\")",
+          "inlineMask": "url(\"/ships/bosses/evolved/boss-02-hull.webp\")",
+          "opacity": "1",
+          "overflow": "hidden"
+        },
+        "reflection": {
+          "display": "none",
+          "rects": 0,
+          "inlineMask": "url(\"/ships/bosses/evolved/boss-02-hull.webp\")"
+        },
+        "hotspots": [
+          {
+            "rects": 1,
+            "opacity": "0.48",
+            "transform": "matrix(-0.0385591, -0.478449, 0.478449, -0.0385591, -10.0156, -8.8125)",
+            "width": "20.0312px",
+            "height": "17.625px",
+            "animation": "none",
+            "innerAnimation": "none",
+            "background": "radial-gradient(at 38% 41%, rgb(255, 216, 155) 0px, rgb(255, 216, 155) 5%, rgba(255, 121, 40, 0.72) 19%, rgba(171, 36, 23, 0.475) 39%, rgba(0, 0, 0, 0) 67%), radial-gradient(at 66% 58%, rgba(243, 97, 37, 0.494) 0px, rgba(243, 97, 37, 0.494) 8%, rgba(0, 0, 0, 0) 52%)",
+            "nativeAnimations": 0
+          },
+          {
+            "rects": 1,
+            "opacity": "0.48",
+            "transform": "matrix(0.42505, 0.223008, -0.223008, 0.42505, -7.15625, -6.49219)",
+            "width": "14.3125px",
+            "height": "12.9844px",
+            "animation": "none",
+            "innerAnimation": "none",
+            "background": "radial-gradient(at 38% 41%, rgb(255, 216, 155) 0px, rgb(255, 216, 155) 5%, rgba(255, 121, 40, 0.72) 19%, rgba(171, 36, 23, 0.475) 39%, rgba(0, 0, 0, 0) 67%), radial-gradient(at 66% 58%, rgba(243, 97, 37, 0.494) 0px, rgba(243, 97, 37, 0.494) 8%, rgba(0, 0, 0, 0) 52%)",
+            "nativeAnimations": 0
+          }
+        ],
+        "cascadeOnlyProbe": {
+          "nonMaskPropertiesIdentical": true,
+          "oppositeMask": "none",
+          "exactInlineStyleRestored": true
+        },
+        "bossRect": {
+          "width": 378.390625,
+          "height": 141.890625
+        },
+        "bossImageReady": true,
+        "sceneCanvases": 0,
+        "backgroundStarCircles": 227,
+        "backgroundPlanets": 4,
+        "flatShips": 3,
+        "reactor": null
+      },
+      "bannerMatches": true,
+      "initialPausedGeometry": {
+        ".game-field": {
+          "x": 0,
+          "y": 0,
+          "width": 430,
+          "height": 825
+        },
+        ".game-hud": {
+          "x": 0,
+          "y": 0,
+          "width": 430,
+          "height": 71
+        },
+        ".home-control": {
+          "x": 4,
+          "y": 10,
+          "width": 36,
+          "height": 44
+        },
+        ".pause-control": {
+          "x": 389.984375,
+          "y": 4,
+          "width": 36,
+          "height": 44
+        },
+        ".player-ship": {
+          "x": 161.25,
+          "y": 589.75,
+          "width": 107.5,
+          "height": 107.5
+        }
+      },
+      "activeObservation": {
+        "activeMs": 20634.899999999994,
+        "coreVolley": 5,
+        "sameDocument": true
+      },
+      "manualPauseFreezes": true,
+      "pointerSteeringPreserved": true,
+      "weaponMenuRoundtrip": true,
+      "reportScene": "flat-live-scene-original-background-original-boss-no-weapon-canvas-hidden-hull-reflection",
+      "normalExitAndReportPreserved": true,
+      "savedActiveMs": 20906.100000000006,
+      "finishedAt": "2026-10-30T16:25:58.852Z"
+    },
+    {
+      "complete": true,
+      "engine": "chromium",
+      "unmasked": true,
+      "physicalDevice": false,
+      "physicalCrashSimulated": false,
+      "fullRecording": false,
+      "whiteScreenFixed": false,
+      "steeringEventsSynthetic": true,
+      "engineVersion": "151.0.7922.34",
+      "source": "67dabc714907be6d3ae99ccf9ebeab170eb34b06",
+      "sourceTree": "72de7664d3ef9dcd21ddd407b081bb647885f4f7",
+      "scene": {
+        "heat": {
+          "display": "block",
+          "rects": 1,
+          "mask": "none",
+          "webkitMask": "none",
+          "inlineMask": "url(\"/ships/bosses/evolved/boss-02-hull.webp\")",
+          "opacity": "1",
+          "overflow": "hidden"
+        },
+        "reflection": {
+          "display": "none",
+          "rects": 0,
+          "inlineMask": "url(\"/ships/bosses/evolved/boss-02-hull.webp\")"
+        },
+        "hotspots": [
+          {
+            "rects": 1,
+            "opacity": "0.48",
+            "transform": "matrix(-0.0385591, -0.478449, 0.478449, -0.0385591, -10.0156, -8.8125)",
+            "width": "20.0312px",
+            "height": "17.625px",
+            "animation": "none",
+            "innerAnimation": "none",
+            "background": "radial-gradient(at 38% 41%, rgb(255, 216, 155) 0px, rgb(255, 216, 155) 5%, rgba(255, 121, 40, 0.72) 19%, rgba(171, 36, 23, 0.475) 39%, rgba(0, 0, 0, 0) 67%), radial-gradient(at 66% 58%, rgba(243, 97, 37, 0.494) 0px, rgba(243, 97, 37, 0.494) 8%, rgba(0, 0, 0, 0) 52%)",
+            "nativeAnimations": 0
+          },
+          {
+            "rects": 1,
+            "opacity": "0.48",
+            "transform": "matrix(0.42505, 0.223008, -0.223008, 0.42505, -7.15625, -6.49219)",
+            "width": "14.3125px",
+            "height": "12.9844px",
+            "animation": "none",
+            "innerAnimation": "none",
+            "background": "radial-gradient(at 38% 41%, rgb(255, 216, 155) 0px, rgb(255, 216, 155) 5%, rgba(255, 121, 40, 0.72) 19%, rgba(171, 36, 23, 0.475) 39%, rgba(0, 0, 0, 0) 67%), radial-gradient(at 66% 58%, rgba(243, 97, 37, 0.494) 0px, rgba(243, 97, 37, 0.494) 8%, rgba(0, 0, 0, 0) 52%)",
+            "nativeAnimations": 0
+          }
+        ],
+        "cascadeOnlyProbe": {
+          "nonMaskPropertiesIdentical": true,
+          "oppositeMask": "url(\"http://127.0.0.1:45379/ships/bosses/evolved/boss-02-hull.webp\")",
+          "exactInlineStyleRestored": true
+        },
+        "bossRect": {
+          "width": 378.390625,
+          "height": 141.890625
+        },
+        "bossImageReady": true,
+        "sceneCanvases": 0,
+        "backgroundStarCircles": 227,
+        "backgroundPlanets": 4,
+        "flatShips": 3,
+        "reactor": null
+      },
+      "bannerMatches": true,
+      "initialPausedGeometry": {
+        ".game-field": {
+          "x": 0,
+          "y": 0,
+          "width": 430,
+          "height": 825
+        },
+        ".game-hud": {
+          "x": 0,
+          "y": 0,
+          "width": 430,
+          "height": 71
+        },
+        ".home-control": {
+          "x": 4,
+          "y": 10,
+          "width": 36,
+          "height": 44
+        },
+        ".pause-control": {
+          "x": 389.984375,
+          "y": 4,
+          "width": 36,
+          "height": 44
+        },
+        ".player-ship": {
+          "x": 161.25,
+          "y": 589.75,
+          "width": 107.5,
+          "height": 107.5
+        }
+      },
+      "originalLayoutBoxesPreserved": true,
+      "activeObservation": {
+        "activeMs": 20572.800000000017,
+        "coreVolley": 5,
+        "sameDocument": true
+      },
+      "manualPauseFreezes": true,
+      "pointerSteeringPreserved": true,
+      "weaponMenuRoundtrip": true,
+      "reportScene": "flat-live-scene-original-background-original-boss-no-weapon-canvas-hidden-hull-reflection-unmasked-hull-heat",
+      "normalExitAndReportPreserved": true,
+      "savedActiveMs": 20858.29999999999,
+      "finishedAt": "2026-10-30T16:26:56.831Z"
+    },
+    {
+      "complete": true,
+      "engine": "webkit",
+      "unmasked": false,
+      "physicalDevice": false,
+      "physicalCrashSimulated": false,
+      "fullRecording": false,
+      "whiteScreenFixed": false,
+      "steeringEventsSynthetic": true,
+      "engineVersion": "26.5",
+      "source": "67dabc714907be6d3ae99ccf9ebeab170eb34b06",
+      "sourceTree": "72de7664d3ef9dcd21ddd407b081bb647885f4f7",
+      "scene": {
+        "heat": {
+          "display": "block",
+          "rects": 1,
+          "mask": "url(\"http://127.0.0.1:39355/ships/bosses/evolved/boss-02-hull.webp\")",
+          "webkitMask": "url(\"http://127.0.0.1:39355/ships/bosses/evolved/boss-02-hull.webp\")",
+          "inlineMask": "url(\"/ships/bosses/evolved/boss-02-hull.webp\")",
+          "opacity": "1",
+          "overflow": "hidden"
+        },
+        "reflection": {
+          "display": "none",
+          "rects": 0,
+          "inlineMask": "url(\"/ships/bosses/evolved/boss-02-hull.webp\")"
+        },
+        "hotspots": [
+          {
+            "rects": 1,
+            "opacity": "0.48",
+            "transform": "matrix(-0.038559, -0.478449, 0.478449, -0.038559, -10.015625, -8.8125)",
+            "width": "20.03125px",
+            "height": "17.625px",
+            "animation": "none",
+            "innerAnimation": "none",
+            "background": "radial-gradient(at 38% 41%, rgb(255, 216, 155) 0px, rgb(255, 216, 155) 5%, rgba(255, 121, 40, 0.72) 19%, rgba(171, 36, 23, 0.475) 39%, rgba(0, 0, 0, 0) 67%), radial-gradient(at 66% 58%, rgba(243, 97, 37, 0.494) 0px, rgba(243, 97, 37, 0.494) 8%, rgba(0, 0, 0, 0) 52%)",
+            "nativeAnimations": 0
+          },
+          {
+            "rects": 1,
+            "opacity": "0.48",
+            "transform": "matrix(0.42505, 0.223008, -0.223008, 0.42505, -7.15625, -6.492188)",
+            "width": "14.3125px",
+            "height": "12.984375px",
+            "animation": "none",
+            "innerAnimation": "none",
+            "background": "radial-gradient(at 38% 41%, rgb(255, 216, 155) 0px, rgb(255, 216, 155) 5%, rgba(255, 121, 40, 0.72) 19%, rgba(171, 36, 23, 0.475) 39%, rgba(0, 0, 0, 0) 67%), radial-gradient(at 66% 58%, rgba(243, 97, 37, 0.494) 0px, rgba(243, 97, 37, 0.494) 8%, rgba(0, 0, 0, 0) 52%)",
+            "nativeAnimations": 0
+          },
+          {
+            "rects": 1,
+            "opacity": "0.48",
+            "transform": "matrix(0.477203, -0.051745, 0.051745, 0.477203, -8.9375, -8.945313)",
+            "width": "17.875px",
+            "height": "17.890625px",
+            "animation": "none",
+            "innerAnimation": "none",
+            "background": "radial-gradient(at 38% 41%, rgb(255, 216, 155) 0px, rgb(255, 216, 155) 5%, rgba(255, 121, 40, 0.72) 19%, rgba(171, 36, 23, 0.475) 39%, rgba(0, 0, 0, 0) 67%), radial-gradient(at 66% 58%, rgba(243, 97, 37, 0.494) 0px, rgba(243, 97, 37, 0.494) 8%, rgba(0, 0, 0, 0) 52%)",
+            "nativeAnimations": 0
+          },
+          {
+            "rects": 1,
+            "opacity": "0.48",
+            "transform": "matrix(0.154021, -0.454618, 0.454618, 0.154021, -8.359375, -9.328125)",
+            "width": "16.71875px",
+            "height": "18.65625px",
+            "animation": "none",
+            "innerAnimation": "none",
+            "background": "radial-gradient(at 38% 41%, rgb(255, 216, 155) 0px, rgb(255, 216, 155) 5%, rgba(255, 121, 40, 0.72) 19%, rgba(171, 36, 23, 0.475) 39%, rgba(0, 0, 0, 0) 67%), radial-gradient(at 66% 58%, rgba(243, 97, 37, 0.494) 0px, rgba(243, 97, 37, 0.494) 8%, rgba(0, 0, 0, 0) 52%)",
+            "nativeAnimations": 0
+          }
+        ],
+        "cascadeOnlyProbe": {
+          "nonMaskPropertiesIdentical": true,
+          "oppositeMask": "none",
+          "exactInlineStyleRestored": true
+        },
+        "bossRect": {
+          "width": 378.390625,
+          "height": 141.890625
+        },
+        "bossImageReady": true,
+        "sceneCanvases": 0,
+        "backgroundStarCircles": 227,
+        "backgroundPlanets": 4,
+        "flatShips": 3,
+        "reactor": null
+      },
+      "bannerMatches": true,
+      "initialPausedGeometry": {
+        ".game-field": {
+          "x": 0,
+          "y": 0,
+          "width": 430,
+          "height": 825
+        },
+        ".game-hud": {
+          "x": 0,
+          "y": 0,
+          "width": 430,
+          "height": 71
+        },
+        ".home-control": {
+          "x": 4,
+          "y": 10,
+          "width": 36,
+          "height": 44
+        },
+        ".pause-control": {
+          "x": 389.984375,
+          "y": 4,
+          "width": 36,
+          "height": 44
+        },
+        ".player-ship": {
+          "x": 161.1666717529297,
+          "y": 589.6666870117188,
+          "width": 107.50001525878906,
+          "height": 107.5
+        }
+      },
+      "activeObservation": {
+        "activeMs": 20907,
+        "coreVolley": 5,
+        "sameDocument": true
+      },
+      "manualPauseFreezes": true,
+      "pointerSteeringPreserved": true,
+      "weaponMenuRoundtrip": true,
+      "reportScene": "flat-live-scene-original-background-original-boss-no-weapon-canvas-hidden-hull-reflection",
+      "normalExitAndReportPreserved": true,
+      "savedActiveMs": 21434,
+      "finishedAt": "2026-10-30T16:26:05.925Z"
+    },
+    {
+      "complete": true,
+      "engine": "webkit",
+      "unmasked": true,
+      "physicalDevice": false,
+      "physicalCrashSimulated": false,
+      "fullRecording": false,
+      "whiteScreenFixed": false,
+      "steeringEventsSynthetic": true,
+      "engineVersion": "26.5",
+      "source": "67dabc714907be6d3ae99ccf9ebeab170eb34b06",
+      "sourceTree": "72de7664d3ef9dcd21ddd407b081bb647885f4f7",
+      "scene": {
+        "heat": {
+          "display": "block",
+          "rects": 1,
+          "mask": "none",
+          "webkitMask": "none",
+          "inlineMask": "url(\"/ships/bosses/evolved/boss-02-hull.webp\")",
+          "opacity": "1",
+          "overflow": "hidden"
+        },
+        "reflection": {
+          "display": "none",
+          "rects": 0,
+          "inlineMask": "url(\"/ships/bosses/evolved/boss-02-hull.webp\")"
+        },
+        "hotspots": [
+          {
+            "rects": 1,
+            "opacity": "0.48",
+            "transform": "matrix(-0.038559, -0.478449, 0.478449, -0.038559, -10.015625, -8.8125)",
+            "width": "20.03125px",
+            "height": "17.625px",
+            "animation": "none",
+            "innerAnimation": "none",
+            "background": "radial-gradient(at 38% 41%, rgb(255, 216, 155) 0px, rgb(255, 216, 155) 5%, rgba(255, 121, 40, 0.72) 19%, rgba(171, 36, 23, 0.475) 39%, rgba(0, 0, 0, 0) 67%), radial-gradient(at 66% 58%, rgba(243, 97, 37, 0.494) 0px, rgba(243, 97, 37, 0.494) 8%, rgba(0, 0, 0, 0) 52%)",
+            "nativeAnimations": 0
+          },
+          {
+            "rects": 1,
+            "opacity": "0.48",
+            "transform": "matrix(-0.454658, -0.153903, 0.153903, -0.454658, -6.125, -9.164063)",
+            "width": "12.25px",
+            "height": "18.328125px",
+            "animation": "none",
+            "innerAnimation": "none",
+            "background": "radial-gradient(at 38% 41%, rgb(255, 216, 155) 0px, rgb(255, 216, 155) 5%, rgba(255, 121, 40, 0.72) 19%, rgba(171, 36, 23, 0.475) 39%, rgba(0, 0, 0, 0) 67%), radial-gradient(at 66% 58%, rgba(243, 97, 37, 0.494) 0px, rgba(243, 97, 37, 0.494) 8%, rgba(0, 0, 0, 0) 52%)",
+            "nativeAnimations": 0
+          },
+          {
+            "rects": 1,
+            "opacity": "0.48",
+            "transform": "matrix(-0.459523, -0.138703, 0.138703, -0.459523, -5.71875, -5.6875)",
+            "width": "11.4375px",
+            "height": "11.375px",
+            "animation": "none",
+            "innerAnimation": "none",
+            "background": "radial-gradient(at 38% 41%, rgb(255, 216, 155) 0px, rgb(255, 216, 155) 5%, rgba(255, 121, 40, 0.72) 19%, rgba(171, 36, 23, 0.475) 39%, rgba(0, 0, 0, 0) 67%), radial-gradient(at 66% 58%, rgba(243, 97, 37, 0.494) 0px, rgba(243, 97, 37, 0.494) 8%, rgba(0, 0, 0, 0) 52%)",
+            "nativeAnimations": 0
+          },
+          {
+            "rects": 1,
+            "opacity": "0.48",
+            "transform": "matrix(-0.077988, 0.473622, -0.473622, -0.077988, -9.0625, -10.632813)",
+            "width": "18.125px",
+            "height": "21.265625px",
+            "animation": "none",
+            "innerAnimation": "none",
+            "background": "radial-gradient(at 38% 41%, rgb(255, 216, 155) 0px, rgb(255, 216, 155) 5%, rgba(255, 121, 40, 0.72) 19%, rgba(171, 36, 23, 0.475) 39%, rgba(0, 0, 0, 0) 67%), radial-gradient(at 66% 58%, rgba(243, 97, 37, 0.494) 0px, rgba(243, 97, 37, 0.494) 8%, rgba(0, 0, 0, 0) 52%)",
+            "nativeAnimations": 0
+          }
+        ],
+        "cascadeOnlyProbe": {
+          "nonMaskPropertiesIdentical": true,
+          "oppositeMask": "url(\"http://127.0.0.1:37379/ships/bosses/evolved/boss-02-hull.webp\")",
+          "exactInlineStyleRestored": true
+        },
+        "bossRect": {
+          "width": 378.390625,
+          "height": 141.890625
+        },
+        "bossImageReady": true,
+        "sceneCanvases": 0,
+        "backgroundStarCircles": 227,
+        "backgroundPlanets": 4,
+        "flatShips": 3,
+        "reactor": null
+      },
+      "bannerMatches": true,
+      "initialPausedGeometry": {
+        ".game-field": {
+          "x": 0,
+          "y": 0,
+          "width": 430,
+          "height": 825
+        },
+        ".game-hud": {
+          "x": 0,
+          "y": 0,
+          "width": 430,
+          "height": 71
+        },
+        ".home-control": {
+          "x": 4,
+          "y": 10,
+          "width": 36,
+          "height": 44
+        },
+        ".pause-control": {
+          "x": 389.984375,
+          "y": 4,
+          "width": 36,
+          "height": 44
+        },
+        ".player-ship": {
+          "x": 161.1666717529297,
+          "y": 589.6666870117188,
+          "width": 107.50001525878906,
+          "height": 107.5
+        }
+      },
+      "originalLayoutBoxesPreserved": true,
+      "activeObservation": {
+        "activeMs": 20979,
+        "coreVolley": 5,
+        "sameDocument": true
+      },
+      "manualPauseFreezes": true,
+      "pointerSteeringPreserved": true,
+      "weaponMenuRoundtrip": true,
+      "reportScene": "flat-live-scene-original-background-original-boss-no-weapon-canvas-hidden-hull-reflection-unmasked-hull-heat",
+      "normalExitAndReportPreserved": true,
+      "savedActiveMs": 21602,
+      "finishedAt": "2026-10-30T16:26:59.819Z"
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "kind": "excluded-incomplete-assistant-desktop-check",
+  "runId": 41088919802,
+  "source": "268abb05d94a8c592ebe0097e4b2446bfbb12195",
+  "physicalDevice": false,
+  "buildAndTypesPassed": true,
+  "completedBrowserFlows": 0,
+  "gameOpened": false,
+  "reason": "Both engines waited for Boss-2-Test öffnen before entering the game. The failure screenshot remains at the prestart menu. The new tap helper omitted the original helper's scrollIntoViewIfNeeded; only the verifier is corrected in 67dabc714907be6d3ae99ccf9ebeab170eb34b06.",
+  "candidateAccepted": false,
+  "whiteScreenReproduced": false,
+  "results": [
+    {
+      "complete": false,
+      "engine": "chromium",
+      "unmasked": false,
+      "physicalDevice": false,
+      "physicalCrashSimulated": false,
+      "fullRecording": false,
+      "whiteScreenFixed": false,
+      "steeringEventsSynthetic": true,
+      "engineVersion": "151.0.7922.34",
+      "source": "268abb05d94a8c592ebe0097e4b2446bfbb12195",
+      "sourceTree": "d47147eb92962684dc71bac6d0fbd340af3f0f1b",
+      "scene": "flat-live-scene-original-background-original-boss-no-weapon-canvas-hidden-hull-reflection",
+      "bannerMatches": true,
+      "failure": {
+        "message": "locator.waitFor: Timeout 45000ms exceeded.\nCall log:\n  - waiting for getByRole('button', { name: 'Boss-2-Test öffnen', exact: true }) to be visible\n",
+        "stack": "locator.waitFor: Timeout 45000ms exceeded.\nCall log:\n  - waiting for getByRole('button', { name: 'Boss-2-Test öffnen', exact: true }) to be visible\n\n    at tap (/home/runner/work/cryptoid-evolution/cryptoid-evolution/verification/boss2-boss-heat-unmasked-20261030/verifyMaskPreview.mjs:25:17)\n    at /home/runner/work/cryptoid-evolution/cryptoid-evolution/verification/boss2-boss-heat-unmasked-20261030/verifyMaskPreview.mjs:61:9"
+      },
+      "finishedAt": "2026-10-30T16:22:19.583Z"
+    },
+    {
+      "complete": false,
+      "engine": "webkit",
+      "unmasked": false,
+      "physicalDevice": false,
+      "physicalCrashSimulated": false,
+      "fullRecording": false,
+      "whiteScreenFixed": false,
+      "steeringEventsSynthetic": true,
+      "engineVersion": "26.5",
+      "source": "268abb05d94a8c592ebe0097e4b2446bfbb12195",
+      "sourceTree": "d47147eb92962684dc71bac6d0fbd340af3f0f1b",
+      "scene": "flat-live-scene-original-background-original-boss-no-weapon-canvas-hidden-hull-reflection",
+      "bannerMatches": true,
+      "failure": {
+        "message": "locator.waitFor: Timeout 45000ms exceeded.\nCall log:\n  - waiting for getByRole('button', { name: 'Boss-2-Test öffnen', exact: true }) to be visible\n",
+        "stack": "locator.waitFor: Timeout 45000ms exceeded.\nCall log:\n  - waiting for getByRole('button', { name: 'Boss-2-Test öffnen', exact: true }) to be visible\n\n    at tap (/home/runner/work/cryptoid-evolution/cryptoid-evolution/verification/boss2-boss-heat-unmasked-20261030/verifyMaskPreview.mjs:25:17)\n    at /home/runner/work/cryptoid-evolution/cryptoid-evolution/verification/boss2-boss-heat-unmasked-20261030/verifyMaskPreview.mjs:61:9"
+      },
+      "finishedAt": "2026-10-30T16:22:44.250Z"
+    }
+  ]
+}

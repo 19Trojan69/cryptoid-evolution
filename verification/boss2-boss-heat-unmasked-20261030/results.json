@@ -1,0 +1,106 @@
+{
+  "version": 1,
+  "kind": "private-visible-boss-heat-without-image-mask-candidate",
+  "whiteScreenFixed": false,
+  "physicalDeviceTested": false,
+  "newPhoneTestAssigned": false,
+  "runtime": {
+    "source": "67dabc714907be6d3ae99ccf9ebeab170eb34b06",
+    "tree": "72de7664d3ef9dcd21ddd407b081bb647885f4f7",
+    "deviceBranch": "codex/boss2-boss-heat-unmasked-device-20261030",
+    "workBranch": "codex/boss2-boss-heat-unmasked-20261030"
+  },
+  "basis": {
+    "handoff": "336eafef12be02f1cf1e0ceb95f26a5c46e8c51d",
+    "latestFailedPhoneSource": "2a531983e5217b14141fb8623ecb35df65d7f700",
+    "latestSavedPhoneTime": "08:36",
+    "nativeMechanismProven": false
+  },
+  "treatment": {
+    "activeImageMaskRemovedOnlyFrom": ".diagnostic-flat-scene .sector-boss .hull-heat-layer",
+    "visibleOriginalHotspots": true,
+    "reflectionHidden": true,
+    "inlineMaskRetained": true,
+    "hotspotGradientsKeysTransformsAndBoundsRetained": true,
+    "miniExplosionsRetained": true,
+    "originalSourcesUnchanged": true,
+    "gameplayClocksInputAudioUnchanged": true,
+    "extraTimersOrFrames": false,
+    "edgeClippingMayDiffer": true
+  },
+  "verification": {
+    "workflow": "https://github.com/19Trojan69/cryptoid-evolution/actions/runs/41089492243",
+    "runId": 41089492243,
+    "status": "passed",
+    "sourceComponentTests": 12,
+    "typePreflight": "passed",
+    "sourcePins": "passed",
+    "shortDesktopFlows": 4,
+    "engines": [
+      {
+        "jobId": 124179336691,
+        "engine": "chromium",
+        "version": "151.0.7922.34",
+        "conclusion": "success"
+      },
+      {
+        "jobId": 124179337212,
+        "engine": "webkit",
+        "version": "26.5",
+        "conclusion": "success"
+      }
+    ],
+    "evidence": "evidence/synthetic-mask-comparison.json",
+    "excludedInitialRunId": 41088919802,
+    "excludedEvidence": "evidence/initial-verifier-failure.json"
+  },
+  "deployment": {
+    "id": "dpl_76aTHkCGXNDHMCT5CtBnukrGEfw1",
+    "url": "https://cryptoid-evolution-testnet-7j8dw88r8-19-trojan69.vercel.app/",
+    "environment": "preview",
+    "status": "Ready",
+    "durationSeconds": 45,
+    "source": "67dabc714907be6d3ae99ccf9ebeab170eb34b06",
+    "gitBranch": "codex/boss2-boss-heat-unmasked-20261030",
+    "requireLogin": true,
+    "protection": "Standard Protection",
+    "customDomainsAssigned": false,
+    "gitAutodeploy": false,
+    "guestOnly": true,
+    "liveBackend": false,
+    "payments": false,
+    "leaderboards": false,
+    "publicReleaseAuthorized": false
+  },
+  "publicMainSource": "ce073547cf573375d141bf846f70e294138dbd73",
+  "limits": [
+    "Short emulated-phone desktop flows are not native physical-phone stability or temperature measurements.",
+    "Removing the heat mask may alter painted-edge clipping; this is an isolated private confirmation/repair candidate.",
+    "Earlier owner outcomes remain unchanged. No new owner phone outcome is asserted."
+  ],
+  "hostedCheck": {
+    "evidence": "evidence/hosted-mask-candidate.json",
+    "source": "67dabc714907be6d3ae99ccf9ebeab170eb34b06",
+    "sourceTree": "72de7664d3ef9dcd21ddd407b081bb647885f4f7",
+    "physicalDevice": false,
+    "displayedTime": "01:10",
+    "savedActiveMs": 70484.39999999851,
+    "savedMode": "ended",
+    "pairedReport": true,
+    "normalExit": true,
+    "reloadRestored": true,
+    "visibleOriginalHotspots": 5,
+    "activeHeatMask": "none",
+    "briefStalledStates": 1,
+    "whiteScreenObserved": false,
+    "whiteScreenFixed": false
+  },
+  "publicProtectionPostcheck": {
+    "publicTestnetProductionId": "dpl_239zEifRV84KCpbyHumnuHmSGm9T",
+    "publicTestnetSource": "ce073547cf573375d141bf846f70e294138dbd73",
+    "requireLogin": true,
+    "protection": "Standard Protection",
+    "newShareableLinkOrExceptionCreated": false,
+    "newPublicRelease": false
+  }
+}
