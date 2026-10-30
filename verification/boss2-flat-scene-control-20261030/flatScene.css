@@ -1,0 +1,71 @@
+.device-preview-menu section::before {
+  content: "DARSTELLUNGSTEST: Einfache Formen; Sterne, Planeten und Grafikdetails aus" !important;
+}
+.diagnostic-flat-scene, .diagnostic-flat-scene .game-field {
+  background: #08131e !important;
+  background-image: none !important;
+}
+.diagnostic-flat-scene::before, .diagnostic-flat-scene::after,
+.diagnostic-flat-scene .game-field::before, .diagnostic-flat-scene .game-field::after,
+.diagnostic-flat-scene .player-ship::before, .diagnostic-flat-scene .player-ship::after,
+.diagnostic-flat-scene .asteroid::before, .diagnostic-flat-scene .asteroid::after,
+.diagnostic-flat-scene .player-laser::before, .diagnostic-flat-scene .player-laser::after,
+.diagnostic-flat-scene .enemy-laser::before, .diagnostic-flat-scene .enemy-laser::after,
+.diagnostic-flat-scene .power-up::before, .diagnostic-flat-scene .power-up::after,
+.diagnostic-flat-scene .enemy-muzzle-flash { display: none !important; }
+
+/* Keep every outer position, size, translation, rotation and HUD/control box. */
+.diagnostic-flat-scene .player-ship, .diagnostic-flat-scene .asteroid,
+.diagnostic-flat-scene .player-laser, .diagnostic-flat-scene .enemy-laser,
+.diagnostic-flat-scene .power-up, .diagnostic-flat-scene .bonus-ship,
+.diagnostic-flat-scene .diagnostic-flat-boss, .diagnostic-flat-scene .diagnostic-flat-ship {
+  animation: none !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+  filter: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  mask-image: none !important;
+  -webkit-mask-image: none !important;
+  clip-path: none !important;
+  will-change: auto !important;
+  mix-blend-mode: normal !important;
+}
+.diagnostic-flat-scene .player-ship, .diagnostic-flat-scene .asteroid {
+  background: transparent !important;
+  border-color: transparent !important;
+}
+.diagnostic-flat-ship {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 2px solid #d8edff;
+  border-radius: 5px;
+  box-sizing: border-box;
+  background: #35b8e2;
+  pointer-events: none;
+}
+.diagnostic-flat-enemy { background: #d96d61; border-color: #ffe2ce; }
+.diagnostic-flat-bonus { background: #dfc657; border-color: #fff3b0; }
+.diagnostic-flat-scene .diagnostic-flat-boss {
+  background: #743f51 !important;
+  border: 2px solid #f4b0b8 !important;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+.diagnostic-flat-boss-label { position: absolute; left: 0; right: 0; top: 42%; text-align: center; color: #fff; font: 700 18px system-ui; }
+.diagnostic-flat-scene .player-laser { background: #a5f3ff !important; border-color: #a5f3ff !important; }
+.diagnostic-flat-scene .enemy-laser { background: #ffae75 !important; border-color: #ffae75 !important; }
+.diagnostic-flat-scene .power-up { background: #71dcad !important; border: 1px solid #d2ffe8 !important; }
+.diagnostic-flat-scene .power-up > * { visibility: hidden; }
+.diagnostic-flat-impact, .diagnostic-flat-rock, .diagnostic-flat-rock-hit {
+  position: absolute; display: block; transform: translate(-50%, -50%); pointer-events: none;
+  box-sizing: border-box; border: 1px solid #ffe1a8; background: #e9b36c; border-radius: 50%;
+}
+.diagnostic-flat-impact { width: 10px; height: 10px; z-index: 3; }
+.diagnostic-flat-rock-layer { position: absolute; inset: 0; pointer-events: none; z-index: 2; }
+.diagnostic-flat-rock { border-color: #d3d3d3; background: #7c8995; }
+.diagnostic-flat-rock-hit { width: 8px; height: 8px; }

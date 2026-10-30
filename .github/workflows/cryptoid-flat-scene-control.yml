@@ -1,0 +1,58 @@
+name: Protected flat scene control
+run-name: Compare artwork and flat scene with unchanged input, combat and clocks
+on:
+  push:
+    branches: [codex/boss2-flat-scene-control-20261030]
+    paths: ['.github/workflows/cryptoid-flat-scene-control.yml', 'verification/boss2-flat-scene-control-20261030/**', 'verification/boss2-forensics-20261028/buildDevicePreview.mjs', 'vercel.json']
+permissions:
+  contents: read
+jobs:
+  flat-scene:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        engine: [chromium, webkit]
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with:
+          node-version: '24'
+      - name: Install existing browser tools
+        run: |
+          npm install --prefix frontend --ignore-scripts --no-audit --no-fund
+          npm install --prefix verification/boss2-forensics-20261028 --ignore-scripts --no-audit --no-fund
+          git restore --worktree -- frontend/yarn.lock
+          cd verification/boss2-forensics-20261028
+          npx playwright install --with-deps ${{ matrix.engine }}
+      - name: Verify reversible render-only changes and original game source pins
+        run: |
+          node --test verification/boss2-flat-scene-control-20261030/flatTransform.test.mjs verification/boss2-flat-scene-control-20261030/flatComponents.test.mjs
+          node verification/boss2-flat-scene-control-20261030/verifyScope.mjs
+          node --experimental-strip-types verification/boss2-flat-scene-control-20261030/preflight.mjs
+      - name: Build and observe preceding artwork condition
+        env:
+          VERCEL_ENV: preview
+          CRYPTOID_FLAT_SCENE: '0'
+          CRYPTOID_FLAT_ENGINE: ${{ matrix.engine }}
+        run: |
+          node verification/boss2-flat-scene-control-20261030/buildFlatPreview.mjs
+          node --experimental-strip-types verification/boss2-flat-scene-control-20261030/verifyFlatPreview.mjs
+      - name: Build and observe flat scene condition
+        env:
+          VERCEL_ENV: preview
+          CRYPTOID_FLAT_SCENE: '1'
+          CRYPTOID_FLAT_ENGINE: ${{ matrix.engine }}
+        run: |
+          node verification/boss2-flat-scene-control-20261030/buildFlatPreview.mjs
+          node --experimental-strip-types verification/boss2-flat-scene-control-20261030/verifyFlatPreview.mjs
+      - name: Preserve synthetic comparison evidence
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: flat-scene-control-${{ matrix.engine }}
+          path: verification/boss2-flat-scene-control-20261030/results/${{ matrix.engine }}/
+          retention-days: 3
