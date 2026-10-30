@@ -1,0 +1,133 @@
+{
+  "version": 1,
+  "kind": "private-original-background-comparison",
+  "whiteScreenFixed": false,
+  "physicalDeviceResult": null,
+  "runtime": {
+    "source": "8e34152c5552f0ed02101566190ae68620105434",
+    "tree": "b520b9fe62e6636dcf7e047c1b3aa011a9bec8fc",
+    "deviceBranch": "codex/boss2-background-device-20261030",
+    "workBranch": "codex/boss2-background-control-20261030",
+    "originalFrontendTree": "890df8a38e13ef1fe315a5c0eb109c1d72b80aab"
+  },
+  "baseFlatPhoneSource": "9b38b695fc3f9b81407dfe97c5feb8128ca95767",
+  "baseFlatPhoneResults": [
+    {
+      "browser": "Safari",
+      "activeMs": 530855,
+      "time": "08:50",
+      "whiteScreenReported": false,
+      "unplannedPausesReported": 2
+    },
+    {
+      "browser": "Pi Browser",
+      "activeMs": 555311,
+      "time": "09:15",
+      "noFailuresReported": true,
+      "normalExit": true
+    }
+  ],
+  "publicMainSource": "ce073547cf573375d141bf846f70e294138dbd73",
+  "deployment": {
+    "id": "dpl_5GbJEUeahhZngQV4jagn5RSZapRi",
+    "url": "https://cryptoid-evolution-testnet-f32jw1hvm-19-trojan69.vercel.app/",
+    "environment": "preview",
+    "status": "Ready",
+    "durationSeconds": 45,
+    "requireLogin": true,
+    "protection": "Standard Protection",
+    "customDomainsAssigned": false,
+    "guestOnly": true,
+    "liveBackend": false,
+    "realAccounts": false,
+    "purchases": false,
+    "leaderboards": false,
+    "automaticUpload": false,
+    "gitAutodeploy": false,
+    "productionCandidate": false
+  },
+  "treatment": {
+    "restoredOriginalModules": [
+      "Starfield",
+      "SectorBackdrop"
+    ],
+    "flatForegroundRetained": true,
+    "flatFieldBaseFillRetained": true,
+    "originalBackgroundPresentationHooksRestored": true,
+    "originalImagePreparationRetained": true,
+    "cssFiltersDisabled": true,
+    "reactorDisabled": true,
+    "ordinaryExplosionCanvasDisabled": true,
+    "gameLogicChanged": false,
+    "collisionGeometryChanged": false,
+    "simulationClockChanged": false,
+    "inputChanged": false,
+    "audioChanged": false,
+    "hudChanged": false,
+    "extraSimulationTimersOrFrames": false
+  },
+  "verification": {
+    "workflow": "https://github.com/19Trojan69/cryptoid-evolution/actions/runs/41041207290",
+    "runId": 41041207290,
+    "sourceComponentTests": 6,
+    "typePreflight": "passed",
+    "originalSourceScopePins": "passed",
+    "jobs": [
+      {
+        "id": 124014182236,
+        "name": "background (chromium)",
+        "conclusion": "success"
+      },
+      {
+        "id": 124014182627,
+        "name": "background (webkit)",
+        "conclusion": "success"
+      }
+    ],
+    "desktopComparisons": 4,
+    "physicalCrashSimulated": false,
+    "steeringEventsSynthetic": true
+  },
+  "hostedCheck": {
+    "physicalDevice": false,
+    "source": "8e34152c5552f0ed02101566190ae68620105434",
+    "diagnosticScene": "flat-live-scene-original-background",
+    "initialClock": "00:00",
+    "pauseObserved": true,
+    "pausedDisplayBefore": "00:47",
+    "pausedDisplayAfter": "00:47",
+    "normalExit": true,
+    "reloadRestored": true,
+    "pairedReport": true,
+    "fullRecording": false,
+    "protection": true,
+    "fullSession": null,
+    "displayedTime": "00:48",
+    "savedActiveMs": 48166.900000002235,
+    "savedMode": "ended",
+    "unobservedGaps": 1,
+    "unobservedGapCauseMeasured": false,
+    "exactCrashTime": false,
+    "workingTreeDirty": true,
+    "runtimeSourceEditsRejectedByBuilder": true,
+    "sceneCanvases": 0,
+    "foregroundImages": 0,
+    "backgroundStarCircles": 227,
+    "backgroundPlanets": 4,
+    "flatBosses": 1,
+    "playerShots": 3,
+    "screenshot": "evidence/hosted-background-control.jpg",
+    "screenshotSha256": "45a4f253732661471c74468d4af89812919d801e6064c614faf342703d07471f",
+    "screenshotIsOwnerPhoneResult": false
+  },
+  "nextPhoneProtocol": {
+    "browser": "same Pi Browser on affected iPhone",
+    "fullRecording": false,
+    "protection": true,
+    "scene": "Boss 2 · Reaktor offen",
+    "targetActiveMinutes": 8,
+    "recordBrowserBarVisibility": true,
+    "crashAction": "Reopen this exact address and save/share the latest report before another run",
+    "firstOwnerResultForThisBackgroundCondition": null
+  }
+}
