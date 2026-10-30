@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 const read = path => JSON.parse(readFileSync(new URL(path, import.meta.url), 'utf8'));
 const results = read('./results.json');
-assert.equal(results.whiteScreenFixed, false); assert.equal(results.physicalDeviceTested, false);
+assert.equal(results.whiteScreenFixed, false); assert.equal(results.physicalDeviceTested, true);
 assert.equal(results.newPhoneTestAssigned, false);
 assert.equal(results.runtime.source, '67dabc714907be6d3ae99ccf9ebeab170eb34b06');
 assert.equal(results.runtime.tree, '72de7664d3ef9dcd21ddd407b081bb647885f4f7');
@@ -41,4 +41,28 @@ if (results.hostedCheck) {
   assert.equal(hosted.activeHeatMask, 'none'); assert.ok(hosted.visibleOriginalHotspots > 0);
   assert.equal(hosted.normalExit, true); assert.equal(hosted.pairedReport, true);
 }
-console.log('CRYPTOID_HEAT_MASK_EVIDENCE ' + JSON.stringify({ passed: true, source: results.runtime.source, desktopFlows: 4, phoneResult: 'not-tested', whiteScreenFixed: false }));
+const owner = read('./evidence/owner-mask-candidate-completion.json');
+assert.equal(owner.runtimeSource, results.runtime.source); assert.equal(owner.runtimeTree, results.runtime.tree);
+assert.equal(owner.ownerObservation.browser, 'Pi Browser'); assert.equal(owner.ownerObservation.browserConfirmedByOwner, true);
+assert.equal(owner.ownerObservation.normalExitReported, true); assert.equal(owner.ownerObservation.selfEndedReported, true);
+assert.equal(owner.ownerObservation.whiteScreenAbsenceExplicitlyStated, false);
+assert.equal(owner.ownerObservation.deviceWarmthReported, null); assert.equal(owner.ownerObservation.temperatureMeasured, false);
+assert.equal(owner.reportFilename, 'cryptoid-diagnose-2026-10-30T17-22-59-959Z-9100dd82.json');
+assert.equal(owner.reportBytes, 7739); assert.equal(owner.reportSha256, '06e4cce2ea0ebbd66d25004bfe3e082dd775c16f07d81d599f1ee598fcf99281');
+assert.equal(owner.rawOwnerReportCommitted, false); assert.equal(owner.savedActiveMs, 656318);
+assert.equal(owner.displayedTime, '10:56'); assert.equal(owner.savedMode, 'ended'); assert.equal(owner.unobservedGaps, 0);
+assert.equal(owner.clockAndBriefRunMatch, true); assert.equal(owner.normalHomeConfirmationEndRecorded, true);
+assert.equal(owner.fullRecording, false); assert.equal(owner.protection, true); assert.equal(owner.fullSession, null);
+assert.equal(owner.retainedEvents, 32); assert.equal(owner.collectorDrops, 271);
+assert.equal(owner.lastSessionActive, false); assert.equal(owner.activeDocumentStartedBeforeRun, true);
+assert.equal(owner.allRetainedBootsBeforeRunStart, true); assert.equal(owner.bootAfterActiveSessionRecorded, false);
+assert.equal(owner.configuredActiveHeatImageMaskRemoved, true); assert.equal(owner.configuredOriginalHotspotsVisible, true);
+assert.equal(owner.configuredReflectionHidden, true); assert.equal(owner.physicalSceneDomMeasuredByReport, false);
+assert.equal(owner.nativeTerminationCauseMeasured, false); assert.equal(owner.whiteScreenFixed, false);
+assert.equal(results.physicalDeviceResult.savedActiveMs, owner.savedActiveMs);
+assert.equal(results.physicalDeviceResult.savedMode, owner.savedMode);
+assert.equal(results.physicalDeviceResult.permanentRepairAccepted, false);
+for (const key of ['newRuntimeCreated', 'newDeploymentCreated', 'newPhoneTestAssigned', 'publicReleaseAuthorized'])
+  assert.equal(results.afterOwnerReport[key], false, key);
+console.log('CRYPTOID_HEAT_MASK_EVIDENCE ' + JSON.stringify({ passed: true, source: results.runtime.source, desktopFlows: 4,
+  phoneResult: 'owner Pi Browser normal exit 10:56', ownerSavedActiveMs: owner.savedActiveMs, whiteScreenFixed: false }));

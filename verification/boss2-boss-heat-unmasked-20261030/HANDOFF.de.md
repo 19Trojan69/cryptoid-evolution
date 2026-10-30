@@ -2,6 +2,8 @@
 
 Ausgangspunkt bleibt die Übergabe 336eafef und der Besitzer-Abbruch bei **08:36** mit Hitzespuren an/Reflexion aus. Die vier bisherigen Besitzer-Vergleiche und deren feste Zweige/Adressen sind unverändert. Ursache und dauerhafte Behebung des White Screens bleiben offen.
 
+**Neuester Stand nach dem Gerätetest:** Der Besitzer meldet ausdrücklich „Pi Browser Selbstbeendet, ganz normal ausgestiegen“. Der passende Bericht zum unveränderten Maskenkandidaten speichert **10:56 / 656318 aktive ms, Modus ended**, mit normaler Home-/Bestätigungs-/Endfolge. Das ist ein neuer Besitzer-Abschluss, kein Assistenten-Desktop-Ergebnis. Er stärkt den Verdacht auf die aktive Hitzespuren-Bildmaske oder ihre Wechselwirkung mit den Hotspots; eine dauerhafte Behebung ist damit noch nicht bewiesen.
+
 ## Tatsächlich erstellter Kandidat
 
 Die Quellprüfung von HullDamage.tsx, BossHullView.tsx, hullFires.ts und index.css zeigt eine bossgroße Bildmaske über den transformierten Hotspots mit radialen Farbverläufen. Boss-Hitzespuren sind bereits statisch und auf höchstens acht Stellen begrenzt. Kleine Trefferexplosionen sind separate Geschwister außerhalb der Maske. Daraus folgt kein bewiesener Speicher-/Grafik-/Temperaturmechanismus.
@@ -28,4 +30,16 @@ Der erste Actions-Lauf 41088919802 ist ausgeschlossen: Das neue Prüfskript scro
 
 Nachweise und Konsistenzprüfung: README.md, results.json, verifyEvidence.mjs und evidence/ in diesem Verzeichnis. Rohe Besitzerberichte und der rohe Assistentenbericht sind nicht ins Repository übertragen. Öffentliche Testnet-Produktion bleibt dpl_239zEifRV84KCpbyHumnuHmSGm9T/ce07354, Schutz unverändert.
 
-**Für diesen Kandidaten liegt noch kein Besitzer-Smartphone-Ergebnis vor; kein neuer Smartphone-Lauf wird hier als offen oder erledigt unterstellt.** Der Kandidat ist jetzt geprüft und verfügbar. Erst ein tatsächliches neues Besitzer-Ergebnis erlaubt die weitere Bewertung; keine erfolgreiche Maskenentfernung im Desktop als Behebung des White Screens ausgeben.
+## Neu abgeschlossener Besitzer-Test
+
+- Bericht: `cryptoid-diagnose-2026-10-30T17-22-59-959Z-9100dd82.json`, 7739 Bytes, SHA-256 `06e4cce2ea0ebbd66d25004bfe3e082dd775c16f07d81d599f1ee598fcf99281`.
+- Commit/Baum/Szenenkennung passen genau zum oben festgehaltenen Laufzeitstand 67dabc71 und zur sichtbaren Hitzespuren-Darstellung ohne aktive Bildmaske, Reflexion aus.
+- **10:56 / 656318 aktive Millisekunden, ended**, Uhr und Kurzbericht gehören zusammen, null aufgezeichnete Lücken. Home → Pause → Bestätigungs-Overlay → beendet ist erhalten. Das vorhandene Dokument und der gespeicherte Boot begannen vor dem Lauf; letzter Sitzungsstatus inaktiv.
+- Vollaufzeichnung aus, Testschutz an, fullSession:null; diese Optionen stehen im zum Lauf gehörenden Kurzbericht. Das ist kein fehlgeschlagener Vollbericht.
+- 32 Ereignisse und 271 Verwerfungen/Begrenzungen; keine Absturzanzahl und keine vollständige Berührungs-/Pausengeschichte. Zwei Kontakte und Gesten-/Pointer-Abbruch sind im Ausschnitt vor dem normalen Ende vorhanden; daraus keinen Eingabeauslöser oder generellen Ausschluss von Eingabe ableiten.
+- Der Besitzer bestätigt den normalen selbst gewählten Ausstieg im Pi-Browser. Er hat Wärme und White-Screen-Abwesenheit nicht zusätzlich ausdrücklich beschrieben; keine Temperaturmessung oder weitergehende Besitzer-Aussage ergänzen.
+- Bereinigter Nachweis: `evidence/owner-mask-candidate-completion.json`; Rohbericht nicht im Repository. Die konfigurierten Grafikbedingungen sind über den Quellstand zugeordnet, nicht durch eine unabhängige Smartphone-DOM-Messung.
+
+Damit ist der Vergleich enger: **Originale sichtbare Hitzespuren mit Bildmaske → 08:36-Abbruch; sichtbare Hitzespuren ohne aktive Bildmaske → 10:56 normal beendet**, jeweils Reflexion aus. Die Maskierung beziehungsweise ihre Wechselwirkung mit den transformierten Hotspots ist nun ein stärkerer Verdacht. Die einzelnen nicht vollständig kontrollierten Geräteläufe beweisen weiterhin weder den nativen Mechanismus noch einen dauerhaften Fix.
+
+**Dieser Besitzer-Test ist abgeschlossen. Aktuell ist kein weiterer Smartphone-Test offen oder neu beauftragt.** Diese Aktualisierung ergänzt ausschließlich Nachweise auf dem Arbeitszweig; kein neuer Laufzeitstand, Testlink, Build oder Deployment. Feste Geräte-Zweige und erfolgreiche/fehlgeschlagene Adressen beibehalten. Nicht auf Grundlage dieses einzelnen Ergebnisses öffentlich veröffentlichen oder die gesamte Untersuchung wiederholen.

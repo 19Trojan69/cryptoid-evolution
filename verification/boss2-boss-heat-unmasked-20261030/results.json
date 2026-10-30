@@ -2,7 +2,7 @@
   "version": 1,
   "kind": "private-visible-boss-heat-without-image-mask-candidate",
   "whiteScreenFixed": false,
-  "physicalDeviceTested": false,
+  "physicalDeviceTested": true,
   "newPhoneTestAssigned": false,
   "runtime": {
     "source": "67dabc714907be6d3ae99ccf9ebeab170eb34b06",
@@ -76,7 +76,7 @@
   "limits": [
     "Short emulated-phone desktop flows are not native physical-phone stability or temperature measurements.",
     "Removing the heat mask may alter painted-edge clipping; this is an isolated private confirmation/repair candidate.",
-    "Earlier owner outcomes remain unchanged. No new owner phone outcome is asserted."
+    "Earlier owner outcomes remain unchanged. The first owner normal completion for this candidate is now recorded separately from desktop checks; permanent repair remains unproved."
   ],
   "hostedCheck": {
     "evidence": "evidence/hosted-mask-candidate.json",
@@ -102,5 +102,29 @@
     "protection": "Standard Protection",
     "newShareableLinkOrExceptionCreated": false,
     "newPublicRelease": false
+  },
+  "physicalDeviceResult": {
+    "evidence": "evidence/owner-mask-candidate-completion.json",
+    "status": "completed-normally-owner-reported",
+    "browser": "Pi Browser",
+    "browserConfirmedByOwner": true,
+    "savedActiveMs": 656318,
+    "displayedTime": "10:56",
+    "savedMode": "ended",
+    "normalExitReported": true,
+    "normalHomeConfirmationEndRecorded": true,
+    "whiteScreenReported": false,
+    "whiteScreenAbsenceExplicitlyStated": false,
+    "temperatureMeasured": false,
+    "nativeMechanismProven": false,
+    "permanentRepairAccepted": false
+  },
+  "afterOwnerReport": {
+    "evidenceOnly": true,
+    "newRuntimeCreated": false,
+    "newDeploymentCreated": false,
+    "newPhoneTestAssigned": false,
+    "preserveFrozenSourcesAndAddresses": true,
+    "publicReleaseAuthorized": false
   }
 }
