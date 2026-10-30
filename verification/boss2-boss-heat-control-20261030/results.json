@@ -2,7 +2,20 @@
   "version": 1,
   "kind": "private-boss-heat-only-comparison",
   "whiteScreenFixed": false,
-  "physicalDeviceResult": null,
+  "physicalDeviceResult": {
+    "evidence": "evidence/owner-heat-control-failure.json",
+    "browser": "Pi Browser",
+    "browserConfirmedByOwner": true,
+    "savedActiveMs": 516166,
+    "displayedTime": "08:36",
+    "savedMode": "running",
+    "whiteScreenReported": true,
+    "normalExitReported": false,
+    "slightDeviceWarmthReported": true,
+    "temperatureMeasured": false,
+    "exactCrashTime": false,
+    "nativeTerminationCauseMeasured": false
+  },
   "runtime": {
     "source": "2a531983e5217b14141fb8623ecb35df65d7f700",
     "tree": "1d100eebfbe1b661ffd6bc404980aa919229325d",
@@ -169,6 +182,16 @@
     "targetActiveMinutes": 10,
     "recordUnexpectedPauseSeparatelyFromWhiteScreen": true,
     "crashAction": "Reopen exact address and save/share latest report before a new run",
-    "ownerOutcomeForThisCondition": null
+    "ownerOutcomeForThisCondition": "Pi Browser explicitly confirmed; White Screen and return to test page, last saved active checkpoint 08:36, slight perceived warmth, no measured temperature/native cause",
+    "status": "completed-with-white-screen"
+  },
+  "nextAction": {
+    "kind": "handoff-for-targeted-hull-heat-presentation-review",
+    "newPhoneTestAssigned": false,
+    "newRuntimeCreated": false,
+    "handoff": "HANDOFF.de.md",
+    "preserveFrozenDeviceBranchesAndUrls": true,
+    "publicReleaseAuthorized": false,
+    "candidateImplemented": false
   }
 }
