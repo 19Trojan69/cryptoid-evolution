@@ -1,0 +1,37 @@
+{
+  "ownerObservation": {
+    "browser": "Pi Browser",
+    "browserConfirmation": "Owner message accompanying report",
+    "noFailuresReported": true,
+    "normalExit": true,
+    "unplannedPauseCountNotIndependentlyEstablished": true
+  },
+  "runtimeSource": "9b38b695fc3f9b81407dfe97c5feb8128ca95767",
+  "runtimeTree": "994db1d2a9daaf63eed6ecdf2a24af01a08baa5d",
+  "configuredTreatment": "flat-live-scene",
+  "reportFilename": "cryptoid-diagnose-2026-10-30T10-22-21-053Z-559d49e3.json",
+  "reportSha256": "af5fe975eea587a613dea08aadfc53863f04548cdde042351958d726f9fa95f0",
+  "rawOwnerReportCommitted": false,
+  "savedActiveMs": 555311,
+  "displayedTime": "09:15",
+  "savedMode": "ended",
+  "unobservedGaps": 0,
+  "clockAndBriefRunMatch": true,
+  "fullRecording": false,
+  "protection": true,
+  "fullSession": null,
+  "retainedEvents": 32,
+  "collectorDrops": 108,
+  "savedTailBlurEvents": 0,
+  "savedTailErrorEvents": 0,
+  "normalHomeConfirmationEndRecorded": true,
+  "lastContextField": {
+    "width": 430,
+    "height": 825
+  },
+  "browserChromeVisibilityMeasured": false,
+  "browserIdentityMeasuredByReport": false,
+  "nativeTerminationCauseMeasured": false,
+  "whiteScreenFixed": false,
+  "conclusion": "Owner-confirmed Pi Browser completed the flat scene normally at 09:15 without reported failures, with the last field 430x825. Together with the Safari 08:50 completion this motivates narrowing the broad live-artwork group; it is not a proven cause or repair. Bounded tail cannot establish the absence of all earlier pauses/errors."
+}

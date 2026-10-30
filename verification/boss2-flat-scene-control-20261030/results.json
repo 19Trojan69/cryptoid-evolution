@@ -2,16 +2,6 @@
   "version": 1,
   "kind": "private-flat-live-scene-comparison",
   "whiteScreenFixed": false,
-  "physicalDeviceResult": {
-    "evidence": "evidence/owner-flat-scene-completion.json",
-    "status": "owner-reported-normal-end-without-white-screen",
-    "browser": "Safari",
-    "browserConfirmedByOwner": true,
-    "savedActiveMs": 530855,
-    "displayedTime": "08:50",
-    "unplannedPausesReported": 2,
-    "notAnAcceptedRepair": true
-  },
   "runtime": {
     "source": "9b38b695fc3f9b81407dfe97c5feb8128ca95767",
     "tree": "994db1d2a9daaf63eed6ecdf2a24af01a08baa5d",
@@ -125,9 +115,9 @@
     "ownerResult": null
   },
   "nextPhoneProtocol": {
-    "status": "Safari-completion-recorded; flat-scene-Pi-Browser-result-pending",
+    "status": "completed-in-Safari-and-Pi-Browser",
     "identicalSafariRepeatRequested": false,
-    "nextStep": "Use the same flat-scene URL in Pi Browser for eight active minutes, full recording off and protection on. The owner confirmed the successful run was Safari, so this adds a different browser condition. Note whether browser bars are visible; do not infer their visibility from field dimensions alone.",
+    "nextStep": "Prepare a separate protected comparison restoring only the original Starfield and SectorBackdrop modules, retaining simple foreground shapes, original clocks, input and audio. No identical flat endurance repeat requested.",
     "browser": "same Pi Browser on affected phone",
     "fullRecording": false,
     "protection": true,
@@ -135,5 +125,26 @@
     "targetActiveMinutes": 8,
     "crashAction": "Reopen this exact URL; prepare and save/share latest report before starting another run",
     "successNotSingleRunProof": true
-  }
+  },
+  "physicalDeviceResults": [
+    {
+      "evidence": "evidence/owner-flat-scene-completion.json",
+      "status": "owner-reported-normal-end-without-white-screen",
+      "browser": "Safari",
+      "browserConfirmedByOwner": true,
+      "savedActiveMs": 530855,
+      "displayedTime": "08:50",
+      "unplannedPausesReported": 2,
+      "notAnAcceptedRepair": true
+    },
+    {
+      "evidence": "evidence/owner-flat-scene-pi-completion.json",
+      "status": "owner-reported-normal-end-without-failures",
+      "browser": "Pi Browser",
+      "browserConfirmedByOwner": true,
+      "savedActiveMs": 555311,
+      "displayedTime": "09:15",
+      "notAnAcceptedRepair": true
+    }
+  ]
 }
