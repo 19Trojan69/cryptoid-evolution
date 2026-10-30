@@ -8,15 +8,19 @@ import { STOPWATCH_KEY } from '../boss2-stopwatch-20261029/stopwatchState.mjs';
 const engine = process.env.CRYPTOID_FLAT_ENGINE, controlled = process.env.CRYPTOID_FLAT_SCENE === '1';
 const backgroundComparison = process.env.CRYPTOID_BACKGROUND_COMPARISON === '1';
 const bossComparison = process.env.CRYPTOID_BOSS_COMPARISON === '1';
+const reflectionComparison = process.env.CRYPTOID_BOSS_REFLECTION_COMPARISON === '1';
+const reflectionOn = reflectionComparison && process.env.CRYPTOID_BOSS_REFLECTION_ON === '1';
 const maskComparison = process.env.CRYPTOID_BOSS_MASK_COMPARISON === '1';
 const maskLayersOff = maskComparison && process.env.CRYPTOID_BOSS_MASK_LAYERS_OFF === '1';
-const weaponComparison = maskComparison || process.env.CRYPTOID_BOSS_WEAPON_COMPARISON === '1';
-const weaponCanvasOff = maskComparison || weaponComparison && process.env.CRYPTOID_BOSS_WEAPON_CANVAS_OFF === '1';
+const weaponComparison = reflectionComparison || maskComparison || process.env.CRYPTOID_BOSS_WEAPON_COMPARISON === '1';
+const weaponCanvasOff = reflectionComparison || maskComparison || weaponComparison && process.env.CRYPTOID_BOSS_WEAPON_CANVAS_OFF === '1';
 const originalBoss = weaponComparison || bossComparison && process.env.CRYPTOID_ORIGINAL_BOSS === '1';
 const originalBackground = weaponComparison || bossComparison || backgroundComparison && process.env.CRYPTOID_FLAT_BACKGROUND === '1';
 assert.ok(['chromium', 'webkit'].includes(engine));
 const pw = createRequire(new URL('../boss2-forensics-20261028/package.json', import.meta.url))('playwright');
-const directory = maskComparison
+const directory = reflectionComparison
+  ? resolve(root, 'verification/boss2-boss-reflection-control-20261030/results', engine, reflectionOn ? 'reflection-on' : 'reflection-off')
+  : maskComparison
   ? resolve(root, 'verification/boss2-boss-mask-control-20261030/results', engine, maskLayersOff ? 'masks-off' : 'masks-on')
   : weaponComparison
   ? resolve(root, 'verification/boss2-boss-weapon-control-20261030/results', engine, weaponCanvasOff ? 'weapons-off' : 'weapons-on')
@@ -28,7 +32,7 @@ const directory = maskComparison
 mkdirSync(directory, { recursive: true });
 const result = { complete: false, engine, controlled, physicalDevice: false, physicalCrashSimulated: false,
   whiteScreenFixed: false, fullRecording: false, steeringEventsSynthetic: true, visualPreparationRetained: true,
-  comparison: maskComparison ? 'boss-masked-layer-toggle' : weaponComparison ? 'boss-weapon-component-toggle' : bossComparison ? 'original-boss-toggle' : backgroundComparison ? 'original-background-toggle' : 'original-artwork-vs-flat', originalBackground, originalBoss, weaponCanvasOff, maskLayersOff };
+  comparison: reflectionComparison ? 'boss-reflection-only-toggle' : maskComparison ? 'boss-masked-layer-toggle' : weaponComparison ? 'boss-weapon-component-toggle' : bossComparison ? 'original-boss-toggle' : backgroundComparison ? 'original-background-toggle' : 'original-artwork-vs-flat', originalBackground, originalBoss, weaponCanvasOff, maskLayersOff, reflectionOn };
 let server, browser, page, fatal;
 const inspect = () => page.evaluate(() => window.__crossDeviceTest.inspect());
 const clock = () => page.evaluate(key => JSON.parse(localStorage.getItem(key)), STOPWATCH_KEY);
@@ -86,8 +90,14 @@ try {
     assert.equal(info.bossMaskControl.originalBossHullImageRetained, true);
     assert.equal(info.bossMaskControl.originalPresentationComponentsAndHooksRetained, true);
   }
+  if (reflectionComparison) {
+    assert.equal(info.bossReflectionControl.enabled, reflectionOn);
+    assert.equal(info.bossReflectionControl.hullHeatHidden, true);
+    assert.equal(info.bossReflectionControl.originalElementsAndMaskStylesRetained, true);
+    assert.equal(info.bossReflectionControl.originalPresentationComponentsAndHooksRetained, true);
+  }
   const label = await page.locator('.device-preview-menu section').evaluate(n => getComputedStyle(n, '::before').content);
-  assert.ok(label.includes(maskComparison ? maskLayersOff ? 'Boss-Reflexion und Hitzespuren aus' : 'Boss-Reflexion und Hitzespuren an' : weaponComparison ? weaponCanvasOff ? 'Boss-Waffenfläche aus' : 'Boss-Waffenfläche an' : bossComparison ? originalBoss ? 'Bossgrafik wieder an' : 'Bossgrafik aus' : controlled ? 'Einfache Formen' : 'Originaldarstellung')); result.bannerMatches = true;
+  assert.ok(label.includes(reflectionComparison ? reflectionOn ? 'Boss-Reflexion wieder an' : 'Boss-Reflexion aus' : maskComparison ? maskLayersOff ? 'Boss-Reflexion und Hitzespuren aus' : 'Boss-Reflexion und Hitzespuren an' : weaponComparison ? weaponCanvasOff ? 'Boss-Waffenfläche aus' : 'Boss-Waffenfläche an' : bossComparison ? originalBoss ? 'Bossgrafik wieder an' : 'Bossgrafik aus' : controlled ? 'Einfache Formen' : 'Originaldarstellung')); result.bannerMatches = true;
   assert.equal(await page.getByRole('checkbox', { name: 'Vollaufzeichnung zusätzlich aktivieren', exact: true }).isChecked(), false);
   assert.equal(await page.getByRole('checkbox', { name: 'Testschutz: Tod und Bossende verhindern', exact: true }).isChecked(), true);
   await tap(page.getByRole('button', { name: 'Testszene vorbereiten', exact: true }));
@@ -95,8 +105,8 @@ try {
   await page.waitForFunction(() => window.__crossDeviceTest?.inspect().status === 'paused');
   await page.evaluate(() => document.fonts.ready); result.initialPausedGeometry = await initialGeometry();
   assert.equal(await page.locator('[data-stopwatch-value]').innerText(), '00:00');
-  if (maskComparison ? maskLayersOff : weaponComparison ? weaponCanvasOff : bossComparison ? originalBoss : controlled && (!backgroundComparison || originalBackground)) {
-    const before = JSON.parse(readFileSync(resolve(directory, maskComparison ? '../masks-on/verification.json' : weaponComparison ? '../weapons-on/verification.json' : bossComparison ? '../boss-off/verification.json' : backgroundComparison ? '../background-off/verification.json' : '../artwork/verification.json'), 'utf8'));
+  if (reflectionComparison ? reflectionOn : maskComparison ? maskLayersOff : weaponComparison ? weaponCanvasOff : bossComparison ? originalBoss : controlled && (!backgroundComparison || originalBackground)) {
+    const before = JSON.parse(readFileSync(resolve(directory, reflectionComparison ? '../reflection-off/verification.json' : maskComparison ? '../masks-on/verification.json' : weaponComparison ? '../weapons-on/verification.json' : bossComparison ? '../boss-off/verification.json' : backgroundComparison ? '../background-off/verification.json' : '../artwork/verification.json'), 'utf8'));
     assert.equal(before.complete, true);
     for (const [selector, rect] of Object.entries(before.initialPausedGeometry)) for (const key of ['x', 'y', 'width', 'height'])
       assert.ok(Math.abs(rect[key] - result.initialPausedGeometry[selector][key]) <= 1, selector + ' ' + key);
@@ -131,7 +141,7 @@ try {
     bossReflections: document.querySelectorAll('.sector-boss .hull-reflection').length,
     weaponLoadingImages: document.querySelectorAll('.sector-boss .boss-weapons-loading').length,
     bossMaskLayers: [...document.querySelectorAll('.sector-boss .hull-reflection,.sector-boss .hull-heat-layer')].map(n => {
-      const style = getComputedStyle(n); return { className: n.className, display: style.display, rects: n.getClientRects().length, maskConfigured: [style.maskImage, style.webkitMaskImage].some(value => value && value !== 'none') };
+      const style = getComputedStyle(n); return { className: n.className, display: style.display, rects: n.getClientRects().length, opacity: Number(style.opacity), maskConfigured: [style.maskImage, style.webkitMaskImage].some(value => value && value !== 'none') };
     }),
     bossRect: (() => { const n = document.querySelector('.sector-boss'); if (!n) return null; const r = n.getBoundingClientRect(); return { width: r.width, height: r.height }; })(),
     flatShips: document.querySelectorAll('.diagnostic-flat-ship').length,
@@ -145,8 +155,8 @@ try {
       assert.equal(art.originalBosses, 1); assert.equal(art.foregroundImages, 1); assert.equal(art.flatBosses, 0);
       assert.equal(art.detailedNonBossShips, 0);
       assert.equal(await page.locator('.sector-boss img.boss-hull').isVisible(), true);
-      if (maskComparison ? maskLayersOff : !weaponComparison || weaponCanvasOff) {
-        const before = JSON.parse(readFileSync(resolve(directory, maskComparison ? '../masks-on/verification.json' : weaponComparison ? '../weapons-on/verification.json' : '../boss-off/verification.json'), 'utf8'));
+      if (reflectionComparison ? reflectionOn : maskComparison ? maskLayersOff : !weaponComparison || weaponCanvasOff) {
+        const before = JSON.parse(readFileSync(resolve(directory, reflectionComparison ? '../reflection-off/verification.json' : maskComparison ? '../masks-on/verification.json' : weaponComparison ? '../weapons-on/verification.json' : '../boss-off/verification.json'), 'utf8'));
         for (const key of ['width', 'height']) assert.ok(Math.abs(art.bossRect[key] - before.activeObservation.scene.bossRect[key]) <= 1, 'boss ' + key);
         result.originalBossOuterSizePreserved = true;
       }
@@ -172,6 +182,16 @@ try {
       else { assert.notEqual(layer.display, 'none'); assert.ok(layer.rects > 0); }
     }
     result.onlyMaskedBossLayersHidden = maskLayersOff;
+  }
+  if (reflectionComparison) {
+    assert.equal(art.bossMaskLayers.length, 2);
+    for (const layer of art.bossMaskLayers) {
+      assert.equal(layer.maskConfigured, true);
+      const visible = reflectionOn && layer.className === 'hull-reflection';
+      if (visible) { assert.notEqual(layer.display, 'none'); assert.ok(layer.rects > 0); }
+      else { assert.equal(layer.display, 'none'); assert.equal(layer.rects, 0); }
+    }
+    result.hullHeatStillHidden = true; result.originalReflectionVisible = reflectionOn;
   }
   result.activeObservation = { activeMs: (await clock()).latest.elapsedMs, coreVolley: active.coreVolley,
     frameAt: active.frameAt, scene: art, sameDocument: true };
@@ -201,7 +221,9 @@ try {
   const part = JSON.parse(await page.getByRole('textbox', { name: 'Diagnosebericht', exact: true }).inputValue());
   assert.equal(part.total, 1); const report = JSON.parse(part.data);
   assert.equal(report.source.sourceCommit, info.sourceCommit);
-  assert.equal(report.source.diagnosticScene, maskLayersOff ? 'flat-live-scene-original-background-original-boss-no-weapon-canvas-hidden-hull-masks' : weaponCanvasOff ? 'flat-live-scene-original-background-original-boss-no-weapon-canvas' : originalBoss ? 'flat-live-scene-original-background-original-boss' : originalBackground ? 'flat-live-scene-original-background' : controlled ? 'flat-live-scene' : 'original-artwork');
+  assert.equal(report.source.diagnosticScene, reflectionComparison ? reflectionOn
+    ? 'flat-live-scene-original-background-original-boss-no-weapon-canvas-hidden-hull-heat'
+    : 'flat-live-scene-original-background-original-boss-no-weapon-canvas-hidden-hull-masks' : maskLayersOff ? 'flat-live-scene-original-background-original-boss-no-weapon-canvas-hidden-hull-masks' : weaponCanvasOff ? 'flat-live-scene-original-background-original-boss-no-weapon-canvas' : originalBoss ? 'flat-live-scene-original-background-original-boss' : originalBackground ? 'flat-live-scene-original-background' : controlled ? 'flat-live-scene' : 'original-artwork');
   assert.equal(report.briefMatchesLatestStopwatch, true); assert.equal(report.fullSession, null);
   assert.equal(report.briefDiagnostics.latest.options.fullRecording, false); result.normalExitAndReportPreserved = true;
   assert.deepEqual(external, []); assert.ok(!fatal, fatal); result.complete = true;
@@ -210,6 +232,6 @@ try {
   if (page && !page.isClosed()) try { await page.screenshot({ path: directory + '/failure.png', timeout: 5000 }); } catch { /* Preserve first failure. */ }
 } finally {
   result.finishedAt = new Date().toISOString(); writeFileSync(directory + '/verification.json', JSON.stringify(result, null, 2) + '\n');
-  console.log((maskComparison ? 'CRYPTOID_BOSS_MASK_RESULT ' : weaponComparison ? 'CRYPTOID_BOSS_WEAPON_RESULT ' : bossComparison ? 'CRYPTOID_BOSS_VISUAL_RESULT ' : backgroundComparison ? 'CRYPTOID_BACKGROUND_RESULT ' : 'CRYPTOID_FLAT_SCENE_RESULT ') + JSON.stringify(result));
+  console.log((reflectionComparison ? 'CRYPTOID_BOSS_REFLECTION_RESULT ' : maskComparison ? 'CRYPTOID_BOSS_MASK_RESULT ' : weaponComparison ? 'CRYPTOID_BOSS_WEAPON_RESULT ' : bossComparison ? 'CRYPTOID_BOSS_VISUAL_RESULT ' : backgroundComparison ? 'CRYPTOID_BACKGROUND_RESULT ' : 'CRYPTOID_FLAT_SCENE_RESULT ') + JSON.stringify(result));
   if (browser) await browser.close(); if (server) await server.close();
 }
