@@ -1,0 +1,23 @@
+# Protected ordinary-explosion Canvas control — 2026-10-30
+
+This is a single rendering-path comparison, not a White Screen repair. Base evidence commit: `b47488fb754bf8454311bf1d7f5026aad9caff6d`. The preceding tested device runtime is `10b30981ac02c63f32dfc829a17e6a36743c0160`, at the protected brief-report preview. Keep its frozen branch and URL unchanged.
+
+## New owner evidence
+
+The owner reported White Screen and identified Pi Browser, attaching `cryptoid-diagnose-2026-10-30T04-54-43-309Z-e1da583b.json` (6,544 bytes; SHA-256 `ab03120729e2b623e11df0cabc9515a67181d5aa0cf26596c41a57263860d219`). The old preview's brief report and saved stopwatch agree on the same run ID, source, 400,185 ms (displayed 06:40), running mode, full recording off and protection on. The record has zero unobserved clock gaps and zero collector drops. A new document is recorded 418 ms after the last saved clock timestamp; this is not an exact crash time. The last saved touch sequence ends 237,751 ms before that checkpoint. No immediate multi-contact, pause, error, rejection, hidden, pagehide or navigation event is present in the saved pre-return tail. Normal lostpointercapture events follow earlier pointerup events, as they also do in the owner's regular 00:31 export test. Do not treat them as the cause. Raw owner telemetry is not committed.
+
+This supports an abrupt document return after recently advancing play and provides no recorded immediate touch trigger. It does not identify a native OS, memory or GPU cause, rule out undelivered events, or prove any leak. The earlier CSS-off and SVG-reactor-off controls have not fully prevented White Screen. Do not request another identical duration run or repeat the unsuccessful iPhone-log search without new reason.
+
+## The comparison
+
+The prior graphics control still mounted `CanvasEffectLayer`, which allocates the ordinary impact 2D surface. This new isolated build inserts only `enabled=false` at that component's entry, using its existing no-Canvas branch. Its children, effect identities, original fallback artwork and lifetimes are preserved. CanvasImpact's existing availability check returns its original DOM effect and does not request its 2D source/texture resources. The exact complete original CanvasEffects blob is pinned and the transformed source must restore byte-for-byte after removing the one insertion.
+
+The existing CSS-filter-off and hidden SVG-reactor controls remain in effect. The brief collector, stopwatch, protection choice, guest authentication, accounts/payments isolation, game/controller source, simulation clocks, input and audio are unchanged. This is not a removal of all Canvas usage: BonusRockLayer and static painted-hull preparation remain. Rocks do not spawn during this boss fight, although their original idle renderer may exist. The fallback may create more DOM/animation work; this is a different rendering condition, not a claim that total graphics cost is lower. The visible banner names the control precisely.
+
+`buildCanvasPreview.mjs` defaults to the fallback control, rejects production and forbids runtime-source file differences from HEAD. The configured Vercel build remains private with Git autodeployment disabled. `CRYPTOID_CANVAS_EFFECT_CONTROL=0` is only the CI comparison. The selected treatment is included in exported build identity and preview metadata, preventing a baseline/control report mix-up. The previous `workingTreeDirty` flag is retained honestly; installer metadata can make it true, and the new builder separately rejects changes to runtime source files.
+
+## Verification
+
+Three source-transform checks verify the exact existing renderer, complete reversibility/fallback retention, refusal to patch a different renderer, and explicit comparison switch. The branch-scoped workflow checks whole frontend/backend/API/assets/private-preview subtree pins and the original instrumented-controller types. In Chromium and Linux WebKit it builds both conditions and exercises natural escort destruction through automated one-finger touch steering. It requires actual original 2D drawing in the comparison and actual original-effect fallback DOM with zero ordinary-impact Canvas resource/draw counters in the control, at least 20 seconds of active play, advancing frame and boss volley, full recording off, real pause freezing, normal Home exit, and a correctly paired brief export identifying the treatment.
+
+These are short implementation checks on desktop automation, not a phone endurance result or reproduction of the owner's White Screen. No source pin or browser result may be presented as a physical-device repair acceptance. The next owner test is justified only after this changed graphics condition and its export are verified.

@@ -1,0 +1,58 @@
+name: Protected Canvas effect control
+run-name: Compare original Canvas explosions and existing fallback with unchanged combat
+on:
+  push:
+    branches: [codex/boss2-canvas-effect-control-20261030]
+    paths: ['.github/workflows/cryptoid-canvas-effect-control.yml', 'verification/boss2-canvas-effect-control-20261030/**', 'verification/boss2-forensics-20261028/buildDevicePreview.mjs', 'vercel.json']
+permissions:
+  contents: read
+jobs:
+  canvas-control:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        engine: [chromium, webkit]
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with:
+          node-version: '24'
+      - name: Install existing browser tools
+        run: |
+          npm install --prefix frontend --ignore-scripts --no-audit --no-fund
+          npm install --prefix verification/boss2-forensics-20261028 --ignore-scripts --no-audit --no-fund
+          git restore --worktree -- frontend/yarn.lock
+          cd verification/boss2-forensics-20261028
+          npx playwright install --with-deps ${{ matrix.engine }}
+      - name: Verify exact renderer patch and unchanged original game source
+        run: |
+          node --test verification/boss2-canvas-effect-control-20261030/canvasControl.test.mjs
+          node verification/boss2-canvas-effect-control-20261030/verifyScope.mjs
+          node --experimental-strip-types verification/boss2-forensics-20261028/devicePreviewPreflight.mjs
+      - name: Build and observe original Canvas effect renderer
+        env:
+          VERCEL_ENV: preview
+          CRYPTOID_CANVAS_EFFECT_CONTROL: '0'
+          CRYPTOID_CANVAS_ENGINE: ${{ matrix.engine }}
+        run: |
+          node verification/boss2-canvas-effect-control-20261030/buildCanvasPreview.mjs
+          node --experimental-strip-types verification/boss2-canvas-effect-control-20261030/verifyCanvasPreview.mjs
+      - name: Build and observe existing original-effect fallback
+        env:
+          VERCEL_ENV: preview
+          CRYPTOID_CANVAS_EFFECT_CONTROL: '1'
+          CRYPTOID_CANVAS_ENGINE: ${{ matrix.engine }}
+        run: |
+          node verification/boss2-canvas-effect-control-20261030/buildCanvasPreview.mjs
+          node --experimental-strip-types verification/boss2-canvas-effect-control-20261030/verifyCanvasPreview.mjs
+      - name: Preserve synthetic comparison evidence
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: canvas-effect-control-${{ matrix.engine }}
+          path: verification/boss2-canvas-effect-control-20261030/results/${{ matrix.engine }}/
+          retention-days: 3

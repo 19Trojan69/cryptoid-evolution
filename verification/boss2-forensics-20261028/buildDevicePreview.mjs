@@ -6,6 +6,7 @@ import { createHash } from 'node:crypto';
 import { resolve } from 'node:path';
 import { root, BASELINE, baselineController } from './fixture.mjs';
 import { deviceController, deviceBoss, deviceHtml } from './devicePreviewTransform.mjs';
+import { canvasEffectControl, canvasEffectControlEnabled } from '../boss2-canvas-effect-control-20261030/canvasControl.mjs';
 assert.equal(process.env.VERCEL_ENV, 'preview', 'Protected Preview only; production builds are denied');
 const require = createRequire(root + '/frontend/package.json');
 const { build } = require('vite'), react = require('@vitejs/plugin-react').default;
@@ -18,7 +19,8 @@ assert.equal(createHash('sha256').update(baselineController(original)).digest('h
   '625fecc2cb959e4ed4ba690f7867d0a07b247b9a136a8ce308afecaf6dcd94fa', 'Exact released controller fingerprint');
 const git = ref => execFileSync('git', ['rev-parse', ref], { cwd: root, encoding: 'utf8' }).trim();
 const identity = { sourceCommit: process.env.VERCEL_GIT_COMMIT_SHA || git('HEAD'), sourceTree: git('HEAD^{tree}'),
-  workingTreeDirty: !!execFileSync('git', ['status', '--porcelain'], { cwd: root, encoding: 'utf8' }).trim() };
+  workingTreeDirty: !!execFileSync('git', ['status', '--porcelain'], { cwd: root, encoding: 'utf8' }).trim(),
+  diagnosticCanvasEffects: canvasEffectControlEnabled() ? 'existing-original-impact-fallback' : 'original-canvas-renderer' };
 execFileSync(process.execPath, ['--experimental-strip-types', 'scripts/buildPaintedHulls.mjs'], { cwd: root + '/frontend', stdio: 'inherit' });
 for (const key of Object.keys(process.env)) if (key.startsWith('VITE_')) delete process.env[key];
 const envDir = resolve(directory, 'results/device-preview/empty-environment'); mkdirSync(envDir, { recursive: true });
@@ -29,6 +31,7 @@ await build({ configFile: false, root: root + '/frontend', envDir, mode: 'produc
     const path = id.split('?')[0];
     if (path === root + '/frontend/src/App.tsx') return `export { default } from ${JSON.stringify(directory + '/devicePreviewApp.jsx')};`;
     if (path === root + '/frontend/src/pages/GamePage.tsx') return deviceController(code);
+    if (path === root + '/frontend/src/pages/CanvasEffects.tsx' && canvasEffectControlEnabled()) return canvasEffectControl(code);
     if (path === root + '/frontend/src/pages/sectorBoss.ts') return deviceBoss(code);
     if (path === root + '/frontend/src/hooks/useAuth.ts') return `export { useAuth } from ${JSON.stringify(directory + '/devicePreviewAuth.mjs')};`;
     if (path === root + '/frontend/src/lib/axiosClient.ts') return `export * from ${JSON.stringify(directory + '/devicePreviewTransport.mjs')};`;
