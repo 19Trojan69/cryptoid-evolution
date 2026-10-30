@@ -15,7 +15,8 @@ assert.equal(owner.reportSha256, 'dfab75e85e8eaaabf340fb52a00ba65274dba0fd674417
 assert.equal(owner.configuredTreatment, 'flat-live-scene-original-background');
 assert.equal(owner.savedActiveMs, 638167); assert.equal(owner.displayedTime, '10:38'); assert.equal(owner.savedMode, 'ended');
 assert.equal(owner.ownerObservation.noFailuresReported, true); assert.equal(owner.ownerObservation.whiteScreenReported, false);
-assert.equal(owner.ownerObservation.browser, null); assert.equal(r.physicalDeviceResult.browserConfirmationPending, true);
+assert.equal(owner.ownerObservation.browser, 'Safari'); assert.equal(r.physicalDeviceResult.browser, 'Safari');
+assert.equal(r.physicalDeviceResult.browserConfirmationPending, false);
 assert.equal(owner.clockAndBriefRunMatch, true); assert.equal(owner.normalHomeConfirmationEndRecorded, true);
 assert.equal(owner.fullRecording, false); assert.equal(owner.protection, true); assert.equal(owner.fullSession, null);
 assert.equal(owner.unobservedGaps, 0); assert.equal(owner.collectorDrops, 66); assert.equal(owner.retainedEvents, 32);
@@ -57,4 +58,4 @@ assert.equal(h.sceneCanvases, 0); assert.equal(h.foregroundImages, 0); assert.eq
 assert.ok(h.backgroundStarCircles >= 215); assert.ok(h.savedActiveMs > 0);
 assert.equal(createHash('sha256').update(readFileSync(new URL('./evidence/hosted-background-control.jpg', import.meta.url))).digest('hex'), h.screenshotSha256);
 console.log('CRYPTOID_BACKGROUND_EVIDENCE ' + JSON.stringify({ passed: true, source: r.runtime.source,
-  syntheticComparisons: 4, physicalDeviceResult: r.physicalDeviceResult.status, browserConfirmationPending: true, whiteScreenFixed: false }));
+  syntheticComparisons: 4, physicalDeviceResult: r.physicalDeviceResult.status, browser: r.physicalDeviceResult.browser, whiteScreenFixed: false }));

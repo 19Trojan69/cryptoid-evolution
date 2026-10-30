@@ -2,8 +2,9 @@
   "ownerObservation": {
     "noFailuresReported": true,
     "whiteScreenReported": false,
-    "browser": null,
-    "browserNotRestatedInThisMessage": true,
+    "browser": "Safari",
+    "browserConfirmationText": "Diese Warnungen auf Safari.",
+    "browserConfirmationInterpretation": "Follow-up answer to the explicit Pi Browser or Safari question; understood as identifying this run as Safari.",
     "deviceNotRestatedInThisMessage": true
   },
   "runtimeSource": "8e34152c5552f0ed02101566190ae68620105434",
@@ -35,5 +36,5 @@
   "reloadTracePresent": false,
   "nativeTerminationCauseMeasured": false,
   "whiteScreenFixed": false,
-  "conclusion": "The owner reports no failures/White Screen in the original-background-restored flat-foreground scene. Matched report records a normal Home/confirmation/ended exit at 10:38 active time. Browser is not restated or measured, and 430x711 field dimensions cannot identify Safari or Pi Browser. Confirm browser before assigning this result to a browser or choosing the next foreground-artwork comparison. One successful run does not establish a cause or repair."
+  "conclusion": "The owner reports no failures/White Screen in the original-background-restored flat-foreground scene. Matched report records a normal Home/confirmation/ended exit at 10:38 active time. The follow-up answer to the browser question is understood as Safari; JSON itself does not identify a browser, and 430x711 dimensions are not used to infer it. A result for this background-restored source in Pi Browser is still pending. One successful run does not establish a cause or repair."
 }
