@@ -5,7 +5,9 @@ import { fileURLToPath } from 'node:url';
 export const flatSceneEnabled = () => process.env.CRYPTOID_FLAT_SCENE === '1';
 export const originalBackgroundEnabled = () => flatSceneEnabled() && process.env.CRYPTOID_FLAT_BACKGROUND === '1';
 export const originalBossEnabled = () => originalBackgroundEnabled() && process.env.CRYPTOID_ORIGINAL_BOSS === '1';
+export const bossWeaponCanvasDisabled = () => originalBossEnabled() && process.env.CRYPTOID_BOSS_WEAPON_CANVAS_OFF === '1';
 export const diagnosticSceneName = () => !flatSceneEnabled() ? 'original-artwork'
+  : bossWeaponCanvasDisabled() ? 'flat-live-scene-original-background-original-boss-no-weapon-canvas'
   : originalBossEnabled() ? 'flat-live-scene-original-background-original-boss'
   : originalBackgroundEnabled() ? 'flat-live-scene-original-background' : 'flat-live-scene';
 export const GAME_SOURCE_BLOB = 'd73579b3f9abe575adacfa978259aec9bdb0e7fd';
@@ -18,6 +20,8 @@ export function flatVisualModule(path) {
   const prefix = '/frontend/src/pages/';
   if (!path.includes(prefix)) return null;
   const name = path.slice(path.lastIndexOf(prefix) + prefix.length);
+  if (bossWeaponCanvasDisabled() && name === 'BossWeaponsView.tsx')
+    return 'export default function DiagnosticBossWeaponsOff() { return null; }';
   if (!Object.hasOwn(visualExports, name)) return null;
   if (originalBackgroundEnabled() && ['Starfield.tsx', 'SectorBackdrop.tsx'].includes(name)) return null;
   if (originalBossEnabled() && name === 'BossHullView.tsx') return null;
