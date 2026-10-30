@@ -25,6 +25,9 @@ jobs:
         run: |
           npm install --prefix frontend --ignore-scripts --no-audit --no-fund
           npm install --prefix verification/boss2-forensics-20261028 --ignore-scripts --no-audit --no-fund
+          # npm updates this tracked Yarn metadata during this clean CI install.
+          # Restore only that generated lockfile before the strict source check.
+          git restore --worktree -- frontend/yarn.lock
           cd verification/boss2-forensics-20261028
           npx playwright install --with-deps ${{ matrix.engine }}
       - name: Verify bounded diagnostics and unchanged entire game source
