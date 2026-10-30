@@ -7,7 +7,7 @@ import { resolve } from 'node:path';
 import { root, BASELINE, baselineController } from './fixture.mjs';
 import { deviceController, deviceBoss, deviceHtml } from './devicePreviewTransform.mjs';
 import { canvasEffectControl, canvasEffectControlEnabled } from '../boss2-canvas-effect-control-20261030/canvasControl.mjs';
-import { flatSceneEnabled, flatVisualModule, flatGameScene } from '../boss2-flat-scene-control-20261030/flatTransform.mjs';
+import { flatSceneEnabled, flatVisualModule, flatGameScene, diagnosticSceneName } from '../boss2-flat-scene-control-20261030/flatTransform.mjs';
 assert.equal(process.env.VERCEL_ENV, 'preview', 'Protected Preview only; production builds are denied');
 const require = createRequire(root + '/frontend/package.json');
 const { build } = require('vite'), react = require('@vitejs/plugin-react').default;
@@ -22,7 +22,7 @@ const git = ref => execFileSync('git', ['rev-parse', ref], { cwd: root, encoding
 const identity = { sourceCommit: process.env.VERCEL_GIT_COMMIT_SHA || git('HEAD'), sourceTree: git('HEAD^{tree}'),
   workingTreeDirty: !!execFileSync('git', ['status', '--porcelain'], { cwd: root, encoding: 'utf8' }).trim(),
   diagnosticCanvasEffects: canvasEffectControlEnabled() ? 'existing-original-impact-fallback' : 'original-canvas-renderer',
-  diagnosticScene: flatSceneEnabled() ? 'flat-live-scene' : 'original-artwork' };
+  diagnosticScene: diagnosticSceneName() };
 execFileSync(process.execPath, ['--experimental-strip-types', 'scripts/buildPaintedHulls.mjs'], { cwd: root + '/frontend', stdio: 'inherit' });
 for (const key of Object.keys(process.env)) if (key.startsWith('VITE_')) delete process.env[key];
 const envDir = resolve(directory, 'results/device-preview/empty-environment'); mkdirSync(envDir, { recursive: true });

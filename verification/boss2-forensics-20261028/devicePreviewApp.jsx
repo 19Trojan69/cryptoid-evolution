@@ -124,7 +124,7 @@ function Menu() {
   return <main className="device-preview-menu"><section>
     <p className="device-preview-eyebrow">CRYPTOID EVOLUTION · PRIVATER TEST</p>
     <h1>Boss 2 direkt testen</h1>
-    <p>Diese getrennte Gastszene verändert deinen echten Spielstand nicht. Anmeldung, Käufe und Rangliste sind gesperrt. {__CRYPTOID_BUILD__.diagnosticScene === 'flat-live-scene' ? 'Einfache Formen ersetzen die Spielgrafik. Ton, Spiellogik und Spieluhren stammen aus dem Spiel.' : 'Grafik, Ton und Spieluhren stammen aus dem Spiel.'}</p>
+    <p>Diese getrennte Gastszene verändert deinen echten Spielstand nicht. Anmeldung, Käufe und Rangliste sind gesperrt. {__CRYPTOID_BUILD__.diagnosticScene.startsWith('flat-live-scene') ? 'Einfache Formen ersetzen Schiffe und Effekte. Ton, Spiellogik und Spieluhren stammen aus dem Spiel.' : 'Grafik, Ton und Spieluhren stammen aus dem Spiel.'}</p>
     <label>Startszene<select value={options.scene} onChange={event => setOptions({ ...options, scene: event.target.value })}>
       <option value="reactor">Boss 2 · Reaktor offen</option><option value="turrets">Boss 2 · Mit Geschützen</option>
     </select></label>

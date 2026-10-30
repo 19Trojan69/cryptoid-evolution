@@ -3,6 +3,9 @@ import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 
 export const flatSceneEnabled = () => process.env.CRYPTOID_FLAT_SCENE === '1';
+export const originalBackgroundEnabled = () => flatSceneEnabled() && process.env.CRYPTOID_FLAT_BACKGROUND === '1';
+export const diagnosticSceneName = () => !flatSceneEnabled() ? 'original-artwork'
+  : originalBackgroundEnabled() ? 'flat-live-scene-original-background' : 'flat-live-scene';
 export const GAME_SOURCE_BLOB = 'd73579b3f9abe575adacfa978259aec9bdb0e7fd';
 export const visualExports = Object.freeze({
   'Starfield.tsx': 'Starfield', 'SectorBackdrop.tsx': 'SectorBackdrop',
@@ -14,6 +17,7 @@ export function flatVisualModule(path) {
   if (!path.includes(prefix)) return null;
   const name = path.slice(path.lastIndexOf(prefix) + prefix.length);
   if (!Object.hasOwn(visualExports, name)) return null;
+  if (originalBackgroundEnabled() && ['Starfield.tsx', 'SectorBackdrop.tsx'].includes(name)) return null;
   const target = fileURLToPath(new URL('./flatComponents.jsx', import.meta.url));
   return `export { ${visualExports[name]} as default } from ${JSON.stringify(target)};`;
 }

@@ -6,12 +6,17 @@ import { root, configuration } from '../boss2-forensics-20261028/fixture.mjs';
 import { serveDevicePreview } from '../boss2-forensics-20261028/devicePreviewServer.mjs';
 import { STOPWATCH_KEY } from '../boss2-stopwatch-20261029/stopwatchState.mjs';
 const engine = process.env.CRYPTOID_FLAT_ENGINE, controlled = process.env.CRYPTOID_FLAT_SCENE === '1';
+const backgroundComparison = process.env.CRYPTOID_BACKGROUND_COMPARISON === '1';
+const originalBackground = backgroundComparison && process.env.CRYPTOID_FLAT_BACKGROUND === '1';
 assert.ok(['chromium', 'webkit'].includes(engine));
 const pw = createRequire(new URL('../boss2-forensics-20261028/package.json', import.meta.url))('playwright');
-const directory = resolve(root, 'verification/boss2-flat-scene-control-20261030/results', engine, controlled ? 'flat' : 'artwork');
+const directory = backgroundComparison
+  ? resolve(root, 'verification/boss2-background-control-20261030/results', engine, originalBackground ? 'background-on' : 'background-off')
+  : resolve(root, 'verification/boss2-flat-scene-control-20261030/results', engine, controlled ? 'flat' : 'artwork');
 mkdirSync(directory, { recursive: true });
 const result = { complete: false, engine, controlled, physicalDevice: false, physicalCrashSimulated: false,
-  whiteScreenFixed: false, fullRecording: false, steeringEventsSynthetic: true, visualPreparationRetained: true };
+  whiteScreenFixed: false, fullRecording: false, steeringEventsSynthetic: true, visualPreparationRetained: true,
+  comparison: backgroundComparison ? 'original-background-toggle' : 'original-artwork-vs-flat', originalBackground };
 let server, browser, page, fatal;
 const inspect = () => page.evaluate(() => window.__crossDeviceTest.inspect());
 const clock = () => page.evaluate(key => JSON.parse(localStorage.getItem(key)), STOPWATCH_KEY);
@@ -47,6 +52,10 @@ try {
   const info = await response.json(); result.source = info.sourceCommit;
   assert.equal(info.flatSceneControl.enabled, controlled); assert.equal(info.canvasEffectControl.enabled, true);
   assert.equal(info.flatSceneControl.originalImagePreparationRetained, true);
+  if (backgroundComparison) {
+    assert.equal(controlled, true); assert.equal(info.backgroundControl.originalBackgroundRestored, originalBackground);
+    assert.equal(info.backgroundControl.simpleForegroundRetained, true);
+  }
   const label = await page.locator('.device-preview-menu section').evaluate(n => getComputedStyle(n, '::before').content);
   assert.ok(label.includes(controlled ? 'Einfache Formen' : 'Originaldarstellung')); result.bannerMatches = true;
   assert.equal(await page.getByRole('checkbox', { name: 'Vollaufzeichnung zusätzlich aktivieren', exact: true }).isChecked(), false);
@@ -56,8 +65,8 @@ try {
   await page.waitForFunction(() => window.__crossDeviceTest?.inspect().status === 'paused');
   await page.evaluate(() => document.fonts.ready); result.initialPausedGeometry = await initialGeometry();
   assert.equal(await page.locator('[data-stopwatch-value]').innerText(), '00:00');
-  if (controlled) {
-    const before = JSON.parse(readFileSync(resolve(directory, '../artwork/verification.json'), 'utf8'));
+  if (controlled && (!backgroundComparison || originalBackground)) {
+    const before = JSON.parse(readFileSync(resolve(directory, backgroundComparison ? '../background-off/verification.json' : '../artwork/verification.json'), 'utf8'));
     assert.equal(before.complete, true);
     for (const [selector, rect] of Object.entries(before.initialPausedGeometry)) for (const key of ['x', 'y', 'width', 'height'])
       assert.ok(Math.abs(rect[key] - result.initialPausedGeometry[selector][key]) <= 1, selector + ' ' + key);
@@ -73,6 +82,9 @@ try {
     canvases: document.querySelectorAll('.game-field canvas').length,
     images: document.querySelectorAll('.game-field img').length,
     starfields: document.querySelectorAll('.starfield, .space-scene').length,
+    foregroundImages: [...document.querySelectorAll('.game-field img')].filter(n => !n.closest('.space-scene, .starfield')).length,
+    backgroundStarCircles: document.querySelectorAll('.game-field .starfield circle').length,
+    backgroundPlanets: document.querySelectorAll('.game-field .space-scene .space-world').length,
     detailedShips: document.querySelectorAll('.game-field .fleet-sprite, .game-field .ship-thruster, .game-field .hull-heat-layer').length,
     flatBosses: document.querySelectorAll('.diagnostic-flat-boss').length,
     flatShips: document.querySelectorAll('.diagnostic-flat-ship').length,
@@ -80,7 +92,14 @@ try {
     playerShotBackground: document.querySelector('.player-laser') ? getComputedStyle(document.querySelector('.player-laser')).backgroundImage : null,
   }));
   if (controlled) {
-    for (const key of ['canvases', 'images', 'starfields', 'detailedShips']) assert.equal(art[key], 0, key);
+    for (const key of ['canvases', 'foregroundImages', 'detailedShips']) assert.equal(art[key], 0, key);
+    if (originalBackground) {
+      assert.equal(art.starfields, 2); assert.ok(art.backgroundStarCircles >= 215); assert.equal(art.backgroundPlanets, 4);
+      assert.equal(await page.locator('.game-field .starfield').isVisible(), true);
+      assert.equal(await page.locator('.game-field .space-scene').isVisible(), true);
+      assert.equal(await page.locator('.game-field .space-scene .space-world').first().isVisible(), true);
+      result.originalBackgroundVisible = true;
+    } else { assert.equal(art.images, 0); assert.equal(art.starfields, 0); }
     assert.equal(art.flatBosses, 1); assert.ok(art.flatShips > 0); assert.equal(art.playerShotBackground, 'none');
   } else { assert.ok(art.canvases > 0); assert.ok(art.images > 0); assert.ok(art.starfields > 0); }
   result.activeObservation = { activeMs: (await clock()).latest.elapsedMs, coreVolley: active.coreVolley,
@@ -111,7 +130,7 @@ try {
   const part = JSON.parse(await page.getByRole('textbox', { name: 'Diagnosebericht', exact: true }).inputValue());
   assert.equal(part.total, 1); const report = JSON.parse(part.data);
   assert.equal(report.source.sourceCommit, info.sourceCommit);
-  assert.equal(report.source.diagnosticScene, controlled ? 'flat-live-scene' : 'original-artwork');
+  assert.equal(report.source.diagnosticScene, originalBackground ? 'flat-live-scene-original-background' : controlled ? 'flat-live-scene' : 'original-artwork');
   assert.equal(report.briefMatchesLatestStopwatch, true); assert.equal(report.fullSession, null);
   assert.equal(report.briefDiagnostics.latest.options.fullRecording, false); result.normalExitAndReportPreserved = true;
   assert.deepEqual(external, []); assert.ok(!fatal, fatal); result.complete = true;
@@ -120,6 +139,6 @@ try {
   if (page && !page.isClosed()) try { await page.screenshot({ path: directory + '/failure.png', timeout: 5000 }); } catch { /* Preserve first failure. */ }
 } finally {
   result.finishedAt = new Date().toISOString(); writeFileSync(directory + '/verification.json', JSON.stringify(result, null, 2) + '\n');
-  console.log('CRYPTOID_FLAT_SCENE_RESULT ' + JSON.stringify(result));
+  console.log((backgroundComparison ? 'CRYPTOID_BACKGROUND_RESULT ' : 'CRYPTOID_FLAT_SCENE_RESULT ') + JSON.stringify(result));
   if (browser) await browser.close(); if (server) await server.close();
 }
