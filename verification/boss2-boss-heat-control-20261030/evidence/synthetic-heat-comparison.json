@@ -1,0 +1,452 @@
+{
+  "source": "2a531983e5217b14141fb8623ecb35df65d7f700",
+  "sourceTree": "1d100eebfbe1b661ffd6bc404980aa919229325d",
+  "workflow": "https://github.com/19Trojan69/cryptoid-evolution/actions/runs/41077619306",
+  "sourceComponentTests": 11,
+  "typePreflight": "passed",
+  "originalSourceScopePins": "passed",
+  "physicalDeviceResult": null,
+  "whiteScreenFixed": false,
+  "records": [
+    {
+      "complete": true,
+      "engine": "chromium",
+      "controlled": true,
+      "physicalDevice": false,
+      "physicalCrashSimulated": false,
+      "whiteScreenFixed": false,
+      "fullRecording": false,
+      "steeringEventsSynthetic": true,
+      "visualPreparationRetained": true,
+      "comparison": "boss-heat-only-toggle",
+      "originalBackground": true,
+      "originalBoss": true,
+      "weaponCanvasOff": true,
+      "maskLayersOff": false,
+      "reflectionOn": false,
+      "heatOn": false,
+      "engineVersion": "151.0.7922.34",
+      "source": "2a531983e5217b14141fb8623ecb35df65d7f700",
+      "bannerMatches": true,
+      "initialPausedGeometry": {
+        ".game-field": {
+          "x": 0,
+          "y": 0,
+          "width": 430,
+          "height": 825
+        },
+        ".game-hud": {
+          "x": 0,
+          "y": 0,
+          "width": 430,
+          "height": 71
+        },
+        ".home-control": {
+          "x": 4,
+          "y": 10,
+          "width": 36,
+          "height": 44
+        },
+        ".pause-control": {
+          "x": 389.984375,
+          "y": 4,
+          "width": 36,
+          "height": 44
+        },
+        ".player-ship": {
+          "x": 161.25,
+          "y": 589.75,
+          "width": 107.5,
+          "height": 107.5
+        }
+      },
+      "originalBossVisible": true,
+      "originalBackgroundVisible": true,
+      "bossReflectionStillHidden": true,
+      "originalHeatLayerVisible": false,
+      "activeObservation": {
+        "activeMs": 20558.399999999994,
+        "coreVolley": 5,
+        "frameAt": 25378.6,
+        "scene": {
+          "canvases": 0,
+          "images": 1,
+          "starfields": 2,
+          "foregroundImages": 1,
+          "backgroundStarCircles": 227,
+          "backgroundPlanets": 4,
+          "detailedShips": 3,
+          "detailedNonBossShips": 0,
+          "flatBosses": 0,
+          "originalBosses": 1,
+          "bossImages": 1,
+          "bossCanvases": 0,
+          "bossReflections": 1,
+          "bossHeatHotspots": 2,
+          "visibleBossHeatHotspots": 0,
+          "weaponLoadingImages": 0,
+          "bossMaskLayers": [
+            {
+              "className": "hull-reflection",
+              "display": "none",
+              "rects": 0,
+              "opacity": 0,
+              "maskConfigured": true
+            },
+            {
+              "className": "hull-heat-layer boss-static-heat",
+              "display": "none",
+              "rects": 0,
+              "opacity": 1,
+              "maskConfigured": true
+            }
+          ],
+          "bossRect": {
+            "width": 378.390625,
+            "height": 141.890625
+          },
+          "flatShips": 3,
+          "playerShotCount": 1,
+          "playerShotBackground": "none"
+        },
+        "sameDocument": true
+      },
+      "pointerSteeringPreserved": true,
+      "weaponMenuRoundtrip": true,
+      "manualPauseFreezes": true,
+      "normalExitAndReportPreserved": true,
+      "finishedAt": "2026-10-30T15:08:52.732Z"
+    },
+    {
+      "complete": true,
+      "engine": "chromium",
+      "controlled": true,
+      "physicalDevice": false,
+      "physicalCrashSimulated": false,
+      "whiteScreenFixed": false,
+      "fullRecording": false,
+      "steeringEventsSynthetic": true,
+      "visualPreparationRetained": true,
+      "comparison": "boss-heat-only-toggle",
+      "originalBackground": true,
+      "originalBoss": true,
+      "weaponCanvasOff": true,
+      "maskLayersOff": false,
+      "reflectionOn": false,
+      "heatOn": true,
+      "engineVersion": "151.0.7922.34",
+      "source": "2a531983e5217b14141fb8623ecb35df65d7f700",
+      "bannerMatches": true,
+      "initialPausedGeometry": {
+        ".game-field": {
+          "x": 0,
+          "y": 0,
+          "width": 430,
+          "height": 825
+        },
+        ".game-hud": {
+          "x": 0,
+          "y": 0,
+          "width": 430,
+          "height": 71
+        },
+        ".home-control": {
+          "x": 4,
+          "y": 10,
+          "width": 36,
+          "height": 44
+        },
+        ".pause-control": {
+          "x": 389.984375,
+          "y": 4,
+          "width": 36,
+          "height": 44
+        },
+        ".player-ship": {
+          "x": 161.25,
+          "y": 589.75,
+          "width": 107.5,
+          "height": 107.5
+        }
+      },
+      "originalLayoutBoxesPreserved": true,
+      "originalBossOuterSizePreserved": true,
+      "originalBossVisible": true,
+      "originalBackgroundVisible": true,
+      "bossReflectionStillHidden": true,
+      "originalHeatLayerVisible": true,
+      "activeObservation": {
+        "activeMs": 20592,
+        "coreVolley": 5,
+        "frameAt": 25237.1,
+        "scene": {
+          "canvases": 0,
+          "images": 1,
+          "starfields": 2,
+          "foregroundImages": 1,
+          "backgroundStarCircles": 227,
+          "backgroundPlanets": 4,
+          "detailedShips": 3,
+          "detailedNonBossShips": 0,
+          "flatBosses": 0,
+          "originalBosses": 1,
+          "bossImages": 1,
+          "bossCanvases": 0,
+          "bossReflections": 1,
+          "bossHeatHotspots": 2,
+          "visibleBossHeatHotspots": 2,
+          "weaponLoadingImages": 0,
+          "bossMaskLayers": [
+            {
+              "className": "hull-reflection",
+              "display": "none",
+              "rects": 0,
+              "opacity": 0,
+              "maskConfigured": true
+            },
+            {
+              "className": "hull-heat-layer boss-static-heat",
+              "display": "block",
+              "rects": 1,
+              "opacity": 1,
+              "maskConfigured": true
+            }
+          ],
+          "bossRect": {
+            "width": 378.390625,
+            "height": 141.890625
+          },
+          "flatShips": 3,
+          "playerShotCount": 2,
+          "playerShotBackground": "none"
+        },
+        "sameDocument": true
+      },
+      "pointerSteeringPreserved": true,
+      "weaponMenuRoundtrip": true,
+      "manualPauseFreezes": true,
+      "normalExitAndReportPreserved": true,
+      "finishedAt": "2026-10-30T15:09:50.612Z"
+    },
+    {
+      "complete": true,
+      "engine": "webkit",
+      "controlled": true,
+      "physicalDevice": false,
+      "physicalCrashSimulated": false,
+      "whiteScreenFixed": false,
+      "fullRecording": false,
+      "steeringEventsSynthetic": true,
+      "visualPreparationRetained": true,
+      "comparison": "boss-heat-only-toggle",
+      "originalBackground": true,
+      "originalBoss": true,
+      "weaponCanvasOff": true,
+      "maskLayersOff": false,
+      "reflectionOn": false,
+      "heatOn": false,
+      "engineVersion": "26.5",
+      "source": "2a531983e5217b14141fb8623ecb35df65d7f700",
+      "bannerMatches": true,
+      "initialPausedGeometry": {
+        ".game-field": {
+          "x": 0,
+          "y": 0,
+          "width": 430,
+          "height": 825
+        },
+        ".game-hud": {
+          "x": 0,
+          "y": 0,
+          "width": 430,
+          "height": 71
+        },
+        ".home-control": {
+          "x": 4,
+          "y": 10,
+          "width": 36,
+          "height": 44
+        },
+        ".pause-control": {
+          "x": 389.984375,
+          "y": 4,
+          "width": 36,
+          "height": 44
+        },
+        ".player-ship": {
+          "x": 161.1666717529297,
+          "y": 589.6666870117188,
+          "width": 107.50001525878906,
+          "height": 107.5
+        }
+      },
+      "originalBossVisible": true,
+      "originalBackgroundVisible": true,
+      "bossReflectionStillHidden": true,
+      "originalHeatLayerVisible": false,
+      "activeObservation": {
+        "activeMs": 20696,
+        "coreVolley": 4,
+        "frameAt": 35068,
+        "scene": {
+          "canvases": 0,
+          "images": 1,
+          "starfields": 2,
+          "foregroundImages": 1,
+          "backgroundStarCircles": 227,
+          "backgroundPlanets": 4,
+          "detailedShips": 3,
+          "detailedNonBossShips": 0,
+          "flatBosses": 0,
+          "originalBosses": 1,
+          "bossImages": 1,
+          "bossCanvases": 0,
+          "bossReflections": 1,
+          "bossHeatHotspots": 5,
+          "visibleBossHeatHotspots": 0,
+          "weaponLoadingImages": 0,
+          "bossMaskLayers": [
+            {
+              "className": "hull-reflection",
+              "display": "none",
+              "rects": 0,
+              "opacity": 0,
+              "maskConfigured": true
+            },
+            {
+              "className": "hull-heat-layer boss-static-heat",
+              "display": "none",
+              "rects": 0,
+              "opacity": 1,
+              "maskConfigured": true
+            }
+          ],
+          "bossRect": {
+            "width": 378.390625,
+            "height": 141.890625
+          },
+          "flatShips": 3,
+          "playerShotCount": 2,
+          "playerShotBackground": "none"
+        },
+        "sameDocument": true
+      },
+      "pointerSteeringPreserved": true,
+      "weaponMenuRoundtrip": true,
+      "manualPauseFreezes": true,
+      "normalExitAndReportPreserved": true,
+      "finishedAt": "2026-10-30T15:09:12.074Z"
+    },
+    {
+      "complete": true,
+      "engine": "webkit",
+      "controlled": true,
+      "physicalDevice": false,
+      "physicalCrashSimulated": false,
+      "whiteScreenFixed": false,
+      "fullRecording": false,
+      "steeringEventsSynthetic": true,
+      "visualPreparationRetained": true,
+      "comparison": "boss-heat-only-toggle",
+      "originalBackground": true,
+      "originalBoss": true,
+      "weaponCanvasOff": true,
+      "maskLayersOff": false,
+      "reflectionOn": false,
+      "heatOn": true,
+      "engineVersion": "26.5",
+      "source": "2a531983e5217b14141fb8623ecb35df65d7f700",
+      "bannerMatches": true,
+      "initialPausedGeometry": {
+        ".game-field": {
+          "x": 0,
+          "y": 0,
+          "width": 430,
+          "height": 825
+        },
+        ".game-hud": {
+          "x": 0,
+          "y": 0,
+          "width": 430,
+          "height": 71
+        },
+        ".home-control": {
+          "x": 4,
+          "y": 10,
+          "width": 36,
+          "height": 44
+        },
+        ".pause-control": {
+          "x": 389.984375,
+          "y": 4,
+          "width": 36,
+          "height": 44
+        },
+        ".player-ship": {
+          "x": 161.1666717529297,
+          "y": 589.6666870117188,
+          "width": 107.50001525878906,
+          "height": 107.5
+        }
+      },
+      "originalLayoutBoxesPreserved": true,
+      "originalBossOuterSizePreserved": true,
+      "originalBossVisible": true,
+      "originalBackgroundVisible": true,
+      "bossReflectionStillHidden": true,
+      "originalHeatLayerVisible": true,
+      "activeObservation": {
+        "activeMs": 20738,
+        "coreVolley": 4,
+        "frameAt": 27302,
+        "scene": {
+          "canvases": 0,
+          "images": 1,
+          "starfields": 2,
+          "foregroundImages": 1,
+          "backgroundStarCircles": 227,
+          "backgroundPlanets": 4,
+          "detailedShips": 3,
+          "detailedNonBossShips": 0,
+          "flatBosses": 0,
+          "originalBosses": 1,
+          "bossImages": 1,
+          "bossCanvases": 0,
+          "bossReflections": 1,
+          "bossHeatHotspots": 4,
+          "visibleBossHeatHotspots": 4,
+          "weaponLoadingImages": 0,
+          "bossMaskLayers": [
+            {
+              "className": "hull-reflection",
+              "display": "none",
+              "rects": 0,
+              "opacity": 0,
+              "maskConfigured": true
+            },
+            {
+              "className": "hull-heat-layer boss-static-heat",
+              "display": "block",
+              "rects": 1,
+              "opacity": 1,
+              "maskConfigured": true
+            }
+          ],
+          "bossRect": {
+            "width": 378.390625,
+            "height": 141.890625
+          },
+          "flatShips": 3,
+          "playerShotCount": 2,
+          "playerShotBackground": "none"
+        },
+        "sameDocument": true
+      },
+      "pointerSteeringPreserved": true,
+      "weaponMenuRoundtrip": true,
+      "manualPauseFreezes": true,
+      "normalExitAndReportPreserved": true,
+      "finishedAt": "2026-10-30T15:10:15.144Z"
+    }
+  ]
+}
