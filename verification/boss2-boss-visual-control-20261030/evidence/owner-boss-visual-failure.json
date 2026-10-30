@@ -1,0 +1,62 @@
+{
+  "ownerObservation": {
+    "browser": "Pi Browser",
+    "browserConfirmedByOwner": true,
+    "whiteScreenReported": true,
+    "fingerSlippedOrStuckReported": true,
+    "fingerCausationEstablished": false,
+    "verbatim": "White screen come als ich am Ende mit dem Finger etwas ausgerutscht bin. Es lief aber wirklich sehr lange. Bin nur mit dem Finger dann abgerutscht. Beziehungsweise ist hängen geblieben"
+  },
+  "runtimeSource": "089d2267dc504611ecbf912b4422f3fb5f5cecf2",
+  "runtimeTree": "908cfa6a957062afbaf63386ab3ef076499f2826",
+  "configuredTreatment": "flat-live-scene-original-background-original-boss",
+  "reportFilename": "cryptoid-diagnose-2026-10-30T12-51-52-805Z-832c0311.json",
+  "reportBytes": 6221,
+  "reportSha256": "c16d9f81badbb6873682e70a6474e43c8934085bc81e1413222e43b830af80cf",
+  "rawOwnerReportCommitted": false,
+  "savedActiveMs": 537728,
+  "displayedTime": "08:57",
+  "savedMode": "running",
+  "unobservedGaps": 0,
+  "exactCrashTime": false,
+  "clockAndBriefRunMatch": true,
+  "fullRecording": false,
+  "protection": true,
+  "fullSession": null,
+  "retainedEvents": 18,
+  "collectorDrops": 0,
+  "normalExitRecorded": false,
+  "pauseRecordedInRetainedEvents": false,
+  "lastRetainedInput": {
+    "kind": "touchstart",
+    "elapsedMs": 251532,
+    "target": "field",
+    "trusted": true,
+    "contacts": 1
+  },
+  "lastRetainedInputActiveMsBeforeCheckpoint": 286196,
+  "releaseAfterLastRetainedContactRecorded": false,
+  "newDocumentAfterRunningCheckpoint": true,
+  "newDocumentMsAfterLastCheckpoint": 1007.0,
+  "newDocumentRoute": "home",
+  "navigationType": "navigate",
+  "lastContext": {
+    "active": true,
+    "hidden": false,
+    "pageHidden": false
+  },
+  "lastContextStatus": "playing",
+  "lastContextReason": "performance",
+  "bootAfterActiveSessionRecorded": true,
+  "browserIdentityMeasuredByReport": false,
+  "nativeTerminationCauseMeasured": false,
+  "whiteScreenFixed": false,
+  "limits": [
+    "The stopwatch is the last persisted checkpoint, not exact crash time.",
+    "Ordinary contact events are not saved immediately; the unwritten final interval is unavailable even with collectorDrops=0.",
+    "The retained touchstart has no saved release, 286.196 active seconds before the last checkpoint; it neither proves a held finger through the failure nor disproves the owner final-slip observation.",
+    "A new document after an active session supports the reported return but establishes no native OS, memory, GPU or browser-process cause.",
+    "This is one owner failure after restoring a boss visual component group against earlier flat-boss completions, not a controlled causal attribution to the boss or any single child."
+  ],
+  "conclusion": "Owner-confirmed Pi Browser White Screen on original-boss condition, last saved active time 08:57 and mode running, followed by a new home document. The final slip/stick observation is not captured. Narrow the restored boss component group by excluding BossWeaponsView in a separate private preview; retain the hull/background and all simulation/input/audio behavior."
+}

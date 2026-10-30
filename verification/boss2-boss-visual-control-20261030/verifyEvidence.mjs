@@ -6,7 +6,17 @@ const r = read('./results.json'), c = read('./evidence/synthetic-boss-comparison
 assert.equal(r.runtime.source, '089d2267dc504611ecbf912b4422f3fb5f5cecf2');
 assert.equal(r.runtime.tree, '908cfa6a957062afbaf63386ab3ef076499f2826');
 assert.equal(r.runtime.deviceBranch, 'codex/boss2-boss-visual-device-20261030');
-assert.equal(r.whiteScreenFixed, false); assert.equal(r.physicalDeviceResult, null);
+assert.equal(r.whiteScreenFixed, false);
+const owner = read('./evidence/owner-boss-visual-failure.json');
+assert.equal(owner.runtimeSource, r.runtime.source); assert.equal(owner.runtimeTree, r.runtime.tree);
+assert.equal(owner.ownerObservation.browser, 'Pi Browser'); assert.equal(owner.ownerObservation.browserConfirmedByOwner, true);
+assert.equal(owner.ownerObservation.whiteScreenReported, true); assert.equal(owner.ownerObservation.fingerCausationEstablished, false);
+assert.equal(owner.savedActiveMs, 537728); assert.equal(owner.displayedTime, '08:57'); assert.equal(owner.savedMode, 'running');
+assert.equal(owner.clockAndBriefRunMatch, true); assert.equal(owner.fullRecording, false); assert.equal(owner.protection, true);
+assert.equal(owner.fullSession, null); assert.equal(owner.normalExitRecorded, false); assert.equal(owner.newDocumentMsAfterLastCheckpoint, 1007);
+assert.equal(owner.lastRetainedInputActiveMsBeforeCheckpoint, 286196); assert.equal(owner.collectorDrops, 0);
+assert.equal(owner.nativeTerminationCauseMeasured, false);
+assert.equal(r.physicalDeviceResult.evidence, 'evidence/owner-boss-visual-failure.json');
 assert.equal(r.publicMainSource, 'ce073547cf573375d141bf846f70e294138dbd73');
 assert.equal(r.deployment.environment, 'preview'); assert.equal(r.deployment.status, 'Ready');
 assert.equal(r.deployment.requireLogin, true); assert.equal(r.deployment.protection, 'Standard Protection');
@@ -58,4 +68,4 @@ assert.equal(r.desktopInvestigation.applicationNativeCauseProven, false);
 assert.equal(r.desktopInvestigation.browserAutomationAsCauseProven, false);
 assert.equal(createHash('sha256').update(readFileSync(new URL('./evidence/hosted-boss-control.jpg', import.meta.url))).digest('hex'), h.screenshotSha256);
 console.log('CRYPTOID_BOSS_VISUAL_EVIDENCE ' + JSON.stringify({ passed: true, source: r.runtime.source,
-  syntheticComparisons: 4, physicalDeviceResult: null, whiteScreenFixed: false }));
+  syntheticComparisons: 4, physicalDeviceResult: r.physicalDeviceResult, whiteScreenFixed: false }));

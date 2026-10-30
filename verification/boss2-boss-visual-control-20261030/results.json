@@ -2,7 +2,17 @@
   "version": 1,
   "kind": "private-original-boss-visual-comparison",
   "whiteScreenFixed": false,
-  "physicalDeviceResult": null,
+  "physicalDeviceResult": {
+    "evidence": "evidence/owner-boss-visual-failure.json",
+    "browser": "Pi Browser",
+    "ownerConfirmedBrowser": true,
+    "savedActiveMs": 537728,
+    "displayedTime": "08:57",
+    "savedMode": "running",
+    "whiteScreenReported": true,
+    "fingerCausationEstablished": false,
+    "nativeTerminationCauseMeasured": false
+  },
   "runtime": {
     "source": "089d2267dc504611ecbf912b4422f3fb5f5cecf2",
     "tree": "908cfa6a957062afbaf63386ab3ef076499f2826",
@@ -146,10 +156,17 @@
     "openBrowserExplicitlyAndPasteAddress": true,
     "fullRecording": false,
     "protection": true,
-    "scene": "Boss 2 \u00b7 Reaktor offen",
+    "scene": "Boss 2 · Reaktor offen",
     "targetActiveMinutes": 8,
     "recordUnexpectedPauseSeparatelyFromWhiteScreen": true,
     "crashAction": "Reopen this exact address, save/share the latest report before a new run",
-    "ownerOutcomeForThisOriginalBossCondition": null
+    "ownerOutcomeForThisOriginalBossCondition": "White Screen; saved active checkpoint 08:57; final slip/stick observation not captured"
+  },
+  "nextComparison": {
+    "kind": "boss-weapon-component-toggle",
+    "removeVisualModule": "BossWeaponsView",
+    "retainOriginalBossHullAndBackground": true,
+    "simulationInputAudioChanged": false,
+    "causalAttributionProven": false
   }
 }
