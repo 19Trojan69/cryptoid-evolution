@@ -1,0 +1,34 @@
+{
+  "ownerObservation": {
+    "browser": "Pi Browser",
+    "browserConfirmedByOwner": true,
+    "whiteScreenReported": false,
+    "normalExitReported": true
+  },
+  "runtimeSource": "8e34152c5552f0ed02101566190ae68620105434",
+  "runtimeTree": "b520b9fe62e6636dcf7e047c1b3aa011a9bec8fc",
+  "configuredTreatment": "flat-live-scene-original-background",
+  "reportFilename": "cryptoid-diagnose-2026-10-30T11-58-48-336Z-150689bb.json",
+  "reportSha256": "62e859a56a55c7abd453a0df7e5ed9db1d49d3dcd0a9528a67668b63ba08bd66",
+  "rawOwnerReportCommitted": false,
+  "savedActiveMs": 601406.0000000001,
+  "displayedTime": "10:01",
+  "savedMode": "ended",
+  "unobservedGaps": 0,
+  "clockAndBriefRunMatch": true,
+  "fullRecording": false,
+  "protection": true,
+  "fullSession": null,
+  "retainedEvents": 32,
+  "collectorDrops": 41,
+  "normalHomeConfirmationEndRecorded": true,
+  "lastContextField": {
+    "width": 430,
+    "height": 825
+  },
+  "retainedBootsAllBeforeRunStart": true,
+  "browserIdentityMeasuredByReport": false,
+  "nativeTerminationCauseMeasured": false,
+  "whiteScreenFixed": false,
+  "conclusion": "Owner-confirmed Pi Browser completed the original-background-restored flat-foreground scene normally at 10:01 without White Screen. This joins the Safari 10:38 completion. It motivates a narrower foreground comparison, not a proven native cause or accepted repair. The two retained app boots precede the run; they are not evidence of an in-run crash. The bounded tail cannot prove absence of all earlier events."
+}

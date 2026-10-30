@@ -2,15 +2,6 @@
   "version": 1,
   "kind": "private-original-background-comparison",
   "whiteScreenFixed": false,
-  "physicalDeviceResult": {
-    "evidence": "evidence/owner-background-completion.json",
-    "status": "owner-reported-no-failures-with-recorded-normal-end",
-    "savedActiveMs": 638167,
-    "displayedTime": "10:38",
-    "browser": "Safari",
-    "browserConfirmationPending": false,
-    "notAnAcceptedRepair": true
-  },
   "runtime": {
     "source": "8e34152c5552f0ed02101566190ae68620105434",
     "tree": "b520b9fe62e6636dcf7e047c1b3aa011a9bec8fc",
@@ -137,8 +128,28 @@
     "recordBrowserBarVisibility": true,
     "crashAction": "Reopen this exact address and save/share the latest report before another run",
     "firstOwnerResultForThisBackgroundCondition": "evidence/owner-background-completion.json",
-    "status": "Safari-background-run-completed; Pi-Browser-background-result-pending",
+    "status": "completed-in-Safari-and-Pi-Browser",
     "identicalRepeatRequested": false,
-    "nextStep": "Open Pi Browser explicitly and paste the existing background-test URL into its address bar. Run this restored-background condition there for eight active minutes, full recording off and protection on. This is a different-browser comparison; no identical Safari repeat or new deployment is requested."
-  }
+    "nextStep": "Prepare a separate protected comparison restoring only original BossHullView and its visual children, retaining original backgrounds, simple player/enemy ships, simple impacts/shots, existing CSS controls, input, clocks and audio. No identical endurance repeat."
+  },
+  "physicalDeviceResults": [
+    {
+      "evidence": "evidence/owner-background-completion.json",
+      "status": "owner-reported-no-failures-with-recorded-normal-end",
+      "savedActiveMs": 638167,
+      "displayedTime": "10:38",
+      "browser": "Safari",
+      "browserConfirmationPending": false,
+      "notAnAcceptedRepair": true
+    },
+    {
+      "evidence": "evidence/owner-background-pi-completion.json",
+      "status": "owner-reported-no-white-screen-with-normal-end",
+      "browser": "Pi Browser",
+      "browserConfirmedByOwner": true,
+      "savedActiveMs": 601406.0000000001,
+      "displayedTime": "10:01",
+      "notAnAcceptedRepair": true
+    }
+  ]
 }
