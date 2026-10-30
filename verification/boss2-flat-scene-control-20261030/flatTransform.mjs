@@ -14,9 +14,10 @@ export const bossHeatComparisonEnabled = () => bossWeaponCanvasDisabled()
   && process.env.CRYPTOID_BOSS_MASK_LAYERS_OFF !== '1' && process.env.CRYPTOID_BOSS_REFLECTION_CONTROL !== '1'
   && process.env.CRYPTOID_BOSS_HEAT_CONTROL === '1';
 export const bossHullHeatRestored = () => bossHeatComparisonEnabled() && process.env.CRYPTOID_BOSS_HEAT_ON === '1';
+export const bossHullHeatUnmasked = () => bossHullHeatRestored() && process.env.CRYPTOID_BOSS_HEAT_UNMASKED === '1';
 export const diagnosticSceneName = () => !flatSceneEnabled() ? 'original-artwork'
   : bossHeatComparisonEnabled() ? bossHullHeatRestored()
-    ? 'flat-live-scene-original-background-original-boss-no-weapon-canvas-hidden-hull-reflection'
+    ? 'flat-live-scene-original-background-original-boss-no-weapon-canvas-hidden-hull-reflection' + (bossHullHeatUnmasked() ? '-unmasked-hull-heat' : '')
     : 'flat-live-scene-original-background-original-boss-no-weapon-canvas-hidden-hull-masks'
   : bossReflectionComparisonEnabled() ? bossReflectionRestored()
     ? 'flat-live-scene-original-background-original-boss-no-weapon-canvas-hidden-hull-heat'
@@ -66,3 +67,4 @@ export function restoreFlatGameScene(source) {
   assert.equal(source.split(flatImpact).length, 2); assert.equal(source.split(newRoot).length, 2);
   return source.replace(flatImpact, originalImpact).replace(newRoot, oldRoot);
 }
+

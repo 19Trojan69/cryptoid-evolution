@@ -1,0 +1,6 @@
+/* One private presentation intervention. Keep the visible original static
+   hotspots, their gradients, transforms, bounds, keys and short hit bursts. */
+.diagnostic-flat-scene .sector-boss .hull-heat-layer {
+  mask-image: none !important;
+  -webkit-mask-image: none !important;
+}
