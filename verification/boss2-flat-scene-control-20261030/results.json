@@ -5,6 +5,8 @@
   "physicalDeviceResult": {
     "evidence": "evidence/owner-flat-scene-completion.json",
     "status": "owner-reported-normal-end-without-white-screen",
+    "browser": "Safari",
+    "browserConfirmedByOwner": true,
     "savedActiveMs": 530855,
     "displayedTime": "08:50",
     "unplannedPausesReported": 2,
@@ -123,9 +125,9 @@
     "ownerResult": null
   },
   "nextPhoneProtocol": {
-    "status": "completed-once-without-owner-reported-white-screen",
-    "repeatRequested": false,
-    "nextStep": "Clarify browser and browser-chrome state because the last recorded field was 430x711 instead of the preceding failure's 430x825; then choose a narrower rendering comparison.",
+    "status": "Safari-completion-recorded; flat-scene-Pi-Browser-result-pending",
+    "identicalSafariRepeatRequested": false,
+    "nextStep": "Use the same flat-scene URL in Pi Browser for eight active minutes, full recording off and protection on. The owner confirmed the successful run was Safari, so this adds a different browser condition. Note whether browser bars are visible; do not infer their visibility from field dimensions alone.",
     "browser": "same Pi Browser on affected phone",
     "fullRecording": false,
     "protection": true,

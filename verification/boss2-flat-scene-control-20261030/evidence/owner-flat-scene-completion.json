@@ -4,7 +4,9 @@
     "normalExit": true,
     "unplannedPausesReported": 2,
     "triggerReported": "Finger absetzen",
-    "browserAndDeviceNotRestatedInThisMessage": true
+    "browser": "Safari",
+    "browserConfirmation": "Owner follow-up: safari",
+    "deviceNotRestatedInThisMessage": true
   },
   "runtimeSource": "9b38b695fc3f9b81407dfe97c5feb8128ca95767",
   "runtimeTree": "994db1d2a9daaf63eed6ecdf2a24af01a08baa5d",
@@ -47,6 +49,7 @@
     "height": 825
   },
   "browserChromeVisibilityMeasured": false,
+  "browserIdentityMeasuredByReport": false,
   "pauseHandlerReview": {
     "controllerBlob": "d73579b3f9abe575adacfa978259aec9bdb0e7fd",
     "file": "frontend/src/pages/GamePage.tsx",
@@ -56,5 +59,5 @@
   },
   "nativeTerminationCauseMeasured": false,
   "whiteScreenFixed": false,
-  "conclusion": "One owner-reported normal completion at 08:50 in the flat-live-scene condition. Encouraging comparison, not a causal proof: two unwanted pauses remain and the reported field height differs from the preceding failed run. Clarify browser/chrome state before choosing the next comparison."
+  "conclusion": "One owner-reported Safari normal completion at 08:50 in the flat-live-scene condition. Encouraging comparison, not a causal proof: two unwanted pauses remain and the reported field height differs from the preceding failed run. This is not a Pi Browser result. The next targeted comparison is this same flat-source URL in Pi Browser; record browser-chrome visibility as well."
 }

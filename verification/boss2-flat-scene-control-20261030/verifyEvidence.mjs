@@ -15,6 +15,8 @@ assert.equal(owner.reportSha256, 'b5442c4693c56113a45d3d44d516cd730cc73c382b6238
 assert.equal(owner.savedActiveMs, 530855); assert.equal(owner.displayedTime, '08:50');
 assert.equal(owner.savedMode, 'ended'); assert.equal(owner.clockAndBriefRunMatch, true);
 assert.equal(owner.ownerObservation.whiteScreen, false); assert.equal(owner.ownerObservation.normalExit, true);
+assert.equal(owner.ownerObservation.browser, 'Safari'); assert.equal(result.physicalDeviceResult.browser, 'Safari');
+assert.equal(owner.browserIdentityMeasuredByReport, false);
 assert.equal(owner.ownerObservation.unplannedPausesReported, 2); assert.equal(owner.whiteScreenFixed, false);
 assert.equal(owner.fullRecording, false); assert.equal(owner.protection, true); assert.equal(owner.fullSession, null);
 assert.equal(owner.retainedEvents, 32); assert.equal(owner.collectorDrops, 199);
