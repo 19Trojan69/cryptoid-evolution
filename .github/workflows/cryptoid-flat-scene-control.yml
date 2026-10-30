@@ -3,7 +3,7 @@ run-name: Compare artwork and flat scene with unchanged input, combat and clocks
 on:
   push:
     branches: [codex/boss2-flat-scene-control-20261030]
-    paths: ['.github/workflows/cryptoid-flat-scene-control.yml', 'verification/boss2-flat-scene-control-20261030/**', 'verification/boss2-forensics-20261028/buildDevicePreview.mjs', 'vercel.json']
+    paths: ['.github/workflows/cryptoid-flat-scene-control.yml', 'verification/boss2-flat-scene-control-20261030/**', 'verification/boss2-forensics-20261028/buildDevicePreview.mjs', 'verification/boss2-forensics-20261028/devicePreviewApp.jsx', 'vercel.json']
 permissions:
   contents: read
 jobs:
