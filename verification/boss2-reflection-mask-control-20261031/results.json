@@ -1,0 +1,121 @@
+{
+  "version": 1,
+  "kind": "private-original-reflection-image-mask-removal",
+  "whiteScreenFixed": false,
+  "physicalDeviceTested": false,
+  "runtime": {
+    "source": "ebe70ac8ac80ebd8bce3f00273a9182520f51323",
+    "tree": "bd6fd845ad281496f668c151ab6b1cbb3e94f350",
+    "workBranch": "codex/boss2-reflection-mask-control-20261031",
+    "deviceBranch": "codex/boss2-reflection-mask-device-20261031"
+  },
+  "basis": {
+    "failedOwnerSource": "e16befbb1251b14b0f2742f8a984c29a00173c41",
+    "failedOwnerSavedActiveMs": 528993,
+    "failedOwnerTime": "08:48",
+    "failedOwnerReceipt": "../boss2-unmasked-heat-reflection-20261030/evidence/owner-reflection-restoration-failure.json",
+    "failureEvidenceCommit": "32502a90b2ef314e7194750883234846d46b39f2",
+    "precedingNormalOwnerSource": "67dabc714907be6d3ae99ccf9ebeab170eb34b06",
+    "precedingNormalOwnerTime": "10:56",
+    "precedingNormalOwnerActiveMs": 656318,
+    "nativeMechanismProven": false
+  },
+  "treatment": {
+    "removeOnly": "standard/WebKit active image mask on .diagnostic-flat-scene .sector-boss .hull-reflection",
+    "originalReflectionVisible": true,
+    "reflectionStandardAndWebkitMasks": "none",
+    "originalReflectionGradientNaturalLightScreenBlendAndBoundsRetained": true,
+    "originalInlineReflectionMaskAndImagePreparationRetained": true,
+    "originalHeatHotspotsVisible": true,
+    "bothHeatImageMasksStillRemoved": true,
+    "bossWeaponsViewStillExcluded": true,
+    "priorFilterReactorOrdinaryExplosionCanvasControlsRetained": true,
+    "originalBossImageHealthMiniExplosionsBackgroundRetained": true,
+    "gameplayClocksBalanceInputAudioUnchanged": true,
+    "extraRuntimeTimersOrFrames": false,
+    "rectangularReflectionPaintMayDiffer": true
+  },
+  "verification": {
+    "runId": 41187402778,
+    "workflow": "https://github.com/19Trojan69/cryptoid-evolution/actions/runs/41187402778",
+    "status": "passed",
+    "sourceComponentTests": 16,
+    "typePreflight": "passed",
+    "originalSourcePins": "passed",
+    "shortDesktopFlows": 4,
+    "jobs": [
+      {
+        "id": 124497007885,
+        "engine": "chromium",
+        "conclusion": "success"
+      },
+      {
+        "id": 124497008083,
+        "engine": "webkit",
+        "conclusion": "success"
+      }
+    ],
+    "localCheckoutLimit": "The local checkout is partial: attempting full controller tests locally found GamePage.tsx absent (2 ENOENT), so local coverage is 6 targeted passing tests. All 16 actual full-source tests and types passed in the complete GitHub checkout; incomplete-local attempts are not treated as candidate failures or full-source success.",
+    "evidence": "evidence/synthetic-reflection-mask-comparison.json",
+    "workflowStatus": "completed",
+    "workflowConclusion": "success"
+  },
+  "deployment": {
+    "id": "dpl_DuEkvLR1VeMkxSFNA1vJ1QQMeR8R",
+    "url": "https://cryptoid-evolution-testnet-i1e80d44e-19-trojan69.vercel.app/",
+    "dashboard": "https://vercel.com/19-trojan69/cryptoid-evolution-testnet/DuEkvLR1VeMkxSFNA1vJ1QQMeR8R",
+    "status": "READY",
+    "durationSeconds": 55,
+    "buildLogsHeadingSeconds": 56,
+    "environment": "Preview",
+    "source": "ebe70ac8ac80ebd8bce3f00273a9182520f51323",
+    "branch": "codex/boss2-reflection-mask-control-20261031",
+    "protection": "Standard Protection (deployment settings observed; unchanged)",
+    "customDomainAssignment": "Skipped",
+    "guestOnly": true,
+    "liveBackend": false,
+    "payments": false,
+    "automaticUpload": false,
+    "gitAutomaticDeploymentEnabled": false,
+    "previewOnly": true,
+    "publicReleaseAuthorized": false
+  },
+  "newOwnerPhoneResult": null,
+  "publicMainSource": "ce073547cf573375d141bf846f70e294138dbd73",
+  "originalSourceTrees": {
+    "api": "ccac7cd576a079771d7d7fe4f0085492ebbe6813",
+    "assets": "a9860b12db58a96dafde818d9a58a6ea0e03c5e5",
+    "backend": "6e93bfbac9e6cc70a1edfb8bd55d737f612ba261",
+    "frontend": "890df8a38e13ef1fe315a5c0eb109c1d72b80aab",
+    "private-preview": "b733d4dc70b4ac407391720eab131dbaf1d60e37"
+  },
+  "limits": [
+    "Short assistant desktop Chromium/WebKit flows are not physical iPhone/Pi Browser endurance or native-cause measurements.",
+    "Removing the reflection mask leaves the original light/screen blend but can show a rectangular light gradient beyond the alpha contour. This is a private confirmation candidate, not final artwork or a proven fix.",
+    "Previous owner failures and normal exits remain frozen; 10:56 is the reflection-hidden baseline, 08:48 is the failed reflection-restored source, neither is a result of this new runtime."
+  ],
+  "hostedCheck": {
+    "evidence": "evidence/hosted-reflection-mask-candidate.json",
+    "screenshot": "evidence/hosted-preview-ready.jpg",
+    "physicalDevice": false,
+    "displayedTime": "01:45",
+    "savedActiveMs": 105693.30000000005,
+    "savedMode": "ended",
+    "normalExit": true,
+    "pairedReport": true,
+    "manualPauseFreezes": true,
+    "lastTimeRestoredAfterReload": true,
+    "visibleHotspots": 6,
+    "bothLayersVisible": true,
+    "bothLayersStandardAndWebkitMaskNone": true,
+    "reflectionBlend": "screen",
+    "stalledStateEntries": 3,
+    "whiteScreenObserved": false,
+    "whiteScreenFixed": false
+  },
+  "preservedDeviceRefs": {
+    "normalExitBaseline": "67dabc714907be6d3ae99ccf9ebeab170eb34b06",
+    "failedReflectionRestoration": "e16befbb1251b14b0f2742f8a984c29a00173c41",
+    "newReflectionMaskCandidate": "ebe70ac8ac80ebd8bce3f00273a9182520f51323"
+  }
+}
