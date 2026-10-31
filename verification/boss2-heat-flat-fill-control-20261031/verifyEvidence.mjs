@@ -4,7 +4,23 @@ const read = p => JSON.parse(readFileSync(new URL(p, import.meta.url), 'utf8'));
 const r = read('./results.json'), e = read('./evidence/synthetic-heat-fill-comparison.json');
 assert.equal(r.runtime.source, 'f67fd2e41c372de600d197f2c8d943b7097b9209');
 assert.equal(r.runtime.tree, 'b58083ab6ba44a523d6497e317af665d4344fb90');
-assert.equal(r.whiteScreenFixed, false); assert.equal(r.physicalDeviceTested, false); assert.equal(r.newOwnerPhoneResult, null);
+assert.equal(r.whiteScreenFixed, false); assert.equal(r.physicalDeviceTested, false); assert.equal(r.newOwnerPhoneResult.status, 'white-screen-owner-reported-awaiting-matching-report');
+assert.equal(r.newOwnerPhoneResult.whiteScreenReported, true);
+assert.equal(r.newOwnerPhoneResult.reportReceived, false);
+assert.equal(r.newOwnerPhoneResult.runtimeSourceVerified, false);
+for (const k of ['runtimeSource','runtimeTree','savedActiveMs','displayedTime','savedMode']) assert.equal(r.newOwnerPhoneResult[k], null);
+const message = read('./evidence/owner-white-screen-message.json');
+assert.equal(message.ownerMessage, 'mit whitescreen'); assert.equal(message.ownerObservation.whiteScreenReported, true);
+assert.equal(message.precedingRequestedPreview.source, r.runtime.source); assert.equal(message.precedingRequestedPreview.tree, r.runtime.tree);
+assert.equal(message.accompanyingReportReceived, false); assert.equal(message.runtimeSourceVerified, false);
+assert.equal(message.runtimeSource, null); assert.equal(message.savedActiveMs, null); assert.equal(message.displayedTime, null);
+assert.equal(message.previousOwner0910TimeAppliedToThisRun, false); assert.equal(message.assistant0112TimeAppliedToThisRun, false);
+assert.equal(message.nativeTerminationCauseMeasured, false); assert.equal(message.permanentRepairAccepted, false);
+const review = read('./evidence/source-review-after-owner-message.json');
+assert.equal(review.source, r.runtime.source); assert.equal(review.tree, r.runtime.tree);
+assert.equal(review.decision.newRuntimeChangeMade, false); assert.equal(review.decision.newDeploymentCreated, false);
+assert.equal(review.decision.additionalUnchangedPhoneRepeatRequested, false); assert.equal(review.decision.causeEstablished, false);
+assert.equal(review.pins['frontend/src/pages/HullDamage.tsx'], '50616cc7bb7f0f419c0bcc3b6303a57d47e62439');
 assert.equal(r.verification.runId, 41209575472); assert.equal(r.verification.status, 'passed');
 assert.equal(r.verification.sourceComponentTests, 20); assert.equal(r.verification.shortDesktopFlows, 4);
 assert.equal(e.physicalDevice, false); assert.equal(e.observations.length, 4);
@@ -67,4 +83,4 @@ if (r.hostedCheck) {
   assert.equal(r.hostedCheck.ownerResult, false); assert.equal(r.hostedCheck.uninterruptedPerformanceClaimed, false);
 }
 console.log('CRYPTOID_HEAT_FLAT_FILL_EVIDENCE ' + JSON.stringify({ passed: true, source: r.runtime.source,
-  desktopFlows: 4, newOwnerPhoneResult: 'not-tested', whiteScreenFixed: false }));
+  desktopFlows: 4, newOwnerPhoneResult: 'owner White Screen reported; exported source/time not yet verified', whiteScreenFixed: false }));

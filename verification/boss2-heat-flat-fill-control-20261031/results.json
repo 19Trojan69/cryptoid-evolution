@@ -83,7 +83,21 @@
     "previewOnly": true,
     "publicReleaseAuthorized": false
   },
-  "newOwnerPhoneResult": null,
+  "newOwnerPhoneResult": {
+    "evidence": "evidence/owner-white-screen-message.json",
+    "status": "white-screen-owner-reported-awaiting-matching-report",
+    "whiteScreenReported": true,
+    "association": "conversation-context-only",
+    "reportReceived": false,
+    "runtimeSourceVerified": false,
+    "runtimeSource": null,
+    "runtimeTree": null,
+    "savedActiveMs": null,
+    "displayedTime": null,
+    "savedMode": null,
+    "nativeMechanismProven": false,
+    "permanentRepairAccepted": false
+  },
   "publicMainSource": "ce073547cf573375d141bf846f70e294138dbd73",
   "originalSourceTrees": {
     "api": "ccac7cd576a079771d7d7fe4f0085492ebbe6813",
@@ -96,7 +110,7 @@
     "Both original-gradient and flat-fill desktop flows are short emulated-phone observations, not physical iPhone/Pi Browser endurance or native-gradient-cause measurements.",
     "The same frozen source 67dabc71 had a normal 10:56 exit and later failed at 09:10; no stable positive control is claimed. Original-gradient desktop control is not a reproduction of the phone crash.",
     "This deliberately changes only the inner heat-marker paint. It cannot prove absence of memory/GPU/WebKit/cache/thermal/input or other causes; temporal differences among owner runs are not measured performance gains.",
-    "No owner phone result exists for this candidate and no permanent repair/public release is accepted."
+    "A new owner White Screen message exists after this preview was delivered, but no accompanying export verifies runtime/time/options. No permanent repair/public release is accepted."
   ],
   "hostedCheck": {
     "status": "passed-with-limits",
@@ -112,5 +126,10 @@
     "stalledStateEntries": 4,
     "uninterruptedPerformanceClaimed": false,
     "ownerResult": false
-  }
+  },
+  "ownerPhysicalDeviceFailureReported": true,
+  "physicalDeviceTestedMeaning": "A physical owner run matched by its exported source to this pinned runtime; the new message is reported but not yet matched.",
+  "currentStatus": "Owner reports White Screen after flat-fill preview delivery; no matching new export, no accepted fix.",
+  "nextOwnerAction": "Attach/save the report from this completed run before another start. No unchanged repeat requested.",
+  "targetedSourceReview": "evidence/source-review-after-owner-message.json"
 }

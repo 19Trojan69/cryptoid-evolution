@@ -1,0 +1,94 @@
+{
+  "version": 1,
+  "kind": "targeted-read-only-source-review-after-owner-white-screen-message",
+  "source": "f67fd2e41c372de600d197f2c8d943b7097b9209",
+  "tree": "b58083ab6ba44a523d6497e317af665d4344fb90",
+  "scope": "HullDamage/static boss heat, direct caller/update paths and separate small impact effect; no general or native-log restart",
+  "pins": {
+    "frontend/src/pages/HullDamage.tsx": "50616cc7bb7f0f419c0bcc3b6303a57d47e62439",
+    "frontend/src/pages/BossHullView.tsx": "68dd74e598caa060ae8825d3c56b199ba0d08449",
+    "frontend/src/pages/hullFires.ts": "53e24756f5c0ab45c33538f646a21e1b6e6733d2",
+    "frontend/src/index.css": "43dea6284bc694bac6026e5928aaf42e4a461ec2",
+    "frontend/src/pages/GamePage.tsx": "d73579b3f9abe575adacfa978259aec9bdb0e7fd",
+    "frontend/src/pages/FinishedEffect.tsx": "1f943eb9114756c4b26a66dd14f9c6883176a37c"
+  },
+  "observations": [
+    {
+      "path": "frontend/src/pages/hullFires.ts",
+      "lines": [
+        6,
+        10,
+        37,
+        40
+      ],
+      "finding": "addPersistentHullFire keeps the array bounded; the boss health formula caps the normal limit at eight. Even at cap/duplicate, it returns a fresh array; a nearby hit replaces a site with an updated revision/power. No unbounded persistent-site list follows from this code."
+    },
+    {
+      "path": "frontend/src/pages/HullDamage.tsx",
+      "lines": [
+        9,
+        13,
+        20,
+        22
+      ],
+      "finding": "The boss uses stable site.id keys and id-based profiles. Re-rendering is not proof of remounting. When rendering, appearance recomputes a profile per site, which includes a small spark array even for a static mark. Render frequency/retention/native cost are not measured."
+    },
+    {
+      "path": "frontend/src/index.css",
+      "lines": [
+        2555,
+        2557,
+        2561,
+        2563
+      ],
+      "finding": "Boss static heat disables hotspot/inner animations and speck content; original geometry/transforms and two opacity stages remain. The flat-fill builder changes only inner background paint; neither the layer nor its React updates is removed."
+    },
+    {
+      "path": "frontend/src/pages/BossHullView.tsx",
+      "lines": [
+        100,
+        104
+      ],
+      "finding": "HullDamage receives sites, latest hit, mask URL and boss damage. Original inline mask style is still present even when active standard/WebKit masks are overridden to none."
+    },
+    {
+      "path": "frontend/src/pages/GamePage.tsx",
+      "lines": [
+        2115,
+        2117
+      ],
+      "finding": "Hits continue updating the bounded simulation-side hullFires array, independent of the static-fill CSS. No gameplay/site-update change was part of the delivered candidate."
+    },
+    {
+      "path": "frontend/src/pages/HullDamage.tsx",
+      "lines": [
+        19,
+        22
+      ],
+      "finding": "The heat div and keyed FinishedEffect mini-explosion are siblings. The flat-fill selector targets inner heat b only; it does not disable the separate mini-explosion gradients, sparks or lifecycle."
+    },
+    {
+      "path": "frontend/src/pages/FinishedEffect.tsx",
+      "lines": [
+        7,
+        18
+      ],
+      "finding": "Completion inspects native subtree animations and may render null. A changed hit key also replaces the previous effect. This source inspection does not show an ever-growing set of impact elements or prove any native failure."
+    }
+  ],
+  "decision": {
+    "newRuntimeChangeMade": false,
+    "newDeploymentCreated": false,
+    "additionalUnchangedPhoneRepeatRequested": false,
+    "whiteScreenFixed": false,
+    "causeEstablished": false,
+    "firstStep": "Match the completed-run report to the delivered source/tree/options and last saved state.",
+    "conditionalInference": "Only if source f67fd2e4 is confirmed does this add a failed uniform-fill condition. Then gradient replacement alone is insufficient; do not label gradients, mask, reflection, touch, heat or a leak as the proven sole cause.",
+    "nextScope": "After matching, choose one small comparison within the remaining static-layer presentation/update path. Do not disable mini-explosions, gameplay and heat together or publish a speculative permanent repair."
+  },
+  "verificationLimits": [
+    "Read-only source review, not a new runtime measurement or native-device test.",
+    "Local checkout is partial; authoritative runtime source was read from the pinned remote commit.",
+    "No new build or test URL is justified solely by an unassigned two-word observation."
+  ]
+}

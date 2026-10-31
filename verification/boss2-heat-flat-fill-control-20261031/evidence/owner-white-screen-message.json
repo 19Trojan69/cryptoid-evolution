@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "kind": "owner-message-only-white-screen-after-preview-delivery",
+  "ownerMessage": "mit whitescreen",
+  "reportedDateLocal": "2026-10-31",
+  "ownerObservation": {
+    "whiteScreenReported": true,
+    "normalExitReported": false,
+    "idleWithoutPlayingExplicitlyRestated": false,
+    "returnToMenuExplicitlyRestated": false,
+    "warmthExplicitlyRestated": false
+  },
+  "precedingRequestedPreview": {
+    "source": "f67fd2e41c372de600d197f2c8d943b7097b9209",
+    "tree": "b58083ab6ba44a523d6497e317af665d4344fb90",
+    "url": "https://cryptoid-evolution-testnet-g08qa3kwb-19-trojan69.vercel.app/",
+    "banner": "HITZESPURENTEST: einfache Farbflächen; Reflexion aus"
+  },
+  "association": "conversation-context-only-awaiting-report",
+  "accompanyingReportReceived": false,
+  "runtimeSourceVerified": false,
+  "runtimeSource": null,
+  "runtimeTree": null,
+  "savedActiveMs": null,
+  "displayedTime": null,
+  "savedMode": null,
+  "retainedEvents": null,
+  "collectorDrops": null,
+  "recordedGaps": null,
+  "fullRecording": null,
+  "protection": null,
+  "fullSession": null,
+  "fullSessionNullConfirmed": false,
+  "bootAfterActiveSessionRecorded": null,
+  "exactCrashTimeMeasured": false,
+  "nativeTerminationCauseMeasured": false,
+  "previousOwner0910TimeAppliedToThisRun": false,
+  "assistant0112TimeAppliedToThisRun": false,
+  "permanentRepairAccepted": false,
+  "whiteScreenFixed": false,
+  "nextOwnerAction": "Save and attach the report from the completed run before another start; no unchanged repeat is requested.",
+  "limits": [
+    "This message records a reported White Screen; it does not independently identify the runtime, device, browser, settings, elapsed time, restart sequence or native cause.",
+    "No current matching export was supplied or found in the scoped current-file lookup. Earlier report 14-06-15/09:10 is a different run; assistant hosted 01:12 is a different observer.",
+    "The new fill is not accepted as a repair. If the exported source matches f67fd2e4, replacing only its static inner gradients was insufficient; other causes and interactions remain open."
+  ]
+}
