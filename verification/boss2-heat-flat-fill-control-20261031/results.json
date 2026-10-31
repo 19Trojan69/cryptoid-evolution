@@ -84,17 +84,25 @@
     "publicReleaseAuthorized": false
   },
   "newOwnerPhoneResult": {
-    "evidence": "evidence/owner-white-screen-message.json",
-    "status": "white-screen-owner-reported-awaiting-matching-report",
+    "evidence": "evidence/owner-flat-fill-export-without-run.json",
+    "ownerMessageEvidence": "evidence/owner-white-screen-message.json",
+    "status": "white-screen-owner-reported-current-export-source-matches-no-saved-run",
     "whiteScreenReported": true,
-    "association": "conversation-context-only",
-    "reportReceived": false,
+    "association": "owner-message-plus-current-page-source-only-no-saved-run",
+    "reportReceived": true,
+    "reportFile": "cryptoid-diagnose-2026-10-31T18-07-25-440Z-f9407023.json",
+    "exportSourceVerified": true,
+    "exportSource": "f67fd2e41c372de600d197f2c8d943b7097b9209",
+    "exportTree": "b58083ab6ba44a523d6497e317af665d4344fb90",
     "runtimeSourceVerified": false,
     "runtimeSource": null,
     "runtimeTree": null,
     "savedActiveMs": null,
     "displayedTime": null,
     "savedMode": null,
+    "stopwatchStorage": "absent",
+    "briefStorage": "absent",
+    "testOptions": null,
     "nativeMechanismProven": false,
     "permanentRepairAccepted": false
   },
@@ -110,7 +118,7 @@
     "Both original-gradient and flat-fill desktop flows are short emulated-phone observations, not physical iPhone/Pi Browser endurance or native-gradient-cause measurements.",
     "The same frozen source 67dabc71 had a normal 10:56 exit and later failed at 09:10; no stable positive control is claimed. Original-gradient desktop control is not a reproduction of the phone crash.",
     "This deliberately changes only the inner heat-marker paint. It cannot prove absence of memory/GPU/WebKit/cache/thermal/input or other causes; temporal differences among owner runs are not measured performance gains.",
-    "A new owner White Screen message exists after this preview was delivered, but no accompanying export verifies runtime/time/options. No permanent repair/public release is accepted."
+    "Owner reports White Screen. The received 18-07-25 export identifies the current flat-fill page, but stopwatch and brief latest/previous plus session marker are absent. It provides no failed-run time/options/source chain. No permanent repair/public release is accepted."
   ],
   "hostedCheck": {
     "status": "passed-with-limits",
@@ -128,8 +136,8 @@
     "ownerResult": false
   },
   "ownerPhysicalDeviceFailureReported": true,
-  "physicalDeviceTestedMeaning": "A physical owner run matched by its exported source to this pinned runtime; the new message is reported but not yet matched.",
-  "currentStatus": "Owner reports White Screen after flat-fill preview delivery; no matching new export, no accepted fix.",
-  "nextOwnerAction": "Attach/save the report from this completed run before another start. No unchanged repeat requested.",
+  "physicalDeviceTestedMeaning": "A physical owner run matched through its saved clock/brief to this pinned runtime; the received export identifies only the current page and has no saved run.",
+  "currentStatus": "Received export identifies current flat-fill page, but clock/brief/previous session absent. Owner White Screen recorded; failed run source/time/options not independently matched.",
+  "nextOwnerAction": "Clarify whether export used the original Pi Browser/tab and exact test address; if the original context still exists, export there without starting a new run. Do not clear storage or request another unchanged endurance test.",
   "targetedSourceReview": "evidence/source-review-after-owner-message.json"
 }

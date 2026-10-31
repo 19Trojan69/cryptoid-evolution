@@ -2,7 +2,21 @@
 
 Der White Screen ist nicht nachweislich behoben. React/TypeScript/Vite, keine Unity-App. Nur geschützte Gast-Previews; keine öffentliche Testnet-/Mainnet-Veröffentlichung/Main-Zusammenführung. Echte Konten/Spielstände/Käufe/Ranglisten bleiben geschützt. Spieltempo, Spieluhren, Balance, Einfingersteuerung, nur manuelles Fortsetzen und Audio bleiben unverändert. Alle früheren Geräte-Zweige/Adressen einfrieren. Keine allgemeinen Untersuchungen oder erfolglose iOS-/Jetsam-Log-Schleife neu beginnen.
 
-## Neueste Besitzer-Rückmeldung nach Auslieferung der einfachen Füllung
+## Neuester Eingang: Export der Füllungsseite ohne gespeicherten Lauf
+
+Bericht **cryptoid-diagnose-2026-10-31T18-07-25-440Z-f9407023.json**, 2451 Bytes, SHA-256 **ee4a42bac00f2eaf8add4e6fcb5da83a55ba1aabf449a55d6488575c0aeb5b5e**, erstellt am 31.10.2026 um **19:07 Uhr Wien** (18:07:25.440Z). Bereinigter Nachweis `evidence/owner-flat-fill-export-without-run.json`; Rohdatei nicht in Git.
+
+Die **aktuell exportierende Seite** trägt f67fd2e41c372de600d197f2c8d943b7097b9209 / b58083ab6ba44a523d6497e317af665d4344fb90 und die korrekte Kennung mit `-flat-fill`. **Stoppuhr und Kurzdiagnose melden jedoch beide storage:absent, latest:null, previous:null.** Keine angezeigte Zeit, keine Optionen, keine Optionshistorie, kein vorheriger Sitzungsmarker. fullSession:null ist vorhanden, beweist aber bei unbekannten Optionen keine ausgeschaltete Vollaufzeichnung. Ereignis-/Drop-/Lückenwerte sind **unbekannt**, nicht null im Sinn von gemessenen null Ereignissen/Abbrüchen.
+
+Das neue aktuelle home-Dokument war beim Export rund **8 Sekunden** alt und hat Navigation `navigate`; im kurzen Reload-Trace steht nur app-boot. **Kein boot-after-active-session ist aufgezeichnet.** Das sind Metadaten des jetzigen Dokuments, keine Spielzeit oder genaue Absturzsekunde. Crash-Tail-Speicher 0Tab/0Origin/1Tab/1Origin absent, keine Crash-Tail-Sitzungen/Flightrecorder.
+
+Die Besitzerbeobachtung White Screen bleibt bestehen. Die Quellfelder bestätigen die jetzt geöffnete Füllungsseite; ohne gespeicherten Lauf bestätigen sie **nicht unabhängig**, welcher zuvor laufende Spielstand gescheitert ist. Keine 09:10 aus dem alten Besitzerlauf und keine 01:12 vom Assistenten übertragen. `physicalDeviceTested:false` bleibt hier für den nicht per gespeicherter Laufquelle abgeglichenen Lauf; die Fehlermeldung wird nicht verworfen.
+
+Enger Exportpfad-Abgleich mit gepinnter `briefState.mjs` e2546655a0c3c553b4d275d2effbb57b5407be1a, Zeilen 39–45: **absent entsteht bei getItem(key) === null**, während eine Lese-/Parse-Ausnahme unavailable ergibt. Die Schlüssel sind im exportierenden Speicher-Kontext nicht vorhanden. Der Export beweist **nicht**, dass der White Screen Daten gelöscht hat, ein anderer Browser benutzt wurde, ein Cachefehler vorliegt oder gar kein Test stattgefunden hätte. Warum Daten fehlen, ist offen. Keine allgemeine Untersuchung/Log-Schleife neu beginnen.
+
+**Nächster Schritt ist Kontextklärung, kein erneuter unveränderter Spieltest:** Kam dieser Export aus dem ursprünglichen Pi Browser/Tab und exakt derselben Testadresse oder aus Safari/ChatGPT/einem anderen Kontext? Falls der ursprüngliche Kontext noch verfügbar ist, dort ohne neuen Start den Bericht exportieren; keine Daten löschen. Kein neuer Kandidat/Build/Link in diesem Update. Die bestehenden Geräte-Zweige und Adressen bleiben eingefroren. Nach ausreichender Zuordnung erst eine einzelne weitere Grenze im statischen Hitzespurenpfad auswählen. Native Ursache und dauerhafter Fix bleiben unbewiesen.
+
+## Vorheriger Stand: Besitzer-Rückmeldung vor Eingang des neuen Exports
 
 Besitzer erneut: **„mit whitescreen“**. Diese neue Rückmeldung folgt auf die Auslieferung von f67fd2e4 / g08qa3kwb mit „HITZESPURENTEST: einfache Farbflächen; Reflexion aus“. Sie wird als White-Screen-Beobachtung festgehalten. **Kein neuer begleitender JSON-Bericht liegt vor**; deshalb sind Laufzeitquelle/Baum, aktive Testzeit/Modus, Einstellungen, Ereignisse, Rückkehr/Boot und genaue Geräte-/Browserzuordnung für diesen neuen Lauf noch nicht durch Export bestätigt. Kein Wärme-/Idle-/Berührungsauslöser aus früheren Berichten übertragen. 09:10 gehört weiterhin zum vorherigen 67dabc71-Besitzerlauf; 01:12 ist weiterhin der Assistenten-Desktoplauf.
 
