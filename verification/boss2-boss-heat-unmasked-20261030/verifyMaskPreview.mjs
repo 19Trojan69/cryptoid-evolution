@@ -7,7 +7,9 @@ import { serveDevicePreview } from '../boss2-forensics-20261028/devicePreviewSer
 import { STOPWATCH_KEY } from '../boss2-stopwatch-20261029/stopwatchState.mjs';
 
 const engine = process.env.CRYPTOID_FLAT_ENGINE;
-const staticHotspotsComparison = process.env.CRYPTOID_STATIC_HOTSPOTS_COMPARISON === '1';
+const miniCompletionComparison = process.env.CRYPTOID_MINI_COMPLETION_COMPARISON === '1';
+const miniCompletionOff = miniCompletionComparison && process.env.CRYPTOID_BOSS_MINI_INSPECTION_OFF === '1';
+const staticHotspotsComparison = miniCompletionComparison || process.env.CRYPTOID_STATIC_HOTSPOTS_COMPARISON === '1';
 const staticHotspotsOff = staticHotspotsComparison && process.env.CRYPTOID_BOSS_STATIC_HOTSPOTS_OFF === '1';
 const heatFlatFillComparison = staticHotspotsComparison || process.env.CRYPTOID_HEAT_FLAT_FILL_COMPARISON === '1';
 const heatFlatFill = heatFlatFillComparison && process.env.CRYPTOID_BOSS_HEAT_FLAT_FILL === '1';
@@ -21,7 +23,9 @@ const reflectionOn = reflectionMaskComparison || (reflectionComparison && proces
 const unmasked = heatFlatFillComparison || reflectionComparison || process.env.CRYPTOID_BOSS_HEAT_UNMASKED === '1';
 assert.ok(['chromium', 'webkit'].includes(engine));
 const pw = createRequire(new URL('../boss2-forensics-20261028/package.json', import.meta.url))('playwright');
-const directory = staticHotspotsComparison
+const directory = miniCompletionComparison
+  ? resolve(root, 'verification/boss2-mini-completion-control-20261031/results', engine, miniCompletionOff ? 'native-off' : 'native-on')
+  : staticHotspotsComparison
   ? resolve(root, 'verification/boss2-static-hotspots-control-20261031/results', engine, staticHotspotsOff ? 'static-off' : 'static-on')
   : heatFlatFillComparison
   ? resolve(root, 'verification/boss2-heat-flat-fill-control-20261031/results', engine, heatFlatFill ? 'flat-fill' : 'original-gradients')
@@ -34,7 +38,7 @@ const directory = staticHotspotsComparison
   : resolve(root, 'verification/boss2-boss-heat-unmasked-20261030/results', engine, unmasked ? 'unmasked' : 'original-mask');
 mkdirSync(directory, { recursive: true });
 const result = {
-  complete: false, engine, unmasked, staticHotspotsComparison, staticHotspotsOff, heatFlatFillComparison, heatFlatFill, reflectionComparison, reflectionOn, reflectionMaskComparison, reflectionMaskRemoved,
+  complete: false, engine, unmasked, miniCompletionComparison, miniCompletionOff, staticHotspotsComparison, staticHotspotsOff, heatFlatFillComparison, heatFlatFill, reflectionComparison, reflectionOn, reflectionMaskComparison, reflectionMaskRemoved,
   reflectionBlendComparison, reflectionNormalBlend, physicalDevice: false, physicalCrashSimulated: false,
   fullRecording: false, whiteScreenFixed: false, steeringEventsSynthetic: true,
 };
@@ -65,6 +69,25 @@ try {
     if (url.origin === server.origin || ['fonts.googleapis.com', 'fonts.gstatic.com'].includes(url.hostname)) return route.continue();
     external.push(url.hostname); return route.abort();
   });
+  if (miniCompletionComparison) await context.addInitScript(() => {
+    // QA-only bounded native-call proof, never part of the delivered build.
+    const proof = { supported:typeof Element.prototype.getAnimations === 'function', nativeCalls:0, endEvents:0, observedPeakBossMini:0 };
+    Object.defineProperty(window,'__miniCompletionProof',{value:proof});
+    const original = Element.prototype.getAnimations;
+    if (proof.supported) Element.prototype.getAnimations = function(options) {
+      if (this.classList.contains('hull-mini-explosion') && this.closest('.sector-boss')) proof.nativeCalls++;
+      return original.call(this,options);
+    };
+    document.addEventListener('animationend',event => {
+      const target=event.target;
+      if (!(target instanceof Element)) return;
+      const mini=target.closest('.hull-mini-explosion');
+      if (mini?.closest('.sector-boss')) {
+        proof.endEvents++;
+        proof.observedPeakBossMini=Math.max(proof.observedPeakBossMini,document.querySelectorAll('.sector-boss .hull-mini-explosion').length);
+      }
+    },{capture:true,passive:true});
+  });
   page = await context.newPage(); page.setDefaultTimeout(25000);
   page.on('pageerror', e => { fatal ||= 'javascript-error: ' + e.message; });
   page.on('crash', () => { fatal ||= 'renderer-crash'; });
@@ -73,6 +96,12 @@ try {
   result.source = info.sourceCommit; result.sourceTree = info.sourceTree; result.scene = info.diagnosticScene;
   assert.equal(info.bossHeatMaskCandidate.enabled, unmasked);
   assert.equal(info.bossHeatMaskCandidate.reflectionHidden, !reflectionOn);
+  if (miniCompletionComparison) {
+    assert.equal(info.bossMiniCompletionControl.enabled,miniCompletionOff);
+    assert.equal(info.bossMiniCompletionControl.nativeInspectionSkippedOnlyForBossMini,miniCompletionOff);
+    assert.equal(info.bossMiniCompletionControl.qaNativeInspectionProbeDeployed,false);
+    for (const key of ['originalFinishedEffectComponentHookAndHandlerRetained','originalMiniMarkupCssSparksDurationsRetained','otherEffectsNativeInspectionRetained','oneLatestKeyedBossMiniAtMost','simulationBossHitAndHullFireArraysUnchanged']) assert.equal(info.bossMiniCompletionControl[key],true,key);
+  }
   if (staticHotspotsComparison) {
     assert.equal(info.bossStaticHotspotControl.enabled, staticHotspotsOff);
     for (const key of ['originalHullDamageComponentAndPropsRetained','originalHeatLayerAndInlineMaskRetained','originalEarlyReturnRetained','originalMiniExplosionFragmentRetained','simulationHullFireArraysAndDamageUnchanged']) assert.equal(info.bossStaticHotspotControl[key], true, key);
@@ -107,7 +136,7 @@ try {
   for (const key of ['actualPiAuthentication', 'liveBackend', 'realAccounts', 'payments', 'automaticUpload', 'automaticResume']) assert.equal(info[key], false, key);
   assert.equal(info.guestOnly, true); assert.equal(info.nativeGameClocks, true);
   const label = await page.locator('.device-preview-menu section').evaluate(n => getComputedStyle(n, '::before').content);
-  assert.ok(label.includes(heatFlatFillComparison ? heatFlatFill ? 'HITZESPURENTEST' : 'HITZESPURENVERGLEICH' : reflectionBlendComparison ? reflectionNormalBlend ? 'BLENDTEST' : 'BLENDKONTROLLE' : reflectionMaskComparison ? reflectionMaskRemoved ? 'MASKENTEST' : 'MASKENKONTROLLE' : reflectionComparison ? reflectionOn ? 'REFLEXIONSTEST' : 'REFLEXIONSVERGLEICH' : unmasked ? 'MASKENKANDIDAT' : 'MASKENVERGLEICH')); result.bannerMatches = true;
+  assert.ok(label.includes(miniCompletionComparison ? 'TREFFERTEST' : heatFlatFillComparison ? heatFlatFill ? 'HITZESPURENTEST' : 'HITZESPURENVERGLEICH' : reflectionBlendComparison ? reflectionNormalBlend ? 'BLENDTEST' : 'BLENDKONTROLLE' : reflectionMaskComparison ? reflectionMaskRemoved ? 'MASKENTEST' : 'MASKENKONTROLLE' : reflectionComparison ? reflectionOn ? 'REFLEXIONSTEST' : 'REFLEXIONSVERGLEICH' : unmasked ? 'MASKENKANDIDAT' : 'MASKENVERGLEICH')); result.bannerMatches = true;
   assert.equal(await page.getByRole('checkbox', { name: 'Vollaufzeichnung zusätzlich aktivieren', exact: true }).isChecked(), false);
   assert.equal(await page.getByRole('checkbox', { name: 'Testschutz: Tod und Bossende verhindern', exact: true }).isChecked(), true);
   await tap(page.getByRole('button', { name: 'Testszene vorbereiten', exact: true }));
@@ -117,8 +146,8 @@ try {
   result.initialPausedGeometry = await geometry();
   assert.equal(await page.locator('[data-stopwatch-value]').innerText(), '00:00');
   let baseline;
-  if (staticHotspotsComparison ? staticHotspotsOff : heatFlatFillComparison ? heatFlatFill : reflectionBlendComparison ? reflectionNormalBlend : reflectionMaskComparison ? reflectionMaskRemoved : reflectionComparison ? reflectionOn : unmasked) {
-    baseline = JSON.parse(readFileSync(resolve(directory, staticHotspotsComparison ? '../static-on/verification.json' : heatFlatFillComparison ? '../original-gradients/verification.json' : reflectionBlendComparison ? '../screen-blend/verification.json' : reflectionMaskComparison ? '../original-reflection-mask/verification.json' : reflectionComparison ? '../reflection-off/verification.json' : '../original-mask/verification.json'), 'utf8'));
+  if (miniCompletionComparison ? miniCompletionOff : staticHotspotsComparison ? staticHotspotsOff : heatFlatFillComparison ? heatFlatFill : reflectionBlendComparison ? reflectionNormalBlend : reflectionMaskComparison ? reflectionMaskRemoved : reflectionComparison ? reflectionOn : unmasked) {
+    baseline = JSON.parse(readFileSync(resolve(directory, miniCompletionComparison ? '../native-on/verification.json' : staticHotspotsComparison ? '../static-on/verification.json' : heatFlatFillComparison ? '../original-gradients/verification.json' : reflectionBlendComparison ? '../screen-blend/verification.json' : reflectionMaskComparison ? '../original-reflection-mask/verification.json' : reflectionComparison ? '../reflection-off/verification.json' : '../original-mask/verification.json'), 'utf8'));
     assert.equal(baseline.complete, true); assert.equal(baseline.source, result.source);
     for (const [selector, rect] of Object.entries(baseline.initialPausedGeometry)) for (const key of ['x', 'y', 'width', 'height'])
       assert.ok(Math.abs(rect[key] - result.initialPausedGeometry[selector][key]) <= 1, selector + ' ' + key);
@@ -147,6 +176,16 @@ try {
     assert.ok(result.originalMiniExplosionPulse.background.includes('radial-gradient'));
     assert.ok(result.originalMiniExplosionPulse.sparks >= 3 && result.originalMiniExplosionPulse.sparks <= 5);
     if(staticHotspotsOff)assert.equal(result.originalMiniExplosionPulse.hotspots,0);
+  }
+  if (miniCompletionComparison) {
+    await page.waitForFunction(() => window.__miniCompletionProof.endEvents >= 3, null, {timeout:20000});
+    result.miniCompletionProof = await page.evaluate(() => ({...window.__miniCompletionProof}));
+    assert.equal(result.miniCompletionProof.supported,true);
+    assert.ok(result.miniCompletionProof.endEvents>=3);
+    assert.equal(result.miniCompletionProof.observedPeakBossMini,1);
+    if(miniCompletionOff) assert.equal(result.miniCompletionProof.nativeCalls,0);
+    else assert.ok(result.miniCompletionProof.nativeCalls>0,'Control must actually invoke native boss-mini completion inspection');
+    result.qaNativeProbeOnlyInTestContext = true;
   }
   if (reflectionOn) {
     // Original reflection is a short naturally triggered pulse. A visible DOM
@@ -307,7 +346,8 @@ try {
   assert.equal(report.briefMatchesLatestStopwatch, true); assert.equal(report.fullSession, null);
   assert.equal(report.briefDiagnostics.latest.options.fullRecording, false);
   result.reportScene = report.source.diagnosticScene;
-  if (staticHotspotsComparison) assert.ok(result.reportScene.endsWith('-unmasked-hull-heat-flat-fill'+(staticHotspotsOff?'-no-static-hotspots':'')));
+  if (miniCompletionComparison) assert.ok(result.reportScene.endsWith('-flat-fill-no-static-hotspots'+(miniCompletionOff?'-no-mini-inspection':'')));
+  else if (staticHotspotsComparison) assert.ok(result.reportScene.endsWith('-unmasked-hull-heat-flat-fill'+(staticHotspotsOff?'-no-static-hotspots':'')));
   else if (heatFlatFillComparison) assert.ok(result.reportScene.endsWith('-hidden-hull-reflection-unmasked-hull-heat' + (heatFlatFill ? '-flat-fill' : '')));
   else if (reflectionBlendComparison) assert.ok(result.reportScene.endsWith('-unmasked-hull-heat-unmasked-hull-reflection' + (reflectionNormalBlend ? '-normal-blend' : '')));
   else if (reflectionMaskComparison) assert.ok(result.reportScene.endsWith(reflectionMaskRemoved
@@ -320,6 +360,6 @@ try {
   if (page && !page.isClosed()) try { await page.screenshot({ path: directory + '/failure.png', timeout: 5000 }); } catch { /* Retain first error. */ }
 } finally {
   result.finishedAt = new Date().toISOString(); writeFileSync(directory + '/verification.json', JSON.stringify(result, null, 2) + '\n');
-  console.log((staticHotspotsComparison ? 'CRYPTOID_STATIC_HOTSPOT_RESULT ' : heatFlatFillComparison ? 'CRYPTOID_HEAT_FLAT_FILL_RESULT ' : reflectionBlendComparison ? 'CRYPTOID_REFLECTION_BLEND_RESULT ' : reflectionMaskComparison ? 'CRYPTOID_REFLECTION_MASK_RESULT ' : reflectionComparison ? 'CRYPTOID_UNMASKED_HEAT_REFLECTION_RESULT ' : 'CRYPTOID_HEAT_MASK_RESULT ') + JSON.stringify(result));
+  console.log((miniCompletionComparison ? 'CRYPTOID_MINI_COMPLETION_RESULT ' : staticHotspotsComparison ? 'CRYPTOID_STATIC_HOTSPOT_RESULT ' : heatFlatFillComparison ? 'CRYPTOID_HEAT_FLAT_FILL_RESULT ' : reflectionBlendComparison ? 'CRYPTOID_REFLECTION_BLEND_RESULT ' : reflectionMaskComparison ? 'CRYPTOID_REFLECTION_MASK_RESULT ' : reflectionComparison ? 'CRYPTOID_UNMASKED_HEAT_REFLECTION_RESULT ' : 'CRYPTOID_HEAT_MASK_RESULT ') + JSON.stringify(result));
   if (browser) await browser.close(); if (server) await server.close();
 }
