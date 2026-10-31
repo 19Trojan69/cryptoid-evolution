@@ -1,0 +1,60 @@
+name: Protected visible boss reflection without image mask
+run-name: Remove only the original reflection image mask beside unmasked heat
+on:
+  push:
+    branches: [codex/boss2-reflection-mask-control-20261031]
+    paths: ['.github/workflows/cryptoid-reflection-mask-control.yml', 'verification/boss2-reflection-mask-control-20261031/**', 'verification/boss2-flat-scene-control-20261030/flatTransform.mjs', 'verification/boss2-boss-heat-unmasked-20261030/verifyMaskPreview.mjs', 'vercel.json']
+permissions:
+  contents: read
+jobs:
+  reflection-mask:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        engine: [chromium, webkit]
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with:
+          node-version: '24'
+      - name: Install existing tools
+        run: |
+          npm install --prefix frontend --ignore-scripts --no-audit --no-fund
+          npm install --prefix verification/boss2-forensics-20261028 --ignore-scripts --no-audit --no-fund
+          git restore --worktree -- frontend/yarn.lock
+          cd verification/boss2-forensics-20261028
+          npx playwright install --with-deps ${{ matrix.engine }}
+      - name: Verify original source pins, boundary and types
+        run: |
+          node --test verification/boss2-flat-scene-control-20261030/flatTransform.test.mjs verification/boss2-flat-scene-control-20261030/flatComponents.test.mjs verification/boss2-background-control-20261030/backgroundControl.test.mjs verification/boss2-boss-visual-control-20261030/bossControl.test.mjs verification/boss2-boss-weapon-control-20261030/weaponControl.test.mjs verification/boss2-boss-mask-control-20261030/maskControl.test.mjs verification/boss2-boss-reflection-control-20261030/reflectionControl.test.mjs verification/boss2-boss-heat-control-20261030/heatControl.test.mjs verification/boss2-boss-heat-unmasked-20261030/maskCandidate.test.mjs verification/boss2-unmasked-heat-reflection-20261030/reflectionControl.test.mjs verification/boss2-reflection-mask-control-20261031/reflectionMaskControl.test.mjs
+          node verification/boss2-reflection-mask-control-20261031/verifyScope.mjs
+          node --experimental-strip-types verification/boss2-flat-scene-control-20261030/preflight.mjs
+      - name: Build and observe failed-owner-condition original reflection mask
+        env:
+          VERCEL_ENV: preview
+          CRYPTOID_REFLECTION_IMAGE_MASK_OFF: '0'
+          CRYPTOID_REFLECTION_MASK_COMPARISON: '1'
+          CRYPTOID_FLAT_ENGINE: ${{ matrix.engine }}
+        run: |
+          node verification/boss2-reflection-mask-control-20261031/buildReflectionMaskPreview.mjs
+          node --experimental-strip-types verification/boss2-boss-heat-unmasked-20261030/verifyMaskPreview.mjs
+      - name: Build and observe reflection image mask removed
+        env:
+          VERCEL_ENV: preview
+          CRYPTOID_REFLECTION_IMAGE_MASK_OFF: '1'
+          CRYPTOID_REFLECTION_MASK_COMPARISON: '1'
+          CRYPTOID_FLAT_ENGINE: ${{ matrix.engine }}
+        run: |
+          node verification/boss2-reflection-mask-control-20261031/buildReflectionMaskPreview.mjs
+          node --experimental-strip-types verification/boss2-boss-heat-unmasked-20261030/verifyMaskPreview.mjs
+      - name: Preserve targeted evidence
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: reflection-mask-${{ matrix.engine }}
+          path: verification/boss2-reflection-mask-control-20261031/results/${{ matrix.engine }}/
+          retention-days: 3
