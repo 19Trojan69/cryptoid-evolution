@@ -5,14 +5,16 @@ const read = p => JSON.parse(readFileSync(new URL(p, import.meta.url), 'utf8'));
 const r = read('./results.json'), e = read('./evidence/synthetic-heat-fill-comparison.json');
 assert.equal(r.runtime.source, 'f67fd2e41c372de600d197f2c8d943b7097b9209');
 assert.equal(r.runtime.tree, 'b58083ab6ba44a523d6497e317af665d4344fb90');
-assert.equal(r.whiteScreenFixed, false); assert.equal(r.physicalDeviceTested, false); assert.equal(r.newOwnerPhoneResult.status, 'white-screen-owner-reported-current-export-source-matches-no-saved-run');
-assert.equal(r.newOwnerPhoneResult.whiteScreenReported, true);
+assert.equal(r.whiteScreenFixed, false); assert.equal(r.physicalDeviceTested, true); assert.equal(r.newOwnerPhoneResult.status, 'matched-repeat-running-checkpoint-then-new-home-document');
+assert.equal(r.newOwnerPhoneResult.whiteScreenReportedForEarlierAttempt, true);
+assert.equal(r.newOwnerPhoneResult.whiteScreenExplicitlyRestatedForThisRepeat, false);
 assert.equal(r.newOwnerPhoneResult.reportReceived, true);
 assert.equal(r.newOwnerPhoneResult.exportSourceVerified, true);
 assert.equal(r.newOwnerPhoneResult.exportSource, r.runtime.source);
 assert.equal(r.newOwnerPhoneResult.exportTree, r.runtime.tree);
-assert.equal(r.newOwnerPhoneResult.runtimeSourceVerified, false);
-for (const k of ['runtimeSource','runtimeTree','savedActiveMs','displayedTime','savedMode']) assert.equal(r.newOwnerPhoneResult[k], null);
+assert.equal(r.newOwnerPhoneResult.runtimeSourceVerified, true);
+assert.equal(r.newOwnerPhoneResult.runtimeSource, r.runtime.source); assert.equal(r.newOwnerPhoneResult.runtimeTree, r.runtime.tree);
+assert.equal(r.newOwnerPhoneResult.savedActiveMs, 525494); assert.equal(r.newOwnerPhoneResult.displayedTime, '08:45'); assert.equal(r.newOwnerPhoneResult.savedMode, 'running');
 const message = read('./evidence/owner-white-screen-message.json');
 assert.equal(message.ownerMessage, 'mit whitescreen'); assert.equal(message.ownerObservation.whiteScreenReported, true);
 assert.equal(message.precedingRequestedPreview.source, r.runtime.source); assert.equal(message.precedingRequestedPreview.tree, r.runtime.tree);
@@ -43,7 +45,7 @@ for (const k of ['nativeTerminationCauseMeasured','exactCrashTimeMeasured','whit
   'old0910TimeApplied','assistant0112TimeApplied','unchangedRepeatRequested','newRuntimeChangeMade','newDeploymentCreated']) assert.equal(received[k], false, k);
 assert.equal(received.storageReadInterpretation.blob, 'e2546655a0c3c553b4d275d2effbb57b5407be1a');
 assert.equal(received.storageReadInterpretation.causeKnown, false);
-if (process.argv[2]) {
+if (process.argv[2] && createHash('sha256').update(readFileSync(process.argv[2])).digest('hex') === received.reportSha256) {
   const bytes = readFileSync(process.argv[2]), raw = JSON.parse(bytes);
   assert.equal(bytes.length, received.reportBytes);
   assert.equal(createHash('sha256').update(bytes).digest('hex'), received.reportSha256);
@@ -61,6 +63,30 @@ if (process.argv[2]) {
   assert.equal(back.lastSession, null); assert.equal(back.storage.session, received.returnSessionStorage);
   assert.deepEqual(back.reloadTrace.events.map(e => e.kind), received.reloadTraceEventKinds);
   assert.deepEqual(raw.crashTails.storage, received.crashTailStorage); assert.equal(raw.crashTails.sessions.length, 0); assert.equal(raw.flightRecorders.length, 0);
+}
+const repeatFill = read('./evidence/owner-flat-fill-repeat-abrupt-return.json');
+assert.equal(repeatFill.runtimeSource, r.runtime.source); assert.equal(repeatFill.runtimeTree, r.runtime.tree);
+assert.equal(repeatFill.savedActiveMs, 525494); assert.equal(repeatFill.displayedTime, '08:45'); assert.equal(repeatFill.savedMode, 'running');
+assert.equal(repeatFill.briefMatchesLatestStopwatch, true); assert.equal(repeatFill.recordedGaps, 0);
+assert.equal(repeatFill.retainedEvents, 6); assert.equal(repeatFill.collectorDrops, 0); assert.equal(repeatFill.lastRecordedContactToCheckpointWallMs, 489581);
+assert.ok(repeatFill.newDocumentAfterCheckpointMs >= 730 && repeatFill.newDocumentAfterCheckpointMs < 731);
+assert.equal(repeatFill.bootAfterActiveSessionRecorded, true); assert.equal(repeatFill.precedingSessionActive, true); assert.equal(repeatFill.precedingStatus, 'playing');
+assert.equal(repeatFill.fullRecording, false); assert.equal(repeatFill.protection, true); assert.equal(repeatFill.fullSession, null);
+assert.equal(repeatFill.normalEndRecorded, false); assert.equal(repeatFill.whitePixelsMeasured, false); assert.equal(repeatFill.ownerWhiteScreenExplicitlyRestatedForThisRepeat, false);
+if (process.argv[2]) {
+  const b = readFileSync(process.argv[2]), sha = createHash('sha256').update(b).digest('hex');
+  assert.ok([received.reportSha256, repeatFill.reportSha256].includes(sha), 'Known owner export required');
+  if (sha === repeatFill.reportSha256) {
+    const raw = JSON.parse(b), c = raw.stopwatch.latest, brief = raw.briefDiagnostics.latest;
+    assert.equal(b.length, repeatFill.reportBytes); assert.deepEqual(c, brief.clock); assert.equal(c.source, r.runtime.source);
+    assert.equal(raw.source.sourceCommit, r.runtime.source); assert.equal(raw.source.sourceTree, r.runtime.tree);
+    assert.equal(c.elapsedMs, repeatFill.savedActiveMs); assert.equal(c.mode, repeatFill.savedMode); assert.equal(c.unobservedGaps, repeatFill.recordedGaps);
+    assert.equal(brief.events.length, repeatFill.retainedEvents); assert.equal(brief.dropped, repeatFill.collectorDrops);
+    assert.deepEqual(brief.options, {scene:'reactor',fullRecording:false,protection:true}); assert.equal(raw.fullSession, null);
+    assert.equal(raw.returnEvidence.activeDocument.startedAt-c.updatedAt, repeatFill.newDocumentAfterCheckpointMs);
+    assert.equal(raw.returnEvidence.activeDocument.route, 'home'); assert.equal(raw.returnEvidence.lastSession.active, true);
+    assert.ok(raw.returnEvidence.reloadTrace.events.some(e=>e.kind==='boot-after-active-session'));
+  }
 }
 const review = read('./evidence/source-review-after-owner-message.json');
 assert.equal(review.source, r.runtime.source); assert.equal(review.tree, r.runtime.tree);
@@ -129,4 +155,4 @@ if (r.hostedCheck) {
   assert.equal(r.hostedCheck.ownerResult, false); assert.equal(r.hostedCheck.uninterruptedPerformanceClaimed, false);
 }
 console.log('CRYPTOID_HEAT_FLAT_FILL_EVIDENCE ' + JSON.stringify({ passed: true, source: r.runtime.source,
-  desktopFlows: 4, newOwnerPhoneResult: 'owner White Screen reported; current export source matches but clock/brief/session absent', whiteScreenFixed: false }));
+  desktopFlows: 4, newOwnerPhoneResult: 'matched repeat 08:45 running then new home document; no accepted fix', whiteScreenFixed: false }));

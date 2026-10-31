@@ -2,7 +2,7 @@
   "version": 1,
   "kind": "private-static-boss-hotspot-uniform-fill-comparison",
   "whiteScreenFixed": false,
-  "physicalDeviceTested": false,
+  "physicalDeviceTested": true,
   "runtime": {
     "source": "f67fd2e41c372de600d197f2c8d943b7097b9209",
     "tree": "b58083ab6ba44a523d6497e317af665d4344fb90",
@@ -84,25 +84,26 @@
     "publicReleaseAuthorized": false
   },
   "newOwnerPhoneResult": {
-    "evidence": "evidence/owner-flat-fill-export-without-run.json",
-    "ownerMessageEvidence": "evidence/owner-white-screen-message.json",
-    "status": "white-screen-owner-reported-current-export-source-matches-no-saved-run",
-    "whiteScreenReported": true,
-    "association": "owner-message-plus-current-page-source-only-no-saved-run",
+    "evidence": "evidence/owner-flat-fill-repeat-abrupt-return.json",
+    "status": "matched-repeat-running-checkpoint-then-new-home-document",
     "reportReceived": true,
-    "reportFile": "cryptoid-diagnose-2026-10-31T18-07-25-440Z-f9407023.json",
+    "whiteScreenReportedForEarlierAttempt": true,
+    "whiteScreenExplicitlyRestatedForThisRepeat": false,
     "exportSourceVerified": true,
     "exportSource": "f67fd2e41c372de600d197f2c8d943b7097b9209",
     "exportTree": "b58083ab6ba44a523d6497e317af665d4344fb90",
-    "runtimeSourceVerified": false,
-    "runtimeSource": null,
-    "runtimeTree": null,
-    "savedActiveMs": null,
-    "displayedTime": null,
-    "savedMode": null,
-    "stopwatchStorage": "absent",
-    "briefStorage": "absent",
-    "testOptions": null,
+    "runtimeSourceVerified": true,
+    "runtimeSource": "f67fd2e41c372de600d197f2c8d943b7097b9209",
+    "runtimeTree": "b58083ab6ba44a523d6497e317af665d4344fb90",
+    "savedActiveMs": 525494,
+    "displayedTime": "08:45",
+    "savedMode": "running",
+    "fullRecording": false,
+    "protection": true,
+    "retainedEvents": 6,
+    "collectorDrops": 0,
+    "bootAfterActiveSessionRecorded": true,
+    "normalEndRecorded": false,
     "nativeMechanismProven": false,
     "permanentRepairAccepted": false
   },
@@ -118,7 +119,8 @@
     "Both original-gradient and flat-fill desktop flows are short emulated-phone observations, not physical iPhone/Pi Browser endurance or native-gradient-cause measurements.",
     "The same frozen source 67dabc71 had a normal 10:56 exit and later failed at 09:10; no stable positive control is claimed. Original-gradient desktop control is not a reproduction of the phone crash.",
     "This deliberately changes only the inner heat-marker paint. It cannot prove absence of memory/GPU/WebKit/cache/thermal/input or other causes; temporal differences among owner runs are not measured performance gains.",
-    "Owner reports White Screen. The received 18-07-25 export identifies the current flat-fill page, but stopwatch and brief latest/previous plus session marker are absent. It provides no failed-run time/options/source chain. No permanent repair/public release is accepted."
+    "Owner reports White Screen. The received 18-07-25 export identifies the current flat-fill page, but stopwatch and brief latest/previous plus session marker are absent. It provides no failed-run time/options/source chain. No permanent repair/public release is accepted.",
+    "Latest repeat now has matched saved run evidence, unlike the earlier empty export. It supplies an abrupt return chain, not a measured native cause or a new explicit owner description of white pixels."
   ],
   "hostedCheck": {
     "status": "passed-with-limits",
@@ -136,8 +138,8 @@
     "ownerResult": false
   },
   "ownerPhysicalDeviceFailureReported": true,
-  "physicalDeviceTestedMeaning": "A physical owner run matched through its saved clock/brief to this pinned runtime; the received export identifies only the current page and has no saved run.",
-  "currentStatus": "Received export identifies current flat-fill page, but clock/brief/previous session absent. Owner White Screen recorded; failed run source/time/options not independently matched.",
-  "nextOwnerAction": "Clarify whether export used the original Pi Browser/tab and exact test address; if the original context still exists, export there without starting a new run. Do not clear storage or request another unchanged endurance test.",
+  "physicalDeviceTestedMeaning": "Owner repeat with matched saved clock/brief/source; native device/browser identity itself is not measured.",
+  "currentStatus": "Matched flat-fill repeat: 08:45 / 525494 active ms / running, then new home document after about 730 ms with boot-after-active-session. No normal completion or accepted fix.",
+  "nextOwnerAction": "No unchanged repeat pending. Prepare/check one private comparison omitting only boss static hotspot children; retain HullDamage shell/masks, original mini-explosions and simulation.",
   "targetedSourceReview": "evidence/source-review-after-owner-message.json"
 }
