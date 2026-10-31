@@ -1,0 +1,169 @@
+{
+  "version": 1,
+  "kind": "protected-boss-mini-completion-native-inspection-fallback",
+  "whiteScreenFixed": false,
+  "physicalDeviceTested": false,
+  "newOwnerPhoneResult": null,
+  "runtime": {
+    "source": "d72db0a8ca5c70b91db9b7760366773e2836db66",
+    "tree": "73c23f8a5dba0bb93ab676c4ad3954ddf7ff1228",
+    "workBranch": "codex/boss2-mini-completion-control-20261031",
+    "deviceBranch": "codex/boss2-mini-completion-device-20261031"
+  },
+  "basis": {
+    "source": "290113362eea446aa9d4171aaaddd7220e3bf646",
+    "tree": "6acb9cff2dd908f0532cd986319f0965a46b5da0",
+    "ownerWhiteScreenReported": true,
+    "savedActiveMs": 900561,
+    "displayedTime": "15:00",
+    "savedMode": "running",
+    "newDocumentAfterCheckpointMs": 843,
+    "bootAfterActiveSessionRecorded": true,
+    "normalEndRecorded": false,
+    "fullRecording": false,
+    "protection": true,
+    "retainedEvents": 32,
+    "collectorDrops": 26,
+    "recordedGaps": 0,
+    "lastRecordedContactToCheckpointWallMs": 81524,
+    "stabilityGainFromLongerTimeProven": false,
+    "evidence": "../boss2-static-hotspots-control-20261031/evidence/owner-static-hotspots-failure.json",
+    "evidenceCommit": "257a62ee562d3586cce0ee0b54e26ea44cf2b6a2"
+  },
+  "treatment": {
+    "change": "Return before native completion inspection only for .hull-mini-explosion beneath .sector-boss; existing parent-owned fallback lifetime",
+    "originalFinishedEffectBlob": "1f943eb9114756c4b26a66dd14f9c6883176a37c",
+    "normalizedOriginalTextSha256": "6d4b445b25946c1888ecee055d9107607d1324f085c91da07496b07cfb91b486",
+    "originalFinishedEffectComponentHookHandlerRetained": true,
+    "originalMiniMarkupCssSparksDurationsRetained": true,
+    "otherEffectsNativeInspectionRetained": true,
+    "oneLatestKeyedBossMiniRetainedUntilParentUpdate": true,
+    "invisibleCompletedMiniMayRemainUntilNextHitOrBossRemoval": true,
+    "nativeInspectionAndEarlyDomCleanupBothChange": true,
+    "qaNativeProbeDeployed": false,
+    "staticHotspotsStillOmitted": true,
+    "heatShellInlineMasksAndImagePreparationRetained": true,
+    "activeHeatMasksNone": true,
+    "reflectionHidden": true,
+    "bossWeaponsViewExcluded": true,
+    "priorFilterReactorExplosionCanvasControlsRetained": true,
+    "originalBossImageHealthBackgroundRetained": true,
+    "gameplaySpeedClocksBalanceOneFingerInputManualResumeAudioUnchanged": true,
+    "newCanvasAssetsTimersFramesHooks": false,
+    "animationStartNativeDiscoveryRemains": true,
+    "notAllNativeQueriesRemoved": true
+  },
+  "verification": {
+    "runId": 41235613143,
+    "workflow": "https://github.com/19Trojan69/cryptoid-evolution/actions/runs/41235613143",
+    "status": "passed",
+    "expectedSourceTests": 24,
+    "localTargetedTests": 11,
+    "localCompleteAppTested": false,
+    "localFinishedEffectSource": "pinned remote source fixture for partial local checkout; CI reads actual original frontend file",
+    "requiredControlNativeCallsPositive": true,
+    "requiredCandidateNativeCallsZero": false,
+    "requiredAnimationEndsBothPositive": true,
+    "requiredOriginalMiniVisibleBoth": true,
+    "requiredPeakObservedBossMiniOne": true,
+    "initialAttempt": {
+      "source": "b5759f90948fae98fba7f0ec40e6168348b4ac13",
+      "runId": 41234937994,
+      "status": "failed-overbroad-zero-total-native-counter",
+      "deployed": false,
+      "evidence": "evidence/initial-native-counter-failure.json"
+    },
+    "requiredCandidateCompletionPhaseCallsZero": true,
+    "requiredControlCompletionPhaseCallsPositive": true,
+    "requiredAnimationStartNativeCallsBothPositive": true,
+    "nativeProofScope": "Completion-phase target calls; native animation-start frame-pacing calls remain positive and unchanged",
+    "otherNativeCallPath": {
+      "path": "frontend/src/lib/cssFramePacing.ts",
+      "blob": "5d9cc3e5b40792277d9813b2953196affbc0eaf3",
+      "phase": "animationstart/transitionrun",
+      "unchanged": true
+    },
+    "completedEngines": [
+      "chromium",
+      "webkit"
+    ],
+    "chromiumNativeCompletionCalls": {
+      "control": 48,
+      "candidate": 0,
+      "nativeStartBoth": 86
+    },
+    "workflowStatus": "completed",
+    "workflowConclusion": "success",
+    "sourceTests": 24,
+    "shortDesktopFlows": 4,
+    "originalSourcePins": "passed",
+    "typePreflight": "passed",
+    "webkitNativeCompletionCalls": {
+      "control": 26,
+      "candidate": 0,
+      "nativeStartControl": 76,
+      "nativeStartCandidate": 84
+    },
+    "evidence": "evidence/synthetic-mini-completion-comparison.json",
+    "jobs": [
+      {
+        "id": 124638645288,
+        "engine": "chromium",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 124638645034,
+        "engine": "webkit",
+        "status": "completed",
+        "conclusion": "success"
+      }
+    ]
+  },
+  "deployment": {
+    "status": "READY",
+    "previewOnly": true,
+    "gitAutomaticDeployment": false,
+    "publicReleaseAuthorized": false,
+    "environment": "Preview",
+    "url": "https://cryptoid-evolution-testnet-r4s9cheli-19-trojan69.vercel.app/",
+    "id": "dpl_73cfVDheGR6f7shhSiEUnSAEvYpv",
+    "dashboard": "https://vercel.com/19-trojan69/cryptoid-evolution-testnet/73cfVDheGR6f7shhSiEUnSAEvYpv",
+    "source": "d72db0a8ca5c70b91db9b7760366773e2836db66",
+    "branch": "codex/boss2-mini-completion-control-20261031",
+    "durationDisplay": "42s",
+    "protection": "Standard Protection (observed in Deployment Settings)",
+    "customDomainAssignment": "Skipped"
+  },
+  "publicMainSource": "ce073547cf573375d141bf846f70e294138dbd73",
+  "originalSourceTrees": {
+    "frontend": "890df8a38e13ef1fe315a5c0eb109c1d72b80aab",
+    "backend": "6e93bfbac9e6cc70a1edfb8bd55d737f612ba261",
+    "api": "ccac7cd576a079771d7d7fe4f0085492ebbe6813",
+    "assets": "a9860b12db58a96dafde818d9a58a6ea0e03c5e5",
+    "private-preview": "b733d4dc70b4ac407391720eab131dbaf1d60e37"
+  },
+  "limits": [
+    "This private candidate changes native completion inspection and early finished-DOM cleanup together. Original authored mini appearance/timing and existing bounded parent lifetime remain; a completed invisible node may persist until the next hit/boss removal.",
+    "QA-only native-call proof is a bounded counter/wrapper/listener in automated browser contexts. It is not shipped, and is not a measurement of the failed owner run or a native-memory/thermal/WebKit cause.",
+    "If the control does not actually invoke target native inspection or there is no useful proof signal, do not request a phone test of this candidate.",
+    "No owner result or permanent repair exists for this candidate. No public release is authorized."
+  ],
+  "hostedCheck": {
+    "status": "passed-with-limits",
+    "evidence": "evidence/hosted-mini-completion-candidate.json",
+    "screenshot": "evidence/hosted-preview-ready.jpg",
+    "browser": "assistant cloud Chromium",
+    "physicalDevice": false,
+    "displayedTime": "01:24",
+    "savedActiveMs": 84087.30000000447,
+    "savedMode": "ended",
+    "pairedReport": true,
+    "lastTimeRestoredAfterReload": true,
+    "stalledStateEntries": 1,
+    "nativeCallsMeasuredHere": false,
+    "uninterruptedPerformanceClaimed": false,
+    "ownerResult": false
+  },
+  "currentStatus": "Ready protected guest mini-completion fallback candidate; source/type/scope/four browser flows/actual hosted lifecycle verified. No owner phone result or accepted fix."
+}
