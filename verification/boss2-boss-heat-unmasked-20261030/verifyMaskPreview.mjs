@@ -7,7 +7,9 @@ import { serveDevicePreview } from '../boss2-forensics-20261028/devicePreviewSer
 import { STOPWATCH_KEY } from '../boss2-stopwatch-20261029/stopwatchState.mjs';
 
 const engine = process.env.CRYPTOID_FLAT_ENGINE;
-const heatFlatFillComparison = process.env.CRYPTOID_HEAT_FLAT_FILL_COMPARISON === '1';
+const staticHotspotsComparison = process.env.CRYPTOID_STATIC_HOTSPOTS_COMPARISON === '1';
+const staticHotspotsOff = staticHotspotsComparison && process.env.CRYPTOID_BOSS_STATIC_HOTSPOTS_OFF === '1';
+const heatFlatFillComparison = staticHotspotsComparison || process.env.CRYPTOID_HEAT_FLAT_FILL_COMPARISON === '1';
 const heatFlatFill = heatFlatFillComparison && process.env.CRYPTOID_BOSS_HEAT_FLAT_FILL === '1';
 const reflectionBlendComparison = process.env.CRYPTOID_REFLECTION_BLEND_COMPARISON === '1';
 const reflectionNormalBlend = reflectionBlendComparison && process.env.CRYPTOID_REFLECTION_NORMAL_BLEND === '1';
@@ -19,7 +21,9 @@ const reflectionOn = reflectionMaskComparison || (reflectionComparison && proces
 const unmasked = heatFlatFillComparison || reflectionComparison || process.env.CRYPTOID_BOSS_HEAT_UNMASKED === '1';
 assert.ok(['chromium', 'webkit'].includes(engine));
 const pw = createRequire(new URL('../boss2-forensics-20261028/package.json', import.meta.url))('playwright');
-const directory = heatFlatFillComparison
+const directory = staticHotspotsComparison
+  ? resolve(root, 'verification/boss2-static-hotspots-control-20261031/results', engine, staticHotspotsOff ? 'static-off' : 'static-on')
+  : heatFlatFillComparison
   ? resolve(root, 'verification/boss2-heat-flat-fill-control-20261031/results', engine, heatFlatFill ? 'flat-fill' : 'original-gradients')
   : reflectionBlendComparison
   ? resolve(root, 'verification/boss2-reflection-blend-control-20261031/results', engine, reflectionNormalBlend ? 'normal-blend' : 'screen-blend')
@@ -30,7 +34,7 @@ const directory = heatFlatFillComparison
   : resolve(root, 'verification/boss2-boss-heat-unmasked-20261030/results', engine, unmasked ? 'unmasked' : 'original-mask');
 mkdirSync(directory, { recursive: true });
 const result = {
-  complete: false, engine, unmasked, heatFlatFillComparison, heatFlatFill, reflectionComparison, reflectionOn, reflectionMaskComparison, reflectionMaskRemoved,
+  complete: false, engine, unmasked, staticHotspotsComparison, staticHotspotsOff, heatFlatFillComparison, heatFlatFill, reflectionComparison, reflectionOn, reflectionMaskComparison, reflectionMaskRemoved,
   reflectionBlendComparison, reflectionNormalBlend, physicalDevice: false, physicalCrashSimulated: false,
   fullRecording: false, whiteScreenFixed: false, steeringEventsSynthetic: true,
 };
@@ -69,12 +73,16 @@ try {
   result.source = info.sourceCommit; result.sourceTree = info.sourceTree; result.scene = info.diagnosticScene;
   assert.equal(info.bossHeatMaskCandidate.enabled, unmasked);
   assert.equal(info.bossHeatMaskCandidate.reflectionHidden, !reflectionOn);
+  if (staticHotspotsComparison) {
+    assert.equal(info.bossStaticHotspotControl.enabled, staticHotspotsOff);
+    for (const key of ['originalHullDamageComponentAndPropsRetained','originalHeatLayerAndInlineMaskRetained','originalEarlyReturnRetained','originalMiniExplosionFragmentRetained','simulationHullFireArraysAndDamageUnchanged']) assert.equal(info.bossStaticHotspotControl[key], true, key);
+  }
   if (heatFlatFillComparison) {
     assert.equal(reflectionOn, false);
     assert.equal(info.bossHeatFlatFillCandidate.enabled, heatFlatFill);
     assert.equal(info.bossHeatFlatFillCandidate.heatStandardAndWebkitMasksStillRemoved, true);
     assert.equal(info.bossHeatFlatFillCandidate.reflectionStillHidden, true);
-    assert.equal(info.bossHeatFlatFillCandidate.originalHotspotComponentsPositionsKeysTransformsShapeBoundsAndOpacityRetained, true);
+    assert.equal(info.bossHeatFlatFillCandidate.originalHotspotComponentsPositionsKeysTransformsShapeBoundsAndOpacityRetained, !staticHotspotsOff);
     assert.equal(info.bossHeatFlatFillCandidate.miniExplosionsAndTheirGradientsRetained, true);
     assert.equal(info.bossHeatFlatFillCandidate.newCanvasOrAsset, false);
     assert.equal(info.bossHeatMaskCandidate.originalHeatComponentHotspotsGradientsAndKeysRetained, !heatFlatFill);
@@ -109,8 +117,8 @@ try {
   result.initialPausedGeometry = await geometry();
   assert.equal(await page.locator('[data-stopwatch-value]').innerText(), '00:00');
   let baseline;
-  if (heatFlatFillComparison ? heatFlatFill : reflectionBlendComparison ? reflectionNormalBlend : reflectionMaskComparison ? reflectionMaskRemoved : reflectionComparison ? reflectionOn : unmasked) {
-    baseline = JSON.parse(readFileSync(resolve(directory, heatFlatFillComparison ? '../original-gradients/verification.json' : reflectionBlendComparison ? '../screen-blend/verification.json' : reflectionMaskComparison ? '../original-reflection-mask/verification.json' : reflectionComparison ? '../reflection-off/verification.json' : '../original-mask/verification.json'), 'utf8'));
+  if (staticHotspotsComparison ? staticHotspotsOff : heatFlatFillComparison ? heatFlatFill : reflectionBlendComparison ? reflectionNormalBlend : reflectionMaskComparison ? reflectionMaskRemoved : reflectionComparison ? reflectionOn : unmasked) {
+    baseline = JSON.parse(readFileSync(resolve(directory, staticHotspotsComparison ? '../static-on/verification.json' : heatFlatFillComparison ? '../original-gradients/verification.json' : reflectionBlendComparison ? '../screen-blend/verification.json' : reflectionMaskComparison ? '../original-reflection-mask/verification.json' : reflectionComparison ? '../reflection-off/verification.json' : '../original-mask/verification.json'), 'utf8'));
     assert.equal(baseline.complete, true); assert.equal(baseline.source, result.source);
     for (const [selector, rect] of Object.entries(baseline.initialPausedGeometry)) for (const key of ['x', 'y', 'width', 'height'])
       assert.ok(Math.abs(rect[key] - result.initialPausedGeometry[selector][key]) <= 1, selector + ' ' + key);
@@ -119,13 +127,27 @@ try {
   await resume(); await page.waitForFunction(() => window.__crossDeviceTest.inspect().encounter === 'boss-fight');
   const first = await inspect(), origin = await page.evaluate(() => performance.timeOrigin);
   await page.waitForFunction(key => JSON.parse(localStorage.getItem(key))?.latest?.elapsedMs >= 20000, STOPWATCH_KEY, { timeout: 90000 });
-  await page.waitForFunction(() => document.querySelectorAll('.sector-boss .hull-hotspot').length > 0);
+  if (staticHotspotsOff) await page.locator('.sector-boss .boss-static-heat').waitFor();
+  else await page.waitForFunction(() => document.querySelectorAll('.sector-boss .hull-hotspot').length > 0);
   const active = await inspect(); assert.equal(active.status, 'playing'); assert.ok(active.frameAt > first.frameAt);
   assert.ok(active.coreVolley > first.coreVolley); assert.equal(active.ownerDiagnostics, false);
   assert.equal(await page.evaluate(() => performance.timeOrigin), origin);
   result.activeObservation = { activeMs: (await clock()).latest.elapsedMs, coreVolley: active.coreVolley, sameDocument: true };
   if (reflectionBlendComparison || heatFlatFillComparison) result.initialActiveObservationBeforeSyntheticSteering = true;
 
+  if (staticHotspotsComparison) {
+    const pulse = await page.waitForFunction(() => {
+      const n = document.querySelector('.sector-boss .hull-mini-explosion'); if (!n) return false;
+      const css = getComputedStyle(n);
+      return n.getClientRects().length && Number(css.opacity) > 0 && !n.closest('.hull-heat-layer')
+        ? { opacity:Number(css.opacity), background:css.backgroundImage, sparks:n.querySelectorAll('span').length,
+            outsideHeatLayer:true, hotspots:document.querySelectorAll('.sector-boss .hull-hotspot').length } : false;
+    }, null, {timeout:20000,polling:'raf'});
+    result.originalMiniExplosionPulse = await pulse.jsonValue(); await pulse.dispose();
+    assert.ok(result.originalMiniExplosionPulse.background.includes('radial-gradient'));
+    assert.ok(result.originalMiniExplosionPulse.sparks >= 3 && result.originalMiniExplosionPulse.sparks <= 5);
+    if(staticHotspotsOff)assert.equal(result.originalMiniExplosionPulse.hotspots,0);
+  }
   if (reflectionOn) {
     // Original reflection is a short naturally triggered pulse. A visible DOM
     // box with zero alpha alone is insufficient evidence that it can paint.
@@ -240,7 +262,8 @@ try {
     assert.equal(scene.reflectionBlendOnlyProbe.oppositeBlend, reflectionNormalBlend ? 'screen' : 'normal');
     if (baseline) for (const key of ['display','rects','mask','webkitMask','background']) assert.equal(scene.reflection[key], baseline.scene.reflection[key]);
   }
-  assert.ok(scene.hotspots.length > 0 && scene.hotspots.length <= 8);
+  if (staticHotspotsOff) assert.equal(scene.hotspots.length, 0);
+  else assert.ok(scene.hotspots.length > 0 && scene.hotspots.length <= 8);
   for (const spot of scene.hotspots) {
     assert.equal(spot.rects, 1); assert.ok(Number(spot.opacity) > 0);
     if (heatFlatFill) { assert.equal(spot.background, 'none'); assert.equal(spot.innerBackgroundColor, 'rgb(255, 121, 40)'); }
@@ -284,7 +307,8 @@ try {
   assert.equal(report.briefMatchesLatestStopwatch, true); assert.equal(report.fullSession, null);
   assert.equal(report.briefDiagnostics.latest.options.fullRecording, false);
   result.reportScene = report.source.diagnosticScene;
-  if (heatFlatFillComparison) assert.ok(result.reportScene.endsWith('-hidden-hull-reflection-unmasked-hull-heat' + (heatFlatFill ? '-flat-fill' : '')));
+  if (staticHotspotsComparison) assert.ok(result.reportScene.endsWith('-unmasked-hull-heat-flat-fill'+(staticHotspotsOff?'-no-static-hotspots':'')));
+  else if (heatFlatFillComparison) assert.ok(result.reportScene.endsWith('-hidden-hull-reflection-unmasked-hull-heat' + (heatFlatFill ? '-flat-fill' : '')));
   else if (reflectionBlendComparison) assert.ok(result.reportScene.endsWith('-unmasked-hull-heat-unmasked-hull-reflection' + (reflectionNormalBlend ? '-normal-blend' : '')));
   else if (reflectionMaskComparison) assert.ok(result.reportScene.endsWith(reflectionMaskRemoved
     ? '-unmasked-hull-heat-unmasked-hull-reflection' : '-unmasked-hull-heat-restored-hull-reflection'));
@@ -296,6 +320,6 @@ try {
   if (page && !page.isClosed()) try { await page.screenshot({ path: directory + '/failure.png', timeout: 5000 }); } catch { /* Retain first error. */ }
 } finally {
   result.finishedAt = new Date().toISOString(); writeFileSync(directory + '/verification.json', JSON.stringify(result, null, 2) + '\n');
-  console.log((heatFlatFillComparison ? 'CRYPTOID_HEAT_FLAT_FILL_RESULT ' : reflectionBlendComparison ? 'CRYPTOID_REFLECTION_BLEND_RESULT ' : reflectionMaskComparison ? 'CRYPTOID_REFLECTION_MASK_RESULT ' : reflectionComparison ? 'CRYPTOID_UNMASKED_HEAT_REFLECTION_RESULT ' : 'CRYPTOID_HEAT_MASK_RESULT ') + JSON.stringify(result));
+  console.log((staticHotspotsComparison ? 'CRYPTOID_STATIC_HOTSPOT_RESULT ' : heatFlatFillComparison ? 'CRYPTOID_HEAT_FLAT_FILL_RESULT ' : reflectionBlendComparison ? 'CRYPTOID_REFLECTION_BLEND_RESULT ' : reflectionMaskComparison ? 'CRYPTOID_REFLECTION_MASK_RESULT ' : reflectionComparison ? 'CRYPTOID_UNMASKED_HEAT_REFLECTION_RESULT ' : 'CRYPTOID_HEAT_MASK_RESULT ') + JSON.stringify(result));
   if (browser) await browser.close(); if (server) await server.close();
 }
