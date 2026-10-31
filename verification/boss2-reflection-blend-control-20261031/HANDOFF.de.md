@@ -1,10 +1,12 @@
 # Fortsetzung nach erneutem White Screen – Blendvergleich gescheitert
 
+**Aktuell: Die frühere Kontrollfassung 67dabc71 scheiterte ebenfalls bei 09:10. Der 20-Minuten-Vergleich ist abgeschlossen; die nachfolgend dokumentierten 09:27-Daten gehören zum vorherigen Blendtest.**
+
 **Aktueller Stand:** Auch die Fassung mit normalem Reflexions-Blend scheitert beim Besitzer. Kein White-Screen-Fix ist akzeptiert. Diese Aktualisierung enthält ausschließlich Nachweise, Zielquellprüfung und eine begründete längere Bestätigung der schon existierenden Vergleichsfassung. **Kein neuer Laufzeitstand, Build, Deployment oder öffentlicher Release.**
 
 React/TypeScript/Vite, keine Unity-App. Nur geschützte Gastversionen sind freigegeben. Echte Konten/Spielstände/Käufe/Ranglisten bleiben geschützt. Spieltempo, Uhren, Balance, Einfingersteuerung, nur manuelles Fortsetzen und Audio bleiben unverändert. Frühere Geräte-Zweige/Adressen nicht verschieben. Allgemeine Untersuchungen und erfolglosen iOS-/Jetsam-Umweg nicht ohne neuen Anlass wiederholen. Ausgangshandoff bleibt 336eafef12be02f1cf1e0ceb95f26a5c46e8c51d / verification/boss2-boss-heat-control-20261030/HANDOFF.de.md.
 
-## Neuester tatsächlich abgeschlossener Besitzer-Test
+## Vorheriger abgeschlossener Blend-Vergleich
 
 - Besitzer-Nachricht: **„whitescreen“**. Keine zusätzliche Aussage zum Laufenlassen/aktiven Spielen, zur Wärme, zum Browser/Gerät oder zur Rückkehr zur Diagnoseseite in dieser Nachricht. Die frühere Aussage „nur laufen gelassen ohne spielen“ gehört zum vorherigen 09:20-Bericht, nicht automatisch zum neuen Lauf.
 - Bericht: `cryptoid-diagnose-2026-10-31T10-09-31-953Z-e564ba87.json`, **8206 Bytes**, SHA-256 **4cbc5421971de477653ec0566d4f7c92d41dde9df35eed47584d301511a002c6**. Rohbericht nicht in Git.
@@ -39,24 +41,18 @@ Alle Bedingungen behalten BossWeaponsView-Ausschluss und übrige vereinfachte Gr
 | original, unmaskiert | original, maskiert | 08:48 | White Screen/Rückkehr, e16befbb |
 | original, unmaskiert | unmaskiert, screen | 09:20 | White Screen beim Laufenlassen, ebe70ac8 |
 | original, unmaskiert | unmaskiert, normal | 09:27 | White Screen, 18bb097a |
+| original, unmaskiert | aus, unverändert 67dabc71 | 09:10 | Wiederholung ebenfalls White Screen |
 
 **Maskenentfernung und normaler Blend haben keinen akzeptierten Fix geliefert.** Eine sichtbare Reflexion ist wegen des früheren 08:36-Abbruchs keine bewiesene allgemeine Voraussetzung. Speicher/GPU/WebKit/Cache/Temperatur/Eingabe oder ein genauer Grafikmechanismus bleiben unbestätigt. Wärme nicht von einem alten Lauf auf andere übertragen. Die einzelnen normalen Enden sind zeitlich begrenzte, vom Besitzer beendete Beobachtungen. 10:56 liegt nur 88876 aktive ms über dem neuesten gesicherten Ausfallstand; diese Differenz allein beweist keine stabile Kontrollbedingung.
 
 Die gezielte erneute Sichtung der unveränderten Zielquellen zeigt die vorgesehene Boss-Grenze von höchstens acht Hotspots, stabile Boss-Site-Schlüssel, bereits statische Boss-Spuren ohne Cooling/Flicker/Speck, separate kurze Trefferexplosionen. FinishedEffect (Originalblob 1f943eb9114756c4b26a66dd14f9c6883176a37c) verwendet vorhandene native Animations-Ende-Prüfung, keinen neuen Timer/RAF. Kein neuer Beleg für unbegrenzte Listen oder ein natives Speicherleck. Komponenten/Renderberechnung bleiben auch in ausgeblendeten Kontrollen vorhanden; keine Rechen-/Heap-Einsparung durch display:none erfinden. Frühere umfangreiche Cleanup-/Lebensdauer-Prüfungen wurden nicht wiederholt. Statische Quellgrenzen sind kein Nachweis nativer Surface-Freigabe.
 
-## Nächster Schritt: bereits vorhandene 10:56-Vergleichsfassung länger bestätigen
+## Neuester Stand: längere Bestätigung gescheitert
 
-**Keine weitere CSS-Variante und kein neuer Link.** Nach den drei gescheiterten Masken-/Blend-Varianten ist jetzt ein längerer vergleichbarer Durchlauf der zuvor einmal normal beendeten Fassung begründet. Das ist eine gezielte Bestätigung einer unsicheren Kontrollbasis, kein Neustart der allgemeinen Untersuchung.
+Der Besitzer meldet „mit whitescreen“. Die unveränderte frühere 10:56-Fassung 67dabc71 speichert im neuen Bericht **09:10 / 550312 ms / running**; derselbe Export enthält den früheren 10:56-Endlauf weiterhin als previous mit passendem Kurzbericht. Neuer home-Boot nach aktivem Spiel, native Ursache/exakte Sekunde nicht gemessen. Sechs Ereignisse/keine Verwerfungen, eine Kontaktfolge bei 01:14-01:17, dann fast acht Minuten keine weitere aufgezeichnete Eingabe. Keine neue ausdrücklich bestätigte Idle-/Wärme-/Browser-/Geräte-Aussage.
 
-- Unveränderter Commit: **67dabc714907be6d3ae99ccf9ebeab170eb34b06**, Baum **72de7664d3ef9dcd21ddd407b081bb647885f4f7**.
-- Fester Geräte-Zweig: `codex/boss2-boss-heat-unmasked-device-20261030`.
-- **Dieselbe frühere Adresse:** https://cryptoid-evolution-testnet-7j8dw88r8-19-trojan69.vercel.app/
-- Banner: **MASKENKANDIDAT: Boss-Hitzespuren an; ohne Bildmaske**.
-- Originale Hitzespuren sichtbar/unmaskiert, Boss-Reflexion aus. Komponenten/Inline-Masken/Bildvorbereitung und alle bisherigen übrigen Bedingungen bleiben.
-- Adresse/Quellstand/Baum/Kennzeichnung und Gastisolation erneut nur lesend geprüft; Backend/Käufe aus. Kein Spiel gestartet, kein neuer Assistenten-Durchlauf oder Telefon-Ergebnis daraus abgeleitet.
-- Auf demselben iPhone im Pi Browser Reaktor offen, Vollaufzeichnung aus, Testschutz an; vorbereiten/öffnen/manuell fortsetzen und möglichst **20 aktive Minuten nur laufen lassen**. Dann normal selbst aussteigen und Bericht sichern. Bei White Screen exakt diese Adresse wieder öffnen und Bericht vor weiterem Start sichern.
-- Zustand dieses längeren Vergleichs: **vorgeschlagen, noch nicht gestartet/berichtet**. Keine Dauerstabilität vorwegnehmen.
+Die bestätigende 20-Minuten-Anweisung ist wegen des Abbruchs erledigt; nicht weiter als vorgeschlagen oder ausstehend führen. **Keine bestätigte stabile Kontrollbasis, kein weiterer unveränderter Wiederholungstest.** Hitzespurenmasken-Entfernung/Reflexionsausblendung haben diesen konfigurierten Lauf nicht geschützt. Der frühere normale Abschluss wird nicht gelöscht, aber nicht als Stabilitätsbeweis verwendet. Details und bereinigter Nachweis: `../boss2-boss-heat-unmasked-20261030/evidence/owner-mask-candidate-repeat-failure.json`; aktuelle Bilanz in `evidence/comparison-review.json`.
 
-Falls auch diese unveränderte Fassung abbricht, die behauptete Stabilität/Korrelation entsprechend zurücknehmen und den gemeinsamen Rest gezielt neu begrenzen. Keine weitere Masken-/Blend-Variation auf einer unbestätigten Basis. Falls sie 20 Minuten normal endet, ist diese Bedingung besser gestützt, aber weiterhin kein permanenter Fix oder native Ursachenklärung; danach die weitere private Reparatur/Rückführung gezielt planen. Keine öffentliche Testnet-/Mainnet-Veröffentlichung aus einem einzelnen Durchlauf.
+Jetzt ist ein neuer, engerer Darstellungsvergleich begründet: dieselbe ausgeblendete Reflexion/entfernte Hitzespurenmaske behalten und nur die inneren radialen Farbverläufe der weiterhin statischen Boss-Hitzespuren durch gleichmäßige orange Füllung ersetzen. Alle Komponenten/Positionsdaten/Schlüssel/Transformationen/Formen/Deckkraft/Grenzen und kleine Trefferexplosionen bleiben, keine neuen Canvas-Flächen/Assets/Timer/Frames. Die Füllung wird bewusst einfacher aussehen. Dies ist ein Vorschlag für eine tatsächliche geprüfte private Änderung, keine bestätigte Ursache; diese Nachweis-Aktualisierung hat ihn noch nicht gebaut/getestet. Neuer Link erst nach bestandenem Build und Prüfungen.
 
-Maschinenlesbare Bilanz: **evidence/comparison-review.json**. Konsistenz einschließlich optionaler lokaler Rohbericht-Paarung: `node verification/boss2-reflection-blend-control-20261031/verifyEvidence.mjs <lokaler-Rohberichtpfad>`. Alle alten Geräte-Zweige/Adressen, Main und öffentliche Versionen bleiben unverändert.
+Weiterhin nur geschützte Gast-Previews, Originalbild/Gesundheit/Hintergründe/Simulation und alle bisherigen anderen Kontrollen erhalten. Spieltempo/Uhren/Balance/Einfingersteuerung/manuelles Fortsetzen/Audio unverändert, keine öffentliche Testnet-/Mainnet-Veröffentlichung. Aktueller Nachweisabschluss erzeugt keinen neuen Laufzeitstand/Link. Bestehende Geräte-Zweige/Adressen/Main bleiben unverändert. Die vorhandene Aufzeichnung beider gleichquelligen Ergebnisse ist der neue Anlass für diese gezielte Eingrenzung; keine allgemeinen Untersuchungen/Jetsam-Schleife neu beginnen.

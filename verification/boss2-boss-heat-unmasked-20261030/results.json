@@ -52,7 +52,8 @@
     ],
     "evidence": "evidence/synthetic-mask-comparison.json",
     "excludedInitialRunId": 41088919802,
-    "excludedEvidence": "evidence/initial-verifier-failure.json"
+    "excludedEvidence": "evidence/initial-verifier-failure.json",
+    "acceptanceScope": "Original source/types/short desktop checks passed; owner initially self-ended at 10:56 and then this same runtime failed at 09:10. No repair accepted."
   },
   "deployment": {
     "id": "dpl_76aTHkCGXNDHMCT5CtBnukrGEfw1",
@@ -76,7 +77,8 @@
   "limits": [
     "Short emulated-phone desktop flows are not native physical-phone stability or temperature measurements.",
     "Removing the heat mask may alter painted-edge clipping; this is an isolated private confirmation/repair candidate.",
-    "Earlier owner outcomes remain unchanged. The first owner normal completion for this candidate is now recorded separately from desktop checks; permanent repair remains unproved."
+    "Earlier owner outcomes remain unchanged. The first owner normal completion for this candidate is now recorded separately from desktop checks; permanent repair remains unproved.",
+    "The unchanged 67dabc71 control repeat failed at 09:10; the same export includes the prior normal 10:56. It is not a stable positive control."
   ],
   "hostedCheck": {
     "evidence": "evidence/hosted-mask-candidate.json",
@@ -104,6 +106,30 @@
     "newPublicRelease": false
   },
   "physicalDeviceResult": {
+    "evidence": "evidence/owner-mask-candidate-repeat-failure.json",
+    "status": "failed-white-screen-owner-reported",
+    "savedActiveMs": 550312,
+    "displayedTime": "09:10",
+    "savedMode": "running",
+    "whiteScreenReported": true,
+    "normalExitReported": false,
+    "fullRecording": false,
+    "protection": true,
+    "includedPreviousNormalCompletionActiveMs": 656318,
+    "durableStableControlEstablished": false,
+    "nativeMechanismProven": false,
+    "permanentRepairAccepted": false
+  },
+  "afterOwnerReport": {
+    "evidenceOnly": true,
+    "newRuntimeCreated": false,
+    "newDeploymentCreated": false,
+    "newPhoneTestAssigned": false,
+    "preserveFrozenSourcesAndAddresses": true,
+    "publicReleaseAuthorized": false,
+    "longerControlConfirmation": "completed-failed"
+  },
+  "firstPhysicalDeviceResult": {
     "evidence": "evidence/owner-mask-candidate-completion.json",
     "status": "completed-normally-owner-reported",
     "browser": "Pi Browser",
@@ -119,12 +145,37 @@
     "nativeMechanismProven": false,
     "permanentRepairAccepted": false
   },
-  "afterOwnerReport": {
-    "evidenceOnly": true,
-    "newRuntimeCreated": false,
-    "newDeploymentCreated": false,
-    "newPhoneTestAssigned": false,
-    "preserveFrozenSourcesAndAddresses": true,
-    "publicReleaseAuthorized": false
-  }
+  "physicalDeviceResults": [
+    {
+      "evidence": "evidence/owner-mask-candidate-completion.json",
+      "status": "completed-normally-owner-reported",
+      "browser": "Pi Browser",
+      "browserConfirmedByOwner": true,
+      "savedActiveMs": 656318,
+      "displayedTime": "10:56",
+      "savedMode": "ended",
+      "normalExitReported": true,
+      "normalHomeConfirmationEndRecorded": true,
+      "whiteScreenReported": false,
+      "whiteScreenAbsenceExplicitlyStated": false,
+      "temperatureMeasured": false,
+      "nativeMechanismProven": false,
+      "permanentRepairAccepted": false
+    },
+    {
+      "evidence": "evidence/owner-mask-candidate-repeat-failure.json",
+      "status": "failed-white-screen-owner-reported",
+      "savedActiveMs": 550312,
+      "displayedTime": "09:10",
+      "savedMode": "running",
+      "whiteScreenReported": true,
+      "normalExitReported": false,
+      "fullRecording": false,
+      "protection": true,
+      "includedPreviousNormalCompletionActiveMs": 656318,
+      "durableStableControlEstablished": false,
+      "nativeMechanismProven": false,
+      "permanentRepairAccepted": false
+    }
+  ]
 }

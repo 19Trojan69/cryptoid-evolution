@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 const read = path => JSON.parse(readFileSync(new URL(path, import.meta.url), 'utf8'));
 const results = read('./results.json');
 assert.equal(results.whiteScreenFixed, false); assert.equal(results.physicalDeviceTested, true);
@@ -59,10 +60,53 @@ assert.equal(owner.allRetainedBootsBeforeRunStart, true); assert.equal(owner.boo
 assert.equal(owner.configuredActiveHeatImageMaskRemoved, true); assert.equal(owner.configuredOriginalHotspotsVisible, true);
 assert.equal(owner.configuredReflectionHidden, true); assert.equal(owner.physicalSceneDomMeasuredByReport, false);
 assert.equal(owner.nativeTerminationCauseMeasured, false); assert.equal(owner.whiteScreenFixed, false);
-assert.equal(results.physicalDeviceResult.savedActiveMs, owner.savedActiveMs);
-assert.equal(results.physicalDeviceResult.savedMode, owner.savedMode);
+assert.equal(results.firstPhysicalDeviceResult.savedActiveMs, owner.savedActiveMs);
+assert.equal(results.firstPhysicalDeviceResult.savedMode, owner.savedMode);
+const repeat = read('./evidence/owner-mask-candidate-repeat-failure.json');
+assert.equal(repeat.runtimeSource, results.runtime.source); assert.equal(repeat.runtimeTree, results.runtime.tree);
+assert.equal(repeat.savedActiveMs, 550312); assert.equal(repeat.displayedTime, '09:10'); assert.equal(repeat.savedMode, 'running');
+assert.equal(repeat.clockAndBriefRunMatch, true); assert.equal(repeat.unobservedGaps, 0);
+assert.equal(repeat.ownerObservation.whiteScreenReported, true); assert.equal(repeat.ownerObservation.leftRunningWithoutPlayingReported, null);
+assert.equal(repeat.ownerObservation.deviceWarmthReported, null);
+assert.equal(repeat.fullRecording, false); assert.equal(repeat.protection, true); assert.equal(repeat.fullSession, null);
+assert.equal(repeat.retainedEvents, 6); assert.equal(repeat.collectorDrops, 0); assert.equal(repeat.recordedContactSequenceCount, 1);
+assert.equal(repeat.maxContactsInRetainedTail, 1); assert.equal(repeat.firstContactSavedActiveMs, 74416);
+assert.equal(repeat.lastContactSavedActiveMs, 77428); assert.equal(repeat.lastRecordedContactToLatestCheckpointWallMs, 472708);
+assert.equal(repeat.newHomeDocumentAfterRunningCheckpoint, true); assert.equal(repeat.newDocumentAfterLastCheckpointMs, 1124);
+assert.equal(repeat.bootAfterActiveSessionRecorded, true); assert.equal(repeat.lastSessionActive, true);
+assert.equal(repeat.configuredOriginalHeatVisible, true); assert.equal(repeat.configuredHeatStandardAndWebkitMasksRemoved, true);
+assert.equal(repeat.configuredReflectionHidden, true); assert.equal(repeat.whiteScreenFixed, false);
+assert.equal(repeat.durableStableControlEstablished, false); assert.equal(repeat.twentyActiveMinuteTargetReached, false);
+assert.equal(repeat.rawOwnerReportCommitted, false); assert.equal(repeat.nativeTerminationCauseMeasured, false);
+assert.equal(repeat.includedPreviousOwnerCompletion.sameSource, true); assert.equal(repeat.includedPreviousOwnerCompletion.differentRunId, true);
+assert.equal(repeat.includedPreviousOwnerCompletion.savedActiveMs, owner.savedActiveMs);
+assert.equal(repeat.includedPreviousOwnerCompletion.savedMode, 'ended');
+assert.equal(repeat.includedPreviousOwnerCompletion.matchesArchivedOwnerCompletion, true);
+assert.equal(repeat.includedPreviousOwnerCompletion.homeAndEndedSequenceRetained, true);
+assert.equal(results.physicalDeviceResult.savedActiveMs, repeat.savedActiveMs);
+assert.equal(results.physicalDeviceResult.savedMode, repeat.savedMode);
+assert.equal(results.physicalDeviceResult.status, 'failed-white-screen-owner-reported');
 assert.equal(results.physicalDeviceResult.permanentRepairAccepted, false);
+assert.equal(results.physicalDeviceResults.length, 2);
+if (process.argv[2]) {
+  const bytes = readFileSync(process.argv[2]), raw = JSON.parse(bytes);
+  assert.equal(bytes.length, repeat.reportBytes); assert.equal(createHash('sha256').update(bytes).digest('hex'), repeat.reportSha256);
+  assert.equal(raw.source.sourceCommit, repeat.runtimeSource); assert.equal(raw.source.sourceTree, repeat.runtimeTree);
+  assert.equal(raw.source.diagnosticScene, repeat.configuredTreatment);
+  const latest = raw.stopwatch.latest, previous = raw.stopwatch.previous, brief = raw.briefDiagnostics.latest, priorBrief = raw.briefDiagnostics.previous;
+  assert.deepEqual(latest, brief.clock); assert.deepEqual(previous, priorBrief.clock); assert.equal(raw.briefMatchesLatestStopwatch, true);
+  assert.equal(latest.elapsedMs, repeat.savedActiveMs); assert.equal(latest.mode, 'running'); assert.equal(latest.source, previous.source);
+  assert.notEqual(latest.id, previous.id); assert.equal(previous.elapsedMs, owner.savedActiveMs); assert.equal(previous.mode, 'ended');
+  assert.equal(brief.options.fullRecording, false); assert.equal(brief.options.protection, true); assert.equal(raw.fullSession, null);
+  assert.equal(priorBrief.options.fullRecording, false); assert.equal(priorBrief.options.protection, true);
+  assert.equal(brief.events.length, 6); assert.equal(brief.dropped, 0);
+  assert.equal(latest.updatedAt - brief.events.at(-1).at, repeat.lastRecordedContactToLatestCheckpointWallMs);
+  assert.equal(raw.returnEvidence.activeDocument.route, 'home');
+  assert.equal(raw.returnEvidence.activeDocument.startedAt - latest.updatedAt, repeat.newDocumentAfterLastCheckpointMs);
+  assert.ok(raw.returnEvidence.reloadTrace.events.some(ev => ev.kind === 'boot-after-active-session' && ev.at > latest.updatedAt));
+}
 for (const key of ['newRuntimeCreated', 'newDeploymentCreated', 'newPhoneTestAssigned', 'publicReleaseAuthorized'])
   assert.equal(results.afterOwnerReport[key], false, key);
 console.log('CRYPTOID_HEAT_MASK_EVIDENCE ' + JSON.stringify({ passed: true, source: results.runtime.source, desktopFlows: 4,
-  phoneResult: 'owner Pi Browser normal exit 10:56', ownerSavedActiveMs: owner.savedActiveMs, whiteScreenFixed: false }));
+  phoneResult: 'same frozen runtime: prior normal 10:56, repeat owner White Screen 09:10',
+  ownerSavedActiveMs: repeat.savedActiveMs, previousOwnerNormalMs: owner.savedActiveMs, whiteScreenFixed: false }));

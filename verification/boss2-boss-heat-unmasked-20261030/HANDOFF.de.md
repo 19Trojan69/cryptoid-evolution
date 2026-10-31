@@ -1,8 +1,10 @@
-# Fortsetzungsstand – Boss-Hitzespuren ohne aktive Bildmaske
+# Fortsetzungsstand – unveränderter Maskenkandidat im Wiederholungstest gescheitert
+
+**Neuester Besitzer-Stand: 09:10 White Screen auf derselben Quelle 67dabc71; der längere Bestätigungsvergleich ist abgeschlossen und gescheitert. Details und vorheriger 10:56-Lauf unten. Kein bestätigter stabiler Kontrollstand.**
 
 Ausgangspunkt bleibt die Übergabe 336eafef und der Besitzer-Abbruch bei **08:36** mit Hitzespuren an/Reflexion aus. Die vier bisherigen Besitzer-Vergleiche und deren feste Zweige/Adressen sind unverändert. Ursache und dauerhafte Behebung des White Screens bleiben offen.
 
-**Neuester Stand nach dem Gerätetest:** Der Besitzer meldet ausdrücklich „Pi Browser Selbstbeendet, ganz normal ausgestiegen“. Der passende Bericht zum unveränderten Maskenkandidaten speichert **10:56 / 656318 aktive ms, Modus ended**, mit normaler Home-/Bestätigungs-/Endfolge. Das ist ein neuer Besitzer-Abschluss, kein Assistenten-Desktop-Ergebnis. Er stärkt den Verdacht auf die aktive Hitzespuren-Bildmaske oder ihre Wechselwirkung mit den Hotspots; eine dauerhafte Behebung ist damit noch nicht bewiesen.
+**Früherer normaler Abschluss (neuer Abbruch unten):** Der Besitzer meldet ausdrücklich „Pi Browser Selbstbeendet, ganz normal ausgestiegen“. Der passende Bericht zum unveränderten Maskenkandidaten speichert **10:56 / 656318 aktive ms, Modus ended**, mit normaler Home-/Bestätigungs-/Endfolge. Das ist ein neuer Besitzer-Abschluss, kein Assistenten-Desktop-Ergebnis. Er stärkt den Verdacht auf die aktive Hitzespuren-Bildmaske oder ihre Wechselwirkung mit den Hotspots; eine dauerhafte Behebung ist damit noch nicht bewiesen.
 
 ## Tatsächlich erstellter Kandidat
 
@@ -43,3 +45,16 @@ Nachweise und Konsistenzprüfung: README.md, results.json, verifyEvidence.mjs un
 Damit ist der Vergleich enger: **Originale sichtbare Hitzespuren mit Bildmaske → 08:36-Abbruch; sichtbare Hitzespuren ohne aktive Bildmaske → 10:56 normal beendet**, jeweils Reflexion aus. Die Maskierung beziehungsweise ihre Wechselwirkung mit den transformierten Hotspots ist nun ein stärkerer Verdacht. Die einzelnen nicht vollständig kontrollierten Geräteläufe beweisen weiterhin weder den nativen Mechanismus noch einen dauerhaften Fix.
 
 **Dieser Besitzer-Test ist abgeschlossen. Aktuell ist kein weiterer Smartphone-Test offen oder neu beauftragt.** Diese Aktualisierung ergänzt ausschließlich Nachweise auf dem Arbeitszweig; kein neuer Laufzeitstand, Testlink, Build oder Deployment. Feste Geräte-Zweige und erfolgreiche/fehlgeschlagene Adressen beibehalten. Nicht auf Grundlage dieses einzelnen Ergebnisses öffentlich veröffentlichen oder die gesamte Untersuchung wiederholen.
+
+
+## Neuer Besitzer-Wiederholungslauf: dieselbe Fassung gescheitert
+
+Besitzer: „mit whitescreen“. Bericht `cryptoid-diagnose-2026-10-31T14-06-15-474Z-6de05962.json`, 9498 Bytes, SHA-256 `70283fe07b1544419c68080b814e857296f625a91dc28d0c30ed2b2f820d433d`, passt exakt zu 67dabc714907be6d3ae99ccf9ebeab170eb34b06 / 72de7664d3ef9dcd21ddd407b081bb647885f4f7. **09:10 / 550312 aktive ms, running**, null aufgezeichnete Lücken; Uhr/Kurzbericht passen, Vollaufzeichnung aus, Testschutz an, fullSession:null. Neues home-Dokument 1124 ms nach dem laufenden Checkpoint, Boot mit `boot-after-active-session`, vorheriger Sitzungsmarker aktiv/playing. Exakte Absturzsekunde und native Ursache nicht gemessen.
+
+Besonders belastbar ist die Laufzuordnung: Derselbe Export enthält in previous weiterhin den früheren **10:56 / 656318 ms / ended** samt passendem Kurzbericht/Home-/Bestätigungs-/Endfolge auf derselben unveränderten Quelle. Der frühere normale Abschluss bleibt gültig, aber diese Fassung ist keine bestätigte stabile Kontrollbasis und kein Fix.
+
+Der neue Kurzbericht enthält sechs Ereignisse und null Verwerfungen: Laufstart und eine kurze Kontaktfolge bei ungefähr 01:14–01:17, danach bis zum letzten Checkpoint fast acht Minuten keine weitere aufgezeichnete Eingabe (472708 reale ms). Das beweist weder einen zeitnahen Eingabeauslöser noch eine vollständige physische Eingabegeschichte. In der neuen Nachricht wird nur White Screen gemeldet; die vorgegebene Nur-Laufenlassen-Bedingung, Wärme, Browser/Gerät oder Rückkehr werden nicht zusätzlich ausdrücklich bestätigt. Browser/iPhone bleiben vorheriger vereinbarter Kontext.
+
+Bereinigter Nachweis: `evidence/owner-mask-candidate-repeat-failure.json`; Rohbericht nicht in Git. Die ursprünglich angestrebten 20 aktiven Minuten wurden wegen des Abbruchs nicht erreicht. **Dieser Wiederholungstest ist abgeschlossen. Kein weiterer Lauf desselben unveränderten Stands ist derzeit beauftragt.** Geräte-Zweig/Adresse bleiben eingefroren. Das Ausblenden der Reflexion und Entfernen der Hitzespurenmaske haben diesen konfigurierten Lauf nicht vor White Screen geschützt. Keine genaue Masken-/Blend-/Reflexions-/GPU-/Speicher-/WebKit-/Cache-/Temperatur-/Berührungsursache ableiten.
+
+Gezielter nächster privater Vorschlag: nur die ursprünglichen beiden radialen Farbverläufe der statischen inneren Boss-Hitzespuren durch eine gleichmäßige orange Füllung ersetzen. Komponenten, Positionen/Schlüssel/Transformationen/Formen/Deckkraft/Grenzen, Inline-Masken/Bildvorbereitung, separate kleine Trefferexplosionen und übrige Kontrollen behalten. Hitzespurenmaske bleibt entfernt, Reflexion bleibt aus. Keine neue Canvas-Fläche, Assets, Timer/Frames oder Spieländerung. Das ist eine absichtlich vereinfachte private Darstellung und eine bisher ungeprüfte Füllungsvariable, keine bewiesene Ursache. Diese reine Nachweis-Aktualisierung baut oder testet den Vorschlag noch nicht.

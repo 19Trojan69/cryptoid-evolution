@@ -2,15 +2,15 @@
   "version": 1,
   "kind": "focused-mask-and-blend-comparison-review",
   "reviewDate": "2026-10-31",
-  "latestFailedOwnerSource": "18bb097a473d8afa2bbdaa12e1babef5e9ef39cc",
-  "latestFailedOwnerSavedActiveMs": 567442,
-  "latestFailedOwnerTime": "09:27",
-  "latestFailureEvidence": "evidence/owner-normal-blend-failure.json",
+  "latestFailedOwnerSource": "67dabc714907be6d3ae99ccf9ebeab170eb34b06",
+  "latestFailedOwnerSavedActiveMs": 550312,
+  "latestFailedOwnerTime": "09:10",
+  "latestFailureEvidence": "../boss2-boss-heat-unmasked-20261030/evidence/owner-mask-candidate-repeat-failure.json",
   "latestSuccessfulControlSource": "67dabc714907be6d3ae99ccf9ebeab170eb34b06",
   "latestSuccessfulControlSavedActiveMs": 656318,
   "latestSuccessfulControlTime": "10:56",
   "successfulControlEndedByOwner": true,
-  "successLongerThanLatestFailedCheckpointByMs": 88876,
+  "successLongerThanLatestFailedCheckpointByMs": 106006,
   "durableStableControlEstablished": false,
   "permanentRepairAccepted": false,
   "targetedSourceReview": {
@@ -33,10 +33,11 @@
     "nativeMechanismProven": false,
     "inputOrHeatCauseProven": false,
     "doNotTreatOwnerEndedDurationsAsPermanentStability": true,
-    "nextStepReason": "After both active-mask removal and normal blend also failed, the single 10:56 control completion is not a sufficiently confirmed basis for more cosmetic CSS variants. Its duration exceeds the latest failed checkpoint by only 88876 ms. A longer unchanged control is newly justified."
+    "nextStepReason": "The unchanged source 67dabc71 itself failed at 09:10; its prior normal 10:56 remains in the same export. No stable positive control has been established. Mask/reflection-specific repair claims are downgraded; original visible heat-marker gradient paint remains a targeted, unisolated presentation variable.",
+    "hiddenReflectionAndHeatMaskRemovalInsufficientAsRepair": true
   },
   "nextOwnerComparison": {
-    "state": "proposed-not-started",
+    "state": "completed-failed",
     "existingFrozenControlOnly": true,
     "source": "67dabc714907be6d3ae99ccf9ebeab170eb34b06",
     "tree": "72de7664d3ef9dcd21ddd407b081bb647885f4f7",
@@ -50,7 +51,14 @@
     "protection": true,
     "requestedOwnerCondition": "same iPhone / Pi Browser, left running without active play after explicit Resume",
     "targetActiveMinutes": 20,
-    "result": null,
+    "result": {
+      "evidence": "../boss2-boss-heat-unmasked-20261030/evidence/owner-mask-candidate-repeat-failure.json",
+      "savedActiveMs": 550312,
+      "displayedTime": "09:10",
+      "savedMode": "running",
+      "whiteScreenReported": true,
+      "twentyMinuteTargetReached": false
+    },
     "ifWhiteScreen": "Reopen exactly this existing control URL and save report before another start. A control failure would weaken the claimed stability/paint correlation; do not call it a repair.",
     "ifNormalEnd": "Normal self-exit at about 20 active minutes and save report; it strengthens this bounded control, not permanent fix or native-cause proof."
   },
@@ -73,6 +81,23 @@
     "payments": false,
     "gameRunStarted": false,
     "newRuntimeCreated": false,
-    "physicalPhoneVerifiedByThisReadOnlyCheck": false
+    "physicalPhoneVerifiedByThisReadOnlyCheck": false,
+    "historicalBeforeOwnerRepeat": true
+  },
+  "previousReviewLatestFailedOwnerSource": "18bb097a473d8afa2bbdaa12e1babef5e9ef39cc",
+  "previousReviewLatestFailedOwnerSavedActiveMs": 567442,
+  "unchangedControlRepeatFailed": true,
+  "includedSameExportPriorNormalCompletion": true,
+  "proposedNextPaintComparison": {
+    "state": "proposed-not-built-by-this-evidence-update",
+    "failedBaselineSource": "67dabc714907be6d3ae99ccf9ebeab170eb34b06",
+    "changeOnly": "inner static boss heat markers: radial background-image becomes none plus uniform #ff7928 background-color",
+    "heatMaskStillRemoved": true,
+    "reflectionStillHidden": true,
+    "originalComponentsPositionsKeysTransformsBoundsOpacityAndMiniExplosionsRetained": true,
+    "newCanvasTimerFrameOrAsset": false,
+    "nativeCauseProven": false,
+    "physicalDeviceTested": false,
+    "whiteScreenFixed": false
   }
 }

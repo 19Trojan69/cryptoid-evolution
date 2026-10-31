@@ -112,7 +112,8 @@
     "Short assistant desktop Chromium/WebKit flows do not establish physical-phone endurance, native failure cause or permanent repair.",
     "Owner 09:20 failure is the preceding screen-blend source ebe70ac8, and 10:56 normal completion is hidden-reflection source 67dabc71; neither is an owner outcome for this candidate.",
     "The preceding 09:20 owner report says no active play. The latest 09:27 message says only White Screen; do not transfer the prior play/warmth/browser statements or treat either contact tail as cause.",
-    "Earlier masked-heat failure at 08:36 occurred with reflection hidden, so visible reflection or screen blend is not a proven general necessary cause."
+    "Earlier masked-heat failure at 08:36 occurred with reflection hidden, so visible reflection or screen blend is not a proven general necessary cause.",
+    "The longer 67dabc71 comparison is now completed with owner White Screen at 09:10; there is no pending rerun or proven stable control."
   ],
   "hostedCheck": {
     "evidence": "evidence/hosted-reflection-blend-candidate.json",
@@ -141,13 +142,22 @@
   },
   "comparisonReview": {
     "evidence": "evidence/comparison-review.json",
-    "decision": "No new CSS variant. First confirm the existing frozen hidden-reflection/unmasked-heat control over a longer idle observation.",
+    "decision": "The unchanged 67dabc71 repeat failed at 09:10. Close the confirmation and downgrade stability/repair claims; next targeted proposal is simple inner heat-marker paint instead of live radial gradients.",
     "newRuntimeCreated": false,
     "newDeploymentCreated": false,
     "newPublicRelease": false,
     "nextOwnerComparisonSource": "67dabc714907be6d3ae99ccf9ebeab170eb34b06",
-    "nextOwnerComparisonState": "proposed-not-started",
+    "nextOwnerComparisonState": "completed-failed",
     "targetActiveMinutes": 20,
-    "newOwnerResult": null
+    "newOwnerResult": {
+      "evidence": "../boss2-boss-heat-unmasked-20261030/evidence/owner-mask-candidate-repeat-failure.json",
+      "savedActiveMs": 550312,
+      "displayedTime": "09:10",
+      "savedMode": "running",
+      "whiteScreenReported": true,
+      "twentyMinuteTargetReached": false
+    },
+    "latestFailedControlSource": "67dabc714907be6d3ae99ccf9ebeab170eb34b06",
+    "latestFailedControlSavedActiveMs": 550312
   }
 }

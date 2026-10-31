@@ -79,17 +79,21 @@ assert.equal(latest.rawOwnerReportCommitted, false); assert.equal(latest.whiteSc
 assert.equal(r.newOwnerPhoneResult.savedActiveMs, latest.savedActiveMs); assert.equal(r.newOwnerPhoneResult.permanentRepairAccepted, false);
 const review = read('./evidence/comparison-review.json');
 const oldControl = read('../boss2-boss-heat-unmasked-20261030/evidence/owner-mask-candidate-completion.json');
-assert.equal(review.latestFailedOwnerSource, latest.runtimeSource); assert.equal(review.latestFailedOwnerSavedActiveMs, latest.savedActiveMs);
+const repeatedControl = read('../boss2-boss-heat-unmasked-20261030/evidence/owner-mask-candidate-repeat-failure.json');
+assert.equal(review.previousReviewLatestFailedOwnerSource, latest.runtimeSource);
+assert.equal(review.latestFailedOwnerSource, repeatedControl.runtimeSource); assert.equal(review.latestFailedOwnerSavedActiveMs, 550312);
 assert.equal(review.latestSuccessfulControlSource, oldControl.runtimeSource); assert.equal(review.latestSuccessfulControlSavedActiveMs, 656318);
-assert.equal(review.successLongerThanLatestFailedCheckpointByMs, oldControl.savedActiveMs - latest.savedActiveMs);
-assert.equal(review.successLongerThanLatestFailedCheckpointByMs, 88876); assert.equal(review.durableStableControlEstablished, false);
+assert.equal(review.successLongerThanLatestFailedCheckpointByMs, oldControl.savedActiveMs - repeatedControl.savedActiveMs);
+assert.equal(review.successLongerThanLatestFailedCheckpointByMs, 106006); assert.equal(review.durableStableControlEstablished, false);
+assert.equal(review.unchangedControlRepeatFailed, true); assert.equal(review.includedSameExportPriorNormalCompletion, true);
 assert.equal(review.interpretation.bothMaskRemovalInsufficientAsRepair, true);
 assert.equal(review.interpretation.screenToNormalChangeInsufficientAsRepair, true);
 assert.equal(review.newRuntimeCreated, false); assert.equal(review.newDeploymentCreated, false); assert.equal(review.newPublicRelease, false);
 assert.equal(review.targetedSourceReview.originalSourcesEdited, false); assert.equal(review.targetedSourceReview.earlierCleanupBenchmarksRepeated, false);
 assert.equal(review.nextOwnerComparison.source, oldControl.runtimeSource); assert.equal(review.nextOwnerComparison.tree, oldControl.runtimeTree);
 assert.equal(review.nextOwnerComparison.existingFrozenControlOnly, true); assert.equal(review.nextOwnerComparison.targetActiveMinutes, 20);
-assert.equal(review.nextOwnerComparison.state, 'proposed-not-started'); assert.equal(review.nextOwnerComparison.result, null);
+assert.equal(review.nextOwnerComparison.state, 'completed-failed'); assert.equal(review.nextOwnerComparison.result.savedActiveMs, 550312);
+assert.equal(review.nextOwnerComparison.result.twentyMinuteTargetReached, false);
 if (process.argv[2]) {
   const bytes = readFileSync(process.argv[2]), raw = JSON.parse(bytes);
   assert.equal(bytes.length, latest.reportBytes); assert.equal(createHash('sha256').update(bytes).digest('hex'), latest.reportSha256);
@@ -109,4 +113,4 @@ if (process.argv[2]) {
 }
 console.log('CRYPTOID_REFLECTION_BLEND_EVIDENCE ' + JSON.stringify({ passed: true, source: r.runtime.source,
   desktopFlows: 4, newOwnerPhoneResult: 'failed-white-screen-owner-reported', savedOwnerTime: '09:27',
-  nextStep: 'confirm-unchanged-67dabc71-control-longer', newRuntime: false, whiteScreenFixed: false }));
+  controlConfirmation: 'same 67dabc71 failed 09:10; previous 10:56 retained', newRuntime: false, whiteScreenFixed: false }));
