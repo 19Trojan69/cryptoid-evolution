@@ -1,0 +1,127 @@
+{
+  "version": 1,
+  "kind": "private-original-boss-reflection-normal-blend",
+  "whiteScreenFixed": false,
+  "physicalDeviceTested": false,
+  "runtime": {
+    "source": "18bb097a473d8afa2bbdaa12e1babef5e9ef39cc",
+    "tree": "dbb6c12a329bcd3862993a10e4b9811f2dc5c372",
+    "workBranch": "codex/boss2-reflection-blend-control-20261031",
+    "deviceBranch": "codex/boss2-reflection-blend-device-20261031"
+  },
+  "basis": {
+    "failedOwnerSource": "ebe70ac8ac80ebd8bce3f00273a9182520f51323",
+    "failedOwnerActiveMs": 560125,
+    "failedOwnerTime": "09:20",
+    "failedOwnerReceipt": "../boss2-reflection-mask-control-20261031/evidence/owner-both-masks-idle-failure.json",
+    "ownerFailureEvidenceCommit": "0a2a0d697daaf78bfea9ccecb04d14820e33a612",
+    "leftRunningWithoutPlayingReported": true,
+    "retainedEvents": 6,
+    "collectorDrops": 0,
+    "lastRecordedContactToLatestCheckpointWallMs": 433126,
+    "precedingNormalOwnerSource": "67dabc714907be6d3ae99ccf9ebeab170eb34b06",
+    "precedingNormalOwnerTime": "10:56",
+    "nativeMechanismProven": false
+  },
+  "treatment": {
+    "changeOnly": "mix-blend-mode: normal !important on .diagnostic-flat-scene .sector-boss .hull-reflection",
+    "reflectionBlend": "normal",
+    "bothOriginalOverlaysVisible": true,
+    "bothOverlaysStandardAndWebkitMasksStillRemoved": true,
+    "originalReflectionGradientNaturalLightOpacityGeometryAndDisplayCascadeRetained": true,
+    "originalInlineMasksComponentsAndImagePreparationRetained": true,
+    "originalHeatHotspotsRetained": true,
+    "originalBossImageHealthMiniExplosionsBackgroundRetained": true,
+    "bossWeaponsViewStillExcluded": true,
+    "priorFilterReactorExplosionCanvasControlsRetained": true,
+    "gameplayClocksBalanceOneFingerInputManualResumeAudioUnchanged": true,
+    "extraRuntimeFramesOrTimers": false,
+    "normalBlendAppearanceAndRectangularBoundsMayDiffer": true
+  },
+  "verification": {
+    "runId": 41189758667,
+    "workflow": "https://github.com/19Trojan69/cryptoid-evolution/actions/runs/41189758667",
+    "status": "passed",
+    "sourceComponentTests": 18,
+    "typePreflight": "passed",
+    "originalSourcePins": "passed",
+    "shortDesktopFlows": 4,
+    "jobs": [
+      {
+        "id": 124503926120,
+        "engine": "webkit",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 124503926250,
+        "engine": "chromium",
+        "status": "completed",
+        "conclusion": "success"
+      }
+    ],
+    "localCoverage": "Eight targeted tests pass in the partial local checkout; full original-source/type/build/browser checks pass in the complete GitHub checkout. No claim of full local app execution.",
+    "evidence": "evidence/synthetic-reflection-blend-comparison.json",
+    "workflowStatus": "completed",
+    "workflowConclusion": "success"
+  },
+  "deployment": {
+    "id": "dpl_7p1HVSDXabuo2WqfwGYUgDofwu4Y",
+    "url": "https://cryptoid-evolution-testnet-kuil5zlns-19-trojan69.vercel.app/",
+    "dashboard": "https://vercel.com/19-trojan69/cryptoid-evolution-testnet/7p1HVSDXabuo2WqfwGYUgDofwu4Y",
+    "status": "READY",
+    "durationSeconds": 39,
+    "environment": "Preview",
+    "source": "18bb097a473d8afa2bbdaa12e1babef5e9ef39cc",
+    "branch": "codex/boss2-reflection-blend-control-20261031",
+    "protection": "Standard Protection (observed after READY; unchanged)",
+    "customDomainAssignment": "Skipped",
+    "guestOnly": true,
+    "liveBackend": false,
+    "payments": false,
+    "automaticUpload": false,
+    "gitAutomaticDeploymentEnabled": false,
+    "previewOnly": true,
+    "publicReleaseAuthorized": false
+  },
+  "newOwnerPhoneResult": null,
+  "originalSourceTrees": {
+    "api": "ccac7cd576a079771d7d7fe4f0085492ebbe6813",
+    "assets": "a9860b12db58a96dafde818d9a58a6ea0e03c5e5",
+    "backend": "6e93bfbac9e6cc70a1edfb8bd55d737f612ba261",
+    "frontend": "890df8a38e13ef1fe315a5c0eb109c1d72b80aab",
+    "private-preview": "b733d4dc70b4ac407391720eab131dbaf1d60e37"
+  },
+  "publicMainSource": "ce073547cf573375d141bf846f70e294138dbd73",
+  "limits": [
+    "Short assistant desktop Chromium/WebKit flows do not establish physical-phone endurance, native failure cause or permanent repair.",
+    "Owner 09:20 failure is the preceding screen-blend source ebe70ac8, and 10:56 normal completion is hidden-reflection source 67dabc71; neither is an owner outcome for this candidate.",
+    "The owner reports no active play. One short recorded contact over seven minutes before the checkpoint is not an immediate-touch trigger or a complete independent physical-input history.",
+    "Earlier masked-heat failure at 08:36 occurred with reflection hidden, so visible reflection or screen blend is not a proven general necessary cause."
+  ],
+  "hostedCheck": {
+    "evidence": "evidence/hosted-reflection-blend-candidate.json",
+    "screenshot": "evidence/hosted-preview-ready.jpg",
+    "physicalDevice": false,
+    "displayedTime": "01:26",
+    "savedActiveMs": 86587.20000000019,
+    "savedMode": "ended",
+    "normalExit": true,
+    "pairedReport": true,
+    "manualPauseFreezes": true,
+    "lastTimeRestoredAfterReload": true,
+    "visibleHotspots": 5,
+    "bothLayersVisible": true,
+    "bothLayersStandardAndWebkitMasksNone": true,
+    "reflectionBlend": "normal",
+    "stalledStateEntries": 1,
+    "whiteScreenObserved": false,
+    "whiteScreenFixed": false
+  },
+  "preservedDeviceRefs": {
+    "normalExitHiddenReflection": "67dabc714907be6d3ae99ccf9ebeab170eb34b06",
+    "failedOriginalMaskedReflection": "e16befbb1251b14b0f2742f8a984c29a00173c41",
+    "failedBothMasksRemovedIdleRun": "ebe70ac8ac80ebd8bce3f00273a9182520f51323",
+    "newNormalBlendCandidate": "18bb097a473d8afa2bbdaa12e1babef5e9ef39cc"
+  }
+}
