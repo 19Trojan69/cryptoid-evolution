@@ -1,0 +1,127 @@
+{
+  "version": 1,
+  "kind": "protected-boss-static-hotspot-children-comparison",
+  "whiteScreenFixed": false,
+  "physicalDeviceTested": false,
+  "newOwnerPhoneResult": null,
+  "runtime": {
+    "source": "290113362eea446aa9d4171aaaddd7220e3bf646",
+    "tree": "6acb9cff2dd908f0532cd986319f0965a46b5da0",
+    "workBranch": "codex/boss2-static-hotspots-control-20261031",
+    "deviceBranch": "codex/boss2-static-hotspots-device-20261031"
+  },
+  "basis": {
+    "source": "f67fd2e41c372de600d197f2c8d943b7097b9209",
+    "tree": "b58083ab6ba44a523d6497e317af665d4344fb90",
+    "savedActiveMs": 525494,
+    "displayedTime": "08:45",
+    "savedMode": "running",
+    "newHomeDocumentAfterCheckpointMs": 730.000244140625,
+    "bootAfterActiveSessionRecorded": true,
+    "normalEndRecorded": false,
+    "whitePixelsMeasured": false,
+    "ownerVisualObservationExplicitlyRestatedForLatestRepeat": false,
+    "fullRecording": false,
+    "protection": true,
+    "retainedEvents": 6,
+    "collectorDrops": 0,
+    "recordedGaps": 0,
+    "lastRecordedContactToCheckpointWallMs": 489581,
+    "stablePositiveControlEstablished": false,
+    "evidence": "../boss2-heat-flat-fill-control-20261031/evidence/owner-flat-fill-repeat-abrupt-return.json",
+    "evidenceCommit": "b77e019260d060eb7032dab97746935d6a437660"
+  },
+  "treatment": {
+    "change": "Only boss guard on original sites.map; no static hotspot i/b children for boss",
+    "originalHullDamageBlob": "50616cc7bb7f0f419c0bcc3b6303a57d47e62439",
+    "normalizedOriginalTextSha256": "a122571e460098df2a7102a2ac807424037a22b434c8f41d82ce042442709549",
+    "wholeComponentReversible": true,
+    "originalComponentPropsEarlyReturnHeatShellMaskStylesRetained": true,
+    "separateMiniExplosionFragmentByteIdentical": true,
+    "nonBossHeatFragmentByteIdentical": true,
+    "simulationSiteArrayUpdatesPreserved": true,
+    "activeHeatMaskStillNone": true,
+    "reflectionStillHidden": true,
+    "originalBossImageHealthBackgroundPreparationRetained": true,
+    "bossWeaponsViewStillExcluded": true,
+    "previousFilterReactorExplosionCanvasControlsRetained": true,
+    "gameplaySpeedClocksBalanceOneFingerInputManualResumeAudioUnchanged": true,
+    "newCanvasAssetsTimersFramesHooks": false,
+    "deliberateVisualChange": "Static boss heat marks are absent. Small hit flashes remain."
+  },
+  "verification": {
+    "runId": 41231656473,
+    "workflow": "https://github.com/19Trojan69/cryptoid-evolution/actions/runs/41231656473",
+    "status": "passed",
+    "expectedSourceTests": 22,
+    "localTargetedTests": 9,
+    "localCompleteAppTested": false,
+    "scopeAndTypeStep": "passed in both full CI checkouts",
+    "controlShortDesktopFlows": "passed in Chromium/WebKit",
+    "candidateShortDesktopFlows": "passed in Chromium/WebKit",
+    "jobs": [
+      {
+        "id": 124626955083,
+        "engine": "webkit",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 124626955294,
+        "engine": "chromium",
+        "status": "completed",
+        "conclusion": "success"
+      }
+    ],
+    "workflowStatus": "completed",
+    "workflowConclusion": "success",
+    "sourceTests": 22,
+    "shortDesktopFlows": 4,
+    "originalSourcePins": "passed",
+    "typePreflight": "passed",
+    "evidence": "evidence/synthetic-static-hotspot-comparison.json"
+  },
+  "deployment": {
+    "status": "READY",
+    "previewOnly": true,
+    "gitAutomaticDeployment": false,
+    "publicReleaseAuthorized": false,
+    "environment": "Preview",
+    "url": "https://cryptoid-evolution-testnet-3gp8sflgo-19-trojan69.vercel.app/",
+    "dashboard": "https://vercel.com/19-trojan69/cryptoid-evolution-testnet/BSAeYa59wum9HY1nTudF7LF6DyTB",
+    "source": "290113362eea446aa9d4171aaaddd7220e3bf646",
+    "branch": "codex/boss2-static-hotspots-control-20261031",
+    "durationDisplay": "42s",
+    "protection": "Standard Protection (observed in Deployment Settings)",
+    "customDomainAssignment": "Skipped",
+    "id": "dpl_BSAeYa59wum9HY1nTudF7LF6DyTB"
+  },
+  "publicMainSource": "ce073547cf573375d141bf846f70e294138dbd73",
+  "originalSourceTrees": {
+    "frontend": "890df8a38e13ef1fe315a5c0eb109c1d72b80aab",
+    "backend": "6e93bfbac9e6cc70a1edfb8bd55d737f612ba261",
+    "api": "ccac7cd576a079771d7d7fe4f0085492ebbe6813",
+    "assets": "a9860b12db58a96dafde818d9a58a6ea0e03c5e5",
+    "private-preview": "b733d4dc70b4ac407391720eab131dbaf1d60e37"
+  },
+  "limits": [
+    "Omitting static hotspot children differs from earlier CSS display:none. The original component/mask shell and simulation arrays remain; this is not removal of all boss effects or all image preparation.",
+    "No native cause, memory leak, thermal/cache/input/GPU/WebKit mechanism or smartphone stability gain is established. A desktop control is not a phone-crash reproduction.",
+    "No owner result exists for this candidate. A later normal phone end is a bounded result, not a permanent repair or authorization for public release."
+  ],
+  "hostedCheck": {
+    "status": "passed-with-limits",
+    "evidence": "evidence/hosted-static-hotspot-candidate.json",
+    "screenshot": "evidence/hosted-preview-ready.jpg",
+    "browser": "assistant cloud Chromium",
+    "physicalDevice": false,
+    "displayedTime": "01:32",
+    "savedActiveMs": 92601.49999999255,
+    "savedMode": "ended",
+    "pairedReport": true,
+    "lastTimeRestoredAfterReload": true,
+    "stalledStateEntries": 1,
+    "uninterruptedPerformanceClaimed": false,
+    "ownerResult": false
+  }
+}
