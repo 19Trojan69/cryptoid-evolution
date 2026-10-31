@@ -1,0 +1,116 @@
+{
+  "version": 1,
+  "kind": "private-static-boss-hotspot-uniform-fill-comparison",
+  "whiteScreenFixed": false,
+  "physicalDeviceTested": false,
+  "runtime": {
+    "source": "f67fd2e41c372de600d197f2c8d943b7097b9209",
+    "tree": "b58083ab6ba44a523d6497e317af665d4344fb90",
+    "workBranch": "codex/boss2-heat-flat-fill-control-20261031",
+    "deviceBranch": "codex/boss2-heat-flat-fill-device-20261031"
+  },
+  "basis": {
+    "failedOwnerSource": "67dabc714907be6d3ae99ccf9ebeab170eb34b06",
+    "failedOwnerTime": "09:10",
+    "failedOwnerActiveMs": 550312,
+    "failedOwnerReceipt": "../boss2-boss-heat-unmasked-20261030/evidence/owner-mask-candidate-repeat-failure.json",
+    "ownerRepeatEvidenceCommit": "9d24ab0e53728c41a565df7d1996bd92d185b8f4",
+    "sameExportPriorNormalOwnerActiveMs": 656318,
+    "sameExportPriorNormalOwnerTime": "10:56",
+    "sameExportPreviousClockMatchesArchivedCompletion": true,
+    "durableStableControlEstablished": false,
+    "retainedEvents": 6,
+    "collectorDrops": 0,
+    "lastRecordedContactToCheckpointWallMs": 472708,
+    "ownerIdleConditionExplicitlyRestated": false,
+    "nativeMechanismProven": false
+  },
+  "treatment": {
+    "changeOnly": "inner static boss hotspot paint: background-image:none and uniform #ff7928 background-color",
+    "selector": ".diagnostic-flat-scene .sector-boss .boss-static-heat .hull-hotspot > b",
+    "originalHotspotComponentsPositionsKeysTransformsShapesBoundsOpacityRetained": true,
+    "originalInlineHeatMaskAndImagePreparationRetained": true,
+    "heatStandardAndWebkitMasksStillRemoved": true,
+    "reflectionStillHidden": true,
+    "miniExplosionsAndTheirGradientsRetained": true,
+    "originalBossImageHealthBackgroundRetained": true,
+    "bossWeaponsViewStillExcluded": true,
+    "priorFilterReactorExplosionCanvasControlsRetained": true,
+    "originalGameClocksSpeedBalanceOneFingerInputManualResumeAudioRetained": true,
+    "newCanvasOrAsset": false,
+    "extraRuntimeTimersOrFrames": false,
+    "uniformMarkerPaintDeliberatelyLooksDifferent": true
+  },
+  "verification": {
+    "runId": 41209575472,
+    "workflow": "https://github.com/19Trojan69/cryptoid-evolution/actions/runs/41209575472",
+    "status": "passed",
+    "workflowStatus": "completed",
+    "workflowConclusion": "success",
+    "sourceComponentTests": 20,
+    "typePreflight": "passed",
+    "originalSourcePins": "passed",
+    "shortDesktopFlows": 4,
+    "jobs": [
+      {
+        "id": 124561547579,
+        "engine": "chromium",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 124561547791,
+        "engine": "webkit",
+        "status": "completed",
+        "conclusion": "success"
+      }
+    ],
+    "localCoverage": "10 targeted local tests; full source/types/build/browser checks in complete GitHub checkout. No full local-app coverage claimed.",
+    "evidence": "evidence/synthetic-heat-fill-comparison.json"
+  },
+  "deployment": {
+    "status": "READY",
+    "environment": "Preview",
+    "url": "https://cryptoid-evolution-testnet-g08qa3kwb-19-trojan69.vercel.app/",
+    "id": "dpl_85gRbyBYQcAiafJ5ckRxhdfjYani",
+    "dashboard": "https://vercel.com/19-trojan69/cryptoid-evolution-testnet/85gRbyBYQcAiafJ5ckRxhdfjYani",
+    "source": "f67fd2e41c372de600d197f2c8d943b7097b9209",
+    "branch": "codex/boss2-heat-flat-fill-control-20261031",
+    "buildSeconds": 63,
+    "protection": "Standard Protection (deployment settings observed)",
+    "customDomainAssignment": "Skipped",
+    "gitAutomaticDeployment": false,
+    "previewOnly": true,
+    "publicReleaseAuthorized": false
+  },
+  "newOwnerPhoneResult": null,
+  "publicMainSource": "ce073547cf573375d141bf846f70e294138dbd73",
+  "originalSourceTrees": {
+    "api": "ccac7cd576a079771d7d7fe4f0085492ebbe6813",
+    "assets": "a9860b12db58a96dafde818d9a58a6ea0e03c5e5",
+    "backend": "6e93bfbac9e6cc70a1edfb8bd55d737f612ba261",
+    "frontend": "890df8a38e13ef1fe315a5c0eb109c1d72b80aab",
+    "private-preview": "b733d4dc70b4ac407391720eab131dbaf1d60e37"
+  },
+  "limits": [
+    "Both original-gradient and flat-fill desktop flows are short emulated-phone observations, not physical iPhone/Pi Browser endurance or native-gradient-cause measurements.",
+    "The same frozen source 67dabc71 had a normal 10:56 exit and later failed at 09:10; no stable positive control is claimed. Original-gradient desktop control is not a reproduction of the phone crash.",
+    "This deliberately changes only the inner heat-marker paint. It cannot prove absence of memory/GPU/WebKit/cache/thermal/input or other causes; temporal differences among owner runs are not measured performance gains.",
+    "No owner phone result exists for this candidate and no permanent repair/public release is accepted."
+  ],
+  "hostedCheck": {
+    "status": "passed-with-limits",
+    "evidence": "evidence/hosted-heat-fill-candidate.json",
+    "screenshot": "evidence/hosted-preview-ready.jpg",
+    "browser": "assistant cloud Chromium",
+    "physicalDevice": false,
+    "displayedTime": "01:12",
+    "savedActiveMs": 72068.89999999478,
+    "savedMode": "ended",
+    "pairedReport": true,
+    "lastTimeRestoredAfterReload": true,
+    "stalledStateEntries": 4,
+    "uninterruptedPerformanceClaimed": false,
+    "ownerResult": false
+  }
+}

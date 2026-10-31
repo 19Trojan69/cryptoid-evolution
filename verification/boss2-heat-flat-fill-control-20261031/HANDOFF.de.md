@@ -1,0 +1,51 @@
+# Fortsetzung – statische Boss-Hitzespuren mit vereinfachter Füllung
+
+Der White Screen ist nicht nachweislich behoben. React/TypeScript/Vite, keine Unity-App. Nur geschützte Gast-Previews; keine öffentliche Testnet-/Mainnet-Veröffentlichung/Main-Zusammenführung. Echte Konten/Spielstände/Käufe/Ranglisten bleiben geschützt. Spieltempo, Spieluhren, Balance, Einfingersteuerung, nur manuelles Fortsetzen und Audio bleiben unverändert. Alle früheren Geräte-Zweige/Adressen einfrieren. Keine allgemeinen Untersuchungen oder erfolglose iOS-/Jetsam-Log-Schleife neu beginnen.
+
+## Zuletzt abgeschlossener Besitzer-Vergleich
+
+Besitzer: **„mit whitescreen“**. Bericht `cryptoid-diagnose-2026-10-31T14-06-15-474Z-6de05962.json`, 9498 Bytes, SHA-256 **70283fe07b1544419c68080b814e857296f625a91dc28d0c30ed2b2f820d433d**, passt exakt zur alten unveränderten Fassung **67dabc714907be6d3ae99ccf9ebeab170eb34b06 / 72de7664d3ef9dcd21ddd407b081bb647885f4f7**: originale Hitzespuren sichtbar, aktive Standard-/WebKit-Hitzespurenmaske entfernt, Reflexion aus, BossWeaponsView weiterhin ausgeschlossen.
+
+Neuster Checkpoint **09:10 / 550312 aktive ms / running**, null aufgezeichnete Lücken, Uhr/Kurzbericht gehören zusammen. Vollaufzeichnung aus, Testschutz an, fullSession:null. Neues home-Dokument 1124 ms nach dem laufenden Checkpoint, Boot mit `boot-after-active-session`, zuvor aktiver/playing Sitzungsmarker. White Screen ist die Besitzerbeobachtung; exakte Absturzsekunde/native Ursache sind nicht gemessen.
+
+**Derselbe Export enthält weiterhin den vorherigen normalen Abschluss bei 10:56 / 656318 ms / ended**, samt passendem previous-Kurzbericht/Home-/Bestätigungs-/Endfolge, gleiche Quelle und Optionen, andere Lauf-ID. Der normale Abschluss bleibt gültig. Die spätere Wiederholung beweist aber, dass keine stabile Kontrollbasis/akzeptierte Reparatur feststeht.
+
+Sechs neue Ereignisse, null Verwerfungen: Laufstart und eine Kontaktfolge bei ca. 01:14–01:17. Danach bis zum letzten Checkpoint fast acht Minuten keine weitere aufgezeichnete Eingabe (472708 reale ms). Kein Beleg eines unmittelbaren Berührungsauslösers oder vollständiger physischer Eingabegeschichte. Idle-Spielweise, Wärme, Browser/Gerät/Rückkehr wurden in der neuen Nachricht nicht zusätzlich bestätigt; Pi Browser/iPhone bleiben vorheriger vereinbarter Kontext und keine unabhängige Messung. Keine Aussagen aus anderen Besitzer-Berichten übertragen.
+
+Bereinigter Nachweis: `../boss2-boss-heat-unmasked-20261030/evidence/owner-mask-candidate-repeat-failure.json`, Nachweis-Commit **9d24ab0e53728c41a565df7d1996bd92d185b8f4**. Rohbericht nicht in Git. Die angestrebten 20 aktiven Minuten wurden wegen Abbruchs nicht erreicht. **Dieser Wiederholungstest ist abgeschlossen. Kein weiterer unveränderter Lauf derselben Fassung ist beauftragt.** Alte Quelle/Adresse 7j8dw88r8 und Geräte-Zweig bleiben erhalten.
+
+## Bilanz und begründete neue Grenze
+
+Originale maskierte Hitzespuren mit Reflexion aus scheiterten bei 08:36. Hitzespuren unmaskiert/Reflexion aus wurden einmal bei 10:56 normal beendet und scheiterten nun bei 09:10 auf derselben Quelle. Wieder sichtbare maskierte Reflexion dazu: 08:48-Abbruch (e16befbb). Beide Bildmasken entfernt/Reflexion screen: 09:20-Abbruch beim vom Besitzer berichteten Laufenlassen (ebe70ac8). Beide Masken entfernt/Reflexion normal: 09:27-Abbruch (18bb097a). Frühere beide-aus 10:34 und Reflexion-an/Hitzespuren-aus 10:00 sind normale, zeitlich begrenzte Besitzer-Enden; keine dauerhafte Stabilität ableiten. Vollständige Bilanz steht zusätzlich im vorherigen Blend-Handoff und comparison-review.json.
+
+Maskenentfernung, Ausblenden der Reflexion und normaler Blend haben keinen akzeptierten Fix geliefert. Keine alleinige Masken-/Blend-/Reflexions-/Speicher-/GPU-/WebKit-/Cache-/Temperatur-/Eingabeursache ist bewiesen; zeitliche Unterschiede zwischen Einzelläufen sind keine gemessene Performanceverbesserung. Der noch nicht separat verglichene sichtbare Hitzespurenpfad enthält zwei radiale Hintergrundverläufe pro statischer Markierung. Boss-Spuren sind schon statisch und begrenzt; daraus folgt kein Lecknachweis. Die neue Füllungsprüfung wird auf den jetzt tatsächlich gescheiterten 67dabc71-Zustand bezogen, nicht auf eine als stabil angenommene Fassung.
+
+## Tatsächlich gebauter nächster privater Kandidat
+
+**Nur innere Füllung der statischen Boss-Hitzespuren:** `.diagnostic-flat-scene .sector-boss .boss-static-heat .hull-hotspot > b` erhält `background-image: none !important` und `background-color: #ff7928 !important`. Die Markierungen sehen absichtlich flacher/gleichmäßig orange aus. Originale Komponenten, Positionen/Schlüssel/Transformationen/Formen/Deckkraft/Grenzen, Inline-Maskenstile und Bildvorbereitung bleiben. Hitzespurenmaske bleibt entfernt, Reflexion aus. Die separaten kleinen Trefferexplosionen und deren Farbverläufe sind nicht Ziel des Selektors und bleiben unverändert. Keine neue Canvas-Fläche, Bitmap-Assets, Timer/Frames/Observer oder Gameplayänderung.
+
+Originales Bossbild/Gesundheit/Originalhintergründe/Simulation bleiben; andere Vordergrundgrafik bleibt vereinfacht. BossWeaponsView und frühere Filter-/Reaktor-/gewöhnliche Explosions-Canvas-Kontrollen bleiben ausgeschlossen. Originale Frontend-/Backend-/API-/Assets-/private-preview-Bäume unverändert. Keine Geschwindigkeits-, Uhren-, Balance-, Steuerungs-, Resume-, Audio-, Konto-/Save-/Kauf-/Ranglistenänderung, kein automatischer Upload.
+
+- Laufzeit-Commit: **f67fd2e41c372de600d197f2c8d943b7097b9209**
+- Baum: **b58083ab6ba44a523d6497e317af665d4344fb90**
+- Arbeits-/Nachweiszweig: `codex/boss2-heat-flat-fill-control-20261031`
+- Eingefrorener Geräte-Zweig: `codex/boss2-heat-flat-fill-device-20261031`
+- Banner: **HITZESPURENTEST: einfache Farbflächen; Reflexion aus**
+- Szenenkennung: `flat-live-scene-original-background-original-boss-no-weapon-canvas-hidden-hull-reflection-unmasked-hull-heat-flat-fill`
+- CRYPTOID_BOSS_HEAT_FLAT_FILL=0 baut als Desktop-Gegenbedingung die ursprünglichen Verläufe mit gleicher entfernten Maske/ausgeblendeten Reflexion. Kein dortiger Kurzlauf soll einen Smartphone-Abbruch oder eine stabile Kontrolle vortäuschen.
+
+Zehn verfügbare lokale Zielprüfungen bestehen. Im vollständigen Checkout bestanden alle **20 Quelltests**, Typ-/Scope-Prüfungen und **vier** Gradienten-/Füllungs-Browserläufe in Chromium/WebKit: [Actions 41209575472](https://github.com/19Trojan69/cryptoid-evolution/actions/runs/41209575472), beide Jobs completed/success. Verglichen wurden tatsächlich sichtbare originale Radialverläufe mit gleichmäßig orange gefüllten Markierungen bei unverändert entfernter Hitzespurenmaske/ausgeblendeter Reflexion. Layout, Originalbild/Hintergrund, Pause/frierende Uhr/manuelles Fortsetzen, synthetische Steuerung, Waffenmenü und normaler Abschluss mit passendem Bericht bestanden. Das ist keine Smartphone-Stabilität und kein nativer Ursachenbeweis.
+
+Neue geschützte Gastvorschau **https://cryptoid-evolution-testnet-g08qa3kwb-19-trojan69.vercel.app/**, Deployment **dpl_85gRbyBYQcAiafJ5ckRxhdfjYani**, READY/Preview/63 s, Quelle f67fd2e4. Standard Protection in Deployment Settings beobachtet, Custom-Domain-Zuweisung Skipped. Originale Geräte-Zweige und Adressen bleiben unverändert; kein öffentliches Release. Noch kein Besitzer-Ergebnis für f67fd2e4. Spätere reine Nachweis-Commits sind nicht der Laufzeitstand.
+
+## Tatsächliche Auslieferungsprüfung des Assistenten
+
+Auf obiger neuer Adresse stimmen Quelle/Baum/Banner und Gastschutz. Fünf sichtbare originale Hotspot-Elemente: innere Hintergrundbilder none, gleichmäßig rgb(255, 121, 40), äußere Deckkraft 0,48/innere 0,72; Formen und Transformationen vorhanden. Hitzespuren sichtbar mit Standard-/WebKit-Maske none, originale Inline-Maske weiter vorhanden. Reflexion display:none/keine Layoutbox. Originales Bossbild geladen, 227 Sterne/vier Planeten, null Spielfeld-Canvas. Manuelle Pause hielt 01:05 fest, ausdrückliches Fortsetzen mit Countdown, normaler Home-/Bestätigungsabschluss.
+
+**01:12 / 72068.89999999478 aktive ms / ended sind nur der Desktop-Cloud-Chromium-Prüflauf des Assistenten**, kein Besitzer-/iPhone-Ergebnis. Kurzbericht passt zur Uhr, Vollaufzeichnung aus/Testschutz an/fullSession:null, 22 Ereignisse/null Verwerfungen/null aufgezeichnete Lücken. Vier begrenzte stalled-Zustandseinträge sind vorhanden; keine Behauptung unterbrechungsfreier Performance. Nach Neuladen bleibt 01:12 sichtbar. Bereinigter Nachweis `evidence/hosted-heat-fill-candidate.json`, Bild `evidence/hosted-preview-ready.jpg`; keine Roh-Sitzungs-/Kontakthistorie in Git. Das ersetzt den neuen Smartphone-Vergleich nicht.
+
+## Nächster Besitzer-Schritt für die tatsächlich neue Füllung
+
+Die oben genannte neue geschützte Adresse mit dem Banner „HITZESPURENTEST: einfache Farbflächen; Reflexion aus“ verwenden; die bestehenden Adressen bleiben unverändert. Auf demselben iPhone/Pi Browser Reaktor offen, Vollaufzeichnung aus, Testschutz an; vorbereiten/öffnen/manuell fortsetzen, möglichst 20 aktive Minuten nur laufen lassen. Normal selbst beenden und Bericht sichern; bei White Screen exakt die neue Adresse erneut öffnen und Bericht vor weiterem Start sichern. Ausgang nicht vorwegnehmen und eine neue Anweisung nicht als bereits durchgeführten Test ausgeben.
+
+Ein normaler Abschluss wäre ein neues begrenztes Besitzer-Ergebnis für die vereinfachte Füllung, kein dauerhafter Fix oder Beweis nativer Gradientenursache. Weitere Bestätigung/gezielte Rückführung nötig, bevor Vollspiel/Übergänge beurteilt werden können. Bei erneutem Abbruch auch diese Änderung als erfolglos festhalten und die gemeinsame Restbedingung gezielt neu begrenzen, bevor weitere Smartphone-Varianten zugewiesen werden. Keine öffentliche Testnet-/Mainnet-Veröffentlichung.
