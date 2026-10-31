@@ -2,7 +2,7 @@
   "version": 1,
   "kind": "private-original-boss-reflection-normal-blend",
   "whiteScreenFixed": false,
-  "physicalDeviceTested": false,
+  "physicalDeviceTested": true,
   "runtime": {
     "source": "18bb097a473d8afa2bbdaa12e1babef5e9ef39cc",
     "tree": "dbb6c12a329bcd3862993a10e4b9811f2dc5c372",
@@ -63,7 +63,8 @@
     "localCoverage": "Eight targeted tests pass in the partial local checkout; full original-source/type/build/browser checks pass in the complete GitHub checkout. No claim of full local app execution.",
     "evidence": "evidence/synthetic-reflection-blend-comparison.json",
     "workflowStatus": "completed",
-    "workflowConclusion": "success"
+    "workflowConclusion": "success",
+    "acceptanceScope": "Source/types/build/short desktop checks passed; latest owner phone run failed. Technical pass is not repair acceptance."
   },
   "deployment": {
     "id": "dpl_7p1HVSDXabuo2WqfwGYUgDofwu4Y",
@@ -84,7 +85,21 @@
     "previewOnly": true,
     "publicReleaseAuthorized": false
   },
-  "newOwnerPhoneResult": null,
+  "newOwnerPhoneResult": {
+    "evidence": "evidence/owner-normal-blend-failure.json",
+    "status": "failed-white-screen-owner-reported",
+    "savedActiveMs": 567442,
+    "displayedTime": "09:27",
+    "savedMode": "running",
+    "retainedEvents": 32,
+    "collectorDrops": 34,
+    "fullRecording": false,
+    "protection": true,
+    "bootAfterActiveSessionRecorded": true,
+    "leftRunningWithoutPlayingReported": null,
+    "nativeMechanismProven": false,
+    "permanentRepairAccepted": false
+  },
   "originalSourceTrees": {
     "api": "ccac7cd576a079771d7d7fe4f0085492ebbe6813",
     "assets": "a9860b12db58a96dafde818d9a58a6ea0e03c5e5",
@@ -96,7 +111,7 @@
   "limits": [
     "Short assistant desktop Chromium/WebKit flows do not establish physical-phone endurance, native failure cause or permanent repair.",
     "Owner 09:20 failure is the preceding screen-blend source ebe70ac8, and 10:56 normal completion is hidden-reflection source 67dabc71; neither is an owner outcome for this candidate.",
-    "The owner reports no active play. One short recorded contact over seven minutes before the checkpoint is not an immediate-touch trigger or a complete independent physical-input history.",
+    "The preceding 09:20 owner report says no active play. The latest 09:27 message says only White Screen; do not transfer the prior play/warmth/browser statements or treat either contact tail as cause.",
     "Earlier masked-heat failure at 08:36 occurred with reflection hidden, so visible reflection or screen blend is not a proven general necessary cause."
   ],
   "hostedCheck": {
@@ -123,5 +138,16 @@
     "failedOriginalMaskedReflection": "e16befbb1251b14b0f2742f8a984c29a00173c41",
     "failedBothMasksRemovedIdleRun": "ebe70ac8ac80ebd8bce3f00273a9182520f51323",
     "newNormalBlendCandidate": "18bb097a473d8afa2bbdaa12e1babef5e9ef39cc"
+  },
+  "comparisonReview": {
+    "evidence": "evidence/comparison-review.json",
+    "decision": "No new CSS variant. First confirm the existing frozen hidden-reflection/unmasked-heat control over a longer idle observation.",
+    "newRuntimeCreated": false,
+    "newDeploymentCreated": false,
+    "newPublicRelease": false,
+    "nextOwnerComparisonSource": "67dabc714907be6d3ae99ccf9ebeab170eb34b06",
+    "nextOwnerComparisonState": "proposed-not-started",
+    "targetActiveMinutes": 20,
+    "newOwnerResult": null
   }
 }

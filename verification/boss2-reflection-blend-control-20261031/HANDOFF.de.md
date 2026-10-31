@@ -1,63 +1,62 @@
-# Fortsetzung – sichtbare Boss-Reflexion mit normaler Überlagerung
+# Fortsetzung nach erneutem White Screen – Blendvergleich gescheitert
 
-Der White Screen ist nicht nachweislich dauerhaft behoben. React/TypeScript/Vite, keine Unity-App. Nur geschützte Gast-Previews; keine öffentliche Testnet-/Mainnet-Veröffentlichung oder Main-Zusammenführung. Echte Spielstände/Konten/Käufe/Ranglisten bleiben geschützt. Allgemeine Untersuchungen und den erfolglosen iOS-/Jetsam-Umweg nicht ohne neuen Anlass wiederholen. Frühere Geräte-Zweige und Adressen bleiben eingefroren.
+**Aktueller Stand:** Auch die Fassung mit normalem Reflexions-Blend scheitert beim Besitzer. Kein White-Screen-Fix ist akzeptiert. Diese Aktualisierung enthält ausschließlich Nachweise, Zielquellprüfung und eine begründete längere Bestätigung der schon existierenden Vergleichsfassung. **Kein neuer Laufzeitstand, Build, Deployment oder öffentlicher Release.**
 
-## Zuletzt tatsächlich abgeschlossener Smartphone-Lauf
+React/TypeScript/Vite, keine Unity-App. Nur geschützte Gastversionen sind freigegeben. Echte Konten/Spielstände/Käufe/Ranglisten bleiben geschützt. Spieltempo, Uhren, Balance, Einfingersteuerung, nur manuelles Fortsetzen und Audio bleiben unverändert. Frühere Geräte-Zweige/Adressen nicht verschieben. Allgemeine Untersuchungen und erfolglosen iOS-/Jetsam-Umweg nicht ohne neuen Anlass wiederholen. Ausgangshandoff bleibt 336eafef12be02f1cf1e0ceb95f26a5c46e8c51d / verification/boss2-boss-heat-control-20261030/HANDOFF.de.md.
 
-Besitzer: **„whitescreen, nur laufen gelassen ohne spielen“**. Bericht `cryptoid-diagnose-2026-10-31T09-35-53-444Z-947aa9be.json`, 4532 Bytes, SHA-256 `65810456b21fec54d2cb48c3ebc7e758a43e7a7f598fc78738d21fb021018452`, gehört exakt zu **ebe70ac8ac80ebd8bce3f00273a9182520f51323 / bd6fd845ad281496f668c151ab6b1cbb3e94f350**. Konfiguration: originale Hitzespuren und Reflexion sichtbar, Standard-/WebKit-Bildmasken beider Ebenen entfernt, Reflexion weiterhin `mix-blend-mode: screen`.
+## Neuester tatsächlich abgeschlossener Besitzer-Test
 
-Letzter gesicherter Stand **09:20 / 560125 aktive ms, running**, null aufgezeichnete Lücken. Uhr und Kurzbericht gehören zusammen; Vollaufzeichnung aus, Testschutz an, fullSession:null. Neues Dokument auf home beginnt 663 ms nach dem laufenden Checkpoint, neuer Boot mit `boot-after-active-session`, vorheriger Sitzungsmarker aktiv/playing. Exakte Absturzsekunde, native Ursache und weiße Bildpunkte werden nicht gemessen. White Screen und Laufenlassen ohne Spielen sind die Besitzerbeobachtung; die Rückkehr/neue home-Seite steht im technischen Bericht und wurde in dieser Nachricht nicht zusätzlich benannt.
+- Besitzer-Nachricht: **„whitescreen“**. Keine zusätzliche Aussage zum Laufenlassen/aktiven Spielen, zur Wärme, zum Browser/Gerät oder zur Rückkehr zur Diagnoseseite in dieser Nachricht. Die frühere Aussage „nur laufen gelassen ohne spielen“ gehört zum vorherigen 09:20-Bericht, nicht automatisch zum neuen Lauf.
+- Bericht: `cryptoid-diagnose-2026-10-31T10-09-31-953Z-e564ba87.json`, **8206 Bytes**, SHA-256 **4cbc5421971de477653ec0566d4f7c92d41dde9df35eed47584d301511a002c6**. Rohbericht nicht in Git.
+- Exakte Zuordnung: **18bb097a473d8afa2bbdaa12e1babef5e9ef39cc**, Baum **dbb6c12a329bcd3862993a10e4b9811f2dc5c372**, Szenenkennung endet auf `-unmasked-hull-heat-unmasked-hull-reflection-normal-blend`.
+- Letzter gesicherter Stand: **09:27 / 567442 aktive ms, running**, null aufgezeichnete Lücken. Uhr/Kurzbericht gehören zusammen. Vollaufzeichnung aus, Testschutz an, fullSession:null, Optionen aus dem laufzugehörigen Kurzbericht.
+- Neues Dokument auf home 562 ms nach dem laufenden Checkpoint, neuer Boot mit `boot-after-active-session`, vorheriger Sitzungsmarker aktiv/playing. Der White Screen ist die Besitzerbeobachtung; neue home-Seite steht im Bericht. Exakte Absturzsekunde und native Ursache werden nicht gemessen.
+- 32 Ereignisse und 34 Verwerfungen/Begrenzungen: keine Absturzanzahl. Zwei Kontakte/Gesten im Ausschnitt; letzter Touchstart bei gespeichertem 08:34 / 514230 ms, 52733 reale ms vor dem letzten Checkpoint. Daraus keinen Berührungsauslöser oder vollständigen physischen Eingabeverlauf ableiten. Browser/Gerät bleiben vorheriger vereinbarter Pi-Browser/iPhone-Kontext, nicht unabhängig gemessen.
+- Bereinigter Nachweis: **evidence/owner-normal-blend-failure.json**. Dieser Smartphone-Test ist abgeschlossen; die frühere Zwölf-Minuten-Anweisung für diese Fassung ist durch den erfolgten Abbruch erledigt.
 
-Sechs Ereignisse, null Verwerfungen/Begrenzungen: Laufstart und eine kurze Ein-Kontakt-Folge bei ungefähr 02:04–02:06. Danach bis zum letzten Checkpoint über sieben Minuten keine weitere aufgezeichnete Eingabe (433126 reale ms zwischen letztem Kontakt und Checkpoint). Ein kurzer Kontakt belegt kein aktives Spielen und keinen zeitnahen Abbruchauslöser. Kein vollständiger unabhängiger physischer Eingabeverlauf oder genereller Ausschluss von Eingabe. Wärme wurde nicht berichtet. Pi Browser/iPhone sind vorheriger vereinbarter Testkontext, nicht neu ausdrücklich bestätigt oder unabhängig gemessen.
+## Eingefrorene fehlgeschlagene Fassung und technische Checks
 
-Bereinigter Nachweis: `../boss2-reflection-mask-control-20261031/evidence/owner-both-masks-idle-failure.json`, Nachweis-Commit **0a2a0d697daaf78bfea9ccecb04d14820e33a612**. Rohbericht nicht in Git. Der zugehörige Geräte-Zweig/Link bleibt ebe70ac8 / i1e80d44e. **Dieser Test ist abgeschlossen; die Anweisung, ihn zwölf Minuten zu prüfen, ist durch den erfolgten Abbruch erledigt.**
+- Geräte-Zweig: `codex/boss2-reflection-blend-device-20261031`, weiterhin 18bb097a.
+- Arbeits-/Nachweiszweig: `codex/boss2-reflection-blend-control-20261031`. Spätere Nachweis-Commits sind nicht die Laufzeitfassung.
+- Adresse: https://cryptoid-evolution-testnet-kuil5zlns-19-trojan69.vercel.app/
+- Banner: **BLENDTEST: Reflexion normal; beide Bildmasken aus**.
+- Gast-Preview dpl_7p1HVSDXabuo2WqfwGYUgDofwu4Y, READY 39 s, Preview, ursprünglicher Standard Protection, Custom-Domain-Zuweisung übersprungen, Git-Autodeployment aus. Nicht neu veröffentlicht oder verändert.
+- Konfiguration: originale Hitzespuren und Reflexion sichtbar, aktive Standard-/WebKit-Bildmasken beider Ebenen entfernt, nur Boss-Reflexions-Blend normal statt screen. Originale Komponenten/Inline-Maskenstile/Bildvorbereitung, Gradient/Licht-Deckkraft/Geometrie, Bossbild/Gesundheit/kleine Trefferexplosionen/Hintergründe/Simulation bleiben. BossWeaponsView ausgeschlossen; frühere Filter-/Reaktor-/Explosions-Canvas-Abschaltungen und sonst vereinfachter Vordergrund bleiben.
+- Actions 41189758667 completed/success, 18 Quell-/Komponentenprüfungen, TypeScript, ursprüngliche Quellbaum-Pins und vier kurze Chromium-/WebKit-Läufe screen/normal bestehen. Natürliche positive Reflexionsimpulse mit normalem Blend wurden in beiden Engines gemessen. Diese technische Prüfung bleibt gültig; der neue Besitzer-Abbruch widerlegt eine daraus abgeleitete Reparaturakzeptanz.
+- Assistenten-Cloud-Chromium endete normal bei **01:26 / 86587,2 ms**; Pause bei 01:10, Bericht/Neuladen bestehen. Ein begrenzter stalled-Zustand, keine FPS-/unterbrechungsfreie Rendering-Aussage. 01:26 gehört allein dem Assistenten, nicht dem Besitzer oder einem Smartphone-Test. Rohe Berichte nicht in Git. Siehe bestehende synthetische/hosted Nachweise in evidence/.
 
-## Zusammenhang der Besitzer-Vergleiche
+## Besitzer-Vergleiche und begrenzte Folgerung
 
-BossWeaponsView bleibt in diesen Bedingungen ausgeschlossen, originale Boss-/Hintergrund-/Spiellogik bleibt, weitere Vordergrundgrafik vereinfacht; bisherige Filter-/Reaktor-/Explosions-Canvas-Kontrollen bleiben. Hitzespuren sind ein grafischer Schadenseffekt, keine Temperaturmessung.
+Alle Bedingungen behalten BossWeaponsView-Ausschluss und übrige vereinfachte Grafik-/Filter-/Reaktor-/Explosions-Canvas-Kontrollen. Hitzespuren sind ein grafischer Schadenseffekt, keine Temperaturmessung.
 
-| Hitzespuren | Reflexion | Letzter gesicherter Stand | Besitzer-Ergebnis |
+| Hitzespuren | Reflexion | Gesicherte Zeit | Besitzer-Ergebnis |
 | --- | --- | --- | --- |
 | original, maskiert | original, maskiert | 08:30 | White Screen |
 | aus | aus | 10:34 | normal selbst beendet |
-| aus | original, maskiert | 10:00 | normal selbst beendet; keine wahrgenommene Erwärmung |
-| original, maskiert | aus | 08:36 | White Screen; Rückkehr; leicht warm beobachtet |
-| original, unmaskiert | aus | 10:56 | normal selbst beendet, Quelle 67dabc71 |
-| original, unmaskiert | original, maskiert | 08:48 | White Screen/Rückkehr, Quelle e16befbb |
-| original, unmaskiert | unmaskiert, screen | 09:20 | White Screen beim Laufenlassen, Quelle ebe70ac8 |
+| aus | original, maskiert | 10:00 | normal selbst beendet, keine wahrgenommene Erwärmung |
+| original, maskiert | aus | 08:36 | White Screen/Rückkehr, leicht warm beobachtet |
+| original, unmaskiert | aus | 10:56 | normal selbst beendet, 67dabc71 |
+| original, unmaskiert | original, maskiert | 08:48 | White Screen/Rückkehr, e16befbb |
+| original, unmaskiert | unmaskiert, screen | 09:20 | White Screen beim Laufenlassen, ebe70ac8 |
+| original, unmaskiert | unmaskiert, normal | 09:27 | White Screen, 18bb097a |
 
-Maskenentfernung allein hat den neuesten Abbruch nicht verhindert. Eine sichtbare Reflexion ist wegen des früheren 08:36-Abbruchs keine bewiesene allgemeine Voraussetzung. Weder alleinige Masken-/Blend-/Reflexionsursache noch Speicher-/GPU-/WebKit-/Cache-/Temperatur-/Berührungsmechanismus sind bewiesen. Die normalen Besitzer-Läufe bleiben gültige Einzelresultate, keine bewiesene Dauerstabilität. Die leichte Wärme gehört ausschließlich zum früheren 08:36-Lauf; nicht auf die neuen Berichte übertragen.
+**Maskenentfernung und normaler Blend haben keinen akzeptierten Fix geliefert.** Eine sichtbare Reflexion ist wegen des früheren 08:36-Abbruchs keine bewiesene allgemeine Voraussetzung. Speicher/GPU/WebKit/Cache/Temperatur/Eingabe oder ein genauer Grafikmechanismus bleiben unbestätigt. Wärme nicht von einem alten Lauf auf andere übertragen. Die einzelnen normalen Enden sind zeitlich begrenzte, vom Besitzer beendete Beobachtungen. 10:56 liegt nur 88876 aktive ms über dem neuesten gesicherten Ausfallstand; diese Differenz allein beweist keine stabile Kontrollbedingung.
 
-## Tatsächlich gebauter nächster Kandidat
+Die gezielte erneute Sichtung der unveränderten Zielquellen zeigt die vorgesehene Boss-Grenze von höchstens acht Hotspots, stabile Boss-Site-Schlüssel, bereits statische Boss-Spuren ohne Cooling/Flicker/Speck, separate kurze Trefferexplosionen. FinishedEffect (Originalblob 1f943eb9114756c4b26a66dd14f9c6883176a37c) verwendet vorhandene native Animations-Ende-Prüfung, keinen neuen Timer/RAF. Kein neuer Beleg für unbegrenzte Listen oder ein natives Speicherleck. Komponenten/Renderberechnung bleiben auch in ausgeblendeten Kontrollen vorhanden; keine Rechen-/Heap-Einsparung durch display:none erfinden. Frühere umfangreiche Cleanup-/Lebensdauer-Prüfungen wurden nicht wiederholt. Statische Quellgrenzen sind kein Nachweis nativer Surface-Freigabe.
 
-Nur **`mix-blend-mode: normal !important`** auf `.diagnostic-flat-scene .sector-boss .hull-reflection` statt der ursprünglichen Screen-Verrechnung. Beide originalen Ebenen bleiben sichtbar und ohne aktive Standard-/WebKit-Bildmasken. Originaler Reflexionsgradient, natürlicher Lichtimpuls/Deckkraft, Display-/Positionskaskade, Geometrie, Hotspots, Inline-Maskenstile, Komponenten und Bildvorbereitung bleiben. Der unmaskierte rechteckige Lichtschein kann unter normaler Überlagerung anders aussehen; das ist eine beabsichtigte private Bestätigungsfassung, keine akzeptierte finale Grafik.
+## Nächster Schritt: bereits vorhandene 10:56-Vergleichsfassung länger bestätigen
 
-BossWeaponsView weiterhin ausgeschlossen; alle bisherigen Filter-/Reaktor-/gewöhnliche Explosions-Canvas-Kontrollen und vereinfachte übrige Vordergrundgrafik bleiben. Originales Bossbild, Gesundheit, kleine Trefferexplosionen, Originalhintergründe und Simulation bleiben. Spieltempo, Spieluhren, Balance, Einfingersteuerung, ausschließlich manuelles Fortsetzen und Audio bleiben unverändert. Keine zusätzlichen Spiel-Timer/Frames oder automatischen Übertragungen. Originale Frontend-/Backend-/API-/Assets-/private-preview-Bäume unverändert.
+**Keine weitere CSS-Variante und kein neuer Link.** Nach den drei gescheiterten Masken-/Blend-Varianten ist jetzt ein längerer vergleichbarer Durchlauf der zuvor einmal normal beendeten Fassung begründet. Das ist eine gezielte Bestätigung einer unsicheren Kontrollbasis, kein Neustart der allgemeinen Untersuchung.
 
-- Neuer Laufzeit-Commit: **18bb097a473d8afa2bbdaa12e1babef5e9ef39cc**
-- Baum: **dbb6c12a329bcd3862993a10e4b9811f2dc5c372**
-- Arbeits-/Nachweiszweig: `codex/boss2-reflection-blend-control-20261031`
-- Fester Geräte-Zweig: `codex/boss2-reflection-blend-device-20261031`
-- Banner: **BLENDTEST: Reflexion normal; beide Bildmasken aus**
-- Szenenkennung: `flat-live-scene-original-background-original-boss-no-weapon-canvas-unmasked-hull-heat-unmasked-hull-reflection-normal-blend`
-- Gegenbedingung `CRYPTOID_REFLECTION_NORMAL_BLEND=0`: bisherige sichtbare/unmaskierte Screen-Fassung; keine Wiederholung eines Besitzer-Laufs und keine Behauptung, dessen White Screen auf Desktop reproduziert zu haben.
+- Unveränderter Commit: **67dabc714907be6d3ae99ccf9ebeab170eb34b06**, Baum **72de7664d3ef9dcd21ddd407b081bb647885f4f7**.
+- Fester Geräte-Zweig: `codex/boss2-boss-heat-unmasked-device-20261030`.
+- **Dieselbe frühere Adresse:** https://cryptoid-evolution-testnet-7j8dw88r8-19-trojan69.vercel.app/
+- Banner: **MASKENKANDIDAT: Boss-Hitzespuren an; ohne Bildmaske**.
+- Originale Hitzespuren sichtbar/unmaskiert, Boss-Reflexion aus. Komponenten/Inline-Masken/Bildvorbereitung und alle bisherigen übrigen Bedingungen bleiben.
+- Adresse/Quellstand/Baum/Kennzeichnung und Gastisolation erneut nur lesend geprüft; Backend/Käufe aus. Kein Spiel gestartet, kein neuer Assistenten-Durchlauf oder Telefon-Ergebnis daraus abgeleitet.
+- Auf demselben iPhone im Pi Browser Reaktor offen, Vollaufzeichnung aus, Testschutz an; vorbereiten/öffnen/manuell fortsetzen und möglichst **20 aktive Minuten nur laufen lassen**. Dann normal selbst aussteigen und Bericht sichern. Bei White Screen exakt diese Adresse wieder öffnen und Bericht vor weiterem Start sichern.
+- Zustand dieses längeren Vergleichs: **vorgeschlagen, noch nicht gestartet/berichtet**. Keine Dauerstabilität vorwegnehmen.
 
-Actions **41189758667** ist completed/success: 18 Quell-/Komponentenprüfungen, vollständige ursprüngliche Quellbaum-Pins, TypeScript und vier Browserläufe screen/normal jeweils Chromium/WebKit bestehen. Jobs 124503926120 (WebKit), 124503926250 (Chromium). Beide Engines messen natürliche Reflexionsimpulse mit positiver Deckkraft unter normaler Überlagerung, beide Maskenpaare bleiben none; Gradient/Geometrie/Hotspots bleiben. Synchroner QA-Kaskadenvergleich ändert außer Blend keine abgefragten Reflexionseigenschaften und stellt den genauen Inline-Stil wieder her. Zunächst mindestens 20 aktive Sekunden vor synthetischer Steuerung, Pause/stehende Uhr/manuelles Fortsetzen/Waffenmenü/normaler Ausstieg und zugeordneter Endbericht bestehen. Acht lokal verfügbare Zielprüfungen bestehen; vollständige App-/TypeScript-Prüfung erfolgte an der vollständigen GitHub-Kopie, nicht an der lokalen Teilkopie. Keine Smartphone-Stabilität aus diesen kurzen Desktop-Läufen ableiten.
+Falls auch diese unveränderte Fassung abbricht, die behauptete Stabilität/Korrelation entsprechend zurücknehmen und den gemeinsamen Rest gezielt neu begrenzen. Keine weitere Masken-/Blend-Variation auf einer unbestätigten Basis. Falls sie 20 Minuten normal endet, ist diese Bedingung besser gestützt, aber weiterhin kein permanenter Fix oder native Ursachenklärung; danach die weitere private Reparatur/Rückführung gezielt planen. Keine öffentliche Testnet-/Mainnet-Veröffentlichung aus einem einzelnen Durchlauf.
 
-## Nächster Besitzer-Vergleich nach technischer Auslieferungsprüfung
-
-Für 18bb097a liegt noch kein Besitzer-Ergebnis vor. Die neue Fassung anschließend möglichst unter derselben gemeldeten Bedingung vergleichen: im Pi Browser auf demselben iPhone nur laufen lassen, Reaktor offen, Vollaufzeichnung aus, Testschutz an; vorbereiten/öffnen/manuell fortsetzen. Möglichst etwa zwölf aktive Minuten, dann normal selbst beenden und letzten Bericht sichern. Bei White Screen dieselbe neue Adresse erneut öffnen und Bericht vor einem weiteren Start sichern. Ausgang nicht unterstellen. Keine künstliche Änderung der Eingabesperren, Spieluhren, Pausen oder des Audios.
-
-Ein normaler Abschluss verlangt weitere Bestätigung und später getrennte Rückführung der bisherigen Grafikvereinfachungen; noch kein öffentlicher Release oder dauerhafter Fix. Bei erneutem Abbruch den Blendvergleich als ebenfalls erfolglos festhalten und die verbleibende Wechselwirkung anhand der gesammelten Nachweise neu begrenzen, bevor weitere Telefon-Vergleiche zugewiesen werden. Keine weitere hypothetische Fassung als schon gebaut/getestet ausgeben.
-
-
-Geschützte Preview **dpl_7p1HVSDXabuo2WqfwGYUgDofwu4Y**, READY in 39 s, Preview, Quelle 18bb097, Custom-Domain-Zuweisung übersprungen, Standard Protection nach Fertigstellung beobachtet und unverändert. Adresse: https://cryptoid-evolution-testnet-kuil5zlns-19-trojan69.vercel.app/ . Spätere Nachweis-Commits sind nicht der Laufzeitstand.
-
-
-## Prüfung der tatsächlich ausgelieferten Vorschau abgeschlossen
-
-Zusätzlicher Cloud-Chromium-Lauf des Assistenten: normal beendet bei **01:26 / 86587,2 aktive ms**. Bei 01:04 waren fünf originale Hotspots sichtbar, beide Boss-Ebenen vorhanden, alle vier aktiven Standard-/WebKit-Maskenwerte `none`, Reflexions-Blend **normal**, ursprünglicher linearer Gradient und Inline-Maskenstile erhalten. Originales Bossbild bereit, 227 Sternkreise/vier Planeten, null Canvas im Spielfeld. Die einzelne ausgelieferte Deckkraft-Abtastung war null; positive ursprüngliche Lichtimpulse mit normalem Blend sind separat in beiden CI-Engines gemessen, nicht als in dieser einzelnen Abtastung gesehen ausgegeben.
-
-Manuelle Pause bei 01:10 blieb stehen; ausschließlich explizites Fortsetzen, Home/Bestätigung/Ende, zum Quellstand/Baum/Szene passender Kurzbericht und Zeitwiederherstellung nach Neuladen bestehen. Vollaufzeichnung aus, Testschutz an, fullSession:null, Uhr/Kurzbericht passen. Ein begrenzter `stalled`-Zustand bleibt dokumentiert; keine FPS-/unterbrechungsfreie-Rendering-Aussage. In diesem kurzen UI-Ablauf kein White Screen/unerwarteter technischer Pausenbildschirm beobachtet. **01:26 gehört ausschließlich dem Assistenten, nicht dem Besitzer und nicht einem Smartphone-Stabilitätsnachweis.**
-
-Nachweise: `results.json`, `evidence/synthetic-reflection-blend-comparison.json`, `evidence/hosted-reflection-blend-candidate.json`, `evidence/hosted-preview-ready.jpg`. Rohe Besitzer-/Desktopberichte sind nicht ins Repository übertragen. `node verification/boss2-reflection-blend-control-20261031/verifyEvidence.mjs` und die lokale Paarung des neuen Besitzer-Rohberichts mit dem vorherigen Nachweis bestehen. Der neue Link ist nach tatsächlicher geprüfter Änderung bereit; **noch kein Besitzer-/Smartphone-Ergebnis für 18bb097a**. Geräte-Zweig und Adresse einfrieren; spätere reine Nachweis-Commits auf dem Arbeitszweig nicht als Laufzeitstand ausgeben. Main ce073547 und alle genannten bisherigen Geräte-Zweige wurden unverändert abgeglichen.
+Maschinenlesbare Bilanz: **evidence/comparison-review.json**. Konsistenz einschließlich optionaler lokaler Rohbericht-Paarung: `node verification/boss2-reflection-blend-control-20261031/verifyEvidence.mjs <lokaler-Rohberichtpfad>`. Alle alten Geräte-Zweige/Adressen, Main und öffentliche Versionen bleiben unverändert.
