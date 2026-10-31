@@ -2,8 +2,29 @@
   "version": 1,
   "kind": "protected-boss-static-hotspot-children-comparison",
   "whiteScreenFixed": false,
-  "physicalDeviceTested": false,
-  "newOwnerPhoneResult": null,
+  "physicalDeviceTested": true,
+  "newOwnerPhoneResult": {
+    "evidence": "evidence/owner-static-hotspots-failure.json",
+    "status": "failed-white-screen-owner-reported",
+    "ownerWhiteScreenReported": true,
+    "runtimeSourceVerified": true,
+    "runtimeSource": "290113362eea446aa9d4171aaaddd7220e3bf646",
+    "runtimeTree": "6acb9cff2dd908f0532cd986319f0965a46b5da0",
+    "savedActiveMs": 900561,
+    "displayedTime": "15:00",
+    "savedMode": "running",
+    "recordedGaps": 0,
+    "fullRecording": false,
+    "protection": true,
+    "retainedEvents": 32,
+    "collectorDrops": 26,
+    "bootAfterActiveSessionRecorded": true,
+    "newDocumentAfterCheckpointMs": 843,
+    "lastRecordedContactToCheckpointWallMs": 81524,
+    "normalEndRecorded": false,
+    "nativeMechanismProven": false,
+    "permanentRepairAccepted": false
+  },
   "runtime": {
     "source": "290113362eea446aa9d4171aaaddd7220e3bf646",
     "tree": "6acb9cff2dd908f0532cd986319f0965a46b5da0",
@@ -107,7 +128,7 @@
   "limits": [
     "Omitting static hotspot children differs from earlier CSS display:none. The original component/mask shell and simulation arrays remain; this is not removal of all boss effects or all image preparation.",
     "No native cause, memory leak, thermal/cache/input/GPU/WebKit mechanism or smartphone stability gain is established. A desktop control is not a phone-crash reproduction.",
-    "No owner result exists for this candidate. A later normal phone end is a bounded result, not a permanent repair or authorization for public release."
+    "Owner now reports White Screen on this matched static-hotspot-off build at last saved 15:00/running. Longer time alone proves no stability gain or native cause. No permanent repair/public release accepted."
   ],
   "hostedCheck": {
     "status": "passed-with-limits",
@@ -123,5 +144,7 @@
     "stalledStateEntries": 1,
     "uninterruptedPerformanceClaimed": false,
     "ownerResult": false
-  }
+  },
+  "currentStatus": "Owner White Screen with static boss hotspot children omitted: matched 15:00 / 900561 active ms / running, then new home document 843ms later. No accepted fix.",
+  "nextOwnerAction": "No unchanged repeat pending. First inspect and verify usage of retained boss mini-explosion completion/native-animation inspection path before assigning another private phone comparison."
 }
