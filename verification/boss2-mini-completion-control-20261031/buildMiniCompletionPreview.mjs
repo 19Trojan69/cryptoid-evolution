@@ -16,7 +16,7 @@ const ip=out+'/device-preview-info.json',info=JSON.parse(readFileSync(ip,'utf8')
 info.bossMiniCompletionControl={version:1,enabled,label,originalFinishedEffectBlob,failedOwnerSource:'290113362eea446aa9d4171aaaddd7220e3bf646',failedOwnerSavedActiveMs:900561,
   change:'Boss mini only: return from completion handler before native getAnimations; use existing parent-owned fallback lifetime',
   originalFinishedEffectComponentHookAndHandlerRetained:true,originalMiniMarkupCssSparksDurationsRetained:true,otherEffectsNativeInspectionRetained:true,
-  nativeInspectionSkippedOnlyForBossMini:enabled,earlyFinishedDomRemovalSkippedOnlyForBossMini:enabled,invisibleMiniMayRemainUntilParentUpdate:enabled,
+  nativeInspectionSkippedOnlyForBossMini:enabled,animationStartNativeDiscoveryRemains:true,notAllNativeQueriesRemoved:true,earlyFinishedDomRemovalSkippedOnlyForBossMini:enabled,invisibleMiniMayRemainUntilParentUpdate:enabled,
   oneLatestKeyedBossMiniAtMost:true,simulationBossHitAndHullFireArraysUnchanged:true,staticBossHotspotsStillOmitted:true,heatMaskStillNone:true,reflectionStillHidden:true,
   originalBossImageHealthBackgroundPreparationRetained:true,bossWeaponsViewStillExcluded:true,previousFilterReactorExplosionCanvasControlsRetained:true,
   sourceGameFilesChanged:false,buildOnlyFinishedEffectGuard:enabled,gameplayChanged:false,simulationClocksChanged:false,inputChanged:false,audioChanged:false,

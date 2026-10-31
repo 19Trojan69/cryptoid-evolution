@@ -71,22 +71,36 @@ try {
   });
   if (miniCompletionComparison) await context.addInitScript(() => {
     // QA-only bounded native-call proof, never part of the delivered build.
-    const proof = { supported:typeof Element.prototype.getAnimations === 'function', nativeCalls:0, endEvents:0, observedPeakBossMini:0 };
+    const proof = { supported:typeof Element.prototype.getAnimations === 'function', nativeCalls:0,
+      nativeCallsAtStart:0, nativeCallsAtEnd:0, nativeCallsOutsideEvents:0, startEvents:0, endEvents:0,
+      observedPeakBossMini:0, eventPhase:'none' };
     Object.defineProperty(window,'__miniCompletionProof',{value:proof});
     const original = Element.prototype.getAnimations;
     if (proof.supported) Element.prototype.getAnimations = function(options) {
-      if (this.classList.contains('hull-mini-explosion') && this.closest('.sector-boss')) proof.nativeCalls++;
+      if (this.classList.contains('hull-mini-explosion') && this.closest('.sector-boss')) {
+        proof.nativeCalls++;
+        if(proof.eventPhase==='start')proof.nativeCallsAtStart++;
+        else if(proof.eventPhase==='end')proof.nativeCallsAtEnd++;
+        else proof.nativeCallsOutsideEvents++;
+      }
       return original.call(this,options);
     };
-    document.addEventListener('animationend',event => {
-      const target=event.target;
-      if (!(target instanceof Element)) return;
-      const mini=target.closest('.hull-mini-explosion');
-      if (mini?.closest('.sector-boss')) {
-        proof.endEvents++;
-        proof.observedPeakBossMini=Math.max(proof.observedPeakBossMini,document.querySelectorAll('.sector-boss .hull-mini-explosion').length);
-      }
-    },{capture:true,passive:true});
+    // Remember the original event scope even if React removes the finished node
+    // before document bubbling. No event/node history is retained after dispatch.
+    const priorPhases=new WeakMap();
+    const begin=event=>{
+      const target=event.target;if(!(target instanceof Element))return;
+      const mini=target.closest('.hull-mini-explosion');if(!mini?.closest('.sector-boss'))return;
+      priorPhases.set(event,proof.eventPhase);
+      proof.eventPhase=event.type==='animationend'?'end':'start';
+      if(proof.eventPhase==='end')proof.endEvents++;else proof.startEvents++;
+      proof.observedPeakBossMini=Math.max(proof.observedPeakBossMini,document.querySelectorAll('.sector-boss .hull-mini-explosion').length);
+    };
+    const finish=event=>{if(priorPhases.has(event)){proof.eventPhase=priorPhases.get(event);priorPhases.delete(event);}};
+    for(const type of ['animationstart','animationend']) {
+      document.addEventListener(type,begin,{capture:true,passive:true});
+      document.addEventListener(type,finish,{passive:true});
+    }
   });
   page = await context.newPage(); page.setDefaultTimeout(25000);
   page.on('pageerror', e => { fatal ||= 'javascript-error: ' + e.message; });
@@ -183,8 +197,12 @@ try {
     assert.equal(result.miniCompletionProof.supported,true);
     assert.ok(result.miniCompletionProof.endEvents>=3);
     assert.equal(result.miniCompletionProof.observedPeakBossMini,1);
-    if(miniCompletionOff) assert.equal(result.miniCompletionProof.nativeCalls,0);
-    else assert.ok(result.miniCompletionProof.nativeCalls>0,'Control must actually invoke native boss-mini completion inspection');
+    assert.equal(result.miniCompletionProof.eventPhase,'none');
+    assert.ok(result.miniCompletionProof.startEvents>0);
+    assert.ok(result.miniCompletionProof.nativeCallsAtStart>0,'Original animation-start frame pacing must remain active');
+    assert.equal(result.miniCompletionProof.nativeCalls,result.miniCompletionProof.nativeCallsAtStart+result.miniCompletionProof.nativeCallsAtEnd+result.miniCompletionProof.nativeCallsOutsideEvents);
+    if(miniCompletionOff) assert.equal(result.miniCompletionProof.nativeCallsAtEnd,0);
+    else assert.ok(result.miniCompletionProof.nativeCallsAtEnd>0,'Control must actually invoke native boss-mini completion inspection during animationend');
     result.qaNativeProbeOnlyInTestContext = true;
   }
   if (reflectionOn) {
