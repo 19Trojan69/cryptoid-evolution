@@ -17,11 +17,12 @@ export const bossHullHeatRestored = () => bossHeatComparisonEnabled() && process
 export const bossHullHeatUnmasked = () => bossHullHeatRestored() && process.env.CRYPTOID_BOSS_HEAT_UNMASKED === '1';
 export const bossUnmaskedHeatReflectionRestored = () => bossHullHeatUnmasked() && process.env.CRYPTOID_UNMASKED_HEAT_REFLECTION === '1';
 export const bossHullReflectionUnmasked = () => bossUnmaskedHeatReflectionRestored() && process.env.CRYPTOID_REFLECTION_IMAGE_MASK_OFF === '1';
+export const bossHullReflectionNormalBlend = () => bossHullReflectionUnmasked() && process.env.CRYPTOID_REFLECTION_NORMAL_BLEND === '1';
 export const diagnosticSceneName = () => !flatSceneEnabled() ? 'original-artwork'
   : bossHeatComparisonEnabled() ? bossHullHeatRestored()
     ? (bossUnmaskedHeatReflectionRestored()
       ? (bossHullReflectionUnmasked()
-        ? 'flat-live-scene-original-background-original-boss-no-weapon-canvas-unmasked-hull-heat-unmasked-hull-reflection'
+        ? 'flat-live-scene-original-background-original-boss-no-weapon-canvas-unmasked-hull-heat-unmasked-hull-reflection' + (bossHullReflectionNormalBlend() ? '-normal-blend' : '')
         : 'flat-live-scene-original-background-original-boss-no-weapon-canvas-unmasked-hull-heat-restored-hull-reflection')
       : 'flat-live-scene-original-background-original-boss-no-weapon-canvas-hidden-hull-reflection' + (bossHullHeatUnmasked() ? '-unmasked-hull-heat' : ''))
     : 'flat-live-scene-original-background-original-boss-no-weapon-canvas-hidden-hull-masks'
