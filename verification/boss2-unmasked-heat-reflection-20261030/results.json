@@ -2,7 +2,7 @@
   "version": 1,
   "kind": "private-original-reflection-with-unmasked-heat-comparison",
   "whiteScreenFixed": false,
-  "physicalDeviceTested": false,
+  "physicalDeviceTested": true,
   "runtime": {
     "source": "e16befbb1251b14b0f2742f8a984c29a00173c41",
     "tree": "b09af3b2dec4f19e17e37485759b19fda79fb6f5",
@@ -68,12 +68,27 @@
     "gitAutomaticDeploymentEnabled": false,
     "protection": "Standard Protection (deployment settings observed after READY; not changed)"
   },
-  "newOwnerPhoneResult": null,
+  "newOwnerPhoneResult": {
+    "evidence": "evidence/owner-reflection-restoration-failure.json",
+    "status": "failed-white-screen-owner-reported",
+    "savedActiveMs": 528993,
+    "displayedTime": "08:48",
+    "savedMode": "running",
+    "whiteScreenReported": true,
+    "returnToDiagnosticPageReported": true,
+    "normalExitReported": false,
+    "fullRecording": false,
+    "protection": true,
+    "bootAfterActiveSessionRecorded": true,
+    "nativeMechanismProven": false,
+    "permanentRepairAccepted": false
+  },
   "publicMainSource": "ce073547cf573375d141bf846f70e294138dbd73",
   "limits": [
     "Short assistant desktop flows do not establish physical iPhone/Pi Browser endurance or native cause.",
     "Original heat image-mask removal still allows changed clipping at transparent hull edges.",
-    "The preceding owner 10:56 completion is the hidden-reflection baseline, not a result for this new reflection-restored source."
+    "The preceding owner 10:56 completion is the hidden-reflection baseline, not a result for this new reflection-restored source.",
+    "New owner report failed at last saved 08:48 with running checkpoint and a new home document. Heat mask removal alone is not an accepted repair for restored-reflection condition."
   ],
   "hostedCheck": {
     "receipt": "evidence/hosted-reflection-candidate.json",
@@ -95,5 +110,13 @@
     "precedingSuccessfulRuntime": "67dabc714907be6d3ae99ccf9ebeab170eb34b06",
     "newFrozenDeviceBranch": "codex/boss2-unmasked-heat-reflection-device-20261030",
     "newFrozenRuntime": "e16befbb1251b14b0f2742f8a984c29a00173c41"
+  },
+  "afterOwnerReport": {
+    "evidenceOnly": true,
+    "newRuntimeCreatedByThisUpdate": false,
+    "newDeploymentCreatedByThisUpdate": false,
+    "newPhoneTestAssignedByThisUpdate": false,
+    "preserveFrozenSourcesAndAddresses": true,
+    "publicReleaseAuthorized": false
   }
 }

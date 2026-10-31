@@ -1,10 +1,11 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 const read = path => JSON.parse(readFileSync(new URL(path, import.meta.url), 'utf8'));
 const results = read('./results.json');
 assert.equal(results.runtime.source, 'e16befbb1251b14b0f2742f8a984c29a00173c41');
 assert.equal(results.runtime.tree, 'b09af3b2dec4f19e17e37485759b19fda79fb6f5');
-assert.equal(results.whiteScreenFixed, false); assert.equal(results.physicalDeviceTested, false);
+assert.equal(results.whiteScreenFixed, false); assert.equal(results.physicalDeviceTested, true);
 assert.equal(results.verification.runId, 41100206610); assert.equal(results.verification.status, 'passed');
 assert.equal(results.verification.sourceComponentTests, 14);
 const evidence = read('./evidence/synthetic-reflection-comparison.json');
@@ -50,5 +51,44 @@ if (results.hostedCheck) {
   assert.equal(hosted.stalledStateEntries, 3); assert.equal(hosted.displayedTime, '01:11');
   assert.equal(hosted.normalExit, true); assert.equal(hosted.pairedReport, true);
 }
+const failedOwner = read('./evidence/owner-reflection-restoration-failure.json');
+assert.equal(failedOwner.runtimeSource, results.runtime.source); assert.equal(failedOwner.runtimeTree, results.runtime.tree);
+assert.equal(failedOwner.savedActiveMs, 528993); assert.equal(failedOwner.displayedTime, '08:48');
+assert.equal(failedOwner.savedMode, 'running'); assert.equal(failedOwner.unobservedGaps, 0);
+assert.equal(failedOwner.clockAndBriefRunMatch, true); assert.equal(failedOwner.fullRecording, false);
+assert.equal(failedOwner.protection, true); assert.equal(failedOwner.fullSession, null);
+assert.equal(failedOwner.retainedEvents, 32); assert.equal(failedOwner.collectorDrops, 41);
+assert.equal(failedOwner.newHomeDocumentAfterRunningCheckpoint, true); assert.equal(failedOwner.newDocumentAfterLastCheckpointMs, 1021);
+assert.equal(failedOwner.bootAfterActiveSessionRecorded, true); assert.equal(failedOwner.lastSessionActive, true);
+assert.equal(failedOwner.configuredReflectionVisibleWithOriginalImageMask, true);
+assert.equal(failedOwner.configuredActiveHeatImageMaskRemoved, true);
+assert.equal(failedOwner.ownerObservation.whiteScreenReported, true);
+assert.equal(failedOwner.ownerObservation.returnToDiagnosticPageReported, true);
+assert.equal(failedOwner.ownerObservation.normalExitReported, false);
+assert.equal(failedOwner.ownerObservation.deviceWarmthReported, null);
+assert.equal(failedOwner.nativeTerminationCauseMeasured, false); assert.equal(failedOwner.exactCrashTimeMeasured, false);
+assert.equal(failedOwner.rawOwnerReportCommitted, false); assert.equal(failedOwner.whiteScreenFixed, false);
+assert.equal(results.newOwnerPhoneResult.status, 'failed-white-screen-owner-reported');
+assert.equal(results.newOwnerPhoneResult.savedActiveMs, failedOwner.savedActiveMs);
+assert.equal(results.newOwnerPhoneResult.permanentRepairAccepted, false);
+if (process.argv[2]) {
+  // Optional local-only comparison to the supplied raw report. Never write it to Git.
+  const bytes = readFileSync(process.argv[2]), raw = JSON.parse(bytes);
+  assert.equal(bytes.length, failedOwner.reportBytes);
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), failedOwner.reportSha256);
+  assert.equal(raw.source.sourceCommit, failedOwner.runtimeSource); assert.equal(raw.source.sourceTree, failedOwner.runtimeTree);
+  assert.equal(raw.source.diagnosticScene, failedOwner.configuredTreatment);
+  const clock = raw.stopwatch.latest, brief = raw.briefDiagnostics.latest, ret = raw.returnEvidence;
+  assert.deepEqual(clock, brief.clock); assert.equal(raw.briefMatchesLatestStopwatch, true);
+  assert.equal(clock.elapsedMs, failedOwner.savedActiveMs); assert.equal(clock.mode, failedOwner.savedMode);
+  assert.equal(clock.unobservedGaps, failedOwner.unobservedGaps);
+  assert.equal(brief.options.fullRecording, failedOwner.fullRecording); assert.equal(brief.options.protection, failedOwner.protection);
+  assert.equal(raw.fullSession, null); assert.equal(brief.events.length, failedOwner.retainedEvents);
+  assert.equal(brief.dropped, failedOwner.collectorDrops);
+  assert.equal(ret.activeDocument.route, 'home');
+  assert.equal(ret.activeDocument.startedAt - clock.updatedAt, failedOwner.newDocumentAfterLastCheckpointMs);
+  assert.equal(ret.lastSession.active, true); assert.equal(ret.lastSession.context.status, 'playing');
+  assert.ok(ret.reloadTrace.events.some(e => e.kind === 'boot-after-active-session' && e.at > clock.updatedAt && e.route === 'home'));
+}
 console.log('CRYPTOID_UNMASKED_REFLECTION_EVIDENCE ' + JSON.stringify({ passed: true, source: results.runtime.source,
-  desktopFlows: 4, newOwnerPhoneResult: 'not-tested', whiteScreenFixed: false }));
+  desktopFlows: 4, newOwnerPhoneResult: 'failed-white-screen-owner-reported', savedOwnerTime: '08:48', whiteScreenFixed: false }));

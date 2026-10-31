@@ -1,6 +1,6 @@
 # Fortsetzungsstand – originale Reflexion mit Hitzespuren ohne Bildmaske
 
-Der bisherige White Screen ist weiterhin nicht dauerhaft nachweislich behoben. Die allgemeine Untersuchung und der erfolglose iOS-/Jetsam-Umweg werden nicht neu begonnen. Der nächste Vergleich baut auf dem tatsächlich abgeschlossenen Besitzer-Test auf.
+Der bisherige White Screen ist weiterhin nicht dauerhaft nachweislich behoben. Die allgemeine Untersuchung und der erfolglose iOS-/Jetsam-Umweg werden nicht neu begonnen. Der neue Reflexionsvergleich ist inzwischen ebenfalls als Besitzer-Abbruch abgeschlossen.
 
 ## Besitzer-Basis unverändert
 
@@ -37,8 +37,19 @@ In 18 einzelnen ausgelieferten DOM-Abtastungen wurde kein positiver kurzer Refle
 
 Nachweise: `results.json`, `evidence/synthetic-reflection-comparison.json`, `evidence/hosted-reflection-candidate.json`, `evidence/hosted-preview-ready.jpg`. Konsistenz: `node verification/boss2-unmasked-heat-reflection-20261030/verifyEvidence.mjs` besteht. Main bleibt ce073547; der erfolgreiche Geräte-Zweig bleibt 67dabc71; der neue Geräte-Zweig zeigt unverändert auf e16befbb. Originale Frontend-/Backend-/API-/Assets-/private-preview-Bäume sind unverändert.
 
-## Nächster Geräte-Schritt
+## Ursprünglich bereitgestellter Geräte-Schritt (inzwischen abgeschlossen)
 
-**Für diese neue Reflexion-an-Bedingung liegt noch kein Besitzer-/Smartphone-Ergebnis vor.** Die geprüfte geschützte Vorschau kann nun im Pi Browser auf demselben iPhone verglichen werden: gleiche Reaktor-Szene, Vollaufzeichnung aus, Testschutz an, vorbereiten/öffnen/manuell fortsetzen; etwa zwölf aktive Minuten sind ein sinnvoller nächster Vergleich zum vorherigen normalen 10:56-Ende. Danach normal selbst aussteigen und den letzten Bericht sichern. Bei White Screen dieselbe neue Adresse erneut öffnen und den Bericht vor einem weiteren Start sichern. Ergebnis und auffällige Erwärmung nur als Beobachtung berichten, keine Ursache vorwegnehmen.
+**Historischer Auslieferungsstand vor dem neuen Bericht:** Für die Reflexion-an-Bedingung lag damals noch kein Besitzer-Ergebnis vor. Die geprüfte geschützte Vorschau kann nun im Pi Browser auf demselben iPhone verglichen werden: gleiche Reaktor-Szene, Vollaufzeichnung aus, Testschutz an, vorbereiten/öffnen/manuell fortsetzen; etwa zwölf aktive Minuten sind ein sinnvoller nächster Vergleich zum vorherigen normalen 10:56-Ende. Danach normal selbst aussteigen und den letzten Bericht sichern. Bei White Screen dieselbe neue Adresse erneut öffnen und den Bericht vor einem weiteren Start sichern. Ergebnis und auffällige Erwärmung nur als Beobachtung berichten, keine Ursache vorwegnehmen.
 
 Bei erneut normalem Abschluss zuerst die verbleibenden ursprünglichen Grafikebenen einzeln zurückführen; anschließend das vollständige Spiel und seine Übergänge prüfen. Bei erneutem Abbruch die neue Wechselwirkung mit der wieder sichtbaren Reflexion anhand genau dieses Berichts eingrenzen. Aus einem einzelnen Ergebnis keine öffentliche Freigabe, Überhitzungs-/Speicher-/GPU-/Eingabeursache oder dauerhafte Behebung ableiten.
+
+
+## Neuester Besitzer-Bericht – 31. Oktober 2026
+
+Der Besitzer meldet „wieder mit whitescreen beendet und auf diagnose seite“. Der Bericht `cryptoid-diagnose-2026-10-31T09-01-16-301Z-9af2b5e4.json` passt exakt zu **e16befbb / b09af3b2 / Reflexion sichtbar, Hitzespuren ohne Bildmaske**. Letzter gesicherter Stand: **08:48 / 528993 aktive ms, running**, null aufgezeichnete Lücken. Kurzbericht und Uhr stimmen überein, Vollaufzeichnung aus, Testschutz an, fullSession:null. Ein neues Dokument auf home beginnt 1021 ms nach dem laufenden Checkpoint; Boot danach mit `boot-after-active-session`, vorheriger Sitzungsmarker aktiv/playing. Der tatsächliche White Screen ist die Besitzerbeobachtung; exakte Absturzsekunde und native Ursache werden nicht gemessen.
+
+32 erhaltene Ereignisse und 41 Verwerfungen/Begrenzungen sind keine Absturzanzahl. Der letzte Touchstart/Ein-Kontakt-Ausschnitt beweist keinen Berührungsauslöser oder eine vollständige Eingabegeschichte. Pi Browser/iPhone sind der vorherige vereinbarte Testkontext, in dieser neuen Nachricht nicht erneut ausdrücklich benannt und im Bericht nicht unabhängig gemessen. Wärme wurde nicht beschrieben. Bereinigter Nachweis: `evidence/owner-reflection-restoration-failure.json`; Rohbericht nicht in Git.
+
+Die Hitzespurenmasken-Entfernung allein ist damit für wieder sichtbare originale Reflexion kein akzeptierter Fix. Der normale 10:56-Lauf ohne sichtbare Reflexion bleibt gültig und eingefroren. Die Werte beweisen keine alleinige Reflexions-/Masken-/Blend-/Speicher-/GPU-/Temperatur- oder Eingabeursache. Die originale Reflexion besitzt weiterhin dieselbe Rumpf-Bildmaske plus `mix-blend-mode: screen`; gezielter nächster Kandidat ist deshalb die Entfernung **nur dieser verbleibenden Reflexions-Bildmaske**, während beide ursprünglichen Ebenen sichtbar und beide Hitzespurenmasken entfernt bleiben. Der natürliche Lichtimpuls/Gradient/Blendmodus und alle übrigen Kontrollen sollen unverändert bleiben. Das kann bei einem privaten Vergleich einen rechteckig begrenzten Reflexionsimpuls statt der Rumpfkontur ergeben; keinen fertigen Grafik-Fix vortäuschen.
+
+**Dieser neue Smartphone-Test ist abgeschlossen.** Diese Nachweis-Aktualisierung erzeugt selbst keinen neuen Laufzeitstand oder Link und beauftragt keinen wiederholten Test. Einen nächsten Link erst nach tatsächlicher, geprüfter Änderung bereitstellen. Bestehende Geräte-Zweige und Adressen bleiben unverändert; nur geschützte Gast-Previews, keine öffentliche Testnet-/Mainnet-Veröffentlichung.
