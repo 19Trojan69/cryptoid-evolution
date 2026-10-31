@@ -2,7 +2,7 @@
   "version": 1,
   "kind": "private-original-reflection-image-mask-removal",
   "whiteScreenFixed": false,
-  "physicalDeviceTested": false,
+  "physicalDeviceTested": true,
   "runtime": {
     "source": "ebe70ac8ac80ebd8bce3f00273a9182520f51323",
     "tree": "bd6fd845ad281496f668c151ab6b1cbb3e94f350",
@@ -80,7 +80,20 @@
     "previewOnly": true,
     "publicReleaseAuthorized": false
   },
-  "newOwnerPhoneResult": null,
+  "newOwnerPhoneResult": {
+    "evidence": "evidence/owner-both-masks-idle-failure.json",
+    "status": "failed-white-screen-owner-reported",
+    "leftRunningWithoutPlayingReported": true,
+    "savedActiveMs": 560125,
+    "displayedTime": "09:20",
+    "savedMode": "running",
+    "retainedEvents": 6,
+    "collectorDrops": 0,
+    "lastRecordedContactToLatestCheckpointWallMs": 433126,
+    "bootAfterActiveSessionRecorded": true,
+    "nativeMechanismProven": false,
+    "permanentRepairAccepted": false
+  },
   "publicMainSource": "ce073547cf573375d141bf846f70e294138dbd73",
   "originalSourceTrees": {
     "api": "ccac7cd576a079771d7d7fe4f0085492ebbe6813",
@@ -92,7 +105,8 @@
   "limits": [
     "Short assistant desktop Chromium/WebKit flows are not physical iPhone/Pi Browser endurance or native-cause measurements.",
     "Removing the reflection mask leaves the original light/screen blend but can show a rectangular light gradient beyond the alpha contour. This is a private confirmation candidate, not final artwork or a proven fix.",
-    "Previous owner failures and normal exits remain frozen; 10:56 is the reflection-hidden baseline, 08:48 is the failed reflection-restored source, neither is a result of this new runtime."
+    "Previous owner failures and normal exits remain frozen; 10:56 is the reflection-hidden baseline, 08:48 is the failed reflection-restored source, neither is a result of this new runtime.",
+    "The new owner run failed at last saved 09:20 even with both image masks removed and no later recorded contact for over seven minutes. Mask removal alone is not an accepted repair; no immediate touch trigger or blend/native cause is established."
   ],
   "hostedCheck": {
     "evidence": "evidence/hosted-reflection-mask-candidate.json",
@@ -117,5 +131,13 @@
     "normalExitBaseline": "67dabc714907be6d3ae99ccf9ebeab170eb34b06",
     "failedReflectionRestoration": "e16befbb1251b14b0f2742f8a984c29a00173c41",
     "newReflectionMaskCandidate": "ebe70ac8ac80ebd8bce3f00273a9182520f51323"
+  },
+  "afterOwnerReport": {
+    "evidenceOnly": true,
+    "newRuntimeCreatedByThisUpdate": false,
+    "newDeploymentCreatedByThisUpdate": false,
+    "newPhoneTestAssignedByThisUpdate": false,
+    "preserveFrozenSourcesAndAddresses": true,
+    "publicReleaseAuthorized": false
   }
 }
