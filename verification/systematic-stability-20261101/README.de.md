@@ -58,6 +58,8 @@ Die exakten Git-Blob-IDs stehen in
 [core-version-comparison.json](evidence/core-version-comparison.json). Das beweist
 Quellgleichheit, nicht identische Laufzeitbelastung: Aufrufer, Zustände, Browser und
 die bereits vorhandenen privaten Build-Transformationen können sich unterscheiden.
+Ein schon länger vorhandener Fehler im gemeinsamen Kern bleibt damit ausdrücklich
+möglich; die längere frühere Version ist kein fehlerfreier Gegenbeweis.
 
 `0868671b` → `ce073547` verändert 31 Dateien unter `frontend/src`, davon viele Tests
 und Übersetzungen. Der Controller enthält unter anderem die bereits verlangten
@@ -145,6 +147,18 @@ wirkliche Ende des Intros und den geöffneten Reaktor; Spielablauf und Pausensch
 bleiben unverändert. Der fehlgeschlagene Versuch bleibt in
 [initial-browser-gate-failure.json](evidence/initial-browser-gate-failure.json)
 erhalten und zählt nicht als White-Screen-Reproduktion oder Langzeitlauf.
+
+Zweiter CI-Versuch `41334157317`, Messquelle `4766b3f7`: Quellen-/Build-Gates
+erneut bestanden. Chromium Original, Chromium Mini-Start und WebKit Mini-Start
+bestehen den vollständigen kurzen Ablauf einschließlich dreier Ein-/Ausstiege und
+normalem Bericht; anschließend starten ihre 20-Minuten-Messungen. WebKit Original
+stoppt bereits am Start der Kurzprüfung wegen einer aufgezeichneten
+Beobachtungslücke. Die letzte Beobachtung zeigt `playing`/`boss-fight`, keine
+technische Pause, sichtbares Dokument, Stoppuhr `running` bei 4.016 ms und eine
+Lücke; keine Volley war bis dahin fortgeschritten. Es wurde kein Langzeitintervall
+gemessen. Der Fehler bleibt bestehen; die Null-Lücken-Prüfung wird nicht
+abgeschwächt. Das ZIP wurde gegen den GitHub-SHA-256 geprüft und fehlerfrei gelesen.
+[Bereinigter Nachweis](evidence/webkit-original-startup-gap.json).
 
 ## Reproduktion
 

@@ -1,0 +1,25 @@
+{
+  "sourceCommit": "4766b3f784babdbd0ece5204d6853d05f441a43f",
+  "workflowRun": 41334157317,
+  "job": 124930586837,
+  "engine": "webkit",
+  "condition": "original",
+  "artifactId": 13094382634,
+  "artifactSha256": "208fc3fe17f429b3f85ca470a4e97e376722c622fb830418ea83cde003e27758",
+  "shortFlowPassed": false,
+  "longObservationStarted": false,
+  "failure": "strict-observation-gap-before-measured-interval",
+  "observation": {
+    "status": "playing",
+    "encounter": "boss-fight",
+    "technicalPause": false,
+    "hidden": false,
+    "coreVolley": 0,
+    "savedClockMs": 4016,
+    "savedMode": "running",
+    "unobservedGaps": 1
+  },
+  "naturalWhiteScreenObserved": false,
+  "nativeCauseEstablished": false,
+  "runtimePatchMade": false
+}
