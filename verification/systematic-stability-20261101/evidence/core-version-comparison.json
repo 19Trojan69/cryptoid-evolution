@@ -1,0 +1,100 @@
+{
+  "refs": {
+    "longer_owner_run": "0868671b213fb25ba9ce1a0a8d1057dc2067d1f2",
+    "public_main": "ce073547cf573375d141bf846f70e294138dbd73",
+    "normal_then_failed_control": "67dabc714907be6d3ae99ccf9ebeab170eb34b06",
+    "last_failed_owner": "d72db0a8ca5c70b91db9b7760366773e2836db66",
+    "latest_candidate": "2dc37bdb6d52ddd29bcfad9269dbb4b3f76bffcf",
+    "analysis_base": "71b253af7d101ededf9c856e9436ff7bf681f126"
+  },
+  "coreModules": [
+    {
+      "path": "frontend/src/lib/cssFramePacing.ts",
+      "blobs": {
+        "longer_owner_run": "5d9cc3e5b40792277d9813b2953196affbc0eaf3",
+        "public_main": "5d9cc3e5b40792277d9813b2953196affbc0eaf3",
+        "normal_then_failed_control": "5d9cc3e5b40792277d9813b2953196affbc0eaf3",
+        "last_failed_owner": "5d9cc3e5b40792277d9813b2953196affbc0eaf3",
+        "latest_candidate": "5d9cc3e5b40792277d9813b2953196affbc0eaf3",
+        "analysis_base": "5d9cc3e5b40792277d9813b2953196affbc0eaf3"
+      }
+    },
+    {
+      "path": "frontend/src/lib/frameScheduler.ts",
+      "blobs": {
+        "longer_owner_run": "5de751102dd2f9c9adf640a9b24f8a83413f47f4",
+        "public_main": "5de751102dd2f9c9adf640a9b24f8a83413f47f4",
+        "normal_then_failed_control": "5de751102dd2f9c9adf640a9b24f8a83413f47f4",
+        "last_failed_owner": "5de751102dd2f9c9adf640a9b24f8a83413f47f4",
+        "latest_candidate": "5de751102dd2f9c9adf640a9b24f8a83413f47f4",
+        "analysis_base": "5de751102dd2f9c9adf640a9b24f8a83413f47f4"
+      }
+    },
+    {
+      "path": "frontend/src/pages/CanvasEffects.tsx",
+      "blobs": {
+        "longer_owner_run": "73e6239d7d6be8a886279bcd38d6cd230e9834af",
+        "public_main": "73e6239d7d6be8a886279bcd38d6cd230e9834af",
+        "normal_then_failed_control": "73e6239d7d6be8a886279bcd38d6cd230e9834af",
+        "last_failed_owner": "73e6239d7d6be8a886279bcd38d6cd230e9834af",
+        "latest_candidate": "73e6239d7d6be8a886279bcd38d6cd230e9834af",
+        "analysis_base": "73e6239d7d6be8a886279bcd38d6cd230e9834af"
+      }
+    },
+    {
+      "path": "frontend/src/pages/BonusRockLayer.tsx",
+      "blobs": {
+        "longer_owner_run": "28a104227e495e2149e42b5b3fe7300970ef3450",
+        "public_main": "28a104227e495e2149e42b5b3fe7300970ef3450",
+        "normal_then_failed_control": "28a104227e495e2149e42b5b3fe7300970ef3450",
+        "last_failed_owner": "28a104227e495e2149e42b5b3fe7300970ef3450",
+        "latest_candidate": "28a104227e495e2149e42b5b3fe7300970ef3450",
+        "analysis_base": "28a104227e495e2149e42b5b3fe7300970ef3450"
+      }
+    },
+    {
+      "path": "frontend/src/pages/gameAudio.ts",
+      "blobs": {
+        "longer_owner_run": "857ec045e694a8fc3c3a4d632b98857df37bfe36",
+        "public_main": "857ec045e694a8fc3c3a4d632b98857df37bfe36",
+        "normal_then_failed_control": "857ec045e694a8fc3c3a4d632b98857df37bfe36",
+        "last_failed_owner": "857ec045e694a8fc3c3a4d632b98857df37bfe36",
+        "latest_candidate": "857ec045e694a8fc3c3a4d632b98857df37bfe36",
+        "analysis_base": "857ec045e694a8fc3c3a4d632b98857df37bfe36"
+      }
+    },
+    {
+      "path": "frontend/src/pages/musicPlayback.ts",
+      "blobs": {
+        "longer_owner_run": "c057ee378d8ef273a2b9faac40d5d723afbb6763",
+        "public_main": "c057ee378d8ef273a2b9faac40d5d723afbb6763",
+        "normal_then_failed_control": "c057ee378d8ef273a2b9faac40d5d723afbb6763",
+        "last_failed_owner": "c057ee378d8ef273a2b9faac40d5d723afbb6763",
+        "latest_candidate": "c057ee378d8ef273a2b9faac40d5d723afbb6763",
+        "analysis_base": "c057ee378d8ef273a2b9faac40d5d723afbb6763"
+      }
+    },
+    {
+      "path": "frontend/src/pages/gameLoop.ts",
+      "blobs": {
+        "longer_owner_run": "440422812a457300b16070385ec19f77630f284b",
+        "public_main": "440422812a457300b16070385ec19f77630f284b",
+        "normal_then_failed_control": "440422812a457300b16070385ec19f77630f284b",
+        "last_failed_owner": "440422812a457300b16070385ec19f77630f284b",
+        "latest_candidate": "440422812a457300b16070385ec19f77630f284b",
+        "analysis_base": "440422812a457300b16070385ec19f77630f284b"
+      }
+    },
+    {
+      "path": "frontend/src/pages/resourceCache.ts",
+      "blobs": {
+        "longer_owner_run": "c0d3a03fc90a7a830728d45d8bcf4d17fb61fd6d",
+        "public_main": "c0d3a03fc90a7a830728d45d8bcf4d17fb61fd6d",
+        "normal_then_failed_control": "c0d3a03fc90a7a830728d45d8bcf4d17fb61fd6d",
+        "last_failed_owner": "c0d3a03fc90a7a830728d45d8bcf4d17fb61fd6d",
+        "latest_candidate": "c0d3a03fc90a7a830728d45d8bcf4d17fb61fd6d",
+        "analysis_base": "c0d3a03fc90a7a830728d45d8bcf4d17fb61fd6d"
+      }
+    }
+  ]
+}

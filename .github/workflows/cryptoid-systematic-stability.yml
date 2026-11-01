@@ -1,0 +1,82 @@
+name: Systematic mobile stability regression
+run-name: Source gates and twenty-minute native-browser observations
+on:
+  push:
+    branches: [codex/systematic-stability-20261101]
+    paths:
+      - '.github/workflows/cryptoid-systematic-stability.yml'
+      - 'verification/systematic-stability-20261101/*.mjs'
+      - 'frontend/src/**'
+permissions:
+  contents: read
+jobs:
+  source-gates:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with:
+          node-version: '24'
+      - name: Install existing frontend tools
+        run: npm install --prefix frontend --include=optional --ignore-scripts --no-audit --no-fund
+      - name: Verify unchanged application and disabled automatic deployment
+        run: |
+          git restore --worktree -- frontend/yarn.lock
+          node verification/boss2-mini-start-control-20261101/verifyScope.mjs
+      - name: Stress actual resource owners and validate report attribution
+        run: |
+          node --experimental-strip-types --test verification/systematic-stability-20261101/reportAnalysis.test.mjs verification/systematic-stability-20261101/lifetimeStress.test.mjs frontend/src/lib/cssFramePacing.test.mjs
+          npm run build --prefix frontend
+  native-observation:
+    needs: source-gates
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        engine: [chromium, webkit]
+        condition: [original, mini-start]
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with:
+          node-version: '24'
+      - name: Install existing test tools and native engine
+        run: |
+          npm install --prefix frontend --include=optional --ignore-scripts --no-audit --no-fund
+          npm install --prefix verification/boss2-forensics-20261028 --ignore-scripts --no-audit --no-fund
+          git restore --worktree -- frontend/yarn.lock
+          cd verification/boss2-forensics-20261028
+          npx playwright install --with-deps ${{ matrix.engine }}
+      - name: Verify original sources and build existing guest condition
+        env:
+          VERCEL_ENV: preview
+          CRYPTOID_SOAK_CONDITION: ${{ matrix.condition }}
+        run: |
+          node verification/boss2-mini-start-control-20261101/verifyScope.mjs
+          node verification/systematic-stability-20261101/prepareSoakBuild.mjs
+      - name: Validate complete short UI flow before long observation
+        env:
+          CRYPTOID_SOAK_ENGINE: ${{ matrix.engine }}
+          CRYPTOID_SOAK_CONDITION: ${{ matrix.condition }}
+          CRYPTOID_SOAK_SECONDS: '30'
+          CRYPTOID_SOAK_RUN: smoke
+        run: node --experimental-strip-types verification/systematic-stability-20261101/verifyBrowserSoak.mjs
+      - name: Observe real active time, manual lifecycle and normal report
+        env:
+          CRYPTOID_SOAK_ENGINE: ${{ matrix.engine }}
+          CRYPTOID_SOAK_CONDITION: ${{ matrix.condition }}
+          CRYPTOID_SOAK_SECONDS: '1200'
+        run: node --experimental-strip-types verification/systematic-stability-20261101/verifyBrowserSoak.mjs
+      - name: Preserve successful and failed synthetic evidence
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: stability-${{ matrix.engine }}-${{ matrix.condition }}
+          path: verification/systematic-stability-20261101/results/
+          retention-days: 7
