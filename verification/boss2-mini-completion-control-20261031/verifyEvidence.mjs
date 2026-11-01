@@ -5,7 +5,7 @@ const read=p=>JSON.parse(readFileSync(new URL(p,import.meta.url),'utf8'));
 const r=read('./results.json'),e=read('./evidence/synthetic-mini-completion-comparison.json');
 assert.equal(r.runtime.source,'d72db0a8ca5c70b91db9b7760366773e2836db66');
 assert.equal(r.runtime.tree,'73c23f8a5dba0bb93ab676c4ad3954ddf7ff1228');
-assert.equal(r.whiteScreenFixed,false);assert.equal(r.physicalDeviceTested,true);assert.equal(r.newOwnerPhoneResult.status,'abrupt-return-after-running-checkpoint');
+assert.equal(r.whiteScreenFixed,false);assert.equal(r.physicalDeviceTested,true);assert.equal(r.newOwnerPhoneResult.status,'failed-white-screen-owner-confirmed');
 assert.equal(r.verification.runId,41235613143);assert.equal(r.verification.status,'passed');assert.equal(r.verification.sourceTests,24);assert.equal(r.verification.shortDesktopFlows,4);
 assert.equal(e.source,r.runtime.source);assert.equal(e.tree,r.runtime.tree);assert.equal(e.physicalDevice,false);assert.equal(e.observations.length,4);
 for(const engine of ['chromium','webkit']) {
@@ -32,7 +32,7 @@ assert.equal(prior.observations.filter(o=>o.complete).length,2);assert.ok(prior.
 const owner=read('../boss2-static-hotspots-control-20261031/evidence/owner-static-hotspots-failure.json');assert.equal(owner.ownerWhiteScreenReported,true);assert.equal(owner.runtimeSource,r.basis.source);assert.equal(owner.runtimeTree,r.basis.tree);assert.equal(owner.savedActiveMs,900561);assert.equal(owner.savedMode,'running');assert.equal(owner.retainedEvents,32);assert.equal(owner.collectorDrops,26);assert.equal(owner.newDocumentAfterCheckpointMs,843);assert.equal(owner.lastRecordedContactToCheckpointWallMs,81524);assert.equal(owner.bootAfterActiveSessionRecorded,true);assert.equal(owner.stabilityGainProvenByLongerTime,false);
 const latest=read('./evidence/owner-mini-completion-abrupt-return.json');
 assert.equal(latest.runtimeSource,r.runtime.source);assert.equal(latest.runtimeTree,r.runtime.tree);
-assert.equal(latest.ownerProvidedReport,true);assert.equal(latest.ownerWhiteScreenExplicitlyRestatedForThisRun,false);assert.equal(latest.whitePixelsMeasured,false);
+assert.equal(latest.ownerProvidedReport,true);assert.equal(latest.ownerWhiteScreenExplicitlyRestatedForThisRun,true);assert.equal(latest.whitePixelsMeasured,false);
 assert.equal(latest.savedActiveMs,962934);assert.equal(latest.displayedTime,'16:02');assert.equal(latest.savedMode,'running');assert.equal(latest.recordedGaps,0);
 assert.equal(latest.retainedEvents,31);assert.equal(latest.collectorDrops,0);assert.equal(latest.lastRecordedContactActiveMs,132618);assert.equal(latest.lastRecordedContactToCheckpointWallMs,829520);
 assert.equal(latest.newDocumentAfterCheckpointMs,203);assert.equal(latest.bootAfterCheckpointMs,828);assert.equal(latest.newDocumentRoute,'home');assert.equal(latest.bootAfterActiveSessionRecorded,true);assert.equal(latest.normalEndRecorded,false);
@@ -62,4 +62,4 @@ if(r.hostedCheck) {
   assert.equal(r.hostedCheck.ownerResult,false);assert.equal(r.hostedCheck.uninterruptedPerformanceClaimed,false);
   assert.equal(h.url,r.deployment.url);assert.equal(h.deploymentId,r.deployment.id);assert.equal(r.deployment.status,'READY');assert.equal(r.deployment.environment,'Preview');assert.equal(r.deployment.source,r.runtime.source);assert.equal(r.deployment.publicReleaseAuthorized,false);
 }
-console.log('CRYPTOID_MINI_COMPLETION_EVIDENCE '+JSON.stringify({passed:true,source:r.runtime.source,shortDesktopFlows:4,newOwnerPhoneResult:'matched16:02/running then abrupt home return; no normal end; white pixels not restated',whiteScreenFixed:false}));
+console.log('CRYPTOID_MINI_COMPLETION_EVIDENCE '+JSON.stringify({passed:true,source:r.runtime.source,shortDesktopFlows:4,newOwnerPhoneResult:'matched16:02/running then abrupt home return; owner confirmed White Screen; no normal end',whiteScreenFixed:false}));
