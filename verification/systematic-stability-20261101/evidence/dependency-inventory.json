@@ -1,0 +1,34 @@
+{
+  "declaredDependenciesUnchangedBetweenSelectedRefs": true,
+  "declaredDevDependenciesUnchangedBetweenSelectedRefs": true,
+  "lockBlobs": {
+    "longer_owner_run": "9be81e73f00bc6d84e6aa584073a99d17cb6e7ac",
+    "public_main": "9be81e73f00bc6d84e6aa584073a99d17cb6e7ac",
+    "normal_then_failed_control": "9be81e73f00bc6d84e6aa584073a99d17cb6e7ac",
+    "last_failed_owner": "9be81e73f00bc6d84e6aa584073a99d17cb6e7ac",
+    "device_candidate": "9be81e73f00bc6d84e6aa584073a99d17cb6e7ac",
+    "ci_measurement": "9be81e73f00bc6d84e6aa584073a99d17cb6e7ac"
+  },
+  "lockfileVersions": {
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "react-router-dom": "7.13.2",
+    "vite": "7.3.1",
+    "typescript": "5.9.3"
+  },
+  "actualLocalInstalledVersions": {
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "react-router-dom": "7.18.5",
+    "vite": "7.3.7",
+    "typescript": "5.9.3"
+  },
+  "ciBuildToolObservedInLog": {
+    "vite": "7.3.1"
+  },
+  "localBuildToolObserved": "7.3.7",
+  "allCiInstalledPackagesDirectlyMeasured": false,
+  "historicalDeliveredDependencyGraphsEstablished": false,
+  "runtimeDependencyChangesMadeByThisTask": false,
+  "limits": "Recorded source and lockfile identity are distinct from the actual installed or historically delivered dependency graph. No dependency change is assigned as the White Screen cause."
+}

@@ -69,6 +69,17 @@ begrenzte Kontakt-/Pausendiagnose. Es gibt deshalb keinen belegten Anlass, früh
 Spielfunktionen pauschal zurückzurollen. Die Grafik-Vergleiche verändern zusätzlich
 den privaten Build, nicht diese gepinnten Originalmodule.
 
+Die deklarierten Laufzeit-/Entwicklungsabhängigkeiten und das gesamte `yarn.lock`
+sind zwischen den ausgewählten Ständen ebenfalls unverändert; Unterschiede in
+`package.json` betreffen Testaufrufe. Die lokale Installation löste allerdings
+neuere zulässige Versionen auf (React 19.3.1, Vite 7.3.7), während das Lockfile
+React 19.2.4/Vite 7.3.1 nennt und die CI tatsächlich Vite 7.3.1 ausgibt. Deshalb
+werden lokale und CI-Builds nicht als bibliotheksidentisch bezeichnet. Historisch
+ausgelieferte vollständige Paketgraphen sind damit nicht rückwirkend bewiesen.
+Es wurde keine Abhängigkeit im Repository geändert und kein Bibliothekswechsel
+als Absturzursache behauptet.
+[Abhängigkeitsinventar](evidence/dependency-inventory.json).
+
 ## Priorisierter Untersuchungsplan
 
 1. **Quellen und Ergebnisse fest zuordnen.** Vor jedem Vergleich Commit, Baum,
@@ -101,8 +112,11 @@ den privaten Build, nicht diese gepinnten Originalmodule.
 - Unverändertes vollständiges Frontend: **539 Tests in 22 Testaufrufen**, alle
   bestanden; Übersetzungsprüfung, TypeScript und Vite bestanden. Die bekannte
   Warnung zu großen JavaScript-Paketen bleibt bestehen.
-- **15 neue Regressionstests** bestanden: 11 zur belastbaren Berichtszuordnung,
-  vier gegen echte Ressourcen-/Schleifenmodule mit kontrollierten Hosts.
+- **20 neue Regressionstests** lokal bestanden: 11 zur belastbaren Berichtszuordnung,
+  vier gegen echte Ressourcen-/Schleifenmodule mit kontrollierten Hosts und fünf
+  für die korrekte Annahme bzw. Ablehnung der nativen Testergebnisse. Die ersten
+  15 wurden zusätzlich in der Mess-CI bestanden; die fünf Offline-Auswertungsfälle
+  sind auch in die folgenden Quellen-Gates aufgenommen.
 - Zusätzlich zehn vorhandene CSS-Animations-Lebenszyklustests bestanden.
 - Der neue Belastungstest deckt 30 **simulierte** Minuten mit drei gemeinsamen
   Taktungsnutzern ab, 2.000 Ein-/Ausbau-/Pause-/Stall-Zyklen, 10.000
@@ -134,10 +148,8 @@ technische Pause bricht den Test ab. Während des aktiven Intervalls gibt es kei
 Screenshots, erzwungene Speicherbereinigung oder Heap-Snapshots. Alle fünf Sekunden
 werden bestehende Teilzähler und externer Linux-Prozessspeicher abgelesen.
 
-Die Ergebnisse der neu gestarteten CI werden nach Abschluss hier nachgetragen.
-Ein vorbereiteter oder gestarteter Job ist ausdrücklich noch kein bestandener
-Browser-Langzeittest. Ein bestandener Linux-Lauf wäre weiterhin keine bestätigte
-Reparatur auf den Smartphones des Besitzers.
+Die vollständigen Ergebnisse sind unten dokumentiert. Ein bestandener Linux-Lauf
+ist weiterhin keine bestätigte Reparatur auf den Smartphones des Besitzers.
 
 Erster CI-Versuch `41333796043`, Quelle `250b6724`: Quellen-/Build-Gates
 bestanden. Alle vier Browser-Kurzprüfungen stoppten vor der Messung, weil der neue
@@ -160,10 +172,83 @@ gemessen. Der Fehler bleibt bestehen; die Null-Lücken-Prüfung wird nicht
 abgeschwächt. Das ZIP wurde gegen den GitHub-SHA-256 geprüft und fehlerfrei gelesen.
 [Bereinigter Nachweis](evidence/webkit-original-startup-gap.json).
 
+## Abgeschlossene native Prüfrunde und neue Speicherspur
+
+Messquelle **4766b3f784babdbd0ece5204d6853d05f441a43f**, Actions
+[41334157317](https://github.com/19Trojan69/cryptoid-evolution/actions/runs/41334157317).
+Der Quellen-Job besteht 564 Fälle (539 vorhandene Release-Fälle, 15 neue Kern- und
+Auswertungsfälle und zehn vorhandene CSS-Fälle), Übersetzungen, TypeScript und Vite.
+Die fünf später ergänzten Offline-Auswertungsfälle bestehen separat lokal.
+
+| Native Linux-Bedingung | Kurzer kompletter Ablauf | Tatsächlich gemessene aktive Langzeit | Abschlussschritte |
+| --- | --- | --- | --- |
+| Chromium, Originaldarstellung | Bestanden | 20:00,003 | Drei Ein-/Ausstiege, Pause, Waffenmenü und normaler Bericht bestanden |
+| Chromium, vorhandener Mini-Start-Kandidat | Bestanden | 20:00,000 | Drei Ein-/Ausstiege, Pause, Waffenmenü und normaler Bericht bestanden |
+| WebKit, vorhandener Mini-Start-Kandidat | Bestanden | 20:00,932 | Drei Ein-/Ausstiege, Pause, Waffenmenü und normaler Bericht bestanden |
+| WebKit, Originaldarstellung | Nicht bestanden: anfängliche Beobachtungslücke | Nicht gestartet | Kein vollständiger Ablauf behauptet |
+
+Die Gesamt-CI bleibt **failure**, nicht grün. Die fehlgeschlagene Original-WebKit-
+Bedingung bleibt ein offener Befund. In den drei vollständigen Langzeitläufen gab
+es keinen vom Test erfassten Dokumentwechsel, unerwarteten Pausenstatus,
+JavaScript-Fehler oder Renderer-Crash. Native weiße Pixel und physische Geräte
+wurden dabei nicht gemessen. Die Spieluhren wurden nicht beschleunigt.
+
+**Ein neuer konkreter Untersuchungsschwerpunkt ist der gemessene Speicheranstieg.**
+Die ersten und letzten 60 aktiven Sekunden der langen Läufe liefern folgende
+Medianwerte des extern gelesenen Linux-Browser-Nachfahren-PSS:
+
+| Bedingung | Erste 60 s | Letzte 60 s |
+| --- | ---: | ---: |
+| Chromium Original | 463,1 MiB | 818,9 MiB |
+| Chromium Mini-Start | 371,6 MiB | 396,1 MiB |
+| WebKit Mini-Start | 946,7 MiB | 1.090,9 MiB |
+
+Beim Original-Chromium-Lauf steigt auch der Median später Zeitfenster weiter
+(Minute 5 etwa 640,4 MiB, Minute 10 etwa 764,3 MiB). Gleichzeitig bleiben die
+beobachteten Teilressourcen klein: maximal drei Effekt-Quellbilder, zwei
+Effekt-Texturen, etwa 1,01 MiB gezählter Effekt-Cache und 46 Audiopuffer. In allen
+drei langen Läufen wird kein Audio-Uhrstillstand gezählt. Diese Aussagen betreffen
+nur die tatsächlich gelesenen Zähler; sie sind keine Gesamt-Speicherbilanz.
+
+Das ist **kein Nachweis eines unbeschränkten Lecks oder der Smartphone-Ursache**.
+Unseeded Szenen, verschiedene Grafikbedingungen, Browser-/Betriebssystem-Caches,
+ausstehende Speicherbereinigung und nicht erfasste Besitzer bleiben möglich.
+Die beiden Chromium-Läufe erreichen jeweils 428 Reaktor-Volleys, WebKit 411;
+damit wird weder gleiche Renderarbeit noch ein isolierter Wirkungsgrad des
+Mini-Start-Guards belegt. Der reduzierte Kandidat enthält bereits mehrere frühere
+Grafik-Transformationen. Der PSS-Unterschied darf deshalb keinem einzelnen Guard
+zugeschrieben werden. Linux-PSS ist keine physische iPhone-/Android-/GPU-Messung.
+
+**Nächste priorisierte technische Arbeit:** Den Anstieg nach dem Aufwärmen im
+Originalzustand reproduzieren und über konkrete Besitzer zuordnen: tatsächliche
+CSS-Animationsregistrierungen/DOM, JavaScript-Retention nach manuell pausierter
+Messung und anschließendes Home-Cleanup, Bild-/Canvas- und native Renderressourcen.
+Dabei die bereits vorhandenen sechsminütigen Heap-/Subsystembelege weiterverwenden;
+keine erzwungene Speicherbereinigung im aktiven Spiel. Die anfängliche WebKit-
+Lücke getrennt auf Diagnosebeobachtung bzw. tatsächliche Blockade prüfen. Erst
+ein reproduzierter Besitz-/Freigabefehler rechtfertigt einen Runtime-Patch.
+Ein weiterer langer Smartphone-Lauf ist für diese nächste technische Analyse
+noch nicht erforderlich.
+
+Alle vier ursprünglichen ZIP-Digests wurden gegen GitHub und ihre ZIP-Integrität
+geprüft. Die sieben vollständigen synthetischen JSON-Ergebnisse bleiben verlustfrei
+komprimiert in [native-captures.json.gz](evidence/native-captures.json.gz) erhalten;
+keine Besitzerberichte sind enthalten. [Manifest](evidence/native-evidence-manifest.json)
+und [Zusammenfassung](evidence/native-results.json) bleiben reproduzierbar.
+Der Offline-Verifier prüft Digests, genaue Quelle/Baum, alle vier Bedingungen,
+Duplikate, aktive Dauer, drei UI-Lebenszyklen und den normalen Endbericht. Kurze
+und fehlgeschlagene Versuche werden nicht in Langzeit-Erfolge umgedeutet.
+
+Es gibt keinen neuen Spiel-Patch, keine neue Geräte-URL und keine Veröffentlichung.
+Öffentliches Spiel, gespeicherter Fortschritt und eingefrorene Geräte-Zweige
+werden durch diese Arbeit nicht geändert.
+
 ## Reproduktion
 
 ```bash
 node --experimental-strip-types --test verification/systematic-stability-20261101/reportAnalysis.test.mjs verification/systematic-stability-20261101/lifetimeStress.test.mjs frontend/src/lib/cssFramePacing.test.mjs
+node --test verification/systematic-stability-20261101/evidence/nativeSummary.test.mjs
+node verification/systematic-stability-20261101/evidence/verifyNativeEvidence.mjs
 node verification/boss2-mini-start-control-20261101/verifyScope.mjs
 npm run build --prefix frontend
 ```

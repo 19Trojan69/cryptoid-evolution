@@ -28,7 +28,7 @@ jobs:
           node verification/boss2-mini-start-control-20261101/verifyScope.mjs
       - name: Stress actual resource owners and validate report attribution
         run: |
-          node --experimental-strip-types --test verification/systematic-stability-20261101/reportAnalysis.test.mjs verification/systematic-stability-20261101/lifetimeStress.test.mjs frontend/src/lib/cssFramePacing.test.mjs
+          node --experimental-strip-types --test verification/systematic-stability-20261101/reportAnalysis.test.mjs verification/systematic-stability-20261101/lifetimeStress.test.mjs verification/systematic-stability-20261101/evidence/nativeSummary.test.mjs frontend/src/lib/cssFramePacing.test.mjs
           npm run build --prefix frontend
   native-observation:
     needs: source-gates

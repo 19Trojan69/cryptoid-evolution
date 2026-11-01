@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "workflowRun": 41334157317,
+  "workflowConclusion": "failure",
+  "sourceGatesPassed": true,
+  "sourceGatesJob": 124930309749,
+  "sourceGateCases": 564,
+  "syntheticEvidenceOnly": true,
+  "rawOwnerReportsIncluded": false,
+  "measuredSource": "4766b3f784babdbd0ece5204d6853d05f441a43f",
+  "measuredTree": "7e99edce80d2fa43909a009a94c2521614598644",
+  "captureFile": "native-captures.json.gz",
+  "captureBytes": 27074,
+  "captureSha256": "df1d58657e92622c90e134b746b89db6da521be15a58cff4ba581527d8806fba",
+  "records": 7,
+  "artifacts": [
+    {
+      "id": 13095194146,
+      "name": "stability-chromium-original",
+      "zipBytes": 23177,
+      "zipSha256": "c2c3d23361dc5f382668934012ccc9e4debd4d9ce341fc148e2cb6fabd0c691a"
+    },
+    {
+      "id": 13095129283,
+      "name": "stability-chromium-mini-start",
+      "zipBytes": 18841,
+      "zipSha256": "3c4a069a74d24ce42ba3969b3197d8e1530b2bff0f23aa11d81dd4c39f89a9bc"
+    },
+    {
+      "id": 13094943432,
+      "name": "stability-webkit-mini-start",
+      "zipBytes": 19318,
+      "zipSha256": "dcb4363bc24f632e44e699023c44ca878528317625884816411be91be13344a3"
+    },
+    {
+      "id": 13094382634,
+      "name": "stability-webkit-original",
+      "zipBytes": 1723,
+      "zipSha256": "208fc3fe17f429b3f85ca470a4e97e376722c622fb830418ea83cde003e27758"
+    }
+  ]
+}
