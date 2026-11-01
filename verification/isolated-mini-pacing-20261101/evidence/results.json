@@ -1,0 +1,805 @@
+{
+  "version": 1,
+  "workflowRun": 41343318455,
+  "workflowConclusion": "in_progress",
+  "cohortComplete": false,
+  "shortCaptures": [
+    {
+      "condition": "control",
+      "replica": 1,
+      "pathProofOnly": true,
+      "nativePathProof": {
+        "miniStartEvents": 1022,
+        "miniEndEvents": 208,
+        "miniQueriesTotal": 1230,
+        "miniQueriesAtStart": 1022,
+        "miniTimingUpdates": 1230,
+        "otherTimingUpdates": 1129
+      },
+      "sourceCommit": "668d4115716bdb425947c4847e70113e8c497990",
+      "sourceTree": "cb0bed431f842cad4067e23ebb3e2036c243b04c",
+      "requestedSeconds": 60,
+      "observedActiveMs": 60000.09999999999,
+      "observedWallMs": 61500,
+      "volleysAdvanced": 21,
+      "completeAttributionCapture": true,
+      "completedTwentyMinuteLinuxObservation": false,
+      "actualInstalledPackages": {
+        "react": "19.2.4",
+        "react-dom": "19.2.4",
+        "react-router-dom": "7.13.2",
+        "vite": "7.3.1",
+        "typescript": "5.9.3"
+      },
+      "engineVersion": "151.0.7922.34",
+      "processPssKiB": {
+        "firstMinuteMedian": 456684,
+        "lastMinuteMedian": 458046,
+        "peakSample": 481788
+      },
+      "sampledMaxima": {
+        "cssActive": 15,
+        "cssConfiguredCumulative": 1167,
+        "paintedPins": 15,
+        "paintedEstimatedBytes": 6972603,
+        "canvasCacheBytes": 1059028,
+        "canvasSurfaceBytes": 66528
+      },
+      "checkpoints": [
+        {
+          "label": "paused-before-gc",
+          "pss": {
+            "totalKiB": 482772,
+            "byRoleKiB": {
+              "browser-other": 142785,
+              "chromium-gpu": 36528,
+              "chromium-renderer": 303459
+            }
+          },
+          "usedJsBytes": 12486508,
+          "embedderHeapUsedBytes": 21106928,
+          "backingStorageBytes": 2777047,
+          "dom": {
+            "documents": 3,
+            "nodes": 831,
+            "jsEventListeners": 386
+          },
+          "attached": {
+            "nodes": 520,
+            "canvases": 3,
+            "images": 1,
+            "nativeAnimations": 11,
+            "animationStates": {
+              "running": 2,
+              "paused": 9,
+              "finished": 0,
+              "idle": 0
+            }
+          },
+          "cssActive": 10,
+          "paintedPins": 15,
+          "canvasCacheBytes": 740932,
+          "canvasSurfaceBytes": 4
+        },
+        {
+          "label": "paused-settled-before-gc",
+          "pss": {
+            "totalKiB": 480792,
+            "byRoleKiB": {
+              "browser-other": 142737,
+              "chromium-gpu": 38938,
+              "chromium-renderer": 299117
+            }
+          },
+          "usedJsBytes": 12644676,
+          "embedderHeapUsedBytes": 21769432,
+          "backingStorageBytes": 2778321,
+          "dom": {
+            "documents": 3,
+            "nodes": 851,
+            "jsEventListeners": 446
+          },
+          "attached": {
+            "nodes": 520,
+            "canvases": 3,
+            "images": 1,
+            "nativeAnimations": 10,
+            "animationStates": {
+              "running": 1,
+              "paused": 9,
+              "finished": 0,
+              "idle": 0
+            }
+          },
+          "cssActive": 10,
+          "paintedPins": 15,
+          "canvasCacheBytes": 740932,
+          "canvasSurfaceBytes": 4
+        },
+        {
+          "label": "paused-after-gc",
+          "pss": {
+            "totalKiB": 381528,
+            "byRoleKiB": {
+              "browser-other": 142737,
+              "chromium-gpu": 38938,
+              "chromium-renderer": 199853
+            }
+          },
+          "usedJsBytes": 10541168,
+          "embedderHeapUsedBytes": 4170560,
+          "backingStorageBytes": 2539194,
+          "dom": {
+            "documents": 3,
+            "nodes": 731,
+            "jsEventListeners": 308
+          },
+          "attached": {
+            "nodes": 520,
+            "canvases": 3,
+            "images": 1,
+            "nativeAnimations": 10,
+            "animationStates": {
+              "running": 1,
+              "paused": 9,
+              "finished": 0,
+              "idle": 0
+            }
+          },
+          "cssActive": 10,
+          "paintedPins": 15,
+          "canvasCacheBytes": 740932,
+          "canvasSurfaceBytes": 4
+        },
+        {
+          "label": "paused-after-snapshot",
+          "pss": {
+            "totalKiB": 388354,
+            "byRoleKiB": {
+              "browser-other": 143592,
+              "chromium-gpu": 34088,
+              "chromium-renderer": 210674
+            }
+          },
+          "usedJsBytes": 10624220,
+          "embedderHeapUsedBytes": 4368016,
+          "backingStorageBytes": 2539456,
+          "dom": {
+            "documents": 3,
+            "nodes": 731,
+            "jsEventListeners": 308
+          },
+          "attached": {
+            "nodes": 520,
+            "canvases": 3,
+            "images": 1,
+            "nativeAnimations": 10,
+            "animationStates": {
+              "running": 1,
+              "paused": 9,
+              "finished": 0,
+              "idle": 0
+            }
+          },
+          "cssActive": 10,
+          "paintedPins": 15,
+          "canvasCacheBytes": 740932,
+          "canvasSurfaceBytes": 4
+        },
+        {
+          "label": "home-before-gc",
+          "pss": {
+            "totalKiB": 387714,
+            "byRoleKiB": {
+              "browser-other": 143596,
+              "chromium-gpu": 34975,
+              "chromium-renderer": 209143
+            }
+          },
+          "usedJsBytes": 10852556,
+          "embedderHeapUsedBytes": 5255344,
+          "backingStorageBytes": 2543052,
+          "dom": {
+            "documents": 3,
+            "nodes": 803,
+            "jsEventListeners": 413
+          },
+          "attached": {
+            "nodes": 54,
+            "canvases": 0,
+            "images": 0,
+            "nativeAnimations": 0,
+            "animationStates": {
+              "running": 0,
+              "paused": 0,
+              "finished": 0,
+              "idle": 0
+            }
+          },
+          "cssActive": 0,
+          "paintedPins": 0,
+          "canvasCacheBytes": 0,
+          "canvasSurfaceBytes": 0
+        },
+        {
+          "label": "home-settled-before-gc",
+          "pss": {
+            "totalKiB": 379114,
+            "byRoleKiB": {
+              "browser-other": 142596,
+              "chromium-gpu": 39545,
+              "chromium-renderer": 196973
+            }
+          },
+          "usedJsBytes": 10912732,
+          "embedderHeapUsedBytes": 5255344,
+          "backingStorageBytes": 2543052,
+          "dom": {
+            "documents": 3,
+            "nodes": 803,
+            "jsEventListeners": 413
+          },
+          "attached": {
+            "nodes": 54,
+            "canvases": 0,
+            "images": 0,
+            "nativeAnimations": 0,
+            "animationStates": {
+              "running": 0,
+              "paused": 0,
+              "finished": 0,
+              "idle": 0
+            }
+          },
+          "cssActive": 0,
+          "paintedPins": 0,
+          "canvasCacheBytes": 0,
+          "canvasSurfaceBytes": 0
+        },
+        {
+          "label": "home-after-gc",
+          "pss": {
+            "totalKiB": 364258,
+            "byRoleKiB": {
+              "browser-other": 142550,
+              "chromium-gpu": 39545,
+              "chromium-renderer": 182163
+            }
+          },
+          "usedJsBytes": 9918728,
+          "embedderHeapUsedBytes": 2750800,
+          "backingStorageBytes": 2539400,
+          "dom": {
+            "documents": 3,
+            "nodes": 247,
+            "jsEventListeners": 212
+          },
+          "attached": {
+            "nodes": 54,
+            "canvases": 0,
+            "images": 0,
+            "nativeAnimations": 0,
+            "animationStates": {
+              "running": 0,
+              "paused": 0,
+              "finished": 0,
+              "idle": 0
+            }
+          },
+          "cssActive": 0,
+          "paintedPins": 0,
+          "canvasCacheBytes": 0,
+          "canvasSurfaceBytes": 0
+        },
+        {
+          "label": "home-after-snapshot",
+          "pss": {
+            "totalKiB": 350834,
+            "byRoleKiB": {
+              "browser-other": 143426,
+              "chromium-gpu": 25401,
+              "chromium-renderer": 182007
+            }
+          },
+          "usedJsBytes": 9971128,
+          "embedderHeapUsedBytes": 2874528,
+          "backingStorageBytes": 2539630,
+          "dom": {
+            "documents": 3,
+            "nodes": 247,
+            "jsEventListeners": 212
+          },
+          "attached": {
+            "nodes": 54,
+            "canvases": 0,
+            "images": 0,
+            "nativeAnimations": 0,
+            "animationStates": {
+              "running": 0,
+              "paused": 0,
+              "finished": 0,
+              "idle": 0
+            }
+          },
+          "cssActive": 0,
+          "paintedPins": 0,
+          "canvasCacheBytes": 0,
+          "canvasSurfaceBytes": 0
+        },
+        {
+          "label": "blank-before-gc",
+          "pss": {
+            "totalKiB": 334033,
+            "byRoleKiB": {
+              "browser-other": 142749,
+              "chromium-gpu": 24499,
+              "chromium-renderer": 166785
+            }
+          },
+          "usedJsBytes": 10452040,
+          "embedderHeapUsedBytes": 3320832,
+          "backingStorageBytes": 2539641,
+          "dom": {
+            "documents": 5,
+            "nodes": 255,
+            "jsEventListeners": 214
+          },
+          "attached": {
+            "nodes": 3,
+            "canvases": 0,
+            "images": 0,
+            "nativeAnimations": 0,
+            "animationStates": {
+              "running": 0,
+              "paused": 0,
+              "finished": 0,
+              "idle": 0
+            }
+          },
+          "cssActive": null,
+          "paintedPins": null,
+          "canvasCacheBytes": null,
+          "canvasSurfaceBytes": null
+        },
+        {
+          "label": "blank-after-gc",
+          "pss": {
+            "totalKiB": 298362,
+            "byRoleKiB": {
+              "browser-other": 142758,
+              "chromium-gpu": 24495,
+              "chromium-renderer": 131109
+            }
+          },
+          "usedJsBytes": 1108436,
+          "embedderHeapUsedBytes": 411736,
+          "backingStorageBytes": 286,
+          "dom": {
+            "documents": 1,
+            "nodes": 4,
+            "jsEventListeners": 2
+          },
+          "attached": {
+            "nodes": 3,
+            "canvases": 0,
+            "images": 0,
+            "nativeAnimations": 0,
+            "animationStates": {
+              "running": 0,
+              "paused": 0,
+              "finished": 0,
+              "idle": 0
+            }
+          },
+          "cssActive": null,
+          "paintedPins": null,
+          "canvasCacheBytes": null,
+          "canvasSurfaceBytes": null
+        }
+      ],
+      "observedHomeOwnershipReleased": true,
+      "physicalPhoneAcceptanceEstablished": false,
+      "permanentLeakProven": false,
+      "whiteScreenFixed": false
+    },
+    {
+      "condition": "bypass",
+      "replica": 1,
+      "pathProofOnly": true,
+      "nativePathProof": {
+        "miniStartEvents": 1022,
+        "miniEndEvents": 210,
+        "miniQueriesTotal": 210,
+        "miniQueriesAtStart": 0,
+        "miniTimingUpdates": 0,
+        "otherTimingUpdates": 322
+      },
+      "sourceCommit": "668d4115716bdb425947c4847e70113e8c497990",
+      "sourceTree": "cb0bed431f842cad4067e23ebb3e2036c243b04c",
+      "requestedSeconds": 60,
+      "observedActiveMs": 60999.999999999985,
+      "observedWallMs": 61728,
+      "volleysAdvanced": 21,
+      "completeAttributionCapture": true,
+      "completedTwentyMinuteLinuxObservation": false,
+      "actualInstalledPackages": {
+        "react": "19.2.4",
+        "react-dom": "19.2.4",
+        "react-router-dom": "7.13.2",
+        "vite": "7.3.1",
+        "typescript": "5.9.3"
+      },
+      "engineVersion": "151.0.7922.34",
+      "processPssKiB": {
+        "firstMinuteMedian": 469489.5,
+        "lastMinuteMedian": 470493.5,
+        "peakSample": 478003
+      },
+      "sampledMaxima": {
+        "cssActive": 10,
+        "cssConfiguredCumulative": 163,
+        "paintedPins": 15,
+        "paintedEstimatedBytes": 6972603,
+        "canvasCacheBytes": 1059028,
+        "canvasSurfaceBytes": 66528
+      },
+      "checkpoints": [
+        {
+          "label": "paused-before-gc",
+          "pss": {
+            "totalKiB": 478964,
+            "byRoleKiB": {
+              "browser-other": 141859,
+              "chromium-gpu": 38938,
+              "chromium-renderer": 298167
+            }
+          },
+          "usedJsBytes": 16214788,
+          "embedderHeapUsedBytes": 31501728,
+          "backingStorageBytes": 2779030,
+          "dom": {
+            "documents": 3,
+            "nodes": 1200,
+            "jsEventListeners": 516
+          },
+          "attached": {
+            "nodes": 519,
+            "canvases": 3,
+            "images": 1,
+            "nativeAnimations": 10,
+            "animationStates": {
+              "running": 2,
+              "paused": 8,
+              "finished": 0,
+              "idle": 0
+            }
+          },
+          "cssActive": 4,
+          "paintedPins": 15,
+          "canvasCacheBytes": 740932,
+          "canvasSurfaceBytes": 4
+        },
+        {
+          "label": "paused-settled-before-gc",
+          "pss": {
+            "totalKiB": 473088,
+            "byRoleKiB": {
+              "browser-other": 141827,
+              "chromium-gpu": 40510,
+              "chromium-renderer": 290751
+            }
+          },
+          "usedJsBytes": 16375672,
+          "embedderHeapUsedBytes": 32153336,
+          "backingStorageBytes": 2780314,
+          "dom": {
+            "documents": 3,
+            "nodes": 1220,
+            "jsEventListeners": 576
+          },
+          "attached": {
+            "nodes": 519,
+            "canvases": 3,
+            "images": 1,
+            "nativeAnimations": 9,
+            "animationStates": {
+              "running": 1,
+              "paused": 8,
+              "finished": 0,
+              "idle": 0
+            }
+          },
+          "cssActive": 4,
+          "paintedPins": 15,
+          "canvasCacheBytes": 740932,
+          "canvasSurfaceBytes": 4
+        },
+        {
+          "label": "paused-after-gc",
+          "pss": {
+            "totalKiB": 384244,
+            "byRoleKiB": {
+              "browser-other": 141827,
+              "chromium-gpu": 40510,
+              "chromium-renderer": 201907
+            }
+          },
+          "usedJsBytes": 10525728,
+          "embedderHeapUsedBytes": 4034256,
+          "backingStorageBytes": 2539175,
+          "dom": {
+            "documents": 3,
+            "nodes": 730,
+            "jsEventListeners": 296
+          },
+          "attached": {
+            "nodes": 519,
+            "canvases": 3,
+            "images": 1,
+            "nativeAnimations": 9,
+            "animationStates": {
+              "running": 1,
+              "paused": 8,
+              "finished": 0,
+              "idle": 0
+            }
+          },
+          "cssActive": 4,
+          "paintedPins": 15,
+          "canvasCacheBytes": 740932,
+          "canvasSurfaceBytes": 4
+        },
+        {
+          "label": "paused-after-snapshot",
+          "pss": {
+            "totalKiB": 389135,
+            "byRoleKiB": {
+              "browser-other": 142349,
+              "chromium-gpu": 35192,
+              "chromium-renderer": 211594
+            }
+          },
+          "usedJsBytes": 10619796,
+          "embedderHeapUsedBytes": 4201096,
+          "backingStorageBytes": 2539447,
+          "dom": {
+            "documents": 3,
+            "nodes": 730,
+            "jsEventListeners": 296
+          },
+          "attached": {
+            "nodes": 519,
+            "canvases": 3,
+            "images": 1,
+            "nativeAnimations": 9,
+            "animationStates": {
+              "running": 1,
+              "paused": 8,
+              "finished": 0,
+              "idle": 0
+            }
+          },
+          "cssActive": 4,
+          "paintedPins": 15,
+          "canvasCacheBytes": 740932,
+          "canvasSurfaceBytes": 4
+        },
+        {
+          "label": "home-before-gc",
+          "pss": {
+            "totalKiB": 388413,
+            "byRoleKiB": {
+              "browser-other": 142363,
+              "chromium-gpu": 36436,
+              "chromium-renderer": 209614
+            }
+          },
+          "usedJsBytes": 10865704,
+          "embedderHeapUsedBytes": 4943408,
+          "backingStorageBytes": 2543083,
+          "dom": {
+            "documents": 3,
+            "nodes": 802,
+            "jsEventListeners": 389
+          },
+          "attached": {
+            "nodes": 54,
+            "canvases": 0,
+            "images": 0,
+            "nativeAnimations": 0,
+            "animationStates": {
+              "running": 0,
+              "paused": 0,
+              "finished": 0,
+              "idle": 0
+            }
+          },
+          "cssActive": 0,
+          "paintedPins": 0,
+          "canvasCacheBytes": 0,
+          "canvasSurfaceBytes": 0
+        },
+        {
+          "label": "home-settled-before-gc",
+          "pss": {
+            "totalKiB": 379629,
+            "byRoleKiB": {
+              "browser-other": 141691,
+              "chromium-gpu": 40416,
+              "chromium-renderer": 197522
+            }
+          },
+          "usedJsBytes": 10925992,
+          "embedderHeapUsedBytes": 4943408,
+          "backingStorageBytes": 2543083,
+          "dom": {
+            "documents": 3,
+            "nodes": 802,
+            "jsEventListeners": 389
+          },
+          "attached": {
+            "nodes": 54,
+            "canvases": 0,
+            "images": 0,
+            "nativeAnimations": 0,
+            "animationStates": {
+              "running": 0,
+              "paused": 0,
+              "finished": 0,
+              "idle": 0
+            }
+          },
+          "cssActive": 0,
+          "paintedPins": 0,
+          "canvasCacheBytes": 0,
+          "canvasSurfaceBytes": 0
+        },
+        {
+          "label": "home-after-gc",
+          "pss": {
+            "totalKiB": 366248,
+            "byRoleKiB": {
+              "browser-other": 141661,
+              "chromium-gpu": 40416,
+              "chromium-renderer": 184171
+            }
+          },
+          "usedJsBytes": 9913292,
+          "embedderHeapUsedBytes": 2646864,
+          "backingStorageBytes": 2539417,
+          "dom": {
+            "documents": 3,
+            "nodes": 247,
+            "jsEventListeners": 212
+          },
+          "attached": {
+            "nodes": 54,
+            "canvases": 0,
+            "images": 0,
+            "nativeAnimations": 0,
+            "animationStates": {
+              "running": 0,
+              "paused": 0,
+              "finished": 0,
+              "idle": 0
+            }
+          },
+          "cssActive": 0,
+          "paintedPins": 0,
+          "canvasCacheBytes": 0,
+          "canvasSurfaceBytes": 0
+        },
+        {
+          "label": "home-after-snapshot",
+          "pss": {
+            "totalKiB": 350860,
+            "byRoleKiB": {
+              "browser-other": 142373,
+              "chromium-gpu": 26000,
+              "chromium-renderer": 182487
+            }
+          },
+          "usedJsBytes": 9964572,
+          "embedderHeapUsedBytes": 2786032,
+          "backingStorageBytes": 2539657,
+          "dom": {
+            "documents": 3,
+            "nodes": 247,
+            "jsEventListeners": 212
+          },
+          "attached": {
+            "nodes": 54,
+            "canvases": 0,
+            "images": 0,
+            "nativeAnimations": 0,
+            "animationStates": {
+              "running": 0,
+              "paused": 0,
+              "finished": 0,
+              "idle": 0
+            }
+          },
+          "cssActive": 0,
+          "paintedPins": 0,
+          "canvasCacheBytes": 0,
+          "canvasSurfaceBytes": 0
+        },
+        {
+          "label": "blank-before-gc",
+          "pss": {
+            "totalKiB": 334104,
+            "byRoleKiB": {
+              "browser-other": 141852,
+              "chromium-gpu": 25062,
+              "chromium-renderer": 167190
+            }
+          },
+          "usedJsBytes": 10446728,
+          "embedderHeapUsedBytes": 3445608,
+          "backingStorageBytes": 2539668,
+          "dom": {
+            "documents": 5,
+            "nodes": 255,
+            "jsEventListeners": 214
+          },
+          "attached": {
+            "nodes": 3,
+            "canvases": 0,
+            "images": 0,
+            "nativeAnimations": 0,
+            "animationStates": {
+              "running": 0,
+              "paused": 0,
+              "finished": 0,
+              "idle": 0
+            }
+          },
+          "cssActive": null,
+          "paintedPins": null,
+          "canvasCacheBytes": null,
+          "canvasSurfaceBytes": null
+        },
+        {
+          "label": "blank-after-gc",
+          "pss": {
+            "totalKiB": 298060,
+            "byRoleKiB": {
+              "browser-other": 141852,
+              "chromium-gpu": 25062,
+              "chromium-renderer": 131146
+            }
+          },
+          "usedJsBytes": 1108976,
+          "embedderHeapUsedBytes": 410864,
+          "backingStorageBytes": 286,
+          "dom": {
+            "documents": 1,
+            "nodes": 4,
+            "jsEventListeners": 2
+          },
+          "attached": {
+            "nodes": 3,
+            "canvases": 0,
+            "images": 0,
+            "nativeAnimations": 0,
+            "animationStates": {
+              "running": 0,
+              "paused": 0,
+              "finished": 0,
+              "idle": 0
+            }
+          },
+          "cssActive": null,
+          "paintedPins": null,
+          "canvasCacheBytes": null,
+          "canvasSurfaceBytes": null
+        }
+      ],
+      "observedHomeOwnershipReleased": true,
+      "physicalPhoneAcceptanceEstablished": false,
+      "permanentLeakProven": false,
+      "whiteScreenFixed": false
+    }
+  ],
+  "whiteScreenFixed": false
+}

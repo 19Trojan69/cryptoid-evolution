@@ -46,12 +46,54 @@ werden. Zwei Wiederholungen liefern noch keine Smartphone-Freigabe oder belastba
 allgemeine Effektgröße. Ein grüner Erfassungslauf bedeutet keinen reparierten
 White Screen. Die offene WebKit-Original-Startlücke bleibt ein gesonderter Befund.
 
-Neue Ergebnisse werden nach tatsächlicher Auswertung ergänzt. Es gibt hier
-keine neue Geräte-URL und bisher keinen als Verbesserung akzeptierten Spiel-Patch.
+## Bestätigte Kurzkontrollen
+
+Gemessene Quelle `668d4115716bdb425947c4847e70113e8c497990`, Baum
+`cb0bed431f842cad4067e23ebb3e2036c243b04c`,
+[CI 41343318455](https://github.com/19Trojan69/cryptoid-evolution/actions/runs/41343318455).
+Die Quellen-Gates und beide kurzen nativen Kontrollen sind erfolgreich. Die vier
+längeren Messungen sind bis zu ihrer tatsächlichen Auswertung ausdrücklich offen.
+
+| tatsächlich gezählter nativer Pfad | Original | Guard |
+| --- | ---: | ---: |
+| gemessene aktive Stoppuhrzeit | 60.000,1 ms | 61.000,0 ms |
+| Mini-Start-Ereignisse | 1.022 | 1.022 |
+| Mini-Zielabfragen während Start-Discovery | 1.022 | 0 |
+| Timing-Schreibzugriffe bei aktuell zugeordnetem Mini-Ziel | 1.230 | 0 |
+| verbleibende Mini-Abfragen außerhalb der Start-Discovery | 208 | 210 |
+| native Mini-End-Ereignisse | 208 | 210 |
+
+Damit ist der vorgesehene Startpfad im Original beobachtet und beim Guard
+ausgeschlossen; die ursprüngliche Abschlussabfrage wird weiterhin tatsächlich
+beobachtet. Der Zähler `otherTimingUpdates` bleibt in beiden Fällen positiv.
+Er klassifiziert das Ziel beim Aufruf. Bei bereits entfernten Elementen kann die
+frühere Mini-Zuordnung fehlen; er ist deshalb kein sauberer Mengenvergleich aller
+anderen Animationen und kein Beweis identischer Arbeit außerhalb der Minis.
+Die Quellenprüfung und die vorhandenen Nicht-Mini-Regressionen sichern den engen
+Codeeingriff. Ungleiche End-Ereigniszahlen werden nicht in gleiche Renderarbeit
+umgedeutet.
+
+Beide Kurzläufe erreichen Pause, regulären Home-Ausstieg und leeres neues
+Dokument. Die komprimierten Original-JSON bleiben verlustfrei gesichert. Beide
+ZIP-Digests/Integritäten und alle vier Kurzlauf-Snapshots wurden geprüft und ihre
+Größen-/Klassensummen erneut aus den Originalgraphen berechnet. Fünf weitere
+Offline-Regressionen verhindern Quellen-/Bedingungsmischung, fehlende positive
+Signale, als Langlauf umetikettierte Kurzdaten, API-Zähler im Langlauf und
+unvollständige beziehungsweise doppelte Wiederholungen.
+
+Der normale Buildpfad ohne neues Flag wurde zusätzlich gebaut: weder neuer
+Vergleich noch Inspektionsbrücke sind darin enthalten. Die 14 bestehenden
+Preview-/Heap-Prüfungen bestehen ebenso wie die 15 Quellen-/Inspektionsfälle
+und die fünf neuen Offline-Annahmefälle (34 Fälle lokal, davon 15 auch in der CI).
+Spielquellen-Pins sind unverändert. Neue Langlaufergebnisse werden nach Prüfung
+ergänzt. Es gibt hier keine neue Geräte-URL und bisher keinen als Verbesserung
+akzeptierten Spiel-Patch.
 
 ```bash
 node --test verification/isolated-mini-pacing-20261101/comparison.test.mjs
 node verification/isolated-mini-pacing-20261101/preflight.mjs
+node --test verification/isolated-mini-pacing-20261101/evidence/summary.test.mjs
+node verification/isolated-mini-pacing-20261101/evidence/verifyEvidence.mjs
 VERCEL_ENV=preview CRYPTOID_SOAK_CONDITION=original CRYPTOID_LIFETIME_ATTRIBUTION=1 CRYPTOID_ISOLATED_MINI_PACING=bypass node verification/systematic-stability-20261101/prepareSoakBuild.mjs
 CRYPTOID_SOAK_CONDITION=original CRYPTOID_LIFETIME_ATTRIBUTION=1 CRYPTOID_ISOLATED_MINI_PACING=bypass CRYPTOID_ISOLATED_PATH_PROOF=1 CRYPTOID_ATTRIBUTION_SECONDS=60 node verification/memory-retention-attribution-20261101/profileLifetime.mjs
 ```

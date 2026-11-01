@@ -1,0 +1,62 @@
+{
+  "version": 1,
+  "workflowRun": 41343318455,
+  "workflowURL": "https://github.com/19Trojan69/cryptoid-evolution/actions/runs/41343318455",
+  "workflowConclusion": "in_progress",
+  "measuredSource": "668d4115716bdb425947c4847e70113e8c497990",
+  "measuredTree": "cb0bed431f842cad4067e23ebb3e2036c243b04c",
+  "rawOwnerReportsIncluded": false,
+  "rawHeapSnapshotsIncluded": false,
+  "captures": [
+    {
+      "file": "control-short.json.gz",
+      "cell": {
+        "condition": "control",
+        "seconds": 60,
+        "replica": 1
+      },
+      "compressedBytes": 11657,
+      "uncompressedBytes": 157163,
+      "sha256": "936537b48c42f9d0ff0da4f97290eaf3c73253d8450be7a01058b87a1255f54b",
+      "originalJsonSha256": "487968da95e60e9e969c7b0601a04b0f69ed4d0e35a579e61225719aeddb69e0",
+      "artifact": {
+        "id": 13097989232,
+        "bytes": 8329423,
+        "sha256": "6bee56c5e7344a4f8a34fdcd6e6efd2ba4f3f1ae3d2f6d62cdff50163322f9f6",
+        "githubDigestMatched": true,
+        "zipIntegrityPassed": true
+      }
+    },
+    {
+      "file": "bypass-short.json.gz",
+      "cell": {
+        "condition": "bypass",
+        "seconds": 60,
+        "replica": 1
+      },
+      "compressedBytes": 11687,
+      "uncompressedBytes": 157160,
+      "sha256": "1736da8392defd3c24e8e4b1657bdd5a6620f221f42751763c9f4aa0ff31ddc9",
+      "originalJsonSha256": "254684caa69a005814a9f7fc7c41f1ed90f10bd83b87db126a4ab680bdb8f50d",
+      "artifact": {
+        "id": 13097864387,
+        "bytes": 8287259,
+        "sha256": "8dcfc9368861337e1700fe1a699bc81c9f59153c825f91fa095768fe559c16ba",
+        "githubDigestMatched": true,
+        "zipIntegrityPassed": true
+      }
+    }
+  ],
+  "snapshotAnalyses": [
+    {
+      "file": "control-short-heaps.json",
+      "bytes": 18072,
+      "sha256": "a23c4b686d9a4152afab4158801b85532ca0326858e642ff9ca1df1ab1dcbbee"
+    },
+    {
+      "file": "bypass-short-heaps.json",
+      "bytes": 18036,
+      "sha256": "8c06792045bfba4c7c9805e62d6fd0694c273d078a13673243014b2e736da1f1"
+    }
+  ]
+}
