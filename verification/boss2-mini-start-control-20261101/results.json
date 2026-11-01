@@ -5,10 +5,10 @@
   "physicalDeviceTested": false,
   "newOwnerPhoneResult": null,
   "runtime": {
-    "source": null,
-    "tree": null,
+    "source": "2dc37bdb6d52ddd29bcfad9269dbb4b3f76bffcf",
+    "tree": "d0e4ea74bee804375e8f7c292b22e5c27bcf7a73",
     "workBranch": "codex/boss2-mini-start-control-20261101",
-    "deviceBranch": null
+    "deviceBranch": "codex/boss2-mini-start-device-20261101"
   },
   "basis": {
     "source": "d72db0a8ca5c70b91db9b7760366773e2836db66",
@@ -19,12 +19,13 @@
     "newDocumentAfterCheckpointMs": 203,
     "bootAfterActiveSessionRecorded": true,
     "normalEndRecorded": false,
-    "ownerWhiteScreenExplicitlyRestatedForThisRun": false,
+    "ownerWhiteScreenExplicitlyRestatedForThisRun": true,
     "evidence": "../boss2-mini-completion-control-20261031/evidence/owner-mini-completion-abrupt-return.json",
-    "evidenceCommit": "cb303a0a42c54864b167aa5f2493c50dbca34161"
+    "evidenceCommit": "b8b135f73fcf20b70f59791acff6e0aef344f63f",
+    "ownerWhiteScreenReported": true
   },
   "verification": {
-    "status": "pending-full-ci",
+    "status": "passed",
     "localTargetedTests": 4,
     "localCompleteAppTested": false,
     "expectedSourceTests": 26,
@@ -32,17 +33,124 @@
     "requiredControlMiniTimingWritesPositive": true,
     "requiredCandidateMiniTargetQueriesAndTimingWritesZero": true,
     "proofIncludesMiniSparkDescendants": true,
-    "qaProbeShipped": false
+    "qaProbeShipped": false,
+    "sourceTests": 26,
+    "shortDesktopFlows": 4,
+    "runId": 41289850128,
+    "workflow": "https://github.com/19Trojan69/cryptoid-evolution/actions/runs/41289850128",
+    "workflowStatus": "completed",
+    "workflowConclusion": "success",
+    "originalSourcePins": "passed",
+    "typePreflight": "passed",
+    "jobs": [
+      {
+        "id": 124798633236,
+        "engine": "chromium",
+        "conclusion": "success"
+      },
+      {
+        "id": 124798633418,
+        "engine": "webkit",
+        "conclusion": "success"
+      }
+    ],
+    "evidence": "evidence/synthetic-mini-start-comparison.json",
+    "nativeProof": {
+      "scope": "Boss-mini root AND spark descendants; start target getAnimations calls and native effect updateTiming writes. No native process/memory or performance measurement.",
+      "chromium": {
+        "startQueriesControl": 257,
+        "startQueriesCandidate": 0,
+        "miniTimingWritesControl": 305,
+        "miniTimingWritesCandidate": 0,
+        "startEventsControl": 257,
+        "startEventsCandidate": 257,
+        "endEventsControl": 48,
+        "endEventsCandidate": 48,
+        "otherTimingWritesControl": 247,
+        "otherTimingWritesCandidate": 41
+      },
+      "webkit": {
+        "startQueriesControl": 252,
+        "startQueriesCandidate": 0,
+        "miniTimingWritesControl": 276,
+        "miniTimingWritesCandidate": 0,
+        "startEventsControl": 252,
+        "startEventsCandidate": 263,
+        "endEventsControl": 24,
+        "endEventsCandidate": 21,
+        "otherTimingWritesControl": 263,
+        "otherTimingWritesCandidate": 41
+      },
+      "notDirectlyComparableWithPriorRootOnlyCounters": true
+    }
   },
   "deployment": {
-    "status": "not-deployed",
+    "status": "READY",
     "previewOnly": true,
     "gitAutomaticDeployment": false,
-    "publicReleaseAuthorized": false
+    "publicReleaseAuthorized": false,
+    "environment": "Preview",
+    "source": "2dc37bdb6d52ddd29bcfad9269dbb4b3f76bffcf",
+    "url": "https://cryptoid-evolution-testnet-e13dxxhkg-19-trojan69.vercel.app/",
+    "id": "dpl_64BJNF9th2rYzJZgSaK1SUkhnCWV",
+    "dashboard": "https://vercel.com/19-trojan69/cryptoid-evolution-testnet/64BJNF9th2rYzJZgSaK1SUkhnCWV",
+    "branch": "codex/boss2-mini-start-control-20261101",
+    "durationDisplay": "44s",
+    "protection": "Standard Protection (observed in Deployment Settings)",
+    "customDomainAssignment": "Skipped"
   },
   "publicMainSource": "ce073547cf573375d141bf846f70e294138dbd73",
   "limits": [
     "Discovery, native timing/listener registration and extra 60-Hz mini visual-progress quantization change together; authored CSS animation remains. Other effect pacing and initial root discovery stay. Game clocks and speed unchanged.",
     "No native cause, permanent fix, owner-phone improvement or new owner result. No unchanged repeat pending. No new link before checks and hosted verification."
-  ]
+  ],
+  "originalSourceTrees": {
+    "frontend": "890df8a38e13ef1fe315a5c0eb109c1d72b80aab",
+    "backend": "6e93bfbac9e6cc70a1edfb8bd55d737f612ba261",
+    "api": "ccac7cd576a079771d7d7fe4f0085492ebbe6813",
+    "assets": "a9860b12db58a96dafde818d9a58a6ea0e03c5e5",
+    "private-preview": "b733d4dc70b4ac407391720eab131dbaf1d60e37"
+  },
+  "treatment": {
+    "change": "Boss-mini root and descendants bypass optional native start discovery/pacing registration; authored CSS playback remains",
+    "originalCssFramePacingBlob": "5d9cc3e5b40792277d9813b2953196affbc0eaf3",
+    "normalizedOriginalTextSha256": "8e08da3d503cbfcd9104d3809ef7c8ce214e9053bda15b030fa3ddc5cd152010",
+    "buildOnlyTwoExactlyReversibleGuards": true,
+    "rootAndSparkDescendantsCovered": true,
+    "discoveryRegistrationTimingListenersAndExtraQuantizationChangeTogether": true,
+    "originalMiniMarkupCssKeyframesSparksDurationsRetained": true,
+    "authoredNativeCssPlaybackRetained": true,
+    "otherEffectPacingRetained": true,
+    "initialRootDiscoveryRetained": true,
+    "notAllGlobalNativeQueriesRemoved": true,
+    "completionInspectionAndEarlyFinishedDomCleanupStillOff": true,
+    "oneLatestKeyedBossMiniRetained": true,
+    "staticHotspotsStillOmitted": true,
+    "heatShellInlineMasksImagePreparationRetained": true,
+    "activeHeatMasksNone": true,
+    "reflectionHidden": true,
+    "bossWeaponsViewExcluded": true,
+    "priorFilterReactorExplosionCanvasControlsRetained": true,
+    "originalBossImageHealthBackgroundRetained": true,
+    "gameplaySpeedClocksBalanceOneFingerInputManualResumeAudioUnchanged": true,
+    "newCanvasAssetsTimersFramesHooks": false,
+    "qaNativeProbeDeployed": false
+  },
+  "hostedCheck": {
+    "status": "passed-with-limits",
+    "evidence": "evidence/hosted-mini-start-candidate.json",
+    "screenshot": "evidence/hosted-preview-ready.jpg",
+    "browser": "assistant cloud Chromium",
+    "physicalDevice": false,
+    "displayedTime": "01:23",
+    "savedActiveMs": 83751.5,
+    "savedMode": "ended",
+    "pairedReport": true,
+    "lastTimeRestoredAfterReload": true,
+    "stalledStateEntries": 2,
+    "nativeCallsMeasuredHere": false,
+    "uninterruptedPerformanceClaimed": false,
+    "ownerResult": false
+  },
+  "currentStatus": "Ready protected guest boss-mini start-pacing bypass candidate; full CI path comparison and hosted lifecycle verified. Latest owner White Screen at16:02 belongs to prior d72 runtime, not this new source. New owner phone test not started or reported; no confirmed fix."
 }
