@@ -230,6 +230,13 @@ ein reproduzierter Besitz-/Freigabefehler rechtfertigt einen Runtime-Patch.
 Ein weiterer langer Smartphone-Lauf ist für diese nächste technische Analyse
 noch nicht erforderlich.
 
+Die unmittelbare Fortsetzung ist unter
+[Speicherbesitzer und Freigabegrenzen](../memory-retention-attribution-20261101/README.de.md)
+dokumentiert. Sie prüft die Originalszene mit bestehenden Besitzerzählern und
+schweren Speicheraufnahmen erst nach Pause beziehungsweise bestätigtem Home-
+Ausstieg. Die oben aufgeführten ursprünglichen Messungen und der rote WebKit-
+Startkontrollfall bleiben davon getrennte, unveränderte Belege.
+
 Alle vier ursprünglichen ZIP-Digests wurden gegen GitHub und ihre ZIP-Integrität
 geprüft. Die sieben vollständigen synthetischen JSON-Ergebnisse bleiben verlustfrei
 komprimiert in [native-captures.json.gz](evidence/native-captures.json.gz) erhalten;

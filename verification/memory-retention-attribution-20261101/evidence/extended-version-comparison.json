@@ -1,0 +1,142 @@
+{
+  "version": 1,
+  "refs": {
+    "longer_owner_run": "0868671b213fb25ba9ce1a0a8d1057dc2067d1f2",
+    "public_main": "ce073547cf573375d141bf846f70e294138dbd73",
+    "normal_then_failed_control": "67dabc714907be6d3ae99ccf9ebeab170eb34b06",
+    "last_failed_owner": "d72db0a8ca5c70b91db9b7760366773e2836db66",
+    "latest_candidate": "2dc37bdb6d52ddd29bcfad9269dbb4b3f76bffcf",
+    "analysis_base": "71b253af7d101ededf9c856e9436ff7bf681f126",
+    "measured_attribution": "9cfe6ae1df777524d84c1a7301694490a4ed3a13"
+  },
+  "additionalModuleBlobs": {
+    "frontend/src/pages/bossWeaponTextures.ts": {
+      "longer_owner_run": "9121c65cfb47beb782c051ff06c441a3d629af69",
+      "public_main": "9121c65cfb47beb782c051ff06c441a3d629af69",
+      "normal_then_failed_control": "9121c65cfb47beb782c051ff06c441a3d629af69",
+      "last_failed_owner": "9121c65cfb47beb782c051ff06c441a3d629af69",
+      "latest_candidate": "9121c65cfb47beb782c051ff06c441a3d629af69",
+      "analysis_base": "9121c65cfb47beb782c051ff06c441a3d629af69",
+      "measured_attribution": "9121c65cfb47beb782c051ff06c441a3d629af69"
+    },
+    "frontend/src/pages/bossWeaponRenderer.ts": {
+      "longer_owner_run": "bc218dafa05c4e5e714718e110035df83e111d21",
+      "public_main": "bc218dafa05c4e5e714718e110035df83e111d21",
+      "normal_then_failed_control": "bc218dafa05c4e5e714718e110035df83e111d21",
+      "last_failed_owner": "bc218dafa05c4e5e714718e110035df83e111d21",
+      "latest_candidate": "bc218dafa05c4e5e714718e110035df83e111d21",
+      "analysis_base": "bc218dafa05c4e5e714718e110035df83e111d21",
+      "measured_attribution": "bc218dafa05c4e5e714718e110035df83e111d21"
+    },
+    "frontend/src/pages/BossWeaponsView.tsx": {
+      "longer_owner_run": "1d96b505fce35c8fded383e49b3e32520d75a3ad",
+      "public_main": "1d96b505fce35c8fded383e49b3e32520d75a3ad",
+      "normal_then_failed_control": "1d96b505fce35c8fded383e49b3e32520d75a3ad",
+      "last_failed_owner": "1d96b505fce35c8fded383e49b3e32520d75a3ad",
+      "latest_candidate": "1d96b505fce35c8fded383e49b3e32520d75a3ad",
+      "analysis_base": "1d96b505fce35c8fded383e49b3e32520d75a3ad",
+      "measured_attribution": "1d96b505fce35c8fded383e49b3e32520d75a3ad"
+    },
+    "frontend/src/pages/bossArtwork.ts": {
+      "longer_owner_run": "2ab127a8835c247b31b08ffccd54b2130560e4bc",
+      "public_main": "2ab127a8835c247b31b08ffccd54b2130560e4bc",
+      "normal_then_failed_control": "2ab127a8835c247b31b08ffccd54b2130560e4bc",
+      "last_failed_owner": "2ab127a8835c247b31b08ffccd54b2130560e4bc",
+      "latest_candidate": "2ab127a8835c247b31b08ffccd54b2130560e4bc",
+      "analysis_base": "2ab127a8835c247b31b08ffccd54b2130560e4bc",
+      "measured_attribution": "2ab127a8835c247b31b08ffccd54b2130560e4bc"
+    },
+    "frontend/src/pages/shipArtwork.ts": {
+      "longer_owner_run": "8446587576080254f595a3af9df9fecb162a41b2",
+      "public_main": "8446587576080254f595a3af9df9fecb162a41b2",
+      "normal_then_failed_control": "8446587576080254f595a3af9df9fecb162a41b2",
+      "last_failed_owner": "8446587576080254f595a3af9df9fecb162a41b2",
+      "latest_candidate": "8446587576080254f595a3af9df9fecb162a41b2",
+      "analysis_base": "8446587576080254f595a3af9df9fecb162a41b2",
+      "measured_attribution": "8446587576080254f595a3af9df9fecb162a41b2"
+    },
+    "frontend/src/pages/bossCombat.ts": {
+      "longer_owner_run": "9b4b45ffe7c8219383d2bbb3c11f6e509595614a",
+      "public_main": "9b4b45ffe7c8219383d2bbb3c11f6e509595614a",
+      "normal_then_failed_control": "9b4b45ffe7c8219383d2bbb3c11f6e509595614a",
+      "last_failed_owner": "9b4b45ffe7c8219383d2bbb3c11f6e509595614a",
+      "latest_candidate": "9b4b45ffe7c8219383d2bbb3c11f6e509595614a",
+      "analysis_base": "9b4b45ffe7c8219383d2bbb3c11f6e509595614a",
+      "measured_attribution": "9b4b45ffe7c8219383d2bbb3c11f6e509595614a"
+    },
+    "frontend/src/pages/paintedShip.ts": {
+      "longer_owner_run": "3ec258eb5eb70d02254a492a4b11354f598955a1",
+      "public_main": "3ec258eb5eb70d02254a492a4b11354f598955a1",
+      "normal_then_failed_control": "3ec258eb5eb70d02254a492a4b11354f598955a1",
+      "last_failed_owner": "3ec258eb5eb70d02254a492a4b11354f598955a1",
+      "latest_candidate": "3ec258eb5eb70d02254a492a4b11354f598955a1",
+      "analysis_base": "3ec258eb5eb70d02254a492a4b11354f598955a1",
+      "measured_attribution": "3ec258eb5eb70d02254a492a4b11354f598955a1"
+    },
+    "frontend/src/lib/nativeFrameEasing.ts": {
+      "longer_owner_run": "cb0b45871da02de5bf0bb02800dda10fb8193488",
+      "public_main": "cb0b45871da02de5bf0bb02800dda10fb8193488",
+      "normal_then_failed_control": "cb0b45871da02de5bf0bb02800dda10fb8193488",
+      "last_failed_owner": "cb0b45871da02de5bf0bb02800dda10fb8193488",
+      "latest_candidate": "cb0b45871da02de5bf0bb02800dda10fb8193488",
+      "analysis_base": "cb0b45871da02de5bf0bb02800dda10fb8193488",
+      "measured_attribution": "cb0b45871da02de5bf0bb02800dda10fb8193488"
+    }
+  },
+  "sourceSubtrees": {
+    "longer_owner_run": {
+      "frontend": "4bfce7d12b525a87209e5bb8f11a6380c93d27e9",
+      "backend": "fcca794ee2b879cc2d8bea84ed0d1cc0de5d376f",
+      "api": "66ea2e84ae8f65c6e9e3c463e1d67acbc3f3f4ee",
+      "assets": "a9860b12db58a96dafde818d9a58a6ea0e03c5e5",
+      "private-preview": "b733d4dc70b4ac407391720eab131dbaf1d60e37"
+    },
+    "public_main": {
+      "frontend": "64988b3fd5071a51293969c54d1ed3ca04b6c437",
+      "backend": "6e93bfbac9e6cc70a1edfb8bd55d737f612ba261",
+      "api": "66ea2e84ae8f65c6e9e3c463e1d67acbc3f3f4ee",
+      "assets": "a9860b12db58a96dafde818d9a58a6ea0e03c5e5",
+      "private-preview": "b733d4dc70b4ac407391720eab131dbaf1d60e37"
+    },
+    "normal_then_failed_control": {
+      "frontend": "890df8a38e13ef1fe315a5c0eb109c1d72b80aab",
+      "backend": "6e93bfbac9e6cc70a1edfb8bd55d737f612ba261",
+      "api": "ccac7cd576a079771d7d7fe4f0085492ebbe6813",
+      "assets": "a9860b12db58a96dafde818d9a58a6ea0e03c5e5",
+      "private-preview": "b733d4dc70b4ac407391720eab131dbaf1d60e37"
+    },
+    "last_failed_owner": {
+      "frontend": "890df8a38e13ef1fe315a5c0eb109c1d72b80aab",
+      "backend": "6e93bfbac9e6cc70a1edfb8bd55d737f612ba261",
+      "api": "ccac7cd576a079771d7d7fe4f0085492ebbe6813",
+      "assets": "a9860b12db58a96dafde818d9a58a6ea0e03c5e5",
+      "private-preview": "b733d4dc70b4ac407391720eab131dbaf1d60e37"
+    },
+    "latest_candidate": {
+      "frontend": "890df8a38e13ef1fe315a5c0eb109c1d72b80aab",
+      "backend": "6e93bfbac9e6cc70a1edfb8bd55d737f612ba261",
+      "api": "ccac7cd576a079771d7d7fe4f0085492ebbe6813",
+      "assets": "a9860b12db58a96dafde818d9a58a6ea0e03c5e5",
+      "private-preview": "b733d4dc70b4ac407391720eab131dbaf1d60e37"
+    },
+    "analysis_base": {
+      "frontend": "890df8a38e13ef1fe315a5c0eb109c1d72b80aab",
+      "backend": "6e93bfbac9e6cc70a1edfb8bd55d737f612ba261",
+      "api": "ccac7cd576a079771d7d7fe4f0085492ebbe6813",
+      "assets": "a9860b12db58a96dafde818d9a58a6ea0e03c5e5",
+      "private-preview": "b733d4dc70b4ac407391720eab131dbaf1d60e37"
+    },
+    "measured_attribution": {
+      "frontend": "890df8a38e13ef1fe315a5c0eb109c1d72b80aab",
+      "backend": "6e93bfbac9e6cc70a1edfb8bd55d737f612ba261",
+      "api": "ccac7cd576a079771d7d7fe4f0085492ebbe6813",
+      "assets": "a9860b12db58a96dafde818d9a58a6ea0e03c5e5",
+      "private-preview": "b733d4dc70b4ac407391720eab131dbaf1d60e37"
+    }
+  },
+  "allAdditionalModulesByteIdentical": true,
+  "limits": [
+    "Git source identity only. Virtual build transforms, build flags, generated assets, installed packages and browser/device conditions are separate.",
+    "Byte-identical code does not exclude a longstanding shared defect."
+  ]
+}

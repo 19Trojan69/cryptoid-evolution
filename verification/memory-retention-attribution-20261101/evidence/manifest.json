@@ -2,7 +2,7 @@
   "version": 1,
   "workflowRun": 41339737350,
   "workflowURL": "https://github.com/19Trojan69/cryptoid-evolution/actions/runs/41339737350",
-  "workflowConclusion": "in_progress",
+  "workflowConclusion": "success",
   "measuredSource": "9cfe6ae1df777524d84c1a7301694490a4ed3a13",
   "measuredTree": "44fe46c19cfd3d13838866457ea9cbadf6c153f7",
   "rawOwnerReportsIncluded": false,
@@ -22,6 +22,33 @@
         "zipIntegrityPassed": true,
         "rawSnapshotDigestsInflatedSizesAndSummariesReparsed": true
       }
+    },
+    {
+      "file": "long-capture.json.gz",
+      "requestedSeconds": 1200,
+      "compressedBytes": 30847,
+      "uncompressedBytes": 977671,
+      "sha256": "06edd99c1cca1960ac55bd8ef15a39cbc45202557fb8f374c25cd4a6f4e387ca",
+      "artifact": {
+        "id": 13098035874,
+        "bytes": 8286661,
+        "sha256": "9c58bd6d8408a90da6cc59ad2f62dc757ef3d8344fab377d1eda25ad2c2181ea",
+        "githubDigestMatched": true,
+        "zipIntegrityPassed": true,
+        "rawSnapshotDigestsInflatedSizesAndSummariesReparsed": true
+      }
+    }
+  ],
+  "snapshotAnalyses": [
+    {
+      "file": "short-heap-comparison.json",
+      "bytes": 17999,
+      "sha256": "355410c3761392773e17df60d008556b147c68e2ab3340d562959f89dbf69e53"
+    },
+    {
+      "file": "long-heap-comparison.json",
+      "bytes": 17993,
+      "sha256": "d41752ab203616bc3e3e8336b4c9667c74c0414dfa550699ba600ea058a01ea1"
     }
   ]
 }
