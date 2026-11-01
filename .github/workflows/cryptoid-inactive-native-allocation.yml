@@ -1,0 +1,92 @@
+name: Inactive native allocator attribution
+run-name: Original scene allocator dumps only after explicit pause and exit
+on:
+  push:
+    branches: [codex/inactive-native-allocation-20261101]
+    paths:
+      - '.github/workflows/cryptoid-inactive-native-allocation.yml'
+      - 'verification/inactive-native-allocation-20261101/*.mjs'
+      - 'verification/memory-retention-attribution-20261101/profileLifetime.mjs'
+permissions:
+  contents: read
+jobs:
+  source-gates:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with: {persist-credentials: false}
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with: {node-version: '24'}
+      - run: npm install --prefix frontend --include=optional --ignore-scripts --no-audit --no-fund
+      - name: Verify unchanged sources, actual inactive collector and retained parser regressions
+        run: |
+          git restore --worktree -- frontend/yarn.lock
+          node verification/boss2-mini-start-control-20261101/verifyScope.mjs
+          node --test verification/inactive-native-allocation-20261101/collector.test.mjs verification/boss2-native-memory-20261029/nativeSummary.test.mjs verification/memory-retention-attribution-20261101/inspection.test.mjs
+          node verification/memory-retention-attribution-20261101/preflight.mjs
+          node verification/isolated-mini-pacing-20261101/evidence/verifyEvidence.mjs
+  short-protocol:
+    needs: source-gates
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      CRYPTOID_SOAK_CONDITION: original
+      CRYPTOID_LIFETIME_ATTRIBUTION: '1'
+      CRYPTOID_INACTIVE_NATIVE_TRACE: '1'
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with: {persist-credentials: false}
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with: {node-version: '24'}
+      - name: Install existing browser tools
+        run: |
+          npm install --prefix frontend --include=optional --ignore-scripts --no-audit --no-fund
+          npm install --prefix verification/boss2-forensics-20261028 --ignore-scripts --no-audit --no-fund
+          git restore --worktree -- frontend/yarn.lock
+          cd verification/boss2-forensics-20261028
+          npx playwright install --with-deps chromium
+      - name: Prove four actual inactive allocator dumps after a one-minute control
+        env: {VERCEL_ENV: preview, CRYPTOID_ATTRIBUTION_SECONDS: '60'}
+        run: |
+          node verification/systematic-stability-20261101/prepareSoakBuild.mjs
+          node verification/memory-retention-attribution-20261101/profileLifetime.mjs
+          node verification/boss2-mini-start-control-20261101/verifyScope.mjs
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: ${{ !cancelled() }}
+        with:
+          name: inactive-native-60
+          path: verification/inactive-native-allocation-20261101/results/
+          retention-days: 7
+  long-attribution:
+    needs: short-protocol
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    env:
+      CRYPTOID_SOAK_CONDITION: original
+      CRYPTOID_LIFETIME_ATTRIBUTION: '1'
+      CRYPTOID_INACTIVE_NATIVE_TRACE: '1'
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with: {persist-credentials: false}
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with: {node-version: '24'}
+      - name: Install existing browser tools
+        run: |
+          npm install --prefix frontend --include=optional --ignore-scripts --no-audit --no-fund
+          npm install --prefix verification/boss2-forensics-20261028 --ignore-scripts --no-audit --no-fund
+          git restore --worktree -- frontend/yarn.lock
+          cd verification/boss2-forensics-20261028
+          npx playwright install --with-deps chromium
+      - name: Observe twenty active minutes before enabling any native trace
+        env: {VERCEL_ENV: preview, CRYPTOID_ATTRIBUTION_SECONDS: '1200'}
+        run: |
+          node verification/systematic-stability-20261101/prepareSoakBuild.mjs
+          node verification/memory-retention-attribution-20261101/profileLifetime.mjs
+          node verification/boss2-mini-start-control-20261101/verifyScope.mjs
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: ${{ !cancelled() }}
+        with:
+          name: inactive-native-1200
+          path: verification/inactive-native-allocation-20261101/results/
+          retention-days: 7

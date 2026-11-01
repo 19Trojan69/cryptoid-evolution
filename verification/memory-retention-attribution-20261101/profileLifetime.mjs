@@ -14,12 +14,21 @@ import { STOPWATCH_KEY } from '../boss2-stopwatch-20261029/stopwatchState.mjs';
 import { requireInactiveCheckpoint } from './inspection.mjs';
 import { comparisonConfig, comparisonProof, assertPathProof } from '../isolated-mini-pacing-20261101/comparison.mjs';
 import { installNativePathProbe } from '../isolated-mini-pacing-20261101/nativePathProbe.mjs';
+import { startInactiveNativeCollector } from '../inactive-native-allocation-20261101/collector.mjs';
 
 const seconds = Number(process.env.CRYPTOID_ATTRIBUTION_SECONDS);
 assert.ok([60, 1200].includes(seconds), 'One short control or one twenty-minute observation');
 const comparison = comparisonConfig();
+const nativeAllocation = process.env.CRYPTOID_INACTIVE_NATIVE_TRACE === '1';
+if (process.env.CRYPTOID_INACTIVE_NATIVE_TRACE !== undefined) assert.ok(['0', '1'].includes(process.env.CRYPTOID_INACTIVE_NATIVE_TRACE));
+if (nativeAllocation) {
+  assert.equal(comparison, null); assert.equal(process.env.CRYPTOID_LIFETIME_ATTRIBUTION, '1');
+  assert.equal(process.env.CRYPTOID_SOAK_CONDITION, 'original');
+}
 if (comparison?.pathProof) assert.equal(seconds, 60, 'Native wrappers only in the short path proof');
-const output = comparison
+const output = nativeAllocation
+  ? resolve(root, 'verification/inactive-native-allocation-20261101/results', 'chromium-' + seconds)
+  : comparison
   ? resolve(root, 'verification/isolated-mini-pacing-20261101/results', comparison.condition + '-r' + comparison.replica + '-' + seconds)
   : resolve(root, 'verification/memory-retention-attribution-20261101/results', 'chromium-' + seconds);
 mkdirSync(output, { recursive: true });
@@ -41,7 +50,8 @@ const result = { version: 1, complete: false, sourceCommit: git('HEAD'), sourceT
   interpretation: 'Synthetic Linux attribution; no physical-phone acceptance, exact native allocator cause or permanent leak inferred.',
   points: [], checkpoints: [], snapshots: [] };
 if (comparison) result.isolatedMiniPacing = comparison;
-let server, browser, page, client, fatal, first;
+if (nativeAllocation) { result.inactiveNativeAllocationRequested = true; result.activeNativeTracing = false; }
+let server, browser, page, client, fatal, first, nativeCollector;
 const external = [], assetFailures = [];
 const within = (promise, ms, label) => new Promise((resolve, reject) => {
   const timer = setTimeout(() => reject(Error(label)), ms);
@@ -92,7 +102,14 @@ async function checkpoint(label, phase, collect = false) {
     sameGameDocument: observed.timeOrigin === first.timeOrigin,
     mounted: observed.mounted, stats: observed.stats, audio: observed.scene?.audio ?? null,
     heap: cleanHeapUsage(heap), dom, attached, memory };
-  assert.ok(row.heap); result.checkpoints.push(row); return row;
+  assert.ok(row.heap); result.checkpoints.push(row);
+  if (nativeCollector?.wants(label)) {
+    row.nativeDump = await nativeCollector.request(label, phase);
+    row.afterNativeDumpMemory = sampleBrowserMemory();
+    assert.equal(row.afterNativeDumpMemory.contentProcessObserved, true);
+    assert.ok(Number.isFinite(row.afterNativeDumpMemory.summedPssKiB));
+  }
+  return row;
 }
 async function snapshot(label, phase) {
   requireInactiveCheckpoint(await observe(), phase);
@@ -199,6 +216,15 @@ try {
     && JSON.parse(localStorage.getItem(key)).latest.mode === 'paused', { key: STOPWATCH_KEY });
   requireInactiveCheckpoint(await observe(), 'paused');
   client = await context.newCDPSession(page); await client.send('HeapProfiler.enable');
+  if (nativeAllocation) {
+    const before = sampleBrowserMemory();
+    nativeCollector = await startInactiveNativeCollector({
+      session: await browser.newBrowserCDPSession(),
+      guard: async phase => requireInactiveCheckpoint(await observe(), phase),
+      save: bytes => writeFileSync(output + '/native-memory-infra.json.gz', bytes),
+    });
+    result.inactiveNativeTraceAttachment = { before, after: sampleBrowserMemory() };
+  }
   await checkpoint('paused-before-gc', 'paused');
   await page.waitForTimeout(5000); await checkpoint('paused-settled-before-gc', 'paused');
   await checkpoint('paused-after-gc', 'paused', true);
@@ -223,6 +249,7 @@ try {
   await page.goto('about:blank'); await page.waitForTimeout(5000);
   client = await context.newCDPSession(page); await client.send('HeapProfiler.enable');
   await checkpoint('blank-before-gc', 'blank'); await checkpoint('blank-after-gc', 'blank', true);
+  if (nativeCollector) result.inactiveNativeAllocation = await nativeCollector.finish();
   result.explicitBlankDocumentControl = true;
   assert.deepEqual(external, []); assert.deepEqual(assetFailures, []); assert.ok(!fatal, fatal);
   result.complete = true;
@@ -235,6 +262,7 @@ try {
   console.log('CRYPTOID_ATTRIBUTION_RESULT ' + JSON.stringify({ complete: result.complete, seconds,
     observedActiveMs: result.observedActiveMs, checkpoints: result.checkpoints.length,
     snapshots: result.snapshots.length, failure: result.failure }));
+  if (nativeCollector && !nativeCollector.finished) try { await nativeCollector.abort(); } catch { /* Original failure already recorded. */ }
   if (client) try { await client.detach(); } catch { /* Preserve original capture failure. */ }
   if (browser) await browser.close(); if (server) await server.close();
 }
