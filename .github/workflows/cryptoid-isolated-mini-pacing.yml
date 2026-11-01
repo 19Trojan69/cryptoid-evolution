@@ -1,0 +1,99 @@
+name: Isolated mini start pacing
+run-name: Original scene with only mini start pacing bypassed
+on:
+  push:
+    branches: [codex/isolated-mini-pacing-20261101]
+    paths:
+      - '.github/workflows/cryptoid-isolated-mini-pacing.yml'
+      - 'verification/isolated-mini-pacing-20261101/*.mjs'
+      - 'verification/boss2-forensics-20261028/buildDevicePreview.mjs'
+      - 'verification/memory-retention-attribution-20261101/profileLifetime.mjs'
+permissions:
+  contents: read
+jobs:
+  source-gates:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with: {persist-credentials: false}
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with: {node-version: '24'}
+      - run: npm install --prefix frontend --include=optional --ignore-scripts --no-audit --no-fund
+      - name: Verify exact scope, positive and negative controls, and both virtual type graphs
+        run: |
+          git restore --worktree -- frontend/yarn.lock
+          node verification/boss2-mini-start-control-20261101/verifyScope.mjs
+          node --test verification/isolated-mini-pacing-20261101/comparison.test.mjs verification/boss2-mini-start-control-20261101/miniStartControl.test.mjs verification/memory-retention-attribution-20261101/inspection.test.mjs verification/memory-retention-attribution-20261101/evidence/attributionSummary.test.mjs
+          node verification/isolated-mini-pacing-20261101/preflight.mjs
+  short-path:
+    needs: source-gates
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix: {condition: [control, bypass]}
+    env:
+      CRYPTOID_ISOLATED_MINI_PACING: ${{ matrix.condition }}
+      CRYPTOID_LIFETIME_ATTRIBUTION: '1'
+      CRYPTOID_SOAK_CONDITION: original
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with: {persist-credentials: false}
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with: {node-version: '24'}
+      - name: Install the existing browser tools
+        run: |
+          npm install --prefix frontend --include=optional --ignore-scripts --no-audit --no-fund
+          npm install --prefix verification/boss2-forensics-20261028 --ignore-scripts --no-audit --no-fund
+          git restore --worktree -- frontend/yarn.lock
+          cd verification/boss2-forensics-20261028
+          npx playwright install --with-deps chromium
+      - name: Build full original scene and prove the one actual changed path
+        env: {VERCEL_ENV: preview, CRYPTOID_ATTRIBUTION_SECONDS: '60', CRYPTOID_ISOLATED_PATH_PROOF: '1'}
+        run: |
+          node verification/systematic-stability-20261101/prepareSoakBuild.mjs
+          node --experimental-strip-types verification/memory-retention-attribution-20261101/profileLifetime.mjs
+          node verification/boss2-mini-start-control-20261101/verifyScope.mjs
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: ${{ !cancelled() }}
+        with:
+          name: isolated-mini-${{ matrix.condition }}-short
+          path: verification/isolated-mini-pacing-20261101/results/
+          retention-days: 7
+  memory:
+    needs: short-path
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    strategy:
+      fail-fast: false
+      matrix: {condition: [control, bypass], replica: [1, 2]}
+    env:
+      CRYPTOID_ISOLATED_MINI_PACING: ${{ matrix.condition }}
+      CRYPTOID_ISOLATED_REPLICA: ${{ matrix.replica }}
+      CRYPTOID_LIFETIME_ATTRIBUTION: '1'
+      CRYPTOID_SOAK_CONDITION: original
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with: {persist-credentials: false}
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with: {node-version: '24'}
+      - name: Install the existing browser tools
+        run: |
+          npm install --prefix frontend --include=optional --ignore-scripts --no-audit --no-fund
+          npm install --prefix verification/boss2-forensics-20261028 --ignore-scripts --no-audit --no-fund
+          git restore --worktree -- frontend/yarn.lock
+          cd verification/boss2-forensics-20261028
+          npx playwright install --with-deps chromium
+      - name: Observe twenty minutes without active native wrappers or profiling
+        env: {VERCEL_ENV: preview, CRYPTOID_ATTRIBUTION_SECONDS: '1200', CRYPTOID_ISOLATED_PATH_PROOF: '0'}
+        run: |
+          node verification/systematic-stability-20261101/prepareSoakBuild.mjs
+          node --experimental-strip-types verification/memory-retention-attribution-20261101/profileLifetime.mjs
+          node verification/boss2-mini-start-control-20261101/verifyScope.mjs
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: ${{ !cancelled() }}
+        with:
+          name: isolated-mini-${{ matrix.condition }}-r${{ matrix.replica }}-long
+          path: verification/isolated-mini-pacing-20261101/results/
+          retention-days: 7

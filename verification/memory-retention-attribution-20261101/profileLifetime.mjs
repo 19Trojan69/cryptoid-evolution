@@ -12,10 +12,16 @@ import { cleanHeapUsage } from '../boss2-forensics-20261028/chromiumHeap.mjs';
 import { summarizeHeap } from '../boss2-forensics-20261028/heapObjects.mjs';
 import { STOPWATCH_KEY } from '../boss2-stopwatch-20261029/stopwatchState.mjs';
 import { requireInactiveCheckpoint } from './inspection.mjs';
+import { comparisonConfig, comparisonProof, assertPathProof } from '../isolated-mini-pacing-20261101/comparison.mjs';
+import { installNativePathProbe } from '../isolated-mini-pacing-20261101/nativePathProbe.mjs';
 
 const seconds = Number(process.env.CRYPTOID_ATTRIBUTION_SECONDS);
 assert.ok([60, 1200].includes(seconds), 'One short control or one twenty-minute observation');
-const output = resolve(root, 'verification/memory-retention-attribution-20261101/results', 'chromium-' + seconds);
+const comparison = comparisonConfig();
+if (comparison?.pathProof) assert.equal(seconds, 60, 'Native wrappers only in the short path proof');
+const output = comparison
+  ? resolve(root, 'verification/isolated-mini-pacing-20261101/results', comparison.condition + '-r' + comparison.replica + '-' + seconds)
+  : resolve(root, 'verification/memory-retention-attribution-20261101/results', 'chromium-' + seconds);
 mkdirSync(output, { recursive: true });
 const require = createRequire(new URL('../boss2-forensics-20261028/package.json', import.meta.url));
 const frontendRequire = createRequire(root + '/frontend/package.json');
@@ -34,6 +40,7 @@ const result = { version: 1, complete: false, sourceCommit: git('HEAD'), sourceT
   manualPauseTrigger: 'existing Home confirmation',
   interpretation: 'Synthetic Linux attribution; no physical-phone acceptance, exact native allocator cause or permanent leak inferred.',
   points: [], checkpoints: [], snapshots: [] };
+if (comparison) result.isolatedMiniPacing = comparison;
 let server, browser, page, client, fatal, first;
 const external = [], assetFailures = [];
 const within = (promise, ms, label) => new Promise((resolve, reject) => {
@@ -115,6 +122,7 @@ try {
   result.engineVersion = browser.version();
   const profile = configuration('android-phone', pw.devices);
   const context = await browser.newContext({ ...profile.context, viewport: { width: 430, height: 825 }, deviceScaleFactor: 3 });
+  if (comparison?.pathProof) await context.addInitScript(installNativePathProbe);
   await context.route('**/*', route => {
     const url = new URL(route.request().url());
     if (url.origin === server.origin || ['fonts.googleapis.com', 'fonts.gstatic.com'].includes(url.hostname)) return route.continue();
@@ -135,6 +143,10 @@ try {
   assert.equal(info.qaLifetimeAttribution?.capturesGameInstance, false);
   assert.equal(info.qaLifetimeAttribution?.activeNativeAnimationScan, false);
   assert.equal(info.qaLifetimeAttribution?.cleanupPolicyChanged, false); result.buildProof = info.qaLifetimeAttribution;
+  if (comparison) {
+    const expected = comparisonProof(readFileSync(root + '/frontend/src/lib/cssFramePacing.ts', 'utf8'), comparison.condition);
+    assert.deepEqual(info.qaIsolatedMiniPacing, expected); result.isolatedBuildProof = expected;
+  } else assert.equal(info.qaIsolatedMiniPacing, undefined);
   assert.equal(await page.getByRole('checkbox', { name: 'Vollaufzeichnung zusätzlich aktivieren', exact: true }).isChecked(), false);
   assert.equal(await page.getByRole('checkbox', { name: 'Testschutz: Tod und Bossende verhindern', exact: true }).isChecked(), true);
   await tap(page.getByRole('button', { name: 'Testszene vorbereiten', exact: true }));
@@ -176,6 +188,12 @@ try {
   result.observedWallMs = Date.now() - started;
   result.volleysAdvanced = previous.scene.coreVolley - first.scene.coreVolley;
   assert.ok(result.volleysAdvanced > 0);
+  if (comparison?.pathProof) {
+    result.isolatedMiniNativeProof = await page.evaluate(() => window.__isolatedMiniNativeProof());
+    assertPathProof(result.isolatedMiniNativeProof, comparison.condition);
+  } else if (comparison) {
+    assert.equal(await page.evaluate(() => typeof window.__isolatedMiniNativeProof), 'undefined', 'No native wrappers in long observations');
+  }
   await tap(page.locator('.home-control')); await page.locator('#leave-mission-title').waitFor();
   await page.waitForFunction(({ key }) => window.__crossDeviceTest.inspect().status === 'paused'
     && JSON.parse(localStorage.getItem(key)).latest.mode === 'paused', { key: STOPWATCH_KEY });

@@ -51,9 +51,10 @@ function resources(stats) {
 
 // This validates a completed attribution protocol. A one-minute control cannot
 // become a twenty-minute result, and neither becomes physical phone acceptance.
-export function summarizeAttribution(capture) {
-  assert.equal(capture.version, 1); assert.equal(capture.sourceCommit, measuredSource);
-  assert.equal(capture.sourceTree, measuredTree); assert.equal(capture.complete, true);
+export function summarizeAttribution(capture, expected = { source: measuredSource, tree: measuredTree }) {
+  assert.match(expected.source, /^[a-f0-9]{40}$/); assert.match(expected.tree, /^[a-f0-9]{40}$/);
+  assert.equal(capture.version, 1); assert.equal(capture.sourceCommit, expected.source);
+  assert.equal(capture.sourceTree, expected.tree); assert.equal(capture.complete, true);
   assert.equal(capture.failure, undefined); assert.equal(capture.actualHostOS, 'linux');
   assert.equal(capture.condition, 'original-artwork'); assert.ok([60, 1200].includes(capture.requestedSeconds));
   for (const key of ['physicalDevice', 'physicalPiBrowser', 'whiteScreenFixed', 'nativeTerminationCauseMeasured',
