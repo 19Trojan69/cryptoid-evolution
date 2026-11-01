@@ -1,0 +1,95 @@
+name: Memory lifetime attribution
+run-name: Original artwork resource ownership before and after explicit cleanup
+on:
+  push:
+    branches: [codex/systematic-stability-20261101]
+    paths:
+      - '.github/workflows/cryptoid-memory-attribution.yml'
+      - 'verification/memory-retention-attribution-20261101/*.mjs'
+      - 'verification/boss2-forensics-20261028/buildDevicePreview.mjs'
+permissions:
+  contents: read
+jobs:
+  short-control:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with:
+          node-version: '24'
+      - name: Install existing tools and Chromium
+        run: |
+          npm install --prefix frontend --include=optional --ignore-scripts --no-audit --no-fund
+          npm install --prefix verification/boss2-forensics-20261028 --ignore-scripts --no-audit --no-fund
+          git restore --worktree -- frontend/yarn.lock
+          cd verification/boss2-forensics-20261028
+          npx playwright install --with-deps chromium
+      - name: Verify source pins, virtual types and profiling gates
+        run: |
+          node verification/boss2-mini-start-control-20261101/verifyScope.mjs
+          node --test verification/memory-retention-attribution-20261101/inspection.test.mjs
+          node verification/memory-retention-attribution-20261101/preflight.mjs
+      - name: Build original artwork with read-only module inspection
+        env:
+          VERCEL_ENV: preview
+          CRYPTOID_SOAK_CONDITION: original
+          CRYPTOID_LIFETIME_ATTRIBUTION: '1'
+        run: node verification/systematic-stability-20261101/prepareSoakBuild.mjs
+      - name: Prove one-minute observation and all inactive profiling boundaries
+        env:
+          CRYPTOID_ATTRIBUTION_SECONDS: '60'
+        run: node --experimental-strip-types verification/memory-retention-attribution-20261101/profileLifetime.mjs
+      - name: Preserve the short control including failures
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: memory-attribution-60
+          path: verification/memory-retention-attribution-20261101/results/
+          retention-days: 7
+  attribution:
+    needs: short-control
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    strategy:
+      fail-fast: false
+      matrix:
+        seconds: [1200]
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with:
+          node-version: '24'
+      - name: Install existing tools and Chromium
+        run: |
+          npm install --prefix frontend --include=optional --ignore-scripts --no-audit --no-fund
+          npm install --prefix verification/boss2-forensics-20261028 --ignore-scripts --no-audit --no-fund
+          git restore --worktree -- frontend/yarn.lock
+          cd verification/boss2-forensics-20261028
+          npx playwright install --with-deps chromium
+      - name: Verify unchanged game, virtual types and inactive-only profiling
+        run: |
+          node verification/boss2-mini-start-control-20261101/verifyScope.mjs
+          node --test verification/memory-retention-attribution-20261101/inspection.test.mjs
+          node verification/memory-retention-attribution-20261101/preflight.mjs
+      - name: Build original artwork with scalar module inspection only
+        env:
+          VERCEL_ENV: preview
+          CRYPTOID_SOAK_CONDITION: original
+          CRYPTOID_LIFETIME_ATTRIBUTION: '1'
+        run: node verification/systematic-stability-20261101/prepareSoakBuild.mjs
+      - name: Observe active interval then profile paused and unmounted boundaries
+        env:
+          CRYPTOID_ATTRIBUTION_SECONDS: ${{ matrix.seconds }}
+        run: node --experimental-strip-types verification/memory-retention-attribution-20261101/profileLifetime.mjs
+      - name: Preserve successful and failed synthetic measurements and inactive snapshots
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: memory-attribution-${{ matrix.seconds }}
+          path: verification/memory-retention-attribution-20261101/results/
+          retention-days: 7

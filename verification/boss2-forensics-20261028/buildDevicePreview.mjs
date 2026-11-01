@@ -11,7 +11,10 @@ import { flatSceneEnabled, flatVisualModule, flatGameScene, diagnosticSceneName,
 import { keepBossMiniAuthoredNativePlayback } from '../boss2-mini-start-control-20261101/miniStartControl.mjs';
 import { useParentLifetimeForBossMini } from '../boss2-mini-completion-control-20261031/miniCompletionControl.mjs';
 import { omitStaticBossHotspots } from '../boss2-static-hotspots-control-20261031/hotspotControl.mjs';
+import { instrumentMemoryInspection } from '../memory-retention-attribution-20261101/inspection.mjs';
 assert.equal(process.env.VERCEL_ENV, 'preview', 'Protected Preview only; production builds are denied');
+const lifetimeAttribution = process.env.CRYPTOID_LIFETIME_ATTRIBUTION === '1';
+if (lifetimeAttribution) assert.equal(flatSceneEnabled(), false, 'Original artwork only for memory attribution');
 const require = createRequire(root + '/frontend/package.json');
 const { build } = require('vite'), react = require('@vitejs/plugin-react').default;
 const directory = resolve(root, 'verification/boss2-forensics-20261028');
@@ -35,7 +38,8 @@ await build({ configFile: false, root: root + '/frontend', envDir, mode: 'produc
   plugins: [react(), { name: 'isolated-device-boss2', enforce: 'pre', transform(code, id) {
     const path = id.split('?')[0];
     if (path === root + '/frontend/src/App.tsx') return `export { default } from ${JSON.stringify(directory + '/devicePreviewApp.jsx')};`;
-    if (path === root + '/frontend/src/pages/GamePage.tsx') return deviceController(flatSceneEnabled() ? flatGameScene(code) : code);
+    if (path === root + '/frontend/src/pages/GamePage.tsx') return deviceController(lifetimeAttribution
+      ? instrumentMemoryInspection(code) : flatSceneEnabled() ? flatGameScene(code) : code);
     if (path === root + '/frontend/src/lib/cssFramePacing.ts' && bossMiniStartPacingDisabled()) return keepBossMiniAuthoredNativePlayback(code);
     if (path === root + '/frontend/src/pages/FinishedEffect.tsx' && bossMiniCompletionInspectionDisabled()) return useParentLifetimeForBossMini(code);
     if (path === root + '/frontend/src/pages/HullDamage.tsx' && bossStaticHotspotsDisabled()) return omitStaticBossHotspots(code);
@@ -59,5 +63,13 @@ writeFileSync(output + '/device-preview-info.json', JSON.stringify({ type: 'prot
   coldDirectWebkitStartup:'Unresolved loop-stall before first frame; retained separately. Prepared start is a different condition.',
   sourceGameEditedByBuilder: false, buildOnlyTransforms: ['isolated menu/auth/transport', 'direct boss seed', 'optional protection/health floor', 'bounded pause observation'],
   nativeDeviceAccepted: false, whiteScreenFixed: false }, null, 2) + '\n');
+if (lifetimeAttribution) {
+  const path = output + '/device-preview-info.json', info = JSON.parse(readFileSync(path, 'utf8'));
+  info.qaLifetimeAttribution = { version: 1, originalArtworkRetained: true,
+    moduleOnlyScalarGetters: ['cssFramePacingStats', 'paintedShipResourceStats', 'canvasEffectResources'],
+    capturesGameInstance: false, newAppTimersOrFrames: false, activeNativeAnimationScan: false,
+    cleanupPolicyChanged: false, shippedRuntimeSourceEdited: false, physicalDevice: false, whiteScreenFixed: false };
+  writeFileSync(path, JSON.stringify(info, null, 2) + '\n');
+}
 console.log('CRYPTOID_DEVICE_PREVIEW_BUILD ' + JSON.stringify({ ...identity, output }));
 
