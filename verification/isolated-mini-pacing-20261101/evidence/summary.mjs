@@ -34,6 +34,10 @@ export function summarizeCohort(items, expected) {
     for (const replica of [1, 2]) assert.ok(seen.has(condition + ':1200:' + replica));
   }
   const reference = items[0].capture;
+  assert.match(reference.engineVersion, /^\d+\.\d+\.\d+\.\d+$/);
+  assert.match(reference.lockSha256, /^[a-f0-9]{64}$/);
+  assert.deepEqual(Object.keys(reference.actualInstalledPackages).sort(), ['react', 'react-dom', 'react-router-dom', 'typescript', 'vite']);
+  for (const version of Object.values(reference.actualInstalledPackages)) assert.match(version, /^\d+\.\d+\.\d+(?:[-+].+)?$/);
   for (const { capture } of items) {
     assert.equal(capture.engineVersion, reference.engineVersion);
     assert.equal(capture.lockSha256, reference.lockSha256);
@@ -46,6 +50,7 @@ export function summarizeCohort(items, expected) {
     return [condition, { replicas: group.length,
       firstMinuteMedianPssKiB: range(group.map(row => row.processPssKiB.firstMinuteMedian)),
       lastMinuteMedianPssKiB: range(group.map(row => row.processPssKiB.lastMinuteMedian)),
+      growthPssKiB: range(group.map(row => row.processPssKiB.lastMinuteMedian - row.processPssKiB.firstMinuteMedian)),
       pausedAfterGcPssKiB: range(group.map(row => row.checkpoints.find(c => c.label === 'paused-after-gc').pss.totalKiB)),
       cssConfigurationsCumulative: range(group.map(row => row.sampledMaxima.cssConfiguredCumulative)),
       homeOwnershipReleasedInBoth: group.every(row => row.observedHomeOwnershipReleased) }];

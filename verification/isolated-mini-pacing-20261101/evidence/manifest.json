@@ -2,7 +2,7 @@
   "version": 1,
   "workflowRun": 41343318455,
   "workflowURL": "https://github.com/19Trojan69/cryptoid-evolution/actions/runs/41343318455",
-  "workflowConclusion": "in_progress",
+  "workflowConclusion": "success",
   "measuredSource": "668d4115716bdb425947c4847e70113e8c497990",
   "measuredTree": "cb0bed431f842cad4067e23ebb3e2036c243b04c",
   "rawOwnerReportsIncluded": false,
@@ -45,6 +45,82 @@
         "githubDigestMatched": true,
         "zipIntegrityPassed": true
       }
+    },
+    {
+      "file": "bypass-r1-long.json.gz",
+      "cell": {
+        "condition": "bypass",
+        "seconds": 1200,
+        "replica": 1
+      },
+      "compressedBytes": 30758,
+      "uncompressedBytes": 977560,
+      "sha256": "404b344c2fc823b05cb6c523b39da48e20f10985b4cde647d2cdd4b8a88882e2",
+      "originalJsonSha256": "c5478adbe159d7bc469e04ec81d86630e4ee86ac0f2d9cc39fed8182a02ad90f",
+      "artifact": {
+        "id": 13099480862,
+        "bytes": 8307867,
+        "sha256": "ac1290b2476dbe0af17365302d63d1da80e230713c70688030806c971a1deb24",
+        "githubDigestMatched": true,
+        "zipIntegrityPassed": true
+      }
+    },
+    {
+      "file": "control-r2-long.json.gz",
+      "cell": {
+        "condition": "control",
+        "seconds": 1200,
+        "replica": 2
+      },
+      "compressedBytes": 30958,
+      "uncompressedBytes": 977114,
+      "sha256": "f12761efd65e63e3cf7cf3dfd64d9c0bb54fc41e3dc7d54f6d593c5f45fc53f9",
+      "originalJsonSha256": "75d27c1227cf1eeb647d4b54aebe2710295248cd8bcf9d76b68ef818ff98289f",
+      "artifact": {
+        "id": 13099435385,
+        "bytes": 8268393,
+        "sha256": "4da7c4c1628dbb44d67ead182a0442bd14f8ae13ce736afcf6abaa5b00cbb5bb",
+        "githubDigestMatched": true,
+        "zipIntegrityPassed": true
+      }
+    },
+    {
+      "file": "bypass-r2-long.json.gz",
+      "cell": {
+        "condition": "bypass",
+        "seconds": 1200,
+        "replica": 2
+      },
+      "compressedBytes": 30863,
+      "uncompressedBytes": 976897,
+      "sha256": "5fc443dc328d9c4b96054dc70379c7e5c22387b9c20b5eef1c6931c69616b8e9",
+      "originalJsonSha256": "3c4fbcc2b1e2c91fe21cada07beee57defff6303ee842a212dadc0638cf4f0b4",
+      "artifact": {
+        "id": 13099211603,
+        "bytes": 8260735,
+        "sha256": "e0122008310e0efb711e4b4ff7464f6ce964a6ca8669fc1368ab9c1a0c5befd5",
+        "githubDigestMatched": true,
+        "zipIntegrityPassed": true
+      }
+    },
+    {
+      "file": "control-r1-long.json.gz",
+      "cell": {
+        "condition": "control",
+        "seconds": 1200,
+        "replica": 1
+      },
+      "compressedBytes": 31473,
+      "uncompressedBytes": 977720,
+      "sha256": "58d5dd3c4978cfe1681e24c1f5f08262c612938e4a7b63b4faad8ff9ad090143",
+      "originalJsonSha256": "e111157972753ae7b6554fc7d3833bede7fb98c9c33c2df18a0c052a9875277d",
+      "artifact": {
+        "id": 13098967520,
+        "bytes": 8270273,
+        "sha256": "88cbf8c5d3a6831ae3be0b33600d4ce54c211168c2f68471030742f644a432c6",
+        "githubDigestMatched": true,
+        "zipIntegrityPassed": true
+      }
     }
   ],
   "snapshotAnalyses": [
@@ -57,6 +133,31 @@
       "file": "bypass-short-heaps.json",
       "bytes": 18036,
       "sha256": "8c06792045bfba4c7c9805e62d6fd0694c273d078a13673243014b2e736da1f1"
+    },
+    {
+      "file": "bypass-r1-long-heaps.json",
+      "bytes": 18065,
+      "sha256": "0c240cec7e6608cde78ebdaffd59a45c11d2a2289efb1bf5418157bd508fd524"
+    },
+    {
+      "file": "control-r2-long-heaps.json",
+      "bytes": 18104,
+      "sha256": "bf2791a8081097d639bbe06f8e5acfcc418a1799dc519a6f4d108b90bfa3292e"
+    },
+    {
+      "file": "bypass-r2-long-heaps.json",
+      "bytes": 18041,
+      "sha256": "521e773ff02a512c226185f3eddfe97bd84102e6e44f82d1b9dcda8db04610a6"
+    },
+    {
+      "file": "control-r1-long-heaps.json",
+      "bytes": 18097,
+      "sha256": "fcfc0d7b6f4a86b31c8a41ba51d5a863c7f075d8f5ec701002dadf2dc1f52147"
     }
-  ]
+  ],
+  "figure": {
+    "file": "process-memory.png",
+    "bytes": 116146,
+    "sha256": "d44e03cbc3e28a304feb9e72f8b5ecf4f1e60037310366761522fc51051cb90d"
+  }
 }

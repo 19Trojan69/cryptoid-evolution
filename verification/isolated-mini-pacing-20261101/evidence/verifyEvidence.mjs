@@ -31,6 +31,12 @@ for (const file of manifest.snapshotAnalyses) {
   }
 }
 const result = JSON.parse(readFileSync(new URL('./results.json', import.meta.url)));
+if (manifest.figure) {
+  assert.equal(manifest.figure.file, 'process-memory.png');
+  const bytes = readFileSync(new URL('./process-memory.png', import.meta.url));
+  assert.equal(bytes.length, manifest.figure.bytes);
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), manifest.figure.sha256);
+}
 assert.equal(result.workflowRun, manifest.workflowRun); assert.equal(result.workflowConclusion, manifest.workflowConclusion);
 if (manifest.workflowConclusion === 'in_progress') {
   assert.deepEqual(result.shortCaptures, items.map(item => summarizeIsolated(item.capture, expected, item.cell)));

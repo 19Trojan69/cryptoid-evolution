@@ -51,8 +51,10 @@ White Screen. Die offene WebKit-Original-Startlücke bleibt ein gesonderter Befu
 Gemessene Quelle `668d4115716bdb425947c4847e70113e8c497990`, Baum
 `cb0bed431f842cad4067e23ebb3e2036c243b04c`,
 [CI 41343318455](https://github.com/19Trojan69/cryptoid-evolution/actions/runs/41343318455).
-Die Quellen-Gates und beide kurzen nativen Kontrollen sind erfolgreich. Die vier
-längeren Messungen sind bis zu ihrer tatsächlichen Auswertung ausdrücklich offen.
+Die Quellen-Gates, beide kurzen nativen Kontrollen und alle vier 20-Minuten-
+Messungen sind erfolgreich abgeschlossen. Eine Speicherverbesserung durch die
+Guards wurde dabei **nicht nachgewiesen**; sie werden aus diesen Daten nicht als
+Speicherkorrektur übernommen.
 
 | tatsächlich gezählter nativer Pfad | Original | Guard |
 | --- | ---: | ---: |
@@ -85,9 +87,68 @@ Der normale Buildpfad ohne neues Flag wurde zusätzlich gebaut: weder neuer
 Vergleich noch Inspektionsbrücke sind darin enthalten. Die 14 bestehenden
 Preview-/Heap-Prüfungen bestehen ebenso wie die 15 Quellen-/Inspektionsfälle
 und die fünf neuen Offline-Annahmefälle (34 Fälle lokal, davon 15 auch in der CI).
-Spielquellen-Pins sind unverändert. Neue Langlaufergebnisse werden nach Prüfung
-ergänzt. Es gibt hier keine neue Geräte-URL und bisher keinen als Verbesserung
-akzeptierten Spiel-Patch.
+Spielquellen-Pins sind unverändert. Es gibt hier keine neue Geräte-URL und keinen
+als Verbesserung akzeptierten Spiel-Patch.
+
+## Abgeschlossene wiederholte Langmessung
+
+Jeder der vier Läufe erfasst mindestens 1.200.000 ms aktive Stoppuhrzeit und
+428 zusätzliche Boss-Kernsalven, ohne aktiven Heap-Profiler, native API-Wrapper,
+Snapshot, Animationsscan oder erzwungene GC. Alle verwenden Chromium
+151.0.7922.34 mit denselben tatsächlich gelesenen React-/Router-/Vite-/TypeScript-
+Versionen und demselben Lock-Digest. Die Daten bleiben unseeded und stammen von
+getrennten Linux-Runnern; gleiche Salvenzahlen beweisen keine identische Renderarbeit.
+
+| Bedingung | Median-PSS letzte aktive Minute | PSS Pause nach GC | aktive Stichprobe: kumulierte Pacing-Konfigurationen |
+| --- | ---: | ---: | ---: |
+| Original 1 | 809,3 MiB | 435,0 MiB | 23.310 |
+| Original 2 | 923,0 MiB | 427,5 MiB | 23.304 |
+| Guard 1 | 1.009,3 MiB | 434,0 MiB | 2.773 |
+| Guard 2 | 877,4 MiB | 426,6 MiB | 2.768 |
+
+![Vier gemessene aktive PSS-Verläufe und dieselben Prozesse nach inaktiver GC](evidence/process-memory.png)
+
+**Nachgewiesen:** Die optionale Pacing-Registrierung sinkt in diesem Aufbau um
+rund 88 Prozent. Die starke aktive Speicherzunahme bleibt in beiden Guard-Läufen
+vorhanden, die Bereiche der Bedingungen überlappen. Die Verläufe zeigen auch
+größere Sprünge und unterschiedliche Bereinigungszeitpunkte. Ein einzelner
+Endwert oder ein gelungenes 20-Minuten-Spiel ist kein stabiler Freigabebeweis.
+
+Nach GC liegen die belegten JS-Heaps aller vier pausierten Szenen zwischen
+10.641.240 und 10.673.568 Byte. Nach Home sind CSS-Registrierungen, Bild-Pins,
+Effektcache und Spiel-Canvas freigegeben; CDP zählt jeweils 247 DOM-Knoten und 210
+JS-Listener. Die Native-Snapshots zeigen jeweils null CSSAnimation-, KeyframeEffect-
+und AudioBuffer-Instanzen nach Home. Die sieben verbliebenen192px-Canvas passen
+weiterhin zum begrenzten Steintexturcache. In allen vier aktiven Strecken bleiben
+die gelesenen CSS-Fallbacks, Canvas-Fehler und Audio-Uhrstillstände bei null.
+
+**Nicht nachgewiesen:** eine reproduzierbare Speicherverbesserung durch diesen
+Guard, eine kausale Verschlechterung, ein bestimmter nativer Absturzgrund oder
+eine Smartphone-Behebung. Zwei unseeded Wiederholungen je Bedingung ergeben keine
+allgemeine Effektgröße. Die viel niedrigeren alten Mini-Start-Werte aus dem
+reduzierten Szenenaufbau dürfen weiterhin nicht diesem Guard zugeschrieben werden.
+
+**Entscheidung zur Behebung:** Den Guard nicht als nachgewiesene Speicherkorrektur
+ins Spiel übernehmen. Die vorhandenen Spielfunktionen und der vollständige
+Originalstand bleiben erhalten. Der nächste gezielte Schritt ist die native
+Allokatorzuordnung im Renderer nach derselben längeren aktiven Strecke, mit
+Aufnahmen ausschließlich in der bestätigten Pause vor/nach GC und nach dem
+Ausstieg. Die vorhandenen 90-Sekunden-Traces und deren bereits korrigierter Parser
+werden dafür wiederverwendet, einschließlich genauer unsigned-Hex-Werte und
+strenger chronologischer Zuordnung der expliziten Dump-Anforderungen.
+
+Alle sechs ZIP-Digests/Integritäten und zwölf Heap-Snapshots wurden geprüft.
+Die sechs synthetischen Ergebnis-JSON bleiben verlustfrei komprimiert, die
+ausgewählten Snapshot-Klassen-/Größensummen reproduziert und alle Zusammenfassungen
+digestgeprüft. Sieben Offline-Annahmefälle bestehen; ein zusätzlicher negativer
+Fall zeigte zunächst, dass fehlende Bibliotheks-/Engine-Angaben in allen Dateien
+irrtümlich als gleich gelten konnten. Der Verifier verlangt diese Angaben jetzt
+ausdrücklich und lehnt unvollständige oder gemischte Kohorten ab. Das war ein
+Auswertungsfehler, kein Spielfehler; die Originalaufnahmen enthalten sämtliche
+Angaben und wurden nach der Korrektur erneut akzeptiert. Insgesamt bestehen 36
+gezielte lokale Prüfungen; 15 davon auch im unveränderten Quellen-Gate der CI.
+Ein physischer Geräte-Langtest ist für diese weitere technische Zuordnung noch
+nicht erforderlich.
 
 ```bash
 node --test verification/isolated-mini-pacing-20261101/comparison.test.mjs
