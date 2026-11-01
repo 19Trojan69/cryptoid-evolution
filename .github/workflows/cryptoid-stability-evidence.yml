@@ -1,0 +1,28 @@
+name: Stability evidence integrity
+on:
+  push:
+    branches: [codex/inactive-native-allocation-20261101]
+    paths:
+      - '.github/workflows/cryptoid-stability-evidence.yml'
+      - 'verification/inactive-native-allocation-20261101/evidence/**'
+      - 'verification/isolated-mini-pacing-20261101/evidence/**'
+      - 'verification/memory-retention-attribution-20261101/evidence/**'
+      - 'verification/boss2-native-memory-20261029/nativeSummary*'
+permissions:
+  contents: read
+jobs:
+  offline-evidence:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with: {persist-credentials: false}
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with: {node-version: '24'}
+      - name: Reparse archived synthetic evidence without another game soak
+        run: |
+          node verification/boss2-mini-start-control-20261101/verifyScope.mjs
+          node --test verification/inactive-native-allocation-20261101/evidence/summary.test.mjs verification/isolated-mini-pacing-20261101/evidence/summary.test.mjs verification/memory-retention-attribution-20261101/evidence/attributionSummary.test.mjs verification/boss2-native-memory-20261029/nativeSummary.test.mjs
+          node verification/memory-retention-attribution-20261101/evidence/verifyEvidence.mjs
+          node verification/isolated-mini-pacing-20261101/evidence/verifyEvidence.mjs
+          node verification/inactive-native-allocation-20261101/evidence/verifyEvidence.mjs

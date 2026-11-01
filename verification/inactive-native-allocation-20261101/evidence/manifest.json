@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "workflowRun": 41347453214,
+  "workflowURL": "https://github.com/19Trojan69/cryptoid-evolution/actions/runs/41347453214",
+  "workflowConclusion": "success",
+  "measuredSource": "ff01956a1726c43813180431d65a630c7ceda673",
+  "measuredTree": "2803d77cdbd059c25a443c775b7bb9996aa41e4b",
+  "rawOwnerReportsIncluded": false,
+  "rawHeapSnapshotsIncluded": false,
+  "captures": [
+    {
+      "name": "short",
+      "compressedBytes": 31845,
+      "uncompressedBytes": 451548,
+      "sha256": "32f5ac873215c483711464da4edd44311a3d96fe8c144cb2097e3e679440d247",
+      "originalJsonSha256": "d4e75e25221b358cb3d41fb484cb38da14f02eee393265b072132c958b401840",
+      "artifact": {
+        "id": 13100151760,
+        "bytes": 9080142,
+        "sha256": "cfc6f4f542244f0eff424c0942895b1798073a3a23c84607c5ddc9baf5bb8579",
+        "githubDigestMatched": true,
+        "zipIntegrityPassed": true
+      },
+      "heapAnalysis": {
+        "bytes": 17983,
+        "sha256": "ef1fe7000b2265821ebc70d81d30e8fd2f5b5068673c052f30b43bbde4fb97fa"
+      }
+    },
+    {
+      "name": "long",
+      "compressedBytes": 51629,
+      "uncompressedBytes": 1274524,
+      "sha256": "cd42652d032def0fee1d47c2d54110a48237bde10f0462325f9cc2b8932f00e4",
+      "originalJsonSha256": "433e36053bee024d6c5080159756d1dfca5439afc9a8e08cfacddcaae9c81156",
+      "artifact": {
+        "id": 13100925587,
+        "bytes": 9621923,
+        "sha256": "5f3ec61ec09f30dbe33d877f38cf47efd2d349e24eea4e62e5c445626180524b",
+        "githubDigestMatched": true,
+        "zipIntegrityPassed": true
+      },
+      "heapAnalysis": {
+        "bytes": 18012,
+        "sha256": "64b23e1e6a90d581c5781951f79ff70a06d138dfe8608f4bfd7a9adb709c6ab9"
+      }
+    }
+  ]
+}
