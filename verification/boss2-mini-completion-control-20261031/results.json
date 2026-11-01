@@ -2,8 +2,21 @@
   "version": 1,
   "kind": "protected-boss-mini-completion-native-inspection-fallback",
   "whiteScreenFixed": false,
-  "physicalDeviceTested": false,
-  "newOwnerPhoneResult": null,
+  "physicalDeviceTested": true,
+  "newOwnerPhoneResult": {
+    "status": "abrupt-return-after-running-checkpoint",
+    "ownerProvidedReport": true,
+    "ownerWhiteScreenExplicitlyRestatedForThisRun": false,
+    "evidence": "evidence/owner-mini-completion-abrupt-return.json",
+    "savedActiveMs": 962934,
+    "displayedTime": "16:02",
+    "savedMode": "running",
+    "newDocumentAfterCheckpointMs": 203,
+    "bootAfterActiveSessionRecorded": true,
+    "normalEndRecorded": false,
+    "permanentRepairAccepted": false,
+    "unchangedPhoneRepeatPending": false
+  },
   "runtime": {
     "source": "d72db0a8ca5c70b91db9b7760366773e2836db66",
     "tree": "73c23f8a5dba0bb93ab676c4ad3954ddf7ff1228",
@@ -147,7 +160,7 @@
     "This private candidate changes native completion inspection and early finished-DOM cleanup together. Original authored mini appearance/timing and existing bounded parent lifetime remain; a completed invisible node may persist until the next hit/boss removal.",
     "QA-only native-call proof is a bounded counter/wrapper/listener in automated browser contexts. It is not shipped, and is not a measurement of the failed owner run or a native-memory/thermal/WebKit cause.",
     "If the control does not actually invoke target native inspection or there is no useful proof signal, do not request a phone test of this candidate.",
-    "No owner result or permanent repair exists for this candidate. No public release is authorized."
+    "Owner supplied a matching report: 16:02/running followed by new home document and boot-after-active-session; no normal end recorded. White pixels were not restated in the attachment-only message and native cause remains unmeasured. Candidate is insufficient for acceptance; no unchanged repeat pending. No public release authorized."
   ],
   "hostedCheck": {
     "status": "passed-with-limits",
@@ -165,5 +178,5 @@
     "uninterruptedPerformanceClaimed": false,
     "ownerResult": false
   },
-  "currentStatus": "Ready protected guest mini-completion fallback candidate; source/type/scope/four browser flows/actual hosted lifecycle verified. No owner phone result or accepted fix."
+  "currentStatus": "Owner run closed: matched mini-completion-off source at saved16:02/running followed by abrupt home return; completion-only candidate insufficient for acceptance. No unchanged phone repeat pending; no permanent fix or native cause proven."
 }

@@ -1,10 +1,11 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 const read=p=>JSON.parse(readFileSync(new URL(p,import.meta.url),'utf8'));
 const r=read('./results.json'),e=read('./evidence/synthetic-mini-completion-comparison.json');
 assert.equal(r.runtime.source,'d72db0a8ca5c70b91db9b7760366773e2836db66');
 assert.equal(r.runtime.tree,'73c23f8a5dba0bb93ab676c4ad3954ddf7ff1228');
-assert.equal(r.whiteScreenFixed,false);assert.equal(r.physicalDeviceTested,false);assert.equal(r.newOwnerPhoneResult,null);
+assert.equal(r.whiteScreenFixed,false);assert.equal(r.physicalDeviceTested,true);assert.equal(r.newOwnerPhoneResult.status,'abrupt-return-after-running-checkpoint');
 assert.equal(r.verification.runId,41235613143);assert.equal(r.verification.status,'passed');assert.equal(r.verification.sourceTests,24);assert.equal(r.verification.shortDesktopFlows,4);
 assert.equal(e.source,r.runtime.source);assert.equal(e.tree,r.runtime.tree);assert.equal(e.physicalDevice,false);assert.equal(e.observations.length,4);
 for(const engine of ['chromium','webkit']) {
@@ -29,6 +30,25 @@ for(const engine of ['chromium','webkit']) {
 const prior=read('./evidence/initial-native-counter-failure.json');assert.equal(prior.source,'b5759f90948fae98fba7f0ec40e6168348b4ac13');assert.equal(prior.deployed,false);assert.equal(prior.observations.length,4);
 assert.equal(prior.observations.filter(o=>o.complete).length,2);assert.ok(prior.observations.filter(o=>o.miniCompletionOff).every(o=>o.complete===false));
 const owner=read('../boss2-static-hotspots-control-20261031/evidence/owner-static-hotspots-failure.json');assert.equal(owner.ownerWhiteScreenReported,true);assert.equal(owner.runtimeSource,r.basis.source);assert.equal(owner.runtimeTree,r.basis.tree);assert.equal(owner.savedActiveMs,900561);assert.equal(owner.savedMode,'running');assert.equal(owner.retainedEvents,32);assert.equal(owner.collectorDrops,26);assert.equal(owner.newDocumentAfterCheckpointMs,843);assert.equal(owner.lastRecordedContactToCheckpointWallMs,81524);assert.equal(owner.bootAfterActiveSessionRecorded,true);assert.equal(owner.stabilityGainProvenByLongerTime,false);
+const latest=read('./evidence/owner-mini-completion-abrupt-return.json');
+assert.equal(latest.runtimeSource,r.runtime.source);assert.equal(latest.runtimeTree,r.runtime.tree);
+assert.equal(latest.ownerProvidedReport,true);assert.equal(latest.ownerWhiteScreenExplicitlyRestatedForThisRun,false);assert.equal(latest.whitePixelsMeasured,false);
+assert.equal(latest.savedActiveMs,962934);assert.equal(latest.displayedTime,'16:02');assert.equal(latest.savedMode,'running');assert.equal(latest.recordedGaps,0);
+assert.equal(latest.retainedEvents,31);assert.equal(latest.collectorDrops,0);assert.equal(latest.lastRecordedContactActiveMs,132618);assert.equal(latest.lastRecordedContactToCheckpointWallMs,829520);
+assert.equal(latest.newDocumentAfterCheckpointMs,203);assert.equal(latest.bootAfterCheckpointMs,828);assert.equal(latest.newDocumentRoute,'home');assert.equal(latest.bootAfterActiveSessionRecorded,true);assert.equal(latest.normalEndRecorded,false);
+assert.equal(latest.bossMiniCompletionInspectionOffInMatchedBuild,true);assert.equal(latest.bossMiniAnimationStartNativeDiscoveryRetainedInMatchedBuild,true);
+assert.equal(latest.nativeCallCountersMeasuredOnOwnerDevice,false);assert.equal(latest.nativeTerminationCauseMeasured,false);assert.equal(latest.stabilityGainProvenByLongerTime,false);assert.equal(latest.permanentRepairAccepted,false);assert.equal(latest.unchangedPhoneRepeatPending,false);
+if(process.argv[2]) {
+  const b=readFileSync(process.argv[2]),raw=JSON.parse(b),c=raw.stopwatch.latest,q=raw.briefDiagnostics.latest,t=raw.returnEvidence;
+  assert.equal(b.length,latest.reportBytes);assert.equal(createHash('sha256').update(b).digest('hex'),latest.reportSha256);
+  assert.deepEqual(c,q.clock);assert.equal(raw.briefMatchesLatestStopwatch,true);assert.equal(c.source,r.runtime.source);assert.equal(raw.source.sourceCommit,r.runtime.source);assert.equal(raw.source.sourceTree,r.runtime.tree);
+  assert.equal(raw.source.diagnosticScene,latest.diagnosticScene);assert.equal(c.elapsedMs,latest.savedActiveMs);assert.equal(c.mode,latest.savedMode);assert.equal(c.unobservedGaps,0);
+  assert.equal(q.events.length,31);assert.equal(q.dropped,0);assert.deepEqual(q.options,{scene:'reactor',fullRecording:false,protection:true});assert.equal(raw.fullSession,null);assert.equal(raw.testOptions,null);
+  const contacts=q.events.filter(e=>['touchend','pointerup','lostpointercapture'].includes(e.kind)),end=contacts.reduce((a,b)=>a.at>b.at?a:b);
+  assert.equal(end.elapsedMs,132618);assert.equal(c.updatedAt-end.at,829520);assert.ok(q.events.every(e=>e.mode==='running'));
+  assert.equal(t.activeDocument.startedAt-c.updatedAt,203);assert.equal(t.activeDocument.route,'home');assert.equal(t.lastSession.active,true);assert.equal(t.lastSession.context.status,'playing');
+  assert.equal(t.reloadTrace.events.find(e=>e.kind==='boot-after-active-session').at-c.updatedAt,828);
+}
 if(r.hostedCheck) {
   const h=read('./evidence/hosted-mini-completion-candidate.json');assert.equal(h.source,r.runtime.source);assert.equal(h.sourceTree,r.runtime.tree);assert.equal(h.physicalDevice,false);assert.equal(h.whiteScreenFixed,false);
   assert.equal(h.miniCompletionControlEnabled,true);assert.equal(h.qaNativeProbeDeployed,false);assert.equal(h.animationStartNativeDiscoveryRemains,true);
@@ -42,4 +62,4 @@ if(r.hostedCheck) {
   assert.equal(r.hostedCheck.ownerResult,false);assert.equal(r.hostedCheck.uninterruptedPerformanceClaimed,false);
   assert.equal(h.url,r.deployment.url);assert.equal(h.deploymentId,r.deployment.id);assert.equal(r.deployment.status,'READY');assert.equal(r.deployment.environment,'Preview');assert.equal(r.deployment.source,r.runtime.source);assert.equal(r.deployment.publicReleaseAuthorized,false);
 }
-console.log('CRYPTOID_MINI_COMPLETION_EVIDENCE '+JSON.stringify({passed:true,source:r.runtime.source,shortDesktopFlows:4,newOwnerPhoneResult:'not-tested',whiteScreenFixed:false}));
+console.log('CRYPTOID_MINI_COMPLETION_EVIDENCE '+JSON.stringify({passed:true,source:r.runtime.source,shortDesktopFlows:4,newOwnerPhoneResult:'matched16:02/running then abrupt home return; no normal end; white pixels not restated',whiteScreenFixed:false}));
