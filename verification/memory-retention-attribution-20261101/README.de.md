@@ -68,14 +68,77 @@ kein neuer Getter im Default, genau ein entsprechendes Modul im Diagnosebuild.
 Die originalen Frontend-/Backend-/API-/Asset-/Private-Preview-Quellbäume bleiben
 gepinnt; automatische Vercel-Auslieferung bleibt deaktiviert.
 
-Aktuelle native Ergebnisse werden nach Abschluss ergänzt. Ein gestarteter Job
-ist keine bestandene Speicher- oder Stabilitätsprüfung. Die vorherige rote
-WebKit-Original-Vorprüfung bleibt separat offen; sie wird hier nicht als Ursache
-des mobilen White Screens umgedeutet.
+## Bestätigter Kurzlauf und laufender Langlauf
+
+Quelle `9cfe6ae1df777524d84c1a7301694490a4ed3a13`, Baum
+`44fe46c19cfd3d13838866457ea9cbadf6c153f7`,
+[CI 41339737350](https://github.com/19Trojan69/cryptoid-evolution/actions/runs/41339737350).
+Der Kurzlauf bestand 60.000 ms aktive Zeit, 21 zusätzliche Boss-Kernsalven,
+alle zehn Freigabe-Messpunkte und beide Heap-Snapshots. Der separate 20-Minuten-
+Lauf beginnt erst danach; sein Ergebnis ist hier bis zur Auswertung offen.
+
+Die tatsächlich installierten CI-Pakete sind diesmal direkt erfasst:
+React/ReactDOM 19.2.4, React Router DOM 7.13.2, Vite 7.3.1, TypeScript 5.9.3.
+Das entspricht den zuvor gelesenen Lock-Einträgen; das ist kein allgemeiner
+Nachweis identischer kompletter Installationen zwischen allen Versuchen.
+
+| Zustand im Kurzlauf | Linux-Prozess-PSS | belegter JS-Heap | CSS aktiv / Bild-Pins | Canvas-Effektcache |
+| --- | ---: | ---: | ---: | ---: |
+| Pause vor GC, nach fünf Sekunden Ruhe | 432,7 MiB | 13.780.616 B | 10 / 15 | 740.932 B |
+| Pause nach GC | 371,4 MiB | 10.503.472 B | 10 / 15 | 740.932 B |
+| Home nach GC | 355,9 MiB | 9.892.436 B | 0 / 0 | 0 B |
+| neues leeres Dokument nach GC | 291,3 MiB | 1.096.496 B | nicht mehr geladen | nicht mehr geladen |
+
+Das ist ein beobachteter Unterschied nach einer **Diagnosemaßnahme**, keine
+implementierte Verbesserung. Eine GC-Anforderung kann neben JavaScript weitere
+verbundene Browserbestände beeinflussen. Die PSS-Differenz wird deshalb weder
+vollständig JavaScript noch GPU zugeschrieben. Ein automatischer Reload und
+regelmäßige Zwangsbereinigungen werden daraus nicht als Reparatur abgeleitet.
+
+Nach Home sind null Spiel-Canvas im Dokument, null native Dokumentanimationen,
+null CSS-Registrierungen, null Bild-Pins und null Canvas-Effektcache bestätigt.
+Der nach GC verbleibende Heap enthält keine native `CSSAnimation`, keinen
+nativen `KeyframeEffect` und keinen nativen `AudioBuffer`. Die insgesamt sieben
+verbleibenden Offscreen-Canvas sind jeweils 192 × 192 Pixel. Das passt zum
+explizit auf sieben Schlüssel begrenzten Steintexturcache in `BonusRockLayer`
+(1.032.192 rechnerische Pixelbytes); der bloße Detached-Canvas-Zähler wäre hier
+kein Lecknachweis. Browser-Backing-/Layerkosten sind damit nicht gemessen.
+
+## Zusätzliche Quellenprüfung der Ressourcenbesitzer
+
+Neben den bereits verglichenen acht Kernmodulen wurden die weiteren Canvas-/
+Bildbesitzer geprüft:
+
+| Pfad | nachgewiesene Quellregel | verbleibende Grenze des Nachweises |
+| --- | --- | --- |
+| `bossWeaponRenderer` / `BossWeaponsView` | Quelllayer und Heizkacheln werden bei Freigabe auf null dimensioniert; höchstens eine Heizstufe pro Kanone | native Freigabelatenz nicht aus Quelltext ableitbar |
+| `bossWeaponTextures` | zwei fertige Cacheeinträge; laufende Anforderungen teilen denselben Promise | kein gemessener kompletter Browser-Bildcache |
+| `bossArtwork` / `shipArtwork` | acht bzw. zwanzig Ergebnis-Canvas; temporäre Quellflächen werden im `finally` freigegeben | Menü-/Sammlungsnutzung ist nicht derselbe Boss-Langlauf |
+| `BonusRockLayer` | genau sieben 192-px-Texturen; Spieloberfläche und Vorbereitungstimer werden beim Unmount freigegeben | gemeinsamer Modulcache bleibt absichtlich warm |
+| `bossCombat` | Maskenschlüssel ist eine der fünfzig Boss-IDs; je Maske 128 × 48 Bits | kein unbeschränktes Zeit-/Trefferprotokoll |
+
+Vorhandene Aufräumroutinen allein gelten weiterhin nicht als Laufzeitbeweis.
+Es wurde hier kein zusätzlicher konkreter Freigabefehler nachgewiesen. Der lange
+Vergleich prüft als Nächstes, ob die Bestände nach 20 Minuten noch dieselbe
+Größenordnung und dieselben Freigabegrenzen haben.
+
+Die Kurzlauf-JSON ist komprimiert mit Digest dauerhaft unter `evidence/`
+gesichert. ZIP-Digest/Integrität, beide Snapshot-Digests, entpackte Größen und
+neu berechnete Heap-Klassen-/Größensummen stimmen. Fünf zusätzliche Offline-
+Regressionen verhindern, dass falsche Quellen, kurze/abgebrochene Aufnahmen,
+aktive Profiler, fehlende Messpunkte oder unvollständige PSS-Prozesssummen als
+erfolgreicher Vergleich veröffentlicht werden. Ein verbliebener Home-Besitz
+wird ausdrücklich als solcher ausgegeben und nicht durch einen grünen
+Erfassungsstatus verdeckt.
+
+Die vorherige rote WebKit-Original-Vorprüfung bleibt separat offen; sie wird
+hier nicht als Ursache des mobilen White Screens umgedeutet.
 
 ```bash
 node --test verification/memory-retention-attribution-20261101/inspection.test.mjs
 node verification/memory-retention-attribution-20261101/preflight.mjs
 VERCEL_ENV=preview CRYPTOID_SOAK_CONDITION=original CRYPTOID_LIFETIME_ATTRIBUTION=1 node verification/systematic-stability-20261101/prepareSoakBuild.mjs
 CRYPTOID_ATTRIBUTION_SECONDS=60 node --experimental-strip-types verification/memory-retention-attribution-20261101/profileLifetime.mjs
+node --test verification/memory-retention-attribution-20261101/evidence/attributionSummary.test.mjs
+node verification/memory-retention-attribution-20261101/evidence/verifyEvidence.mjs
 ```
