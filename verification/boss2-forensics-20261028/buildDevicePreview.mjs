@@ -7,7 +7,8 @@ import { resolve } from 'node:path';
 import { root, BASELINE, baselineController } from './fixture.mjs';
 import { deviceController, deviceBoss, deviceHtml } from './devicePreviewTransform.mjs';
 import { canvasEffectControl, canvasEffectControlEnabled } from '../boss2-canvas-effect-control-20261030/canvasControl.mjs';
-import { flatSceneEnabled, flatVisualModule, flatGameScene, diagnosticSceneName, bossStaticHotspotsDisabled, bossMiniCompletionInspectionDisabled } from '../boss2-flat-scene-control-20261030/flatTransform.mjs';
+import { flatSceneEnabled, flatVisualModule, flatGameScene, diagnosticSceneName, bossStaticHotspotsDisabled, bossMiniCompletionInspectionDisabled, bossMiniStartPacingDisabled } from '../boss2-flat-scene-control-20261030/flatTransform.mjs';
+import { keepBossMiniAuthoredNativePlayback } from '../boss2-mini-start-control-20261101/miniStartControl.mjs';
 import { useParentLifetimeForBossMini } from '../boss2-mini-completion-control-20261031/miniCompletionControl.mjs';
 import { omitStaticBossHotspots } from '../boss2-static-hotspots-control-20261031/hotspotControl.mjs';
 assert.equal(process.env.VERCEL_ENV, 'preview', 'Protected Preview only; production builds are denied');
@@ -35,6 +36,7 @@ await build({ configFile: false, root: root + '/frontend', envDir, mode: 'produc
     const path = id.split('?')[0];
     if (path === root + '/frontend/src/App.tsx') return `export { default } from ${JSON.stringify(directory + '/devicePreviewApp.jsx')};`;
     if (path === root + '/frontend/src/pages/GamePage.tsx') return deviceController(flatSceneEnabled() ? flatGameScene(code) : code);
+    if (path === root + '/frontend/src/lib/cssFramePacing.ts' && bossMiniStartPacingDisabled()) return keepBossMiniAuthoredNativePlayback(code);
     if (path === root + '/frontend/src/pages/FinishedEffect.tsx' && bossMiniCompletionInspectionDisabled()) return useParentLifetimeForBossMini(code);
     if (path === root + '/frontend/src/pages/HullDamage.tsx' && bossStaticHotspotsDisabled()) return omitStaticBossHotspots(code);
     if (flatSceneEnabled()) { const visual = flatVisualModule(path); if (visual) return visual; }

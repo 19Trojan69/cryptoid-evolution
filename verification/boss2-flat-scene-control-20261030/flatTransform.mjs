@@ -21,13 +21,14 @@ export const bossHullReflectionNormalBlend = () => bossHullReflectionUnmasked() 
 export const bossHeatFlatFillEnabled = () => bossHullHeatUnmasked() && !bossUnmaskedHeatReflectionRestored() && process.env.CRYPTOID_BOSS_HEAT_FLAT_FILL === '1';
 export const bossStaticHotspotsDisabled = () => bossHeatFlatFillEnabled() && process.env.CRYPTOID_BOSS_STATIC_HOTSPOTS_OFF === '1';
 export const bossMiniCompletionInspectionDisabled = () => bossStaticHotspotsDisabled() && process.env.CRYPTOID_BOSS_MINI_INSPECTION_OFF === '1';
+export const bossMiniStartPacingDisabled = () => bossMiniCompletionInspectionDisabled() && process.env.CRYPTOID_BOSS_MINI_START_PACING_OFF === '1';
 export const diagnosticSceneName = () => !flatSceneEnabled() ? 'original-artwork'
   : bossHeatComparisonEnabled() ? bossHullHeatRestored()
     ? (bossUnmaskedHeatReflectionRestored()
       ? (bossHullReflectionUnmasked()
         ? 'flat-live-scene-original-background-original-boss-no-weapon-canvas-unmasked-hull-heat-unmasked-hull-reflection' + (bossHullReflectionNormalBlend() ? '-normal-blend' : '')
         : 'flat-live-scene-original-background-original-boss-no-weapon-canvas-unmasked-hull-heat-restored-hull-reflection')
-      : 'flat-live-scene-original-background-original-boss-no-weapon-canvas-hidden-hull-reflection' + (bossHullHeatUnmasked() ? '-unmasked-hull-heat' : '') + (bossHeatFlatFillEnabled() ? '-flat-fill' : '') + (bossStaticHotspotsDisabled() ? '-no-static-hotspots' : '') + (bossMiniCompletionInspectionDisabled() ? '-no-mini-inspection' : ''))
+      : 'flat-live-scene-original-background-original-boss-no-weapon-canvas-hidden-hull-reflection' + (bossHullHeatUnmasked() ? '-unmasked-hull-heat' : '') + (bossHeatFlatFillEnabled() ? '-flat-fill' : '') + (bossStaticHotspotsDisabled() ? '-no-static-hotspots' : '') + (bossMiniCompletionInspectionDisabled() ? '-no-mini-inspection' : '') + (bossMiniStartPacingDisabled() ? '-no-mini-start-pacing' : ''))
     : 'flat-live-scene-original-background-original-boss-no-weapon-canvas-hidden-hull-masks'
   : bossReflectionComparisonEnabled() ? bossReflectionRestored()
     ? 'flat-live-scene-original-background-original-boss-no-weapon-canvas-hidden-hull-heat'

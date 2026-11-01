@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "kind": "protected-boss-mini-optional-start-pacing-bypass",
+  "whiteScreenFixed": false,
+  "physicalDeviceTested": false,
+  "newOwnerPhoneResult": null,
+  "runtime": {
+    "source": null,
+    "tree": null,
+    "workBranch": "codex/boss2-mini-start-control-20261101",
+    "deviceBranch": null
+  },
+  "basis": {
+    "source": "d72db0a8ca5c70b91db9b7760366773e2836db66",
+    "tree": "73c23f8a5dba0bb93ab676c4ad3954ddf7ff1228",
+    "savedActiveMs": 962934,
+    "displayedTime": "16:02",
+    "savedMode": "running",
+    "newDocumentAfterCheckpointMs": 203,
+    "bootAfterActiveSessionRecorded": true,
+    "normalEndRecorded": false,
+    "ownerWhiteScreenExplicitlyRestatedForThisRun": false,
+    "evidence": "../boss2-mini-completion-control-20261031/evidence/owner-mini-completion-abrupt-return.json",
+    "evidenceCommit": "cb303a0a42c54864b167aa5f2493c50dbca34161"
+  },
+  "verification": {
+    "status": "pending-full-ci",
+    "localTargetedTests": 4,
+    "localCompleteAppTested": false,
+    "expectedSourceTests": 26,
+    "requiredControlMiniStartQueriesPositive": true,
+    "requiredControlMiniTimingWritesPositive": true,
+    "requiredCandidateMiniTargetQueriesAndTimingWritesZero": true,
+    "proofIncludesMiniSparkDescendants": true,
+    "qaProbeShipped": false
+  },
+  "deployment": {
+    "status": "not-deployed",
+    "previewOnly": true,
+    "gitAutomaticDeployment": false,
+    "publicReleaseAuthorized": false
+  },
+  "publicMainSource": "ce073547cf573375d141bf846f70e294138dbd73",
+  "limits": [
+    "Discovery, native timing/listener registration and extra 60-Hz mini visual-progress quantization change together; authored CSS animation remains. Other effect pacing and initial root discovery stay. Game clocks and speed unchanged.",
+    "No native cause, permanent fix, owner-phone improvement or new owner result. No unchanged repeat pending. No new link before checks and hosted verification."
+  ]
+}

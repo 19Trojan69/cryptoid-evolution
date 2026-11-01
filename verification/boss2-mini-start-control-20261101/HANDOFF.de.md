@@ -1,0 +1,27 @@
+# Fortsetzung: Startbehandlung kleiner Boss-Treffer
+
+Nur React/TypeScript/Vite, geschützte Gast-Previews. Kein öffentliches Testnet/Mainnet/main-Merge; echte Accounts/Spielstände/Käufe/Rangliste schützen. Spieltempo/Uhren/Balance/Einfingersteuerung/manuelles Fortsetzen/Audio unverändert. Bestehende Geräte-Zweige/URLs einfrieren. Keine allgemeine Untersuchung/Jetsam wiederholen. White Screen nicht nachweislich behoben.
+
+## Tatsächlich neu ausgewerteter Besitzerlauf
+
+Quelle d72db0a8ca5c70b91db9b7760366773e2836db66 / Baum73c23f8a5dba0bb93ab676c4ad3954ddf7ff1228; letzter Link r4s9cheli gehört dazu. Bericht cryptoid-diagnose-2026-11-01T08-29-24-853Z-52e5a414.json,8201Bytes/SHA-256 d7106acc2b9986cbed66c3c5147b9cad56b4ccd36563bc12c388fa17c713f214. Uhr und Kurzbericht passen: **16:02/962934 aktive ms/running**, null aufgezeichnete Lücken. Reaktor/Vollaufzeichnung aus/Testschutz an/fullSession:null. Top-level testOptions:null; Optionen aus passendem Kurzbericht.
+
+Neues home-Dokument203ms nach dem Checkpoint, navigate, boot-after-active-session828ms nach Checkpoint, vorher aktiv/playing/boss-fight; kein normaler Abschluss aufgezeichnet. Rein angehängte Datei: White-Screen-Pixel wurden nicht erneut ausdrücklich beschrieben/werden nicht gemessen. Fehlendes Endereignis beweist keine native Ursache und schließt absichtliche Navigation nicht aus. 31Ereignisse/null Verwerfungen sind keine Absturzzahl oder Vollaufzeichnung. Letzter Kontakt bei02:12/132618aktiven ms,829520reale ms vor Checkpoint. Kein unmittelbarer Eingabetrigger, keine besondere Idle-Spielweise/Wärme neu bestätigt. 16:02 beweist keine Verbesserung gegenüber15:00 oder8–10Minuten.
+
+Abschlussprüfung und frühe Entfernung fertigen Treffer-DOMs sind im geprüften Build aus; Startentdeckung und Frame-Easing noch an. Kandidat nicht als Reparatur bestätigt, Lauf geschlossen, kein unveränderter Smartphone-Wiederholungstest offen. Bereinigter Nachweis ../boss2-mini-completion-control-20261031/evidence/owner-mini-completion-abrupt-return.json, Nachweiscommit cb303a0a42c54864b167aa5f2493c50dbca34161. Rohbericht und Kontakthistorie nicht in Git. 01:24 war nur der Assistenten-Desktoplauf auf dieser alten Preview; nicht Besitzerzeit.
+
+## Kleine neue Vergleichsgrenze
+
+Original cssFramePacing.ts, Blob5d9cc3e5b40792277d9813b2953196affbc0eaf3, normierter SHA-2568e08da3d503cbfcd9104d3809ef7c8ce214e9053bda15b030fa3ddc5cd152010. Bereits im vorigen CI positiv belegte Startabfrage bei animationstart/transitionrun. Danach nativeFrameEasing, effect.updateTiming, Map und finish/cancel-Listener. Keine dieser begrenzten Strukturen beweist ein Leck oder die Smartphone-Ursache.
+
+Build-Transformation ergänzt genau zwei umkehrbare Guards nur für `.sector-boss .hull-mini-explosion` einschließlich Funkenkindern: vor Ziel-getAnimations und vor Registrierung. Der zweite Guard gilt auch für initialen Root-Scan und direkte paceAnimation-Registrierung. Ursprüngliches Mini-Markup/CSS/Verläufe/Formen/Funken/Keyframes/Dauern bleiben, Browser spielt die authored CSS-Animation weiter. Nur zusätzliche60-Hz-Quantisierung/natives Timing-Nachstellen/Listenerregistrierung dieser Untergruppe entfallen gemeinsam. Das ist kein reiner Methodenvergleich und keine allgemeine Aufhebung der Taktung: andere Effekte und initiale Root-Abfrage bleiben. Spieluhren/Simulation/Tempo/Audio/Input bleiben unverändert; keine Timer/RAF/Hooks/Assets/Canvas hinzugefügt.
+
+Abschlussprüfung/frühe Mini-Entfernung bleiben in Kontrolle und Kandidat aus, ein neuester keyed Mini maximal. Statische Hotspots weiter ausgelassen; leere Heat-Ebene, Inline-Masken, Bildvorbereitung bleiben; aktive Masken none, Reflexion aus. Originalboss/Gesundheit/Hintergründe und kleine Treffer bleiben. BossWeaponsView/frühere Filter/Reaktor/gewöhnliche Explosions-Canvas-Kontrollen bleiben ausgeschlossen, übriger Vordergrund vereinfacht. Originalquellbäume gepinnt; Änderung nur im privaten Build.
+
+## Prüfen vor Auslieferung
+
+Arbeitszweig codex/boss2-mini-start-control-20261101. Flag CRYPTOID_BOSS_MINI_START_PACING_OFF=0 ist der Besitzerbedingung entsprechende Kontrolle; Standard1 neuer Kandidat. Szenenende -no-mini-inspection-no-mini-start-pacing. Banner **TREFFERTEST: Originaltreffer; zusätzliche Animationstaktung aus**. Neuer Geräte-Zweig erst nach bestandenen Prüfungen an exakt getesteter Quelle einfrieren.
+
+Vier lokale Zieltests führen den tatsächlichen Abschluss-Callback und das tatsächliche TS-Pacing-Modul mit isolierten Hosts aus; exakte Umkehrung, Quellpins, Mini/Nicht-Mini/Boss/Nicht-Boss, initialer Scan/direkte Registrierung/Events und Aufräumen. Lokaler Checkout teilweise: gepinnte textgleiche Remote-Dateien liegen nur als externe Testfixtures vor. Vollständiger Quell-/Typ-/Vite-/Browserbeweis erfolgt in CI, nicht als lokal vollständiger Build ausgeben.
+
+Browser-QA ausschließlich im isolierten Testkontext: Miniwurzel UND Funken-Unterelemente zählen, getAnimations und KeyframeEffect.updateTiming zählen, echte animationstart/end-Ereignisse. Kontrolle muss positive Startabfragen UND Timing-Schreibvorgänge zeigen; Kandidat beides0, Endabfragen in beiden0. Sichtbare Originaltreffer/Dauern/3–5Funken/ein beobachteter Mini plus Layout, Pause/Uhrfreeze, explizites Resume, Steuerung, Waffenmenü und normaler Endbericht in Chromium/WebKit erforderlich. Keine QA-Probe ausliefern, keine nativen Messwerte vom Besitzergerät unterstellen. Kein Link ohne bestandene Kontrollen und tatsächliche geschützte Hosted-Prüfung. Keine Smartphone-Ergebnisse für neue Quelle bisher.
