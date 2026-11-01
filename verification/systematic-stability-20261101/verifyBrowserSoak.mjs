@@ -104,6 +104,12 @@ try {
     await tap(page.getByRole('button', { name: 'Boss-2-Test öffnen', exact: true }));
     await page.waitForFunction(() => window.__crossDeviceTest?.inspect().status === 'paused');
     await tap(page.locator('.pause-resume-button')); await waitMode('running');
+    // Resume first enters the existing boss intro. Begin the measured interval
+    // only after the authored intro actually reaches the open-reactor fight.
+    await page.waitForFunction(() => {
+      const state = window.__crossDeviceTest?.inspect();
+      return state?.status === 'playing' && state.encounter === 'boss-fight' && state.reactorOpen;
+    }, null, { timeout: 45000 });
     const first = await observe(); verifyActive(first, first);
     const started = Date.now(); let previous = first, progressAt = started, printedAt = started, sampledAt = 0;
     while (previous.clock.latest.elapsedMs - first.clock.latest.elapsedMs < requestedMs) {

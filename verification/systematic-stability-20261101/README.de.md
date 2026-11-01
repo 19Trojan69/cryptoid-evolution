@@ -137,6 +137,15 @@ Ein vorbereiteter oder gestarteter Job ist ausdrücklich noch kein bestandener
 Browser-Langzeittest. Ein bestandener Linux-Lauf wäre weiterhin keine bestätigte
 Reparatur auf den Smartphones des Besitzers.
 
+Erster CI-Versuch `41333796043`, Quelle `250b6724`: Quellen-/Build-Gates
+bestanden. Alle vier Browser-Kurzprüfungen stoppten vor der Messung, weil der neue
+Prüfablauf unmittelbar nach Fortsetzen schon `boss-fight` verlangte. Tatsächlich
+lief noch das unveränderte `boss-intro`. Die Prüfsteuerung wartet jetzt auf das
+wirkliche Ende des Intros und den geöffneten Reaktor; Spielablauf und Pausenschutz
+bleiben unverändert. Der fehlgeschlagene Versuch bleibt in
+[initial-browser-gate-failure.json](evidence/initial-browser-gate-failure.json)
+erhalten und zählt nicht als White-Screen-Reproduktion oder Langzeitlauf.
+
 ## Reproduktion
 
 ```bash

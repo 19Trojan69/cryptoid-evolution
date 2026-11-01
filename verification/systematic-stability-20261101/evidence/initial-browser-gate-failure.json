@@ -1,0 +1,15 @@
+{
+  "sourceCommit": "250b67246f6f38b4a39734fa324faebafbd727c0",
+  "workflowRun": 41333796043,
+  "sourceGates": "passed",
+  "observedJobs": [124929605821, 124929605811, 124929605775, 124929605742],
+  "engines": ["chromium", "webkit"],
+  "conditions": ["original", "mini-start"],
+  "stage": "short-ui-flow-before-duration",
+  "failure": "Harness asserted boss-fight immediately after Resume while the unchanged game was still in its authored boss-intro",
+  "measuredLongObservationStarted": false,
+  "naturalWhiteScreenObserved": false,
+  "runtimeCorrection": false,
+  "testCorrection": "Wait for the actual playing open-reactor boss-fight after the unchanged intro before beginning active-time measurement",
+  "status": "preserved-failed-attempt-not-a-pass"
+}
