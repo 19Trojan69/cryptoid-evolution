@@ -3,6 +3,7 @@ import { createRequire } from 'node:module';
 import { execFileSync } from 'node:child_process';
 import { mkdirSync, writeFileSync, appendFileSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
+import { createHash } from 'node:crypto';
 import { root, configuration } from '../boss2-forensics-20261028/fixture.mjs';
 import { serveDevicePreview } from '../boss2-forensics-20261028/devicePreviewServer.mjs';
 import { sampleBrowserMemory } from '../boss2-forensics-20261028/processMemory.mjs';
@@ -58,6 +59,11 @@ if (clockProbe) {
   result.existingClockSampleObserver = true; result.noNewTimerOrAnimationFrame = true;
   result.extraGameCollectors = true;
   result.limits.push('Two explicit bounded scalar observers are present; never merge this condition with earlier uninstrumented memory captures.');
+  const frontendRequire = createRequire(root + '/frontend/package.json');
+  result.actualInstalledPackages = Object.fromEntries(['react', 'react-dom', 'react-router-dom', 'vite', 'typescript']
+    .map(name => [name, frontendRequire(name + '/package.json').version]));
+  result.playwrightVersion = createRequire(new URL('../boss2-forensics-20261028/package.json', import.meta.url))('playwright/package.json').version;
+  result.lockSha256 = createHash('sha256').update(readFileSync(root + '/frontend/yarn.lock')).digest('hex');
 }
 let browser, server, page, fatal, probeFirst;
 const external = [], assetFailures = [];
@@ -129,7 +135,8 @@ try {
       [name, readFileSync(root + '/frontend/src/pages/' + name + '.tsx', 'utf8')]));
     const expected = localStyleProof(sources, clockProbe.condition);
     assert.deepEqual(info.qaLocalBossStyle, expected); result.localStyleBuildProof = expected;
-    const proof = info.qaClockGapProbe; assert.equal(proof.version, 1);
+    const proof = info.qaClockGapProbe; assert.equal(proof.version, 2);
+    assert.equal(proof.clockStartPolicy, 'wait for a fresh advancing frame on initial start and resume');
     for (const k of ['newTimers', 'newAnimationFrames', 'appClocksWritten', 'automaticResume', 'stateObjectsOrDomRetained',
       'sourceGameFilesEdited', 'physicalDevice', 'whiteScreenFixed']) assert.equal(proof[k], false);
     assert.equal(proof.maxClockRows, 96); assert.equal(proof.maxFrameGapRows, 16); result.clockGapBuildProof = proof;

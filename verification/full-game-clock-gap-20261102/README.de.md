@@ -73,3 +73,43 @@ geändert. Ein neuer manueller Handytest ist noch nicht erforderlich.
 node --test verification/full-game-clock-gap-20261102/probe.test.mjs
 node verification/local-boss-style-20261102/preflight.mjs --clock-probe
 ```
+
+## Erste echte Spielrunde: Startfehler der Diagnose eingegrenzt
+
+Quelle `ba817d0114ee2487e1488ab20a43664ac694ed7a`, Baum
+`a2f1db1c7d057f429733fe7cb40f762daa897034`,
+[CI 41443647086](https://github.com/19Trojan69/cryptoid-evolution/actions/runs/41443647086).
+Beide Quellen-/Typ-Gates bestehen. Alle vier Chromium-Kurzläufe bestehen ihren
+vollständigen 60/10/10-Sekunden-UI-Ablauf. Alle vier WebKit-Läufe scheitern an der
+unveränderten Null-Lücken-Prüfung; deshalb wird die Langstufe übersprungen.
+Einer der WebKit-Kandidaten hatte vorher seinen ersten 60-Sekunden-/UI-Zyklus
+vollständig beendet und scheitert erst beim nächsten Mount.
+
+In **allen vier** WebKit-Fehlschlägen steht unmittelbar vor der neuen Lücke:
+Clock-Modus `running`, Spielstatus `playing`, nativer Frame-Zähler `0` und
+Frame-Zeitstempel `0`. Bereits 214–289 ms später meldet die Clock eine Lücke;
+weiterhin hat noch kein nativer Frame stattgefunden. Die folgenden echten
+Spiel-Frames laufen weiter. Die höchsten gespeicherten laufenden Frame-Abstände
+nach dem Fehler liegen bei 446–715 ms, unter dem unveränderten 2.500-ms-Watchdog.
+
+Damit ist ein konkreter Fehler der diagnostischen Stoppuhr belegt: Ihr bisheriger
+Start-/Resume-Zweig ließ `running` ohne frischen, fortgeschrittenen Frame zu.
+Der nächste Sample wertete den weiterhin fehlenden Frame dann als Lücke. Der
+Fehler erklärt diesen Testabbruch und wird nicht als Smartphone-White-Screen-
+Ursache ausgegeben. Alle acht Rohbeobachtungen und ZIP-Digests bleiben erhalten.
+
+Die folgende Diagnose-Korrektur wartet beim ersten Start und nach echten Pausen
+auf einen frischen, fortgeschrittenen Frame. Bis dahin zählt sie keine aktive
+Zeit. Sie setzt weder Spielstatus noch Zeitwerte zurück und nimmt keine echte
+spätere Lücke aus der weiterhin strengen Prüfung heraus. Zwei Regressionen
+bilden den beobachteten Frame-0-Verlauf und den anschließenden echten 3-Sekunden-
+Beobachtungsausfall ab. Die bestehenden Clock-Regeln bleiben geprüft.
+
+Zwei weitere Begrenzungsdetails werden korrigiert: Epoch-Werte von
+`performance.timeOrigin` über einer Billion dürfen im einmaligen Fehler-Read
+nicht als ungültig verworfen werden; ein erster laufender Callback mit großem
+vorhandenem Frame-Abstand muss im Frame-Maximum enthalten sein. Alte Nullwerte
+und Rohdaten werden nicht rückwirkend ergänzt. Die Build-Probe erhält Version 2,
+aktuelle installierte Pakete und Lock-Digest werden zusätzlich aufgezeichnet.
+24 direkte Clock-/Beobachter-Regressionen bestehen lokal. Die neuen acht
+Kurzläufe müssen diese Korrektur anschließend unter echten Engines bestätigen.

@@ -68,3 +68,10 @@ test('the real collector reads only after failure and preserves the six historic
   const manifest = JSON.parse(readFileSync(new URL('../local-boss-style-20261102/evidence/manifest.json', import.meta.url)));
   assert.equal(manifest.captures.length, 6); assert.equal(manifest.status, 'finished-with-protocol-failure');
 });
+test('a real epoch-valued performance time origin remains available for document identity checks', () => {
+  const f = fixture(); f.host.performance.timeOrigin = 1793622070000;
+  const s = readFailureState('key', f.host);
+  assert.equal(s.timeOrigin, 1793622070000);
+  assert.equal(classifyFailureState(s, { ...first, timeOrigin: 1793622070000 }).sameDocument, true);
+  assert.equal(classifyFailureState(s, { ...first, timeOrigin: 1793622080000 }).sameDocument, false);
+});

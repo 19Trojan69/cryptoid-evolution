@@ -7,6 +7,7 @@ on:
       - 'verification/full-game-clock-gap-20261102/*.mjs'
       - 'verification/full-game-clock-gap-20261102/*.mts'
       - 'verification/systematic-stability-20261101/verifyBrowserSoak.mjs'
+      - 'verification/boss2-stopwatch-20261029/stopwatchState*'
 permissions:
   contents: read
 jobs:
@@ -23,7 +24,7 @@ jobs:
         run: |
           git restore --worktree -- frontend/yarn.lock
           node verification/boss2-mini-start-control-20261101/verifyScope.mjs
-          node --test verification/full-game-clock-gap-20261102/probe.test.mjs verification/memory-retention-attribution-20261101/failureObservation.test.mjs verification/local-boss-style-20261102/transform.test.mjs
+          node --test verification/full-game-clock-gap-20261102/probe.test.mjs verification/boss2-stopwatch-20261029/stopwatchState.test.mjs verification/memory-retention-attribution-20261101/failureObservation.test.mjs verification/local-boss-style-20261102/transform.test.mjs
           node verification/local-boss-style-20261102/preflight.mjs --clock-probe
           node verification/local-boss-style-dynamic-20261102/evidence/verifyEvidence.mjs
   short-flow:

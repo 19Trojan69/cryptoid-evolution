@@ -81,6 +81,7 @@ export function createStopwatch({ source, storage, now, wallNow }) {
     const starting = !live.startedAt || ['paused', 'hidden'].includes(live.mode);
     let mode = ['game-over', 'victory', 'destroying'].includes(snapshot.status) ? 'ended'
       : !visible ? 'hidden' : snapshot.status !== 'playing' ? 'paused'
+      : starting && (!fresh || !advancing) ? 'paused'
       : !starting && (!fresh || !advancing || !continuous) ? 'stalled' : 'running';
     if (live.mode === 'ended') mode = 'ended';
     if (!live.startedAt && mode === 'running') {

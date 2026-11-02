@@ -12,7 +12,8 @@ const official = readFileSync(root + '/verification/boss2-stopwatch-20261029/sto
   .replace('__CRYPTOID_STOPWATCH_SOURCE__', info.sourceCommit).replace("'./stopwatchState.mjs'", "'./diagnostic-stopwatch-state.js'");
 assert.equal(original, official, 'Unchanged existing stopwatch before explicit observer insertion');
 const digest = value => createHash('sha256').update(value).digest('hex');
-info.qaClockGapProbe = { version: 1, frameHook: 'existing native GamePage step, before simulation substeps',
+info.qaClockGapProbe = { version: 2, frameHook: 'existing native GamePage step, before simulation substeps',
+  clockStartPolicy: 'wait for a fresh advancing frame on initial start and resume',
   nativeFrameGapsRead: true, existingClockSamplesReused: true, maxClockRows: 96, maxFrameGapRows: 16,
   diagnosticStopwatchBeforeSha256: digest(original), diagnosticStopwatchObservedSha256: digest(changed),
   newTimers: false, newAnimationFrames: false, appClocksWritten: false, automaticResume: false,

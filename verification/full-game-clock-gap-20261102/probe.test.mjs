@@ -11,6 +11,8 @@ test('existing native frames distinguish a large actual playing-frame gap from a
   for (let i = 0; i < 1000; i++) f.record(4000 + i * 300, 300, 'playing');
   assert.equal(f.read().gaps.length, 16); assert.equal(f.read().frames, 1003);
   const r = f.read(); r.gaps[0].gap = 0; assert.notEqual(f.read().gaps[0].gap, 0);
+  const first = createFrameProbe(); first.record(4100, 4000, 'playing');
+  assert.equal(first.read().maxPlayingGapMs, 4000, 'A first playing callback gap is retained too');
 });
 test('bounded existing-clock observations never keep contact, account, DOM or raw storage payloads', () => {
   const trace = createClockTrace();

@@ -12,7 +12,7 @@ export function readFailureState(key, host = window) {
   const now = finite(host.performance.now());
   const frame = finite(scene?.frameAt);
   return {
-    timeOrigin: finite(host.performance.timeOrigin), observedAt: now,
+    timeOrigin: finite(host.performance.timeOrigin, Number.MAX_SAFE_INTEGER), observedAt: now,
     hidden: host.document.hidden, focused: host.document.hasFocus(),
     mounted: !!host.document.querySelector('.game-shell'),
     scene: scene ? {

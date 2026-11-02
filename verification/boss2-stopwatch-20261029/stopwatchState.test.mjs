@@ -15,14 +15,14 @@ test('real start begins at zero; active monotonic time advances independently of
   const h = host(), clock = h.make();
   clock.observe(h.snapshot('paused')); assert.equal(h.writes.length, 0);
   h.tick(5000); clock.observe(h.snapshot('paused')); assert.equal(clock.view().live.elapsedMs, 0);
-  clock.observe(h.snapshot()); h.tick(1000, -10000); clock.observe(h.snapshot());
+  h.tick(1); clock.observe(h.snapshot()); h.tick(1000, -10000); clock.observe(h.snapshot());
   assert.equal(clock.view().live.elapsedMs, 1000); assert.equal(clock.view().live.mode, 'running');
 });
 test('pause freezes time and only later observed gameplay resumes the same run', () => {
   const h = host(), clock = h.make(); clock.observe(h.snapshot());
   h.tick(1200); clock.observe(h.snapshot('paused')); const id = clock.view().latest.id;
   h.tick(10000); clock.observe(h.snapshot('paused')); assert.equal(clock.view().latest.elapsedMs, 1200);
-  clock.observe(h.snapshot()); h.tick(1000); clock.observe(h.snapshot());
+  h.tick(1); clock.observe(h.snapshot()); h.tick(1000); clock.observe(h.snapshot());
   assert.equal(clock.view().latest.elapsedMs, 2200); assert.equal(clock.view().latest.id, id);
 });
 test('duplicate DOM notifications before the next frame neither invent a stall nor lose the active-time anchor', () => {
@@ -92,4 +92,26 @@ test('corrupt, oversized or unsupported saved records are ignored without cleari
 test('display preserves total seconds and switches to hours without wrapping the elapsed time', () => {
   for (const [ms, text] of [[0, '00:00'], [59999, '00:59'], [60000, '01:00'], [3600000, '01:00:00'], [3661000, '01:01:01'], [-1, '00:00'], [NaN, '00:00']])
     assert.equal(formatStopwatch(ms), text);
+});
+test('the observed WebKit playing/frame-zero boundary waits for the first fresh advancing frame instead of inventing a gap', () => {
+  const h = host(), clock = h.make(); clock.observe(h.snapshot('paused', 'a', true, 0));
+  h.tick(11706); const start = Object.freeze(h.snapshot('playing', 'a', true, 0));
+  clock.observe(start); h.tick(250); clock.observe(start);
+  assert.equal(clock.view().live.startedAt, null); assert.equal(clock.view().live.unobservedGaps, 0);
+  assert.equal(clock.view().live.mode, 'paused'); assert.equal(h.writes.length, 0);
+  h.tick(1004); clock.observe(h.snapshot()); assert.equal(clock.view().latest.elapsedMs, 0);
+  assert.equal(clock.view().latest.unobservedGaps, 0); assert.equal(clock.view().latest.mode, 'running');
+  h.tick(1004); clock.observe(h.snapshot()); assert.equal(clock.view().latest.elapsedMs, 1004);
+  assert.equal(start.status, 'playing'); assert.equal(start.frameAt, 0);
+});
+test('resume retains the same saved elapsed time while awaiting a fresh frame and still records a genuine later observer gap', () => {
+  const h = host(), clock = h.make(); clock.observe(h.snapshot()); h.tick(1000); clock.observe(h.snapshot('paused'));
+  const id = clock.view().latest.id; h.tick(10000); clock.observe(h.snapshot('playing', 'a', true, 0));
+  h.tick(250); clock.observe(h.snapshot('playing', 'a', true, 0));
+  assert.equal(clock.view().latest.elapsedMs, 1000); assert.equal(clock.view().latest.unobservedGaps, 0);
+  h.tick(1000); clock.observe(h.snapshot()); assert.equal(clock.view().latest.mode, 'running');
+  assert.equal(clock.view().latest.id, id); assert.equal(clock.view().latest.elapsedMs, 1000);
+  h.tick(3000); clock.observe(h.snapshot());
+  assert.equal(clock.view().latest.unobservedGaps, 1); assert.equal(clock.view().latest.mode, 'stalled');
+  assert.equal(clock.view().latest.elapsedMs, 1000);
 });
