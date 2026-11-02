@@ -4,22 +4,19 @@
   "project": "cryptoid-evolution-testnet",
   "projectId": "prj_JpvzU9ZS8bFkn9jZgE51Gct8TZpF",
   "accountId": "team_KzJmtl0QyoYZAOu5RQKsAR2i",
-  "candidateSourceCommit": "5acefc1aa3ea224b656a76c415da39ece0ed84f0",
-  "candidateSourceTree": "e5d838eead213cf6c1d9e9d365c4de38ef7395b8",
+  "candidateSourceCommit": "b042c8e50ad3f05a70418ae5ee6bb4412809035b",
+  "candidateSourceTree": "921fe9212ce0ccfeaa7dc46352d3d6385c7f3fb2",
   "pairedNativeFlowRun": 41445407351,
-  "nativePackageFlowRun": 41449159220,
+  "nativePackageFlowRun": 41489185104,
   "allEightShortAndFourLongNativeFlowsPassed": true,
   "bothNativePackageFlowsPassed": true,
   "candidateDeployment": {
-    "id": "dpl_4GBdNjrnTdWLtyxRBs58RkwRd2Rr",
-    "hostname": "cryptoid-evolution-testnet-59fzd7ozh-19-trojan69.vercel.app",
+    "id": "dpl_HiEfjsJYS3HTuHs3A7JkQ4Jzg7Yu",
+    "hostname": "cryptoid-evolution-testnet-qj8gl2epe-19-trojan69.vercel.app",
+    "sourceCommit": "b042c8e50ad3f05a70418ae5ee6bb4412809035b",
+    "sourceTree": "921fe9212ce0ccfeaa7dc46352d3d6385c7f3fb2",
     "target": null,
-    "readyState": "ERROR",
-    "errorCode": "BUILD_UTILS_SPAWN_1",
-    "errorStep": "buildStep",
-    "errorMessage": "Command \"node verification/direct-boss-style-device-20261102/buildDevicePreview.mjs\" exited with 1",
-    "buildFailureCauseEstablished": true,
-    "confirmedCause": "AssertionError: No inherited diagnostic treatment at buildDevicePreview.mjs:8:52"
+    "readyState": "READY"
   },
   "isolatedBuildDiagnostic": {
     "sourceCommit": "dbbac5406e8b2b803823ba3ac161cde380ebee0f",
@@ -38,13 +35,14 @@
     "authenticatedLocalCliAvailable": false,
     "userTeamProjectAuthorizationRequired": null,
     "protectionChanged": false,
-    "browserFallbackAttempted": false,
+    "browserFallbackAttempted": true,
     "userAuthorizationReported": true,
     "currentCauseOfAccessDenialEstablished": false,
-    "authenticatedBrowserFallbackApproved": false
+    "authenticatedBrowserFallbackApproved": true,
+    "browserFallbackSucceeded": true
   },
-  "hostedPlayableCandidateVerified": false,
-  "phoneTestReady": false,
+  "hostedPlayableCandidateVerified": true,
+  "phoneTestReady": true,
   "productionChanged": false,
   "physicalDeviceAccepted": false,
   "whiteScreenFixed": false,
@@ -64,16 +62,50 @@
       "sourceTree": "5cf24892e16ffbf4f3ba0ed5d939e0dd646c675e",
       "runId": 41485674562,
       "completeNativePackageFlows": 2
+    },
+    {
+      "sourceCommit": "b042c8e50ad3f05a70418ae5ee6bb4412809035b",
+      "sourceTree": "921fe9212ce0ccfeaa7dc46352d3d6385c7f3fb2",
+      "runId": 41489185104,
+      "completeNativePackageFlows": 2
     }
   ],
   "latestPreviewAttempt": {
-    "id": "dpl_5wo2k7XPFSH6Reg9dsn5KYUVHbRQ",
-    "hostname": "cryptoid-evolution-testnet-1qgwdaamc-19-trojan69.vercel.app",
-    "sourceCommit": "ce8cc4ab6630e502b796adfde082d75238c5095b",
+    "id": "dpl_HiEfjsJYS3HTuHs3A7JkQ4Jzg7Yu",
+    "hostname": "cryptoid-evolution-testnet-qj8gl2epe-19-trojan69.vercel.app",
+    "sourceCommit": "b042c8e50ad3f05a70418ae5ee6bb4412809035b",
+    "sourceTree": "921fe9212ce0ccfeaa7dc46352d3d6385c7f3fb2",
     "target": null,
-    "readyState": "ERROR",
-    "errorCode": "BUILD_UTILS_SPAWN_1",
-    "errorMessage": "Command \"node verification/direct-boss-style-device-20261102/installDevicePreview.mjs\" exited with 1",
-    "concreteInstallFailureCauseEstablished": false
-  }
+    "readyState": "READY"
+  },
+  "hostedAttemptHistory": [
+    {
+      "id": "dpl_4GBdNjrnTdWLtyxRBs58RkwRd2Rr",
+      "hostname": "cryptoid-evolution-testnet-59fzd7ozh-19-trojan69.vercel.app",
+      "target": null,
+      "readyState": "ERROR",
+      "errorCode": "BUILD_UTILS_SPAWN_1",
+      "errorStep": "buildStep",
+      "errorMessage": "Command \"node verification/direct-boss-style-device-20261102/buildDevicePreview.mjs\" exited with 1",
+      "buildFailureCauseEstablished": true,
+      "confirmedCause": "AssertionError: No inherited diagnostic treatment at buildDevicePreview.mjs:8:52",
+      "sourceCommit": "5acefc1aa3ea224b656a76c415da39ece0ed84f0",
+      "sourceTree": "e5d838eead213cf6c1d9e9d365c4de38ef7395b8"
+    },
+    {
+      "id": "dpl_5wo2k7XPFSH6Reg9dsn5KYUVHbRQ",
+      "hostname": "cryptoid-evolution-testnet-1qgwdaamc-19-trojan69.vercel.app",
+      "sourceCommit": "ce8cc4ab6630e502b796adfde082d75238c5095b",
+      "target": null,
+      "readyState": "ERROR",
+      "errorCode": "BUILD_UTILS_SPAWN_1",
+      "errorMessage": "Command \"node verification/direct-boss-style-device-20261102/installDevicePreview.mjs\" exited with 1",
+      "concreteInstallFailureCauseEstablished": true,
+      "confirmedCause": "verifyScope.mjs:20: compact JSON blob e50f042bfc5e09ece0b058a0d03013867849fda2 instead of exact pretty JSON blob e94775c2f8a435f2dcb46b65fafd34e67abdc640; contents identical"
+    }
+  ],
+  "initialNativePackageFlowRun": 41449159220,
+  "longNativeFlowSourceCommit": "a8e407a649431c719dfee64e0ec3cf63d73de3e0",
+  "phoneTestUrl": "https://cryptoid-evolution-testnet-qj8gl2epe-19-trojan69.vercel.app/",
+  "anonymousShareLinkCreated": false
 }

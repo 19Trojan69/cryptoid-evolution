@@ -224,3 +224,56 @@ nicht bekannt. Dieser gehostete Fehlschlag wird trotz bestandener nativer CI
 als offen beibehalten. Die Handy-Preview bleibt bis zur Auswertung dieses
 Installationsfehlers und erfolgreicher gehosteter Prüfung gesperrt. Keine
 Produktion, Schutz- oder Kontoeinstellung wurde geändert.
+
+## Abschließende Konfigurationskorrektur und erfolgreich gehostete Preview
+
+Mit vom Eigentümer ausdrücklich freigegebenem Browserzugriff konnten die
+vollständigen Deploy Logs des zuletzt gescheiterten Builds gelesen werden.
+Der konkrete Abbruch lag vor npm in `verifyScope.mjs:20`: Der Konfigurations-
+Blob war `e50f042bfc5e09ece0b058a0d03013867849fda2` statt
+`e94775c2f8a435f2dcb46b65fafd34e67abdc640`. Alle fünf originalen Runtime-Pins
+und deren unveränderte Arbeitsdateien hatten davor bereits bestanden.
+
+Der abweichende Hash wurde lokal exakt mit `JSON.stringify(originalConfig) +
+'\n'` reproduziert. Vercel hatte dieselben Inhalte kompakt serialisiert.
+Der Guard erlaubt jetzt nur diese beiden vollständig gepinnten Byteformen.
+Die tatsächliche Scope-Prüfung besteht in beiden Formaten; sieben Änderungen
+an Deployment-Regeln, Output, API-Routing, Header, Framework und Commands
+scheitern in beiden Formaten. Ein drittes, nicht aufgezeichnetes Format wird
+weiter abgelehnt. Keine beliebige Normalisierung oder Spieländerung wurde erlaubt.
+
+Quelle `b042c8e50ad3f05a70418ae5ee6bb4412809035b`, Baum
+`921fe9212ce0ccfeaa7dc46352d3d6385c7f3fb2`,
+[CI 41489185104](https://github.com/19Trojan69/cryptoid-evolution/actions/runs/41489185104):
+Beide nativen Paketabläufe bestehen mit der tatsächlichen kompakten Vercel-
+Darstellung während Installation und Build sowie widersprüchlichen geerbten
+Umgebungswerten. Ihre ursprünglichen 60/10/10-Sekunden-Beobachtungen erweitern
+das Paket-Folgearchiv auf sechs Captures aus drei getrennten Quellen.
+
+Der neue getrennte Build `dpl_HiEfjsJYS3HTuHs3A7JkQ4Jzg7Yu` ist **READY**,
+Umgebung **Preview**, Dauer 55 Sekunden. Seine tatsächlich ausgelieferten
+Build-Daten bestätigen exakt Quelle/Baum, direkte Styles, Originalgrafik,
+korrigierte Stoppuhr und den Ausschluss aktiver Frame-/Clock-Ringe. Style-,
+Clock- und Controller-Metadaten stimmen mit beiden nativen Paket-Builds überein.
+Der Live-Gast-Endpunkt liefert nur `user: null` und verweigert Admin-Zugriff.
+Vorbereiten, angehaltener Einstieg und manuelles Fortsetzen wurden zusätzlich
+im gehosteten Chromium-Browser geprüft. Die sichtbare Uhr lief bis `00:38`;
+nach normalem Home-Ausstieg und Bestätigung blieb `00:43` gespeichert und der
+Kurzbericht war im Menü verfügbar. Dies ist ein Browsercheck, kein Handytest.
+
+Die LIVE-Build-Daten, beide Gast-Antworten und der READY-Screenshot liegen mit
+Byte-Digests unter `hosted-preview-evidence/`. Der direkte Aufruf einer einzelnen
+JS-Datei wurde vom Browserwerkzeug mit `net::ERR_BLOCKED_BY_CLIENT` abgelehnt;
+ein unabhängiger HTTP-Bytevergleich dieser JS-Dateien wird deshalb nicht
+behauptet. Ihre Build-Digests und Kopier-/Paketprüfungen bleiben getrennt belegt.
+
+Die genaue geschützte Testadresse lautet
+https://cryptoid-evolution-testnet-qj8gl2epe-19-trojan69.vercel.app/ .
+Der bestehende Vercel-Zugangsschutz bleibt aktiv; es wurde kein anonymer
+Freigabelink erzeugt und keine öffentliche Stammadresse geändert. Für den
+Gerätetest: Pi Browser, offener Reaktor, Testschutz an, Vollaufzeichnung aus;
+vorbereiten, Boss-2-Test öffnen, manuell fortsetzen, zwanzig aktive Minuten.
+Nach normalem Ausstieg den Bericht sichern. Bei White Screen dieselbe Adresse
+erneut öffnen und vor einem weiteren Start den letzten Bericht sichern.
+Die Smartphone-Stabilität und die ursprüngliche White-Screen-Ursache bleiben
+bis zu tatsächlichen Gerätedaten offen.

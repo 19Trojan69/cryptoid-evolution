@@ -7,12 +7,13 @@ const expected = JSON.parse(readFileSync(new URL('../../local-boss-style-2026110
 const sources = {
   '3d4cb0c17d1b3d91de9a9b87eb9a2761832f2efe': { tree: 'b70e43a631a3bd32a14ef73d122b81462eed876d', run: 41484913176 },
   'ce8cc4ab6630e502b796adfde082d75238c5095b': { tree: '5cf24892e16ffbf4f3ba0ed5d939e0dd646c675e', run: 41485674562 },
+  'b042c8e50ad3f05a70418ae5ee6bb4412809035b': { tree: '921fe9212ce0ccfeaa7dc46352d3d6385c7f3fb2', run: 41489185104 },
 };
 assert.equal(m.version, 1); assert.equal(m.rawOwnerReportsIncluded, false);
-assert.equal(m.finalCandidateSource, 'ce8cc4ab6630e502b796adfde082d75238c5095b'); assert.equal(m.captures.length, 4);
+assert.equal(m.finalCandidateSource, 'b042c8e50ad3f05a70418ae5ee6bb4412809035b'); assert.equal(m.captures.length, 6);
 const keys = new Set();
 function checked(r) {
-  assert.match(r.file, /^(3d4cb0c1|ce8cc4ab)-(chromium|webkit)-(verification\.json|build-info\.json|source-scope\.txt|cycle-[012]\.jsonl)$/);
+  assert.match(r.file, /^(3d4cb0c1|ce8cc4ab|b042c8e5)-(chromium|webkit)-(verification\.json|build-info\.json|source-scope\.txt|cycle-[012]\.jsonl)$/);
   const b = read(r.file); assert.equal(b.length, r.bytes); assert.equal(createHash('sha256').update(b).digest('hex'), r.sha256); return b;
 }
 const summaries = [];
@@ -53,5 +54,5 @@ for (const cell of m.captures) {
   }
   summaries.push({ source: cell.sourceCommit, engine: cell.engine, activeMs: c.cycles.map(r => r.observedActiveMs) });
 }
-console.log('CRYPTOID_DEVICE_ENVIRONMENT_EVIDENCE ' + JSON.stringify({ captures: summaries, hostedPlayableCandidateVerified: false,
+console.log('CRYPTOID_DEVICE_ENVIRONMENT_EVIDENCE ' + JSON.stringify({ captures: summaries, nativeFlowsOnly: true,
   physicalDeviceAccepted: false, whiteScreenFixed: false, memoryComparisonEligible: false }));

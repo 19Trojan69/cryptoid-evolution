@@ -18,6 +18,7 @@ on:
       - 'verification/full-game-clock-gap-20261102/evidence/**'
       - 'verification/full-game-clock-gap-20261102/package-evidence/**'
       - 'verification/full-game-clock-gap-20261102/environment-fix-evidence/**'
+      - 'verification/full-game-clock-gap-20261102/hosted-preview-evidence/**'
 permissions:
   contents: read
 jobs:

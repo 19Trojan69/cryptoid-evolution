@@ -1,0 +1,63 @@
+{
+  "version": 1,
+  "sourceCommit": "b042c8e50ad3f05a70418ae5ee6bb4412809035b",
+  "sourceTree": "921fe9212ce0ccfeaa7dc46352d3d6385c7f3fb2",
+  "deploymentId": "dpl_HiEfjsJYS3HTuHs3A7JkQ4Jzg7Yu",
+  "projectId": "prj_JpvzU9ZS8bFkn9jZgE51Gct8TZpF",
+  "accountId": "team_KzJmtl0QyoYZAOu5RQKsAR2i",
+  "target": null,
+  "readyState": "READY",
+  "previewUrl": "https://cryptoid-evolution-testnet-qj8gl2epe-19-trojan69.vercel.app/",
+  "dashboardUrl": "https://vercel.com/19-trojan69/cryptoid-evolution-testnet/HiEfjsJYS3HTuHs3A7JkQ4Jzg7Yu",
+  "nativePackageRun": 41489185104,
+  "nativePackageEnginesPassed": [
+    "chromium",
+    "webkit"
+  ],
+  "observedMenuSource": "b042c8e5",
+  "preparedInitialPauseObserved": true,
+  "manualResumeObserved": true,
+  "activeTimerObserved": "00:38",
+  "normalExitConfirmationObserved": true,
+  "normalExitMenuObserved": true,
+  "normalExitSavedTimer": "00:43",
+  "fullRecordingEnabled": false,
+  "protectionEnabled": true,
+  "guestUserResponseVerified": true,
+  "adminDenialResponseVerified": true,
+  "directClockFileReadAttempted": true,
+  "directClockFileReadSucceeded": false,
+  "directClockFileReadBlock": "net::ERR_BLOCKED_BY_CLIENT",
+  "clockMetadataComparedWithNativeBuild": true,
+  "browserAccessGrantedByUser": true,
+  "sharingOrProtectionChanged": false,
+  "productionChanged": false,
+  "physicalDevice": false,
+  "whiteScreenFixed": false,
+  "ownerReportsIncluded": false,
+  "credentialsOrShareTokensIncluded": false,
+  "files": {
+    "build-info.json": {
+      "file": "build-info.json",
+      "bytes": 4429,
+      "sha256": "3492329e015213279da64e73e738bde6b4c10f265f40e34558c8aeb031afde4f"
+    },
+    "guest-user.json": {
+      "file": "guest-user.json",
+      "bytes": 48,
+      "sha256": "0b40a4938e539978b7464ad1cc26fa4d8925784e719a2cd381a2157ec8e6d29c"
+    },
+    "admin-denied.json": {
+      "file": "admin-denied.json",
+      "bytes": 38,
+      "sha256": "7fd1d59ae2b8e00f6e2a214aa273381d5010ff2d41d05e0e157332973bc3075b"
+    },
+    "ready-dashboard.jpg": {
+      "file": "ready-dashboard.jpg",
+      "bytes": 97227,
+      "sha256": "940154a19e17ccb5f4a66e957927d9ebfd47ee6d04d138f7d3b690997c22ae11"
+    }
+  },
+  "initialPauseHomeAttemptHadNoVisibleEffect": true,
+  "normalReportAvailableAtMenu": true
+}

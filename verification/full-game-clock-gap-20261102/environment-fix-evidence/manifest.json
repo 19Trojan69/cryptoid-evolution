@@ -1,7 +1,7 @@
 {
   "version": 1,
   "rawOwnerReportsIncluded": false,
-  "finalCandidateSource": "ce8cc4ab6630e502b796adfde082d75238c5095b",
+  "finalCandidateSource": "b042c8e50ad3f05a70418ae5ee6bb4412809035b",
   "captures": [
     {
       "sourceCommit": "3d4cb0c17d1b3d91de9a9b87eb9a2761832f2efe",
@@ -220,6 +220,116 @@
           "file": "ce8cc4ab-webkit-cycle-2.jsonl",
           "bytes": 1965,
           "sha256": "fdb79dfe93b354c265b91722b07e4ebd3d122582558fbf05c304a0e61d109735"
+        }
+      ]
+    },
+    {
+      "sourceCommit": "b042c8e50ad3f05a70418ae5ee6bb4412809035b",
+      "sourceTree": "921fe9212ce0ccfeaa7dc46352d3d6385c7f3fb2",
+      "runId": 41489185104,
+      "jobId": 125427378893,
+      "jobConclusion": "success",
+      "engine": "chromium",
+      "artifact": {
+        "id": 13164405557,
+        "name": "direct-style-device-chromium",
+        "size_in_bytes": 7234,
+        "digest": "sha256:b3e90d3bffb4464790a65e243b86ba37e58bab0ac11f9e7f166878f3eb691935",
+        "workflow_run": {
+          "id": 41489185104,
+          "repository_id": 1379416967,
+          "head_repository_id": 1379416967,
+          "head_branch": "codex/direct-boss-style-device-20261102",
+          "head_sha": "b042c8e50ad3f05a70418ae5ee6bb4412809035b"
+        },
+        "githubDigestMatched": true,
+        "zipIntegrityPassed": true
+      },
+      "observation": {
+        "file": "b042c8e5-chromium-verification.json",
+        "bytes": 24964,
+        "sha256": "21c9abe37e1c7fc752569259652fa99efe2bec5b09362ebad381ac3f58f709eb"
+      },
+      "build": {
+        "file": "b042c8e5-chromium-build-info.json",
+        "bytes": 4429,
+        "sha256": "3492329e015213279da64e73e738bde6b4c10f265f40e34558c8aeb031afde4f"
+      },
+      "scope": {
+        "file": "b042c8e5-chromium-source-scope.txt",
+        "bytes": 116,
+        "sha256": "637865c37ae36c99b43c78525af2d67611de5a1c7488e508c4d9aef70eb1c732"
+      },
+      "pointLogs": [
+        {
+          "file": "b042c8e5-chromium-cycle-0.jsonl",
+          "bytes": 8830,
+          "sha256": "138070c022c9336fff5db3869ef0db5c0f566fc78ca7716a974924ee115519d3"
+        },
+        {
+          "file": "b042c8e5-chromium-cycle-1.jsonl",
+          "bytes": 1962,
+          "sha256": "e8b76dbeabef35f00f4d19d0751ebaf527d4d50c4fa171eb1468192ee4c7744f"
+        },
+        {
+          "file": "b042c8e5-chromium-cycle-2.jsonl",
+          "bytes": 1988,
+          "sha256": "76b64f65318f2ff5d5cd2cf6dcaafb69b41393c1f6b2e3d3d32c7f3b04864346"
+        }
+      ]
+    },
+    {
+      "sourceCommit": "b042c8e50ad3f05a70418ae5ee6bb4412809035b",
+      "sourceTree": "921fe9212ce0ccfeaa7dc46352d3d6385c7f3fb2",
+      "runId": 41489185104,
+      "jobId": 125427379472,
+      "jobConclusion": "success",
+      "engine": "webkit",
+      "artifact": {
+        "id": 13164775119,
+        "name": "direct-style-device-webkit",
+        "size_in_bytes": 6848,
+        "digest": "sha256:78f814f207ceefb33866dd68868d58de409cbc506f9e07a99f40bcb72f371ae0",
+        "workflow_run": {
+          "id": 41489185104,
+          "repository_id": 1379416967,
+          "head_repository_id": 1379416967,
+          "head_branch": "codex/direct-boss-style-device-20261102",
+          "head_sha": "b042c8e50ad3f05a70418ae5ee6bb4412809035b"
+        },
+        "githubDigestMatched": true,
+        "zipIntegrityPassed": true
+      },
+      "observation": {
+        "file": "b042c8e5-webkit-verification.json",
+        "bytes": 23494,
+        "sha256": "ac32e560be0d8f28b92cf551eddf1d620ecb73df3c0fbbd257464af506c26ce2"
+      },
+      "build": {
+        "file": "b042c8e5-webkit-build-info.json",
+        "bytes": 4429,
+        "sha256": "3492329e015213279da64e73e738bde6b4c10f265f40e34558c8aeb031afde4f"
+      },
+      "scope": {
+        "file": "b042c8e5-webkit-source-scope.txt",
+        "bytes": 116,
+        "sha256": "637865c37ae36c99b43c78525af2d67611de5a1c7488e508c4d9aef70eb1c732"
+      },
+      "pointLogs": [
+        {
+          "file": "b042c8e5-webkit-cycle-0.jsonl",
+          "bytes": 7931,
+          "sha256": "0aceb70c0439026dedb7e7e07822703aa8a89cba6ea6a677cf3f7c0e40e9a581"
+        },
+        {
+          "file": "b042c8e5-webkit-cycle-1.jsonl",
+          "bytes": 1965,
+          "sha256": "d9eb488ee70842e699f02fd0f3750f6646c2d5cdc39a35a3a93e1078b965ff6f"
+        },
+        {
+          "file": "b042c8e5-webkit-cycle-2.jsonl",
+          "bytes": 1965,
+          "sha256": "ff4fa470e8d16ab629ad57785c403db5598c8b8ba4209f07426a6003cd0d25bb"
         }
       ]
     }
