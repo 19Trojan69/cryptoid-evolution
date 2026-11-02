@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { EventEmitter } from 'node:events';
 import { gunzipSync } from 'node:zlib';
+import { readFileSync } from 'node:fs';
 import { pausedSceneProbe, conditions, pairs } from './sceneProbe.mjs';
 import { captureStyleTimeline, summarizeTimeline, maxEvents } from './timeline.mjs';
 function fixture(firing = false) {
@@ -117,4 +118,13 @@ test('guard faults, missing native counters, loss, overflow and unconfirmed deta
       } });
     assert.equal(s.result.complete, false); assert.equal(s.saved.length, 1); assert.equal(session.listenerCount('Tracing.dataCollected'), 0);
   }
+});
+test('the first real native trace parses its explicit element counts while its failed restoration remains a failed comparison', () => {
+  const c = JSON.parse(gunzipSync(readFileSync(new URL('./evidence/initial-failed-r1.json.gz', import.meta.url))));
+  assert.equal(c.complete, false); assert.equal(c.cases.length, 1); assert.equal(c.cases[0].complete, false);
+  assert.match(c.failure.message, /Exact original inline attributes restored/); assert.equal(c.normalExitVerified, undefined);
+  const events = JSON.parse(gunzipSync(readFileSync(new URL('./evidence/initial-failed-r1-root-timeline.json.gz', import.meta.url)))).traceEvents;
+  const partial = summarizeTimeline(events, { prefix: c.cases[0].prefix, steps: 16, frameId: c.frameId });
+  assert.equal(partial.totalElementStyleCalculations, 1520); assert.ok(partial.steps.every(r => r.elementStyleCalculations === 95));
+  assert.equal(c.performanceOrMemoryBenefitEstablished, false);
 });

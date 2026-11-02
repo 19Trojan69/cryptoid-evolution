@@ -17,6 +17,7 @@ export function pausedSceneProbe({ condition, pairs, prefix, firingFidelity = fa
   const lights = svg ? [...svg.querySelectorAll('.boss-special-conductor, .boss-special-muzzle')] : [];
   check(root && svg && engines.length > 0 && engines.length <= 16 && lights.length > 0 && lights.length <= 32, 'Original bounded consumers');
   const nodes = [root, svg, ...engines, ...lights], originals = nodes.map(node => node.getAttribute('style'));
+  const originalCanonical = nodes.map(node => node.style.cssText);
   const originalClass = svg.getAttribute('class');
   const animations = root.getAnimations({ subtree: true }).map(animation => ({ animation, start: animation.startTime, rate: animation.playbackRate }));
   check(animations.length <= 512, 'Bounded original native animation set');
@@ -51,7 +52,10 @@ export function pausedSceneProbe({ condition, pairs, prefix, firingFidelity = fa
       const observed = read(); host.performance.mark(prefix + i + ':end'); outputs.push(observed);
     }
     restore(); check(same(before, read()), 'Original browser-computed outputs restored');
-    check(nodes.every((n, i) => n.getAttribute('style') === originals[i]), 'Exact original inline attributes restored');
+    const restorationDifferences = nodes.map((n, i) => ({ index: i, tag: n.tagName,
+      before: originals[i], canonicalBefore: originalCanonical[i], after: n.getAttribute('style'), canonical: n.style.cssText }))
+      .filter(row => row.before !== row.after);
+    check(restorationDifferences.length === 0, 'Exact original inline attributes restored: ' + JSON.stringify(restorationDifferences));
     check(svg.getAttribute('class') === originalClass, 'Original firing class restored');
     const afterAnimations = root.getAnimations({ subtree: true });
     check(afterAnimations.length === animations.length && animations.every(row => afterAnimations.includes(row.animation)

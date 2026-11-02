@@ -1,0 +1,10 @@
+{
+  "id": 13130305924,
+  "name": "initial-r1",
+  "size_in_bytes": 4538,
+  "digest": "sha256:0193a3833ff21f51d0321f6cd0e7965334f648264ebb7d7dda1efa2757f4d811",
+  "head_sha": "5806d22ef61e37bd0c535d3c4b33bd5a5afc937e",
+  "sha256": "0193a3833ff21f51d0321f6cd0e7965334f648264ebb7d7dda1efa2757f4d811",
+  "githubDigestMatched": true,
+  "zipIntegrityPassed": true
+}

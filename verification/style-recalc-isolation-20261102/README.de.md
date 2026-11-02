@@ -76,3 +76,23 @@ node verification/boss2-mini-start-control-20261101/verifyScope.mjs
 ```
 
 Tatsächliche Browserergebnisse werden erst nach den beendeten Läufen ergänzt.
+
+## Erster Browser-Gate-Fehler, unverändert erhalten
+
+Quelle `5806d22ef61e37bd0c535d3c4b33bd5a5afc937e`,
+[CI 41420951968](https://github.com/19Trojan69/cryptoid-evolution/actions/runs/41420951968):
+17 Quellen-Gate-Fälle bestehen. Der erste native Lauf scheitert in der
+unverändert strikten Prüfung der originalen Inline-Attribute. Die unabhängige
+Wiederholung wird deshalb übersprungen. Das ist ein Fehler im neuen Prüfablauf,
+kein reproduzierter White Screen und kein erfolgreicher Style-Vergleich.
+
+Die vollständige fehlgeschlagene Beobachtung, ihr partieller Root-Timeline-Trace,
+erfolgreicher Nach-Scope-Beleg und gegen GitHub geprüfter ZIP-Digest bleiben unter
+`evidence/initial-*` erhalten. Der reale Trace validiert separat das native Format
+mit echten vollständigen `UpdateLayoutTree`-Spans/Markerintervallen. Seine 16
+Root-Schritte ergeben jeweils 95 berichtete Element-Style-Berechnungen. Diese
+partiellen Daten werden nicht als abgeschlossener Vergleich gewertet.
+
+Die nächste Quellenänderung ergänzt zunächst begrenzte Roh-/kanonische
+Vor-/Nachwerte der abweichenden Inline-Attribute in der Fehlermeldung. Die
+Wiederherstellungsanforderung wird nicht gelockert. Spielquellen bleiben gleich.
