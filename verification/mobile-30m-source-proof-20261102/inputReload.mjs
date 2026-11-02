@@ -2,7 +2,8 @@ import assert from 'node:assert/strict';
 import { createRequire } from 'node:module';
 import { execFileSync } from 'node:child_process';
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { resolve, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { pathToFileURL } from 'node:url';
 import { readSourceState } from './sourceState.mjs';
 
@@ -29,8 +30,31 @@ try {
   const load = p => import(pathToFileURL(resolve(source, p)));
   const { configuration } = await load('verification/boss2-forensics-20261028/fixture.mjs');
   const { serveDevicePreview } = await load('verification/boss2-forensics-20261028/devicePreviewServer.mjs');
-  const { verifyDeviceInput } = await load('verification/single-finger-controls-20261029/verify-device-input.mjs');
   const { STOPWATCH_KEY } = await load('verification/boss2-stopwatch-20261029/stopwatchState.mjs');
+  // The old probe assumes owner-only full pause telemetry. The frozen minimal
+  // package intentionally has that telemetry off. Adapt only its TWO reads to
+  // actual menu/game/clock state, preserving every original input action.
+  const originalProbe = readFileSync(resolve(source, 'verification/single-finger-controls-20261029/verify-device-input.mjs'), 'utf8');
+  const oldPause = "assert.equal(await page.evaluate(()=>window.__bossLabPauseEvents.at(-1).pauseReason),'weapon-menu');";
+  assert.equal(originalProbe.split(oldPause).length, 3, 'Exactly two legacy pause telemetry checks');
+  const prefix = `async function assertMinimalWeaponPause(page) {
+    await page.waitForFunction(key => JSON.parse(localStorage.getItem(key) || 'null')?.latest?.mode === 'paused', ${JSON.stringify(STOPWATCH_KEY)});
+    const s = await page.evaluate(() => window.__crossDeviceTest.inspect());
+    assert.equal(s.status, 'paused'); assert.equal(s.weaponMenuOpen, true); assert.equal(s.technicalPause, false);
+    assert.equal(await page.locator('.weapon-selection-dialog').isVisible(), true);
+  }\n`;
+  let adapted = originalProbe.replaceAll(oldPause, 'await assertMinimalWeaponPause(page);');
+  const imports = ['../contact-diagnostics-20261029/verifyNeutralContacts.mjs', '../window-focus-diagnostics-20261029/verifyElementFocus.mjs'];
+  for (const old of imports) { assert.equal(adapted.split("'" + old + "'").length, 2);
+    adapted = adapted.replace("'" + old + "'", JSON.stringify(pathToFileURL(resolve(source, 'verification/single-finger-controls-20261029', old)).href)); }
+  let restored = adapted.replaceAll('await assertMinimalWeaponPause(page);', oldPause);
+  for (const old of imports) restored = restored.replace(JSON.stringify(pathToFileURL(resolve(source, 'verification/single-finger-controls-20261029', old)).href), "'" + old + "'");
+  assert.equal(restored, originalProbe, 'All native input actions and other checks remain byte-identical');
+  const adaptedPath = resolve(dirname(fileURLToPath(import.meta.url)), 'inputProbe.generated.mjs');
+  writeFileSync(adaptedPath, prefix + adapted);
+  const { verifyDeviceInput } = await import(pathToFileURL(adaptedPath));
+  result.measurementAdaptation = { legacyPauseLogReadsReplaced: 2, originalContactActionsRestoredExactly: true,
+    requiresPausedClock: true, requiresVisibleWeaponsDialog: true, requiresPausedNontechnicalGame: true };
   server = await serveDevicePreview(); browser = await pw.chromium.launch({ headless: true });
   result.engineVersion = browser.version();
   const context = await browser.newContext({ ...configuration('android-phone', pw.devices).context,
