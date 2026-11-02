@@ -23,3 +23,11 @@ statt den Test durch gelockerte Gates oder Wiederaufnahme erfolgreich zu machen.
 
 Dies ist ein kurzer synthetischer Linux-WebKit-Kompatibilitätsvergleich,
 kein iPhone-/Pi-Browser-Test und kein bestätigter Speicher-/White-Screen-Fix.
+
+Die [CI 41385089320](https://github.com/19Trojan69/cryptoid-evolution/actions/runs/41385089320)
+ist vollständig fehlgeschlagen: Alle vier Abläufe erreichen beim Start oder
+Neueinstieg das Gate für eine unbeobachtete Stoppuhrlücke. Original 2 besteht
+vorher zwei UI-/Darstellungszyklen (60.736 und 10.763 ms aktive Messzeit), scheitert
+dann am dritten Einstieg. Diese Teilprüfungen bleiben sichtbar, machen den
+Gesamtablauf aber nicht erfolgreich. Vier verlustfreie Captures, ihre ZIP-
+Digests und die abgeleitete Klassifikation stehen unter `../evidence/`.

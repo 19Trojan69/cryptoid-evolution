@@ -1,0 +1,279 @@
+{
+  "version": 1,
+  "rawOwnerReportsIncluded": false,
+  "rawHeapSnapshotsIncluded": false,
+  "expectedBuilds": {
+    "file": "expected-builds.json",
+    "bytes": 1258,
+    "sha256": "d7a51c9fd10cecd4de2ff2e555deb18fdb1846a55f73f83bc21a948b27f6ee3b"
+  },
+  "chromium": {
+    "workflowRun": 41384115772,
+    "workflowURL": "https://github.com/19Trojan69/cryptoid-evolution/actions/runs/41384115772",
+    "conclusion": "success",
+    "measuredSource": "600892649a97b4ade8530ca84a507fded5872d0e",
+    "measuredTree": "fa80782bee79c11359713424de689d9a8766ce0f",
+    "captures": [
+      {
+        "file": "control-short.json.gz",
+        "bytes": 32309,
+        "sha256": "6590f213aeef75ccfaa296d03010425de9fe2a112eb9786b56a82a1bd77d5424",
+        "uncompressedBytes": 453120,
+        "originalJsonSha256": "589ef0c37a5441f57e196af609264e46a04edc4f32ee947bc99a36313b78b17d",
+        "artifact": {
+          "id": 13114857181,
+          "bytes": 9242402,
+          "sha256": "96d1038505f6d05009c4219da63e82e0be8a9a042cd9172b8ea4a62829e55b5f",
+          "githubDigestMatched": true,
+          "zipIntegrityPassed": true
+        },
+        "cell": {
+          "condition": "control",
+          "seconds": 60,
+          "replica": 1
+        },
+        "nativeTrace": {
+          "file": "control-short-native.json.gz",
+          "bytes": 885488,
+          "sha256": "ae76c9c87e4a9a36fd71460e2561820d86ae8f96e6285b206a71f8485fb24dcc"
+        },
+        "heapAnalysis": {
+          "file": "control-short-heaps.json",
+          "bytes": 18087,
+          "sha256": "5c5fe5595e801726671d733b3955f233a07001c88667d658977ff89ab64dc6fc"
+        }
+      },
+      {
+        "file": "control-r1-long.json.gz",
+        "bytes": 51301,
+        "sha256": "4b31d2d9e0744f321d233322130f30002f7db2218816810def4ba37f6c302c74",
+        "uncompressedBytes": 1277472,
+        "originalJsonSha256": "6ba970498be7fd33b29625155dfb5a8c84d191afa9ebb0eb89bb447f4c7c5926",
+        "artifact": {
+          "id": 13114354998,
+          "bytes": 9087867,
+          "sha256": "c71a2abdfc471b8532bc299af01279accd574ef160518454dc991d7b6331a53d",
+          "githubDigestMatched": true,
+          "zipIntegrityPassed": true
+        },
+        "cell": {
+          "condition": "control",
+          "seconds": 1200,
+          "replica": 1
+        },
+        "nativeTrace": {
+          "file": "control-r1-long-native.json.gz",
+          "bytes": 815842,
+          "sha256": "ef7f4665d53d37a453d189ab7af6a40f6ff8d49df0cf28dc55541ef62ae89d26"
+        },
+        "heapAnalysis": {
+          "file": "control-r1-long-heaps.json",
+          "bytes": 18054,
+          "sha256": "7cdb590fe3473489ac5d41dbcd8be60960274094a219a417e2f31c6bd0caf330"
+        }
+      },
+      {
+        "file": "control-r2-long.json.gz",
+        "bytes": 51968,
+        "sha256": "ebcb298d99cce9eb1d5a017ce92a2e2dbaff2a3683212b10f0ab27ac2d32ee8b",
+        "uncompressedBytes": 1271592,
+        "originalJsonSha256": "b09c1457ec3e60f3adb57dbd236af7da33775f91ff8d5ed00a16b13835c3a14f",
+        "artifact": {
+          "id": 13115233418,
+          "bytes": 9273784,
+          "sha256": "8b17e1d893f16d2eaba76fa8852681847d22aae8cdb45bfc0801a2bf4723abe3",
+          "githubDigestMatched": true,
+          "zipIntegrityPassed": true
+        },
+        "cell": {
+          "condition": "control",
+          "seconds": 1200,
+          "replica": 2
+        },
+        "nativeTrace": {
+          "file": "control-r2-long-native.json.gz",
+          "bytes": 1006522,
+          "sha256": "8d1d447e8f2b3d8978ca15599aa36e2e04b03fbd3d8dadf372b1b34e7b3a65b8"
+        },
+        "heapAnalysis": {
+          "file": "control-r2-long-heaps.json",
+          "bytes": 18089,
+          "sha256": "abd1e6c54c35632e6fe7522534c3b821ea64eb452f0de49804263d0d097b345b"
+        }
+      },
+      {
+        "file": "leaf-short.json.gz",
+        "bytes": 32192,
+        "sha256": "f004d4b66c73afa1ebd99de6d39b0372c9e0f813238ad9d4db7e1857edb0dfff",
+        "uncompressedBytes": 449859,
+        "originalJsonSha256": "2f8f8da4ce4e37a1ef309874dc770b1d1dd2c8c6bc8c13f188854fbed97dc26d",
+        "artifact": {
+          "id": 13114628147,
+          "bytes": 9147731,
+          "sha256": "6a83dea7640c66771bf8af737cc0639775568fde98ac7501fb59ce742db1a458",
+          "githubDigestMatched": true,
+          "zipIntegrityPassed": true
+        },
+        "cell": {
+          "condition": "leaf",
+          "seconds": 60,
+          "replica": 1
+        },
+        "nativeTrace": {
+          "file": "leaf-short-native.json.gz",
+          "bytes": 814615,
+          "sha256": "f63b7f920d72be2e59b21c92e71bf3a8156d11a55347efb7205aeb39e9ad449d"
+        },
+        "heapAnalysis": {
+          "file": "leaf-short-heaps.json",
+          "bytes": 18084,
+          "sha256": "1ce188b8d168388b47e56eb30e0643dd116af210c8c8d7e4ddcdd267a7127698"
+        }
+      },
+      {
+        "file": "leaf-r1-long.json.gz",
+        "bytes": 51314,
+        "sha256": "be2b659a0c0a0fb7c21d2fb22f991aa5998a521889ff0bf981add153dd1ca0b5",
+        "uncompressedBytes": 1275974,
+        "originalJsonSha256": "ab4d9d7d28b8afd0a6516f5bbeb542145cdb6390f7c7ac2e73b4116d62e52ab0",
+        "artifact": {
+          "id": 13115148773,
+          "bytes": 9127981,
+          "sha256": "813371afea1c98d22a64d5c53af94437c411443ed45b91e0a57c64db2a99673d",
+          "githubDigestMatched": true,
+          "zipIntegrityPassed": true
+        },
+        "cell": {
+          "condition": "leaf",
+          "seconds": 1200,
+          "replica": 1
+        },
+        "nativeTrace": {
+          "file": "leaf-r1-long-native.json.gz",
+          "bytes": 805464,
+          "sha256": "9da3d4cf188fcd61f689f1f56f26e5ae0446c6f5b4d6f3a963ee0cb8186425f3"
+        },
+        "heapAnalysis": {
+          "file": "leaf-r1-long-heaps.json",
+          "bytes": 18066,
+          "sha256": "a1cbdc5cfdc871b9a512bef530fdb516906b99061c88b716388c2125773836a3"
+        }
+      },
+      {
+        "file": "leaf-r2-long.json.gz",
+        "bytes": 51174,
+        "sha256": "cf6476b2a8a60462337e8e0c52054309929a5b92ff4f3cd11bae836d4d27356a",
+        "uncompressedBytes": 1275004,
+        "originalJsonSha256": "f0aee5e204e3b465417c0cefa0e5d7807535b7816591d9d5b6c14d6c18463a13",
+        "artifact": {
+          "id": 13115283256,
+          "bytes": 9183721,
+          "sha256": "f57bfb5217c1548ca891553bd8c827bcf73403b954ef70c529b343c378472c2d",
+          "githubDigestMatched": true,
+          "zipIntegrityPassed": true
+        },
+        "cell": {
+          "condition": "leaf",
+          "seconds": 1200,
+          "replica": 2
+        },
+        "nativeTrace": {
+          "file": "leaf-r2-long-native.json.gz",
+          "bytes": 849389,
+          "sha256": "076a9960348a088dd1bd14488d605e98e8e73adc450d2970028be120f1c6d29c"
+        },
+        "heapAnalysis": {
+          "file": "leaf-r2-long-heaps.json",
+          "bytes": 18086,
+          "sha256": "4826f21cec499d7db2af24b9f95ef879d893270381cbf4e01c61cc5bf93e8a9d"
+        }
+      }
+    ]
+  },
+  "webkit": {
+    "workflowRun": 41385089320,
+    "workflowURL": "https://github.com/19Trojan69/cryptoid-evolution/actions/runs/41385089320",
+    "conclusion": "failure",
+    "measuredSource": "7254b8acb121497c6fcf708f19dbcbae95edd177",
+    "measuredTree": "8cd5cac70de6e375a881d93ea086747c2d9dd26f",
+    "captures": [
+      {
+        "file": "webkit-control-r1.json.gz",
+        "bytes": 1827,
+        "sha256": "e6e41a01971f47c279034dc40bac5ea059c77818a8edae93e5930d46d6c78341",
+        "uncompressedBytes": 4607,
+        "originalJsonSha256": "b0bf845c3a3a05e66433d0784ff019710bd1d20d0ea838fe95474eff000396f9",
+        "artifact": {
+          "id": 13114604672,
+          "bytes": 1980,
+          "sha256": "3cfefc1aa35daf49101e0c9ce7ccb8ad70c3e6909452684e730c54b18e8b6064",
+          "githubDigestMatched": true,
+          "zipIntegrityPassed": true
+        },
+        "cell": {
+          "condition": "control",
+          "replica": 1
+        }
+      },
+      {
+        "file": "webkit-control-r2.json.gz",
+        "bytes": 2881,
+        "sha256": "bf36d1c3c8c4151b97eca3ef2f00d2681dd8a15029b050d6f29f76b88ee7e3e5",
+        "uncompressedBytes": 24264,
+        "originalJsonSha256": "bb18aa9280130ce81ccfc5065e82333d4899aae00a98efec1b883dd251a32ed5",
+        "artifact": {
+          "id": 13115460520,
+          "bytes": 4517,
+          "sha256": "3d4cd257269d048672d78d56fdf93ca5899ce22c198b2aa9a1b9983b3d930242",
+          "githubDigestMatched": true,
+          "zipIntegrityPassed": true
+        },
+        "cell": {
+          "condition": "control",
+          "replica": 2
+        }
+      },
+      {
+        "file": "webkit-leaf-r1.json.gz",
+        "bytes": 1864,
+        "sha256": "1718fbc0d575243aabff0a2ec0d008638f5b7f1657700f38000efc319836d46a",
+        "uncompressedBytes": 4600,
+        "originalJsonSha256": "b26e4c7cdf5bb31415f3ae4b2507f3ac8811dba6bf30ef3517618e1d47283df3",
+        "artifact": {
+          "id": 13115126650,
+          "bytes": 2009,
+          "sha256": "bb2bbc4fd3ab0be31267282009fc9e1a25e1c40a0f9ce8864be480cca7512cf4",
+          "githubDigestMatched": true,
+          "zipIntegrityPassed": true
+        },
+        "cell": {
+          "condition": "leaf",
+          "replica": 1
+        }
+      },
+      {
+        "file": "webkit-leaf-r2.json.gz",
+        "bytes": 1862,
+        "sha256": "bfba51a4b4531f5a60eca1139693e7bb0986b59ac48dd9c84bfad671a074a8c3",
+        "uncompressedBytes": 4600,
+        "originalJsonSha256": "bdcb503a63f5c20400ca403ab8b63348354b8e800c8f01deaecfa1c534aa87ef",
+        "artifact": {
+          "id": 13113909726,
+          "bytes": 2008,
+          "sha256": "b2523a7aa72716f43b7eb4664104a63015944270c55fd5fd1c614e8b0499ef50",
+          "githubDigestMatched": true,
+          "zipIntegrityPassed": true
+        },
+        "cell": {
+          "condition": "leaf",
+          "replica": 2
+        }
+      }
+    ]
+  },
+  "figure": {
+    "file": "process-memory.png",
+    "bytes": 198725,
+    "sha256": "adaad88d9daae15c92b5c366ad26cccb57e6dd0ee2314565420e553287b5a200"
+  }
+}

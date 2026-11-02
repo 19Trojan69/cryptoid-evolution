@@ -1,0 +1,36 @@
+{
+  "control": {
+    "version": 1,
+    "condition": "control",
+    "originalBlob": "68dd74e598caa060ae8825d3c56b199ba0d08449",
+    "transformedBlob": "68dd74e598caa060ae8825d3c56b199ba0d08449",
+    "onlyExistingThrustDeclarationScopeChanged": false,
+    "sameExpressionEvaluatedOnce": true,
+    "originalEngineNodesAndAnchorsRetained": true,
+    "originalCssAndAnimationsRetained": true,
+    "originalArtworkRetained": true,
+    "allEarlierVisualControlsOff": true,
+    "gameClocksChanged": false,
+    "newTimersOrFrames": false,
+    "runtimeSourceFilesEdited": false,
+    "physicalDevice": false,
+    "whiteScreenFixed": false
+  },
+  "leaf": {
+    "version": 1,
+    "condition": "leaf",
+    "originalBlob": "68dd74e598caa060ae8825d3c56b199ba0d08449",
+    "transformedBlob": "f9073df3064170483247acfe5422333f7f7b6a4d",
+    "onlyExistingThrustDeclarationScopeChanged": true,
+    "sameExpressionEvaluatedOnce": true,
+    "originalEngineNodesAndAnchorsRetained": true,
+    "originalCssAndAnimationsRetained": true,
+    "originalArtworkRetained": true,
+    "allEarlierVisualControlsOff": true,
+    "gameClocksChanged": false,
+    "newTimersOrFrames": false,
+    "runtimeSourceFilesEdited": false,
+    "physicalDevice": false,
+    "whiteScreenFixed": false
+  }
+}

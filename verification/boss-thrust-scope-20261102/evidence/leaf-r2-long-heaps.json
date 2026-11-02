@@ -1,0 +1,740 @@
+{
+  "sourceCommit": "600892649a97b4ade8530ca84a507fded5872d0e",
+  "sourceTree": "fa80782bee79c11359713424de689d9a8766ce0f",
+  "cell": {
+    "condition": "leaf",
+    "seconds": 1200,
+    "replica": 2
+  },
+  "originalDigestsSizesAndSummariesMatched": true,
+  "states": [
+    {
+      "label": "paused",
+      "compressedSha256": "567a370709ca664e65328413febcc4993dac1725d5c5a9e01a82bf40dae0a756",
+      "rawBytes": 20095069,
+      "graphNodes": 221296,
+      "graphSelfBytes": 19430772,
+      "nativeCounts": {
+        "AudioContext": 3,
+        "AudioBuffer": 46,
+        "CSSAnimation": 12,
+        "KeyframeEffect": 12,
+        "HTMLTag_canvas": 12,
+        "CanvasRenderingContext2D": 11,
+        "HTMLTag_img": 12,
+        "EventListener": 309,
+        "V8EventListener": 293
+      },
+      "canvasDimensions": [
+        {
+          "width": 545,
+          "height": 341
+        },
+        {
+          "width": 1,
+          "height": 1
+        },
+        {
+          "width": 128,
+          "height": 128
+        },
+        {
+          "width": 99,
+          "height": 99
+        },
+        {
+          "width": 1,
+          "height": 1
+        },
+        {
+          "width": 192,
+          "height": 192
+        },
+        {
+          "width": 192,
+          "height": 192
+        },
+        {
+          "width": 192,
+          "height": 192
+        },
+        {
+          "width": 192,
+          "height": 192
+        },
+        {
+          "width": 192,
+          "height": 192
+        },
+        {
+          "width": 192,
+          "height": 192
+        },
+        {
+          "width": 192,
+          "height": 192
+        }
+      ]
+    },
+    {
+      "label": "home",
+      "compressedSha256": "e30ad74b90e18f24416fa70befd00c9573fa0614ee984f6be7e2ad10d927a3c6",
+      "rawBytes": 17765025,
+      "graphNodes": 191890,
+      "graphSelfBytes": 17470189,
+      "nativeCounts": {
+        "AudioContext": 1,
+        "AudioBuffer": 0,
+        "CSSAnimation": 0,
+        "KeyframeEffect": 0,
+        "HTMLTag_canvas": 7,
+        "CanvasRenderingContext2D": 7,
+        "HTMLTag_img": 9,
+        "EventListener": 210,
+        "V8EventListener": 198
+      },
+      "canvasDimensions": [
+        {
+          "width": 192,
+          "height": 192
+        },
+        {
+          "width": 192,
+          "height": 192
+        },
+        {
+          "width": 192,
+          "height": 192
+        },
+        {
+          "width": 192,
+          "height": 192
+        },
+        {
+          "width": 192,
+          "height": 192
+        },
+        {
+          "width": 192,
+          "height": 192
+        },
+        {
+          "width": 192,
+          "height": 192
+        }
+      ]
+    }
+  ],
+  "pausedToHome": {
+    "nodesDelta": -29406,
+    "selfBytesDelta": -1960583,
+    "classComparisonCoverage": "all-in-memory-classes",
+    "classes": [
+      {
+        "type": "native",
+        "name": "unclassified",
+        "countDelta": -2043,
+        "selfBytesDelta": -126075
+      },
+      {
+        "type": "object",
+        "name": "Ag",
+        "countDelta": -977,
+        "selfBytesDelta": -101608
+      },
+      {
+        "type": "object",
+        "name": "Object",
+        "countDelta": -3047,
+        "selfBytesDelta": -90988
+      },
+      {
+        "type": "native",
+        "name": "blink::UniqueElementData",
+        "countDelta": -459,
+        "selfBytesDelta": -51408
+      },
+      {
+        "type": "native",
+        "name": "SVGAnimatedLength",
+        "countDelta": -729,
+        "selfBytesDelta": -46656
+      },
+      {
+        "type": "native",
+        "name": "blink::EffectPaintPropertyNode",
+        "countDelta": -314,
+        "selfBytesDelta": -45216
+      },
+      {
+        "type": "native",
+        "name": "blink::LayoutSVGEllipse",
+        "countDelta": -227,
+        "selfBytesDelta": -43584
+      },
+      {
+        "type": "native",
+        "name": "blink::ComputedStyle",
+        "countDelta": -602,
+        "selfBytesDelta": -43344
+      },
+      {
+        "type": "native",
+        "name": "blink::GeometryMapperTransformCache",
+        "countDelta": -120,
+        "selfBytesDelta": -40320
+      },
+      {
+        "type": "native",
+        "name": "blink::ComputedStyleBase::StyleMiscData",
+        "countDelta": -456,
+        "selfBytesDelta": -40128
+      },
+      {
+        "type": "native",
+        "name": "blink::MutableCSSPropertyValueSet",
+        "countDelta": -382,
+        "selfBytesDelta": -39728
+      },
+      {
+        "type": "native",
+        "name": "blink::FragmentData::RareData",
+        "countDelta": -363,
+        "selfBytesDelta": -34848
+      },
+      {
+        "type": "native",
+        "name": "blink::ComputedStyleBase::StyleSVGData",
+        "countDelta": -422,
+        "selfBytesDelta": -33760
+      },
+      {
+        "type": "native",
+        "name": "blink::TransformPaintPropertyNode",
+        "countDelta": -121,
+        "selfBytesDelta": -30976
+      },
+      {
+        "type": "native",
+        "name": "SVGCircleElement",
+        "countDelta": -227,
+        "selfBytesDelta": -30872
+      },
+      {
+        "type": "native",
+        "name": "blink::HitTestData",
+        "countDelta": -368,
+        "selfBytesDelta": -29440
+      },
+      {
+        "type": "native",
+        "name": "blink::ComputedStyleBase::StyleFillData",
+        "countDelta": -278,
+        "selfBytesDelta": -26688
+      },
+      {
+        "type": "native",
+        "name": "blink::CSSNumericLiteralValue",
+        "countDelta": -1086,
+        "selfBytesDelta": -26064
+      },
+      {
+        "type": "native",
+        "name": "SVGAnimatedTransformList",
+        "countDelta": -367,
+        "selfBytesDelta": -23488
+      },
+      {
+        "type": "native",
+        "name": "blink::SVGLength",
+        "countDelta": -729,
+        "selfBytesDelta": -23328
+      },
+      {
+        "type": "native",
+        "name": "blink::ComputedStyleBase::StyleGeometryData",
+        "countDelta": -313,
+        "selfBytesDelta": -22536
+      },
+      {
+        "type": "native",
+        "name": "blink::CSSParserContext",
+        "countDelta": -126,
+        "selfBytesDelta": -21168
+      },
+      {
+        "type": "native",
+        "name": "blink::ImageResource",
+        "countDelta": -6,
+        "selfBytesDelta": -17808
+      },
+      {
+        "type": "native",
+        "name": "blink::NodeRareData",
+        "countDelta": -468,
+        "selfBytesDelta": -15048
+      },
+      {
+        "type": "native",
+        "name": "blink::ClipPaintPropertyNode",
+        "countDelta": -70,
+        "selfBytesDelta": -14000
+      },
+      {
+        "type": "native",
+        "name": "blink::GridSizingTrackCollection",
+        "countDelta": -8,
+        "selfBytesDelta": -13952
+      },
+      {
+        "type": "native",
+        "name": "blink::ObjectPaintProperties",
+        "countDelta": -340,
+        "selfBytesDelta": -13600
+      },
+      {
+        "type": "native",
+        "name": "blink::LayoutSVGTransformableContainer",
+        "countDelta": -73,
+        "selfBytesDelta": -12264
+      },
+      {
+        "type": "native",
+        "name": "blink::SVGTransformList",
+        "countDelta": -367,
+        "selfBytesDelta": -11744
+      },
+      {
+        "type": "native",
+        "name": "blink::FragmentDataList",
+        "countDelta": -489,
+        "selfBytesDelta": -11736
+      },
+      {
+        "type": "native",
+        "name": "blink::LayoutBlockFlow",
+        "countDelta": -77,
+        "selfBytesDelta": -11704
+      },
+      {
+        "type": "native",
+        "name": "blink::CachedMatchedProperties",
+        "countDelta": -82,
+        "selfBytesDelta": -11152
+      },
+      {
+        "type": "native",
+        "name": "blink::GeometryMapperTransformCache::PlaneRootTransform",
+        "countDelta": -35,
+        "selfBytesDelta": -10080
+      },
+      {
+        "type": "native",
+        "name": "blink::LayoutSVGPath",
+        "countDelta": -52,
+        "selfBytesDelta": -9984
+      },
+      {
+        "type": "native",
+        "name": "blink::ElementAnimations",
+        "countDelta": -15,
+        "selfBytesDelta": -9960
+      },
+      {
+        "type": "native",
+        "name": "blink::PaintLayer",
+        "countDelta": -112,
+        "selfBytesDelta": -8960
+      },
+      {
+        "type": "native",
+        "name": "blink::LayoutResult",
+        "countDelta": -110,
+        "selfBytesDelta": -8800
+      },
+      {
+        "type": "native",
+        "name": "blink::PhysicalBoxFragment",
+        "countDelta": -111,
+        "selfBytesDelta": -8760
+      },
+      {
+        "type": "native",
+        "name": "SVGGElement",
+        "countDelta": -73,
+        "selfBytesDelta": -8760
+      },
+      {
+        "type": "native",
+        "name": "blink::ComputedStyleBase::StyleMisc2Data",
+        "countDelta": -29,
+        "selfBytesDelta": -7192
+      },
+      {
+        "type": "native",
+        "name": "blink::ComputedStyleBase::StyleSvginheritedData",
+        "countDelta": -293,
+        "selfBytesDelta": -7032
+      },
+      {
+        "type": "object",
+        "name": "Array",
+        "countDelta": -424,
+        "selfBytesDelta": -6784
+      },
+      {
+        "type": "native",
+        "name": "SVGPathElement",
+        "countDelta": -52,
+        "selfBytesDelta": -6656
+      },
+      {
+        "type": "native",
+        "name": "CanvasRenderingContext2D",
+        "countDelta": -4,
+        "selfBytesDelta": -6640
+      },
+      {
+        "type": "object",
+        "name": "unclassified",
+        "countDelta": -149,
+        "selfBytesDelta": -6544
+      },
+      {
+        "type": "native",
+        "name": "blink::ComputedStyleBase::StyleBoxData",
+        "countDelta": -36,
+        "selfBytesDelta": -6336
+      },
+      {
+        "type": "native",
+        "name": "CSSAnimation",
+        "countDelta": -12,
+        "selfBytesDelta": -6336
+      },
+      {
+        "type": "native",
+        "name": "blink::PaintLayerScrollableArea",
+        "countDelta": -17,
+        "selfBytesDelta": -6256
+      },
+      {
+        "type": "native",
+        "name": "blink::ComputedStyleBase::StyleStrokeData",
+        "countDelta": -52,
+        "selfBytesDelta": -6240
+      },
+      {
+        "type": "native",
+        "name": "blink::BoxOverflowModel",
+        "countDelta": -50,
+        "selfBytesDelta": -6000
+      },
+      {
+        "type": "native",
+        "name": "blink::CSSAnimationData",
+        "countDelta": -13,
+        "selfBytesDelta": -5304
+      },
+      {
+        "type": "native",
+        "name": "KeyframeEffect",
+        "countDelta": -12,
+        "selfBytesDelta": -5120
+      },
+      {
+        "type": "native",
+        "name": "blink::ComputedStyleBase::StyleSurroundData",
+        "countDelta": -16,
+        "selfBytesDelta": -4992
+      },
+      {
+        "type": "native",
+        "name": "blink::ComputedStyleBase::StyleMisc7Data",
+        "countDelta": -30,
+        "selfBytesDelta": -4800
+      },
+      {
+        "type": "native",
+        "name": "blink::StringKeyframe",
+        "countDelta": -27,
+        "selfBytesDelta": -4536
+      },
+      {
+        "type": "native",
+        "name": "blink::SelectorQuery",
+        "countDelta": -18,
+        "selfBytesDelta": -4464
+      },
+      {
+        "type": "native",
+        "name": "blink::SpaceSplitString::Data",
+        "countDelta": -69,
+        "selfBytesDelta": -4416
+      },
+      {
+        "type": "native",
+        "name": "blink::InlineItem",
+        "countDelta": -103,
+        "selfBytesDelta": -4120
+      },
+      {
+        "type": "native",
+        "name": "blink::cssvalue::CSSRadialGradientValue",
+        "countDelta": -21,
+        "selfBytesDelta": -3864
+      },
+      {
+        "type": "native",
+        "name": "V8EventListener",
+        "countDelta": -95,
+        "selfBytesDelta": -3800
+      },
+      {
+        "type": "object",
+        "name": "SVGCircleElement",
+        "countDelta": -227,
+        "selfBytesDelta": -3632
+      },
+      {
+        "type": "native",
+        "name": "blink::InvalidatableInterpolation",
+        "countDelta": -28,
+        "selfBytesDelta": -3584
+      },
+      {
+        "type": "native",
+        "name": "HTMLTag_div",
+        "countDelta": -33,
+        "selfBytesDelta": -3480
+      },
+      {
+        "type": "native",
+        "name": "CSSStyleDeclaration",
+        "countDelta": -46,
+        "selfBytesDelta": -3232
+      },
+      {
+        "type": "native",
+        "name": "ArrayBuffer",
+        "countDelta": -50,
+        "selfBytesDelta": -3200
+      },
+      {
+        "type": "native",
+        "name": "blink::ImmutableCSSPropertyValueSet",
+        "countDelta": -60,
+        "selfBytesDelta": -3120
+      },
+      {
+        "type": "native",
+        "name": "blink::RasterInvalidator",
+        "countDelta": -38,
+        "selfBytesDelta": -3040
+      },
+      {
+        "type": "native",
+        "name": "blink::CSSUnparsedDeclarationValue",
+        "countDelta": -126,
+        "selfBytesDelta": -3024
+      },
+      {
+        "type": "native",
+        "name": "blink::CanvasRenderingContext2DState",
+        "countDelta": -4,
+        "selfBytesDelta": -3008
+      },
+      {
+        "type": "native",
+        "name": "blink::StylePath",
+        "countDelta": -47,
+        "selfBytesDelta": -3008
+      },
+      {
+        "type": "native",
+        "name": "HTMLTag_canvas",
+        "countDelta": -5,
+        "selfBytesDelta": -2960
+      },
+      {
+        "type": "native",
+        "name": "blink::PaintLayerStackingNode",
+        "countDelta": -41,
+        "selfBytesDelta": -2952
+      },
+      {
+        "type": "native",
+        "name": "AudioBuffer",
+        "countDelta": -46,
+        "selfBytesDelta": -2944
+      },
+      {
+        "type": "native",
+        "name": "blink::PseudoElementData",
+        "countDelta": -28,
+        "selfBytesDelta": -2912
+      },
+      {
+        "type": "native",
+        "name": "Float32Array",
+        "countDelta": -50,
+        "selfBytesDelta": -2800
+      },
+      {
+        "type": "native",
+        "name": "blink::ComputedStyleBase::StyleBackgroundData",
+        "countDelta": -29,
+        "selfBytesDelta": -2784
+      },
+      {
+        "type": "native",
+        "name": "blink::TranslateTransformOperation",
+        "countDelta": -58,
+        "selfBytesDelta": -2784
+      },
+      {
+        "type": "native",
+        "name": "HTMLTag_span",
+        "countDelta": -26,
+        "selfBytesDelta": -2736
+      },
+      {
+        "type": "native",
+        "name": "blink::ContentLayerClientImpl",
+        "countDelta": -38,
+        "selfBytesDelta": -2736
+      },
+      {
+        "type": "native",
+        "name": "blink::cssvalue::CSSLinearGradientValue",
+        "countDelta": -15,
+        "selfBytesDelta": -2520
+      },
+      {
+        "type": "native",
+        "name": "EventListener",
+        "countDelta": -99,
+        "selfBytesDelta": -2464
+      },
+      {
+        "type": "native",
+        "name": "blink::InlineNodeData",
+        "countDelta": -42,
+        "selfBytesDelta": -2352
+      },
+      {
+        "type": "native",
+        "name": "blink::StringKeyframe::CSSPropertySpecificKeyframe",
+        "countDelta": -49,
+        "selfBytesDelta": -2352
+      },
+      {
+        "type": "native",
+        "name": "blink::DropShadowFilterOperation",
+        "countDelta": -29,
+        "selfBytesDelta": -2320
+      },
+      {
+        "type": "native",
+        "name": "blink::LayoutTextFragment",
+        "countDelta": -17,
+        "selfBytesDelta": -2312
+      },
+      {
+        "type": "native",
+        "name": "blink::StyleGeneratedImage",
+        "countDelta": -36,
+        "selfBytesDelta": -2304
+      },
+      {
+        "type": "native",
+        "name": "blink::GeometryMapperClipCache",
+        "countDelta": -69,
+        "selfBytesDelta": -2208
+      },
+      {
+        "type": "native",
+        "name": "blink::ComputedStyleBase::StyleInheritedData",
+        "countDelta": -16,
+        "selfBytesDelta": -2176
+      },
+      {
+        "type": "native",
+        "name": "AudioParam",
+        "countDelta": -26,
+        "selfBytesDelta": -2112
+      },
+      {
+        "type": "native",
+        "name": "blink::CssKeyframeEffectModel",
+        "countDelta": -12,
+        "selfBytesDelta": -2112
+      },
+      {
+        "type": "native",
+        "name": "blink::SVGAnimatedPath",
+        "countDelta": -52,
+        "selfBytesDelta": -2080
+      },
+      {
+        "type": "native",
+        "name": "blink::LayoutSVGRoot",
+        "countDelta": -7,
+        "selfBytesDelta": -2016
+      },
+      {
+        "type": "native",
+        "name": "blink::CSSAnimations::RunningAnimation",
+        "countDelta": -12,
+        "selfBytesDelta": -2016
+      },
+      {
+        "type": "native",
+        "name": "Element",
+        "countDelta": -17,
+        "selfBytesDelta": -1904
+      },
+      {
+        "type": "native",
+        "name": "blink::CSSVariableData",
+        "countDelta": -69,
+        "selfBytesDelta": -1872
+      },
+      {
+        "type": "native",
+        "name": "blink::CSSTransitionData",
+        "countDelta": -9,
+        "selfBytesDelta": -1872
+      },
+      {
+        "type": "native",
+        "name": "blink::LayoutFlexibleBox",
+        "countDelta": -12,
+        "selfBytesDelta": -1824
+      },
+      {
+        "type": "native",
+        "name": "blink::InterpolationEffect::InterpolationRecord",
+        "countDelta": -28,
+        "selfBytesDelta": -1792
+      },
+      {
+        "type": "native",
+        "name": "blink::LayoutResult::RareData",
+        "countDelta": -13,
+        "selfBytesDelta": -1768
+      },
+      {
+        "type": "native",
+        "name": "HTMLTag_i",
+        "countDelta": -17,
+        "selfBytesDelta": -1768
+      }
+    ],
+    "interpretation": "Changes between two paused, explicitly garbage-collected synthetic scenes. Counts/self sizes do not identify the retaining reference or prove a leak."
+  },
+  "scope": "Offline synthetic snapshots after inactive GC; counts/self sizes only, not native allocator ownership, retained sizes or physical phone proof.",
+  "rawOwnerReportsIncluded": false,
+  "rawHeapSnapshotsIncluded": false,
+  "whiteScreenFixed": false
+}
