@@ -1,0 +1,55 @@
+name: Boss thrust WebKit compatibility
+on:
+  push:
+    branches: [codex/boss-thrust-scope-20261102]
+    paths:
+      - '.github/workflows/cryptoid-thrust-webkit.yml'
+      - 'verification/systematic-stability-20261101/verifyBrowserSoak.mjs'
+permissions:
+  contents: read
+jobs:
+  short-webkit:
+    strategy:
+      fail-fast: false
+      matrix:
+        condition: [control, leaf]
+        replica: [1, 2]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      CRYPTOID_SOAK_CONDITION: original
+      CRYPTOID_LIFETIME_ATTRIBUTION: '1'
+      CRYPTOID_THRUST_SCOPE: ${{ matrix.condition }}
+      CRYPTOID_THRUST_REPLICA: ${{ matrix.replica }}
+      CRYPTOID_THRUST_FIDELITY: '1'
+      CRYPTOID_ATTRIBUTION_SECONDS: '60'
+      CRYPTOID_SOAK_SECONDS: '60'
+      CRYPTOID_SOAK_ENGINE: webkit
+      CRYPTOID_SOAK_RUN: smoke
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with: {persist-credentials: false}
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with: {node-version: '24'}
+      - name: Install existing frontend and browser tools
+        run: |
+          npm install --prefix frontend --include=optional --ignore-scripts --no-audit --no-fund
+          npm install --prefix verification/boss2-forensics-20261028 --ignore-scripts --no-audit --no-fund
+          git restore --worktree -- frontend/yarn.lock
+          cd verification/boss2-forensics-20261028
+          npx playwright install --with-deps webkit
+      - name: Verify exact original sources and retained strict browser-result checks
+        run: |
+          node verification/boss2-mini-start-control-20261101/verifyScope.mjs
+          node --test verification/boss-thrust-scope-20261102/transform.test.mjs verification/systematic-stability-20261101/evidence/nativeSummary.test.mjs
+      - name: Build only the explicitly declared virtual thrust condition
+        env: {VERCEL_ENV: preview}
+        run: node verification/systematic-stability-20261101/prepareSoakBuild.mjs
+      - name: Preserve strict startup, one active minute, native fidelity and two UI remounts
+        run: node verification/systematic-stability-20261101/verifyBrowserSoak.mjs
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: ${{ !cancelled() }}
+        with:
+          name: thrust-webkit-${{ matrix.condition }}-r${{ matrix.replica }}
+          path: verification/boss-thrust-scope-20261102/results/
+          retention-days: 7

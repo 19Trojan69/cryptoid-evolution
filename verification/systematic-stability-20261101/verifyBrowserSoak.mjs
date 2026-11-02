@@ -1,23 +1,30 @@
 import assert from 'node:assert/strict';
 import { createRequire } from 'node:module';
 import { execFileSync } from 'node:child_process';
-import { mkdirSync, writeFileSync, appendFileSync } from 'node:fs';
+import { mkdirSync, writeFileSync, appendFileSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { root, configuration } from '../boss2-forensics-20261028/fixture.mjs';
 import { serveDevicePreview } from '../boss2-forensics-20261028/devicePreviewServer.mjs';
 import { sampleBrowserMemory } from '../boss2-forensics-20261028/processMemory.mjs';
 import { STOPWATCH_KEY } from '../boss2-stopwatch-20261029/stopwatchState.mjs';
+import { thrustConfig, thrustProof } from '../boss-thrust-scope-20261102/transform.mjs';
+import { verifyThrustFidelity } from '../boss-thrust-scope-20261102/fidelity.mjs';
+import { requireInactiveCheckpoint } from '../memory-retention-attribution-20261101/inspection.mjs';
 
 const engine = process.env.CRYPTOID_SOAK_ENGINE;
 const condition = process.env.CRYPTOID_SOAK_CONDITION;
 const seconds = Number(process.env.CRYPTOID_SOAK_SECONDS || 1200);
 const run = process.env.CRYPTOID_SOAK_RUN || 'soak';
+const thrust = thrustConfig();
 assert.ok(['chromium', 'webkit'].includes(engine), 'Explicit engine required');
 assert.ok(['original', 'mini-start'].includes(condition), 'Explicit source treatment required');
 assert.ok(Number.isInteger(seconds) && seconds >= 30 && seconds <= 1800);
 assert.ok(['smoke', 'soak'].includes(run));
 const pw = createRequire(new URL('../boss2-forensics-20261028/package.json', import.meta.url))('playwright');
-const output = resolve(root, 'verification/systematic-stability-20261101/results', `${engine}-${condition}`, run);
+if (thrust) { assert.equal(run, 'smoke'); assert.equal(seconds, 60); assert.equal(thrust.fidelity, true); }
+const output = thrust
+  ? resolve(root, 'verification/boss-thrust-scope-20261102/results', `${engine}-${thrust.condition}-r${thrust.replica}`)
+  : resolve(root, 'verification/systematic-stability-20261101/results', `${engine}-${condition}`, run);
 mkdirSync(output, { recursive: true });
 const git = ref => execFileSync('git', ['rev-parse', ref], { cwd: root, encoding: 'utf8' }).trim();
 const result = { version: 1, complete: false, sourceCommit: git('HEAD'), sourceTree: git('HEAD^{tree}'),
@@ -32,6 +39,10 @@ const result = { version: 1, complete: false, sourceCommit: git('HEAD'), sourceT
     'Alive DOM and advancing game clocks do not measure native white pixels or a physical browser kill.',
     'Resource counters are sampled subsets. Linux process PSS is neither phone RAM nor GPU memory.'],
   cycles: [] };
+if (thrust) {
+  result.thrustComparison = thrust; result.comparedConditionsAreVisuallyDifferent = false;
+  result.shortEngineCompatibilityOnly = true; result.memoryComparisonEligible = false;
+}
 let browser, server, page, fatal;
 const external = [], assetFailures = [];
 async function tap(locator) {
@@ -93,6 +104,10 @@ try {
   assert.equal(!!info.bossMiniStartControl?.enabled, condition === 'mini-start');
   assert.equal(!!info.bossMiniCompletionControl?.enabled, condition === 'mini-start');
   result.builtScene = info.diagnosticScene;
+  if (thrust) {
+    const expected = thrustProof(readFileSync(root + '/frontend/src/pages/BossHullView.tsx', 'utf8'), thrust.condition);
+    assert.deepEqual(info.qaThrustScope, expected); result.thrustBuildProof = expected;
+  } else assert.equal(info.qaThrustScope, undefined);
   result.productionRuntimeNotChanged = true;
   for (let cycle = 0; cycle < 3; cycle++) {
     const requestedMs = (cycle === 0 ? seconds : 10) * 1000;
@@ -141,6 +156,8 @@ try {
     const paused = await observe(); await page.waitForTimeout(1600); const held = await observe();
     assert.equal(held.clock.latest.elapsedMs, paused.clock.latest.elapsedMs);
     assert.equal(held.scene.coreVolley, paused.scene.coreVolley); row.pauseFreezeVerified = true;
+    if (thrust) row.thrustFidelity = await verifyThrustFidelity({ page, condition: thrust.condition,
+      guard: async phase => requireInactiveCheckpoint(await observe(), phase) });
     await tap(page.locator('.pause-resume-button')); await waitMode('running');
     await tap(page.getByRole('button', { name: /^Waffen · Aktive Waffe:/ }));
     await page.locator('.weapon-selection-dialog').waitFor(); await waitMode('paused');
