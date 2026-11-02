@@ -15,10 +15,13 @@ import { requireInactiveCheckpoint } from './inspection.mjs';
 import { comparisonConfig, comparisonProof, assertPathProof } from '../isolated-mini-pacing-20261101/comparison.mjs';
 import { installNativePathProbe } from '../isolated-mini-pacing-20261101/nativePathProbe.mjs';
 import { startInactiveNativeCollector } from '../inactive-native-allocation-20261101/collector.mjs';
+import { styleProbeConfig, assertStyleProof } from '../style-variable-attribution-20261102/config.mjs';
+import { installStyleWriteProbe } from '../style-variable-attribution-20261102/styleWriteProbe.mjs';
 
 const seconds = Number(process.env.CRYPTOID_ATTRIBUTION_SECONDS);
 assert.ok([60, 1200].includes(seconds), 'One short control or one twenty-minute observation');
 const comparison = comparisonConfig();
+const styleObservation = styleProbeConfig();
 const nativeAllocation = process.env.CRYPTOID_INACTIVE_NATIVE_TRACE === '1';
 if (process.env.CRYPTOID_INACTIVE_NATIVE_TRACE !== undefined) assert.ok(['0', '1'].includes(process.env.CRYPTOID_INACTIVE_NATIVE_TRACE));
 if (nativeAllocation) {
@@ -26,7 +29,9 @@ if (nativeAllocation) {
   assert.equal(process.env.CRYPTOID_SOAK_CONDITION, 'original');
 }
 if (comparison?.pathProof) assert.equal(seconds, 60, 'Native wrappers only in the short path proof');
-const output = nativeAllocation
+const output = styleObservation
+  ? resolve(root, 'verification/style-variable-attribution-20261102/results', 'chromium-' + seconds)
+  : nativeAllocation
   ? resolve(root, 'verification/inactive-native-allocation-20261101/results', 'chromium-' + seconds)
   : comparison
   ? resolve(root, 'verification/isolated-mini-pacing-20261101/results', comparison.condition + '-r' + comparison.replica + '-' + seconds)
@@ -51,6 +56,7 @@ const result = { version: 1, complete: false, sourceCommit: git('HEAD'), sourceT
   points: [], checkpoints: [], snapshots: [] };
 if (comparison) result.isolatedMiniPacing = comparison;
 if (nativeAllocation) { result.inactiveNativeAllocationRequested = true; result.activeNativeTracing = false; }
+if (styleObservation) result.activeStyleWriteProbe = true;
 let server, browser, page, client, fatal, first, nativeCollector;
 const external = [], assetFailures = [];
 const within = (promise, ms, label) => new Promise((resolve, reject) => {
@@ -64,14 +70,15 @@ async function tap(locator) {
   assert.ok(x >= 0 && x < v.width && y >= 0 && y < v.height);
   await page.touchscreen.tap(x, y);
 }
-const observe = () => page.evaluate(key => {
+const observe = (beginStyleObservation = false) => page.evaluate(({ key, beginStyleObservation }) => {
+  if (beginStyleObservation) window.__styleWriteProbe.begin();
   let clock = null;
   try { clock = JSON.parse(localStorage.getItem(key) || 'null'); } catch { /* Blank document may have an opaque origin. */ }
   return { url: location.href, timeOrigin: performance.timeOrigin,
     hidden: document.hidden, mounted: !!document.querySelector('.game-shell'),
     scene: window.__crossDeviceTest?.inspect() ?? null,
     stats: window.__lifetimeAttributionStats?.() ?? null, clock };
-}, STOPWATCH_KEY);
+}, { key: STOPWATCH_KEY, beginStyleObservation });
 function active(row) {
   assert.ok(!fatal, fatal); assert.equal(row.timeOrigin, first.timeOrigin); assert.equal(row.hidden, false);
   assert.equal(row.mounted, true); assert.equal(row.scene?.status, 'playing');
@@ -140,6 +147,7 @@ try {
   const profile = configuration('android-phone', pw.devices);
   const context = await browser.newContext({ ...profile.context, viewport: { width: 430, height: 825 }, deviceScaleFactor: 3 });
   if (comparison?.pathProof) await context.addInitScript(installNativePathProbe);
+  if (styleObservation) await context.addInitScript(installStyleWriteProbe);
   await context.route('**/*', route => {
     const url = new URL(route.request().url());
     if (url.origin === server.origin || ['fonts.googleapis.com', 'fonts.gstatic.com'].includes(url.hostname)) return route.continue();
@@ -177,10 +185,10 @@ try {
     return s?.status === 'playing' && s.encounter === 'boss-fight' && s.reactorOpen
       && JSON.parse(localStorage.getItem(key) || 'null')?.latest?.mode === 'running';
   }, { key: STOPWATCH_KEY }, { timeout: 45000 });
-  first = await observe(); active(first);
+  first = await observe(styleObservation); active(first);
   const started = Date.now(); let previous = first, frameProgressAt = started, sampledAt = 0, printedAt = started;
   while (previous.clock.latest.elapsedMs - first.clock.latest.elapsedMs < seconds * 1000) {
-    const row = await observe(); active(row);
+    const row = styleObservation && result.points.length === 0 ? first : await observe(); active(row);
     assert.ok(row.clock.latest.elapsedMs >= previous.clock.latest.elapsedMs);
     if (row.scene.frameAt > previous.scene.frameAt) frameProgressAt = Date.now();
     assert.ok(Date.now() - frameProgressAt < 5000, 'Game frames advance');
@@ -205,6 +213,12 @@ try {
   result.observedWallMs = Date.now() - started;
   result.volleysAdvanced = previous.scene.coreVolley - first.scene.coreVolley;
   assert.ok(result.volleysAdvanced > 0);
+  if (styleObservation) {
+    result.styleWriteObservation = await page.evaluate(() => window.__styleWriteProbe.finish());
+    assertStyleProof(result.styleWriteObservation);
+    result.styleProbeRemovedBeforeInactiveInspection = await page.evaluate(() => typeof window.__styleWriteProbe === 'undefined');
+    assert.equal(result.styleProbeRemovedBeforeInactiveInspection, true);
+  }
   if (comparison?.pathProof) {
     result.isolatedMiniNativeProof = await page.evaluate(() => window.__isolatedMiniNativeProof());
     assertPathProof(result.isolatedMiniNativeProof, comparison.condition);
@@ -257,6 +271,9 @@ try {
   result.failure = { code: fatal || 'attribution-failed', message: error.message };
   process.exitCode = 1;
 } finally {
+  if (styleObservation && !result.styleWriteObservation && page) try {
+    result.abortedStyleWriteObservation = await page.evaluate(() => window.__styleWriteProbe?.finish());
+  } catch { /* A closed page is retired by browser cleanup below. */ }
   result.finishedAt = new Date().toISOString();
   writeFileSync(output + '/attribution.json', JSON.stringify(result, null, 2) + '\n');
   console.log('CRYPTOID_ATTRIBUTION_RESULT ' + JSON.stringify({ complete: result.complete, seconds,
