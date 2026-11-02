@@ -1,0 +1,56 @@
+name: Frozen device source repeated thirty-minute native flow
+on:
+  push:
+    branches: [codex/mobile-30m-source-proof-20261102]
+    paths:
+      - '.github/workflows/cryptoid-frozen-source-30m.yml'
+      - 'verification/mobile-30m-source-proof-20261102/run.mjs'
+permissions:
+  contents: read
+jobs:
+  frozen-native-flow:
+    strategy:
+      fail-fast: false
+      matrix:
+        engine: [chromium, webkit]
+        replica: [1, 2]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with: {persist-credentials: false, path: lab}
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          persist-credentials: false
+          path: candidate
+          ref: b042c8e50ad3f05a70418ae5ee6bb4412809035b
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with: {node-version: '24'}
+      - name: Install tooling in the frozen checkout
+        working-directory: candidate
+        env: {VERCEL_ENV: preview}
+        run: |
+          node verification/direct-boss-style-device-20261102/installDevicePreview.mjs --ignore-scripts
+          npm install --prefix verification/boss2-forensics-20261028 --ignore-scripts --no-audit --no-fund
+          cd verification/boss2-forensics-20261028
+          npx playwright install --with-deps ${{ matrix.engine }}
+      - name: Build the exact unchanged minimal device package
+        working-directory: candidate
+        env: {VERCEL_ENV: preview}
+        run: |
+          node verification/direct-boss-style-device-20261102/verifyScope.mjs
+          node verification/direct-boss-style-device-20261102/buildDevicePreview.mjs
+          node verification/direct-boss-style-device-20261102/verifyPackage.mjs
+      - name: Pass a fresh sixty-second complete native flow first
+        run: node lab/verification/mobile-30m-source-proof-20261102/run.mjs candidate lab/verification/mobile-30m-source-proof-20261102/results ${{ matrix.engine }} ${{ matrix.replica }} smoke
+      - name: Require thirty real active minutes and the complete recovery flow
+        run: node lab/verification/mobile-30m-source-proof-20261102/run.mjs candidate lab/verification/mobile-30m-source-proof-20261102/results ${{ matrix.engine }} ${{ matrix.replica }} soak
+      - name: Preserve success and failure evidence
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: frozen-30m-${{ matrix.engine }}-r${{ matrix.replica }}
+          path: |
+            lab/verification/mobile-30m-source-proof-20261102/results/
+            candidate/verification/systematic-stability-20261101/results/
+          retention-days: 14
