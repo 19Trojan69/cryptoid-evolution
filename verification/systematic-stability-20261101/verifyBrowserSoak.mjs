@@ -159,6 +159,16 @@ try {
       return state?.status === 'playing' && state.encounter === 'boss-fight' && state.reactorOpen;
     }, null, { timeout: 45000 });
     const first = await observe(); if (clockProbe) probeFirst = first; verifyActive(first, first);
+    if (info.diagnosticResourceCheckpoint) {
+      // Functional assertion of the new diagnostic wire, separate from the
+      // unchanged native-flow/memory baseline. No extra game inspector call.
+      await page.waitForFunction(({ key, id }) => {
+        const p = JSON.parse(localStorage.getItem(key) || 'null')?.latest?.resourceCheckpoint;
+        return p?.clockId === id && p.frameAt > 0 && p.audioBufferBytes > 0
+          && Number.isSafeInteger(p.canvasCacheBytes) && p.canvasFailureCount === 0;
+      }, { key: 'cryptoid_private_brief_v1', id: first.clock.latest.id }, { timeout: 45000 });
+      row.resourceCheckpointActiveVerified = true;
+    }
     const started = Date.now(); let previous = first, progressAt = started, printedAt = started, sampledAt = 0;
     while (previous.clock.latest.elapsedMs - first.clock.latest.elapsedMs < requestedMs) {
       assert.ok(Date.now() - started < requestedMs * 2 + 90000, 'Wall-time budget exceeded');
@@ -216,6 +226,16 @@ try {
   assert.equal(report.fullSession, null); assert.equal(report.briefMatchesLatestStopwatch, true);
   assert.equal(report.stopwatch.latest.mode, 'ended');
   assert.equal(report.briefDiagnostics.latest.options.fullRecording, false);
+  if (info.diagnosticResourceCheckpoint) {
+    assert.equal(report.reportDocumentOrigin, server.origin);
+    const p = report.briefDiagnostics.latest.resourceCheckpoint;
+    assert.equal(p.clockId, report.stopwatch.latest.id);
+    assert.ok(p.at >= report.stopwatch.latest.startedAt && p.at <= report.stopwatch.latest.updatedAt);
+    assert.ok(p.frameAt > 0); assert.equal(report.briefDiagnostics.limits.maxResourcePointsPerRun, 1);
+    assert.equal(report.briefDiagnostics.limits.recordingStateMeasured, false);
+    result.diagnosticResourceCheckpointVerified = true;
+    result.memoryComparisonEligible = false;
+  }
   result.normalReportVerified = true;
   if (clockProbe) result.clockTrace = await page.evaluate(() => window.__clockGapTrace());
   assert.deepEqual(external, []); assert.deepEqual(assetFailures, []); assert.ok(!fatal, fatal);

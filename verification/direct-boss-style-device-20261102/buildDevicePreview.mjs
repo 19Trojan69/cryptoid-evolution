@@ -47,5 +47,13 @@ info.directStyleDeviceCandidate = { version: 1, label, condition: 'leaves',
   activeFrameProbeIncluded: false, activeClockTraceIncluded: false,
   sourceGameFilesEdited: false, productionCandidate: false, physicalDeviceAccepted: false, whiteScreenFixed: false };
 info.buildOnlyTransforms.push('Exact verified direct boss thrust/charge style distribution; original formulas, artwork, context consumers and clocks retained');
+info.diagnosticResourceCheckpoint = { version: 1, maxPointsPerRun: 1, maxSavedCharacters: 16384,
+  baselineSourceCommit: 'b042c8e50ad3f05a70418ae5ee6bb4412809035b',
+  existingInspectorResultReused: true, additionalGameInspectorReads: false,
+  newGameTimers: false, newAnimationFrames: false, newGlobalListeners: false,
+  extraStorageWritesScheduled: false, gameClocksWritten: false,
+  additionalSerializedData: true, resourceCheckpointGuaranteed: false,
+  recordingStateMeasured: false, nativeMemoryMeasured: false,
+  reportDocumentOriginAtExport: true, sourceGameFilesEdited: false, whiteScreenFixed: false };
 writeFileSync(path, JSON.stringify(info, null, 2) + '\n');
 console.log('CRYPTOID_DIRECT_STYLE_DEVICE_BUILD ' + JSON.stringify({ source: info.sourceCommit, candidate: info.directStyleDeviceCandidate }));

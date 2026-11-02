@@ -88,6 +88,7 @@ function Menu() {
       const stopwatch = readSavedStopwatch(store), briefDiagnostics = readBrief(store), identity = reportIdentity(window);
       const details = { version: 2, format: 'cryptoid-isolated-boss2-device-report',
         reportId: identity.reportId, preparedAt: identity.preparedAt, selectedFullSessionId: id || null,
+        reportDocumentOrigin: window.location.origin,
         stopwatch, briefDiagnostics, stopwatchLinkedToSelectedFullSession: false,
         briefMatchesLatestStopwatch: !!stopwatch.latest && stopwatch.latest.id === briefDiagnostics.latest?.clock.id,
         source: __CRYPTOID_BUILD__, isolatedGuest: true, testOptions: matched,

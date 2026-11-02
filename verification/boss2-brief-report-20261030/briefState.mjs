@@ -10,6 +10,26 @@ const kinds = new Set(['state', 'pointerdown', 'pointerup', 'pointercancel', 'lo
 const targets = new Set(['field', 'weapons', 'pause', 'home', 'overlay', 'other', 'document']);
 const finite = value => Number.isFinite(value) && value >= 0;
 const clone = value => value ? JSON.parse(JSON.stringify(value)) : null;
+const audioStates = new Set(['none', 'running', 'suspended', 'interrupted', 'closed']);
+const safeMetric = value => finite(value) && value <= Number.MAX_SAFE_INTEGER ? value : null;
+const safeCount = value => Number.isSafeInteger(value) && value >= 0 ? value : null;
+// One last point, never a resource history. Unknown/missing values remain null;
+// only points belonging to this exact saved clock and its past are accepted.
+export function cleanResourceCheckpoint(value, clock) {
+  try {
+    if (!value || value.version !== 1 || value.clockId !== clock.id || !finite(value.at)
+      || value.at < clock.startedAt || value.at > clock.updatedAt || !finite(value.elapsedMs)
+      || value.elapsedMs > clock.elapsedMs) return null;
+    const out = { version: 1, clockId: clock.id, at: value.at, elapsedMs: value.elapsedMs,
+      frameAt: safeMetric(value.frameAt), visible: typeof value.visible === 'boolean' ? value.visible : null,
+      audioState: audioStates.has(value.audioState) ? value.audioState : null,
+      audioClockMs: safeMetric(value.audioClockMs) };
+    for (const key of ['audioClockStalls', 'audioRecoveries', 'audioBlockedSounds', 'audioVoices',
+      'audioBufferBytes', 'canvasRegisteredEffects', 'canvasCacheBytes', 'canvasSurfaceBytes', 'canvasFailureCount'])
+      out[key] = safeCount(value[key]);
+    return out;
+  } catch { return null; } // Optional telemetry cannot interrupt the clock/store.
+}
 export function cleanClock(value) {
   if (!value || !/^[a-f0-9]{40}$/.test(value.source) || typeof value.id !== 'string'
     || !/^[a-zA-Z0-9-]{1,100}$/.test(value.id) || !finite(value.startedAt) || !value.startedAt
@@ -32,9 +52,12 @@ function cleanEvent(value) {
 function cleanRun(value) {
   const clock = cleanClock(value?.clock);
   if (!clock || !finite(value.documentStartedAt)) return null;
-  return { clock, documentStartedAt: value.documentStartedAt, options: cleanOptions(value.options),
+  const run = { clock, documentStartedAt: value.documentStartedAt, options: cleanOptions(value.options),
     events: (Array.isArray(value.events) ? value.events : []).slice(-MAX_EVENTS).map(cleanEvent).filter(Boolean),
     dropped: Number.isInteger(value.dropped) && value.dropped >= 0 ? value.dropped : 0 };
+  const resources = cleanResourceCheckpoint(value.resourceCheckpoint, clock);
+  if (resources) run.resourceCheckpoint = resources;
+  return run;
 }
 function readValue(storage, key, limit) {
   try {
@@ -57,7 +80,9 @@ export function readBrief(storage) {
     previous: value?.version === 1 ? cleanRun(value.previous) : null,
     limits: { maxEventsPerRun: MAX_EVENTS, maxSavedRuns: 2, maxCharacters: MAX_BYTES,
       checkpointMs: 1000, ordinaryEventsSavedImmediately: false, terminalEventGuaranteed: false,
-      nativeTerminationCauseMeasured: false, rawContactFieldsStored: false } };
+      nativeTerminationCauseMeasured: false, rawContactFieldsStored: false,
+      maxResourcePointsPerRun: 1, resourceCheckpointGuaranteed: false,
+      nativeMemoryMeasured: false, recordingStateMeasured: false } };
 }
 export function createBrief({ storage, source, now, documentStartedAt }) {
   if (!/^[a-f0-9]{40}$/.test(source)) throw Error('Exact preview source required');
@@ -70,7 +95,17 @@ export function createBrief({ storage, source, now, documentStartedAt }) {
     const at = now();
     if (!currentId || !latest || !force && at - lastWrite < 1000) return;
     try {
-      const raw = JSON.stringify({ version: 1, latest, previous });
+      let raw = JSON.stringify({ version: 1, latest, previous });
+      if (raw.length > MAX_BYTES && (latest.resourceCheckpoint || previous?.resourceCheckpoint)) {
+        // Optional counters must not make a previously fitting clock/contact
+        // record fail. Keep the original bound and the same single write.
+        const withoutResources = run => {
+          if (!run) return null;
+          const { resourceCheckpoint, ...rest } = run;
+          return rest;
+        };
+        raw = JSON.stringify({ version: 1, latest: withoutResources(latest), previous: withoutResources(previous) });
+      }
       if (raw.length > MAX_BYTES) throw Error('Brief record bound exceeded');
       storage.setItem(BRIEF_KEY, raw); lastWrite = at; storageAvailable = true;
     } catch { storageAvailable = false; }
@@ -91,18 +126,22 @@ export function createBrief({ storage, source, now, documentStartedAt }) {
     if (latest.events.length > MAX_EVENTS) { latest.events.shift(); latest.dropped++; }
     if (critical && (fields.kind === 'pagehide' || at - lastWrite >= 250)) flush(true);
   };
-  const checkpoint = (value, options) => {
+  const checkpoint = (value, options, resourceCheckpoint) => {
     const clock = cleanClock(value);
     if (!clock || clock.source !== source) return;
+    const resources = cleanResourceCheckpoint(resourceCheckpoint, clock);
     if (currentId !== clock.id) {
       if (clock.id === latest?.clock.id) return; // Restored runs are never resumed by a new document.
       previous = latest;
       latest = { clock, documentStartedAt, options: cleanOptions(options), events: [], dropped: 0 };
+      if (resources) latest.resourceCheckpoint = resources;
       currentId = clock.id;
       record({ kind: 'state', target: 'document' }); flush(true); return;
     }
     const changed = latest.clock.mode !== clock.mode;
     latest.clock = clock;
+    if (resources && (!latest.resourceCheckpoint || resources.at >= latest.resourceCheckpoint.at
+      && resources.elapsedMs >= latest.resourceCheckpoint.elapsedMs)) latest.resourceCheckpoint = resources;
     if (changed) record({ kind: 'state', target: 'document' });
     flush(changed);
   };

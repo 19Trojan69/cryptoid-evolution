@@ -66,17 +66,33 @@ export function mountStopwatch(host = window) {
     if (stopped) return;
     const current = doc.querySelector('.game-shell');
     if (current !== shell) observe(current);
-    let snapshot = null;
+    let snapshot = null, resourceValues = null;
     if (shell) {
       try {
         const state = host.__crossDeviceTest?.inspect();
         if (state) snapshot = { token: shell, status: state.status, frameAt: state.frameAt,
           visible: doc.visibilityState !== 'hidden' };
+        // inspect() already computes these counters. Copy only primitives from
+        // that SAME read; no second inspector call, timer or native API scan.
+        if (state) {
+          const audio = state.audio, canvas = state.canvas;
+          resourceValues = { frameAt: state.frameAt, visible: snapshot.visible,
+            audioState: audio?.audioState, audioClockMs: audio?.audioClockMs,
+            audioClockStalls: audio?.audioClockStalls, audioRecoveries: audio?.audioRecoveries,
+            audioBlockedSounds: audio?.audioBlockedSounds, audioVoices: audio?.audioVoices,
+            audioBufferBytes: audio?.audioBufferBytes,
+            canvasRegisteredEffects: canvas?.registeredEffects, canvasCacheBytes: canvas?.cacheBytes,
+            canvasSurfaceBytes: canvas?.surfaceBytes,
+            canvasFailureCount: Array.isArray(canvas?.failures) ? canvas.failures.length : undefined };
+        }
       } catch { /* A diagnostic clock cannot interrupt the game. */ }
     }
     const view = clock.observe(snapshot);
     render(view);
-    host.dispatchEvent(new host.CustomEvent('cryptoid:diagnostic-clock', { detail: view }));
+    const detail = resourceValues && view.live?.startedAt ? { ...view, resourceCheckpoint: {
+      version: 1, clockId: view.live.id, at: view.live.updatedAt, elapsedMs: view.live.elapsedMs, ...resourceValues,
+    } } : view;
+    host.dispatchEvent(new host.CustomEvent('cryptoid:diagnostic-clock', { detail }));
   }
   const pagehide = () => sample();
   const visibility = () => sample();

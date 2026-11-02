@@ -10,7 +10,7 @@ export function installBriefDiagnostics(host, source) {
   const clock = event => {
     const run = event.detail?.live;
     if (run?.startedAt) {
-      brief.checkpoint(run, host.__deviceBossOptions); currentRunId = run.id; live = run.mode !== 'ended';
+      brief.checkpoint(run, host.__deviceBossOptions, event.detail.resourceCheckpoint); currentRunId = run.id; live = run.mode !== 'ended';
     } else {
       if (currentRunId && event.detail?.latest?.id === currentRunId) brief.checkpoint(event.detail.latest, host.__deviceBossOptions);
       live = false; pointers.clear();

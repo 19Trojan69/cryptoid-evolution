@@ -1,0 +1,60 @@
+name: Bounded device resource checkpoint verification
+on:
+  push:
+    branches: [codex/device-resource-checkpoint-20261102]
+permissions:
+  contents: read
+jobs:
+  native-diagnostic-flow:
+    strategy:
+      fail-fast: false
+      matrix:
+        engine: [chromium, webkit]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with: {persist-credentials: false}
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with: {node-version: '24'}
+      - name: Verify bounds, unchanged game trees and the actual browser adapter
+        run: |
+          node verification/direct-boss-style-device-20261102/verifyScope.mjs
+          node --test verification/direct-boss-style-device-20261102/verifyScope.test.mjs verification/boss2-stopwatch-20261029/stopwatchState.test.mjs verification/boss2-brief-report-20261030/briefState.test.mjs verification/device-resource-checkpoint-20261102/resourceCheckpoint.test.mjs
+      - name: Install isolated native browser tooling
+        env: {VERCEL_ENV: preview}
+        run: |
+          node --input-type=module -e "import {readFileSync,writeFileSync} from 'node:fs'; writeFileSync('vercel.json', JSON.stringify(JSON.parse(readFileSync('vercel.json','utf8'))) + '\n');"
+          node verification/direct-boss-style-device-20261102/installDevicePreview.mjs --ignore-scripts
+          npm install --prefix verification/boss2-forensics-20261028 --ignore-scripts --no-audit --no-fund
+          cd verification/boss2-forensics-20261028
+          npx playwright install --with-deps ${{ matrix.engine }}
+      - name: Build the exact protected guest package
+        env:
+          VERCEL_ENV: preview
+          CRYPTOID_SOAK_CONDITION: mini-start
+          CRYPTOID_UNKNOWN_INHERITED_SETTING: device-env-regression-marker
+        run: |
+          node verification/direct-boss-style-device-20261102/buildDevicePreview.mjs
+          node verification/device-resource-checkpoint-20261102/verifyPackage.mjs
+      - name: Exercise actual UI, pause, three runs and normal diagnostic export
+        env:
+          CRYPTOID_SOAK_CONDITION: original
+          CRYPTOID_SOAK_ENGINE: ${{ matrix.engine }}
+          CRYPTOID_SOAK_SECONDS: '60'
+          CRYPTOID_SOAK_RUN: smoke
+        run: node verification/systematic-stability-20261101/verifyBrowserSoak.mjs
+      - name: Verify frozen game trees after the native flow
+        if: ${{ !cancelled() }}
+        run: |
+          mkdir -p verification/device-resource-checkpoint-20261102/results
+          node verification/direct-boss-style-device-20261102/verifyScope.mjs > verification/device-resource-checkpoint-20261102/results/source-scope-after.txt
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: ${{ !cancelled() }}
+        with:
+          name: resource-checkpoint-${{ matrix.engine }}
+          path: |
+            verification/device-resource-checkpoint-20261102/results/
+            verification/systematic-stability-20261101/results/
+            verification/boss2-forensics-20261028/results/device-preview/site/device-preview-info.json
+          retention-days: 7
