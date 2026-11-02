@@ -1,0 +1,54 @@
+{
+  "version": 1,
+  "sourceCommit": "b042c8e50ad3f05a70418ae5ee6bb4412809035b",
+  "sourceTree": "921fe9212ce0ccfeaa7dc46352d3d6385c7f3fb2",
+  "projectId": "prj_JpvzU9ZS8bFkn9jZgE51Gct8TZpF",
+  "originalDeploymentId": "dpl_HiEfjsJYS3HTuHs3A7JkQ4Jzg7Yu",
+  "controlDeploymentId": "dpl_DsTqBdzB8JrwLhaQ12KR6joCmgK1",
+  "controlBranch": "codex/no-toolbar-guest-control-20261102",
+  "controlUrl": "https://cryptoid-evolution-testnet-aido52fcg-19-trojan69.vercel.app/",
+  "readyState": "READY",
+  "target": null,
+  "branchScopedEnvironment": {
+    "key": "VERCEL_PREVIEW_FEEDBACK_ENABLED",
+    "value": "0",
+    "target": [
+      "preview"
+    ],
+    "gitBranch": "codex/no-toolbar-guest-control-20261102"
+  },
+  "observedOriginalScriptPaths": [
+    "/assets/index-B7p26OaO.js",
+    "/diagnostic-stopwatch.js",
+    "/device-preview-sdk.js",
+    "https://vercel.live/_next-live/feedback/feedback.js"
+  ],
+  "observedControlScriptPaths": [
+    "/assets/index-B7p26OaO.js",
+    "/diagnostic-stopwatch.js",
+    "/device-preview-sdk.js"
+  ],
+  "observationSource": "read-only rendered DOM in authenticated cloud browser",
+  "observedControlSourceTreeMatches": true,
+  "observedControlStopwatchStateSha256": "5e5845d5e5beef85ca5dadac597b8d751e81f931374b942b22fdedc7d83bbb5c",
+  "guestOnly": true,
+  "originalArtworkAndCanvasRenderer": true,
+  "liveBackend": false,
+  "payments": false,
+  "automaticResume": false,
+  "activeFrameProbeIncluded": false,
+  "activeClockTraceIncluded": false,
+  "deploymentProtectionWeakened": false,
+  "projectWideToolbarSettingChanged": false,
+  "runtimeSourceChanged": false,
+  "physicalDevice": false,
+  "whiteScreenFixed": false,
+  "hostedThirtyMinuteFlowVerified": false,
+  "limits": [
+    "Different immutable deployment origin also changes cache/local-storage/authentication context; not a perfectly matched causal A/B experiment.",
+    "The source of the phone White Screen is still unknown; toolbar involvement is not established.",
+    "Same bundle filename is not an independent exact-byte comparison with the hosted JS response.",
+    "Only the menu and delivery metadata were inspected in this new hosted control; no long hosted gameplay is claimed."
+  ],
+  "documentation": "https://vercel.com/docs/vercel-toolbar/managing-toolbar"
+}

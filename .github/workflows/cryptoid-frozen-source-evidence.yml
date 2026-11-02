@@ -1,0 +1,24 @@
+name: Frozen source capture integrity
+on:
+  push:
+    branches: [codex/mobile-30m-source-proof-20261102]
+    paths:
+      - '.github/workflows/cryptoid-frozen-source-evidence.yml'
+      - 'verification/mobile-30m-source-proof-20261102/evidence/**'
+      - 'verification/mobile-30m-source-proof-20261102/README.de.md'
+      - 'verification/mobile-30m-source-proof-20261102/INPUT-RELOAD.de.md'
+permissions:
+  contents: read
+jobs:
+  replay-closed-cohort:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with: {persist-credentials: false}
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with: {node-version: '24'}
+      - name: Verify frozen runtime and replay the original eight synthetic captures
+        run: |
+          node verification/direct-boss-style-device-20261102/verifyScope.mjs
+          python3 verification/mobile-30m-source-proof-20261102/evidence/verify.py

@@ -1,0 +1,54 @@
+{
+  "version": 1,
+  "rows": [
+    {
+      "case": "chromium-r1",
+      "scope": "entire driver invocation, including preparation and normal UI/remounts; not aligned active-only allocator peaks",
+      "validExternalSamples": 375,
+      "firstObservedSummedPssMiB": 356.779296875,
+      "peakPssMiBByRole": {
+        "browser-other": 150.826171875,
+        "chromium-gpu": 41.6806640625,
+        "chromium-renderer": 351.1337890625
+      }
+    },
+    {
+      "case": "chromium-r2",
+      "scope": "entire driver invocation, including preparation and normal UI/remounts; not aligned active-only allocator peaks",
+      "validExternalSamples": 375,
+      "firstObservedSummedPssMiB": 368.275390625,
+      "peakPssMiBByRole": {
+        "browser-other": 152.810546875,
+        "chromium-gpu": 42.2626953125,
+        "chromium-renderer": 335.1611328125
+      }
+    },
+    {
+      "case": "webkit-r1",
+      "scope": "entire driver invocation, including preparation and normal UI/remounts; not aligned active-only allocator peaks",
+      "validExternalSamples": 379,
+      "firstObservedSummedPssMiB": 993.271484375,
+      "peakPssMiBByRole": {
+        "browser-other": 109.2216796875,
+        "webkit-network": 58.53125,
+        "webkit-content": 1146.654296875
+      }
+    },
+    {
+      "case": "webkit-r2",
+      "scope": "entire driver invocation, including preparation and normal UI/remounts; not aligned active-only allocator peaks",
+      "validExternalSamples": 379,
+      "firstObservedSummedPssMiB": 971.5322265625,
+      "peakPssMiBByRole": {
+        "browser-other": 109.4345703125,
+        "webkit-network": 44.8408203125,
+        "webkit-content": 1141.2392578125
+      }
+    }
+  ],
+  "limits": [
+    "Independent role peaks occur at potentially different times and must not be added.",
+    "First observed process sample is not a fresh blank-page baseline.",
+    "Linux process roles do not measure native phone memory or GPU-resident resources."
+  ]
+}
