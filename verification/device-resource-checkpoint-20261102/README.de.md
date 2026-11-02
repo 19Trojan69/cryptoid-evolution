@@ -27,4 +27,14 @@ Die zusätzlichen Regressionen prüfen die Bindung an den richtigen Lauf, ungül
 
 Der isolierte Workflow `cryptoid-device-resource-checkpoint.yml` prüft Chromium und WebKit unter Linux: 60 Sekunden echte aktive Spielzeit plus zwei neue 10-Sekunden-Läufe, echte Pause/Fortsetzen/Waffen/Home-Aktionen und normaler Berichtsexport. Er prüft auch den tatsächlich gespeicherten Ressourcenpunkt und die Herkunftsadresse. Er simuliert weder eine iOS-Systemaufnahme noch einen nativen Smartphone-Prozessabbruch. Ergebnisse werden auch bei einem Fehlschlag gesichert. Ein grüner Lauf erlaubt die Bereitstellung dieser Diagnose; er erklärt den ursprünglichen White Screen nicht für behoben.
 
-Aktueller Status vor Veröffentlichung: lokale Regressionen geprüft; native Workflow-Ergebnisse werden am exakten Commit separat festgehalten.
+Ergebnis: [Workflow 41526377418](https://github.com/19Trojan69/cryptoid-evolution/actions/runs/41526377418) ist vollständig bestanden. Beide frischen Runner prüfen 29 Regressionen und den nativen 60/10/10-Sekunden-Ablauf am exakten Quell-Commit `ac98e95166b0e2013186257904da46323840dab5`, Baum `99092ec24e843fb1e419dc382bc2523a4edc0b42`. Der reguläre Berichtsexport und der Ressourcenpunkt aller drei Läufe sind in beiden Engines bestätigt. Die synthetischen Original-Ergebnisdateien liegen mit Download- und Dateihashes unter `evidence/`; private Besitzer-Daten sind nicht enthalten. Dieser Belegzweig ändert die eingefrorene Vorschau nicht.
+
+Offline-Prüfung: `python3 verification/device-resource-checkpoint-20261102/evidence/verify.py`.
+
+## Geschützte Bereitstellung
+
+[Geprüfte Diagnose-Vorschau](https://cryptoid-evolution-testnet-ikt0c6yoo-19-trojan69.vercel.app/), Deployment `dpl_7bP26Ltvbi68CxrdqbaFU7PSTURk`, Status `READY`, Preview-Ziel ohne Produktionszuweisung. Das Deaktivieren der Feedback-Toolbar gilt nur für diesen neuen Preview-Zweig; die bestehende Zugangskontrolle bleibt aktiv.
+
+Die bereitgestellte Seite wurde zusätzlich im Cloud-Browser über die normale Oberfläche geöffnet, vorbereitet, fortgesetzt, über Home verlassen und exportiert. Der heruntergeladene synthetische Bericht enthält 38.781 ms aktive Zeit, die korrekte Adresse und einen laufgebundenen Ressourcenpunkt. Nach einem regulären Neuladen bleibt die beendete Uhr sichtbar. **Zwei `stalled`-Einträge der Diagnose-Uhr bleiben im Bericht erhalten**; der kurze Cloud-Lauf wird deshalb nicht als weiterer strenger Stabilitätspass ausgegeben. Sein letzter Punkt stammt aus der Pause vor dem Beenden (unter anderem Canvas-Cache 0) und ist kein aktiver Ressourcen-Höchstwert. Die synthetischen Downloadbytes, ausgelieferte Metadaten und eine Spielansicht sind separat mit Hashes gesichert. Besitzerberichte und Handyvideos sind nicht enthalten.
+
+Der nächste gezielte Handyvergleich erfolgt zunächst ohne Kamera-/Bildschirmaufnahme bei sonst gleichen Testoptionen. Weder die Toolbar-Abschaltung noch diese Diagnose-Erweiterung werden als White-Screen-Behebung bezeichnet.

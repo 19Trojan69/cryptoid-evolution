@@ -1,0 +1,132 @@
+{
+  "version": 1,
+  "sourceCommit": "ac98e95166b0e2013186257904da46323840dab5",
+  "sourceTree": "99092ec24e843fb1e419dc382bc2523a4edc0b42",
+  "workflowRun": 41526377418,
+  "workflowConclusion": "success",
+  "jobIds": {
+    "chromium": 125555054769,
+    "webkit": 125555055243
+  },
+  "testsPerJob": 29,
+  "diagnosticOnly": true,
+  "physicalDevice": false,
+  "whiteScreenFixed": false,
+  "nativeMemoryMeasured": false,
+  "memoryComparisonEligible": false,
+  "archive": {
+    "path": "native-captures.tar.gz",
+    "bytes": 9351,
+    "sha256": "e258dd00e3cf7acf3a3800d4214864a0482a4056212b5d680d365ad779a44adf"
+  },
+  "downloadedArtifacts": [
+    {
+      "engine": "webkit",
+      "id": 13179927778,
+      "zipBytes": 7088,
+      "zipSha256": "5e95c7bf590a4687ca69b00099b8439cec853e54e70909044e76e731c30c45a7"
+    },
+    {
+      "engine": "chromium",
+      "id": 13179543390,
+      "zipBytes": 7495,
+      "zipSha256": "309728392d8c9d0e741e7ee88954b1f7518613c59c1f57f47327fa21eb4d65f0"
+    }
+  ],
+  "files": [
+    {
+      "path": "resource-checkpoint-chromium/boss2-forensics-20261028/results/device-preview/site/device-preview-info.json",
+      "bytes": 5134,
+      "sha256": "f17606725f6d202ed5ace50a5b04b34509427ae62b052a69af882ee1634ae945"
+    },
+    {
+      "path": "resource-checkpoint-chromium/device-resource-checkpoint-20261102/results/source-scope-after.txt",
+      "bytes": 116,
+      "sha256": "637865c37ae36c99b43c78525af2d67611de5a1c7488e508c4d9aef70eb1c732"
+    },
+    {
+      "path": "resource-checkpoint-chromium/systematic-stability-20261101/results/chromium-original/smoke/cycle-0.jsonl",
+      "bytes": 8782,
+      "sha256": "46cfbe686f688a98b5867282405a269443e8711de47ecd6fbc4c2843e1d153ca"
+    },
+    {
+      "path": "resource-checkpoint-chromium/systematic-stability-20261101/results/chromium-original/smoke/cycle-1.jsonl",
+      "bytes": 1975,
+      "sha256": "b105056d6405de304d9f98e610f3085e6e7db0f9de3810fe4a3c45f815ec4708"
+    },
+    {
+      "path": "resource-checkpoint-chromium/systematic-stability-20261101/results/chromium-original/smoke/cycle-2.jsonl",
+      "bytes": 1962,
+      "sha256": "b93140941207fbbd18ea9f05a030129b07e49eaf7a638dbe34a416af9af55ca9"
+    },
+    {
+      "path": "resource-checkpoint-chromium/systematic-stability-20261101/results/chromium-original/smoke/verification.json",
+      "bytes": 25133,
+      "sha256": "e5b6eafa6827998c91ffc5e83a3f938bd80cc1109b9560edc561514903aed836"
+    },
+    {
+      "path": "resource-checkpoint-webkit/boss2-forensics-20261028/results/device-preview/site/device-preview-info.json",
+      "bytes": 5134,
+      "sha256": "f17606725f6d202ed5ace50a5b04b34509427ae62b052a69af882ee1634ae945"
+    },
+    {
+      "path": "resource-checkpoint-webkit/device-resource-checkpoint-20261102/results/source-scope-after.txt",
+      "bytes": 116,
+      "sha256": "637865c37ae36c99b43c78525af2d67611de5a1c7488e508c4d9aef70eb1c732"
+    },
+    {
+      "path": "resource-checkpoint-webkit/systematic-stability-20261101/results/webkit-original/smoke/cycle-0.jsonl",
+      "bytes": 7930,
+      "sha256": "79823684d7f60839c10580c88827e5aa49dce4a3093fca4d92ceaefb69ad9379"
+    },
+    {
+      "path": "resource-checkpoint-webkit/systematic-stability-20261101/results/webkit-original/smoke/cycle-1.jsonl",
+      "bytes": 1965,
+      "sha256": "425cfb738742a0056219ee6df3655925223347100000a322d38b1f74627c4539"
+    },
+    {
+      "path": "resource-checkpoint-webkit/systematic-stability-20261101/results/webkit-original/smoke/cycle-2.jsonl",
+      "bytes": 1308,
+      "sha256": "cfc871ea1916d4aca9627dc4b1f87df92b3ef9c32bda3798888cbf0ccc8f2746"
+    },
+    {
+      "path": "resource-checkpoint-webkit/systematic-stability-20261101/results/webkit-original/smoke/verification.json",
+      "bytes": 22551,
+      "sha256": "0945e3c73a778846f3f75b9f543c929aeac0e05ea440da76f5ef9a62fdf8d8bf"
+    }
+  ],
+  "hostedFunctionalCheck": {
+    "deploymentId": "dpl_7bP26Ltvbi68CxrdqbaFU7PSTURk",
+    "url": "https://cryptoid-evolution-testnet-ikt0c6yoo-19-trojan69.vercel.app/",
+    "state": "READY",
+    "target": null,
+    "toolbarPresent": false,
+    "toolbarScope": "preview branch only",
+    "reportOriginVerified": true,
+    "normalExitAndExportVerified": true,
+    "endedClockRestoredAfterReload": true,
+    "elapsedMs": 38781.09999999404,
+    "observedDiagnosticStalledEvents": 2,
+    "unobservedGaps": 0,
+    "strictStabilityPassClaimed": false,
+    "physicalPhoneOrRecordingTest": false,
+    "note": "Short cloud browser UI and export check only. Two observed stalled clock states are retained; this is not a new stability/soak pass. Reload followed a normal exit, not a simulated native process kill. Paused final counters are not the active-game resource peak."
+  },
+  "hostedFiles": [
+    {
+      "path": "hosted-report.json",
+      "bytes": 5328,
+      "sha256": "847904fab40d35ac681ecf8fc79d65fab3731bbd9c7c78ae74c01aba5b19018e"
+    },
+    {
+      "path": "hosted-info.json",
+      "bytes": 5134,
+      "sha256": "f17606725f6d202ed5ace50a5b04b34509427ae62b052a69af882ee1634ae945"
+    },
+    {
+      "path": "hosted-game.jpg",
+      "bytes": 95236,
+      "sha256": "8fb156eead1786e8ccebb903f919c25f8329884526295491baf43e4a1ea0b518"
+    }
+  ]
+}
