@@ -4,7 +4,9 @@ on:
     branches: [codex/style-recalc-isolation-20261102]
     paths:
       - '.github/workflows/cryptoid-local-style-dynamic.yml'
-      - 'verification/local-boss-style-dynamic-20261102/**'
+      - 'verification/local-boss-style-dynamic-20261102/*.mjs'
+      - 'verification/local-boss-style-dynamic-20261102/*.jsx'
+      - 'verification/local-boss-style-dynamic-20261102/*.html'
       - 'verification/memory-retention-attribution-20261101/failureObservation*'
 permissions:
   contents: read
