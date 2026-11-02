@@ -15,6 +15,7 @@ on:
       - 'verification/style-recalc-isolation-20261102/evidence/**'
       - 'verification/local-boss-style-20261102/evidence/**'
       - 'verification/local-boss-style-dynamic-20261102/evidence/**'
+      - 'verification/full-game-clock-gap-20261102/evidence/**'
 permissions:
   contents: read
 jobs:
@@ -36,6 +37,7 @@ jobs:
           node --test verification/style-recalc-isolation-20261102/probe.test.mjs verification/style-recalc-isolation-20261102/evidence/summary.test.mjs
           node --test verification/local-boss-style-20261102/evidence/summary.test.mjs
           node --test verification/local-boss-style-dynamic-20261102/evidence/summary.test.mjs
+          node --test verification/full-game-clock-gap-20261102/evidence/summary.test.mjs
           node verification/memory-retention-attribution-20261101/evidence/verifyEvidence.mjs
           node verification/isolated-mini-pacing-20261101/evidence/verifyEvidence.mjs
           node verification/inactive-native-allocation-20261101/evidence/verifyEvidence.mjs
@@ -46,3 +48,4 @@ jobs:
           node verification/style-recalc-isolation-20261102/evidence/verifyEvidence.mjs
           node verification/local-boss-style-20261102/evidence/verifyEvidence.mjs
           node verification/local-boss-style-dynamic-20261102/evidence/verifyEvidence.mjs
+          node verification/full-game-clock-gap-20261102/evidence/verifyEvidence.mjs

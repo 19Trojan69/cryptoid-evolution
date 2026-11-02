@@ -1,0 +1,388 @@
+{
+  "version": 1,
+  "rawOwnerReportsIncluded": false,
+  "captures": [
+    {
+      "label": "initial",
+      "engine": "chromium",
+      "condition": "control",
+      "replica": 1,
+      "phase": "short",
+      "sourceCommit": "ba817d0114ee2487e1488ab20a43664ac694ed7a",
+      "sourceTree": "a2f1db1c7d057f429733fe7cb40f762daa897034",
+      "observerVersion": 1,
+      "runId": 41443647086,
+      "jobId": 125271776393,
+      "jobConclusion": "success",
+      "artifact": {
+        "id": 13140389749,
+        "name": "clock-gap-chromium-control-r1-short",
+        "size_in_bytes": 10298,
+        "digest": "sha256:d5a44e546d1ca922fddd1f501b1415528a274cdde6f74fbcab9856ad62b626cf",
+        "sha256": "d5a44e546d1ca922fddd1f501b1415528a274cdde6f74fbcab9856ad62b626cf",
+        "head_sha": "ba817d0114ee2487e1488ab20a43664ac694ed7a",
+        "githubDigestMatched": true,
+        "zipIntegrityPassed": true
+      },
+      "observation": {
+        "file": "initial-chromium-control-r1-short-verification.json",
+        "bytes": 76882,
+        "sha256": "b0fcef10d8a5d7cccb67813c6dcd92334219753aed5081e7c5ed85335a4d4823"
+      },
+      "build": {
+        "file": "initial-chromium-control-r1-short-build-info.json",
+        "bytes": 4268,
+        "sha256": "365c77bcf893492d1f8a52372a3551bc14ad13e79410d579cff78afa0d530b96"
+      },
+      "scope": {
+        "file": "initial-chromium-control-r1-short-source-scope.txt",
+        "bytes": 74,
+        "sha256": "aca06e79ccdf8bb490a75b7319a60d8c0362fcd98db05a7155fb8e1c0e8780a3"
+      },
+      "pointLogs": [
+        {
+          "file": "initial-chromium-control-r1-short-cycle-0.jsonl",
+          "bytes": 8864,
+          "sha256": "512c07e6ccb35c5dedbdbb718db33dceea6eef9f4ec2f81ecae4419eaf3ced72"
+        },
+        {
+          "file": "initial-chromium-control-r1-short-cycle-1.jsonl",
+          "bytes": 1988,
+          "sha256": "f4bea8d5838fdb7c232102f68ec6ba08361eefab1470c7a495ef29822df6e6cb"
+        },
+        {
+          "file": "initial-chromium-control-r1-short-cycle-2.jsonl",
+          "bytes": 1962,
+          "sha256": "bcf1fb8b6dcd64120cc30798cdd4eb73b184376124e01b0e5c43adb2550baed1"
+        }
+      ]
+    },
+    {
+      "label": "initial",
+      "engine": "chromium",
+      "condition": "control",
+      "replica": 2,
+      "phase": "short",
+      "sourceCommit": "ba817d0114ee2487e1488ab20a43664ac694ed7a",
+      "sourceTree": "a2f1db1c7d057f429733fe7cb40f762daa897034",
+      "observerVersion": 1,
+      "runId": 41443647086,
+      "jobId": 125271776402,
+      "jobConclusion": "success",
+      "artifact": {
+        "id": 13141585821,
+        "name": "clock-gap-chromium-control-r2-short",
+        "size_in_bytes": 10123,
+        "digest": "sha256:093264e777144a5a37b930fe0cf0b63a7023f3c5dad38ec1357e727166300a38",
+        "sha256": "093264e777144a5a37b930fe0cf0b63a7023f3c5dad38ec1357e727166300a38",
+        "head_sha": "ba817d0114ee2487e1488ab20a43664ac694ed7a",
+        "githubDigestMatched": true,
+        "zipIntegrityPassed": true
+      },
+      "observation": {
+        "file": "initial-chromium-control-r2-short-verification.json",
+        "bytes": 77412,
+        "sha256": "57fb0556afa6a247dab6b35b9118374b79deaaf6a2785df150df6857466dc301"
+      },
+      "build": {
+        "file": "initial-chromium-control-r2-short-build-info.json",
+        "bytes": 4268,
+        "sha256": "365c77bcf893492d1f8a52372a3551bc14ad13e79410d579cff78afa0d530b96"
+      },
+      "scope": {
+        "file": "initial-chromium-control-r2-short-source-scope.txt",
+        "bytes": 74,
+        "sha256": "aca06e79ccdf8bb490a75b7319a60d8c0362fcd98db05a7155fb8e1c0e8780a3"
+      },
+      "pointLogs": [
+        {
+          "file": "initial-chromium-control-r2-short-cycle-0.jsonl",
+          "bytes": 8793,
+          "sha256": "d8e4bdd468323649c0d9fb794a9d556ac18e71b0f993a98e6aeed1d7fa8ea438"
+        },
+        {
+          "file": "initial-chromium-control-r2-short-cycle-1.jsonl",
+          "bytes": 1975,
+          "sha256": "8a713e46563a35a3994935cb2995e5a2963fc539f0d78a15a9e9010d4ff6bfc2"
+        },
+        {
+          "file": "initial-chromium-control-r2-short-cycle-2.jsonl",
+          "bytes": 1962,
+          "sha256": "7f41e94921e73818527b25fc5754d5afb4bfb91499ebd37f8cdfdb43546dd12e"
+        }
+      ]
+    },
+    {
+      "label": "initial",
+      "engine": "chromium",
+      "condition": "leaves",
+      "replica": 1,
+      "phase": "short",
+      "sourceCommit": "ba817d0114ee2487e1488ab20a43664ac694ed7a",
+      "sourceTree": "a2f1db1c7d057f429733fe7cb40f762daa897034",
+      "observerVersion": 1,
+      "runId": 41443647086,
+      "jobId": 125271776307,
+      "jobConclusion": "success",
+      "artifact": {
+        "id": 13140389699,
+        "name": "clock-gap-chromium-leaves-r1-short",
+        "size_in_bytes": 10274,
+        "digest": "sha256:91211ab64371b6ca6ddd7dfe2276bc79884f21543fc6dbe8b20fd2b2b3dd8a1b",
+        "sha256": "91211ab64371b6ca6ddd7dfe2276bc79884f21543fc6dbe8b20fd2b2b3dd8a1b",
+        "head_sha": "ba817d0114ee2487e1488ab20a43664ac694ed7a",
+        "githubDigestMatched": true,
+        "zipIntegrityPassed": true
+      },
+      "observation": {
+        "file": "initial-chromium-leaves-r1-short-verification.json",
+        "bytes": 77025,
+        "sha256": "1657d75e2431073e74e7f7a1cf5bd799089ba1138aa98b3488f5a34c91732fe4"
+      },
+      "build": {
+        "file": "initial-chromium-leaves-r1-short-build-info.json",
+        "bytes": 4267,
+        "sha256": "47fa07eb6ac8dd682d5f4c32c9538d9f8de05d9a3b5a2b0a84e4d4de194b4f24"
+      },
+      "scope": {
+        "file": "initial-chromium-leaves-r1-short-source-scope.txt",
+        "bytes": 74,
+        "sha256": "aca06e79ccdf8bb490a75b7319a60d8c0362fcd98db05a7155fb8e1c0e8780a3"
+      },
+      "pointLogs": [
+        {
+          "file": "initial-chromium-leaves-r1-short-cycle-0.jsonl",
+          "bytes": 8818,
+          "sha256": "47b980a015597220d541cd2dfa22bb93fbd0e458a8f37ae6d365abeb667a4d74"
+        },
+        {
+          "file": "initial-chromium-leaves-r1-short-cycle-1.jsonl",
+          "bytes": 1988,
+          "sha256": "2c7a68d06d121b0e91d1b6ca8ba58bbccf3b00d9e52e9b11d5abac4dd5bde568"
+        },
+        {
+          "file": "initial-chromium-leaves-r1-short-cycle-2.jsonl",
+          "bytes": 1988,
+          "sha256": "799fd5b7fbda900d87c86af21e8781c4ad023865a786837c371f00617791a927"
+        }
+      ]
+    },
+    {
+      "label": "initial",
+      "engine": "chromium",
+      "condition": "leaves",
+      "replica": 2,
+      "phase": "short",
+      "sourceCommit": "ba817d0114ee2487e1488ab20a43664ac694ed7a",
+      "sourceTree": "a2f1db1c7d057f429733fe7cb40f762daa897034",
+      "observerVersion": 1,
+      "runId": 41443647086,
+      "jobId": 125271776342,
+      "jobConclusion": "success",
+      "artifact": {
+        "id": 13141510837,
+        "name": "clock-gap-chromium-leaves-r2-short",
+        "size_in_bytes": 10401,
+        "digest": "sha256:c918a08d86a592f7cee2979718d5e4ef7fc4f307cf4ad01b0dd59b37fa67d942",
+        "sha256": "c918a08d86a592f7cee2979718d5e4ef7fc4f307cf4ad01b0dd59b37fa67d942",
+        "head_sha": "ba817d0114ee2487e1488ab20a43664ac694ed7a",
+        "githubDigestMatched": true,
+        "zipIntegrityPassed": true
+      },
+      "observation": {
+        "file": "initial-chromium-leaves-r2-short-verification.json",
+        "bytes": 76324,
+        "sha256": "2b3de22e662fdd3c335f55beabba8849dcc7de5e8a676e17af6e978b4bd6d2f5"
+      },
+      "build": {
+        "file": "initial-chromium-leaves-r2-short-build-info.json",
+        "bytes": 4267,
+        "sha256": "47fa07eb6ac8dd682d5f4c32c9538d9f8de05d9a3b5a2b0a84e4d4de194b4f24"
+      },
+      "scope": {
+        "file": "initial-chromium-leaves-r2-short-source-scope.txt",
+        "bytes": 74,
+        "sha256": "aca06e79ccdf8bb490a75b7319a60d8c0362fcd98db05a7155fb8e1c0e8780a3"
+      },
+      "pointLogs": [
+        {
+          "file": "initial-chromium-leaves-r2-short-cycle-0.jsonl",
+          "bytes": 8730,
+          "sha256": "5b31f847212a29b692fab44ab8b1529392978d6255bfd3597387f69a49e1cb00"
+        },
+        {
+          "file": "initial-chromium-leaves-r2-short-cycle-1.jsonl",
+          "bytes": 1988,
+          "sha256": "e35a8dc30d395f8e1c644a14cd06bd462005e6ae24bc4544463c85a193f0e6af"
+        },
+        {
+          "file": "initial-chromium-leaves-r2-short-cycle-2.jsonl",
+          "bytes": 1320,
+          "sha256": "aaf9c7a02243c9bd2aadef1e0991718470e18ea55899296eed6abadaea018bff"
+        }
+      ]
+    },
+    {
+      "label": "initial",
+      "engine": "webkit",
+      "condition": "control",
+      "replica": 1,
+      "phase": "short",
+      "sourceCommit": "ba817d0114ee2487e1488ab20a43664ac694ed7a",
+      "sourceTree": "a2f1db1c7d057f429733fe7cb40f762daa897034",
+      "observerVersion": 1,
+      "runId": 41443647086,
+      "jobId": 125271776354,
+      "jobConclusion": "failure",
+      "artifact": {
+        "id": 13141930150,
+        "name": "clock-gap-webkit-control-r1-short",
+        "size_in_bytes": 5919,
+        "digest": "sha256:9e27c8bd2b6c3751cc6f5abdb8c68434aa0608f2f5660f1a50d38c3f4e1d39dc",
+        "sha256": "9e27c8bd2b6c3751cc6f5abdb8c68434aa0608f2f5660f1a50d38c3f4e1d39dc",
+        "head_sha": "ba817d0114ee2487e1488ab20a43664ac694ed7a",
+        "githubDigestMatched": true,
+        "zipIntegrityPassed": true
+      },
+      "observation": {
+        "file": "initial-webkit-control-r1-short-verification.json",
+        "bytes": 20919,
+        "sha256": "93fce04fac4342822e9cf3e4ec9dc42a6b8e1e4e342b6bddb0c3fc911405cba5"
+      },
+      "build": {
+        "file": "initial-webkit-control-r1-short-build-info.json",
+        "bytes": 4268,
+        "sha256": "365c77bcf893492d1f8a52372a3551bc14ad13e79410d579cff78afa0d530b96"
+      },
+      "scope": {
+        "file": "initial-webkit-control-r1-short-source-scope.txt",
+        "bytes": 74,
+        "sha256": "aca06e79ccdf8bb490a75b7319a60d8c0362fcd98db05a7155fb8e1c0e8780a3"
+      },
+      "pointLogs": []
+    },
+    {
+      "label": "initial",
+      "engine": "webkit",
+      "condition": "control",
+      "replica": 2,
+      "phase": "short",
+      "sourceCommit": "ba817d0114ee2487e1488ab20a43664ac694ed7a",
+      "sourceTree": "a2f1db1c7d057f429733fe7cb40f762daa897034",
+      "observerVersion": 1,
+      "runId": 41443647086,
+      "jobId": 125271776505,
+      "jobConclusion": "failure",
+      "artifact": {
+        "id": 13141274180,
+        "name": "clock-gap-webkit-control-r2-short",
+        "size_in_bytes": 5938,
+        "digest": "sha256:e07525920d72478e105c6aa718915e952edab73c909b1eddfe213869e2fcbb70",
+        "sha256": "e07525920d72478e105c6aa718915e952edab73c909b1eddfe213869e2fcbb70",
+        "head_sha": "ba817d0114ee2487e1488ab20a43664ac694ed7a",
+        "githubDigestMatched": true,
+        "zipIntegrityPassed": true
+      },
+      "observation": {
+        "file": "initial-webkit-control-r2-short-verification.json",
+        "bytes": 21077,
+        "sha256": "0460a797ebde2ac63b0a755c0c2e73c64cded93610431c94437f37b4bf2306e5"
+      },
+      "build": {
+        "file": "initial-webkit-control-r2-short-build-info.json",
+        "bytes": 4268,
+        "sha256": "365c77bcf893492d1f8a52372a3551bc14ad13e79410d579cff78afa0d530b96"
+      },
+      "scope": {
+        "file": "initial-webkit-control-r2-short-source-scope.txt",
+        "bytes": 74,
+        "sha256": "aca06e79ccdf8bb490a75b7319a60d8c0362fcd98db05a7155fb8e1c0e8780a3"
+      },
+      "pointLogs": []
+    },
+    {
+      "label": "initial",
+      "engine": "webkit",
+      "condition": "leaves",
+      "replica": 1,
+      "phase": "short",
+      "sourceCommit": "ba817d0114ee2487e1488ab20a43664ac694ed7a",
+      "sourceTree": "a2f1db1c7d057f429733fe7cb40f762daa897034",
+      "observerVersion": 1,
+      "runId": 41443647086,
+      "jobId": 125271776378,
+      "jobConclusion": "failure",
+      "artifact": {
+        "id": 13141480963,
+        "name": "clock-gap-webkit-leaves-r1-short",
+        "size_in_bytes": 10415,
+        "digest": "sha256:0b091e433f6110c2ed2f636b3b9a8c204aab4f155a59a238e8cb1918e851f7da",
+        "sha256": "0b091e433f6110c2ed2f636b3b9a8c204aab4f155a59a238e8cb1918e851f7da",
+        "head_sha": "ba817d0114ee2487e1488ab20a43664ac694ed7a",
+        "githubDigestMatched": true,
+        "zipIntegrityPassed": true
+      },
+      "observation": {
+        "file": "initial-webkit-leaves-r1-short-verification.json",
+        "bytes": 72827,
+        "sha256": "5d8cede84178db62eab9f5a94056a84c5da17a1e8c1c99d50993039eb64e9e89"
+      },
+      "build": {
+        "file": "initial-webkit-leaves-r1-short-build-info.json",
+        "bytes": 4267,
+        "sha256": "47fa07eb6ac8dd682d5f4c32c9538d9f8de05d9a3b5a2b0a84e4d4de194b4f24"
+      },
+      "scope": {
+        "file": "initial-webkit-leaves-r1-short-source-scope.txt",
+        "bytes": 74,
+        "sha256": "aca06e79ccdf8bb490a75b7319a60d8c0362fcd98db05a7155fb8e1c0e8780a3"
+      },
+      "pointLogs": [
+        {
+          "file": "initial-webkit-leaves-r1-short-cycle-0.jsonl",
+          "bytes": 7895,
+          "sha256": "ab439659e3a2dc0ff1868563b85197601a07fbab8b3fdca87074cac33f5d5628"
+        }
+      ]
+    },
+    {
+      "label": "initial",
+      "engine": "webkit",
+      "condition": "leaves",
+      "replica": 2,
+      "phase": "short",
+      "sourceCommit": "ba817d0114ee2487e1488ab20a43664ac694ed7a",
+      "sourceTree": "a2f1db1c7d057f429733fe7cb40f762daa897034",
+      "observerVersion": 1,
+      "runId": 41443647086,
+      "jobId": 125271776538,
+      "jobConclusion": "failure",
+      "artifact": {
+        "id": 13140933571,
+        "name": "clock-gap-webkit-leaves-r2-short",
+        "size_in_bytes": 6069,
+        "digest": "sha256:182c9be5400694abda376c3cbe573e8c4be388d4b07b05924b44d2f70a6eb8bc",
+        "sha256": "182c9be5400694abda376c3cbe573e8c4be388d4b07b05924b44d2f70a6eb8bc",
+        "head_sha": "ba817d0114ee2487e1488ab20a43664ac694ed7a",
+        "githubDigestMatched": true,
+        "zipIntegrityPassed": true
+      },
+      "observation": {
+        "file": "initial-webkit-leaves-r2-short-verification.json",
+        "bytes": 21209,
+        "sha256": "2f9cf5a581dc0144bfc183c72d10e94fee9d4fa48e2749944f0b83333ab8ecaf"
+      },
+      "build": {
+        "file": "initial-webkit-leaves-r2-short-build-info.json",
+        "bytes": 4267,
+        "sha256": "47fa07eb6ac8dd682d5f4c32c9538d9f8de05d9a3b5a2b0a84e4d4de194b4f24"
+      },
+      "scope": {
+        "file": "initial-webkit-leaves-r2-short-source-scope.txt",
+        "bytes": 74,
+        "sha256": "aca06e79ccdf8bb490a75b7319a60d8c0362fcd98db05a7155fb8e1c0e8780a3"
+      },
+      "pointLogs": []
+    }
+  ]
+}

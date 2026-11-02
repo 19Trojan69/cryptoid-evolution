@@ -1,0 +1,366 @@
+{
+  "captures": [
+    {
+      "cell": {
+        "label": "initial",
+        "engine": "chromium",
+        "condition": "control",
+        "replica": 1,
+        "phase": "short"
+      },
+      "sourceCommit": "ba817d0114ee2487e1488ab20a43664ac694ed7a",
+      "sourceTree": "a2f1db1c7d057f429733fe7cb40f762daa897034",
+      "engineVersion": "151.0.7922.34",
+      "complete": true,
+      "observerVersion": 1,
+      "packagesRecorded": false,
+      "actualInstalledPackages": null,
+      "lockSha256": null,
+      "completedUiCycles": 3,
+      "measuredActiveMs": [
+        61000.09999999999,
+        10000.100000000006,
+        10000
+      ],
+      "prematureClockStartEdges": [],
+      "observedFrameMaxAtFailureMs": null,
+      "observedFrameMaxAfterFailureMs": null,
+      "diagnosis": null,
+      "failure": null,
+      "normalReportVerified": true,
+      "nativeTerminationCauseMeasured": false,
+      "whiteScreenFixed": false,
+      "physicalPhoneAcceptanceEstablished": false,
+      "memoryComparisonEligible": false
+    },
+    {
+      "cell": {
+        "label": "initial",
+        "engine": "chromium",
+        "condition": "control",
+        "replica": 2,
+        "phase": "short"
+      },
+      "sourceCommit": "ba817d0114ee2487e1488ab20a43664ac694ed7a",
+      "sourceTree": "a2f1db1c7d057f429733fe7cb40f762daa897034",
+      "engineVersion": "151.0.7922.34",
+      "complete": true,
+      "observerVersion": 1,
+      "packagesRecorded": false,
+      "actualInstalledPackages": null,
+      "lockSha256": null,
+      "completedUiCycles": 3,
+      "measuredActiveMs": [
+        60000,
+        10000.100000000006,
+        10000
+      ],
+      "prematureClockStartEdges": [],
+      "observedFrameMaxAtFailureMs": null,
+      "observedFrameMaxAfterFailureMs": null,
+      "diagnosis": null,
+      "failure": null,
+      "normalReportVerified": true,
+      "nativeTerminationCauseMeasured": false,
+      "whiteScreenFixed": false,
+      "physicalPhoneAcceptanceEstablished": false,
+      "memoryComparisonEligible": false
+    },
+    {
+      "cell": {
+        "label": "initial",
+        "engine": "chromium",
+        "condition": "leaves",
+        "replica": 1,
+        "phase": "short"
+      },
+      "sourceCommit": "ba817d0114ee2487e1488ab20a43664ac694ed7a",
+      "sourceTree": "a2f1db1c7d057f429733fe7cb40f762daa897034",
+      "engineVersion": "151.0.7922.34",
+      "complete": true,
+      "observerVersion": 1,
+      "packagesRecorded": false,
+      "actualInstalledPackages": null,
+      "lockSha256": null,
+      "completedUiCycles": 3,
+      "measuredActiveMs": [
+        61000.399999999994,
+        10000.100000000006,
+        10000.100000000006
+      ],
+      "prematureClockStartEdges": [],
+      "observedFrameMaxAtFailureMs": null,
+      "observedFrameMaxAfterFailureMs": null,
+      "diagnosis": null,
+      "failure": null,
+      "normalReportVerified": true,
+      "nativeTerminationCauseMeasured": false,
+      "whiteScreenFixed": false,
+      "physicalPhoneAcceptanceEstablished": false,
+      "memoryComparisonEligible": false
+    },
+    {
+      "cell": {
+        "label": "initial",
+        "engine": "chromium",
+        "condition": "leaves",
+        "replica": 2,
+        "phase": "short"
+      },
+      "sourceCommit": "ba817d0114ee2487e1488ab20a43664ac694ed7a",
+      "sourceTree": "a2f1db1c7d057f429733fe7cb40f762daa897034",
+      "engineVersion": "151.0.7922.34",
+      "complete": true,
+      "observerVersion": 1,
+      "packagesRecorded": false,
+      "actualInstalledPackages": null,
+      "lockSha256": null,
+      "completedUiCycles": 3,
+      "measuredActiveMs": [
+        60002.5,
+        10001.199999999983,
+        10001.100000000006
+      ],
+      "prematureClockStartEdges": [],
+      "observedFrameMaxAtFailureMs": null,
+      "observedFrameMaxAfterFailureMs": null,
+      "diagnosis": null,
+      "failure": null,
+      "normalReportVerified": true,
+      "nativeTerminationCauseMeasured": false,
+      "whiteScreenFixed": false,
+      "physicalPhoneAcceptanceEstablished": false,
+      "memoryComparisonEligible": false
+    },
+    {
+      "cell": {
+        "label": "initial",
+        "engine": "webkit",
+        "condition": "control",
+        "replica": 1,
+        "phase": "short"
+      },
+      "sourceCommit": "ba817d0114ee2487e1488ab20a43664ac694ed7a",
+      "sourceTree": "a2f1db1c7d057f429733fe7cb40f762daa897034",
+      "engineVersion": "26.5",
+      "complete": false,
+      "observerVersion": 1,
+      "packagesRecorded": false,
+      "actualInstalledPackages": null,
+      "lockSha256": null,
+      "completedUiCycles": 0,
+      "measuredActiveMs": [
+        null
+      ],
+      "prematureClockStartEdges": [
+        {
+          "clockId": "ba817d01-1793622077568-1",
+          "beforeAt": 11806,
+          "afterAt": 12056,
+          "sampleGapMs": 250,
+          "previousFrames": 0,
+          "currentFrames": 0,
+          "unobservedGaps": 1
+        }
+      ],
+      "observedFrameMaxAtFailureMs": 308,
+      "observedFrameMaxAfterFailureMs": 688,
+      "diagnosis": {
+        "clockGapEdges": 1,
+        "gameFramesObservedAfterLastGap": true,
+        "noPlayingFrameGapAboveExistingWatchdogObserved": true,
+        "classification": "clock-checkpoint-gap-with-continuing-game-frames",
+        "unobservedIntervalCannotBeReconstructed": true,
+        "nativeTerminationCauseMeasured": false,
+        "whiteScreenFixed": false
+      },
+      "failure": {
+        "code": "verification-failed",
+        "message": "No hidden/unobserved interval accepted\n\n1 !== 0\n"
+      },
+      "normalReportVerified": false,
+      "nativeTerminationCauseMeasured": false,
+      "whiteScreenFixed": false,
+      "physicalPhoneAcceptanceEstablished": false,
+      "memoryComparisonEligible": false
+    },
+    {
+      "cell": {
+        "label": "initial",
+        "engine": "webkit",
+        "condition": "control",
+        "replica": 2,
+        "phase": "short"
+      },
+      "sourceCommit": "ba817d0114ee2487e1488ab20a43664ac694ed7a",
+      "sourceTree": "a2f1db1c7d057f429733fe7cb40f762daa897034",
+      "engineVersion": "26.5",
+      "complete": false,
+      "observerVersion": 1,
+      "packagesRecorded": false,
+      "actualInstalledPackages": null,
+      "lockSha256": null,
+      "completedUiCycles": 0,
+      "measuredActiveMs": [
+        null
+      ],
+      "prematureClockStartEdges": [
+        {
+          "clockId": "ba817d01-1793622075288-1",
+          "beforeAt": 11779,
+          "afterAt": 12048,
+          "sampleGapMs": 269,
+          "previousFrames": 0,
+          "currentFrames": 0,
+          "unobservedGaps": 1
+        }
+      ],
+      "observedFrameMaxAtFailureMs": 338,
+      "observedFrameMaxAfterFailureMs": 715,
+      "diagnosis": {
+        "clockGapEdges": 1,
+        "gameFramesObservedAfterLastGap": true,
+        "noPlayingFrameGapAboveExistingWatchdogObserved": true,
+        "classification": "clock-checkpoint-gap-with-continuing-game-frames",
+        "unobservedIntervalCannotBeReconstructed": true,
+        "nativeTerminationCauseMeasured": false,
+        "whiteScreenFixed": false
+      },
+      "failure": {
+        "code": "verification-failed",
+        "message": "No hidden/unobserved interval accepted\n\n1 !== 0\n"
+      },
+      "normalReportVerified": false,
+      "nativeTerminationCauseMeasured": false,
+      "whiteScreenFixed": false,
+      "physicalPhoneAcceptanceEstablished": false,
+      "memoryComparisonEligible": false
+    },
+    {
+      "cell": {
+        "label": "initial",
+        "engine": "webkit",
+        "condition": "leaves",
+        "replica": 1,
+        "phase": "short"
+      },
+      "sourceCommit": "ba817d0114ee2487e1488ab20a43664ac694ed7a",
+      "sourceTree": "a2f1db1c7d057f429733fe7cb40f762daa897034",
+      "engineVersion": "26.5",
+      "complete": false,
+      "observerVersion": 1,
+      "packagesRecorded": false,
+      "actualInstalledPackages": null,
+      "lockSha256": null,
+      "completedUiCycles": 1,
+      "measuredActiveMs": [
+        60712,
+        null
+      ],
+      "prematureClockStartEdges": [
+        {
+          "clockId": "ba817d01-1793622184476-2",
+          "beforeAt": 102896,
+          "afterAt": 103185,
+          "sampleGapMs": 289,
+          "previousFrames": 0,
+          "currentFrames": 0,
+          "unobservedGaps": 1
+        }
+      ],
+      "observedFrameMaxAtFailureMs": 350,
+      "observedFrameMaxAfterFailureMs": 446,
+      "diagnosis": {
+        "clockGapEdges": 1,
+        "gameFramesObservedAfterLastGap": true,
+        "noPlayingFrameGapAboveExistingWatchdogObserved": true,
+        "classification": "clock-checkpoint-gap-with-continuing-game-frames",
+        "unobservedIntervalCannotBeReconstructed": true,
+        "nativeTerminationCauseMeasured": false,
+        "whiteScreenFixed": false
+      },
+      "failure": {
+        "code": "verification-failed",
+        "message": "No hidden/unobserved interval accepted\n\n1 !== 0\n"
+      },
+      "normalReportVerified": false,
+      "nativeTerminationCauseMeasured": false,
+      "whiteScreenFixed": false,
+      "physicalPhoneAcceptanceEstablished": false,
+      "memoryComparisonEligible": false
+    },
+    {
+      "cell": {
+        "label": "initial",
+        "engine": "webkit",
+        "condition": "leaves",
+        "replica": 2,
+        "phase": "short"
+      },
+      "sourceCommit": "ba817d0114ee2487e1488ab20a43664ac694ed7a",
+      "sourceTree": "a2f1db1c7d057f429733fe7cb40f762daa897034",
+      "engineVersion": "26.5",
+      "complete": false,
+      "observerVersion": 1,
+      "packagesRecorded": false,
+      "actualInstalledPackages": null,
+      "lockSha256": null,
+      "completedUiCycles": 0,
+      "measuredActiveMs": [
+        null
+      ],
+      "prematureClockStartEdges": [
+        {
+          "clockId": "ba817d01-1793622079924-1",
+          "beforeAt": 11169,
+          "afterAt": 11383,
+          "sampleGapMs": 214,
+          "previousFrames": 0,
+          "currentFrames": 0,
+          "unobservedGaps": 1
+        }
+      ],
+      "observedFrameMaxAtFailureMs": 279,
+      "observedFrameMaxAfterFailureMs": 617,
+      "diagnosis": {
+        "clockGapEdges": 1,
+        "gameFramesObservedAfterLastGap": true,
+        "noPlayingFrameGapAboveExistingWatchdogObserved": true,
+        "classification": "clock-checkpoint-gap-with-continuing-game-frames",
+        "unobservedIntervalCannotBeReconstructed": true,
+        "nativeTerminationCauseMeasured": false,
+        "whiteScreenFixed": false
+      },
+      "failure": {
+        "code": "verification-failed",
+        "message": "No hidden/unobserved interval accepted\n\n1 !== 0\n"
+      },
+      "normalReportVerified": false,
+      "nativeTerminationCauseMeasured": false,
+      "whiteScreenFixed": false,
+      "physicalPhoneAcceptanceEstablished": false,
+      "memoryComparisonEligible": false
+    }
+  ],
+  "cohort": {
+    "archivedCaptures": 8,
+    "retainedFailures": 4,
+    "cohorts": [
+      {
+        "sourceCommit": "ba817d0114ee2487e1488ab20a43664ac694ed7a",
+        "completeShortFlows": 4,
+        "failedShortFlows": 4,
+        "allEightShortFlowsPassed": false,
+        "completedLongFlows": 0,
+        "failedLongFlows": 0,
+        "completeFourConditionLongStage": false,
+        "prematureClockStartFailures": 4
+      }
+    ],
+    "nativeTerminationCauseMeasured": false,
+    "whiteScreenFixed": false,
+    "physicalPhoneAcceptanceEstablished": false,
+    "memoryComparisonEligible": false
+  },
+  "whiteScreenFixed": false
+}
