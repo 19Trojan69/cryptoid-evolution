@@ -15,11 +15,15 @@ import { instrumentMemoryInspection } from '../memory-retention-attribution-2026
 import { comparisonConfig, comparisonCss, comparisonProof } from '../isolated-mini-pacing-20261101/comparison.mjs';
 import { thrustConfig, thrustSource, thrustProof } from '../boss-thrust-scope-20261102/transform.mjs';
 import { localStyleConfig, localStyleSource, localStyleProof } from '../local-boss-style-20261102/transform.mjs';
+import { instrumentClockFrames } from '../full-game-clock-gap-20261102/transforms.mjs';
 assert.equal(process.env.VERCEL_ENV, 'preview', 'Protected Preview only; production builds are denied');
 const lifetimeAttribution = process.env.CRYPTOID_LIFETIME_ATTRIBUTION === '1';
 const isolatedMini = comparisonConfig();
 const thrust = thrustConfig();
 const localStyles = localStyleConfig();
+const clockGapProbe = process.argv.includes('--clock-probe');
+if (clockGapProbe) { assert.equal(lifetimeAttribution, true); assert.ok(localStyles); assert.equal(localStyles.fidelity, false);
+  assert.equal(isolatedMini, null); assert.equal(thrust, null); }
 if (lifetimeAttribution) assert.equal(flatSceneEnabled(), false, 'Original artwork only for memory attribution');
 const require = createRequire(root + '/frontend/package.json');
 const { build } = require('vite'), react = require('@vitejs/plugin-react').default;
@@ -44,8 +48,10 @@ await build({ configFile: false, root: root + '/frontend', envDir, mode: 'produc
   plugins: [react(), { name: 'isolated-device-boss2', enforce: 'pre', transform(code, id) {
     const path = id.split('?')[0];
     if (path === root + '/frontend/src/App.tsx') return `export { default } from ${JSON.stringify(directory + '/devicePreviewApp.jsx')};`;
-    if (path === root + '/frontend/src/pages/GamePage.tsx') return deviceController(lifetimeAttribution
-      ? instrumentMemoryInspection(code) : flatSceneEnabled() ? flatGameScene(code) : code);
+    if (path === root + '/frontend/src/pages/GamePage.tsx') {
+      const diagnostic = lifetimeAttribution ? instrumentMemoryInspection(code) : flatSceneEnabled() ? flatGameScene(code) : code;
+      return deviceController(clockGapProbe ? instrumentClockFrames(diagnostic) : diagnostic);
+    }
     if (path === root + '/frontend/src/lib/cssFramePacing.ts') {
       if (isolatedMini) return comparisonCss(code, isolatedMini.condition);
       if (bossMiniStartPacingDisabled()) return keepBossMiniAuthoredNativePlayback(code);

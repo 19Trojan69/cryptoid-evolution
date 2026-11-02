@@ -6,12 +6,14 @@ import { root } from '../boss2-forensics-20261028/fixture.mjs';
 import { deviceController } from '../boss2-forensics-20261028/devicePreviewTransform.mjs';
 import { instrumentMemoryInspection } from '../memory-retention-attribution-20261101/inspection.mjs';
 import { localStyleSource } from './transform.mjs';
+import { instrumentClockFrames } from '../full-game-clock-gap-20261102/transforms.mjs';
 const ts = createRequire(root + '/frontend/package.json')('typescript');
 const config = ts.readConfigFile(root + '/frontend/tsconfig.app.json', ts.sys.readFile); assert.equal(config.error, undefined);
 const parsed = ts.parseJsonConfigFileContent(config.config, ts.sys, root + '/frontend', {}, root + '/frontend/tsconfig.app.json');
 for (const condition of ['control', 'leaves']) {
   const controller = root + '/frontend/src/pages/GamePage.tsx';
-  const virtual = new Map([[controller, deviceController(instrumentMemoryInspection(readFileSync(controller, 'utf8')))]]);
+  const inspected = instrumentMemoryInspection(readFileSync(controller, 'utf8'));
+  const virtual = new Map([[controller, deviceController(process.argv.includes('--clock-probe') ? instrumentClockFrames(inspected) : inspected)]]);
   for (const name of ['BossHullView', 'BossReactorView']) {
     const path = root + '/frontend/src/pages/' + name + '.tsx'; virtual.set(path, localStyleSource(readFileSync(path, 'utf8'), name, condition));
   }

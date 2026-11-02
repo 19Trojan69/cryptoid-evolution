@@ -10,11 +10,16 @@ import { STOPWATCH_KEY } from '../boss2-stopwatch-20261029/stopwatchState.mjs';
 import { thrustConfig, thrustProof } from '../boss-thrust-scope-20261102/transform.mjs';
 import { verifyThrustFidelity } from '../boss-thrust-scope-20261102/fidelity.mjs';
 import { requireInactiveCheckpoint } from '../memory-retention-attribution-20261101/inspection.mjs';
+import { clockGapConfig } from '../full-game-clock-gap-20261102/transforms.mjs';
+import { classifyClockTrace } from '../full-game-clock-gap-20261102/clockTrace.mjs';
+import { captureFailureState } from '../memory-retention-attribution-20261101/failureObservation.mjs';
+import { localStyleProof } from '../local-boss-style-20261102/transform.mjs';
 
-const engine = process.env.CRYPTOID_SOAK_ENGINE;
+const clockProbe = clockGapConfig();
+const engine = clockProbe?.engine ?? process.env.CRYPTOID_SOAK_ENGINE;
 const condition = process.env.CRYPTOID_SOAK_CONDITION;
-const seconds = Number(process.env.CRYPTOID_SOAK_SECONDS || 1200);
-const run = process.env.CRYPTOID_SOAK_RUN || 'soak';
+const seconds = clockProbe?.seconds ?? Number(process.env.CRYPTOID_SOAK_SECONDS || 1200);
+const run = clockProbe ? (clockProbe.phase === 'short' ? 'smoke' : 'soak') : process.env.CRYPTOID_SOAK_RUN || 'soak';
 const thrust = thrustConfig();
 assert.ok(['chromium', 'webkit'].includes(engine), 'Explicit engine required');
 assert.ok(['original', 'mini-start'].includes(condition), 'Explicit source treatment required');
@@ -22,7 +27,8 @@ assert.ok(Number.isInteger(seconds) && seconds >= 30 && seconds <= 1800);
 assert.ok(['smoke', 'soak'].includes(run));
 const pw = createRequire(new URL('../boss2-forensics-20261028/package.json', import.meta.url))('playwright');
 if (thrust) { assert.equal(run, 'smoke'); assert.equal(seconds, 60); assert.equal(thrust.fidelity, true); }
-const output = thrust
+const output = clockProbe ? resolve(root, 'verification/full-game-clock-gap-20261102/results',
+  engine + '-' + clockProbe.condition + '-r' + clockProbe.replica + '-' + clockProbe.phase) : thrust
   ? resolve(root, 'verification/boss-thrust-scope-20261102/results', `${engine}-${thrust.condition}-r${thrust.replica}`)
   : resolve(root, 'verification/systematic-stability-20261101/results', `${engine}-${condition}`, run);
 mkdirSync(output, { recursive: true });
@@ -43,7 +49,17 @@ if (thrust) {
   result.thrustComparison = thrust; result.comparedConditionsAreVisuallyDifferent = false;
   result.shortEngineCompatibilityOnly = true; result.memoryComparisonEligible = false;
 }
-let browser, server, page, fatal;
+if (clockProbe) {
+  assert.equal(condition, 'original'); assert.equal(process.env.CRYPTOID_LOCAL_STYLE_SCOPE, clockProbe.condition);
+  assert.equal(Number(process.env.CRYPTOID_LOCAL_STYLE_REPLICA), clockProbe.replica);
+  assert.equal(process.env.CRYPTOID_LOCAL_STYLE_FIDELITY, '0');
+  result.clockGapComparison = clockProbe; result.comparedConditionsAreVisuallyDifferent = false;
+  result.memoryComparisonEligible = false; result.activeFrameScalarObserver = true;
+  result.existingClockSampleObserver = true; result.noNewTimerOrAnimationFrame = true;
+  result.extraGameCollectors = true;
+  result.limits.push('Two explicit bounded scalar observers are present; never merge this condition with earlier uninstrumented memory captures.');
+}
+let browser, server, page, fatal, probeFirst;
 const external = [], assetFailures = [];
 async function tap(locator) {
   await locator.waitFor({ state: 'visible', timeout: 45000 });
@@ -108,6 +124,16 @@ try {
     const expected = thrustProof(readFileSync(root + '/frontend/src/pages/BossHullView.tsx', 'utf8'), thrust.condition);
     assert.deepEqual(info.qaThrustScope, expected); result.thrustBuildProof = expected;
   } else assert.equal(info.qaThrustScope, undefined);
+  if (clockProbe) {
+    const sources = Object.fromEntries(['BossHullView', 'BossReactorView'].map(name =>
+      [name, readFileSync(root + '/frontend/src/pages/' + name + '.tsx', 'utf8')]));
+    const expected = localStyleProof(sources, clockProbe.condition);
+    assert.deepEqual(info.qaLocalBossStyle, expected); result.localStyleBuildProof = expected;
+    const proof = info.qaClockGapProbe; assert.equal(proof.version, 1);
+    for (const k of ['newTimers', 'newAnimationFrames', 'appClocksWritten', 'automaticResume', 'stateObjectsOrDomRetained',
+      'sourceGameFilesEdited', 'physicalDevice', 'whiteScreenFixed']) assert.equal(proof[k], false);
+    assert.equal(proof.maxClockRows, 96); assert.equal(proof.maxFrameGapRows, 16); result.clockGapBuildProof = proof;
+  }
   result.productionRuntimeNotChanged = true;
   for (let cycle = 0; cycle < 3; cycle++) {
     const requestedMs = (cycle === 0 ? seconds : 10) * 1000;
@@ -125,7 +151,7 @@ try {
       const state = window.__crossDeviceTest?.inspect();
       return state?.status === 'playing' && state.encounter === 'boss-fight' && state.reactorOpen;
     }, null, { timeout: 45000 });
-    const first = await observe(); verifyActive(first, first);
+    const first = await observe(); if (clockProbe) probeFirst = first; verifyActive(first, first);
     const started = Date.now(); let previous = first, progressAt = started, printedAt = started, sampledAt = 0;
     while (previous.clock.latest.elapsedMs - first.clock.latest.elapsedMs < requestedMs) {
       assert.ok(Date.now() - started < requestedMs * 2 + 90000, 'Wall-time budget exceeded');
@@ -163,6 +189,7 @@ try {
     await page.locator('.weapon-selection-dialog').waitFor(); await waitMode('paused');
     await tap(page.locator('.weapon-drawer-tab')); await waitMode('running'); row.weaponRoundtripVerified = true;
     await tap(page.locator('.home-control')); await page.locator('#leave-mission-title').waitFor();
+    if (clockProbe) row.frameProbe = await page.evaluate(() => window.__clockFrameProbe?.() ?? null);
     await tap(page.getByRole('button', { name: 'Spiel verlassen', exact: true })); await waitMode('ended');
     assert.equal(await page.locator('.game-shell').count(), 0);
     const closed = await observe(); assert.equal(closed.clock.latest.mode, 'ended');
@@ -170,6 +197,10 @@ try {
     // Removing it after unmount is harness cleanup, never an application fix.
     await page.evaluate(() => { delete window.__crossDeviceTest; });
     row.qaInspectionBridgeReleased = true; row.normalExitVerified = true; row.complete = true;
+    if (clockProbe) {
+      row.frameProbeReleased = await page.evaluate(() => typeof window.__clockFrameProbe === 'undefined');
+      assert.equal(row.frameProbeReleased, true);
+    }
   }
   await tap(page.getByRole('button', { name: 'Letzten Testbericht vorbereiten', exact: true }));
   await tap(page.getByRole('button', { name: 'Berichtstext in Teilen anzeigen', exact: true }));
@@ -179,10 +210,23 @@ try {
   assert.equal(report.stopwatch.latest.mode, 'ended');
   assert.equal(report.briefDiagnostics.latest.options.fullRecording, false);
   result.normalReportVerified = true;
+  if (clockProbe) result.clockTrace = await page.evaluate(() => window.__clockGapTrace());
   assert.deepEqual(external, []); assert.deepEqual(assetFailures, []); assert.ok(!fatal, fatal);
   result.complete = true;
 } catch (error) {
-  result.failure = { code: fatal || 'verification-failed', message: error.message };
+  result.failure = { code: fatal || 'verification-failed', message: String(error.message).slice(0, 4096) };
+  if (clockProbe) {
+    result.failureObservation = await captureFailureState({ page, key: STOPWATCH_KEY, first: probeFirst });
+    if (page && !page.isClosed()) try {
+      result.frameProbeAtFailure = await page.evaluate(() => window.__clockFrameProbe?.() ?? null);
+      // Observe the existing samples for four seconds AFTER failure. No input,
+      // Resume, time reset, fresh run or success reclassification is allowed.
+      await page.waitForTimeout(4000);
+      result.clockTrace = await page.evaluate(() => window.__clockGapTrace?.() ?? null);
+      result.frameProbeAfterFailure = await page.evaluate(() => window.__clockFrameProbe?.() ?? null);
+      result.clockGapDiagnosis = classifyClockTrace(result.clockTrace, result.failureObservation);
+    } catch { result.postFailureTraceUnavailable = true; }
+  }
   if (page && !page.isClosed()) try { result.lastObservation = await observe(); }
   catch { result.lastObservationUnavailable = true; }
   process.exitCode = 1;

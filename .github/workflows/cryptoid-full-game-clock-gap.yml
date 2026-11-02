@@ -1,0 +1,121 @@
+name: Full game clock gap and paired lifecycle diagnosis
+on:
+  push:
+    branches: [codex/style-recalc-isolation-20261102]
+    paths:
+      - '.github/workflows/cryptoid-full-game-clock-gap.yml'
+      - 'verification/full-game-clock-gap-20261102/*.mjs'
+      - 'verification/full-game-clock-gap-20261102/*.mts'
+      - 'verification/systematic-stability-20261101/verifyBrowserSoak.mjs'
+permissions:
+  contents: read
+jobs:
+  source-gates:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with: {persist-credentials: false}
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with: {node-version: '24'}
+      - run: npm install --prefix frontend --include=optional --ignore-scripts --no-audit --no-fund
+      - name: Validate strict scalar observers, both actual virtual controller types and prior evidence
+        run: |
+          git restore --worktree -- frontend/yarn.lock
+          node verification/boss2-mini-start-control-20261101/verifyScope.mjs
+          node --test verification/full-game-clock-gap-20261102/probe.test.mjs verification/memory-retention-attribution-20261101/failureObservation.test.mjs verification/local-boss-style-20261102/transform.test.mjs
+          node verification/local-boss-style-20261102/preflight.mjs --clock-probe
+          node verification/local-boss-style-dynamic-20261102/evidence/verifyEvidence.mjs
+  short-flow:
+    needs: source-gates
+    strategy:
+      fail-fast: false
+      matrix:
+        engine: [chromium, webkit]
+        condition: [control, leaves]
+        replica: [1, 2]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      CRYPTOID_SOAK_CONDITION: original
+      CRYPTOID_LIFETIME_ATTRIBUTION: '1'
+      CRYPTOID_LOCAL_STYLE_SCOPE: ${{ matrix.condition }}
+      CRYPTOID_LOCAL_STYLE_REPLICA: ${{ matrix.replica }}
+      CRYPTOID_LOCAL_STYLE_FIDELITY: '0'
+      CRYPTOID_ATTRIBUTION_SECONDS: '60'
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with: {persist-credentials: false}
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with: {node-version: '24'}
+      - name: Install existing native test engine
+        run: |
+          npm install --prefix frontend --include=optional --ignore-scripts --no-audit --no-fund
+          npm install --prefix verification/boss2-forensics-20261028 --ignore-scripts --no-audit --no-fund
+          git restore --worktree -- frontend/yarn.lock
+          cd verification/boss2-forensics-20261028
+          npx playwright install --with-deps ${{ matrix.engine }}
+      - name: Build exact declared guest condition with bounded clock/frame observers
+        env: {VERCEL_ENV: preview}
+        run: node verification/full-game-clock-gap-20261102/build.mjs --clock-probe
+      - name: Require unchanged zero-gap gate, one active minute and two complete remounts
+        run: node verification/systematic-stability-20261101/verifyBrowserSoak.mjs --clock-probe ${{ matrix.engine }} ${{ matrix.condition }} ${{ matrix.replica }} short
+      - name: Check original source after success or failure
+        if: ${{ !cancelled() }}
+        run: |
+          mkdir -p verification/full-game-clock-gap-20261102/results
+          node verification/boss2-mini-start-control-20261101/verifyScope.mjs > verification/full-game-clock-gap-20261102/results/source-scope-after.txt
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: ${{ !cancelled() }}
+        with:
+          name: clock-gap-${{ matrix.engine }}-${{ matrix.condition }}-r${{ matrix.replica }}-short
+          path: |
+            verification/full-game-clock-gap-20261102/results/
+            verification/boss2-forensics-20261028/results/device-preview/site/device-preview-info.json
+          retention-days: 7
+  long-flow:
+    needs: short-flow
+    strategy:
+      fail-fast: false
+      matrix:
+        engine: [chromium, webkit]
+        condition: [control, leaves]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    env:
+      CRYPTOID_SOAK_CONDITION: original
+      CRYPTOID_LIFETIME_ATTRIBUTION: '1'
+      CRYPTOID_LOCAL_STYLE_SCOPE: ${{ matrix.condition }}
+      CRYPTOID_LOCAL_STYLE_REPLICA: '1'
+      CRYPTOID_LOCAL_STYLE_FIDELITY: '0'
+      CRYPTOID_ATTRIBUTION_SECONDS: '1200'
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with: {persist-credentials: false}
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with: {node-version: '24'}
+      - name: Install existing native test engine
+        run: |
+          npm install --prefix frontend --include=optional --ignore-scripts --no-audit --no-fund
+          npm install --prefix verification/boss2-forensics-20261028 --ignore-scripts --no-audit --no-fund
+          git restore --worktree -- frontend/yarn.lock
+          cd verification/boss2-forensics-20261028
+          npx playwright install --with-deps ${{ matrix.engine }}
+      - name: Build the same exact guest treatment after all short gates pass
+        env: {VERCEL_ENV: preview}
+        run: node verification/full-game-clock-gap-20261102/build.mjs --clock-probe
+      - name: Observe twenty real active minutes then pause, weapons, Home and report
+        run: node verification/systematic-stability-20261101/verifyBrowserSoak.mjs --clock-probe ${{ matrix.engine }} ${{ matrix.condition }} 1 long
+      - name: Check original source after success or failure
+        if: ${{ !cancelled() }}
+        run: |
+          mkdir -p verification/full-game-clock-gap-20261102/results
+          node verification/boss2-mini-start-control-20261101/verifyScope.mjs > verification/full-game-clock-gap-20261102/results/source-scope-after.txt
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: ${{ !cancelled() }}
+        with:
+          name: clock-gap-${{ matrix.engine }}-${{ matrix.condition }}-r1-long
+          path: |
+            verification/full-game-clock-gap-20261102/results/
+            verification/boss2-forensics-20261028/results/device-preview/site/device-preview-info.json
+          retention-days: 7
