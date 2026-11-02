@@ -17,6 +17,10 @@ assert.equal(text.split(install).length, 2);
 const restored = text.replace(current, 'node verification/boss2-mini-start-control-20261101/buildMiniStartPreview.mjs')
   .replace(install, 'npm install --prefix frontend --include=optional --no-audit --no-fund');
 const sha = createHash('sha1').update('blob ' + Buffer.byteLength(restored) + '\0').update(restored).digest('hex');
-assert.equal(sha, 'e94775c2f8a435f2dcb46b65fafd34e67abdc640', 'Only the two declared Preview install/build-command replacements');
+// Vercel rewrites this file as JSON.stringify(config) + '\n' before install.
+// The second digest is exactly that serialization of the same pinned config.
+// Admit only these two complete byte forms, never arbitrary configuration edits.
+assert.ok(['e94775c2f8a435f2dcb46b65fafd34e67abdc640', 'e50f042bfc5e09ece0b058a0d03013867849fda2'].includes(sha),
+  'Only the two declared Preview commands in exact source or observed hosted JSON format');
 assert.equal(JSON.parse(text).git.deploymentEnabled, false);
 console.log('CRYPTOID_DIRECT_STYLE_DEVICE_SCOPE ' + JSON.stringify({ passed: true, originalRuntimeTreesUnchanged: true, automaticDeployment: false }));

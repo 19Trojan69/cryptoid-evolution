@@ -64,3 +64,24 @@ erneut bestehen und npm erfolgreich beendet sein. Andere Quellenänderungen
 werden weder zurückgesetzt noch zugelassen. Es gelten weiterhin derselbe
 Installationsbefehl und dieselben Abhängigkeiten. Die native Paket-CI verwendet
 diesen identischen Wrapper statt ihrer bisherigen eigenen Yarn-Wiederherstellung.
+
+## Konkreter gehosteter Installationsabbruch
+
+Die per Browser gelesenen Deploy Logs von `dpl_5wo2k7XPFSH6Reg9dsn5KYUVHbRQ`
+belegen einen Fehler bei der Konfigurationsprüfung vor npm. Sämtliche fünf
+Runtime-Pins und deren unveränderte Arbeitsdateien hatten vorher bestanden.
+Nach den beiden deklarierten Command-Ersetzungen war der Konfigurations-Blob
+`e50f042bfc5e09ece0b058a0d03013867849fda2` statt des erwarteten
+`e94775c2f8a435f2dcb46b65fafd34e67abdc640` vorhanden.
+
+Der erste Hash wurde lokal exakt als `JSON.stringify(originalConfig) + '\n'`
+reproduziert. Vercels kompakte Serialisierung enthält dieselben Inhalte. Der
+Guard akzeptiert deshalb ausschließlich diese beiden vollständigen Byteformen;
+keine beliebige Normalisierung, andere Konfiguration oder Quellenänderung.
+Die tatsächliche Scope-Prüfung wird mit beiden Darstellungen getestet. Änderungen
+an automatischem Deploy, Output, API-Routing, Robots-Header, Framework und beiden
+Commands müssen in beiden Darstellungen weiterhin scheitern. Ein drittes,
+nicht aufgezeichnetes Dateiformat bleibt ebenfalls abgelehnt.
+Die native Paket-CI verwendet vor Installation und Build ausdrücklich dieselbe
+kompakte JSON-Darstellung wie der gehostete Build, zusätzlich zu ihren weiterhin
+widersprüchlichen Umgebungswerten.

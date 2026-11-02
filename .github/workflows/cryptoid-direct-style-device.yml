@@ -24,6 +24,7 @@ jobs:
       - name: Install exact declared browser tooling
         env: {VERCEL_ENV: preview}
         run: |
+          node --input-type=module -e "import {readFileSync,writeFileSync} from 'node:fs'; writeFileSync('vercel.json', JSON.stringify(JSON.parse(readFileSync('vercel.json','utf8'))) + '\n');"
           node verification/direct-boss-style-device-20261102/installDevicePreview.mjs --ignore-scripts
           npm install --prefix verification/boss2-forensics-20261028 --ignore-scripts --no-audit --no-fund
           cd verification/boss2-forensics-20261028
@@ -40,6 +41,7 @@ jobs:
           CRYPTOID_UNKNOWN_INHERITED_SETTING: device-env-regression-marker
         run: |
           node verification/direct-boss-style-device-20261102/verifyScope.mjs
+          node --test verification/direct-boss-style-device-20261102/verifyScope.test.mjs
           node --test verification/boss2-stopwatch-20261029/stopwatchState.test.mjs
           node verification/direct-boss-style-device-20261102/buildDevicePreview.mjs
           node verification/direct-boss-style-device-20261102/verifyPackage.mjs
