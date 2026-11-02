@@ -4,7 +4,7 @@ on:
     branches: [codex/mobile-30m-source-proof-20261102]
     paths:
       - '.github/workflows/cryptoid-frozen-source-30m.yml'
-      - 'verification/mobile-30m-source-proof-20261102/run.mjs'
+      - 'verification/mobile-30m-source-proof-20261102/*.mjs'
 permissions:
   contents: read
 jobs:
@@ -26,6 +26,8 @@ jobs:
           ref: b042c8e50ad3f05a70418ae5ee6bb4412809035b
       - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
         with: {node-version: '24'}
+      - name: Verify the narrow source-state guard regression
+        run: node --test lab/verification/mobile-30m-source-proof-20261102/sourceState.test.mjs
       - name: Install tooling in the frozen checkout
         working-directory: candidate
         env: {VERCEL_ENV: preview}

@@ -6,6 +6,7 @@ import { mkdirSync, readFileSync, readdirSync, writeFileSync, appendFileSync, co
 import { resolve, relative } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { arch, cpus, totalmem } from 'node:os';
+import { readSourceState } from './sourceState.mjs';
 
 // The driver lives OUTSIDE the tested checkout. No runtime source, built file,
 // simulation clock, browser API or application diagnostic is patched here.
@@ -23,13 +24,13 @@ mkdirSync(output, { recursive: true });
 const git = ref => execFileSync('git', ['rev-parse', ref], { cwd: candidate, encoding: 'utf8' }).trim();
 assert.equal(git('HEAD'), SOURCE, 'Test exactly the frozen device source');
 assert.equal(git('HEAD^{tree}'), TREE, 'Test exactly the frozen device tree');
-assert.equal(execFileSync('git', ['status', '--porcelain'], { cwd: candidate, encoding: 'utf8' }).trim(), '', 'Clean source checkout');
+const generatedLockfiles = readSourceState(candidate);
 execFileSync(process.execPath, ['verification/direct-boss-style-device-20261102/verifyScope.mjs'], { cwd: candidate, stdio: 'inherit' });
 execFileSync(process.execPath, ['verification/direct-boss-style-device-20261102/verifyPackage.mjs'], { cwd: candidate, stdio: 'inherit' });
 const site = resolve(candidate, 'verification/boss2-forensics-20261028/results/device-preview/site');
 const info = JSON.parse(readFileSync(resolve(site, 'device-preview-info.json'), 'utf8'));
 assert.equal(info.sourceCommit, SOURCE); assert.equal(info.sourceTree, TREE);
-assert.equal(info.workingTreeDirty, false);
+assert.equal(info.workingTreeDirty, true, 'Build truthfully includes the two generated npm locks');
 assert.equal(info.directStyleDeviceCandidate.diagnosticClockStateSha256, CLOCK);
 assert.equal(info.directStyleDeviceCandidate.activeFrameProbeIncluded, false);
 assert.equal(info.directStyleDeviceCandidate.activeClockTraceIncluded, false);
@@ -48,7 +49,7 @@ packages.playwright = pwRequire('playwright/package.json').version;
 const receipt = { version: 1, complete: false, sourceCommit: SOURCE, sourceTree: TREE,
   engine, replica: Number(replica), phase, requestedActiveSeconds: seconds,
   startedAt: new Date().toISOString(), nodeVersion: process.version, installedPackages: packages,
-  lockSha256: digest(resolve(candidate, 'frontend/yarn.lock')), scriptsAndStyles: files,
+  lockSha256: digest(resolve(candidate, 'frontend/yarn.lock')), generatedLockfiles, scriptsAndStyles: files,
   host: { platform: process.platform, arch: arch(), logicalCpus: cpus().length, totalMemoryBytes: totalmem() },
   runtimeSourceChanged: false, builtRuntimeChanged: false, addedInPageHooks: false,
   exactFrozenSourceCheckout: true, physicalDevice: false, whiteScreenFixed: false,
@@ -100,7 +101,7 @@ try {
   }
   assert.ok(receipt.processSamples >= Math.floor(seconds / 5), 'External capture covers the requested wall interval');
   execFileSync(process.execPath, ['verification/direct-boss-style-device-20261102/verifyScope.mjs'], { cwd: candidate, stdio: 'inherit' });
-  assert.equal(execFileSync('git', ['status', '--porcelain'], { cwd: candidate, encoding: 'utf8' }).trim(), '');
+  assert.deepEqual(readSourceState(candidate), generatedLockfiles, 'Source state and generated lock bytes stay identical');
   assert.equal(receipt.errors.length, 0);
   receipt.complete = true;
 } catch (e) { receipt.errors.push(String(e.message).slice(0, 4096)); }

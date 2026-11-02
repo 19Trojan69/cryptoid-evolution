@@ -38,3 +38,20 @@ Es gibt hier nur eine Bedingung, keine gematchte A/B- oder Speicher-Leck-
 Behauptung. Linux-PSS ist weder iPhone-RAM noch GPU-residenter Speicher.
 Fortschritt von DOM und Spieluhr beweist keine fehlenden weißen Pixel auf einem
 physischen Gerät. Auch vier bestandene Läufe wären keine White-Screen-Behebung.
+
+## Fehler der ersten Testvorbereitung
+
+CI `41506829900`, Testquelle `d2559d11`, besteht Installation und Paket-Build.
+Der neue Treiber scheitert vor dem eigentlichen Browserstart an seiner pauschalen
+Forderung nach leerem Git-Status. Tatsächlich hat npm exakt zwei neue Dateien
+erzeugt: `frontend/package-lock.json` und
+`verification/boss2-forensics-20261028/package-lock.json`. Das ist ein Fehler
+dieser neuen Testvorbereitung; kein Spielabsturz und kein gestarteter Langlauf.
+
+Die korrigierte Prüfung erlaubt ausschließlich diese zwei ungetrackten Dateien,
+prüft gültige npm-Lockdaten und zum jeweiligen Paket passende Namen und hält ihre
+Digests vor/nach jedem Lauf fest. Jede getrackte Änderung, auch eine gestagte,
+jede zusätzliche Datei und jede spätere Lockänderung bleibt ein Fehler. Das
+tatsächliche Buildmerkmal `workingTreeDirty:true` wird wahrheitsgemäß erhalten.
+Sechs lokale Git-Integrationsfälle prüfen genau diese Grenzen. Die fehlgeschlagene
+CI wird nicht durch nachträgliche Umklassifizierung zu einem bestandenen Lauf.
