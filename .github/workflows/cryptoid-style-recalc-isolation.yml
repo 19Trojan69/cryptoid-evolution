@@ -1,0 +1,100 @@
+name: Native paused style recalculation isolation
+on:
+  push:
+    branches: [codex/style-recalc-isolation-20261102]
+    paths:
+      - '.github/workflows/cryptoid-style-recalc-isolation.yml'
+      - 'verification/style-recalc-isolation-20261102/*.mjs'
+permissions:
+  contents: read
+jobs:
+  source-gates:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with: {persist-credentials: false}
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with: {node-version: '24'}
+      - name: Verify original sources, reversible scene mutation and strict native event parsing
+        run: |
+          node verification/boss2-mini-start-control-20261101/verifyScope.mjs
+          node --check verification/style-recalc-isolation-20261102/run.mjs
+          node --test verification/style-recalc-isolation-20261102/probe.test.mjs verification/active-pressure-attribution-20261102/collector.test.mjs verification/boss2-native-memory-20261029/nativeSummary.test.mjs
+          node verification/active-blink-detail-20261102/evidence/verifyEvidence.mjs
+  native-first:
+    needs: source-gates
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    env:
+      CRYPTOID_SOAK_CONDITION: original
+      CRYPTOID_LIFETIME_ATTRIBUTION: '1'
+      CRYPTOID_STYLE_RECALC_REPLICA: '1'
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with: {persist-credentials: false}
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with: {node-version: '24'}
+      - name: Install existing browser tools
+        run: |
+          npm install --prefix frontend --include=optional --ignore-scripts --no-audit --no-fund
+          npm install --prefix verification/boss2-forensics-20261028 --ignore-scripts --no-audit --no-fund
+          git restore --worktree -- frontend/yarn.lock
+          cd verification/boss2-forensics-20261028
+          npx playwright install --with-deps chromium
+      - name: Compare sixteen identical style pairs in four scopes after manual Home pause
+        env: {VERCEL_ENV: preview}
+        run: |
+          node verification/systematic-stability-20261101/prepareSoakBuild.mjs
+          node verification/style-recalc-isolation-20261102/run.mjs
+      - name: Confirm unchanged sources also after a diagnostic failure
+        if: ${{ !cancelled() }}
+        run: |
+          mkdir -p verification/style-recalc-isolation-20261102/results
+          node verification/boss2-mini-start-control-20261101/verifyScope.mjs > verification/style-recalc-isolation-20261102/results/source-scope-after.txt
+          cat verification/style-recalc-isolation-20261102/results/source-scope-after.txt
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: ${{ !cancelled() }}
+        with:
+          name: style-recalc-r1
+          path: verification/style-recalc-isolation-20261102/results/
+          if-no-files-found: error
+          retention-days: 7
+  native-repeat:
+    needs: native-first
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    env:
+      CRYPTOID_SOAK_CONDITION: original
+      CRYPTOID_LIFETIME_ATTRIBUTION: '1'
+      CRYPTOID_STYLE_RECALC_REPLICA: '2'
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with: {persist-credentials: false}
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with: {node-version: '24'}
+      - name: Install existing browser tools
+        run: |
+          npm install --prefix frontend --include=optional --ignore-scripts --no-audit --no-fund
+          npm install --prefix verification/boss2-forensics-20261028 --ignore-scripts --no-audit --no-fund
+          git restore --worktree -- frontend/yarn.lock
+          cd verification/boss2-forensics-20261028
+          npx playwright install --with-deps chromium
+      - name: Repeat all conditions on a fresh runner in reversed order
+        env: {VERCEL_ENV: preview}
+        run: |
+          node verification/systematic-stability-20261101/prepareSoakBuild.mjs
+          node verification/style-recalc-isolation-20261102/run.mjs
+      - name: Confirm unchanged sources also after a diagnostic failure
+        if: ${{ !cancelled() }}
+        run: |
+          mkdir -p verification/style-recalc-isolation-20261102/results
+          node verification/boss2-mini-start-control-20261101/verifyScope.mjs > verification/style-recalc-isolation-20261102/results/source-scope-after.txt
+          cat verification/style-recalc-isolation-20261102/results/source-scope-after.txt
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: ${{ !cancelled() }}
+        with:
+          name: style-recalc-r2
+          path: verification/style-recalc-isolation-20261102/results/
+          if-no-files-found: error
+          retention-days: 7
