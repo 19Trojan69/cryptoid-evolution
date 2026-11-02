@@ -250,6 +250,27 @@ Es gibt keinen neuen Spiel-Patch, keine neue Geräte-URL und keine Veröffentlic
 Öffentliches Spiel, gespeicherter Fortschritt und eingefrorene Geräte-Zweige
 werden durch diese Arbeit nicht geändert.
 
+## Fortgesetzte Eingrenzung am 2. November
+
+Die folgenden Prüfungen bauen auf der Bestandsaufnahme oben auf. Die ursprünglichen
+Fehler und Geräte-Kandidaten bleiben unverändert; kein einzelner guter Linux-Lauf
+wird rückwirkend zur stabilen Smartphone-Referenz erklärt.
+
+| Fortsetzung | Belastbarer Befund | Konsequenz |
+| --- | --- | --- |
+| [Speicherbesitzer und Freigabegrenzen](../memory-retention-attribution-20261101/README.de.md) | Ein erheblicher aktiver PSS-Anstieg bleibt nach angeforderter GC/Home nicht als entsprechend großer JS-Heap oder wachsender gezählter Spielbesitz bestehen | Native Bestände und Bereinigungszeitpunkte untersuchen |
+| [Isolierte Mini-Start-Taktung](../isolated-mini-pacing-20261101/README.de.md) | Deutlich weniger Registrierungen ergeben in zwei Wiederholungen keinen konsistent niedrigeren Speicher | Guard nicht als bewiesene Reparatur übernehmen |
+| [Native Allokatoren nach Pause](../inactive-native-allocation-20261101/README.de.md) | Großer bereinigbarer Blink-/Style-Bestand, unter anderem native CSS-Variablen- und Style-Strukturen | Style-Schreibpfade gezielt zuordnen; Canvas/Audio nicht pauschal abschalten |
+| [Kurze CSS-Aufrufzuordnung](../style-variable-attribution-20261102/README.de.md) | 24.929 echte Custom-Property-Aufrufe in einer aktiven Minute; Boss-Schub und SVG-Ladung wechseln jeweils fast immer | API-Aufrufe sind noch kein Nachweis nativer Invalidierungen oder ihrer Speicherwirkung |
+| [Wiederholte Schub-Vererbungsprüfung](../boss-thrust-scope-20261102/README.de.md) | Darstellungsgleichheit bestätigt; vier Langläufe mit gemischter Speicherentwicklung. Original 2 erreicht 2.378,4 MiB PSS, fällt nach Pause noch vor dem ersten Dump stark ab | Keine bestätigte Runtime-Korrektur; die aktive Spitze erfordert einen eigenen Messaufbau |
+| [Aktive leichte Allokatoraufnahme](../active-pressure-attribution-20261102/README.de.md) | Ein eigener aktiver Collector erfasst einmalig bei extern beobachteter hoher Renderer-PSS; eigener Kalibrierungslauf vor zwei unabhängigen Original-Läufen | Aktive Spitze zuordnen, ursprüngliche inaktive Gates beibehalten und Diagnoseeinfluss ausdrücklich prüfen |
+
+Die vier eigenständigen WebKit-Kurzprüfungen der Schubserie bleiben fehlgeschlagen:
+Beobachtungslücken beim Start/Neueinstieg, teilweise bestandene UI-Teilstrecken,
+kein damit gemessener nativer White-Screen-Abbruch. Dieser Befund wird getrennt
+von den Chromium-Speichermessungen weitergeführt. Es gibt weiterhin keine neue
+Geräte-URL oder bestätigte mobile Freigabe.
+
 ## Reproduktion
 
 ```bash

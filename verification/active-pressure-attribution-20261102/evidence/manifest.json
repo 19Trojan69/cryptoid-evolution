@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "source": "9a21529a247fb18e1e4dbec1036f1a24f7331d4d",
+  "tree": "1be9590fc563383da4a954adf9cb93ddef39d615",
+  "workflowRun": 41390668660,
+  "conclusion": "failure",
+  "sourceGatesJobId": 125101127003,
+  "sourceGatesConclusion": "success",
+  "rawOwnerReportsIncluded": false,
+  "rawHeapSnapshotsIncluded": false,
+  "captures": [
+    {
+      "file": "calibration-r1.json.gz",
+      "bytes": 10383,
+      "sha256": "1720e9f12d13d1a4cf62d43d8d2eae01c4f92866c81f10e0e29e1b82f1e3e43b",
+      "cell": {
+        "mode": "calibration",
+        "replica": 1
+      },
+      "jobId": 125101397582,
+      "jobConclusion": "success",
+      "artifact": {
+        "id": 13116933577,
+        "name": "active-pressure-calibration",
+        "size_in_bytes": 78490,
+        "digest": "sha256:2417e58b60702fe72f9a53ac01d93b2a5a182453d87a36857561c48039e207d0",
+        "head_sha": "9a21529a247fb18e1e4dbec1036f1a24f7331d4d",
+        "sha256": "2417e58b60702fe72f9a53ac01d93b2a5a182453d87a36857561c48039e207d0",
+        "githubDigestMatched": true,
+        "zipIntegrityPassed": true
+      },
+      "uncompressedBytes": 135523,
+      "originalJsonSha256": "9873983e35247adf6e1b0e849087b7d466b5590fffe890f25a9e821d3a86c32c",
+      "activePointLogExactlyMatched": true,
+      "nativeTrace": {
+        "file": "calibration-r1-native.json.gz",
+        "bytes": 64976,
+        "sha256": "d81368da82fafcd7e5c21b64bcf64d563258f0a6f632694523726a34d36f0993"
+      }
+    },
+    {
+      "file": "pressure-r1.json.gz",
+      "bytes": 20781,
+      "sha256": "800925c4d11f499fb03a7421a0ebdde60e9441e4f90b0b80e0b52d9ef9c06901",
+      "cell": {
+        "mode": "pressure",
+        "replica": 1
+      },
+      "jobId": 125102122939,
+      "jobConclusion": "success",
+      "artifact": {
+        "id": 13117532484,
+        "name": "active-pressure-r1",
+        "size_in_bytes": 100063,
+        "digest": "sha256:c771e1ad9bcfb0a7673aa609472f7c2cea0e6bade8409e070a42a3bed1b1abb0",
+        "head_sha": "9a21529a247fb18e1e4dbec1036f1a24f7331d4d",
+        "sha256": "c771e1ad9bcfb0a7673aa609472f7c2cea0e6bade8409e070a42a3bed1b1abb0",
+        "githubDigestMatched": true,
+        "zipIntegrityPassed": true
+      },
+      "uncompressedBytes": 503600,
+      "originalJsonSha256": "891063c1e50ef9418ba5eae01f1842038d370a3000affd5764d60f232f15a510",
+      "activePointLogExactlyMatched": true,
+      "nativeTrace": {
+        "file": "pressure-r1-native.json.gz",
+        "bytes": 65280,
+        "sha256": "71b2cef0c059c0ef9b0ea178a38ac216403c2f3c174bbdbb90716b32018e07cd"
+      }
+    },
+    {
+      "file": "pressure-r2.json.gz",
+      "bytes": 21047,
+      "sha256": "3bb596ff3a32a379d68ed3bdd7d3bc69b3e378bee37efebaef1a52c7adfd80a0",
+      "cell": {
+        "mode": "pressure",
+        "replica": 2
+      },
+      "jobId": 125102123005,
+      "jobConclusion": "failure",
+      "artifact": {
+        "id": 13117673424,
+        "name": "active-pressure-r2",
+        "size_in_bytes": 104595,
+        "digest": "sha256:7c10ba94fb217def076b5578db925a51f1e97c50c75e4fc0fccea1695e486968",
+        "head_sha": "9a21529a247fb18e1e4dbec1036f1a24f7331d4d",
+        "sha256": "7c10ba94fb217def076b5578db925a51f1e97c50c75e4fc0fccea1695e486968",
+        "githubDigestMatched": true,
+        "zipIntegrityPassed": true
+      },
+      "uncompressedBytes": 507189,
+      "originalJsonSha256": "b5f0808ab0a1bb2f30c0e389cc32d281a11d3a8e6313b4230f143a4536feebfc",
+      "activePointLogExactlyMatched": true,
+      "nativeTrace": {
+        "file": "pressure-r2-native.json.gz",
+        "bytes": 69350,
+        "sha256": "593b0b61db7bd5fc7c591c67e165d61c2a28b5958f0de2e687a8b05c46027a0f"
+      }
+    }
+  ]
+}

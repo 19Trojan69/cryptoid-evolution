@@ -1,0 +1,1291 @@
+{
+  "workflowRun": 41390668660,
+  "conclusion": "failure",
+  "captures": [
+    {
+      "cell": {
+        "mode": "calibration",
+        "replica": 1
+      },
+      "sourceCommit": "9a21529a247fb18e1e4dbec1036f1a24f7331d4d",
+      "sourceTree": "1be9590fc563383da4a954adf9cb93ddef39d615",
+      "runtimeComplete": true,
+      "outcome": "calibration-collected",
+      "failure": null,
+      "classification": "calibration-pass",
+      "observedActiveMs": 60000,
+      "observedWallMs": 60590,
+      "engineVersion": "151.0.7922.34",
+      "actualInstalledPackages": {
+        "react": "19.2.4",
+        "react-dom": "19.2.4",
+        "react-router-dom": "7.13.2",
+        "vite": "7.3.1",
+        "typescript": "5.9.3"
+      },
+      "lockSha256": "b6d496c5725bf24ddb4f51b576b0597ced9f35c5ea7927a65165a5fb6311ad1a",
+      "changedTrackedPaths": [],
+      "buildWorkingTreeDirty": true,
+      "maximumSampledRendererPssKiB": 273562,
+      "maximumSampledTotalPssKiB": 456570,
+      "points": 13,
+      "native": {
+        "pssKiB": {
+          "trigger": 271933,
+          "beforeDump": 268346,
+          "afterDump": 269321,
+          "afterTrace": 269667
+        },
+        "requestWallMs": 52,
+        "captureWallMs": 291,
+        "events": 19,
+        "processFragments": 13,
+        "rendererFragments": [
+          {
+            "processId": 3044,
+            "processName": "Renderer",
+            "fragmentIndex": 4,
+            "allocatorCount": 0,
+            "categories": {
+              "blink_gc": null,
+              "blink_gc/main/heap": null,
+              "blink_objects": null,
+              "v8": null,
+              "malloc": null,
+              "partition_alloc": null,
+              "cc": null,
+              "cc/image_memory": null,
+              "skia": null,
+              "discardable": null,
+              "canvas": null,
+              "media": null,
+              "web_cache": null,
+              "shared_memory": null,
+              "gpu": null,
+              "gpu/shared_images": null
+            },
+            "blinkHeap": null,
+            "largestReportedSizes": [],
+            "outsideSafeIntegerRange": [],
+            "sharedOwnershipEdges": 0,
+            "processTotals": {
+              "is_peak_rss_resettable": true,
+              "peak_resident_set_size": "1b363000",
+              "private_footprint_bytes": "a6fa000"
+            },
+            "reportedSizesMustNotBeSummed": true
+          },
+          {
+            "processId": 3044,
+            "processName": "Renderer",
+            "fragmentIndex": 9,
+            "allocatorCount": 899,
+            "categories": {
+              "blink_gc": 62324816,
+              "blink_gc/main/heap": 62324816,
+              "blink_objects": null,
+              "v8": 28530612,
+              "malloc": 48531120,
+              "partition_alloc": 34033664,
+              "cc": 49852416,
+              "cc/image_memory": 26046464,
+              "skia": 11606077,
+              "discardable": 27021312,
+              "canvas": 1880312,
+              "media": 4402024,
+              "web_cache": 7037064,
+              "shared_memory": 59535360,
+              "gpu": null,
+              "gpu/shared_images": null
+            },
+            "blinkHeap": {
+              "path": "blink_gc/main/heap",
+              "bytes": 62324816,
+              "attributes": {
+                "allocated_objects_size": 15659968,
+                "committed_size": 62324816,
+                "effective_size": 62324816,
+                "pooled_size": 7208960,
+                "size": 62324816
+              },
+              "unrepresentableByteScalars": {}
+            },
+            "largestReportedSizes": [
+              {
+                "path": "blink_gc",
+                "bytes": 62324816,
+                "attributes": {
+                  "effective_size": 62324816,
+                  "size": 62324816
+                },
+                "unrepresentableByteScalars": {}
+              },
+              {
+                "path": "blink_gc/main",
+                "bytes": 62324816,
+                "attributes": {
+                  "effective_size": 62324816,
+                  "size": 62324816
+                },
+                "unrepresentableByteScalars": {}
+              },
+              {
+                "path": "blink_gc/main/heap",
+                "bytes": 62324816,
+                "attributes": {
+                  "allocated_objects_size": 15659968,
+                  "committed_size": 62324816,
+                  "effective_size": 62324816,
+                  "pooled_size": 7208960,
+                  "size": 62324816
+                },
+                "unrepresentableByteScalars": {}
+              },
+              {
+                "path": "shared_memory",
+                "bytes": 59535360,
+                "attributes": {
+                  "effective_size": 16278869,
+                  "size": 59535360
+                },
+                "unrepresentableByteScalars": {}
+              },
+              {
+                "path": "cc",
+                "bytes": 49852416,
+                "attributes": {
+                  "effective_size": 37949440,
+                  "size": 49852416
+                },
+                "unrepresentableByteScalars": {}
+              },
+              {
+                "path": "malloc",
+                "bytes": 48531120,
+                "attributes": {
+                  "effective_size": 30308193,
+                  "size": 48531120,
+                  "virtual_size": 46555136
+                },
+                "unrepresentableByteScalars": {}
+              },
+              {
+                "path": "malloc/partitions",
+                "bytes": 48531120,
+                "attributes": {
+                  "allocated_objects_size": 41693872,
+                  "brp_quarantined_bytes_per_minute": 39002279,
+                  "effective_size": 6837214,
+                  "size": 48531120
+                },
+                "unrepresentableByteScalars": {}
+              },
+              {
+                "path": "malloc/partitions/allocator",
+                "bytes": 48240304,
+                "attributes": {
+                  "allocated_objects_size": 41486688,
+                  "allocated_size": 41486688,
+                  "brp_quarantined_size": 0,
+                  "decommittable_size": 2342912,
+                  "discardable_size": 937984,
+                  "effective_size": 6796246,
+                  "intended_leak_size": 0,
+                  "max_allocated_size": 183038688,
+                  "max_committed_size": null,
+                  "size": 48240304,
+                  "virtual_committed_size": null,
+                  "virtual_size": 239075328,
+                  "wasted": null
+                },
+                "unrepresentableByteScalars": {
+                  "max_committed_size": {
+                    "rawHex": "0xfffffffffffff000",
+                    "reason": "outside-safe-integer-range"
+                  },
+                  "virtual_committed_size": {
+                    "rawHex": "0xfffffffffe296000",
+                    "reason": "outside-safe-integer-range"
+                  },
+                  "wasted": {
+                    "rawHex": "0xfffffffffbb056a0",
+                    "reason": "outside-safe-integer-range"
+                  }
+                }
+              },
+              {
+                "path": "malloc/partitions/allocator/buckets",
+                "bytes": 46264320,
+                "attributes": {
+                  "effective_size": 6517863,
+                  "size": 46264320
+                },
+                "unrepresentableByteScalars": {}
+              },
+              {
+                "path": "malloc/allocated_objects",
+                "bytes": 41693872,
+                "attributes": {
+                  "effective_size": 23470979,
+                  "size": 41693872
+                },
+                "unrepresentableByteScalars": {}
+              },
+              {
+                "path": "partition_alloc",
+                "bytes": 34033664,
+                "attributes": {
+                  "effective_size": 28559742,
+                  "size": 34033664
+                },
+                "unrepresentableByteScalars": {}
+              },
+              {
+                "path": "partition_alloc/partitions",
+                "bytes": 34033664,
+                "attributes": {
+                  "effective_size": 2838651,
+                  "size": 34033664
+                },
+                "unrepresentableByteScalars": {}
+              },
+              {
+                "path": "partition_alloc/allocated_objects",
+                "bytes": 31195012,
+                "attributes": {
+                  "effective_size": 25721091,
+                  "size": 31195012
+                },
+                "unrepresentableByteScalars": {}
+              },
+              {
+                "path": "v8",
+                "bytes": 28530612,
+                "attributes": {
+                  "effective_size": 28530612,
+                  "size": 28530612
+                },
+                "unrepresentableByteScalars": {}
+              },
+              {
+                "path": "discardable",
+                "bytes": 27021312,
+                "attributes": {
+                  "effective_size": 827392,
+                  "size": 27021312
+                },
+                "unrepresentableByteScalars": {}
+              },
+              {
+                "path": "v8/main",
+                "bytes": 26486708,
+                "attributes": {
+                  "effective_size": 26486708,
+                  "size": 26486708
+                },
+                "unrepresentableByteScalars": {}
+              },
+              {
+                "path": "partition_alloc/partitions/buffer",
+                "bytes": 26173440,
+                "attributes": {
+                  "allocated_objects_size": 23600260,
+                  "allocated_size": 23612832,
+                  "brp_quarantined_size": 0,
+                  "decommittable_size": 290816,
+                  "discardable_size": 196608,
+                  "effective_size": 2183052,
+                  "intended_leak_size": 0,
+                  "max_allocated_size": 26154640,
+                  "max_committed_size": 27688960,
+                  "size": 26173440,
+                  "virtual_committed_size": 26374144,
+                  "virtual_size": 46137344,
+                  "wasted": 2773884
+                },
+                "unrepresentableByteScalars": {}
+              },
+              {
+                "path": "v8/main/heap",
+                "bytes": 26124288,
+                "attributes": {
+                  "effective_size": 26124288,
+                  "size": 26124288
+                },
+                "unrepresentableByteScalars": {}
+              },
+              {
+                "path": "cc/image_memory",
+                "bytes": 26046464,
+                "attributes": {
+                  "effective_size": 26046464,
+                  "size": 26046464
+                },
+                "unrepresentableByteScalars": {}
+              },
+              {
+                "path": "partition_alloc/allocated_objects/<unspecified>",
+                "bytes": 25721091,
+                "attributes": {
+                  "effective_size": 25721091,
+                  "size": 25721091
+                },
+                "unrepresentableByteScalars": {}
+              }
+            ],
+            "outsideSafeIntegerRange": [
+              {
+                "path": "malloc/partitions/allocator",
+                "attributes": {
+                  "max_committed_size": {
+                    "rawHex": "0xfffffffffffff000",
+                    "reason": "outside-safe-integer-range"
+                  },
+                  "virtual_committed_size": {
+                    "rawHex": "0xfffffffffe296000",
+                    "reason": "outside-safe-integer-range"
+                  },
+                  "wasted": {
+                    "rawHex": "0xfffffffffbb056a0",
+                    "reason": "outside-safe-integer-range"
+                  }
+                }
+              }
+            ],
+            "sharedOwnershipEdges": 442,
+            "processTotals": null,
+            "reportedSizesMustNotBeSummed": true
+          }
+        ],
+        "pressureVerifiedAtSampledBoundariesOnly": true,
+        "categoriesAndFragmentsOverlapMustNotBeSummed": true
+      },
+      "pressureEvidenceQualified": false,
+      "nativeTerminationCauseMeasured": false,
+      "physicalPhoneAcceptanceEstablished": false,
+      "whiteScreenFixed": false,
+      "lifecyclePssKiB": [
+        {
+          "label": "paused-immediate",
+          "renderer": 270419,
+          "total": 486533
+        },
+        {
+          "label": "paused-settled-without-requested-gc",
+          "renderer": 264573,
+          "total": 476285
+        },
+        {
+          "label": "home-settled-without-requested-gc",
+          "renderer": 167471,
+          "total": 385218
+        }
+      ],
+      "homeStats": {
+        "css": {
+          "mode": "native-easing",
+          "targetHz": 60,
+          "active": 0,
+          "configured": 1189,
+          "fallbacks": 0,
+          "jsFrameWrites": 0
+        },
+        "painted": {
+          "painted": 6,
+          "estimatedBytes": 2200455,
+          "sources": 8,
+          "pending": 0,
+          "retained": 0,
+          "retainCount": 0,
+          "sourceRetained": 0,
+          "sourceRetainCount": 0,
+          "jobsStarted": 0,
+          "jobsFinished": 0,
+          "queueWaitMaxMs": 0,
+          "materialTotalMs": 0,
+          "materialMaxMs": 0,
+          "encodeTotalMs": 0,
+          "decodeTotalMs": 0,
+          "sourceWorkTotalMs": 0,
+          "sourceWorkMaxMs": 0
+        },
+        "canvas": {
+          "activeDrawFrame": false,
+          "registeredEffects": 0,
+          "sourceImages": 0,
+          "textureEntries": 0,
+          "cacheBytes": 0,
+          "surfaceBytes": 0,
+          "imageBytes": 0,
+          "textureBytes": 0,
+          "hullLoads": 0,
+          "hullEvictions": 0,
+          "retainedHullUsers": 0,
+          "draws": 0,
+          "fragmentDraws": 0,
+          "failures": []
+        }
+      }
+    },
+    {
+      "cell": {
+        "mode": "pressure",
+        "replica": 1
+      },
+      "sourceCommit": "9a21529a247fb18e1e4dbec1036f1a24f7331d4d",
+      "sourceTree": "1be9590fc563383da4a954adf9cb93ddef39d615",
+      "runtimeComplete": true,
+      "outcome": "active-pressure-collected",
+      "failure": null,
+      "classification": "active-pressure-captured",
+      "observedActiveMs": 573000.1,
+      "observedWallMs": 572741,
+      "engineVersion": "151.0.7922.34",
+      "actualInstalledPackages": {
+        "react": "19.2.4",
+        "react-dom": "19.2.4",
+        "react-router-dom": "7.13.2",
+        "vite": "7.3.1",
+        "typescript": "5.9.3"
+      },
+      "lockSha256": "b6d496c5725bf24ddb4f51b576b0597ced9f35c5ea7927a65165a5fb6311ad1a",
+      "changedTrackedPaths": [],
+      "buildWorkingTreeDirty": true,
+      "maximumSampledRendererPssKiB": 813389,
+      "maximumSampledTotalPssKiB": 994108,
+      "points": 114,
+      "native": {
+        "pssKiB": {
+          "trigger": 813389,
+          "beforeDump": 810086,
+          "afterDump": 808292,
+          "afterTrace": 809322
+        },
+        "requestWallMs": 76,
+        "captureWallMs": 418,
+        "events": 19,
+        "processFragments": 13,
+        "rendererFragments": [
+          {
+            "processId": 3251,
+            "processName": "Renderer",
+            "fragmentIndex": 4,
+            "allocatorCount": 0,
+            "categories": {
+              "blink_gc": null,
+              "blink_gc/main/heap": null,
+              "blink_objects": null,
+              "v8": null,
+              "malloc": null,
+              "partition_alloc": null,
+              "cc": null,
+              "cc/image_memory": null,
+              "skia": null,
+              "discardable": null,
+              "canvas": null,
+              "media": null,
+              "web_cache": null,
+              "shared_memory": null,
+              "gpu": null,
+              "gpu/shared_images": null
+            },
+            "blinkHeap": null,
+            "largestReportedSizes": [],
+            "outsideSafeIntegerRange": [],
+            "sharedOwnershipEdges": 0,
+            "processTotals": {
+              "is_peak_rss_resettable": true,
+              "peak_resident_set_size": "36cba000",
+              "private_footprint_bytes": "2a712000"
+            },
+            "reportedSizesMustNotBeSummed": true
+          },
+          {
+            "processId": 3251,
+            "processName": "Renderer",
+            "fragmentIndex": 9,
+            "allocatorCount": 1077,
+            "categories": {
+              "blink_gc": 479134096,
+              "blink_gc/main/heap": 479134096,
+              "blink_objects": null,
+              "v8": 72748644,
+              "malloc": 58607968,
+              "partition_alloc": 104022016,
+              "cc": 43044864,
+              "cc/image_memory": 21778432,
+              "skia": 11494661,
+              "discardable": 44867584,
+              "canvas": 1880312,
+              "media": 4466344,
+              "web_cache": 1697498,
+              "shared_memory": 75587584,
+              "gpu": null,
+              "gpu/shared_images": null
+            },
+            "blinkHeap": {
+              "path": "blink_gc/main/heap",
+              "bytes": 479134096,
+              "attributes": {
+                "allocated_objects_size": 100723664,
+                "committed_size": 479134096,
+                "effective_size": 479134096,
+                "pooled_size": 18087936,
+                "size": 479134096
+              },
+              "unrepresentableByteScalars": {}
+            },
+            "largestReportedSizes": [
+              {
+                "path": "blink_gc",
+                "bytes": 479134096,
+                "attributes": {
+                  "effective_size": 479134096,
+                  "size": 479134096
+                },
+                "unrepresentableByteScalars": {}
+              },
+              {
+                "path": "blink_gc/main",
+                "bytes": 479134096,
+                "attributes": {
+                  "effective_size": 479134096,
+                  "size": 479134096
+                },
+                "unrepresentableByteScalars": {}
+              },
+              {
+                "path": "blink_gc/main/heap",
+                "bytes": 479134096,
+                "attributes": {
+                  "allocated_objects_size": 100723664,
+                  "committed_size": 479134096,
+                  "effective_size": 479134096,
+                  "pooled_size": 18087936,
+                  "size": 479134096
+                },
+                "unrepresentableByteScalars": {}
+              },
+              {
+                "path": "partition_alloc",
+                "bytes": 104022016,
+                "attributes": {
+                  "effective_size": 99028897,
+                  "size": 104022016
+                },
+                "unrepresentableByteScalars": {}
+              },
+              {
+                "path": "partition_alloc/partitions",
+                "bytes": 104022016,
+                "attributes": {
+                  "effective_size": 43561723,
+                  "size": 104022016
+                },
+                "unrepresentableByteScalars": {}
+              },
+              {
+                "path": "partition_alloc/partitions/buffer",
+                "bytes": 96423936,
+                "attributes": {
+                  "allocated_objects_size": 52865540,
+                  "allocated_size": 52871328,
+                  "brp_quarantined_size": 0,
+                  "decommittable_size": 364544,
+                  "discardable_size": 1335296,
+                  "effective_size": 40379845,
+                  "intended_leak_size": 0,
+                  "max_allocated_size": 98155440,
+                  "max_committed_size": 94158848,
+                  "size": 96423936,
+                  "virtual_committed_size": 91635712,
+                  "virtual_size": 117440512,
+                  "wasted": 38770172
+                },
+                "unrepresentableByteScalars": {}
+              },
+              {
+                "path": "shared_memory",
+                "bytes": 75587584,
+                "attributes": {
+                  "effective_size": 15381845,
+                  "size": 75587584
+                },
+                "unrepresentableByteScalars": {}
+              },
+              {
+                "path": "v8",
+                "bytes": 72748644,
+                "attributes": {
+                  "effective_size": 72748644,
+                  "size": 72748644
+                },
+                "unrepresentableByteScalars": {}
+              },
+              {
+                "path": "v8/main",
+                "bytes": 70704740,
+                "attributes": {
+                  "effective_size": 70704740,
+                  "size": 70704740
+                },
+                "unrepresentableByteScalars": {}
+              },
+              {
+                "path": "v8/main/heap",
+                "bytes": 70127616,
+                "attributes": {
+                  "effective_size": 70127616,
+                  "size": 70127616
+                },
+                "unrepresentableByteScalars": {}
+              },
+              {
+                "path": "partition_alloc/allocated_objects",
+                "bytes": 60460292,
+                "attributes": {
+                  "effective_size": 55467174,
+                  "size": 60460292
+                },
+                "unrepresentableByteScalars": {}
+              },
+              {
+                "path": "malloc",
+                "bytes": 58607968,
+                "attributes": {
+                  "effective_size": 40094526,
+                  "size": 58607968,
+                  "virtual_size": 54460416
+                },
+                "unrepresentableByteScalars": {}
+              },
+              {
+                "path": "malloc/partitions",
+                "bytes": 58607968,
+                "attributes": {
+                  "allocated_objects_size": 47540292,
+                  "brp_quarantined_bytes_per_minute": 37317091,
+                  "effective_size": 11067615,
+                  "size": 58607968
+                },
+                "unrepresentableByteScalars": {}
+              },
+              {
+                "path": "malloc/partitions/allocator",
+                "bytes": 58317152,
+                "attributes": {
+                  "allocated_objects_size": 47333124,
+                  "allocated_size": 47348640,
+                  "brp_quarantined_size": 32,
+                  "decommittable_size": 2048000,
+                  "discardable_size": 937984,
+                  "effective_size": 11012714,
+                  "intended_leak_size": 0,
+                  "max_allocated_size": 185669472,
+                  "max_committed_size": null,
+                  "size": 58317152,
+                  "virtual_committed_size": null,
+                  "virtual_size": 255852544,
+                  "wasted": null
+                },
+                "unrepresentableByteScalars": {
+                  "max_committed_size": {
+                    "rawHex": "0xfffffffffffff000",
+                    "reason": "outside-safe-integer-range"
+                  },
+                  "virtual_committed_size": {
+                    "rawHex": "0xffffffffdefdb000",
+                    "reason": "outside-safe-integer-range"
+                  },
+                  "wasted": {
+                    "rawHex": "0xffffffffdc2b70fc",
+                    "reason": "outside-safe-integer-range"
+                  }
+                }
+              },
+              {
+                "path": "partition_alloc/allocated_objects/<unspecified>",
+                "bytes": 55467174,
+                "attributes": {
+                  "effective_size": 55467174,
+                  "size": 55467174
+                },
+                "unrepresentableByteScalars": {}
+              },
+              {
+                "path": "malloc/partitions/allocator/buckets",
+                "bytes": 54169600,
+                "attributes": {
+                  "effective_size": 10229481,
+                  "size": 54169600
+                },
+                "unrepresentableByteScalars": {}
+              },
+              {
+                "path": "v8/main/heap/new_space",
+                "bytes": 54001664,
+                "attributes": {
+                  "allocated_objects_size": 539008,
+                  "effective_size": 54001664,
+                  "size": 54001664,
+                  "virtual_size": 54001664
+                },
+                "unrepresentableByteScalars": {}
+              },
+              {
+                "path": "malloc/allocated_objects",
+                "bytes": 47540292,
+                "attributes": {
+                  "effective_size": 29026911,
+                  "size": 47540292
+                },
+                "unrepresentableByteScalars": {}
+              },
+              {
+                "path": "discardable",
+                "bytes": 44867584,
+                "attributes": {
+                  "effective_size": 23064576,
+                  "size": 44867584
+                },
+                "unrepresentableByteScalars": {}
+              },
+              {
+                "path": "cc",
+                "bytes": 43044864,
+                "attributes": {
+                  "effective_size": 32411648,
+                  "size": 43044864
+                },
+                "unrepresentableByteScalars": {}
+              }
+            ],
+            "outsideSafeIntegerRange": [
+              {
+                "path": "malloc/partitions/allocator",
+                "attributes": {
+                  "max_committed_size": {
+                    "rawHex": "0xfffffffffffff000",
+                    "reason": "outside-safe-integer-range"
+                  },
+                  "virtual_committed_size": {
+                    "rawHex": "0xffffffffdefdb000",
+                    "reason": "outside-safe-integer-range"
+                  },
+                  "wasted": {
+                    "rawHex": "0xffffffffdc2b70fc",
+                    "reason": "outside-safe-integer-range"
+                  }
+                }
+              }
+            ],
+            "sharedOwnershipEdges": 462,
+            "processTotals": null,
+            "reportedSizesMustNotBeSummed": true
+          }
+        ],
+        "pressureVerifiedAtSampledBoundariesOnly": true,
+        "categoriesAndFragmentsOverlapMustNotBeSummed": true
+      },
+      "pressureEvidenceQualified": true,
+      "nativeTerminationCauseMeasured": false,
+      "physicalPhoneAcceptanceEstablished": false,
+      "whiteScreenFixed": false,
+      "lifecyclePssKiB": [
+        {
+          "label": "paused-immediate",
+          "renderer": 810828,
+          "total": 1028748
+        },
+        {
+          "label": "paused-settled-without-requested-gc",
+          "renderer": 805046,
+          "total": 1019816
+        },
+        {
+          "label": "home-settled-without-requested-gc",
+          "renderer": 209548,
+          "total": 427851
+        }
+      ],
+      "homeStats": {
+        "css": {
+          "mode": "native-easing",
+          "targetHz": 60,
+          "active": 0,
+          "configured": 11088,
+          "fallbacks": 0,
+          "jsFrameWrites": 0
+        },
+        "painted": {
+          "painted": 6,
+          "estimatedBytes": 2156381,
+          "sources": 8,
+          "pending": 0,
+          "retained": 0,
+          "retainCount": 0,
+          "sourceRetained": 0,
+          "sourceRetainCount": 0,
+          "jobsStarted": 0,
+          "jobsFinished": 0,
+          "queueWaitMaxMs": 0,
+          "materialTotalMs": 0,
+          "materialMaxMs": 0,
+          "encodeTotalMs": 0,
+          "decodeTotalMs": 0,
+          "sourceWorkTotalMs": 0,
+          "sourceWorkMaxMs": 0
+        },
+        "canvas": {
+          "activeDrawFrame": false,
+          "registeredEffects": 0,
+          "sourceImages": 0,
+          "textureEntries": 0,
+          "cacheBytes": 0,
+          "surfaceBytes": 0,
+          "imageBytes": 0,
+          "textureBytes": 0,
+          "hullLoads": 0,
+          "hullEvictions": 0,
+          "retainedHullUsers": 0,
+          "draws": 0,
+          "fragmentDraws": 0,
+          "failures": []
+        }
+      }
+    },
+    {
+      "cell": {
+        "mode": "pressure",
+        "replica": 2
+      },
+      "sourceCommit": "9a21529a247fb18e1e4dbec1036f1a24f7331d4d",
+      "sourceTree": "1be9590fc563383da4a954adf9cb93ddef39d615",
+      "runtimeComplete": false,
+      "outcome": "pressure-changed-during-probe",
+      "failure": {
+        "code": "pressure-changed-during-probe",
+        "message": "Declared active high-pressure attribution target was not obtained; this is not a measured game crash."
+      },
+      "classification": "diagnostic-objective-unmet",
+      "observedActiveMs": 575000,
+      "observedWallMs": 575039,
+      "engineVersion": "151.0.7922.34",
+      "actualInstalledPackages": {
+        "react": "19.2.4",
+        "react-dom": "19.2.4",
+        "react-router-dom": "7.13.2",
+        "vite": "7.3.1",
+        "typescript": "5.9.3"
+      },
+      "lockSha256": "b6d496c5725bf24ddb4f51b576b0597ced9f35c5ea7927a65165a5fb6311ad1a",
+      "changedTrackedPaths": [],
+      "buildWorkingTreeDirty": true,
+      "maximumSampledRendererPssKiB": 788390,
+      "maximumSampledTotalPssKiB": 969958,
+      "points": 115,
+      "native": {
+        "pssKiB": {
+          "trigger": 788390,
+          "beforeDump": 785819,
+          "afterDump": 786631,
+          "afterTrace": 786114
+        },
+        "requestWallMs": 64,
+        "captureWallMs": 298,
+        "events": 19,
+        "processFragments": 13,
+        "rendererFragments": [
+          {
+            "processId": 3225,
+            "processName": "Renderer",
+            "fragmentIndex": 4,
+            "allocatorCount": 0,
+            "categories": {
+              "blink_gc": null,
+              "blink_gc/main/heap": null,
+              "blink_objects": null,
+              "v8": null,
+              "malloc": null,
+              "partition_alloc": null,
+              "cc": null,
+              "cc/image_memory": null,
+              "skia": null,
+              "discardable": null,
+              "canvas": null,
+              "media": null,
+              "web_cache": null,
+              "shared_memory": null,
+              "gpu": null,
+              "gpu/shared_images": null
+            },
+            "blinkHeap": null,
+            "largestReportedSizes": [],
+            "outsideSafeIntegerRange": [],
+            "sharedOwnershipEdges": 0,
+            "processTotals": {
+              "is_peak_rss_resettable": true,
+              "peak_resident_set_size": "35bf8000",
+              "private_footprint_bytes": "2929d000"
+            },
+            "reportedSizesMustNotBeSummed": true
+          },
+          {
+            "processId": 3225,
+            "processName": "Renderer",
+            "fragmentIndex": 9,
+            "allocatorCount": 1141,
+            "categories": {
+              "blink_gc": 462684640,
+              "blink_gc/main/heap": 462684640,
+              "blink_objects": null,
+              "v8": 72416868,
+              "malloc": 54899744,
+              "partition_alloc": 100966400,
+              "cc": 43458560,
+              "cc/image_memory": 22126592,
+              "skia": 11532761,
+              "discardable": 40931328,
+              "canvas": 1942088,
+              "media": 4459400,
+              "web_cache": 1697498,
+              "shared_memory": 71913472,
+              "gpu": null,
+              "gpu/shared_images": null
+            },
+            "blinkHeap": {
+              "path": "blink_gc/main/heap",
+              "bytes": 462684640,
+              "attributes": {
+                "allocated_objects_size": 131604352,
+                "committed_size": 462684640,
+                "effective_size": 462684640,
+                "pooled_size": 20578304,
+                "size": 462684640
+              },
+              "unrepresentableByteScalars": {}
+            },
+            "largestReportedSizes": [
+              {
+                "path": "blink_gc",
+                "bytes": 462684640,
+                "attributes": {
+                  "effective_size": 462684640,
+                  "size": 462684640
+                },
+                "unrepresentableByteScalars": {}
+              },
+              {
+                "path": "blink_gc/main",
+                "bytes": 462684640,
+                "attributes": {
+                  "effective_size": 462684640,
+                  "size": 462684640
+                },
+                "unrepresentableByteScalars": {}
+              },
+              {
+                "path": "blink_gc/main/heap",
+                "bytes": 462684640,
+                "attributes": {
+                  "allocated_objects_size": 131604352,
+                  "committed_size": 462684640,
+                  "effective_size": 462684640,
+                  "pooled_size": 20578304,
+                  "size": 462684640
+                },
+                "unrepresentableByteScalars": {}
+              },
+              {
+                "path": "partition_alloc",
+                "bytes": 100966400,
+                "attributes": {
+                  "effective_size": 95973261,
+                  "size": 100966400
+                },
+                "unrepresentableByteScalars": {}
+              },
+              {
+                "path": "partition_alloc/partitions",
+                "bytes": 100966400,
+                "attributes": {
+                  "effective_size": 35239451,
+                  "size": 100966400
+                },
+                "unrepresentableByteScalars": {}
+              },
+              {
+                "path": "partition_alloc/partitions/buffer",
+                "bytes": 93368320,
+                "attributes": {
+                  "allocated_objects_size": 58132196,
+                  "allocated_size": 58137984,
+                  "brp_quarantined_size": 0,
+                  "decommittable_size": 53248,
+                  "discardable_size": 864256,
+                  "effective_size": 32587558,
+                  "intended_leak_size": 0,
+                  "max_allocated_size": 95393584,
+                  "max_committed_size": 91189248,
+                  "size": 93368320,
+                  "virtual_committed_size": 88338432,
+                  "virtual_size": 109051904,
+                  "wasted": 30206236
+                },
+                "unrepresentableByteScalars": {}
+              },
+              {
+                "path": "v8",
+                "bytes": 72416868,
+                "attributes": {
+                  "effective_size": 72416868,
+                  "size": 72416868
+                },
+                "unrepresentableByteScalars": {}
+              },
+              {
+                "path": "shared_memory",
+                "bytes": 71913472,
+                "attributes": {
+                  "effective_size": 15512917,
+                  "size": 71913472
+                },
+                "unrepresentableByteScalars": {}
+              },
+              {
+                "path": "v8/main",
+                "bytes": 70372964,
+                "attributes": {
+                  "effective_size": 70372964,
+                  "size": 70372964
+                },
+                "unrepresentableByteScalars": {}
+              },
+              {
+                "path": "v8/main/heap",
+                "bytes": 69795840,
+                "attributes": {
+                  "effective_size": 69795840,
+                  "size": 69795840
+                },
+                "unrepresentableByteScalars": {}
+              },
+              {
+                "path": "partition_alloc/allocated_objects",
+                "bytes": 65726948,
+                "attributes": {
+                  "effective_size": 60733810,
+                  "size": 65726948
+                },
+                "unrepresentableByteScalars": {}
+              },
+              {
+                "path": "partition_alloc/allocated_objects/<unspecified>",
+                "bytes": 60733810,
+                "attributes": {
+                  "effective_size": 60733810,
+                  "size": 60733810
+                },
+                "unrepresentableByteScalars": {}
+              },
+              {
+                "path": "malloc",
+                "bytes": 54899744,
+                "attributes": {
+                  "effective_size": 36293393,
+                  "size": 54899744,
+                  "virtual_size": 52084736
+                },
+                "unrepresentableByteScalars": {}
+              },
+              {
+                "path": "malloc/partitions",
+                "bytes": 54899744,
+                "attributes": {
+                  "allocated_objects_size": 46922752,
+                  "brp_quarantined_bytes_per_minute": 37585792,
+                  "effective_size": 7976954,
+                  "size": 54899744
+                },
+                "unrepresentableByteScalars": {}
+              },
+              {
+                "path": "malloc/partitions/allocator",
+                "bytes": 54613024,
+                "attributes": {
+                  "allocated_objects_size": 46715664,
+                  "allocated_size": 46715664,
+                  "brp_quarantined_size": 0,
+                  "decommittable_size": 1585152,
+                  "discardable_size": 794624,
+                  "effective_size": 7935300,
+                  "intended_leak_size": 0,
+                  "max_allocated_size": 185319712,
+                  "max_committed_size": null,
+                  "size": 54613024,
+                  "virtual_committed_size": null,
+                  "virtual_size": 253755392,
+                  "wasted": null
+                },
+                "unrepresentableByteScalars": {
+                  "max_committed_size": {
+                    "rawHex": "0xfffffffffffff000",
+                    "reason": "outside-safe-integer-range"
+                  },
+                  "virtual_committed_size": {
+                    "rawHex": "0xffffffffddc67000",
+                    "reason": "outside-safe-integer-range"
+                  },
+                  "wasted": {
+                    "rawHex": "0xffffffffdafd9cf0",
+                    "reason": "outside-safe-integer-range"
+                  }
+                }
+              },
+              {
+                "path": "v8/main/heap/new_space",
+                "bytes": 54001664,
+                "attributes": {
+                  "allocated_objects_size": 6731144,
+                  "effective_size": 54001664,
+                  "size": 54001664,
+                  "virtual_size": 54001664
+                },
+                "unrepresentableByteScalars": {}
+              },
+              {
+                "path": "malloc/partitions/allocator/buckets",
+                "bytes": 51798016,
+                "attributes": {
+                  "effective_size": 7526277,
+                  "size": 51798016
+                },
+                "unrepresentableByteScalars": {}
+              },
+              {
+                "path": "malloc/allocated_objects",
+                "bytes": 46922752,
+                "attributes": {
+                  "effective_size": 28316439,
+                  "size": 46922752
+                },
+                "unrepresentableByteScalars": {}
+              },
+              {
+                "path": "cc",
+                "bytes": 43458560,
+                "attributes": {
+                  "effective_size": 32792576,
+                  "size": 43458560
+                },
+                "unrepresentableByteScalars": {}
+              },
+              {
+                "path": "discardable",
+                "bytes": 40931328,
+                "attributes": {
+                  "effective_size": 18780160,
+                  "size": 40931328
+                },
+                "unrepresentableByteScalars": {}
+              }
+            ],
+            "outsideSafeIntegerRange": [
+              {
+                "path": "malloc/partitions/allocator",
+                "attributes": {
+                  "max_committed_size": {
+                    "rawHex": "0xfffffffffffff000",
+                    "reason": "outside-safe-integer-range"
+                  },
+                  "virtual_committed_size": {
+                    "rawHex": "0xffffffffddc67000",
+                    "reason": "outside-safe-integer-range"
+                  },
+                  "wasted": {
+                    "rawHex": "0xffffffffdafd9cf0",
+                    "reason": "outside-safe-integer-range"
+                  }
+                }
+              }
+            ],
+            "sharedOwnershipEdges": 510,
+            "processTotals": null,
+            "reportedSizesMustNotBeSummed": true
+          }
+        ],
+        "pressureVerifiedAtSampledBoundariesOnly": true,
+        "categoriesAndFragmentsOverlapMustNotBeSummed": true
+      },
+      "pressureEvidenceQualified": false,
+      "nativeTerminationCauseMeasured": false,
+      "physicalPhoneAcceptanceEstablished": false,
+      "whiteScreenFixed": false,
+      "lifecyclePssKiB": [
+        {
+          "label": "paused-immediate",
+          "renderer": 787214,
+          "total": 1001677
+        },
+        {
+          "label": "paused-settled-without-requested-gc",
+          "renderer": 782930,
+          "total": 996881
+        },
+        {
+          "label": "home-settled-without-requested-gc",
+          "renderer": 766692,
+          "total": 982758
+        }
+      ],
+      "homeStats": {
+        "css": {
+          "mode": "native-easing",
+          "targetHz": 60,
+          "active": 0,
+          "configured": 11161,
+          "fallbacks": 0,
+          "jsFrameWrites": 0
+        },
+        "painted": {
+          "painted": 6,
+          "estimatedBytes": 2156381,
+          "sources": 8,
+          "pending": 0,
+          "retained": 0,
+          "retainCount": 0,
+          "sourceRetained": 0,
+          "sourceRetainCount": 0,
+          "jobsStarted": 0,
+          "jobsFinished": 0,
+          "queueWaitMaxMs": 0,
+          "materialTotalMs": 0,
+          "materialMaxMs": 0,
+          "encodeTotalMs": 0,
+          "decodeTotalMs": 0,
+          "sourceWorkTotalMs": 0,
+          "sourceWorkMaxMs": 0
+        },
+        "canvas": {
+          "activeDrawFrame": false,
+          "registeredEffects": 0,
+          "sourceImages": 0,
+          "textureEntries": 0,
+          "cacheBytes": 0,
+          "surfaceBytes": 0,
+          "imageBytes": 0,
+          "textureBytes": 0,
+          "hullLoads": 0,
+          "hullEvictions": 0,
+          "retainedHullUsers": 0,
+          "draws": 0,
+          "fragmentDraws": 0,
+          "failures": []
+        }
+      }
+    }
+  ],
+  "highPressureCaptures": 1,
+  "physicalPhoneAcceptanceEstablished": false,
+  "whiteScreenFixed": false
+}
