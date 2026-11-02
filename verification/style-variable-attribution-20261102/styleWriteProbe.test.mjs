@@ -86,6 +86,7 @@ test('short-only configuration excludes native dumps, old treatments and long me
   assert.equal(styleProbeConfig(env), true);
   for (const patch of [{ CRYPTOID_STYLE_WRITE_PROBE: 'other' }, { CRYPTOID_ATTRIBUTION_SECONDS: '1200' },
     { CRYPTOID_LIFETIME_ATTRIBUTION: '0' }, { CRYPTOID_SOAK_CONDITION: 'mini-start' },
-    { CRYPTOID_INACTIVE_NATIVE_TRACE: '1' }, { CRYPTOID_ISOLATED_MINI_PACING: 'control' }, { CRYPTOID_BOSS_MASK: '0' }])
+    { CRYPTOID_INACTIVE_NATIVE_TRACE: '1' }, { CRYPTOID_THRUST_SCOPE: 'leaf' },
+    { CRYPTOID_ISOLATED_MINI_PACING: 'control' }, { CRYPTOID_BOSS_MASK: '0' }])
     assert.throws(() => styleProbeConfig({ ...env, ...patch }));
 });

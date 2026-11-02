@@ -13,9 +13,11 @@ import { useParentLifetimeForBossMini } from '../boss2-mini-completion-control-2
 import { omitStaticBossHotspots } from '../boss2-static-hotspots-control-20261031/hotspotControl.mjs';
 import { instrumentMemoryInspection } from '../memory-retention-attribution-20261101/inspection.mjs';
 import { comparisonConfig, comparisonCss, comparisonProof } from '../isolated-mini-pacing-20261101/comparison.mjs';
+import { thrustConfig, thrustSource, thrustProof } from '../boss-thrust-scope-20261102/transform.mjs';
 assert.equal(process.env.VERCEL_ENV, 'preview', 'Protected Preview only; production builds are denied');
 const lifetimeAttribution = process.env.CRYPTOID_LIFETIME_ATTRIBUTION === '1';
 const isolatedMini = comparisonConfig();
+const thrust = thrustConfig();
 if (lifetimeAttribution) assert.equal(flatSceneEnabled(), false, 'Original artwork only for memory attribution');
 const require = createRequire(root + '/frontend/package.json');
 const { build } = require('vite'), react = require('@vitejs/plugin-react').default;
@@ -47,6 +49,7 @@ await build({ configFile: false, root: root + '/frontend', envDir, mode: 'produc
       if (bossMiniStartPacingDisabled()) return keepBossMiniAuthoredNativePlayback(code);
     }
     if (path === root + '/frontend/src/pages/FinishedEffect.tsx' && bossMiniCompletionInspectionDisabled()) return useParentLifetimeForBossMini(code);
+    if (path === root + '/frontend/src/pages/BossHullView.tsx' && thrust) return thrustSource(code, thrust.condition);
     if (path === root + '/frontend/src/pages/HullDamage.tsx' && bossStaticHotspotsDisabled()) return omitStaticBossHotspots(code);
     if (flatSceneEnabled()) { const visual = flatVisualModule(path); if (visual) return visual; }
     if (path === root + '/frontend/src/pages/CanvasEffects.tsx' && canvasEffectControlEnabled()) return canvasEffectControl(code);
@@ -79,6 +82,11 @@ if (lifetimeAttribution) {
 if (isolatedMini) {
   const path = output + '/device-preview-info.json', info = JSON.parse(readFileSync(path, 'utf8'));
   info.qaIsolatedMiniPacing = comparisonProof(readFileSync(root + '/frontend/src/lib/cssFramePacing.ts', 'utf8'), isolatedMini.condition);
+  writeFileSync(path, JSON.stringify(info, null, 2) + '\n');
+}
+if (thrust) {
+  const path = output + '/device-preview-info.json', info = JSON.parse(readFileSync(path, 'utf8'));
+  info.qaThrustScope = thrustProof(readFileSync(root + '/frontend/src/pages/BossHullView.tsx', 'utf8'), thrust.condition);
   writeFileSync(path, JSON.stringify(info, null, 2) + '\n');
 }
 console.log('CRYPTOID_DEVICE_PREVIEW_BUILD ' + JSON.stringify({ ...identity, output }));

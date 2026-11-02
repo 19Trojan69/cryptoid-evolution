@@ -7,6 +7,7 @@ export function styleProbeConfig(env = process.env) {
   assert.equal(env.CRYPTOID_ATTRIBUTION_SECONDS, '60', 'Style API wrappers are short observation only');
   assert.equal(env.CRYPTOID_LIFETIME_ATTRIBUTION, '1'); assert.equal(env.CRYPTOID_SOAK_CONDITION, 'original');
   assert.notEqual(env.CRYPTOID_INACTIVE_NATIVE_TRACE, '1');
+  assert.equal(env.CRYPTOID_THRUST_SCOPE, undefined);
   for (const key of Object.keys(env)) assert.ok(!/^CRYPTOID_(ISOLATED_|FLAT|BOSS_|CANVAS_|CSS_FILTER)/.test(key),
     'Style observation cannot inherit another treatment');
   return true;

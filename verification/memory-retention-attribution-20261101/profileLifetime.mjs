@@ -17,11 +17,14 @@ import { installNativePathProbe } from '../isolated-mini-pacing-20261101/nativeP
 import { startInactiveNativeCollector } from '../inactive-native-allocation-20261101/collector.mjs';
 import { styleProbeConfig, assertStyleProof } from '../style-variable-attribution-20261102/config.mjs';
 import { installStyleWriteProbe } from '../style-variable-attribution-20261102/styleWriteProbe.mjs';
+import { thrustConfig, thrustProof } from '../boss-thrust-scope-20261102/transform.mjs';
+import { verifyThrustFidelity } from '../boss-thrust-scope-20261102/fidelity.mjs';
 
 const seconds = Number(process.env.CRYPTOID_ATTRIBUTION_SECONDS);
 assert.ok([60, 1200].includes(seconds), 'One short control or one twenty-minute observation');
 const comparison = comparisonConfig();
 const styleObservation = styleProbeConfig();
+const thrust = thrustConfig();
 const nativeAllocation = process.env.CRYPTOID_INACTIVE_NATIVE_TRACE === '1';
 if (process.env.CRYPTOID_INACTIVE_NATIVE_TRACE !== undefined) assert.ok(['0', '1'].includes(process.env.CRYPTOID_INACTIVE_NATIVE_TRACE));
 if (nativeAllocation) {
@@ -29,7 +32,9 @@ if (nativeAllocation) {
   assert.equal(process.env.CRYPTOID_SOAK_CONDITION, 'original');
 }
 if (comparison?.pathProof) assert.equal(seconds, 60, 'Native wrappers only in the short path proof');
-const output = styleObservation
+const output = thrust
+  ? resolve(root, 'verification/boss-thrust-scope-20261102/results', thrust.condition + '-r' + thrust.replica + '-' + seconds)
+  : styleObservation
   ? resolve(root, 'verification/style-variable-attribution-20261102/results', 'chromium-' + seconds)
   : nativeAllocation
   ? resolve(root, 'verification/inactive-native-allocation-20261101/results', 'chromium-' + seconds)
@@ -57,6 +62,7 @@ const result = { version: 1, complete: false, sourceCommit: git('HEAD'), sourceT
 if (comparison) result.isolatedMiniPacing = comparison;
 if (nativeAllocation) { result.inactiveNativeAllocationRequested = true; result.activeNativeTracing = false; }
 if (styleObservation) result.activeStyleWriteProbe = true;
+if (thrust) { result.thrustComparison = thrust; result.activeStyleWriteProbe = false; result.activeNativeApiWrappers = false; }
 let server, browser, page, client, fatal, first, nativeCollector;
 const external = [], assetFailures = [];
 const within = (promise, ms, label) => new Promise((resolve, reject) => {
@@ -172,6 +178,12 @@ try {
     const expected = comparisonProof(readFileSync(root + '/frontend/src/lib/cssFramePacing.ts', 'utf8'), comparison.condition);
     assert.deepEqual(info.qaIsolatedMiniPacing, expected); result.isolatedBuildProof = expected;
   } else assert.equal(info.qaIsolatedMiniPacing, undefined);
+  if (thrust) {
+    const expected = thrustProof(readFileSync(root + '/frontend/src/pages/BossHullView.tsx', 'utf8'), thrust.condition);
+    assert.deepEqual(info.qaThrustScope, expected); result.thrustBuildProof = expected;
+    assert.equal(await page.evaluate(() => typeof window.__styleWriteProbe), 'undefined');
+    assert.equal(await page.evaluate(() => typeof window.__isolatedMiniNativeProof), 'undefined');
+  } else assert.equal(info.qaThrustScope, undefined);
   assert.equal(await page.getByRole('checkbox', { name: 'Vollaufzeichnung zusätzlich aktivieren', exact: true }).isChecked(), false);
   assert.equal(await page.getByRole('checkbox', { name: 'Testschutz: Tod und Bossende verhindern', exact: true }).isChecked(), true);
   await tap(page.getByRole('button', { name: 'Testszene vorbereiten', exact: true }));
@@ -188,7 +200,7 @@ try {
   first = await observe(styleObservation); active(first);
   const started = Date.now(); let previous = first, frameProgressAt = started, sampledAt = 0, printedAt = started;
   while (previous.clock.latest.elapsedMs - first.clock.latest.elapsedMs < seconds * 1000) {
-    const row = styleObservation && result.points.length === 0 ? first : await observe(); active(row);
+    const row = (styleObservation || thrust) && result.points.length === 0 ? first : await observe(); active(row);
     assert.ok(row.clock.latest.elapsedMs >= previous.clock.latest.elapsedMs);
     if (row.scene.frameAt > previous.scene.frameAt) frameProgressAt = Date.now();
     assert.ok(Date.now() - frameProgressAt < 5000, 'Game frames advance');
@@ -229,6 +241,8 @@ try {
   await page.waitForFunction(({ key }) => window.__crossDeviceTest.inspect().status === 'paused'
     && JSON.parse(localStorage.getItem(key)).latest.mode === 'paused', { key: STOPWATCH_KEY });
   requireInactiveCheckpoint(await observe(), 'paused');
+  if (thrust?.fidelity) result.thrustFidelity = await verifyThrustFidelity({ page, condition: thrust.condition,
+    guard: async phase => requireInactiveCheckpoint(await observe(), phase) });
   client = await context.newCDPSession(page); await client.send('HeapProfiler.enable');
   if (nativeAllocation) {
     const before = sampleBrowserMemory();
