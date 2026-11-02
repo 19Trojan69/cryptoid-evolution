@@ -1,0 +1,377 @@
+{
+  "version": 1,
+  "captures": [
+    {
+      "source": "5806d22ef61e37bd0c535d3c4b33bd5a5afc937e",
+      "tree": "c3a8c541fc23e5d55788db2d31a2f01f6e5357f3",
+      "replica": 1,
+      "complete": false,
+      "classification": "failed-scene-proof-no-comparison",
+      "failureCode": "native-style-recalc-probe-failed",
+      "engineVersion": "151.0.7922.34",
+      "actualInstalledPackages": {
+        "react": "19.2.4",
+        "react-dom": "19.2.4",
+        "react-router-dom": "7.13.2",
+        "vite": "7.3.1",
+        "typescript": "5.9.3"
+      },
+      "lockSha256": "b6d496c5725bf24ddb4f51b576b0597ced9f35c5ea7927a65165a5fb6311ad1a",
+      "nativeWork": null,
+      "memoryBenefitEstablished": false,
+      "physicalPhoneAcceptanceEstablished": false,
+      "whiteScreenFixed": false
+    },
+    {
+      "source": "15ef6827050cc0fab1178458f53e6439f72f3f30",
+      "tree": "0e200d3293a270279a73399d74868d004e3edddf",
+      "replica": 1,
+      "complete": false,
+      "classification": "failed-scene-proof-no-comparison",
+      "failureCode": "native-style-recalc-probe-failed",
+      "engineVersion": "151.0.7922.34",
+      "actualInstalledPackages": {
+        "react": "19.2.4",
+        "react-dom": "19.2.4",
+        "react-router-dom": "7.13.2",
+        "vite": "7.3.1",
+        "typescript": "5.9.3"
+      },
+      "lockSha256": "b6d496c5725bf24ddb4f51b576b0597ced9f35c5ea7927a65165a5fb6311ad1a",
+      "nativeWork": null,
+      "memoryBenefitEstablished": false,
+      "physicalPhoneAcceptanceEstablished": false,
+      "whiteScreenFixed": false
+    },
+    {
+      "source": "483b4b86e25115e7fb48f75c4286175258220c02",
+      "tree": "d8766c7c62d6588ade31d74d57e9797d0e1dd006",
+      "replica": 1,
+      "complete": false,
+      "classification": "failed-scene-proof-no-comparison",
+      "failureCode": "native-style-recalc-probe-failed",
+      "engineVersion": "151.0.7922.34",
+      "actualInstalledPackages": {
+        "react": "19.2.4",
+        "react-dom": "19.2.4",
+        "react-router-dom": "7.13.2",
+        "vite": "7.3.1",
+        "typescript": "5.9.3"
+      },
+      "lockSha256": "b6d496c5725bf24ddb4f51b576b0597ced9f35c5ea7927a65165a5fb6311ad1a",
+      "nativeWork": null,
+      "memoryBenefitEstablished": false,
+      "physicalPhoneAcceptanceEstablished": false,
+      "whiteScreenFixed": false
+    },
+    {
+      "source": "37e51af5b74a3f2e6a623d6b440f181174e32cf2",
+      "tree": "a9c03ae78b66dc9077138bf75da92a14744c7f05",
+      "replica": 1,
+      "complete": true,
+      "classification": "accepted-paused-style-work-comparison",
+      "failureCode": null,
+      "engineVersion": "151.0.7922.34",
+      "actualInstalledPackages": {
+        "react": "19.2.4",
+        "react-dom": "19.2.4",
+        "react-router-dom": "7.13.2",
+        "vite": "7.3.1",
+        "typescript": "5.9.3"
+      },
+      "lockSha256": "b6d496c5725bf24ddb4f51b576b0597ced9f35c5ea7927a65165a5fb6311ad1a",
+      "nativeWork": [
+        {
+          "condition": "root",
+          "totalElementStyleCalculations": 1520,
+          "calculationsPerStep": [
+            95,
+            95,
+            95,
+            95,
+            95,
+            95,
+            95,
+            95,
+            95,
+            95,
+            95,
+            95,
+            95,
+            95,
+            95,
+            95
+          ],
+          "emptySvgStyleAttributeIndices": [
+            4,
+            5,
+            6
+          ],
+          "rawStyleAttributePresenceIdentical": false
+        },
+        {
+          "condition": "charge-opacity",
+          "totalElementStyleCalculations": 1520,
+          "calculationsPerStep": [
+            95,
+            95,
+            95,
+            95,
+            95,
+            95,
+            95,
+            95,
+            95,
+            95,
+            95,
+            95,
+            95,
+            95,
+            95,
+            95
+          ],
+          "emptySvgStyleAttributeIndices": [
+            4,
+            5,
+            6
+          ],
+          "rawStyleAttributePresenceIdentical": false
+        },
+        {
+          "condition": "thrust-height",
+          "totalElementStyleCalculations": 1200,
+          "calculationsPerStep": [
+            75,
+            75,
+            75,
+            75,
+            75,
+            75,
+            75,
+            75,
+            75,
+            75,
+            75,
+            75,
+            75,
+            75,
+            75,
+            75
+          ],
+          "emptySvgStyleAttributeIndices": [],
+          "rawStyleAttributePresenceIdentical": true
+        },
+        {
+          "condition": "both-local",
+          "totalElementStyleCalculations": 80,
+          "calculationsPerStep": [
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5
+          ],
+          "emptySvgStyleAttributeIndices": [
+            4,
+            5,
+            6
+          ],
+          "rawStyleAttributePresenceIdentical": false
+        }
+      ],
+      "memoryBenefitEstablished": false,
+      "physicalPhoneAcceptanceEstablished": false,
+      "whiteScreenFixed": false
+    },
+    {
+      "source": "37e51af5b74a3f2e6a623d6b440f181174e32cf2",
+      "tree": "a9c03ae78b66dc9077138bf75da92a14744c7f05",
+      "replica": 2,
+      "complete": true,
+      "classification": "accepted-paused-style-work-comparison",
+      "failureCode": null,
+      "engineVersion": "151.0.7922.34",
+      "actualInstalledPackages": {
+        "react": "19.2.4",
+        "react-dom": "19.2.4",
+        "react-router-dom": "7.13.2",
+        "vite": "7.3.1",
+        "typescript": "5.9.3"
+      },
+      "lockSha256": "b6d496c5725bf24ddb4f51b576b0597ced9f35c5ea7927a65165a5fb6311ad1a",
+      "nativeWork": [
+        {
+          "condition": "root",
+          "totalElementStyleCalculations": 1520,
+          "calculationsPerStep": [
+            95,
+            95,
+            95,
+            95,
+            95,
+            95,
+            95,
+            95,
+            95,
+            95,
+            95,
+            95,
+            95,
+            95,
+            95,
+            95
+          ],
+          "emptySvgStyleAttributeIndices": [],
+          "rawStyleAttributePresenceIdentical": true
+        },
+        {
+          "condition": "charge-opacity",
+          "totalElementStyleCalculations": 1520,
+          "calculationsPerStep": [
+            95,
+            95,
+            95,
+            95,
+            95,
+            95,
+            95,
+            95,
+            95,
+            95,
+            95,
+            95,
+            95,
+            95,
+            95,
+            95
+          ],
+          "emptySvgStyleAttributeIndices": [
+            4,
+            5,
+            6
+          ],
+          "rawStyleAttributePresenceIdentical": false
+        },
+        {
+          "condition": "thrust-height",
+          "totalElementStyleCalculations": 1200,
+          "calculationsPerStep": [
+            75,
+            75,
+            75,
+            75,
+            75,
+            75,
+            75,
+            75,
+            75,
+            75,
+            75,
+            75,
+            75,
+            75,
+            75,
+            75
+          ],
+          "emptySvgStyleAttributeIndices": [],
+          "rawStyleAttributePresenceIdentical": true
+        },
+        {
+          "condition": "both-local",
+          "totalElementStyleCalculations": 80,
+          "calculationsPerStep": [
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5
+          ],
+          "emptySvgStyleAttributeIndices": [
+            4,
+            5,
+            6
+          ],
+          "rawStyleAttributePresenceIdentical": false
+        }
+      ],
+      "memoryBenefitEstablished": false,
+      "physicalPhoneAcceptanceEstablished": false,
+      "whiteScreenFixed": false
+    }
+  ],
+  "comparison": {
+    "acceptedReplicas": 2,
+    "rows": [
+      {
+        "condition": "root",
+        "totalElementStyleCalculations": [
+          1520,
+          1520
+        ],
+        "syntheticWorkReductionPercentFromOwnRoot": [
+          0,
+          0
+        ]
+      },
+      {
+        "condition": "charge-opacity",
+        "totalElementStyleCalculations": [
+          1520,
+          1520
+        ],
+        "syntheticWorkReductionPercentFromOwnRoot": [
+          0,
+          0
+        ]
+      },
+      {
+        "condition": "thrust-height",
+        "totalElementStyleCalculations": [
+          1200,
+          1200
+        ],
+        "syntheticWorkReductionPercentFromOwnRoot": [
+          21.052631578947366,
+          21.052631578947366
+        ]
+      },
+      {
+        "condition": "both-local",
+        "totalElementStyleCalculations": [
+          80,
+          80
+        ],
+        "syntheticWorkReductionPercentFromOwnRoot": [
+          94.73684210526315,
+          94.73684210526315
+        ]
+      }
+    ],
+    "bothLocalStyleWorkReductionRepeated": true,
+    "activeRuntimeMemoryBenefitEstablished": false,
+    "physicalPhoneAcceptanceEstablished": false,
+    "whiteScreenFixed": false
+  }
+}

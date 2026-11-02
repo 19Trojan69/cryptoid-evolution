@@ -1,0 +1,10 @@
+{
+  "id": 13132011063,
+  "name": "accepted-r1",
+  "size_in_bytes": 10203,
+  "digest": "sha256:9ba225ff4082476a0c5614d55935417501b821a2c1d1ce003bb67029292fe834",
+  "head_sha": "37e51af5b74a3f2e6a623d6b440f181174e32cf2",
+  "sha256": "9ba225ff4082476a0c5614d55935417501b821a2c1d1ce003bb67029292fe834",
+  "githubDigestMatched": true,
+  "zipIntegrityPassed": true
+}

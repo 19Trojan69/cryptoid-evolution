@@ -1,0 +1,228 @@
+{
+  "version": 1,
+  "rawOwnerReportsIncluded": false,
+  "rawHeapSnapshotsIncluded": false,
+  "captures": [
+    {
+      "name": "initial-failed-r1",
+      "workflowRun": 41420951968,
+      "jobId": 125196200334,
+      "sourceGatesConclusion": "success",
+      "scopeAfterConclusion": "success",
+      "jobConclusion": "failure",
+      "workflowConclusion": "failure",
+      "artifact": {
+        "id": 13130305924,
+        "name": "initial-r1",
+        "size_in_bytes": 4538,
+        "digest": "sha256:0193a3833ff21f51d0321f6cd0e7965334f648264ebb7d7dda1efa2757f4d811",
+        "head_sha": "5806d22ef61e37bd0c535d3c4b33bd5a5afc937e",
+        "sha256": "0193a3833ff21f51d0321f6cd0e7965334f648264ebb7d7dda1efa2757f4d811",
+        "githubDigestMatched": true,
+        "zipIntegrityPassed": true
+      },
+      "uncompressedBytes": 7366,
+      "originalJsonSha256": "e287938758f667bb57afefcfbc95c00878a28c34a31be7b374ba57541df76e0b",
+      "scopeAfter": {
+        "file": "initial-failed-r1-source-scope.txt",
+        "bytes": 74,
+        "sha256": "aca06e79ccdf8bb490a75b7319a60d8c0362fcd98db05a7155fb8e1c0e8780a3"
+      },
+      "timelines": [
+        {
+          "condition": "root",
+          "file": "initial-failed-r1-root-timeline.json.gz",
+          "bytes": 1716,
+          "sha256": "ed9b3cca21d812349530926e1154bd8c83b6d6b1222b01e56cad0858ea3e91b7"
+        }
+      ],
+      "file": "initial-failed-r1.json.gz",
+      "bytes": 2337,
+      "sha256": "955a979400a7f70a1976fd0a581e8c8e7ad40928c84d2c54fb27eda2566a2497"
+    },
+    {
+      "name": "diagnostic-failed-r1",
+      "workflowRun": 41422549736,
+      "jobId": 125201415501,
+      "sourceGatesConclusion": "success",
+      "scopeAfterConclusion": "success",
+      "jobConclusion": "failure",
+      "workflowConclusion": "failure",
+      "artifact": {
+        "id": 13130228021,
+        "name": "diagnostic-r1",
+        "size_in_bytes": 4630,
+        "digest": "sha256:4b30753e0893d8158cf53b793c7f5d871f9bef27e865bf74b9eaf940dc130441",
+        "head_sha": "15ef6827050cc0fab1178458f53e6439f72f3f30",
+        "sha256": "4b30753e0893d8158cf53b793c7f5d871f9bef27e865bf74b9eaf940dc130441",
+        "githubDigestMatched": true,
+        "zipIntegrityPassed": true
+      },
+      "uncompressedBytes": 8008,
+      "originalJsonSha256": "de7a761438a2f392dcd94d9abea3c3320fb6688e28130b840a0b21aca75440c1",
+      "scopeAfter": {
+        "file": "diagnostic-failed-r1-source-scope.txt",
+        "bytes": 74,
+        "sha256": "aca06e79ccdf8bb490a75b7319a60d8c0362fcd98db05a7155fb8e1c0e8780a3"
+      },
+      "timelines": [
+        {
+          "condition": "root",
+          "file": "diagnostic-failed-r1-root-timeline.json.gz",
+          "bytes": 1730,
+          "sha256": "65c45709ca9d721b665c37441e08838d7ef8e858eae96aac09d73a0d1878b136"
+        }
+      ],
+      "file": "diagnostic-failed-r1.json.gz",
+      "bytes": 2426,
+      "sha256": "437f2abf27263e0803b4fb68abbbfeb360b52b2487bc309c52804f5fda0ee4f7"
+    },
+    {
+      "name": "restoration-order-failed-r1",
+      "workflowRun": 41424050264,
+      "jobId": 125206339844,
+      "sourceGatesConclusion": "success",
+      "scopeAfterConclusion": "success",
+      "jobConclusion": "failure",
+      "workflowConclusion": "failure",
+      "artifact": {
+        "id": 13131625838,
+        "name": "restoration-order-failed-r1",
+        "size_in_bytes": 4662,
+        "digest": "sha256:83efdfb9dbbbf4a1518e3d1cacfb36391182a9247633dbefd46ec2252aaf1dd0",
+        "head_sha": "483b4b86e25115e7fb48f75c4286175258220c02",
+        "sha256": "83efdfb9dbbbf4a1518e3d1cacfb36391182a9247633dbefd46ec2252aaf1dd0",
+        "githubDigestMatched": true,
+        "zipIntegrityPassed": true
+      },
+      "uncompressedBytes": 8008,
+      "originalJsonSha256": "962479a6c74506e4bc0b12285858d2a7a567ea0f133353d3ddaddb8ad3f63037",
+      "scopeAfter": {
+        "file": "restoration-order-failed-r1-source-scope.txt",
+        "bytes": 74,
+        "sha256": "aca06e79ccdf8bb490a75b7319a60d8c0362fcd98db05a7155fb8e1c0e8780a3"
+      },
+      "timelines": [
+        {
+          "condition": "root",
+          "file": "restoration-order-failed-r1-root-timeline.json.gz",
+          "bytes": 1762,
+          "sha256": "ff07e63db53b01dd2a5987bb9682c483835f2f34a7757d56ed36e68b648ce266"
+        }
+      ],
+      "file": "restoration-order-failed-r1.json.gz",
+      "bytes": 2425,
+      "sha256": "1916aaf464147523b7c5c2e1f1443ec687afa3ded06f4dc347182e5cdb739088"
+    },
+    {
+      "name": "accepted-r1",
+      "workflowRun": 41424651767,
+      "jobId": 125208373237,
+      "sourceGatesConclusion": "success",
+      "scopeAfterConclusion": "success",
+      "jobConclusion": "success",
+      "workflowConclusion": "success",
+      "artifact": {
+        "id": 13132011063,
+        "name": "accepted-r1",
+        "size_in_bytes": 10203,
+        "digest": "sha256:9ba225ff4082476a0c5614d55935417501b821a2c1d1ce003bb67029292fe834",
+        "head_sha": "37e51af5b74a3f2e6a623d6b440f181174e32cf2",
+        "sha256": "9ba225ff4082476a0c5614d55935417501b821a2c1d1ce003bb67029292fe834",
+        "githubDigestMatched": true,
+        "zipIntegrityPassed": true
+      },
+      "uncompressedBytes": 38424,
+      "originalJsonSha256": "a664c75ece4079f59211b3c7bff0543a85ca90827cce4c8a5c2da57c9a42f557",
+      "scopeAfter": {
+        "file": "accepted-r1-source-scope.txt",
+        "bytes": 74,
+        "sha256": "aca06e79ccdf8bb490a75b7319a60d8c0362fcd98db05a7155fb8e1c0e8780a3"
+      },
+      "timelines": [
+        {
+          "condition": "root",
+          "file": "accepted-r1-root-timeline.json.gz",
+          "bytes": 1802,
+          "sha256": "84352b6c85bd4dc82558c2902feca3b052b8da3a6cf2e56d6cfd58c93563b58f"
+        },
+        {
+          "condition": "charge-opacity",
+          "file": "accepted-r1-charge-opacity-timeline.json.gz",
+          "bytes": 1448,
+          "sha256": "fb21cdb20cdea9f79ff1f2c5dc41e48a72f56953d957b4f3b30f5a197352df33"
+        },
+        {
+          "condition": "thrust-height",
+          "file": "accepted-r1-thrust-height-timeline.json.gz",
+          "bytes": 1422,
+          "sha256": "5d2ed1042dbc2a7d8518ddf9e0f2771e5e46591f962835bcdf7b14c3a62bef65"
+        },
+        {
+          "condition": "both-local",
+          "file": "accepted-r1-both-local-timeline.json.gz",
+          "bytes": 1341,
+          "sha256": "ca4451dcd7b3dae411b98455f7627e226d6643057cd593ccefb13bb5f1f82b9c"
+        }
+      ],
+      "file": "accepted-r1.json.gz",
+      "bytes": 3115,
+      "sha256": "cdbe4e06c408d82a30847c7b5793c079ea37a65ace72118f869760eeb2285994"
+    },
+    {
+      "name": "accepted-r2",
+      "workflowRun": 41424651767,
+      "jobId": 125209076806,
+      "sourceGatesConclusion": "success",
+      "scopeAfterConclusion": "success",
+      "jobConclusion": "success",
+      "workflowConclusion": "success",
+      "artifact": {
+        "id": 13131816923,
+        "name": "accepted-r2",
+        "size_in_bytes": 10238,
+        "digest": "sha256:360a82a890c06e09fe46822099762d4284ba3a42bf4e955fdd1219ba28194127",
+        "head_sha": "37e51af5b74a3f2e6a623d6b440f181174e32cf2",
+        "sha256": "360a82a890c06e09fe46822099762d4284ba3a42bf4e955fdd1219ba28194127",
+        "githubDigestMatched": true,
+        "zipIntegrityPassed": true
+      },
+      "uncompressedBytes": 38370,
+      "originalJsonSha256": "d9e932b9bb7b2a3e3744176b76d1f527d84fd72f822934146561cf4d1a430dce",
+      "scopeAfter": {
+        "file": "accepted-r2-source-scope.txt",
+        "bytes": 74,
+        "sha256": "aca06e79ccdf8bb490a75b7319a60d8c0362fcd98db05a7155fb8e1c0e8780a3"
+      },
+      "timelines": [
+        {
+          "condition": "both-local",
+          "file": "accepted-r2-both-local-timeline.json.gz",
+          "bytes": 1768,
+          "sha256": "fd8032d072f0fd25fc3514dcf009c0c2d405628c452c0b210c04c00b983ddd70"
+        },
+        {
+          "condition": "thrust-height",
+          "file": "accepted-r2-thrust-height-timeline.json.gz",
+          "bytes": 1425,
+          "sha256": "d2e57b6adf1ed6da8d14781cbc4fcf0e4c15c28f0cf4f73054e724ea422c18f6"
+        },
+        {
+          "condition": "charge-opacity",
+          "file": "accepted-r2-charge-opacity-timeline.json.gz",
+          "bytes": 1428,
+          "sha256": "64fabf7b840eee458812beb15ad5869c5356f03364d9a76eefbe4f3a2ea4871d"
+        },
+        {
+          "condition": "root",
+          "file": "accepted-r2-root-timeline.json.gz",
+          "bytes": 1422,
+          "sha256": "fc3fd313c3f6dd126a22a3ca722cd27fe1acb591e4cdcce613dd6e97bdc90a4a"
+        }
+      ],
+      "file": "accepted-r2.json.gz",
+      "bytes": 3117,
+      "sha256": "f7270a1b6196b328aa7af34d39436d9038c9ea92c281bb2914aedb687f181511"
+    }
+  ]
+}

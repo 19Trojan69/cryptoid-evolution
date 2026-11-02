@@ -75,7 +75,8 @@ node --test verification/style-recalc-isolation-20261102/probe.test.mjs
 node verification/boss2-mini-start-control-20261101/verifyScope.mjs
 ```
 
-Tatsächliche Browserergebnisse werden erst nach den beendeten Läufen ergänzt.
+Die beendeten Browserergebnisse stehen unten; fehlgeschlagene Vorstufen bleiben
+als solche erhalten.
 
 ## Erster Browser-Gate-Fehler, unverändert erhalten
 
@@ -124,3 +125,59 @@ Reader für Style-Attributpräsenz; vorhandene MutationObserver beobachten die
 Boss-Pfadattribute nicht. Exakte berechnete Werte, originale Klasse und native
 Animationsidentität bleiben Pflicht. Diese kontrollierte Diagnoseausnahme ist
 kein Runtime-Patch und erklärt keinen White Screen.
+
+## Bestätigte native Eingrenzung, kein bestätigter Speicher-Fix
+
+Quelle `37e51af5b74a3f2e6a623d6b440f181174e32cf2`, Baum
+`a9c03ae78b66dc9077138bf75da92a14744c7f05`,
+[CI 41424651767](https://github.com/19Trojan69/cryptoid-evolution/actions/runs/41424651767):
+Quellen-Gate sowie beide frischen Browserläufe bestehen. Der zweite vertauscht
+die Reihenfolge. Tatsächlicher Engine-Build: Chromium `151.0.7922.34`, Playwright
+`1.62.1`, Linux; React/ReactDOM `19.2.4`, Router `7.13.2`, Vite `7.3.1`,
+TypeScript `5.9.3`. Die installierten Versionen und der unveränderte Lock-Digest
+stehen in beiden vollständigen Beobachtungen.
+
+| Bedingung | Berechnungen je Schritt, Lauf 1 / 2 | Summe über 16 Schritte, Lauf 1 / 2 |
+| --- | --- | --- |
+| `root` | 95 / 95 | 1.520 / 1.520 |
+| `charge-opacity` | 95 / 95 | 1.520 / 1.520 |
+| `thrust-height` | 75 / 75 | 1.200 / 1.200 |
+| `both-local` | 5 / 5 | 80 / 80 |
+
+Alle sechzehn echten Browser-Höhen/-Opazitäten stimmen zwischen den Bedingungen
+exakt überein. Je Lauf bestehen zusätzlich zehn Schuss-/Ladefälle einschließlich
+der Mündungsopazität 1 beim Feuern, originale Klasse, deklarierte Wiederherstellung,
+native Animationsobjekte/Startzeiten/Raten, unveränderte pausierte Spiel-/Stoppuhr,
+Dokument-/Quellenidentität, normaler bestätigter Home-Ausstieg und Nach-Scope.
+Die Abweichungen fehlend/leer werden im Beleg wahrheitsgemäß ausgewiesen.
+
+**Nachgewiesen:** Im pausierten, instrumentierten Original-Boss-2-DOM senkt nur
+die gemeinsame direkte Deklaration die gemeldete Style-Arbeit stark: um
+94,7368 % gegenüber Root, in beiden Reihenfolgen. Dies ist ein kausal kontrollierter
+Style-Arbeitsvergleich und erklärt, weshalb eine einzelne Umverteilung nicht
+genügen muss. **Nicht nachgewiesen:** weniger aktiver Prozessspeicher, weniger
+native Retention/GC-Druck, höhere FPS, geringere Temperatur oder eine behobene
+White-Screen-Ursache. Es wird insbesondere nicht rückwirkend die frühere
+Schub-Leaf-Custom-Property-Serie als erfolgreicher Speicher-Fix ausgegeben.
+
+Alle fünf vollständigen Beobachtungen, elf gefilterten nativen Timelines,
+fünf Nach-Scope-Belege und fünf gegen GitHub geprüften Artefakt-Digests stehen in
+`evidence/`. `verifyEvidence.mjs` prüft Digests und reparst die acht akzeptierten
+Timelines mit denselben strengen Frame-/Marker-/Counterregeln. Sechs zusätzliche
+Auswertungsregressionen verhindern unter anderem die Umwertung von Teilbelegen,
+abweichender Darstellung oder fehlender Replikation in eine Verbesserung.
+
+**Priorisierter nächster Versuch:** Ein eigener virtueller React-Kandidat darf
+beide Deklarationen gemeinsam lokalisieren. Dabei müssen die bisherigen
+memoisierten SVG-Kunstwerke erhalten bleiben; Ladeänderungen sollen nur die
+bereits vorhandenen Verbraucherpfade aktualisieren. Originale Formeln,
+Feuern-Override, Geometrie, Fall-/Abbaupfade und Animationen sind vor einem
+aktiven Vergleich über alle Boss-Modelle technisch zu prüfen. Erst ein aktiver
+Speichervergleich mit frischen Kontrollen kann daraus einen Speicher-Kandidaten
+machen. Keine Geräte-Referenz, Produktion oder Main wurde für diesen Vergleich
+geändert; ein neuer manueller Langtest wird hieraus noch nicht angefordert.
+
+```bash
+node --test verification/style-recalc-isolation-20261102/probe.test.mjs verification/style-recalc-isolation-20261102/evidence/summary.test.mjs
+node verification/style-recalc-isolation-20261102/evidence/verifyEvidence.mjs
+```
