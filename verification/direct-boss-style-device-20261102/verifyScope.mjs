@@ -12,8 +12,11 @@ for (const [path, sha] of Object.entries(pins)) {
 const text = readFileSync(new URL('../../vercel.json', import.meta.url), 'utf8');
 const current = 'node verification/direct-boss-style-device-20261102/buildDevicePreview.mjs';
 assert.equal(text.split(current).length, 2);
-const restored = text.replace(current, 'node verification/boss2-mini-start-control-20261101/buildMiniStartPreview.mjs');
+const install = 'node verification/direct-boss-style-device-20261102/installDevicePreview.mjs';
+assert.equal(text.split(install).length, 2);
+const restored = text.replace(current, 'node verification/boss2-mini-start-control-20261101/buildMiniStartPreview.mjs')
+  .replace(install, 'npm install --prefix frontend --include=optional --no-audit --no-fund');
 const sha = createHash('sha1').update('blob ' + Buffer.byteLength(restored) + '\0').update(restored).digest('hex');
-assert.equal(sha, 'e94775c2f8a435f2dcb46b65fafd34e67abdc640', 'Only the one declared Preview build-command replacement');
+assert.equal(sha, 'e94775c2f8a435f2dcb46b65fafd34e67abdc640', 'Only the two declared Preview install/build-command replacements');
 assert.equal(JSON.parse(text).git.deploymentEnabled, false);
 console.log('CRYPTOID_DIRECT_STYLE_DEVICE_SCOPE ' + JSON.stringify({ passed: true, originalRuntimeTreesUnchanged: true, automaticDeployment: false }));

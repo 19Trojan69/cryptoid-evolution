@@ -15,8 +15,8 @@ lokalem Bericht, keine Spielveröffentlichung auf den öffentlichen Stammadresse
 Automatische Vercel-Deployments bleiben ausgeschaltet.
 
 Ein eigener Scope-Guard prüft die fünf vollständigen Original-Runtime-Bäume und
-stellt den ganzen ursprünglichen Vercel-Config-Blob nach exakt einer bekannten
-Build-Command-Ersetzung wieder her. Er ersetzt oder schwächt die alten Guards
+stellt den ganzen ursprünglichen Vercel-Config-Blob nach exakt zwei bekannten
+Install-/Build-Command-Ersetzungen wieder her. Er ersetzt oder schwächt die alten Guards
 im Analysezweig nicht ab. Zwei native Kurzläufe prüfen das tatsächliche minimale
 Paket einschließlich aller drei Ein-/Ausstiege und des normalen Berichts.
 
@@ -51,3 +51,16 @@ Build muss trotzdem die exakt gepinnten Kandidaten-Styles, Originalgrafik,
 korrigierte Stoppuhr und den Ausschluss aktiver Frame-/Clock-Proben nachweisen;
 danach bleiben die vollständigen 60/10/10-Sekunden-UI-/Berichtabläufe erforderlich.
 Diese neue Regression ersetzt keine früheren Rohdaten oder Gerätetests.
+
+Bei einer lokalen Wiederholung des tatsächlichen npm-Installationsbefehls wurde
+zusätzlich eine Umschreibung von `frontend/yarn.lock` beobachtet; sie ließ den
+unveränderten Scope-Guard zu Recht scheitern. Auch `--no-save` verhinderte diese
+Yarn-Umschreibung unter dem vorhandenen npm nicht. Dies ist ein separat lokal
+belegtes Verpackungsproblem; aus dem ursprünglichen Vercel-Log folgt es nicht.
+Der getrennte Installations-Wrapper prüft deshalb vor npm alle fünf originalen
+Runtime-Bäume, sichert die unveränderten Yarn-Bytes und stellt ausschließlich
+diese eine Datei nach npm wieder her. Danach müssen sämtliche Scope-Prüfungen
+erneut bestehen und npm erfolgreich beendet sein. Andere Quellenänderungen
+werden weder zurückgesetzt noch zugelassen. Es gelten weiterhin derselbe
+Installationsbefehl und dieselben Abhängigkeiten. Die native Paket-CI verwendet
+diesen identischen Wrapper statt ihrer bisherigen eigenen Yarn-Wiederherstellung.

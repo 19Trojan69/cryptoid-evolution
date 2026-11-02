@@ -1,7 +1,7 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": null,
-  "installCommand": "npm install --prefix frontend --include=optional --no-audit --no-fund",
+  "installCommand": "node verification/direct-boss-style-device-20261102/installDevicePreview.mjs",
   "buildCommand": "node verification/direct-boss-style-device-20261102/buildDevicePreview.mjs",
   "outputDirectory": "verification/boss2-forensics-20261028/results/device-preview/site",
   "redirects": [

@@ -22,10 +22,10 @@ jobs:
       - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
         with: {node-version: '24'}
       - name: Install exact declared browser tooling
+        env: {VERCEL_ENV: preview}
         run: |
-          npm install --prefix frontend --include=optional --ignore-scripts --no-audit --no-fund
+          node verification/direct-boss-style-device-20261102/installDevicePreview.mjs --ignore-scripts
           npm install --prefix verification/boss2-forensics-20261028 --ignore-scripts --no-audit --no-fund
-          git restore --worktree -- frontend/yarn.lock
           cd verification/boss2-forensics-20261028
           npx playwright install --with-deps ${{ matrix.engine }}
       - name: Verify exact package despite conflicting inherited build controls
