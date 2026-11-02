@@ -30,7 +30,9 @@ const result = { version: 1, kind: 'paused-native-style-recalc-isolation', compl
 const css = readFileSync(root + '/frontend/src/index.css', 'utf8');
 assert.equal(css.match(/var\(--boss-thrust/g)?.length, 1); assert.equal(css.match(/var\(--weapon-charge/g)?.length, 2);
 assert.ok(css.includes('.boss-special-weapon-firing .boss-special-muzzle { fill:#fff6dd; opacity:1; }'));
-result.consumerSourceProof = { cssBlob: git('hash-object', 'frontend/src/index.css'), thrustConsumers: 1, chargeConsumers: 2, firingOverridePreserved: true };
+assert.equal(/\[\s*style(?:\s|\]|[~|^$*=])/i.test(css), false, 'No CSS selector distinguishes empty from absent inline style attributes');
+result.consumerSourceProof = { cssBlob: git('hash-object', 'frontend/src/index.css'), thrustConsumers: 1, chargeConsumers: 2,
+  firingOverridePreserved: true, noInlineStyleAttributeSelector: true };
 let server, browser, page, first, paused, fatal; const external = [], assets = [];
 async function tap(locator) {
   await locator.waitFor({ state: 'visible', timeout: 45000 }); assert.ok(await locator.isEnabled()); await locator.scrollIntoViewIfNeeded();

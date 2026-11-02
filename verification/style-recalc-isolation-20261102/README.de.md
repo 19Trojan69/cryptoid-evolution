@@ -39,8 +39,8 @@ Gemessene Schritte behalten dagegen die unveränderte ursprüngliche Feuern-Klas
 
 Nach jedem Schritt werden echte berechnete Höhen/Opazitäten gelesen. Alle vier
 Bedingungen müssen für dieselbe Wertefolge exakt dieselben Browserwerte liefern.
-Danach werden sämtliche ursprünglichen Inline-Attribute und die ursprüngliche
-Feuern-Klasse exakt wiederhergestellt. Die vorherigen berechneten Werte sowie
+Danach werden sämtliche ursprünglichen Inline-Deklarationen und die ursprüngliche
+Feuern-Klasse wiederhergestellt. Die vorherigen berechneten Werte sowie
 identische native Animationsobjekte, Startzeiten und Raten sind Pflicht. Auch
 Fehlerpfade führen die Wiederherstellung aus. Anschließend folgt der normale
 bestätigte Home-Ausstieg. Nach-Scope und begrenzte Artefaktsicherung laufen auch
@@ -105,3 +105,22 @@ die Wiederholung wird übersprungen. Die Korrektur ordnet die exakte erneute
 Raw-Attribut-Wiederherstellung **hinter** die letzten berechneten Style-/Animations-
 Reads. Die unveränderte strenge Prüfung der originalen Attribute folgt danach.
 Eine neue Regression bildet die beobachtete Materialisierung leerer SVG-Styles ab.
+
+Auch die geänderte Read-Reihenfolge in `483b4b86`,
+[CI 41424050264](https://github.com/19Trojan69/cryptoid-evolution/actions/runs/41424050264),
+scheitert an exakt denselben drei leeren SVG-Attributen. Die ursprüngliche
+Regression modellierte nur `getComputedStyle`; der reale Browser synchronisiert
+das leere Attribut auch beim Attributlesen nach `removeAttribute`. Dieser
+Fehlschlag und seine Rohdaten bleiben ebenfalls erhalten.
+
+Der nächste Prüfstand korrigiert daher **ausdrücklich den Prüfvertrag**: Nur auf
+den vorhandenen Lade-Verbraucherpfaden darf ursprünglich fehlendes `style` als
+`style=""` zurückkehren, wenn vorher und nachher keine CSS-Deklaration existiert.
+Jede andere Rohabweichung bleibt ein Fehler. Die konkrete Abweichung und ein
+separates Presence-Restored-Boolean werden gespeichert; es wird nicht mehr
+behauptet, alle rohen Attribute seien identisch. Die Ausgangs-CSS darf keinen
+`[style]`-Attributselektor enthalten. Die Quellensuche fand auch keinen Runtime-
+Reader für Style-Attributpräsenz; vorhandene MutationObserver beobachten die
+Boss-Pfadattribute nicht. Exakte berechnete Werte, originale Klasse und native
+Animationsidentität bleiben Pflicht. Diese kontrollierte Diagnoseausnahme ist
+kein Runtime-Patch und erklärt keinen White Screen.

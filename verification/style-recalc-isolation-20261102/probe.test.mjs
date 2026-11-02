@@ -17,11 +17,17 @@ function fixture(firing = false) {
         this.props.set(key, value); this.attrs.set('style', [...this.props].map(([k, v]) => k + ':' + v).join(';'));
       }, removeProperty: key => { const prior = this.props.get(key) || ''; this.props.delete(key);
         this.attrs.set('style', [...this.props].map(([k, v]) => k + ':' + v).join(';')); return prior; } };
+      Object.defineProperty(this.style, 'cssText', { get: () => [...this.props].map(([k, v]) => k + ':' + v).join(';') });
       this.classList = { contains: name => (this.attrs.get('class') || '').split(' ').includes(name),
         toggle: (name, yes) => { const all = (this.attrs.get('class') || '').split(' ').filter(s => s && s !== name);
           if (yes) all.push(name); this.attrs.set('class', all.join(' ')); } };
     }
-    getAttribute(key) { return this.attrs.get(key) ?? null; }
+    getAttribute(key) {
+      if (key === 'style' && this.styleTouched && this.props.size === 0
+        && (host.materializeEmptySvg && lights.includes(this) || host.materializeEmptyNonSvg && engines.includes(this)))
+        this.attrs.set('style', host.materializedValue ?? '');
+      return this.attrs.get(key) ?? null;
+    }
     setAttribute(key, value) { this.attrs.set(key, value); if (key === 'style') this.props = new Map(value.split(';').filter(Boolean).map(s => {
       const i = s.indexOf(':'); return [s.slice(0, i).trim(), s.slice(i + 1).trim()]; })); }
     removeAttribute(key) { this.attrs.delete(key); if (key === 'style') this.props = new Map(); }
@@ -70,10 +76,15 @@ test('a failed native read restores the exact original scene; active/hidden or u
   }
   assert.throws(() => pausedSceneProbe({ ...args('root'), pairs: pairs.slice(1) }, fixture().host));
 });
-test('an empty SVG style materialized by native reads is removed after the final style/animation flush without weakening exact restoration', () => {
+test('native SVG attribute synchronization is recorded truthfully and allows only absent-to-empty declarations on the original leaves', () => {
   const h = fixture(); h.host.materializeEmptySvg = true;
   const result = pausedSceneProbe(args('both-local'), h.host);
-  assert.equal(result.originalInlineAttributesRestored, true); assert.deepEqual(h.original(), h.before);
+  assert.equal(result.originalInlineDeclarationsRestored, true); assert.equal(result.originalInlineAttributePresenceRestored, false);
+  assert.deepEqual(result.emptySvgStyleAttributeIndices, [4]); assert.equal(result.sameNativeAnimationsStartsAndRates, true);
+  for (const change of [h => h.host.materializedValue = ' ', h => h.host.materializeEmptyNonSvg = true]) {
+    const h = fixture(); h.host.materializeEmptySvg = true; change(h);
+    assert.throws(() => pausedSceneProbe(args('both-local'), h.host), /Original inline declarations restored/);
+  }
 });
 const prefix = 'cryptoid-recalc-r1-root-', frameId = 'frame-fixture';
 function nativeEvents() {

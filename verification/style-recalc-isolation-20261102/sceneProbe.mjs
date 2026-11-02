@@ -55,18 +55,22 @@ export function pausedSceneProbe({ condition, pairs, prefix, firingFidelity = fa
     const afterAnimations = root.getAnimations({ subtree: true });
     check(afterAnimations.length === animations.length && animations.every(row => afterAnimations.includes(row.animation)
       && row.animation.startTime === row.start && row.animation.playbackRate === row.rate), 'Same native animation objects, starts and rates');
-    // Native SVG style synchronization during computed-style/animation reads
-    // can materialize an empty style attribute. Reapply the exact original raw
-    // attributes after these reads, while retaining the strict original check.
+    // Native SVG CSSOM synchronization can materialize style="" again even
+    // after removeAttribute. Record that observed attribute-presence difference;
+    // accept only absent -> empty on these exact leaves with no declarations.
     restore();
     const restorationDifferences = nodes.map((n, i) => ({ index: i, tag: n.tagName, before: originals[i], after: n.getAttribute('style') }))
       .filter(row => row.before !== row.after).map(row => ({ ...row,
         canonicalBefore: originalCanonical[row.index], canonical: nodes[row.index].style.cssText }));
-    check(restorationDifferences.length === 0, 'Exact original inline attributes restored: ' + JSON.stringify(restorationDifferences));
+    check(restorationDifferences.every(row => lights.includes(nodes[row.index]) && row.before === null && row.after === ''
+      && row.canonicalBefore === '' && row.canonical === ''),
+    'Original inline declarations restored; only absent-to-empty SVG leaf attributes allowed: ' + JSON.stringify(restorationDifferences));
     check(svg.getAttribute('class') === originalClass, 'Original firing class restored');
     check(host.__crossDeviceTest.inspect().status === 'paused', 'No automatic Resume');
     return { condition, prefix, steps: pairs.length, engines: engines.length, chargeConsumers: lights.length, firing,
-      outputs, firingFidelityCases: fidelityCases, originalInlineAttributesRestored: true, originalFiringClassRestored: true,
+      outputs, firingFidelityCases: fidelityCases, originalInlineDeclarationsRestored: true,
+      originalInlineAttributePresenceRestored: restorationDifferences.length === 0,
+      emptySvgStyleAttributeIndices: restorationDifferences.map(row => row.index), originalFiringClassRestored: true,
       originalComputedOutputsRestored: true, sameNativeAnimationsStartsAndRates: true,
       onlyWhilePaused: true, appOrAnimationClocksWritten: false, newAppTimersOrFrames: false };
   } finally { restore(); }
