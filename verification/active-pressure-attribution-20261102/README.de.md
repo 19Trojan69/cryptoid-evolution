@@ -188,6 +188,11 @@ normalen Ausstieg und die unverändert fehlgeschlagene zweite Druckbewertung.
 20 Collector-/Parser-/Inaktivitätsfälle bestehen im Quellen-Gate. Die gesamte
 Offline-Serie umfasst jetzt 56 Fälle einschließlich neun neuer Auswertungsfälle;
 die Fallzahlen verschiedener Aufrufe überlappen und werden nicht addiert.
+Die unabhängige [Offline-CI 41393087399](https://github.com/19Trojan69/cryptoid-evolution/actions/runs/41393087399)
+hat den gesicherten Stand `455ef632` erfolgreich geprüft: 34 + 8 + 14 Fälle,
+null Fehler, alle archivierten Belege einschließlich der drei neuen Traces
+erneut gelesen. Die ursprüngliche rote Mess-CI und der nicht bestandene zweite
+Drucknachweis bleiben dadurch ausdrücklich unverändert.
 
 ```bash
 node --test verification/active-pressure-attribution-20261102/collector.test.mjs verification/active-pressure-attribution-20261102/evidence/summary.test.mjs
