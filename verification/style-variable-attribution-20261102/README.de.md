@@ -51,4 +51,60 @@ Hinzu kommen die vorhandenen Inspektions-/Collector-/Parserprüfungen. Erst
 danach führt die CI die Originalszene für eine echte aktive Minute aus.
 
 Es gibt keinen Spielquellen-Patch, keine neue Geräte-URL und keine Freigabe.
-Ergebnisse werden nach Erhalt und Prüfung des tatsächlichen Artefakts ergänzt.
+
+## Bestätigter Kurzlauf
+
+Quelle `0f21c59239fafad5f2d396bcf940f8e7812a9d5d`, Baum
+`51d66b277803a3dc200a3c675a603b3cbaeb8e44`,
+[CI 41382160334](https://github.com/19Trojan69/cryptoid-evolution/actions/runs/41382160334).
+Beide Jobs sind erfolgreich. Der Browser beobachtet 60.000 ms aktive Zeit und
+21 zusätzliche Kernsalven. Alle zehn inaktiven Grenzen und beide Heap-Aufnahmen
+bestehen. ZIP-Digest/Integrität, beide Snapshot-Digests, Rohgrößen und erneut
+berechnete Graph-/Klassensummen stimmen. Das vollständige Capture ist verlustfrei
+komprimiert gesichert; vier weitere Offline-Regressionen sichern Quellen,
+Laufzeit, ursprüngliche Besitzer, Zählkonsistenz und vollständige Wiederherstellung.
+
+Insgesamt 24.929 erfolgreiche CSS-Variablen-Aufrufe: 3.619 erste Beobachtungen,
+13.634 gleiche vorher beobachtete Argumente und 7.676 verschiedene Argumente.
+Kein Aufruf bleibt ohne beobachteten Besitzer oder klassifizierbares Argument;
+kein Überlauf, Beobachterfehler oder fehlgeschlagener Originalaufruf wird gezählt.
+Sämtliche originalen Getter-/Methodendeskriptoren sind vor der Pause wiederhergestellt
+und die Beobachtungsbrücke ist entfernt. Der Testschutz und die fehlende aktive
+Spielereingabe sind dieselbe diagnostische Bedingung wie zuvor; die konstanten
+Schiffswerte dürfen nicht auf alle echten Steuerungszustände verallgemeinert werden.
+
+| Beobachteter Pfad | Aufrufe | gleiches vorheriges Argument | anderes vorheriges Argument |
+| --- | ---: | ---: | ---: |
+| Spielerschiff `--flame-length` | 3.696 | 3.695 | 0 |
+| Spielerschiff `--hull-light` | 3.696 | 3.695 | 0 |
+| Spielerschiff `--visual-bank` | 3.696 | 3.695 | 0 |
+| Spielerschiff `--muzzle-light` | 3.696 | 2.549 | 1.146 |
+| Boss-Wurzel `--boss-thrust` | 1.797 | 0 | 1.796 |
+| Boss-SVG `--weapon-charge` | 1.797 | 0 | 1.796 |
+
+Je Pfad kommt die erste Beobachtung hinzu. Die Aufrufe sind keine Allokator-
+Messung. Ein gleiches Argument beweist keinen vermiedenen oder verursachten
+nativen Style-Aufwand. Der instrumentierte PSS wird ausdrücklich nicht mit den
+unbeeinflussten Langläufen als Optimierungswirkung verglichen.
+
+## Abgeleiteter isolierter Versuch
+
+`--boss-thrust` wird in der vollständigen Quelle nur an der Boss-Wurzel gesetzt
+und nur für die Höhe der vorhandenen `.boss-engine-flame` verwendet. Der Wert
+wechselt im echten Kurzlauf 1.796-mal. Das rechtfertigt als einzelnen Versuch,
+**denselben Ausdruck direkt an den bestehenden Triebwerksflammen zu setzen**,
+statt ihn durch den gesamten Boss-Unterbaum zu vererben. Grafik, Anker, Anzahl,
+CSS-Regeln, Animationen und Spieluhren müssen identisch bleiben.
+
+Das ist zunächst eine überprüfbare Hypothese zur Style-Erzeugung. Bei mehreren
+Flammen können mehr API-Schreibzugriffe entstehen; reine Aufrufzahlen sind
+deshalb kein Erfolgskriterium. Erforderlich sind ein genau begrenzter und
+umkehrbarer Vergleich, gleiche berechnete Darstellung und native Zeitabläufe,
+danach wiederholte Original-/Vergleichs-Langläufe ohne aktive Beobachtungswrapper.
+Erst eine reproduzierte Ressourcenverbesserung rechtfertigt einen Runtime-Patch.
+Die frühere Mini-Start-Negativserie und die offene WebKit-Startlücke bleiben erhalten.
+
+**Nachgewiesen:** konkrete ursprüngliche Style-Schreibpfade, vollständige
+Beobachtungsfreigabe und nachprüfbare Zählungen. **Vermutung:** kleinere
+Vererbungsbereiche könnten die native Style-Belastung senken. **Keine bestätigte
+Spielverbesserung oder Smartphone-Behebung** aus dieser kurzen API-Zählung.

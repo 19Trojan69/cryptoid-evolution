@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "workflowRun": 41382160334,
+  "workflowURL": "https://github.com/19Trojan69/cryptoid-evolution/actions/runs/41382160334",
+  "workflowConclusion": "success",
+  "measuredSource": "0f21c59239fafad5f2d396bcf940f8e7812a9d5d",
+  "measuredTree": "51d66b277803a3dc200a3c675a603b3cbaeb8e44",
+  "rawOwnerReportsIncluded": false,
+  "rawHeapSnapshotsIncluded": false,
+  "capture": {
+    "file": "capture.json.gz",
+    "compressedBytes": 12677,
+    "uncompressedBytes": 174483,
+    "sha256": "3148328f24e1024580b885a898728745be872cc3cd39502a1892a7cf06c6a0ad",
+    "originalJsonSha256": "88489a849e20e49e09caf2389a8d47199b7f5191c64cafebbdd7cc61e16d4854"
+  },
+  "artifact": {
+    "id": 13113368724,
+    "bytes": 8294374,
+    "sha256": "3c201d4839f2ccdffa237dd46cc95a4506fc859de5c36f34df2dc7030bc4c1b4",
+    "githubDigestMatched": true,
+    "zipIntegrityPassed": true
+  },
+  "heapAnalysis": {
+    "file": "heaps.json",
+    "bytes": 17982,
+    "sha256": "2ca2154c3c11cc2bf52f1d87b529ee31663344de4b25c709d75f286fd56ec8a9"
+  }
+}

@@ -1,13 +1,14 @@
 name: Stability evidence integrity
 on:
   push:
-    branches: [codex/inactive-native-allocation-20261101]
+    branches: [codex/inactive-native-allocation-20261101, codex/style-variable-attribution-20261102]
     paths:
       - '.github/workflows/cryptoid-stability-evidence.yml'
       - 'verification/inactive-native-allocation-20261101/evidence/**'
       - 'verification/isolated-mini-pacing-20261101/evidence/**'
       - 'verification/memory-retention-attribution-20261101/evidence/**'
       - 'verification/boss2-native-memory-20261029/nativeSummary*'
+      - 'verification/style-variable-attribution-20261102/evidence/**'
 permissions:
   contents: read
 jobs:
@@ -22,7 +23,8 @@ jobs:
       - name: Reparse archived synthetic evidence without another game soak
         run: |
           node verification/boss2-mini-start-control-20261101/verifyScope.mjs
-          node --test verification/inactive-native-allocation-20261101/evidence/summary.test.mjs verification/isolated-mini-pacing-20261101/evidence/summary.test.mjs verification/memory-retention-attribution-20261101/evidence/attributionSummary.test.mjs verification/boss2-native-memory-20261029/nativeSummary.test.mjs
+          node --test verification/inactive-native-allocation-20261101/evidence/summary.test.mjs verification/isolated-mini-pacing-20261101/evidence/summary.test.mjs verification/memory-retention-attribution-20261101/evidence/attributionSummary.test.mjs verification/boss2-native-memory-20261029/nativeSummary.test.mjs verification/style-variable-attribution-20261102/styleWriteProbe.test.mjs verification/style-variable-attribution-20261102/evidence/summary.test.mjs
           node verification/memory-retention-attribution-20261101/evidence/verifyEvidence.mjs
           node verification/isolated-mini-pacing-20261101/evidence/verifyEvidence.mjs
           node verification/inactive-native-allocation-20261101/evidence/verifyEvidence.mjs
+          node verification/style-variable-attribution-20261102/evidence/verifyEvidence.mjs

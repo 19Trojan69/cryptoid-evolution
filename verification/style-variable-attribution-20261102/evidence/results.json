@@ -1,0 +1,1079 @@
+{
+  "workflowRun": 41382160334,
+  "workflowConclusion": "success",
+  "summary": {
+    "sourceCommit": "0f21c59239fafad5f2d396bcf940f8e7812a9d5d",
+    "sourceTree": "51d66b277803a3dc200a3c675a603b3cbaeb8e44",
+    "observedActiveMs": 60000,
+    "observedWallMs": 61686,
+    "volleysAdvanced": 21,
+    "engineVersion": "151.0.7922.34",
+    "actualInstalledPackages": {
+      "react": "19.2.4",
+      "react-dom": "19.2.4",
+      "react-router-dom": "7.13.2",
+      "vite": "7.3.1",
+      "typescript": "5.9.3"
+    },
+    "apiObservationOnly": true,
+    "memoryComparisonEligible": false,
+    "physicalPhoneAcceptanceEstablished": false,
+    "observationRestoredBeforeInactiveInspection": true,
+    "observedHomeOwnershipReleased": true,
+    "totals": {
+      "calls": 24929,
+      "firstObservedArgument": 3619,
+      "matchingPreviousArgument": 13634,
+      "differentPreviousArgument": 7676,
+      "unclassifiedArgument": 0
+    },
+    "unclassifiedOwnerCalls": 0,
+    "byProperty": [
+      {
+        "property": "--visual-bank",
+        "calls": 5814,
+        "firstObservedArgument": 7,
+        "matchingPreviousArgument": 3695,
+        "differentPreviousArgument": 2112,
+        "unclassifiedArgument": 0
+      },
+      {
+        "property": "--flame-length",
+        "calls": 4528,
+        "firstObservedArgument": 7,
+        "matchingPreviousArgument": 3695,
+        "differentPreviousArgument": 826,
+        "unclassifiedArgument": 0
+      },
+      {
+        "property": "--hull-light",
+        "calls": 3702,
+        "firstObservedArgument": 7,
+        "matchingPreviousArgument": 3695,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "property": "--muzzle-light",
+        "calls": 3696,
+        "firstObservedArgument": 1,
+        "matchingPreviousArgument": 2549,
+        "differentPreviousArgument": 1146,
+        "unclassifiedArgument": 0
+      },
+      {
+        "property": "--boss-thrust",
+        "calls": 1797,
+        "firstObservedArgument": 1,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 1796,
+        "unclassifiedArgument": 0
+      },
+      {
+        "property": "--weapon-charge",
+        "calls": 1797,
+        "firstObservedArgument": 1,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 1796,
+        "unclassifiedArgument": 0
+      },
+      {
+        "property": "--spark-x",
+        "calls": 730,
+        "firstObservedArgument": 730,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "property": "--spark-y",
+        "calls": 730,
+        "firstObservedArgument": 730,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "property": "--burst-max",
+        "calls": 197,
+        "firstObservedArgument": 197,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "property": "--burst-width",
+        "calls": 197,
+        "firstObservedArgument": 197,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "property": "--cooling",
+        "calls": 197,
+        "firstObservedArgument": 197,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "property": "--ember-max",
+        "calls": 197,
+        "firstObservedArgument": 197,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "property": "--ember-width",
+        "calls": 197,
+        "firstObservedArgument": 197,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "property": "--flicker",
+        "calls": 197,
+        "firstObservedArgument": 197,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "property": "--flicker-delay",
+        "calls": 197,
+        "firstObservedArgument": 197,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "property": "--impact-angle",
+        "calls": 197,
+        "firstObservedArgument": 197,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "property": "--impact-aspect",
+        "calls": 197,
+        "firstObservedArgument": 197,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "property": "--ship-surface-mask",
+        "calls": 22,
+        "firstObservedArgument": 22,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "property": "--boss-shot-color",
+        "calls": 21,
+        "firstObservedArgument": 21,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "property": "--boss-shot-diameter",
+        "calls": 21,
+        "firstObservedArgument": 21,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "property": "--boss-shot-width",
+        "calls": 21,
+        "firstObservedArgument": 21,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "property": "--enemy-shot-color",
+        "calls": 21,
+        "firstObservedArgument": 21,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "property": "--shot-angle",
+        "calls": 21,
+        "firstObservedArgument": 21,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "property": "--flare-color",
+        "calls": 16,
+        "firstObservedArgument": 16,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "property": "--flare-duration",
+        "calls": 16,
+        "firstObservedArgument": 16,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "property": "--flare-size",
+        "calls": 16,
+        "firstObservedArgument": 16,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "property": "--flare-strength",
+        "calls": 16,
+        "firstObservedArgument": 16,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "property": "--fragment-delay",
+        "calls": 16,
+        "firstObservedArgument": 16,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "property": "--fragment-spin",
+        "calls": 16,
+        "firstObservedArgument": 16,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "property": "--fragment-x",
+        "calls": 16,
+        "firstObservedArgument": 16,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "property": "--fragment-y",
+        "calls": 16,
+        "firstObservedArgument": 16,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "property": "--flame-core",
+        "calls": 11,
+        "firstObservedArgument": 11,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "property": "--flame-glow",
+        "calls": 11,
+        "firstObservedArgument": 11,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "property": "--flame-mid",
+        "calls": 11,
+        "firstObservedArgument": 11,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "property": "--flame-tail",
+        "calls": 11,
+        "firstObservedArgument": 11,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "property": "--nozzle-width",
+        "calls": 11,
+        "firstObservedArgument": 11,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "property": "--nozzle-x",
+        "calls": 11,
+        "firstObservedArgument": 11,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "property": "--nozzle-y",
+        "calls": 11,
+        "firstObservedArgument": 11,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "property": "--health-flame-tip",
+        "calls": 6,
+        "firstObservedArgument": 6,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "property": "--hull-top",
+        "calls": 6,
+        "firstObservedArgument": 6,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "property": "--hull-x",
+        "calls": 6,
+        "firstObservedArgument": 6,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "property": "--debris-height",
+        "calls": 4,
+        "firstObservedArgument": 4,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "property": "--debris-rotation",
+        "calls": 4,
+        "firstObservedArgument": 4,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "property": "--debris-size",
+        "calls": 4,
+        "firstObservedArgument": 4,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      }
+    ],
+    "byOwner": [
+      {
+        "owner": "div.player-ship.shielded-ship.player-ship-grey",
+        "calls": 14784,
+        "firstObservedArgument": 4,
+        "matchingPreviousArgument": 13634,
+        "differentPreviousArgument": 1146,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "div.asteroid.asteroid-small.cryptoid.cryptoid-memeSwarm",
+        "calls": 1982,
+        "firstObservedArgument": 18,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 1964,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "div.asteroid.sector-boss.boss-enraged",
+        "calls": 1797,
+        "firstObservedArgument": 1,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 1796,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "svg.boss-special-weapon",
+        "calls": 1797,
+        "firstObservedArgument": 1,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 1796,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "i.hull-mini-explosion",
+        "calls": 1647,
+        "firstObservedArgument": 1647,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "span.no-class",
+        "calls": 1460,
+        "firstObservedArgument": 1460,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "div.asteroid.asteroid-small.cryptoid.cryptoid-solflare",
+        "calls": 992,
+        "firstObservedArgument": 18,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 974,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "i.hull-hotspot",
+        "calls": 126,
+        "firstObservedArgument": 126,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "div.no-class",
+        "calls": 105,
+        "firstObservedArgument": 105,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "span.exhaust.ship-thruster",
+        "calls": 77,
+        "firstObservedArgument": 77,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "em.scattered-debris-piece",
+        "calls": 64,
+        "firstObservedArgument": 64,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "i.distant-star-flare",
+        "calls": 64,
+        "firstObservedArgument": 64,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "i.scattered-debris-sprite.material-hull",
+        "calls": 16,
+        "firstObservedArgument": 16,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "div.ship-debris.scattered-debris.ship-debris-light",
+        "calls": 12,
+        "firstObservedArgument": 12,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "i.fleet-sprite.material-hull",
+        "calls": 6,
+        "firstObservedArgument": 6,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      }
+    ],
+    "groups": [
+      {
+        "owner": "div.player-ship.shielded-ship.player-ship-grey",
+        "property": "--flame-length",
+        "calls": 3696,
+        "firstObservedArgument": 1,
+        "matchingPreviousArgument": 3695,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "div.player-ship.shielded-ship.player-ship-grey",
+        "property": "--hull-light",
+        "calls": 3696,
+        "firstObservedArgument": 1,
+        "matchingPreviousArgument": 3695,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "div.player-ship.shielded-ship.player-ship-grey",
+        "property": "--muzzle-light",
+        "calls": 3696,
+        "firstObservedArgument": 1,
+        "matchingPreviousArgument": 2549,
+        "differentPreviousArgument": 1146,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "div.player-ship.shielded-ship.player-ship-grey",
+        "property": "--visual-bank",
+        "calls": 3696,
+        "firstObservedArgument": 1,
+        "matchingPreviousArgument": 3695,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "div.asteroid.sector-boss.boss-enraged",
+        "property": "--boss-thrust",
+        "calls": 1797,
+        "firstObservedArgument": 1,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 1796,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "svg.boss-special-weapon",
+        "property": "--weapon-charge",
+        "calls": 1797,
+        "firstObservedArgument": 1,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 1796,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "div.asteroid.asteroid-small.cryptoid.cryptoid-memeSwarm",
+        "property": "--visual-bank",
+        "calls": 1449,
+        "firstObservedArgument": 3,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 1446,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "span.no-class",
+        "property": "--spark-x",
+        "calls": 730,
+        "firstObservedArgument": 730,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "span.no-class",
+        "property": "--spark-y",
+        "calls": 730,
+        "firstObservedArgument": 730,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "div.asteroid.asteroid-small.cryptoid.cryptoid-solflare",
+        "property": "--visual-bank",
+        "calls": 669,
+        "firstObservedArgument": 3,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 666,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "div.asteroid.asteroid-small.cryptoid.cryptoid-memeSwarm",
+        "property": "--flame-length",
+        "calls": 521,
+        "firstObservedArgument": 3,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 518,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "div.asteroid.asteroid-small.cryptoid.cryptoid-solflare",
+        "property": "--flame-length",
+        "calls": 311,
+        "firstObservedArgument": 3,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 308,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "i.hull-mini-explosion",
+        "property": "--burst-max",
+        "calls": 183,
+        "firstObservedArgument": 183,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "i.hull-mini-explosion",
+        "property": "--burst-width",
+        "calls": 183,
+        "firstObservedArgument": 183,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "i.hull-mini-explosion",
+        "property": "--cooling",
+        "calls": 183,
+        "firstObservedArgument": 183,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "i.hull-mini-explosion",
+        "property": "--ember-max",
+        "calls": 183,
+        "firstObservedArgument": 183,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "i.hull-mini-explosion",
+        "property": "--ember-width",
+        "calls": 183,
+        "firstObservedArgument": 183,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "i.hull-mini-explosion",
+        "property": "--flicker",
+        "calls": 183,
+        "firstObservedArgument": 183,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "i.hull-mini-explosion",
+        "property": "--flicker-delay",
+        "calls": 183,
+        "firstObservedArgument": 183,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "i.hull-mini-explosion",
+        "property": "--impact-angle",
+        "calls": 183,
+        "firstObservedArgument": 183,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "i.hull-mini-explosion",
+        "property": "--impact-aspect",
+        "calls": 183,
+        "firstObservedArgument": 183,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "div.no-class",
+        "property": "--boss-shot-color",
+        "calls": 21,
+        "firstObservedArgument": 21,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "div.no-class",
+        "property": "--boss-shot-diameter",
+        "calls": 21,
+        "firstObservedArgument": 21,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "div.no-class",
+        "property": "--boss-shot-width",
+        "calls": 21,
+        "firstObservedArgument": 21,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "div.no-class",
+        "property": "--enemy-shot-color",
+        "calls": 21,
+        "firstObservedArgument": 21,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "div.no-class",
+        "property": "--shot-angle",
+        "calls": 21,
+        "firstObservedArgument": 21,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "em.scattered-debris-piece",
+        "property": "--fragment-delay",
+        "calls": 16,
+        "firstObservedArgument": 16,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "em.scattered-debris-piece",
+        "property": "--fragment-spin",
+        "calls": 16,
+        "firstObservedArgument": 16,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "em.scattered-debris-piece",
+        "property": "--fragment-x",
+        "calls": 16,
+        "firstObservedArgument": 16,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "em.scattered-debris-piece",
+        "property": "--fragment-y",
+        "calls": 16,
+        "firstObservedArgument": 16,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "i.distant-star-flare",
+        "property": "--flare-color",
+        "calls": 16,
+        "firstObservedArgument": 16,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "i.distant-star-flare",
+        "property": "--flare-duration",
+        "calls": 16,
+        "firstObservedArgument": 16,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "i.distant-star-flare",
+        "property": "--flare-size",
+        "calls": 16,
+        "firstObservedArgument": 16,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "i.distant-star-flare",
+        "property": "--flare-strength",
+        "calls": 16,
+        "firstObservedArgument": 16,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "i.scattered-debris-sprite.material-hull",
+        "property": "--ship-surface-mask",
+        "calls": 16,
+        "firstObservedArgument": 16,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "i.hull-hotspot",
+        "property": "--burst-max",
+        "calls": 14,
+        "firstObservedArgument": 14,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "i.hull-hotspot",
+        "property": "--burst-width",
+        "calls": 14,
+        "firstObservedArgument": 14,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "i.hull-hotspot",
+        "property": "--cooling",
+        "calls": 14,
+        "firstObservedArgument": 14,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "i.hull-hotspot",
+        "property": "--ember-max",
+        "calls": 14,
+        "firstObservedArgument": 14,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "i.hull-hotspot",
+        "property": "--ember-width",
+        "calls": 14,
+        "firstObservedArgument": 14,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "i.hull-hotspot",
+        "property": "--flicker",
+        "calls": 14,
+        "firstObservedArgument": 14,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "i.hull-hotspot",
+        "property": "--flicker-delay",
+        "calls": 14,
+        "firstObservedArgument": 14,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "i.hull-hotspot",
+        "property": "--impact-angle",
+        "calls": 14,
+        "firstObservedArgument": 14,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "i.hull-hotspot",
+        "property": "--impact-aspect",
+        "calls": 14,
+        "firstObservedArgument": 14,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "span.exhaust.ship-thruster",
+        "property": "--flame-core",
+        "calls": 11,
+        "firstObservedArgument": 11,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "span.exhaust.ship-thruster",
+        "property": "--flame-glow",
+        "calls": 11,
+        "firstObservedArgument": 11,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "span.exhaust.ship-thruster",
+        "property": "--flame-mid",
+        "calls": 11,
+        "firstObservedArgument": 11,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "span.exhaust.ship-thruster",
+        "property": "--flame-tail",
+        "calls": 11,
+        "firstObservedArgument": 11,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "span.exhaust.ship-thruster",
+        "property": "--nozzle-width",
+        "calls": 11,
+        "firstObservedArgument": 11,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "span.exhaust.ship-thruster",
+        "property": "--nozzle-x",
+        "calls": 11,
+        "firstObservedArgument": 11,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "span.exhaust.ship-thruster",
+        "property": "--nozzle-y",
+        "calls": 11,
+        "firstObservedArgument": 11,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "i.fleet-sprite.material-hull",
+        "property": "--ship-surface-mask",
+        "calls": 6,
+        "firstObservedArgument": 6,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "div.ship-debris.scattered-debris.ship-debris-light",
+        "property": "--debris-height",
+        "calls": 4,
+        "firstObservedArgument": 4,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "div.ship-debris.scattered-debris.ship-debris-light",
+        "property": "--debris-rotation",
+        "calls": 4,
+        "firstObservedArgument": 4,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "div.ship-debris.scattered-debris.ship-debris-light",
+        "property": "--debris-size",
+        "calls": 4,
+        "firstObservedArgument": 4,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "div.asteroid.asteroid-small.cryptoid.cryptoid-memeSwarm",
+        "property": "--health-flame-tip",
+        "calls": 3,
+        "firstObservedArgument": 3,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "div.asteroid.asteroid-small.cryptoid.cryptoid-memeSwarm",
+        "property": "--hull-light",
+        "calls": 3,
+        "firstObservedArgument": 3,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "div.asteroid.asteroid-small.cryptoid.cryptoid-memeSwarm",
+        "property": "--hull-top",
+        "calls": 3,
+        "firstObservedArgument": 3,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "div.asteroid.asteroid-small.cryptoid.cryptoid-memeSwarm",
+        "property": "--hull-x",
+        "calls": 3,
+        "firstObservedArgument": 3,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "div.asteroid.asteroid-small.cryptoid.cryptoid-solflare",
+        "property": "--health-flame-tip",
+        "calls": 3,
+        "firstObservedArgument": 3,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "div.asteroid.asteroid-small.cryptoid.cryptoid-solflare",
+        "property": "--hull-light",
+        "calls": 3,
+        "firstObservedArgument": 3,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "div.asteroid.asteroid-small.cryptoid.cryptoid-solflare",
+        "property": "--hull-top",
+        "calls": 3,
+        "firstObservedArgument": 3,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      },
+      {
+        "owner": "div.asteroid.asteroid-small.cryptoid.cryptoid-solflare",
+        "property": "--hull-x",
+        "calls": 3,
+        "firstObservedArgument": 3,
+        "matchingPreviousArgument": 0,
+        "differentPreviousArgument": 0,
+        "unclassifiedArgument": 0
+      }
+    ],
+    "limits": "Successful native custom-property API calls and consecutive primitive arguments only; no actual value readback, invalidation counts, allocation attribution, memory effect or physical phone acceptance.",
+    "whiteScreenFixed": false
+  }
+}
