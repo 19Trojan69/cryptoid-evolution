@@ -78,3 +78,28 @@ node --test verification/local-boss-style-20261102/*.test.mjs
 node verification/local-boss-style-20261102/preflight.mjs
 node verification/boss2-mini-start-control-20261101/verifyScope.mjs
 ```
+
+## Abgeschlossene kurze Gates
+
+Gemessene Quelle `8d5fe35e24d5b09b8ac4016a69b56368335b4c27`, Baum
+`91d459326f736db7e83891ced5f00df203bc9c8a`,
+[CI 41427163697](https://github.com/19Trojan69/cryptoid-evolution/actions/runs/41427163697).
+Quellen-Gate mit 25 Tests, beide virtuellen TypeScript-Konfigurationen und beide
+kurzen Browserkontrollen bestehen. Original: 60.000 aktive ms; Kandidat:
+60.001,6 aktive ms. Beide enthalten die bestandene native Umverteilungsprüfung,
+vollständige inaktive Profilgrenzen und bestätigte beobachtete Home-Freigaben.
+Chromium `151.0.7922.34`; tatsächliche Pakete und Lock-Digest stehen in den
+vollständigen unveränderten Beobachtungen.
+
+Die ersten beiden gegen GitHub geprüften Artefakte, vollständigen Beobachtungen,
+nativen Rohtraces, Nach-Scope-Belege sowie unabhängig aus den Original-Heap-
+Dateien nachgerechneten gefilterten Summen sind gesichert. Roh-Heaps und
+Besitzerberichte werden nicht ins Repository aufgenommen. Vier Auswertungs-
+Regressionen trennen kurze Belege, verfehlte Replikation, aktive Profilierung,
+Ressourcen-/Darstellungsfehler und gemischte Quellen von einem positiven Urteil.
+
+Die vier Langläufe sind in diesem Zwischenstand noch **ausstehend**.
+`evidence/results.json` setzt deshalb den Langvergleich auf `null`; es wird
+kein aktiver Speichervorteil oder Geräte-Fix daraus abgeleitet. Die nächste
+Belegversion ergänzt die beendeten Langläufe; sie ersetzt keine fehlgeschlagenen
+oder unqualifizierten Messungen durch erfolgreiche Werte.

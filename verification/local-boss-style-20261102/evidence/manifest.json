@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "source": "8d5fe35e24d5b09b8ac4016a69b56368335b4c27",
+  "tree": "91d459326f736db7e83891ced5f00df203bc9c8a",
+  "workflowRun": 41427163697,
+  "status": "short-only-long-pending",
+  "workflowConclusion": null,
+  "rawOwnerReportsIncluded": false,
+  "rawHeapSnapshotsIncluded": false,
+  "captures": [
+    {
+      "name": "control-r1-60",
+      "cell": {
+        "condition": "control",
+        "seconds": 60,
+        "replica": 1
+      },
+      "jobId": 125216976061,
+      "jobConclusion": "success",
+      "sourceGatesConclusion": "success",
+      "scopeAfterConclusion": "success",
+      "artifact": {
+        "id": 13132273607,
+        "name": "local-style-control-r1-60",
+        "size_in_bytes": 9292344,
+        "digest": "sha256:a8953fce54527a88222cb22d14bb8eda33f3ebf02e6314e536bb546c91d713ff",
+        "head_sha": "8d5fe35e24d5b09b8ac4016a69b56368335b4c27",
+        "sha256": "a8953fce54527a88222cb22d14bb8eda33f3ebf02e6314e536bb546c91d713ff",
+        "githubDigestMatched": true,
+        "zipIntegrityPassed": true
+      },
+      "activePointLogExactlyMatched": true,
+      "activePointLogSha256": "b757e639625473084dafa61d9ecca49e4a1e4b839b1ec1c03743f9cbbe1aa59a",
+      "uncompressedBytes": 453131,
+      "originalJsonSha256": "002f444b02e27385f63ac49eedd7dd9e355e7e7f3d1dddc395cb15f258115236",
+      "nativeTrace": {
+        "file": "control-r1-60-native.json.gz",
+        "bytes": 928252,
+        "sha256": "dc09a033fd06b91938cee2c325f9e03fef8cf2ac26b1765bf2d12daaff558f6e"
+      },
+      "scopeAfter": {
+        "file": "control-r1-60-source-scope.txt",
+        "bytes": 74,
+        "sha256": "aca06e79ccdf8bb490a75b7319a60d8c0362fcd98db05a7155fb8e1c0e8780a3"
+      },
+      "heapAnalysis": {
+        "file": "control-r1-60-heaps.json",
+        "bytes": 18074,
+        "sha256": "f95d4e1bd9a292e3d7a1e60811cd6604cad553d2f4e9fa4bd8c3b7403cda4dd5"
+      },
+      "file": "control-r1-60.json.gz",
+      "bytes": 32308,
+      "sha256": "91ffef41c40edb7d8493108bd983fb7d826c1115b463ffa4831d98b270b8fc2a"
+    },
+    {
+      "name": "leaves-r1-60",
+      "cell": {
+        "condition": "leaves",
+        "seconds": 60,
+        "replica": 1
+      },
+      "jobId": 125216976205,
+      "jobConclusion": "success",
+      "sourceGatesConclusion": "success",
+      "scopeAfterConclusion": "success",
+      "artifact": {
+        "id": 13132448488,
+        "name": "local-style-leaves-r1-60",
+        "size_in_bytes": 9082328,
+        "digest": "sha256:9af6e74e9c299815c0eb4a2ada3866eaed1b8784b4672ec3b419bfa7e5fe86ed",
+        "head_sha": "8d5fe35e24d5b09b8ac4016a69b56368335b4c27",
+        "sha256": "9af6e74e9c299815c0eb4a2ada3866eaed1b8784b4672ec3b419bfa7e5fe86ed",
+        "githubDigestMatched": true,
+        "zipIntegrityPassed": true
+      },
+      "activePointLogExactlyMatched": true,
+      "activePointLogSha256": "3d133abf4b8c842727a17f1b85992d0cb3cc9ce3d22975919ea007115cf52bd0",
+      "uncompressedBytes": 452253,
+      "originalJsonSha256": "1f4d773891446bdd17b649e1a776b67852a78a04e913445556aa3c3478923fc1",
+      "nativeTrace": {
+        "file": "leaves-r1-60-native.json.gz",
+        "bytes": 743246,
+        "sha256": "40f060bacefd3486bf7dfdc4cec0aea3f47e5e94a53ddfb28044de2bfae06c5b"
+      },
+      "scopeAfter": {
+        "file": "leaves-r1-60-source-scope.txt",
+        "bytes": 74,
+        "sha256": "aca06e79ccdf8bb490a75b7319a60d8c0362fcd98db05a7155fb8e1c0e8780a3"
+      },
+      "heapAnalysis": {
+        "file": "leaves-r1-60-heaps.json",
+        "bytes": 18090,
+        "sha256": "431afbc51740231a45ce7759c45dbea43d40b51d5000b0dd4c7f5d39defc4a40"
+      },
+      "file": "leaves-r1-60.json.gz",
+      "bytes": 32298,
+      "sha256": "2c60694f5b9df0643e92f8f13d5b921abffc4d3086c6f9cc00c7d5f02bbdf179"
+    }
+  ]
+}
