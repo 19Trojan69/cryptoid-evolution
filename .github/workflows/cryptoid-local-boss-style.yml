@@ -1,0 +1,117 @@
+name: Paired direct boss styles with original artwork
+on:
+  push:
+    branches: [codex/style-recalc-isolation-20261102]
+    paths:
+      - '.github/workflows/cryptoid-local-boss-style.yml'
+      - 'verification/local-boss-style-20261102/*.mjs'
+      - 'verification/boss2-forensics-20261028/buildDevicePreview.mjs'
+      - 'verification/memory-retention-attribution-20261101/profileLifetime.mjs'
+permissions:
+  contents: read
+jobs:
+  source-gates:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with: {persist-credentials: false}
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with: {node-version: '24'}
+      - run: npm install --prefix frontend --include=optional --ignore-scripts --no-audit --no-fund
+      - name: Check real React rendering over all bosses, both virtual types and retained evidence
+        run: |
+          git restore --worktree -- frontend/yarn.lock
+          node verification/boss2-mini-start-control-20261101/verifyScope.mjs
+          node --test verification/local-boss-style-20261102/*.test.mjs verification/boss-thrust-scope-20261102/transform.test.mjs verification/memory-retention-attribution-20261101/inspection.test.mjs verification/inactive-native-allocation-20261101/collector.test.mjs verification/boss2-native-memory-20261029/nativeSummary.test.mjs
+          node verification/local-boss-style-20261102/preflight.mjs
+          node verification/style-recalc-isolation-20261102/evidence/verifyEvidence.mjs
+  short-fidelity:
+    needs: source-gates
+    strategy:
+      fail-fast: false
+      matrix:
+        condition: [control, leaves]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      CRYPTOID_SOAK_CONDITION: original
+      CRYPTOID_LIFETIME_ATTRIBUTION: '1'
+      CRYPTOID_INACTIVE_NATIVE_TRACE: '1'
+      CRYPTOID_LOCAL_STYLE_SCOPE: ${{ matrix.condition }}
+      CRYPTOID_LOCAL_STYLE_REPLICA: '1'
+      CRYPTOID_LOCAL_STYLE_FIDELITY: '1'
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with: {persist-credentials: false}
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with: {node-version: '24'}
+      - name: Install existing browser tools
+        run: |
+          npm install --prefix frontend --include=optional --ignore-scripts --no-audit --no-fund
+          npm install --prefix verification/boss2-forensics-20261028 --ignore-scripts --no-audit --no-fund
+          git restore --worktree -- frontend/yarn.lock
+          cd verification/boss2-forensics-20261028
+          npx playwright install --with-deps chromium
+      - name: Observe a real minute, then compare actual computed values and animation identities during ordinary Home pause
+        env: {VERCEL_ENV: preview, CRYPTOID_ATTRIBUTION_SECONDS: '60'}
+        run: |
+          node verification/systematic-stability-20261101/prepareSoakBuild.mjs
+          node verification/memory-retention-attribution-20261101/profileLifetime.mjs
+      - name: Check original sources even if the diagnostic target failed
+        if: ${{ !cancelled() }}
+        run: |
+          mkdir -p verification/local-boss-style-20261102/results
+          node verification/boss2-mini-start-control-20261101/verifyScope.mjs > verification/local-boss-style-20261102/results/source-scope-after.txt
+          cat verification/local-boss-style-20261102/results/source-scope-after.txt
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: ${{ !cancelled() }}
+        with:
+          name: local-style-${{ matrix.condition }}-r1-60
+          path: verification/local-boss-style-20261102/results/
+          retention-days: 7
+  paired-active:
+    needs: short-fidelity
+    strategy:
+      fail-fast: false
+      matrix:
+        condition: [control, leaves]
+        replica: [1, 2]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    env:
+      CRYPTOID_SOAK_CONDITION: original
+      CRYPTOID_LIFETIME_ATTRIBUTION: '1'
+      CRYPTOID_INACTIVE_NATIVE_TRACE: '1'
+      CRYPTOID_LOCAL_STYLE_SCOPE: ${{ matrix.condition }}
+      CRYPTOID_LOCAL_STYLE_REPLICA: ${{ matrix.replica }}
+      CRYPTOID_LOCAL_STYLE_FIDELITY: '0'
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with: {persist-credentials: false}
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with: {node-version: '24'}
+      - name: Install existing browser tools
+        run: |
+          npm install --prefix frontend --include=optional --ignore-scripts --no-audit --no-fund
+          npm install --prefix verification/boss2-forensics-20261028 --ignore-scripts --no-audit --no-fund
+          git restore --worktree -- frontend/yarn.lock
+          cd verification/boss2-forensics-20261028
+          npx playwright install --with-deps chromium
+      - name: Observe twenty active minutes without wrappers, active tracing, GC, snapshots or DOM sweeps
+        env: {VERCEL_ENV: preview, CRYPTOID_ATTRIBUTION_SECONDS: '1200'}
+        run: |
+          node verification/systematic-stability-20261101/prepareSoakBuild.mjs
+          node verification/memory-retention-attribution-20261101/profileLifetime.mjs
+      - name: Check original sources even if the diagnostic target failed
+        if: ${{ !cancelled() }}
+        run: |
+          mkdir -p verification/local-boss-style-20261102/results
+          node verification/boss2-mini-start-control-20261101/verifyScope.mjs > verification/local-boss-style-20261102/results/source-scope-after.txt
+          cat verification/local-boss-style-20261102/results/source-scope-after.txt
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: ${{ !cancelled() }}
+        with:
+          name: local-style-${{ matrix.condition }}-r${{ matrix.replica }}-1200
+          path: verification/local-boss-style-20261102/results/
+          retention-days: 7
