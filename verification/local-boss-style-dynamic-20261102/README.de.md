@@ -93,27 +93,83 @@ neuer Diagnose-Read nicht automatisch vier bereits abgeschlossene Langläufe.
 - Der Originalquellen-Scope bleibt bestanden. Kein Spiel-Runtime-Patch wurde
   übernommen oder veröffentlicht.
 
-## Ausstehend und nächster konkreter Schritt
+## Ausgeführte Browserläufe und erhaltene Fehlschläge
 
-**Die neuen nativen Browserläufe sind noch nicht ausgeführt.** Lokal sind keine
-Chromium-/WebKit-Binaries installiert. Die automatische Freigabeprüfung hat den
-Push der Analyse-/Evidenz-Commits abgelehnt: Eine ausdrückliche Nutzerfreigabe
-für das Hochladen in das öffentliche Repository sei nicht belegt. Der danach
-über den verbundenen GitHub-Zugang geprüfte passende Besitzer, Repository-ID,
-Branch und Schreibzugriff wurden nicht als Ersatz für diese Freigabe akzeptiert.
-Es erfolgte kein weiterer Upload-Versuch über einen anderen Weg.
+Nach der ausdrücklichen Nutzerfreigabe wurde der Upload über den verbundenen
+GitHub-Zugang abgeschlossen. Dem direkten Git-Transport fehlten Anmeldedaten.
+Die API erzeugt neue Commit-Metadaten; jeder veröffentlichte Dateibaum wurde
+exakt gegen den freigegebenen lokalen Baum geprüft. Die Zuordnung steht in
+`evidence/upload-tree-map.json`. Es gab keine erneute Freigabeanforderung und
+keine Veröffentlichung des Spiels.
 
-Nach ausdrücklicher Freigabe genau diese lokalen Analyse-Commits auf denselben
-Analysezweig pushen und die neue Chromium-/WebKit-CI abwarten. Ergebnisse,
-Fehler und Artefaktdigests sichern; keine fehlgeschlagene Bedingung entfernen
-oder als Geräte-Fix umdeuten. Der neue Browservergleich ersetzt weder die alte
-Startlücken-Untersuchung noch die ausstehende Smartphone-Abnahme. Vor diesen
-Ergebnissen wird kein neuer manueller Geräte-Langtest angefordert.
+| Serie | Quelle | Chromium | WebKit |
+| --- | --- | --- | --- |
+| Initial, CI 41438806386 | `c65a5f58` | Fehler bei Modell 8; 7 vollständig | 50 Modelle vollständig bestanden |
+| Genauere Höhen-Diagnose, CI 41439376881 | `63f02c73` | Derselbe Prüffehler; Werte gesichert | 50 Modelle vollständig bestanden |
+| Expliziter CSSOM-Prüfvertrag, CI 41439931929 | `d3f43caa` | Vollständig bestanden | Vollständig bestanden |
+
+Die erste Chromium-Abweichung war eine zu strenge Annahme des neuen Testcodes
+über die Dezimalschreibweise von Inline-CSS. Die zweite Serie behielt den
+Fehler unverändert bei und sicherte die genauen Werte: erwartete Formel
+`29.29525px`, ausgelesenes Inline-CSS `29.2952px`, tatsächlich berechnete Höhe
+in **beiden** Varianten exakt `29.2812px`. Kein veralteter Schub oder
+unterschiedlich gerendertes Modell wurde an dieser Stelle nachgewiesen.
+
+Der Prüfvertrag wurde danach ausdrücklich korrigiert: Ein einzelner nicht
+gemounteter Fixture-CSSOM-Parser serialisiert den aktuellen Sollwert mit
+derselben Engine. Dieser kanonische String muss exakt dem aktuellen Inline-
+Wert entsprechen. Die berechneten Höhen des Originals und Kandidaten müssen
+weiterhin exakt gleich sein; es wird keine neue numerische Toleranz eingeführt.
+Eine Regression verwendet die real beobachteten Werte und weist bereits eine
+abweichende native Höhe von `29.2813px` oder einen veralteten Inline-Wert zurück.
+Die Formeln und beide Spiel-Komponenten wurden dafür nicht geändert.
+
+Die erfolgreiche Quelle ist `d3f43caaaabe238e3b112c665b4dae8844c6ee8b`, Baum
+`3bf979ad49337db500dcbda508507761ae2cb798`,
+[CI 41439931929](https://github.com/19Trojan69/cryptoid-evolution/actions/runs/41439931929).
+Native Engines: Chromium `151.0.7922.34` und WebKit `26.5` auf Linux,
+Playwright `1.62.1`. Beide verwenden React/ReactDOM `19.2.4`, Vite `7.3.1`,
+TypeScript `5.9.3` und denselben gespeicherten Lock-Digest.
+
+Je Engine bestehen 1.800 aufeinanderfolgende Zustandsvergleiche für alle
+50 Modelle, 50 Fall-/50 Abwesenheitsfälle, 3.500 Prüfungen gleicher gemounteter
+Knoten und ein weiterer Schub-/Ladefall vor der Animation. Hinzu kommen
+66 bestätigte Erhaltungsprüfungen tatsächlich gestarteter nativer Animationen
+und das explizite Unmount beider Wurzeln. Es wurden 6.950 Flammen- und
+5.619 Lade-/Mündungsverbraucher geprüft. Die abgeschlossenen Quellen-Gates und
+die vorherige Archiv-CI `41438806305` bestehen ebenfalls.
+
+Alle sechs unveränderten Beobachtungen, alle sechs tatsächlichen Build-Belege,
+Nach-Scope-Belege und gegen GitHub geprüften Artefakt-Digests stehen in
+`evidence/`. Die zwei fehlgeschlagenen Chromium-Beobachtungen bleiben dort
+als Fehlschläge erhalten. Drei zusätzliche Archiv-Regressionen verhindern
+unter anderem Erfolg ohne vollständige Modelle, Animationserhalt, Unmount,
+gleiche Quellen oder beide Engines. Neue Beleg-/Dokumentations-Commits starten
+diesen Browservergleich nicht erneut.
+
+## Bedeutung und nächster konkreter Schritt
+
+**Bestanden ist die dynamische Komponenten-Darstellung des unveränderten
+virtuellen Kandidaten in beiden Engines.** Die alten vollständigen Spielstart-
+Lücken sind damit nicht geprüft. Dieser isolierte Test misst keinen aktiven
+Speichervorteil und keinen nativen iPhone-/Android-/Pi-Browser-Abbruch.
+Die vorherige unvollständige Speicher-Kohorte bleibt weiterhin nicht abgenommen;
+die erfolgreichen Komponentenläufe ersetzen ihre fehlende zweite Kontrolle
+nicht. Eine dauerhafte White-Screen-Behebung ist nicht bestätigt.
+
+Die nächste gezielte aktive Eingrenzung kann den nun vorhandenen einmaligen
+Abbruch-Read verwenden: Dokumentwechsel, verlorene Szene, technische Pause und
+beobachtete Zeitlücke getrennt sichern. Alte Messungen dürfen dabei nicht
+nachträglich ergänzt oder vermischt werden. Vor einer Geräte-Freigabe bleibt
+insbesondere die Startlücke des vollständigen Spiels zu klären. Noch kein neuer
+manueller Geräte-Langtest und keine Änderung an Main oder Produktion.
 
 ```bash
 node --test verification/memory-retention-attribution-20261101/failureObservation.test.mjs verification/local-boss-style-dynamic-20261102/validation.test.mjs
 node verification/local-boss-style-dynamic-20261102/build.mjs
 node verification/boss2-mini-start-control-20261101/verifyScope.mjs
+node --test verification/local-boss-style-dynamic-20261102/evidence/summary.test.mjs
+node verification/local-boss-style-dynamic-20261102/evidence/verifyEvidence.mjs
 # Erst mit installierter jeweiliger Engine:
 node verification/local-boss-style-dynamic-20261102/run.mjs chromium
 node verification/local-boss-style-dynamic-20261102/run.mjs webkit

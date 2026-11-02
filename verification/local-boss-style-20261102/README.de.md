@@ -165,3 +165,22 @@ Die alte Messserie darf dadurch nicht nachträglich ergänzt oder umklassifizier
 werden. Ein weiterer unveränderter 20-Minuten-Lauf allein ersetzt diese fehlende
 Diagnose nicht. Main, Veröffentlichung und eingefrorene Geräte-Referenzen bleiben
 unverändert.
+
+## Fortgesetzte dynamische Browserprüfung abgeschlossen
+
+Die im letzten Abschnitt priorisierte Eingrenzung ist inzwischen ausgeführt:
+Der exakt gleiche virtuelle Kandidat besteht die dynamischen React-/nativen
+Verbrauchervergleiche für alle 50 Modelle in Chromium und WebKit. Zwei zuvor
+fehlgeschlagene Chromium-Prüfungen bleiben erhalten; sie betrafen die Dezimal-
+Serialisierung im neuen Testharness. Der korrigierte Vertrag fordert den exakt
+browserkanonischen Inline-Wert und weiterhin exakt gleiche berechnete Höhen.
+Spielquellen und vorstehende aktive Speicher-Kohorte wurden nicht verändert.
+
+Vollständige Fortsetzung, genaue Quellen, Engines und alle sechs Beobachtungen:
+[Dynamische Boss-Styles](../local-boss-style-dynamic-20261102/README.de.md),
+[erfolgreiche CI 41439931929](https://github.com/19Trojan69/cryptoid-evolution/actions/runs/41439931929).
+Die Quellen-/Beleg-CI des freigegebenen Uploads `41438806317`/`41438806305`
+bestehen. Der externe Collector sichert künftig im Fehlerfall einmalig den
+begrenzten vorhandenen Scene-/Clock-Zustand; die alte abgebrochene Kontrolle
+erhält dadurch keine nachträgliche Beobachtung. Speicherziel, vollständiger
+Spielstart und Smartphone-/White-Screen-Abnahme bleiben offen.

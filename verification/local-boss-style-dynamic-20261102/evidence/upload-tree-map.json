@@ -1,0 +1,14 @@
+{
+  "transport": "connected GitHub Git Data API after explicit user approval",
+  "repository": "19Trojan69/cryptoid-evolution",
+  "branch": "codex/style-recalc-isolation-20261102",
+  "reasonForDifferentCommitIds": "Commit metadata is assigned by the API; authorized local and remote file trees were required to match exactly.",
+  "commits": [
+    {"localCommit":"b6f7277d73a1e806baafaf5876246118dfbf0d7d","remoteCommit":"b96c7df947cd586356c454383d2e7163ccf51ecb","tree":"b8f73139a2be30d897c09ba2d57d3cbfde66a1af"},
+    {"localCommit":"700577f3d6e4421876ce784fb41be04bd2b5f29b","remoteCommit":"c65a5f580d598bf7f778e6a045f76d3b50a66bc1","tree":"75ec162e01a9ead2678dc32b4438df0e06ad0727"},
+    {"localCommit":"343e8d568566cfd28fcb558bb69a4fed3d42f931","remoteCommit":"63f02c732da9ef74483062099fd96195b291a6f9","tree":"5b4581754050df7f1aa1208df97b2fa2a8d4041a"},
+    {"localCommit":"0b91661db3074e5dd83c7dbf24e9eedde5b26a37","remoteCommit":"d3f43caaaabe238e3b112c665b4dae8844c6ee8b","tree":"3bf979ad49337db500dcbda508507761ae2cb798"}
+  ],
+  "runtimeSourceFilesEdited": false,
+  "whiteScreenFixed": false
+}

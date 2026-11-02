@@ -1,0 +1,115 @@
+{
+  "version": 1,
+  "kind": "standalone-dynamic-react-component-fidelity",
+  "complete": false,
+  "engine": "chromium",
+  "sourceCommit": "c65a5f580d598bf7f778e6a045f76d3b50a66bc1",
+  "sourceTree": "75ec162e01a9ead2678dc32b4438df0e06ad0727",
+  "componentProofs": {
+    "control": {
+      "version": 1,
+      "condition": "control",
+      "originalBlobs": {
+        "BossHullView": "68dd74e598caa060ae8825d3c56b199ba0d08449",
+        "BossReactorView": "0d92e39aba2eb68aa25ba6239932cd4437f4ebf7"
+      },
+      "transformedBlobs": {
+        "BossHullView": "68dd74e598caa060ae8825d3c56b199ba0d08449",
+        "BossReactorView": "0d92e39aba2eb68aa25ba6239932cd4437f4ebf7"
+      },
+      "originalFormulasAndFiringOverrideRetained": true,
+      "originalMemoizedArtworkRetained": true,
+      "onlyExistingConsumersReceiveDirectProperties": true,
+      "newDomNodes": false,
+      "newTimersOrFrames": false,
+      "newEffectsOrGlobalListeners": false,
+      "gameOrAnimationClocksChanged": false,
+      "runtimeSourceFilesEdited": false,
+      "physicalDevice": false,
+      "whiteScreenFixed": false
+    },
+    "leaves": {
+      "version": 1,
+      "condition": "leaves",
+      "originalBlobs": {
+        "BossHullView": "68dd74e598caa060ae8825d3c56b199ba0d08449",
+        "BossReactorView": "0d92e39aba2eb68aa25ba6239932cd4437f4ebf7"
+      },
+      "transformedBlobs": {
+        "BossHullView": "570a0db4dec6abb59f90b39f515156916043517a",
+        "BossReactorView": "33cc560e042963b548c6757384b0d9f21aa221b8"
+      },
+      "originalFormulasAndFiringOverrideRetained": true,
+      "originalMemoizedArtworkRetained": true,
+      "onlyExistingConsumersReceiveDirectProperties": true,
+      "newDomNodes": false,
+      "newTimersOrFrames": false,
+      "newEffectsOrGlobalListeners": false,
+      "gameOrAnimationClocksChanged": false,
+      "runtimeSourceFilesEdited": false,
+      "physicalDevice": false,
+      "whiteScreenFixed": false
+    }
+  },
+  "observedCompilerTransforms": {
+    "control/BossHullView": "68dd74e598caa060ae8825d3c56b199ba0d08449",
+    "leaves/BossHullView": "570a0db4dec6abb59f90b39f515156916043517a",
+    "leaves/BossReactorView": "33cc560e042963b548c6757384b0d9f21aa221b8",
+    "control/BossReactorView": "0d92e39aba2eb68aa25ba6239932cd4437f4ebf7"
+  },
+  "cssBlob": "43dea6284bc694bac6026e5928aaf42e4a461ec2",
+  "actualInstalledPackages": {
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "vite": "7.3.1",
+    "typescript": "5.9.3"
+  },
+  "lockSha256": "b6d496c5725bf24ddb4f51b576b0597ced9f35c5ea7927a65165a5fb6311ad1a",
+  "componentInputTestOnly": true,
+  "originalCssRetained": true,
+  "syntheticInputSequence": true,
+  "normalization": [
+    "paired React useId prefixes",
+    "declared thrust/charge property redistribution",
+    "empty style only on charge consumers after removing declared opacity"
+  ],
+  "gameControllerStarted": false,
+  "gameClockStarted": false,
+  "liveBackend": false,
+  "authentication": false,
+  "payments": false,
+  "physicalDevice": false,
+  "runtimeSourceFilesEdited": false,
+  "whiteScreenFixed": false,
+  "playwrightVersion": "1.62.1",
+  "actualHostOS": "linux",
+  "modelsCompleted": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "remoteFontRequestPolicy": "Remote Google fonts are blocked and not part of this component property comparison.",
+  "memoryBenefitMeasured": false,
+  "wholeGameStartupVerified": false,
+  "physicalPhoneAcceptanceEstablished": false,
+  "engineVersion": "151.0.7922.34",
+  "progress": {
+    "dynamicCases": 252,
+    "fallingCases": 7,
+    "absentCases": 7,
+    "sameNodeChecks": 490,
+    "retainedNativeAnimationChecks": 0,
+    "retainedStartedAnimationChecks": 0,
+    "enginesChecked": 756,
+    "lightsChecked": 756
+  },
+  "failure": {
+    "code": "dynamic-component-fidelity-failed",
+    "message": "page.evaluate: Error: Candidate height must reflect the current nested model values\n    at va (http://127.0.0.1:46305/assets/index-D3NtUP7l.js:9:1683023)\n    at http://127.0.0.1:46305/assets/index-D3NtUP7l.js:9:1684078\n    at Array.forEach (<anonymous>)\n    at Jb (http://127.0.0.1:46305/assets/index-D3NtUP7l.js:9:1683935)\n    at rr (http://127.0.0.1:46305/assets/index-D3NtUP7l.js:9:1688373)\n    at hp (http://127.0.0.1:46305/assets/index-D3NtUP7l.js:9:1689042)\n    at Object.runModel (http://127.0.0.1:46305/assets/index-D3NtUP7l.js:9:1689288)\n    at eval (eval at evaluate (:311:30), <anonymous>:1:34)\n    at UtilityScript.evaluate (<anonymous>:313:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+  },
+  "finishedAt": "2026-11-02T11:43:04.372Z"
+}

@@ -1,0 +1,218 @@
+{
+  "version": 1,
+  "rawOwnerReportsIncluded": false,
+  "rawHeapSnapshotsIncluded": false,
+  "expectedCssBlob": "43dea6284bc694bac6026e5928aaf42e4a461ec2",
+  "captures": [
+    {
+      "label": "initial",
+      "engine": "chromium",
+      "sourceCommit": "c65a5f580d598bf7f778e6a045f76d3b50a66bc1",
+      "sourceTree": "75ec162e01a9ead2678dc32b4438df0e06ad0727",
+      "validationContract": 1,
+      "runId": 41438806386,
+      "jobId": 125255213402,
+      "jobConclusion": "failure",
+      "artifact": {
+        "id": 13138311229,
+        "name": "local-style-dynamic-chromium",
+        "size_in_bytes": 3003,
+        "digest": "sha256:99a521b15f1b74e61379255adc28e46f386e866ca2661527efe5081de3e7a1a0",
+        "sha256": "99a521b15f1b74e61379255adc28e46f386e866ca2661527efe5081de3e7a1a0",
+        "head_sha": "c65a5f580d598bf7f778e6a045f76d3b50a66bc1",
+        "githubDigestMatched": true,
+        "zipIntegrityPassed": true
+      },
+      "observation": {
+        "file": "initial-chromium-observation.json",
+        "bytes": 4575,
+        "sha256": "1aa80e1d0544145175e5fcfed71e8f730af844b23b8b45f6618bca6aa528d740"
+      },
+      "build": {
+        "file": "initial-chromium-build-info.json",
+        "bytes": 2967,
+        "sha256": "a00f5615a7aa86d0458a71e5fb328aad96b68683a3a4cf27c1baca9fa51ca97e"
+      },
+      "scope": {
+        "file": "initial-chromium-source-scope.txt",
+        "bytes": 74,
+        "sha256": "aca06e79ccdf8bb490a75b7319a60d8c0362fcd98db05a7155fb8e1c0e8780a3"
+      }
+    },
+    {
+      "label": "initial",
+      "engine": "webkit",
+      "sourceCommit": "c65a5f580d598bf7f778e6a045f76d3b50a66bc1",
+      "sourceTree": "75ec162e01a9ead2678dc32b4438df0e06ad0727",
+      "validationContract": 1,
+      "runId": 41438806386,
+      "jobId": 125255213865,
+      "jobConclusion": "success",
+      "artifact": {
+        "id": 13136928861,
+        "name": "local-style-dynamic-webkit",
+        "size_in_bytes": 2877,
+        "digest": "sha256:7cb8f61a5ca999954b51ca42320f00dc17e681396f97951cd109c48159d3aab3",
+        "sha256": "7cb8f61a5ca999954b51ca42320f00dc17e681396f97951cd109c48159d3aab3",
+        "head_sha": "c65a5f580d598bf7f778e6a045f76d3b50a66bc1",
+        "githubDigestMatched": true,
+        "zipIntegrityPassed": true
+      },
+      "observation": {
+        "file": "initial-webkit-observation.json",
+        "bytes": 4720,
+        "sha256": "fda024a35a106599e544f8f45decbf65e5c2f24dcc4bb626d15cbf56bc67a043"
+      },
+      "build": {
+        "file": "initial-webkit-build-info.json",
+        "bytes": 2967,
+        "sha256": "a00f5615a7aa86d0458a71e5fb328aad96b68683a3a4cf27c1baca9fa51ca97e"
+      },
+      "scope": {
+        "file": "initial-webkit-source-scope.txt",
+        "bytes": 74,
+        "sha256": "aca06e79ccdf8bb490a75b7319a60d8c0362fcd98db05a7155fb8e1c0e8780a3"
+      }
+    },
+    {
+      "label": "height-diagnostic",
+      "engine": "chromium",
+      "sourceCommit": "63f02c732da9ef74483062099fd96195b291a6f9",
+      "sourceTree": "5b4581754050df7f1aa1208df97b2fa2a8d4041a",
+      "validationContract": 1,
+      "runId": 41439376881,
+      "jobId": 125257095773,
+      "jobConclusion": "failure",
+      "artifact": {
+        "id": 13137534246,
+        "name": "local-style-dynamic-chromium",
+        "size_in_bytes": 3058,
+        "digest": "sha256:0e064c7efa25a14495b00927b64d681ea0ac9139e0a22ed95a3af85925dd0eb5",
+        "sha256": "0e064c7efa25a14495b00927b64d681ea0ac9139e0a22ed95a3af85925dd0eb5",
+        "head_sha": "63f02c732da9ef74483062099fd96195b291a6f9",
+        "githubDigestMatched": true,
+        "zipIntegrityPassed": true
+      },
+      "observation": {
+        "file": "height-diagnostic-chromium-observation.json",
+        "bytes": 4697,
+        "sha256": "93fb1699f18cf6f4ed008ed4e496e1f165055d41496ecba1205b0f4cabe97222"
+      },
+      "build": {
+        "file": "height-diagnostic-chromium-build-info.json",
+        "bytes": 2967,
+        "sha256": "bf0af0083651a88ca52dbf837c4765d54ca792b18e65ac56164e92e53b08c9e3"
+      },
+      "scope": {
+        "file": "height-diagnostic-chromium-source-scope.txt",
+        "bytes": 74,
+        "sha256": "aca06e79ccdf8bb490a75b7319a60d8c0362fcd98db05a7155fb8e1c0e8780a3"
+      }
+    },
+    {
+      "label": "height-diagnostic",
+      "engine": "webkit",
+      "sourceCommit": "63f02c732da9ef74483062099fd96195b291a6f9",
+      "sourceTree": "5b4581754050df7f1aa1208df97b2fa2a8d4041a",
+      "validationContract": 1,
+      "runId": 41439376881,
+      "jobId": 125257095503,
+      "jobConclusion": "success",
+      "artifact": {
+        "id": 13137403012,
+        "name": "local-style-dynamic-webkit",
+        "size_in_bytes": 2885,
+        "digest": "sha256:66c0d16f90efd763e651e0116db3cc8a81ebbb0582f2f095d5c36dd013e0a740",
+        "sha256": "66c0d16f90efd763e651e0116db3cc8a81ebbb0582f2f095d5c36dd013e0a740",
+        "head_sha": "63f02c732da9ef74483062099fd96195b291a6f9",
+        "githubDigestMatched": true,
+        "zipIntegrityPassed": true
+      },
+      "observation": {
+        "file": "height-diagnostic-webkit-observation.json",
+        "bytes": 4720,
+        "sha256": "f84b1adabba9a1cc3dd646565102b69efc5a81aee1e9566a234c86627e1f859e"
+      },
+      "build": {
+        "file": "height-diagnostic-webkit-build-info.json",
+        "bytes": 2967,
+        "sha256": "c207cfee5528a88e44a4011f0f45c052d803c4b53c599d63d2c0a558dfad0019"
+      },
+      "scope": {
+        "file": "height-diagnostic-webkit-source-scope.txt",
+        "bytes": 74,
+        "sha256": "aca06e79ccdf8bb490a75b7319a60d8c0362fcd98db05a7155fb8e1c0e8780a3"
+      }
+    },
+    {
+      "label": "cssom",
+      "engine": "chromium",
+      "sourceCommit": "d3f43caaaabe238e3b112c665b4dae8844c6ee8b",
+      "sourceTree": "3bf979ad49337db500dcbda508507761ae2cb798",
+      "validationContract": 2,
+      "runId": 41439931929,
+      "jobId": 125258941914,
+      "jobConclusion": "success",
+      "artifact": {
+        "id": 13139160944,
+        "name": "local-style-dynamic-chromium",
+        "size_in_bytes": 3025,
+        "digest": "sha256:87560818647c9d5c989acaaf606a789d9bfc8da4ded7268c377b3a6f91be121b",
+        "sha256": "87560818647c9d5c989acaaf606a789d9bfc8da4ded7268c377b3a6f91be121b",
+        "head_sha": "d3f43caaaabe238e3b112c665b4dae8844c6ee8b",
+        "githubDigestMatched": true,
+        "zipIntegrityPassed": true
+      },
+      "observation": {
+        "file": "cssom-chromium-observation.json",
+        "bytes": 4876,
+        "sha256": "38dd37efcf2440f10f9813a5afa3b7155d6419b3cbeee8369a419bc649883ce4"
+      },
+      "build": {
+        "file": "cssom-chromium-build-info.json",
+        "bytes": 3112,
+        "sha256": "428b7a1f61248c1f9380a496debc9a710b472911192797cb9ab7ddc47e7eedf7"
+      },
+      "scope": {
+        "file": "cssom-chromium-source-scope.txt",
+        "bytes": 74,
+        "sha256": "aca06e79ccdf8bb490a75b7319a60d8c0362fcd98db05a7155fb8e1c0e8780a3"
+      }
+    },
+    {
+      "label": "cssom",
+      "engine": "webkit",
+      "sourceCommit": "d3f43caaaabe238e3b112c665b4dae8844c6ee8b",
+      "sourceTree": "3bf979ad49337db500dcbda508507761ae2cb798",
+      "validationContract": 2,
+      "runId": 41439931929,
+      "jobId": 125258942192,
+      "jobConclusion": "success",
+      "artifact": {
+        "id": 13138660959,
+        "name": "local-style-dynamic-webkit",
+        "size_in_bytes": 3009,
+        "digest": "sha256:466795c547fa9d338435febf33c16a235a60a72bfb16bda68655541d4e14d95a",
+        "sha256": "466795c547fa9d338435febf33c16a235a60a72bfb16bda68655541d4e14d95a",
+        "head_sha": "d3f43caaaabe238e3b112c665b4dae8844c6ee8b",
+        "githubDigestMatched": true,
+        "zipIntegrityPassed": true
+      },
+      "observation": {
+        "file": "cssom-webkit-observation.json",
+        "bytes": 4865,
+        "sha256": "a877bf4ad2c5b975d703788cd175c02339e8ee76053f2a2beed833d78df7939d"
+      },
+      "build": {
+        "file": "cssom-webkit-build-info.json",
+        "bytes": 3112,
+        "sha256": "428b7a1f61248c1f9380a496debc9a710b472911192797cb9ab7ddc47e7eedf7"
+      },
+      "scope": {
+        "file": "cssom-webkit-source-scope.txt",
+        "bytes": 74,
+        "sha256": "aca06e79ccdf8bb490a75b7319a60d8c0362fcd98db05a7155fb8e1c0e8780a3"
+      }
+    }
+  ]
+}
