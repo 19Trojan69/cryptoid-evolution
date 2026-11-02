@@ -1,0 +1,49 @@
+{
+  "version": 1,
+  "checkedDate": "2026-11-02",
+  "project": "cryptoid-evolution-testnet",
+  "projectId": "prj_JpvzU9ZS8bFkn9jZgE51Gct8TZpF",
+  "accountId": "team_KzJmtl0QyoYZAOu5RQKsAR2i",
+  "candidateSourceCommit": "5acefc1aa3ea224b656a76c415da39ece0ed84f0",
+  "candidateSourceTree": "e5d838eead213cf6c1d9e9d365c4de38ef7395b8",
+  "pairedNativeFlowRun": 41445407351,
+  "nativePackageFlowRun": 41449159220,
+  "allEightShortAndFourLongNativeFlowsPassed": true,
+  "bothNativePackageFlowsPassed": true,
+  "candidateDeployment": {
+    "id": "dpl_4GBdNjrnTdWLtyxRBs58RkwRd2Rr",
+    "hostname": "cryptoid-evolution-testnet-59fzd7ozh-19-trojan69.vercel.app",
+    "target": null,
+    "readyState": "ERROR",
+    "errorCode": "BUILD_UTILS_SPAWN_1",
+    "errorStep": "buildStep",
+    "errorMessage": "Command \"node verification/direct-boss-style-device-20261102/buildDevicePreview.mjs\" exited with 1",
+    "buildFailureCauseEstablished": false
+  },
+  "isolatedBuildDiagnostic": {
+    "sourceCommit": "dbbac5406e8b2b803823ba3ac161cde380ebee0f",
+    "sourceTree": "5d750f1e1350a2f6acc463c8e0a9fff8a7416be1",
+    "id": "dpl_FuvEfwQLqb5x1Ta2xD6n4etRjPY3",
+    "hostname": "cryptoid-evolution-testnet-55e52nf1h-19-trojan69.vercel.app",
+    "target": null,
+    "readyState": "READY",
+    "playableCandidate": false,
+    "diagnosticResultRetrieved": false
+  },
+  "accessBlock": {
+    "deploymentEvents": "404 not_found",
+    "protectedDiagnosticFetch": "403 forbidden at read_protection_bypass",
+    "protectedShareLink": "404 lookup_deployment with explicit known team",
+    "authenticatedLocalCliAvailable": false,
+    "userTeamProjectAuthorizationRequired": true,
+    "protectionChanged": false,
+    "browserFallbackAttempted": false
+  },
+  "hostedPlayableCandidateVerified": false,
+  "phoneTestReady": false,
+  "productionChanged": false,
+  "physicalDeviceAccepted": false,
+  "whiteScreenFixed": false,
+  "ownerReportsIncluded": false,
+  "credentialsOrShareTokensIncluded": false
+}

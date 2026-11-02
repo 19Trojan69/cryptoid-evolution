@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { summarizeFlow, classifyFlows } from './summary.mjs';
+import '../package-evidence/verifyEvidence.mjs';
 const read = name => readFileSync(new URL(name, import.meta.url));
 const m = JSON.parse(read('manifest.json')), results = JSON.parse(read('results.json')), rows = [];
 assert.equal(m.version, 1); assert.equal(m.rawOwnerReportsIncluded, false);

@@ -383,6 +383,666 @@
         "sha256": "aca06e79ccdf8bb490a75b7319a60d8c0362fcd98db05a7155fb8e1c0e8780a3"
       },
       "pointLogs": []
+    },
+    {
+      "label": "fresh-frame",
+      "engine": "chromium",
+      "condition": "control",
+      "replica": 1,
+      "phase": "long",
+      "sourceCommit": "a8e407a649431c719dfee64e0ec3cf63d73de3e0",
+      "sourceTree": "2780ff76231ae2f11e2ef7a25eb8c91bad41161a",
+      "observerVersion": 2,
+      "runId": 41445407351,
+      "jobId": 125280316044,
+      "jobConclusion": "success",
+      "artifact": {
+        "id": 13144601170,
+        "name": "clock-gap-chromium-control-r1-long",
+        "size_in_bytes": 25530,
+        "digest": "sha256:efd3765ddf2e3b1bc582bc8dfd1cb76ff6bbbe4fe0ea7314ef0a10c4fb223a90",
+        "sha256": "efd3765ddf2e3b1bc582bc8dfd1cb76ff6bbbe4fe0ea7314ef0a10c4fb223a90",
+        "head_sha": "a8e407a649431c719dfee64e0ec3cf63d73de3e0",
+        "githubDigestMatched": true,
+        "zipIntegrityPassed": true
+      },
+      "observation": {
+        "file": "fresh-frame-chromium-control-r1-long-verification.json",
+        "bytes": 347503,
+        "sha256": "385a68007a48710adf46154b4c19e8bf685399884c8c0ccba60faa7af6e08b0e"
+      },
+      "build": {
+        "file": "fresh-frame-chromium-control-r1-long-build-info.json",
+        "bytes": 4356,
+        "sha256": "a9e5ba3bc7326062a27bdf71ad38a3cd73eef299a82278dfb0486b9d4411f4e1"
+      },
+      "scope": {
+        "file": "fresh-frame-chromium-control-r1-long-source-scope.txt",
+        "bytes": 74,
+        "sha256": "aca06e79ccdf8bb490a75b7319a60d8c0362fcd98db05a7155fb8e1c0e8780a3"
+      },
+      "pointLogs": [
+        {
+          "file": "fresh-frame-chromium-control-r1-long-cycle-0.jsonl",
+          "bytes": 163579,
+          "sha256": "2a331130f0bbba3e830239a948a8796b20a3d6a9cbbf988b95a416a416cce1e1"
+        },
+        {
+          "file": "fresh-frame-chromium-control-r1-long-cycle-1.jsonl",
+          "bytes": 1985,
+          "sha256": "213a44a31e715021ce09e7242ae1cf409adbbf08d489dfd214564ec69868fb01"
+        },
+        {
+          "file": "fresh-frame-chromium-control-r1-long-cycle-2.jsonl",
+          "bytes": 1975,
+          "sha256": "201c59c1c8cb58c421d67a1ccbfd60b8655c9ac9a73377ca5c4d690e70a6bfea"
+        }
+      ]
+    },
+    {
+      "label": "fresh-frame",
+      "engine": "chromium",
+      "condition": "leaves",
+      "replica": 1,
+      "phase": "long",
+      "sourceCommit": "a8e407a649431c719dfee64e0ec3cf63d73de3e0",
+      "sourceTree": "2780ff76231ae2f11e2ef7a25eb8c91bad41161a",
+      "observerVersion": 2,
+      "runId": 41445407351,
+      "jobId": 125280316139,
+      "jobConclusion": "success",
+      "artifact": {
+        "id": 13143967047,
+        "name": "clock-gap-chromium-leaves-r1-long",
+        "size_in_bytes": 25479,
+        "digest": "sha256:d891138814bd9510e3a3925bf3f9593b0a2657858caa22af58f8f8fdabdea7d5",
+        "sha256": "d891138814bd9510e3a3925bf3f9593b0a2657858caa22af58f8f8fdabdea7d5",
+        "head_sha": "a8e407a649431c719dfee64e0ec3cf63d73de3e0",
+        "githubDigestMatched": true,
+        "zipIntegrityPassed": true
+      },
+      "observation": {
+        "file": "fresh-frame-chromium-leaves-r1-long-verification.json",
+        "bytes": 348862,
+        "sha256": "4ab4be967416afaf88d34e1e6ab47e95f10d820b2f1b80b14d59755223a578c1"
+      },
+      "build": {
+        "file": "fresh-frame-chromium-leaves-r1-long-build-info.json",
+        "bytes": 4355,
+        "sha256": "3a3b8326980dbe39d2e2c1ed55b4ab4966be8af95a9bb2716a6c291d2ecd6683"
+      },
+      "scope": {
+        "file": "fresh-frame-chromium-leaves-r1-long-source-scope.txt",
+        "bytes": 74,
+        "sha256": "aca06e79ccdf8bb490a75b7319a60d8c0362fcd98db05a7155fb8e1c0e8780a3"
+      },
+      "pointLogs": [
+        {
+          "file": "fresh-frame-chromium-leaves-r1-long-cycle-0.jsonl",
+          "bytes": 165298,
+          "sha256": "fcbb4c13c02c9a15bfe6445c17133f059c2e5381385439731ebb05de14d48740"
+        },
+        {
+          "file": "fresh-frame-chromium-leaves-r1-long-cycle-1.jsonl",
+          "bytes": 1306,
+          "sha256": "28d38f5f270fdaca1de0970fc53f17a4d7601dc0545b6ce54a7677714813f0b1"
+        },
+        {
+          "file": "fresh-frame-chromium-leaves-r1-long-cycle-2.jsonl",
+          "bytes": 1974,
+          "sha256": "c706333697d885e9417055adbe627f877d2d4619ad3e836f4a134a207b723f7f"
+        }
+      ]
+    },
+    {
+      "label": "fresh-frame",
+      "engine": "webkit",
+      "condition": "leaves",
+      "replica": 1,
+      "phase": "long",
+      "sourceCommit": "a8e407a649431c719dfee64e0ec3cf63d73de3e0",
+      "sourceTree": "2780ff76231ae2f11e2ef7a25eb8c91bad41161a",
+      "observerVersion": 2,
+      "runId": 41445407351,
+      "jobId": 125280316055,
+      "jobConclusion": "success",
+      "artifact": {
+        "id": 13143706987,
+        "name": "clock-gap-webkit-leaves-r1-long",
+        "size_in_bytes": 24368,
+        "digest": "sha256:0079cbd2234a0ceeeb1cc718617fbacdc30386b28e8c36a4935422a0a27d5056",
+        "sha256": "0079cbd2234a0ceeeb1cc718617fbacdc30386b28e8c36a4935422a0a27d5056",
+        "head_sha": "a8e407a649431c719dfee64e0ec3cf63d73de3e0",
+        "githubDigestMatched": true,
+        "zipIntegrityPassed": true
+      },
+      "observation": {
+        "file": "fresh-frame-webkit-leaves-r1-long-verification.json",
+        "bytes": 339377,
+        "sha256": "f70b930746d99289abe437c2525392cf3cce01af51974f642f98de4fcbd53dc0"
+      },
+      "build": {
+        "file": "fresh-frame-webkit-leaves-r1-long-build-info.json",
+        "bytes": 4355,
+        "sha256": "3a3b8326980dbe39d2e2c1ed55b4ab4966be8af95a9bb2716a6c291d2ecd6683"
+      },
+      "scope": {
+        "file": "fresh-frame-webkit-leaves-r1-long-source-scope.txt",
+        "bytes": 74,
+        "sha256": "aca06e79ccdf8bb490a75b7319a60d8c0362fcd98db05a7155fb8e1c0e8780a3"
+      },
+      "pointLogs": [
+        {
+          "file": "fresh-frame-webkit-leaves-r1-long-cycle-0.jsonl",
+          "bytes": 155246,
+          "sha256": "421a0761bcf47c2938b5f753351ffa534614d9a08e57270952a22f61ef62bacb"
+        },
+        {
+          "file": "fresh-frame-webkit-leaves-r1-long-cycle-1.jsonl",
+          "bytes": 1965,
+          "sha256": "87a1ae411803876ee68cdd02e49cd2fb0a040614d511d4b1abaddea45695cfd3"
+        },
+        {
+          "file": "fresh-frame-webkit-leaves-r1-long-cycle-2.jsonl",
+          "bytes": 1965,
+          "sha256": "329ab588447f80043c49fa3b5c7e2228d89a9af7af8794146edc7b7afbfc5b87"
+        }
+      ]
+    },
+    {
+      "label": "fresh-frame",
+      "engine": "webkit",
+      "condition": "control",
+      "replica": 1,
+      "phase": "long",
+      "sourceCommit": "a8e407a649431c719dfee64e0ec3cf63d73de3e0",
+      "sourceTree": "2780ff76231ae2f11e2ef7a25eb8c91bad41161a",
+      "observerVersion": 2,
+      "runId": 41445407351,
+      "jobId": 125280315974,
+      "jobConclusion": "success",
+      "artifact": {
+        "id": 13143607347,
+        "name": "clock-gap-webkit-control-r1-long",
+        "size_in_bytes": 23925,
+        "digest": "sha256:3671c373e84b292b782e61b00a9bcb0ab8ffbeb83b6bb0a86511cc91a6fd997d",
+        "sha256": "3671c373e84b292b782e61b00a9bcb0ab8ffbeb83b6bb0a86511cc91a6fd997d",
+        "head_sha": "a8e407a649431c719dfee64e0ec3cf63d73de3e0",
+        "githubDigestMatched": true,
+        "zipIntegrityPassed": true
+      },
+      "observation": {
+        "file": "fresh-frame-webkit-control-r1-long-verification.json",
+        "bytes": 336594,
+        "sha256": "a4176825d7301509f375a67ab932545001596e5e17268292c3df7c58a0b0d4c7"
+      },
+      "build": {
+        "file": "fresh-frame-webkit-control-r1-long-build-info.json",
+        "bytes": 4356,
+        "sha256": "a9e5ba3bc7326062a27bdf71ad38a3cd73eef299a82278dfb0486b9d4411f4e1"
+      },
+      "scope": {
+        "file": "fresh-frame-webkit-control-r1-long-source-scope.txt",
+        "bytes": 74,
+        "sha256": "aca06e79ccdf8bb490a75b7319a60d8c0362fcd98db05a7155fb8e1c0e8780a3"
+      },
+      "pointLogs": [
+        {
+          "file": "fresh-frame-webkit-control-r1-long-cycle-0.jsonl",
+          "bytes": 153561,
+          "sha256": "70c10d55e6aa0d0f38a9871b60c87d618f561d29b5b2b7734525f1d329cff834"
+        },
+        {
+          "file": "fresh-frame-webkit-control-r1-long-cycle-1.jsonl",
+          "bytes": 1966,
+          "sha256": "6bd3269008c3ff860dafd3c4e08c871a039b6798a881bfe1c734750cb27ab6d0"
+        },
+        {
+          "file": "fresh-frame-webkit-control-r1-long-cycle-2.jsonl",
+          "bytes": 1966,
+          "sha256": "818c4375a2fcbad8b30782f185c8f8111e32d9951cd30b55c105cd4feaaf55b0"
+        }
+      ]
+    },
+    {
+      "label": "fresh-frame",
+      "engine": "chromium",
+      "condition": "control",
+      "replica": 1,
+      "phase": "short",
+      "sourceCommit": "a8e407a649431c719dfee64e0ec3cf63d73de3e0",
+      "sourceTree": "2780ff76231ae2f11e2ef7a25eb8c91bad41161a",
+      "observerVersion": 2,
+      "runId": 41445407351,
+      "jobId": 125277586705,
+      "jobConclusion": "success",
+      "artifact": {
+        "id": 13143050681,
+        "name": "clock-gap-chromium-control-r1-short",
+        "size_in_bytes": 10623,
+        "digest": "sha256:655e1840a9adc5a03e769848335ac1dca86de804517ae164f2b8de63891e3d5b",
+        "sha256": "655e1840a9adc5a03e769848335ac1dca86de804517ae164f2b8de63891e3d5b",
+        "head_sha": "a8e407a649431c719dfee64e0ec3cf63d73de3e0",
+        "githubDigestMatched": true,
+        "zipIntegrityPassed": true
+      },
+      "observation": {
+        "file": "fresh-frame-chromium-control-r1-short-verification.json",
+        "bytes": 77211,
+        "sha256": "fbcaf5de704316a4bf76458bb301e079957b46a9f93318c60abda8680ded07da"
+      },
+      "build": {
+        "file": "fresh-frame-chromium-control-r1-short-build-info.json",
+        "bytes": 4356,
+        "sha256": "a9e5ba3bc7326062a27bdf71ad38a3cd73eef299a82278dfb0486b9d4411f4e1"
+      },
+      "scope": {
+        "file": "fresh-frame-chromium-control-r1-short-source-scope.txt",
+        "bytes": 74,
+        "sha256": "aca06e79ccdf8bb490a75b7319a60d8c0362fcd98db05a7155fb8e1c0e8780a3"
+      },
+      "pointLogs": [
+        {
+          "file": "fresh-frame-chromium-control-r1-short-cycle-0.jsonl",
+          "bytes": 8767,
+          "sha256": "09626a136548dc6a4e8f664ea7524bc24ccc1804b7eb3c54667940ad0b55b92c"
+        },
+        {
+          "file": "fresh-frame-chromium-control-r1-short-cycle-1.jsonl",
+          "bytes": 1988,
+          "sha256": "583805fbffe64764a95b6ceebd28997d6fbd7f5850dc9d0f50f0e288136906ff"
+        },
+        {
+          "file": "fresh-frame-chromium-control-r1-short-cycle-2.jsonl",
+          "bytes": 1319,
+          "sha256": "a5b31938d8108cda9b308a587c2c0d77cd32c5c195bac8fdeb3eb9e381ac567f"
+        }
+      ]
+    },
+    {
+      "label": "fresh-frame",
+      "engine": "webkit",
+      "condition": "leaves",
+      "replica": 1,
+      "phase": "short",
+      "sourceCommit": "a8e407a649431c719dfee64e0ec3cf63d73de3e0",
+      "sourceTree": "2780ff76231ae2f11e2ef7a25eb8c91bad41161a",
+      "observerVersion": 2,
+      "runId": 41445407351,
+      "jobId": 125277586466,
+      "jobConclusion": "success",
+      "artifact": {
+        "id": 13142881097,
+        "name": "clock-gap-webkit-leaves-r1-short",
+        "size_in_bytes": 10822,
+        "digest": "sha256:bd48db6686f5745880c228e9d5378dfbba3b29157116c0be8ebafff4ea811d37",
+        "sha256": "bd48db6686f5745880c228e9d5378dfbba3b29157116c0be8ebafff4ea811d37",
+        "head_sha": "a8e407a649431c719dfee64e0ec3cf63d73de3e0",
+        "githubDigestMatched": true,
+        "zipIntegrityPassed": true
+      },
+      "observation": {
+        "file": "fresh-frame-webkit-leaves-r1-short-verification.json",
+        "bytes": 79414,
+        "sha256": "11ae0cf3ea88de823e150e919c9d47e4447bb2f6c2c50d63f477b55a7ccb677a"
+      },
+      "build": {
+        "file": "fresh-frame-webkit-leaves-r1-short-build-info.json",
+        "bytes": 4355,
+        "sha256": "3a3b8326980dbe39d2e2c1ed55b4ab4966be8af95a9bb2716a6c291d2ecd6683"
+      },
+      "scope": {
+        "file": "fresh-frame-webkit-leaves-r1-short-source-scope.txt",
+        "bytes": 74,
+        "sha256": "aca06e79ccdf8bb490a75b7319a60d8c0362fcd98db05a7155fb8e1c0e8780a3"
+      },
+      "pointLogs": [
+        {
+          "file": "fresh-frame-webkit-leaves-r1-short-cycle-0.jsonl",
+          "bytes": 7898,
+          "sha256": "303f5585799309b2458be03661abd6d2d0b051670a2a6df5717e6bfb39d8b95f"
+        },
+        {
+          "file": "fresh-frame-webkit-leaves-r1-short-cycle-1.jsonl",
+          "bytes": 1309,
+          "sha256": "b14bbdc5f6efd139b732d26eca1e89ecca1854e831ece781870886f9250a4be1"
+        },
+        {
+          "file": "fresh-frame-webkit-leaves-r1-short-cycle-2.jsonl",
+          "bytes": 1966,
+          "sha256": "212dbfda324133d0747bacc1219f6de611a67ff819815ca768c69e0b105a27bf"
+        }
+      ]
+    },
+    {
+      "label": "fresh-frame",
+      "engine": "webkit",
+      "condition": "control",
+      "replica": 2,
+      "phase": "short",
+      "sourceCommit": "a8e407a649431c719dfee64e0ec3cf63d73de3e0",
+      "sourceTree": "2780ff76231ae2f11e2ef7a25eb8c91bad41161a",
+      "observerVersion": 2,
+      "runId": 41445407351,
+      "jobId": 125277587190,
+      "jobConclusion": "success",
+      "artifact": {
+        "id": 13142756910,
+        "name": "clock-gap-webkit-control-r2-short",
+        "size_in_bytes": 10883,
+        "digest": "sha256:c33501a028ae2df2145bce58cdb7b0ab082ca24cdbda5a79e4fdddc739e7cbe4",
+        "sha256": "c33501a028ae2df2145bce58cdb7b0ab082ca24cdbda5a79e4fdddc739e7cbe4",
+        "head_sha": "a8e407a649431c719dfee64e0ec3cf63d73de3e0",
+        "githubDigestMatched": true,
+        "zipIntegrityPassed": true
+      },
+      "observation": {
+        "file": "fresh-frame-webkit-control-r2-short-verification.json",
+        "bytes": 80650,
+        "sha256": "d88eec50c6132276f15acf317f6ca86429c6b5519f3029e155c5ea4f383097fb"
+      },
+      "build": {
+        "file": "fresh-frame-webkit-control-r2-short-build-info.json",
+        "bytes": 4356,
+        "sha256": "a9e5ba3bc7326062a27bdf71ad38a3cd73eef299a82278dfb0486b9d4411f4e1"
+      },
+      "scope": {
+        "file": "fresh-frame-webkit-control-r2-short-source-scope.txt",
+        "bytes": 74,
+        "sha256": "aca06e79ccdf8bb490a75b7319a60d8c0362fcd98db05a7155fb8e1c0e8780a3"
+      },
+      "pointLogs": [
+        {
+          "file": "fresh-frame-webkit-control-r2-short-cycle-0.jsonl",
+          "bytes": 7931,
+          "sha256": "66e78399ca2ee152441645ba840a0e8d6fed03c85f6af6294d2300b04e2fab2c"
+        },
+        {
+          "file": "fresh-frame-webkit-control-r2-short-cycle-1.jsonl",
+          "bytes": 1964,
+          "sha256": "609e8c1c3046e3e79b7ca59deed77239058e5ed60d768e3b39e4d42e197f57ef"
+        },
+        {
+          "file": "fresh-frame-webkit-control-r2-short-cycle-2.jsonl",
+          "bytes": 1965,
+          "sha256": "683fb8b9bec2e215ee313a1d7ffad88a0a0f852ad048928842f08ebe6ff18feb"
+        }
+      ]
+    },
+    {
+      "label": "fresh-frame",
+      "engine": "webkit",
+      "condition": "leaves",
+      "replica": 2,
+      "phase": "short",
+      "sourceCommit": "a8e407a649431c719dfee64e0ec3cf63d73de3e0",
+      "sourceTree": "2780ff76231ae2f11e2ef7a25eb8c91bad41161a",
+      "observerVersion": 2,
+      "runId": 41445407351,
+      "jobId": 125277586616,
+      "jobConclusion": "success",
+      "artifact": {
+        "id": 13142502313,
+        "name": "clock-gap-webkit-leaves-r2-short",
+        "size_in_bytes": 10882,
+        "digest": "sha256:1281a74f5968c1f47282c69ed206d9a86fce2045eda2a1f1c5cf332343035aee",
+        "sha256": "1281a74f5968c1f47282c69ed206d9a86fce2045eda2a1f1c5cf332343035aee",
+        "head_sha": "a8e407a649431c719dfee64e0ec3cf63d73de3e0",
+        "githubDigestMatched": true,
+        "zipIntegrityPassed": true
+      },
+      "observation": {
+        "file": "fresh-frame-webkit-leaves-r2-short-verification.json",
+        "bytes": 80608,
+        "sha256": "79d501f39e471d23b1d4a8d83ba2a97316673852b8d16942a8c4e2876b037f35"
+      },
+      "build": {
+        "file": "fresh-frame-webkit-leaves-r2-short-build-info.json",
+        "bytes": 4355,
+        "sha256": "3a3b8326980dbe39d2e2c1ed55b4ab4966be8af95a9bb2716a6c291d2ecd6683"
+      },
+      "scope": {
+        "file": "fresh-frame-webkit-leaves-r2-short-source-scope.txt",
+        "bytes": 74,
+        "sha256": "aca06e79ccdf8bb490a75b7319a60d8c0362fcd98db05a7155fb8e1c0e8780a3"
+      },
+      "pointLogs": [
+        {
+          "file": "fresh-frame-webkit-leaves-r2-short-cycle-0.jsonl",
+          "bytes": 7899,
+          "sha256": "85ba0e4404dddb074037ffd7c04792cffb360fd0e1936826c837fffe61f24e10"
+        },
+        {
+          "file": "fresh-frame-webkit-leaves-r2-short-cycle-1.jsonl",
+          "bytes": 1966,
+          "sha256": "195356f02f0bb531acf5f6ac661cfbc17005235a92cdaf503dcd8ed3a9add7a0"
+        },
+        {
+          "file": "fresh-frame-webkit-leaves-r2-short-cycle-2.jsonl",
+          "bytes": 1966,
+          "sha256": "d1cef8c7c3c56bfb12e5e4a9e2c72e6cf005555f25051915612eddbca89f5471"
+        }
+      ]
+    },
+    {
+      "label": "fresh-frame",
+      "engine": "webkit",
+      "condition": "control",
+      "replica": 1,
+      "phase": "short",
+      "sourceCommit": "a8e407a649431c719dfee64e0ec3cf63d73de3e0",
+      "sourceTree": "2780ff76231ae2f11e2ef7a25eb8c91bad41161a",
+      "observerVersion": 2,
+      "runId": 41445407351,
+      "jobId": 125277586496,
+      "jobConclusion": "success",
+      "artifact": {
+        "id": 13142002791,
+        "name": "clock-gap-webkit-control-r1-short",
+        "size_in_bytes": 10861,
+        "digest": "sha256:0436ad7ef640b517efa7420082d59446fe76f02e54e854ebc2731a86befcbce2",
+        "sha256": "0436ad7ef640b517efa7420082d59446fe76f02e54e854ebc2731a86befcbce2",
+        "head_sha": "a8e407a649431c719dfee64e0ec3cf63d73de3e0",
+        "githubDigestMatched": true,
+        "zipIntegrityPassed": true
+      },
+      "observation": {
+        "file": "fresh-frame-webkit-control-r1-short-verification.json",
+        "bytes": 80644,
+        "sha256": "5cab604c2c9b357182b9da90389d5cd99354cbe2477e1cd528b4d14d74268bd3"
+      },
+      "build": {
+        "file": "fresh-frame-webkit-control-r1-short-build-info.json",
+        "bytes": 4356,
+        "sha256": "a9e5ba3bc7326062a27bdf71ad38a3cd73eef299a82278dfb0486b9d4411f4e1"
+      },
+      "scope": {
+        "file": "fresh-frame-webkit-control-r1-short-source-scope.txt",
+        "bytes": 74,
+        "sha256": "aca06e79ccdf8bb490a75b7319a60d8c0362fcd98db05a7155fb8e1c0e8780a3"
+      },
+      "pointLogs": [
+        {
+          "file": "fresh-frame-webkit-control-r1-short-cycle-0.jsonl",
+          "bytes": 7931,
+          "sha256": "0ce491a736a19c66f2c89f2ec91ff5cf7d25c8117ea7b852af0d5dc4a0b02aa7"
+        },
+        {
+          "file": "fresh-frame-webkit-control-r1-short-cycle-1.jsonl",
+          "bytes": 1965,
+          "sha256": "5722a35133f3efde477636ee96989cb24ce969285a05010a2cc37545a20ce7ad"
+        },
+        {
+          "file": "fresh-frame-webkit-control-r1-short-cycle-2.jsonl",
+          "bytes": 1966,
+          "sha256": "e021f024bdbced4f13db5989d4bc2dda1886cf8e371e8a02161f8b4ccff9273d"
+        }
+      ]
+    },
+    {
+      "label": "fresh-frame",
+      "engine": "chromium",
+      "condition": "leaves",
+      "replica": 1,
+      "phase": "short",
+      "sourceCommit": "a8e407a649431c719dfee64e0ec3cf63d73de3e0",
+      "sourceTree": "2780ff76231ae2f11e2ef7a25eb8c91bad41161a",
+      "observerVersion": 2,
+      "runId": 41445407351,
+      "jobId": 125277586485,
+      "jobConclusion": "success",
+      "artifact": {
+        "id": 13141348254,
+        "name": "clock-gap-chromium-leaves-r1-short",
+        "size_in_bytes": 10570,
+        "digest": "sha256:02df9c364ab8af0fa71583295e31f02eafecd2b807870e0c65b7bf93a966a7c0",
+        "sha256": "02df9c364ab8af0fa71583295e31f02eafecd2b807870e0c65b7bf93a966a7c0",
+        "head_sha": "a8e407a649431c719dfee64e0ec3cf63d73de3e0",
+        "githubDigestMatched": true,
+        "zipIntegrityPassed": true
+      },
+      "observation": {
+        "file": "fresh-frame-chromium-leaves-r1-short-verification.json",
+        "bytes": 76787,
+        "sha256": "ed5eed0eae6fca5d97c8d7cfb11f2050fa0cad15e79d29a831ba35eb20ecb329"
+      },
+      "build": {
+        "file": "fresh-frame-chromium-leaves-r1-short-build-info.json",
+        "bytes": 4355,
+        "sha256": "3a3b8326980dbe39d2e2c1ed55b4ab4966be8af95a9bb2716a6c291d2ecd6683"
+      },
+      "scope": {
+        "file": "fresh-frame-chromium-leaves-r1-short-source-scope.txt",
+        "bytes": 74,
+        "sha256": "aca06e79ccdf8bb490a75b7319a60d8c0362fcd98db05a7155fb8e1c0e8780a3"
+      },
+      "pointLogs": [
+        {
+          "file": "fresh-frame-chromium-leaves-r1-short-cycle-0.jsonl",
+          "bytes": 8741,
+          "sha256": "bfc729aecd82abb9056ce73e4e6ed858982ef0bb7e79376a7b2f026e992d59a5"
+        },
+        {
+          "file": "fresh-frame-chromium-leaves-r1-short-cycle-1.jsonl",
+          "bytes": 1962,
+          "sha256": "8fa4c549e17558443f2eefa471c7340c7764505d3c14a21f696e8fc1d5207d38"
+        },
+        {
+          "file": "fresh-frame-chromium-leaves-r1-short-cycle-2.jsonl",
+          "bytes": 1306,
+          "sha256": "c20ee854729db762b7b3fe8a7f87bbc10e3e7b411a5702ef924c6c8fc271402c"
+        }
+      ]
+    },
+    {
+      "label": "fresh-frame",
+      "engine": "chromium",
+      "condition": "control",
+      "replica": 2,
+      "phase": "short",
+      "sourceCommit": "a8e407a649431c719dfee64e0ec3cf63d73de3e0",
+      "sourceTree": "2780ff76231ae2f11e2ef7a25eb8c91bad41161a",
+      "observerVersion": 2,
+      "runId": 41445407351,
+      "jobId": 125277586633,
+      "jobConclusion": "success",
+      "artifact": {
+        "id": 13141348253,
+        "name": "clock-gap-chromium-control-r2-short",
+        "size_in_bytes": 10410,
+        "digest": "sha256:54811980a4a15464a8faf6ffd473afd6c06811e70ae6de2d0030f3a1c84ff503",
+        "sha256": "54811980a4a15464a8faf6ffd473afd6c06811e70ae6de2d0030f3a1c84ff503",
+        "head_sha": "a8e407a649431c719dfee64e0ec3cf63d73de3e0",
+        "githubDigestMatched": true,
+        "zipIntegrityPassed": true
+      },
+      "observation": {
+        "file": "fresh-frame-chromium-control-r2-short-verification.json",
+        "bytes": 76510,
+        "sha256": "cd5ef36dfa3c89edb1eee1b2d7fe10c7864f391ae01eee9995fd0a99272340fa"
+      },
+      "build": {
+        "file": "fresh-frame-chromium-control-r2-short-build-info.json",
+        "bytes": 4356,
+        "sha256": "a9e5ba3bc7326062a27bdf71ad38a3cd73eef299a82278dfb0486b9d4411f4e1"
+      },
+      "scope": {
+        "file": "fresh-frame-chromium-control-r2-short-source-scope.txt",
+        "bytes": 74,
+        "sha256": "aca06e79ccdf8bb490a75b7319a60d8c0362fcd98db05a7155fb8e1c0e8780a3"
+      },
+      "pointLogs": [
+        {
+          "file": "fresh-frame-chromium-control-r2-short-cycle-0.jsonl",
+          "bytes": 8743,
+          "sha256": "c15a46a5b627eff3963230153fdf963dd48a4f4aef065fe7a67f34e9ba343ebf"
+        },
+        {
+          "file": "fresh-frame-chromium-control-r2-short-cycle-1.jsonl",
+          "bytes": 1306,
+          "sha256": "2bbbd08c52c529a334802fc74a6c47d6e412dd14d2ce7111e3755f6efedfdaa1"
+        },
+        {
+          "file": "fresh-frame-chromium-control-r2-short-cycle-2.jsonl",
+          "bytes": 1975,
+          "sha256": "c08a0a805ae49149729528151595dee9f34a9fc940cd3cf1bbf5121b41cd2023"
+        }
+      ]
+    },
+    {
+      "label": "fresh-frame",
+      "engine": "chromium",
+      "condition": "leaves",
+      "replica": 2,
+      "phase": "short",
+      "sourceCommit": "a8e407a649431c719dfee64e0ec3cf63d73de3e0",
+      "sourceTree": "2780ff76231ae2f11e2ef7a25eb8c91bad41161a",
+      "observerVersion": 2,
+      "runId": 41445407351,
+      "jobId": 125277586583,
+      "jobConclusion": "success",
+      "artifact": {
+        "id": 13141348249,
+        "name": "clock-gap-chromium-leaves-r2-short",
+        "size_in_bytes": 10554,
+        "digest": "sha256:17937e3bd91ea9cf4c82dbe8f6c51f1efcdb33edf2b5fed3577baa5ad67f2427",
+        "sha256": "17937e3bd91ea9cf4c82dbe8f6c51f1efcdb33edf2b5fed3577baa5ad67f2427",
+        "head_sha": "a8e407a649431c719dfee64e0ec3cf63d73de3e0",
+        "githubDigestMatched": true,
+        "zipIntegrityPassed": true
+      },
+      "observation": {
+        "file": "fresh-frame-chromium-leaves-r2-short-verification.json",
+        "bytes": 78079,
+        "sha256": "812909397bfac41bb9c1b3c6b07ff25fe4289afeb03121564256160023acf95a"
+      },
+      "build": {
+        "file": "fresh-frame-chromium-leaves-r2-short-build-info.json",
+        "bytes": 4355,
+        "sha256": "3a3b8326980dbe39d2e2c1ed55b4ab4966be8af95a9bb2716a6c291d2ecd6683"
+      },
+      "scope": {
+        "file": "fresh-frame-chromium-leaves-r2-short-source-scope.txt",
+        "bytes": 74,
+        "sha256": "aca06e79ccdf8bb490a75b7319a60d8c0362fcd98db05a7155fb8e1c0e8780a3"
+      },
+      "pointLogs": [
+        {
+          "file": "fresh-frame-chromium-leaves-r2-short-cycle-0.jsonl",
+          "bytes": 8840,
+          "sha256": "2ad00bb76c8817ec2d43bf515f835e48206cb6bbd8ff0e90f30808e8b111a831"
+        },
+        {
+          "file": "fresh-frame-chromium-leaves-r2-short-cycle-1.jsonl",
+          "bytes": 1962,
+          "sha256": "f658fd537826ce68fba24cd21f6b86f4e88e3bfaf847c468b42e961d69bb61b1"
+        },
+        {
+          "file": "fresh-frame-chromium-leaves-r2-short-cycle-2.jsonl",
+          "bytes": 1962,
+          "sha256": "297c2db8ae57a403c4ccc014987cd20d15c1e0382efff3c7bf373a264c6024dc"
+        }
+      ]
     }
   ]
 }

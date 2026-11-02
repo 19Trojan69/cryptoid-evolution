@@ -1,0 +1,1 @@
+CRYPTOID_MINI_START_SCOPE {"passed":true,"originalSourcesUnchanged":true}

@@ -19,7 +19,7 @@ Nur der isolierte Gast-Builder erhält unter dem expliziten Argument
 lokaler skalarer Zähler, ein Aufruf am vorhandenen nativen `step` vor seinen
 Simulations-Substeps sowie Freigabe in dessen bestehendem Cleanup. Der Zähler
 speichert Callback-Anzahl, vorhandenen nativen Zeitstempel, größten beobachteten
-Frame-Abstand während zweier laufender Zustände und höchstens 16 Abstände über
+Frame-Abstand eines laufenden Callbacks und höchstens 16 Abstände über
 250 ms. Ein separater Generationswert verhindert das Vermischen neu angelegter
 Loop-Instanzen. Keine Instanz-, DOM-, Grafik- oder State-Objekte werden gehalten.
 
@@ -27,8 +27,10 @@ Die bestehende diagnostische Stoppuhr erhält einen einzigen skalaren Read nach
 ihrem bereits vorhandenen `clock.observe(snapshot)`. Sie verwendet denselben
 schon gelesenen Snapshot und höchstens 96 Ringzeilen. Kein zusätzlicher Timer,
 RAF, Listener, aktiver DOM-/Animationsscan, Profiler oder Speicher-Dump entsteht.
-Die Zeitberechnung, bestehende Null-Lücken-Prüfung, 2.500-ms-Spiel-Watchdog und
-500-ms-Überwachung werden nicht verändert. Die geänderte Diagnose-JS und ihre
+Die erste Runde lässt Zeitberechnung, bestehende Null-Lücken-Prüfung,
+2.500-ms-Spiel-Watchdog und 500-ms-Überwachung unverändert. Die zweite Runde
+korrigiert ausschließlich den unten belegten Start-/Resume-Zweig der Diagnose.
+Die geänderte Diagnose-JS und ihre
 unveränderte Basis erhalten getrennte Digests im tatsächlichen Build-Beleg.
 
 Nach einem Testfehler bleibt der Lauf **fehlgeschlagen**. Ein einmaliger
@@ -67,7 +69,8 @@ noch ihre vorab festgelegten Akzeptanzkriterien. Unseeded Zufall, Linux-PSS und
 synthetischer Gast-Schutz erlauben keine physische Smartphone-Abnahme.
 
 Spielquellen, Main, Produktion, Geräte-Referenzen und echte Konten werden nicht
-geändert. Ein neuer manueller Handytest ist noch nicht erforderlich.
+geändert. Ein manueller Handytest folgt erst nach den festgelegten Browser-Gates
+und einer getrennten Prüfung des tatsächlich auszuliefernden Pakets.
 
 ```bash
 node --test verification/full-game-clock-gap-20261102/probe.test.mjs
@@ -113,3 +116,69 @@ und Rohdaten werden nicht rückwirkend ergänzt. Die Build-Probe erhält Version
 aktuelle installierte Pakete und Lock-Digest werden zusätzlich aufgezeichnet.
 24 direkte Clock-/Beobachter-Regressionen bestehen lokal. Die neuen acht
 Kurzläufe müssen diese Korrektur anschließend unter echten Engines bestätigen.
+
+## Zweite echte Spielrunde: alle zwölf Abläufe bestanden
+
+Quelle `a8e407a649431c719dfee64e0ec3cf63d73de3e0`, Baum
+`2780ff76231ae2f11e2ef7a25eb8c91bad41161a`,
+[CI 41445407351](https://github.com/19Trojan69/cryptoid-evolution/actions/runs/41445407351).
+Alle acht Kurzläufe bestehen den vollständigen 60/10/10-Sekunden-Ablauf. Erst
+danach starten und bestehen alle vier Langläufe. Die erste aktive Spielzeit ist
+direkt aus den unveränderten Rohbeobachtungen übernommen:
+
+| Engine | Bedingung | Aktive Zeit im ersten Zyklus | Vollständige UI-Zyklen | Normaler Bericht |
+| --- | --- | ---: | ---: | --- |
+| Chromium 151.0.7922.34 | Original | 1200,000 s | 3 | bestanden |
+| Chromium 151.0.7922.34 | direkte Styles | 1200,9999 s | 3 | bestanden |
+| WebKit 26.5 | Original | 1200,953 s | 3 | bestanden |
+| WebKit 26.5 | direkte Styles | 1200,664 s | 3 | bestanden |
+
+Alle zwölf Läufe bestehen die strenge Null-Lücken-Prüfung, echten
+Volley-Fortschritt, Pause-Freeze, manuelles Fortsetzen, Waffenmenü, Home-Ausstieg,
+erneutes Öffnen sowie Freigabe von Test-Bridge und Frame-Probe. Paketversionen
+und Lock-Digest stimmen innerhalb dieser zweiten Kohorte überein. Die vier alten
+WebKit-Fehlschläge bleiben unverändert als Fehlschläge in demselben Archiv.
+`evidence/manifest.json` enthält alle 20 Originalbeobachtungen einschließlich
+Build-Belegen, vollständigen Punktlogs und geprüften ZIP-Digests.
+
+Diese diagnostisch instrumentierten Läufe belegen den geprüften Spielfluss. Sie
+ersetzen die frühere gescheiterte Speicher-Kohorte nicht; aus ihnen wird weder
+ein vergleichbarer Speichergewinn noch eine Smartphone-Abnahme abgeleitet.
+
+## Separates Paket ohne aktive Frame-/Clock-Ringe
+
+Quelle `5acefc1aa3ea224b656a76c415da39ece0ed84f0`, Baum
+`e5d838eead213cf6c1d9e9d365c4de38ef7395b8`,
+[CI 41449159220](https://github.com/19Trojan69/cryptoid-evolution/actions/runs/41449159220).
+Beide nativen Paketläufe bestehen alle drei 60/10/10-Sekunden-UI-Zyklen und den
+normalen Bericht. Der Builder verwendet dieselben gepinnten direkten Styles und
+dieselbe korrigierte Stoppuhr. Originalgrafik und Ton bleiben erhalten. Die
+zusätzlichen aktiven Frame- und Clock-Ringe der Ursachenanalyse sind im
+tatsächlich geschriebenen Paket ausgeschlossen. Die originalen fünf Runtime-
+Bäume und der ausgeschaltete automatische Deploy bleiben geprüft.
+
+Die beiden unveränderten Paketbeobachtungen sind getrennt unter
+`package-evidence/` archiviert. Ein erfolgreicher nativer Paketlauf ersetzt keine
+Prüfung des anschließend tatsächlich gehosteten Builds und keinen Gerätetest.
+White Screen und native Abbruchursache bleiben offen.
+
+## Gehosteter Stand: Zugriff zur weiteren Prüfung erforderlich
+
+Der erste getrennte Preview-Build aus exakt `5acefc1a` scheitert am Build-Schritt
+(`dpl_4GBdNjrnTdWLtyxRBs58RkwRd2Rr`, `BUILD_UTILS_SPAWN_1`). Die konkrete Ursache
+ist noch nicht belegt. Die Browser-CI-Ergebnisse werden dadurch weder ersetzt
+noch zu einer erfolgreichen gehosteten Abnahme umgedeutet.
+
+Eine separate Build-Diagnose aus `dbbac540` fängt ausschließlich den Build-Fehler
+ab und erzeugt eine minimale Diagnose-Datei. Diese Adresse enthält ausdrücklich
+keinen spielbaren Kandidaten. Ihre Bereitschaft `READY` ist kein bestandener
+Spiel-Build. Die originale Kandidatenquelle bleibt unverändert.
+
+Die verbundene Vercel-App verweigert den Zugriff auf die Build-Ereignisse (404),
+die geschützte Diagnose-Datei (403 beim Schutz-Zugriff) sowie den geschützten
+Freigabelink mit dem bekannten Team (404). Eine angemeldete lokale CLI ist nicht
+verfügbar. Deshalb sind weitere Prüfung, gezielte Build-Korrektur und Handy-
+Freigabe bis zur Autorisierung des bestehenden Projekts/Teams offen. Kein
+Schutz wurde abgeschaltet, keine Browser-Anmeldung begonnen und keine
+öffentliche Stammadresse geändert. Die exakten Quellen und Zustände stehen in
+`hosted-preview-status.json`; Zugangsdaten oder Freigabetokens sind nicht enthalten.

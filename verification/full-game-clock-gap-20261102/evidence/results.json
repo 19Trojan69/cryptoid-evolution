@@ -340,10 +340,478 @@
       "whiteScreenFixed": false,
       "physicalPhoneAcceptanceEstablished": false,
       "memoryComparisonEligible": false
+    },
+    {
+      "cell": {
+        "label": "fresh-frame",
+        "engine": "chromium",
+        "condition": "control",
+        "replica": 1,
+        "phase": "long"
+      },
+      "sourceCommit": "a8e407a649431c719dfee64e0ec3cf63d73de3e0",
+      "sourceTree": "2780ff76231ae2f11e2ef7a25eb8c91bad41161a",
+      "engineVersion": "151.0.7922.34",
+      "complete": true,
+      "observerVersion": 2,
+      "packagesRecorded": true,
+      "actualInstalledPackages": {
+        "react": "19.2.4",
+        "react-dom": "19.2.4",
+        "react-router-dom": "7.13.2",
+        "vite": "7.3.1",
+        "typescript": "5.9.3"
+      },
+      "lockSha256": "b6d496c5725bf24ddb4f51b576b0597ced9f35c5ea7927a65165a5fb6311ad1a",
+      "completedUiCycles": 3,
+      "measuredActiveMs": [
+        1200000,
+        10850.199999999953,
+        10000
+      ],
+      "prematureClockStartEdges": [],
+      "observedFrameMaxAtFailureMs": null,
+      "observedFrameMaxAfterFailureMs": null,
+      "diagnosis": null,
+      "failure": null,
+      "normalReportVerified": true,
+      "nativeTerminationCauseMeasured": false,
+      "whiteScreenFixed": false,
+      "physicalPhoneAcceptanceEstablished": false,
+      "memoryComparisonEligible": false
+    },
+    {
+      "cell": {
+        "label": "fresh-frame",
+        "engine": "chromium",
+        "condition": "leaves",
+        "replica": 1,
+        "phase": "long"
+      },
+      "sourceCommit": "a8e407a649431c719dfee64e0ec3cf63d73de3e0",
+      "sourceTree": "2780ff76231ae2f11e2ef7a25eb8c91bad41161a",
+      "engineVersion": "151.0.7922.34",
+      "complete": true,
+      "observerVersion": 2,
+      "packagesRecorded": true,
+      "actualInstalledPackages": {
+        "react": "19.2.4",
+        "react-dom": "19.2.4",
+        "react-router-dom": "7.13.2",
+        "vite": "7.3.1",
+        "typescript": "5.9.3"
+      },
+      "lockSha256": "b6d496c5725bf24ddb4f51b576b0597ced9f35c5ea7927a65165a5fb6311ad1a",
+      "completedUiCycles": 3,
+      "measuredActiveMs": [
+        1200999.9,
+        10000.199999999953,
+        10000.09999999986
+      ],
+      "prematureClockStartEdges": [],
+      "observedFrameMaxAtFailureMs": null,
+      "observedFrameMaxAfterFailureMs": null,
+      "diagnosis": null,
+      "failure": null,
+      "normalReportVerified": true,
+      "nativeTerminationCauseMeasured": false,
+      "whiteScreenFixed": false,
+      "physicalPhoneAcceptanceEstablished": false,
+      "memoryComparisonEligible": false
+    },
+    {
+      "cell": {
+        "label": "fresh-frame",
+        "engine": "webkit",
+        "condition": "leaves",
+        "replica": 1,
+        "phase": "long"
+      },
+      "sourceCommit": "a8e407a649431c719dfee64e0ec3cf63d73de3e0",
+      "sourceTree": "2780ff76231ae2f11e2ef7a25eb8c91bad41161a",
+      "engineVersion": "26.5",
+      "complete": true,
+      "observerVersion": 2,
+      "packagesRecorded": true,
+      "actualInstalledPackages": {
+        "react": "19.2.4",
+        "react-dom": "19.2.4",
+        "react-router-dom": "7.13.2",
+        "vite": "7.3.1",
+        "typescript": "5.9.3"
+      },
+      "lockSha256": "b6d496c5725bf24ddb4f51b576b0597ced9f35c5ea7927a65165a5fb6311ad1a",
+      "completedUiCycles": 3,
+      "measuredActiveMs": [
+        1200664,
+        10532,
+        10730
+      ],
+      "prematureClockStartEdges": [],
+      "observedFrameMaxAtFailureMs": null,
+      "observedFrameMaxAfterFailureMs": null,
+      "diagnosis": null,
+      "failure": null,
+      "normalReportVerified": true,
+      "nativeTerminationCauseMeasured": false,
+      "whiteScreenFixed": false,
+      "physicalPhoneAcceptanceEstablished": false,
+      "memoryComparisonEligible": false
+    },
+    {
+      "cell": {
+        "label": "fresh-frame",
+        "engine": "webkit",
+        "condition": "control",
+        "replica": 1,
+        "phase": "long"
+      },
+      "sourceCommit": "a8e407a649431c719dfee64e0ec3cf63d73de3e0",
+      "sourceTree": "2780ff76231ae2f11e2ef7a25eb8c91bad41161a",
+      "engineVersion": "26.5",
+      "complete": true,
+      "observerVersion": 2,
+      "packagesRecorded": true,
+      "actualInstalledPackages": {
+        "react": "19.2.4",
+        "react-dom": "19.2.4",
+        "react-router-dom": "7.13.2",
+        "vite": "7.3.1",
+        "typescript": "5.9.3"
+      },
+      "lockSha256": "b6d496c5725bf24ddb4f51b576b0597ced9f35c5ea7927a65165a5fb6311ad1a",
+      "completedUiCycles": 3,
+      "measuredActiveMs": [
+        1200953,
+        10664,
+        10052
+      ],
+      "prematureClockStartEdges": [],
+      "observedFrameMaxAtFailureMs": null,
+      "observedFrameMaxAfterFailureMs": null,
+      "diagnosis": null,
+      "failure": null,
+      "normalReportVerified": true,
+      "nativeTerminationCauseMeasured": false,
+      "whiteScreenFixed": false,
+      "physicalPhoneAcceptanceEstablished": false,
+      "memoryComparisonEligible": false
+    },
+    {
+      "cell": {
+        "label": "fresh-frame",
+        "engine": "chromium",
+        "condition": "control",
+        "replica": 1,
+        "phase": "short"
+      },
+      "sourceCommit": "a8e407a649431c719dfee64e0ec3cf63d73de3e0",
+      "sourceTree": "2780ff76231ae2f11e2ef7a25eb8c91bad41161a",
+      "engineVersion": "151.0.7922.34",
+      "complete": true,
+      "observerVersion": 2,
+      "packagesRecorded": true,
+      "actualInstalledPackages": {
+        "react": "19.2.4",
+        "react-dom": "19.2.4",
+        "react-router-dom": "7.13.2",
+        "vite": "7.3.1",
+        "typescript": "5.9.3"
+      },
+      "lockSha256": "b6d496c5725bf24ddb4f51b576b0597ced9f35c5ea7927a65165a5fb6311ad1a",
+      "completedUiCycles": 3,
+      "measuredActiveMs": [
+        61000,
+        10002.100000000006,
+        10000.399999999994
+      ],
+      "prematureClockStartEdges": [],
+      "observedFrameMaxAtFailureMs": null,
+      "observedFrameMaxAfterFailureMs": null,
+      "diagnosis": null,
+      "failure": null,
+      "normalReportVerified": true,
+      "nativeTerminationCauseMeasured": false,
+      "whiteScreenFixed": false,
+      "physicalPhoneAcceptanceEstablished": false,
+      "memoryComparisonEligible": false
+    },
+    {
+      "cell": {
+        "label": "fresh-frame",
+        "engine": "webkit",
+        "condition": "leaves",
+        "replica": 1,
+        "phase": "short"
+      },
+      "sourceCommit": "a8e407a649431c719dfee64e0ec3cf63d73de3e0",
+      "sourceTree": "2780ff76231ae2f11e2ef7a25eb8c91bad41161a",
+      "engineVersion": "26.5",
+      "complete": true,
+      "observerVersion": 2,
+      "packagesRecorded": true,
+      "actualInstalledPackages": {
+        "react": "19.2.4",
+        "react-dom": "19.2.4",
+        "react-router-dom": "7.13.2",
+        "vite": "7.3.1",
+        "typescript": "5.9.3"
+      },
+      "lockSha256": "b6d496c5725bf24ddb4f51b576b0597ced9f35c5ea7927a65165a5fb6311ad1a",
+      "completedUiCycles": 3,
+      "measuredActiveMs": [
+        60424,
+        10248,
+        10294
+      ],
+      "prematureClockStartEdges": [],
+      "observedFrameMaxAtFailureMs": null,
+      "observedFrameMaxAfterFailureMs": null,
+      "diagnosis": null,
+      "failure": null,
+      "normalReportVerified": true,
+      "nativeTerminationCauseMeasured": false,
+      "whiteScreenFixed": false,
+      "physicalPhoneAcceptanceEstablished": false,
+      "memoryComparisonEligible": false
+    },
+    {
+      "cell": {
+        "label": "fresh-frame",
+        "engine": "webkit",
+        "condition": "control",
+        "replica": 2,
+        "phase": "short"
+      },
+      "sourceCommit": "a8e407a649431c719dfee64e0ec3cf63d73de3e0",
+      "sourceTree": "2780ff76231ae2f11e2ef7a25eb8c91bad41161a",
+      "engineVersion": "26.5",
+      "complete": true,
+      "observerVersion": 2,
+      "packagesRecorded": true,
+      "actualInstalledPackages": {
+        "react": "19.2.4",
+        "react-dom": "19.2.4",
+        "react-router-dom": "7.13.2",
+        "vite": "7.3.1",
+        "typescript": "5.9.3"
+      },
+      "lockSha256": "b6d496c5725bf24ddb4f51b576b0597ced9f35c5ea7927a65165a5fb6311ad1a",
+      "completedUiCycles": 3,
+      "measuredActiveMs": [
+        61708,
+        11872,
+        10552
+      ],
+      "prematureClockStartEdges": [],
+      "observedFrameMaxAtFailureMs": null,
+      "observedFrameMaxAfterFailureMs": null,
+      "diagnosis": null,
+      "failure": null,
+      "normalReportVerified": true,
+      "nativeTerminationCauseMeasured": false,
+      "whiteScreenFixed": false,
+      "physicalPhoneAcceptanceEstablished": false,
+      "memoryComparisonEligible": false
+    },
+    {
+      "cell": {
+        "label": "fresh-frame",
+        "engine": "webkit",
+        "condition": "leaves",
+        "replica": 2,
+        "phase": "short"
+      },
+      "sourceCommit": "a8e407a649431c719dfee64e0ec3cf63d73de3e0",
+      "sourceTree": "2780ff76231ae2f11e2ef7a25eb8c91bad41161a",
+      "engineVersion": "26.5",
+      "complete": true,
+      "observerVersion": 2,
+      "packagesRecorded": true,
+      "actualInstalledPackages": {
+        "react": "19.2.4",
+        "react-dom": "19.2.4",
+        "react-router-dom": "7.13.2",
+        "vite": "7.3.1",
+        "typescript": "5.9.3"
+      },
+      "lockSha256": "b6d496c5725bf24ddb4f51b576b0597ced9f35c5ea7927a65165a5fb6311ad1a",
+      "completedUiCycles": 3,
+      "measuredActiveMs": [
+        60003,
+        10236,
+        10913
+      ],
+      "prematureClockStartEdges": [],
+      "observedFrameMaxAtFailureMs": null,
+      "observedFrameMaxAfterFailureMs": null,
+      "diagnosis": null,
+      "failure": null,
+      "normalReportVerified": true,
+      "nativeTerminationCauseMeasured": false,
+      "whiteScreenFixed": false,
+      "physicalPhoneAcceptanceEstablished": false,
+      "memoryComparisonEligible": false
+    },
+    {
+      "cell": {
+        "label": "fresh-frame",
+        "engine": "webkit",
+        "condition": "control",
+        "replica": 1,
+        "phase": "short"
+      },
+      "sourceCommit": "a8e407a649431c719dfee64e0ec3cf63d73de3e0",
+      "sourceTree": "2780ff76231ae2f11e2ef7a25eb8c91bad41161a",
+      "engineVersion": "26.5",
+      "complete": true,
+      "observerVersion": 2,
+      "packagesRecorded": true,
+      "actualInstalledPackages": {
+        "react": "19.2.4",
+        "react-dom": "19.2.4",
+        "react-router-dom": "7.13.2",
+        "vite": "7.3.1",
+        "typescript": "5.9.3"
+      },
+      "lockSha256": "b6d496c5725bf24ddb4f51b576b0597ced9f35c5ea7927a65165a5fb6311ad1a",
+      "completedUiCycles": 3,
+      "measuredActiveMs": [
+        60163,
+        10587,
+        10774
+      ],
+      "prematureClockStartEdges": [],
+      "observedFrameMaxAtFailureMs": null,
+      "observedFrameMaxAfterFailureMs": null,
+      "diagnosis": null,
+      "failure": null,
+      "normalReportVerified": true,
+      "nativeTerminationCauseMeasured": false,
+      "whiteScreenFixed": false,
+      "physicalPhoneAcceptanceEstablished": false,
+      "memoryComparisonEligible": false
+    },
+    {
+      "cell": {
+        "label": "fresh-frame",
+        "engine": "chromium",
+        "condition": "leaves",
+        "replica": 1,
+        "phase": "short"
+      },
+      "sourceCommit": "a8e407a649431c719dfee64e0ec3cf63d73de3e0",
+      "sourceTree": "2780ff76231ae2f11e2ef7a25eb8c91bad41161a",
+      "engineVersion": "151.0.7922.34",
+      "complete": true,
+      "observerVersion": 2,
+      "packagesRecorded": true,
+      "actualInstalledPackages": {
+        "react": "19.2.4",
+        "react-dom": "19.2.4",
+        "react-router-dom": "7.13.2",
+        "vite": "7.3.1",
+        "typescript": "5.9.3"
+      },
+      "lockSha256": "b6d496c5725bf24ddb4f51b576b0597ced9f35c5ea7927a65165a5fb6311ad1a",
+      "completedUiCycles": 3,
+      "measuredActiveMs": [
+        60000,
+        10000,
+        10002.200000000012
+      ],
+      "prematureClockStartEdges": [],
+      "observedFrameMaxAtFailureMs": null,
+      "observedFrameMaxAfterFailureMs": null,
+      "diagnosis": null,
+      "failure": null,
+      "normalReportVerified": true,
+      "nativeTerminationCauseMeasured": false,
+      "whiteScreenFixed": false,
+      "physicalPhoneAcceptanceEstablished": false,
+      "memoryComparisonEligible": false
+    },
+    {
+      "cell": {
+        "label": "fresh-frame",
+        "engine": "chromium",
+        "condition": "control",
+        "replica": 2,
+        "phase": "short"
+      },
+      "sourceCommit": "a8e407a649431c719dfee64e0ec3cf63d73de3e0",
+      "sourceTree": "2780ff76231ae2f11e2ef7a25eb8c91bad41161a",
+      "engineVersion": "151.0.7922.34",
+      "complete": true,
+      "observerVersion": 2,
+      "packagesRecorded": true,
+      "actualInstalledPackages": {
+        "react": "19.2.4",
+        "react-dom": "19.2.4",
+        "react-router-dom": "7.13.2",
+        "vite": "7.3.1",
+        "typescript": "5.9.3"
+      },
+      "lockSha256": "b6d496c5725bf24ddb4f51b576b0597ced9f35c5ea7927a65165a5fb6311ad1a",
+      "completedUiCycles": 3,
+      "measuredActiveMs": [
+        60000,
+        10000,
+        10000
+      ],
+      "prematureClockStartEdges": [],
+      "observedFrameMaxAtFailureMs": null,
+      "observedFrameMaxAfterFailureMs": null,
+      "diagnosis": null,
+      "failure": null,
+      "normalReportVerified": true,
+      "nativeTerminationCauseMeasured": false,
+      "whiteScreenFixed": false,
+      "physicalPhoneAcceptanceEstablished": false,
+      "memoryComparisonEligible": false
+    },
+    {
+      "cell": {
+        "label": "fresh-frame",
+        "engine": "chromium",
+        "condition": "leaves",
+        "replica": 2,
+        "phase": "short"
+      },
+      "sourceCommit": "a8e407a649431c719dfee64e0ec3cf63d73de3e0",
+      "sourceTree": "2780ff76231ae2f11e2ef7a25eb8c91bad41161a",
+      "engineVersion": "151.0.7922.34",
+      "complete": true,
+      "observerVersion": 2,
+      "packagesRecorded": true,
+      "actualInstalledPackages": {
+        "react": "19.2.4",
+        "react-dom": "19.2.4",
+        "react-router-dom": "7.13.2",
+        "vite": "7.3.1",
+        "typescript": "5.9.3"
+      },
+      "lockSha256": "b6d496c5725bf24ddb4f51b576b0597ced9f35c5ea7927a65165a5fb6311ad1a",
+      "completedUiCycles": 3,
+      "measuredActiveMs": [
+        60000.000000000015,
+        10000,
+        10000
+      ],
+      "prematureClockStartEdges": [],
+      "observedFrameMaxAtFailureMs": null,
+      "observedFrameMaxAfterFailureMs": null,
+      "diagnosis": null,
+      "failure": null,
+      "normalReportVerified": true,
+      "nativeTerminationCauseMeasured": false,
+      "whiteScreenFixed": false,
+      "physicalPhoneAcceptanceEstablished": false,
+      "memoryComparisonEligible": false
     }
   ],
   "cohort": {
-    "archivedCaptures": 8,
+    "archivedCaptures": 20,
     "retainedFailures": 4,
     "cohorts": [
       {
@@ -355,6 +823,16 @@
         "failedLongFlows": 0,
         "completeFourConditionLongStage": false,
         "prematureClockStartFailures": 4
+      },
+      {
+        "sourceCommit": "a8e407a649431c719dfee64e0ec3cf63d73de3e0",
+        "completeShortFlows": 8,
+        "failedShortFlows": 0,
+        "allEightShortFlowsPassed": true,
+        "completedLongFlows": 4,
+        "failedLongFlows": 0,
+        "completeFourConditionLongStage": true,
+        "prematureClockStartFailures": 0
       }
     ],
     "nativeTerminationCauseMeasured": false,

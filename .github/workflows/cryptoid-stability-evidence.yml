@@ -16,6 +16,7 @@ on:
       - 'verification/local-boss-style-20261102/evidence/**'
       - 'verification/local-boss-style-dynamic-20261102/evidence/**'
       - 'verification/full-game-clock-gap-20261102/evidence/**'
+      - 'verification/full-game-clock-gap-20261102/package-evidence/**'
 permissions:
   contents: read
 jobs:

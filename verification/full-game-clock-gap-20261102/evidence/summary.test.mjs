@@ -24,9 +24,22 @@ test('completed Chromium UI cycles require real active time, volleys, pause, wea
     const broken = structuredClone(c); change(broken); assert.throws(() => summarizeFlow(broken, cell));
   }
 });
-test('failed initial captures and missing long stages remain present in the combined archive', () => {
+test('failed initial captures remain present in the combined archive', () => {
   const rows = m.captures.map(cell => summarizeFlow(read(cell.observation.file), cell));
   const result = classifyFlows(rows); assert.ok(result.retainedFailures >= 4); assert.equal(result.whiteScreenFixed, false);
   assert.throws(() => classifyFlows([rows[0], rows[0]]));
   const f = actual('webkit'); f.c.complete = true; assert.throws(() => summarizeFlow(f.c, f.cell));
+});
+test('the second complete cohort requires all eight short and all four long cells without borrowing initial results', () => {
+  const fresh = m.captures.filter(c => c.label === 'fresh-frame'); assert.equal(fresh.length, 12);
+  const rows = fresh.map(cell => summarizeFlow(read(cell.observation.file), cell));
+  const result = classifyFlows(rows);
+  assert.equal(result.retainedFailures, 0); assert.equal(result.cohorts.length, 1);
+  assert.equal(result.cohorts[0].allEightShortFlowsPassed, true);
+  assert.equal(result.cohorts[0].completeFourConditionLongStage, true);
+  assert.equal(result.memoryComparisonEligible, false); assert.equal(result.physicalPhoneAcceptanceEstablished, false);
+  assert.equal(classifyFlows(rows.filter(r => !(r.cell.phase === 'long' && r.cell.engine === 'webkit' && r.cell.condition === 'control'))).cohorts[0].completeFourConditionLongStage, false);
+  assert.equal(classifyFlows(rows.filter(r => !(r.cell.phase === 'short' && r.cell.replica === 2))).cohorts[0].allEightShortFlowsPassed, false);
+  const changed = structuredClone(rows); changed[0].lockSha256 = '0'.repeat(64);
+  assert.throws(() => classifyFlows(changed));
 });
