@@ -1,4 +1,4 @@
-name: Frozen device source native contacts and deliberate reload control
+name: Frozen device source deliberate active reload control
 on:
   push:
     branches: [codex/native-input-reload-proof-20261102]
@@ -32,8 +32,8 @@ jobs:
           cd ../../
           node verification/direct-boss-style-device-20261102/buildDevicePreview.mjs
           node verification/direct-boss-style-device-20261102/verifyPackage.mjs
-      - name: Exercise original contact probes and a deliberate active-document reload
-        run: node lab/verification/mobile-30m-source-proof-20261102/inputReload.mjs candidate lab/verification/mobile-30m-source-proof-20261102/input-results
+      - name: Verify deliberate active reload without repeating completed contact cases
+        run: node lab/verification/mobile-30m-source-proof-20261102/inputReload.mjs candidate lab/verification/mobile-30m-source-proof-20261102/input-results reload-only
       - name: Preserve the result even on failure
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02

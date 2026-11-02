@@ -38,3 +38,20 @@ Weder Vollaufzeichnung noch ein Spielhook werden dafür eingeschaltet.
 Der ursprüngliche kleine Fehlbericht ist ZIP-SHA- und integritätsgeprüft
 archiviert. Er bleibt ein Fehler dieser Testvorstufe und wird nicht als
 beobachteter White Screen oder bestandener Kontrollfall umetikettiert.
+
+## Kontaktteil abgeschlossen, Reload-Vorbedingung getrennt
+
+CI `41510735463`, Testquelle `556234af`, beendet den kompletten Kontaktteil:
+vier Hauptprüfungen, neun neutrale Kontaktfälle, zwölf wiederholte Kontaktfolgen
+und den Fokusprüfer. Der anschließende Reload-Teil stoppt vor seinem Neuladen:
+Der Spielstatus ist schon `playing`, der asynchrone diagnostische Clock-
+Checkpoint steht unmittelbar nach der Rückkehr noch auf `paused`. Die neue
+Kontrollprüfung hatte hier, anders als der bestehende Soak-Prüfer, das Warten
+auf den ersten frischen Clock-Checkpoint ausgelassen. Die gesamte CI bleibt
+deshalb fehlgeschlagen; ihr vollständiger Teilbeleg wird nicht umklassifiziert.
+
+Die nächste getrennte Erfassung verwendet `reload-only`: Die abgeschlossenen
+Kontaktfälle werden nicht erneut abgespult. Wie im unveränderten Soak-Prüfer
+wird zunächst der echte `running`-Checkpoint abgewartet; kein Resume, Uhrwert
+oder Zeitkriterium wird geändert. Der reale Vorzustand wird zusätzlich festgehalten.
+Erst dann folgt der bisher noch nicht erreichte absichtliche Reload-Kontrollfall.
