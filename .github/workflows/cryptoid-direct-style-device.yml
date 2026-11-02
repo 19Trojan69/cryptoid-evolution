@@ -28,8 +28,16 @@ jobs:
           git restore --worktree -- frontend/yarn.lock
           cd verification/boss2-forensics-20261028
           npx playwright install --with-deps ${{ matrix.engine }}
-      - name: Verify immutable runtime, current clock and exact minimal device package
-        env: {VERCEL_ENV: preview}
+      - name: Verify exact package despite conflicting inherited build controls
+        env:
+          VERCEL_ENV: preview
+          CRYPTOID_SOAK_CONDITION: mini-start
+          CRYPTOID_LIFETIME_ATTRIBUTION: '0'
+          CRYPTOID_LOCAL_STYLE_SCOPE: control
+          CRYPTOID_LOCAL_STYLE_FIDELITY: '1'
+          CRYPTOID_INACTIVE_NATIVE_TRACE: '1'
+          CRYPTOID_STYLE_WRITE_PROBE: '1'
+          CRYPTOID_UNKNOWN_INHERITED_SETTING: device-env-regression-marker
         run: |
           node verification/direct-boss-style-device-20261102/verifyScope.mjs
           node --test verification/boss2-stopwatch-20261029/stopwatchState.test.mjs

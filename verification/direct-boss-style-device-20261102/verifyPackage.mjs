@@ -5,6 +5,7 @@ const directory = new URL('../boss2-forensics-20261028/results/device-preview/si
 const info = JSON.parse(readFileSync(new URL('device-preview-info.json', directory)));
 const expected = JSON.parse(readFileSync(new URL('../local-boss-style-20261102/evidence/expected-builds.json', import.meta.url)));
 assert.deepEqual(info.qaLocalBossStyle, expected.leaves);
+assert.equal(info.directStyleDeviceCandidate.inheritedProjectBuildControlsExcluded, true);
 assert.equal(info.qaClockGapProbe, undefined); assert.equal(info.directStyleDeviceCandidate.activeFrameProbeIncluded, false);
 assert.equal(info.directStyleDeviceCandidate.activeClockTraceIncluded, false);
 assert.equal(info.directStyleDeviceCandidate.physicalDeviceAccepted, false); assert.equal(info.directStyleDeviceCandidate.whiteScreenFixed, false);

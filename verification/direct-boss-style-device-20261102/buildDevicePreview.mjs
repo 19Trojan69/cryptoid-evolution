@@ -5,6 +5,10 @@ import { createHash } from 'node:crypto';
 import { localStyleProof } from '../local-boss-style-20261102/transform.mjs';
 assert.equal(process.env.VERCEL_ENV, 'preview', 'Isolated guest Preview only');
 assert.equal(process.argv.includes('--clock-probe'), false, 'Active scalar trace is excluded from the owner Preview');
+// Project settings may include unrelated or older CRYPTOID controls. Discard
+// them in this build process before importing any environment-driven builder.
+// Do not read/log their values or modify the stored Vercel project environment.
+for (const key of Object.keys(process.env)) if (key.startsWith('CRYPTOID_')) delete process.env[key];
 for (const key of Object.keys(process.env)) assert.equal(key.startsWith('CRYPTOID_'), false, 'No inherited diagnostic treatment');
 await import('./verifyScope.mjs');
 Object.assign(process.env, { CRYPTOID_SOAK_CONDITION: 'original', CRYPTOID_LIFETIME_ATTRIBUTION: '1',
@@ -34,6 +38,7 @@ writeFileSync(directory + '/diagnostic-direct-style.css', '.device-preview-menu 
 const hp = directory + '/index.html', html = readFileSync(hp, 'utf8'), link = '<link rel="stylesheet" href="/diagnostic-direct-style.css">';
 assert.equal(html.split('</head>').length, 2); writeFileSync(hp, html.replace('</head>', link + '</head>'));
 info.directStyleDeviceCandidate = { version: 1, label, condition: 'leaves',
+  inheritedProjectBuildControlsExcluded: true,
   basisNativeFlowSource: 'a8e407a649431c719dfee64e0ec3cf63d73de3e0', basisNativeFlowRun: 41445407351,
   candidateArtifactMustPassBothLongEngineGatesBeforeDeviceUse: true,
   originalArtworkAudioGameplayRetained: true, virtualStyleChangeOnly: true,
