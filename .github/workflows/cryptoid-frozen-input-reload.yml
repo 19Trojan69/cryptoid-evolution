@@ -1,0 +1,43 @@
+name: Frozen device source native contacts and deliberate reload control
+on:
+  push:
+    branches: [codex/native-input-reload-proof-20261102]
+    paths:
+      - '.github/workflows/cryptoid-frozen-input-reload.yml'
+      - 'verification/mobile-30m-source-proof-20261102/inputReload.mjs'
+permissions:
+  contents: read
+jobs:
+  native-input-reload-control:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with: {persist-credentials: false, path: lab}
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          persist-credentials: false
+          path: candidate
+          ref: b042c8e50ad3f05a70418ae5ee6bb4412809035b
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with: {node-version: '24'}
+      - name: Install and build the exact unchanged minimal device package
+        working-directory: candidate
+        env: {VERCEL_ENV: preview}
+        run: |
+          node verification/direct-boss-style-device-20261102/installDevicePreview.mjs --ignore-scripts
+          npm install --prefix verification/boss2-forensics-20261028 --ignore-scripts --no-audit --no-fund
+          cd verification/boss2-forensics-20261028
+          npx playwright install --with-deps chromium
+          cd ../../
+          node verification/direct-boss-style-device-20261102/buildDevicePreview.mjs
+          node verification/direct-boss-style-device-20261102/verifyPackage.mjs
+      - name: Exercise original contact probes and a deliberate active-document reload
+        run: node lab/verification/mobile-30m-source-proof-20261102/inputReload.mjs candidate lab/verification/mobile-30m-source-proof-20261102/input-results
+      - name: Preserve the result even on failure
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: frozen-native-input-reload
+          path: lab/verification/mobile-30m-source-proof-20261102/input-results/
+          retention-days: 14
