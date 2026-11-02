@@ -21,6 +21,7 @@ import { thrustConfig, thrustProof } from '../boss-thrust-scope-20261102/transfo
 import { verifyThrustFidelity } from '../boss-thrust-scope-20261102/fidelity.mjs';
 import { localStyleConfig, localStyleProof } from '../local-boss-style-20261102/transform.mjs';
 import { verifyLocalStyleFidelity } from '../local-boss-style-20261102/fidelity.mjs';
+import { captureFailureState } from './failureObservation.mjs';
 
 const seconds = Number(process.env.CRYPTOID_ATTRIBUTION_SECONDS);
 assert.ok([60, 1200].includes(seconds), 'One short control or one twenty-minute observation');
@@ -297,7 +298,8 @@ try {
   assert.deepEqual(external, []); assert.deepEqual(assetFailures, []); assert.ok(!fatal, fatal);
   result.complete = true;
 } catch (error) {
-  result.failure = { code: fatal || 'attribution-failed', message: error.message };
+  result.failure = { code: fatal || 'attribution-failed', message: String(error.message).slice(0, 4096) };
+  result.failureObservation = await captureFailureState({ page, key: STOPWATCH_KEY, first });
   process.exitCode = 1;
 } finally {
   if (styleObservation && !result.styleWriteObservation && page) try {

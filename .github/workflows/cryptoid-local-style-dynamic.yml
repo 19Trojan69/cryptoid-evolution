@@ -1,0 +1,50 @@
+name: Dynamic boss style fidelity in Chromium and WebKit
+on:
+  push:
+    branches: [codex/style-recalc-isolation-20261102]
+    paths:
+      - '.github/workflows/cryptoid-local-style-dynamic.yml'
+      - 'verification/local-boss-style-dynamic-20261102/**'
+      - 'verification/memory-retention-attribution-20261101/failureObservation*'
+permissions:
+  contents: read
+jobs:
+  native-component-updates:
+    strategy:
+      fail-fast: false
+      matrix:
+        engine: [chromium, webkit]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with: {persist-credentials: false}
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with: {node-version: '24'}
+      - name: Install existing component and browser tools
+        run: |
+          npm install --prefix frontend --include=optional --ignore-scripts --no-audit --no-fund
+          npm install --prefix verification/boss2-forensics-20261028 --ignore-scripts --no-audit --no-fund
+          git restore --worktree -- frontend/yarn.lock
+          cd verification/boss2-forensics-20261028
+          npx playwright install --with-deps ${{ matrix.engine }}
+      - name: Check strict observers, unchanged runtime scope and exact measured virtual candidate
+        run: |
+          node --test verification/local-boss-style-dynamic-20261102/validation.test.mjs verification/memory-retention-attribution-20261101/failureObservation.test.mjs
+          node verification/boss2-mini-start-control-20261101/verifyScope.mjs
+          node verification/local-boss-style-dynamic-20261102/build.mjs
+      - name: Compare 1800 mounted React input updates, all falls, absent views and started native animations
+        run: node verification/local-boss-style-dynamic-20261102/run.mjs ${{ matrix.engine }}
+      - name: Check original runtime sources after the component test
+        if: ${{ !cancelled() }}
+        run: |
+          mkdir -p verification/local-boss-style-dynamic-20261102/results/${{ matrix.engine }}
+          node verification/boss2-mini-start-control-20261101/verifyScope.mjs > verification/local-boss-style-dynamic-20261102/results/${{ matrix.engine }}/source-scope-after.txt
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: ${{ !cancelled() }}
+        with:
+          name: local-style-dynamic-${{ matrix.engine }}
+          path: |
+            verification/local-boss-style-dynamic-20261102/results/${{ matrix.engine }}/
+            verification/local-boss-style-dynamic-20261102/results/site/build-info.json
+          retention-days: 7

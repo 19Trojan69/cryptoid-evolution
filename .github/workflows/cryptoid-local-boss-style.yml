@@ -1,5 +1,6 @@
 name: Paired direct boss styles with original artwork
 on:
+  workflow_dispatch:
   push:
     branches: [codex/style-recalc-isolation-20261102]
     paths:
@@ -23,10 +24,11 @@ jobs:
         run: |
           git restore --worktree -- frontend/yarn.lock
           node verification/boss2-mini-start-control-20261101/verifyScope.mjs
-          node --test verification/local-boss-style-20261102/*.test.mjs verification/boss-thrust-scope-20261102/transform.test.mjs verification/memory-retention-attribution-20261101/inspection.test.mjs verification/inactive-native-allocation-20261101/collector.test.mjs verification/boss2-native-memory-20261029/nativeSummary.test.mjs
+          node --test verification/local-boss-style-20261102/*.test.mjs verification/boss-thrust-scope-20261102/transform.test.mjs verification/memory-retention-attribution-20261101/inspection.test.mjs verification/memory-retention-attribution-20261101/failureObservation.test.mjs verification/inactive-native-allocation-20261101/collector.test.mjs verification/boss2-native-memory-20261029/nativeSummary.test.mjs
           node verification/local-boss-style-20261102/preflight.mjs
           node verification/style-recalc-isolation-20261102/evidence/verifyEvidence.mjs
   short-fidelity:
+    if: github.event_name == 'workflow_dispatch'
     needs: source-gates
     strategy:
       fail-fast: false
