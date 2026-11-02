@@ -1,0 +1,100 @@
+name: Active renderer pressure attribution
+on:
+  push:
+    branches: [codex/active-pressure-attribution-20261102]
+    paths:
+      - '.github/workflows/cryptoid-active-pressure-attribution.yml'
+      - 'verification/active-pressure-attribution-20261102/*.mjs'
+permissions:
+  contents: read
+jobs:
+  source-gates:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with: {persist-credentials: false}
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with: {node-version: '24'}
+      - run: npm install --prefix frontend --include=optional --ignore-scripts --no-audit --no-fund
+      - name: Check unchanged game sources, active collector, existing guard and retained evidence
+        run: |
+          git restore --worktree -- frontend/yarn.lock
+          node verification/boss2-mini-start-control-20261101/verifyScope.mjs
+          node --check verification/active-pressure-attribution-20261102/run.mjs
+          node --test verification/active-pressure-attribution-20261102/collector.test.mjs verification/boss2-native-memory-20261029/nativeSummary.test.mjs verification/inactive-native-allocation-20261101/collector.test.mjs verification/memory-retention-attribution-20261101/inspection.test.mjs
+          node verification/boss-thrust-scope-20261102/preflight.mjs
+          node verification/boss-thrust-scope-20261102/evidence/verifyEvidence.mjs
+          node verification/style-variable-attribution-20261102/evidence/verifyEvidence.mjs
+  calibration:
+    needs: source-gates
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      CRYPTOID_SOAK_CONDITION: original
+      CRYPTOID_LIFETIME_ATTRIBUTION: '1'
+      CRYPTOID_ACTIVE_PRESSURE_MODE: calibration
+      CRYPTOID_PRESSURE_REPLICA: '1'
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with: {persist-credentials: false}
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with: {node-version: '24'}
+      - name: Install existing browser tools
+        run: |
+          npm install --prefix frontend --include=optional --ignore-scripts --no-audit --no-fund
+          npm install --prefix verification/boss2-forensics-20261028 --ignore-scripts --no-audit --no-fund
+          git restore --worktree -- frontend/yarn.lock
+          cd verification/boss2-forensics-20261028
+          npx playwright install --with-deps chromium
+      - name: Calibrate one light dump after a real active minute without a pressure claim
+        env: {VERCEL_ENV: preview}
+        run: |
+          node verification/systematic-stability-20261101/prepareSoakBuild.mjs
+          node verification/active-pressure-attribution-20261102/run.mjs
+          node verification/boss2-mini-start-control-20261101/verifyScope.mjs
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: ${{ !cancelled() }}
+        with:
+          name: active-pressure-calibration
+          path: verification/active-pressure-attribution-20261102/results/
+          if-no-files-found: error
+          retention-days: 7
+  pressure:
+    needs: calibration
+    strategy:
+      fail-fast: false
+      matrix:
+        replica: [1, 2]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    env:
+      CRYPTOID_SOAK_CONDITION: original
+      CRYPTOID_LIFETIME_ATTRIBUTION: '1'
+      CRYPTOID_ACTIVE_PRESSURE_MODE: pressure
+      CRYPTOID_PRESSURE_REPLICA: ${{ matrix.replica }}
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with: {persist-credentials: false}
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with: {node-version: '24'}
+      - name: Install existing browser tools
+        run: |
+          npm install --prefix frontend --include=optional --ignore-scripts --no-audit --no-fund
+          npm install --prefix verification/boss2-forensics-20261028 --ignore-scripts --no-audit --no-fund
+          git restore --worktree -- frontend/yarn.lock
+          cd verification/boss2-forensics-20261028
+          npx playwright install --with-deps chromium
+      - name: Observe the original scene and capture once at the fixed renderer PSS threshold
+        env: {VERCEL_ENV: preview}
+        run: |
+          node verification/systematic-stability-20261101/prepareSoakBuild.mjs
+          node verification/active-pressure-attribution-20261102/run.mjs
+          node verification/boss2-mini-start-control-20261101/verifyScope.mjs
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: ${{ !cancelled() }}
+        with:
+          name: active-pressure-r${{ matrix.replica }}
+          path: verification/active-pressure-attribution-20261102/results/
+          if-no-files-found: error
+          retention-days: 7
