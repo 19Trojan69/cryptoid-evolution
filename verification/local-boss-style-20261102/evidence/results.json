@@ -1,5 +1,5 @@
 {
-  "status": "short-only-long-pending",
+  "status": "finished-with-protocol-failure",
   "captures": [
     {
       "cell": {
@@ -2152,9 +2152,3228 @@
       "nativeTerminationCauseMeasured": false,
       "whiteScreenFixed": false,
       "limits": "Unseeded synthetic Linux runs; sampled renderer PSS is not exact peak, retained bytes or phone RAM. Native categories overlap and inactive dumps/GC influence memory."
+    },
+    {
+      "cell": {
+        "condition": "control",
+        "seconds": 1200,
+        "replica": 1
+      },
+      "sourceCommit": "8d5fe35e24d5b09b8ac4016a69b56368335b4c27",
+      "sourceTree": "91d459326f736db7e83891ced5f00df203bc9c8a",
+      "completeAttributionCapture": true,
+      "observedActiveMs": 1200999.9999999998,
+      "observedWallMs": 1202445,
+      "volleysAdvanced": 428,
+      "engineVersion": "151.0.7922.34",
+      "actualInstalledPackages": {
+        "react": "19.2.4",
+        "react-dom": "19.2.4",
+        "react-router-dom": "7.13.2",
+        "vite": "7.3.1",
+        "typescript": "5.9.3"
+      },
+      "lockSha256": "b6d496c5725bf24ddb4f51b576b0597ced9f35c5ea7927a65165a5fb6311ad1a",
+      "longMemoryObservation": true,
+      "shortFidelityOnly": false,
+      "fidelity": null,
+      "buildProof": {
+        "version": 1,
+        "condition": "control",
+        "originalBlobs": {
+          "BossHullView": "68dd74e598caa060ae8825d3c56b199ba0d08449",
+          "BossReactorView": "0d92e39aba2eb68aa25ba6239932cd4437f4ebf7"
+        },
+        "transformedBlobs": {
+          "BossHullView": "68dd74e598caa060ae8825d3c56b199ba0d08449",
+          "BossReactorView": "0d92e39aba2eb68aa25ba6239932cd4437f4ebf7"
+        },
+        "originalFormulasAndFiringOverrideRetained": true,
+        "originalMemoizedArtworkRetained": true,
+        "onlyExistingConsumersReceiveDirectProperties": true,
+        "newDomNodes": false,
+        "newTimersOrFrames": false,
+        "newEffectsOrGlobalListeners": false,
+        "gameOrAnimationClocksChanged": false,
+        "runtimeSourceFilesEdited": false,
+        "physicalDevice": false,
+        "whiteScreenFixed": false
+      },
+      "rendererPssKiB": {
+        "firstMinuteSamples": 12,
+        "lastMinuteSamples": 12,
+        "firstMinuteMean": 251737.83333333334,
+        "lastMinuteMean": 571756,
+        "firstToLastMinuteGrowth": 320018.1666666666,
+        "sampledPeak": 603350,
+        "observedUntilActiveMs": 1198999.9999999998,
+        "unobservedTailMs": 2000
+      },
+      "totalBrowserPssKiB": {
+        "firstMinuteMedian": 440684,
+        "lastMinuteMedian": 754944,
+        "peakSample": 782738
+      },
+      "sampledMaxima": {
+        "cssActive": 25,
+        "cssConfiguredCumulative": 23298,
+        "paintedPins": 15,
+        "paintedEstimatedBytes": 6973056,
+        "canvasCacheBytes": 1059028,
+        "canvasSurfaceBytes": 80256
+      },
+      "checkpoints": [
+        {
+          "label": "paused-before-gc",
+          "pss": {
+            "totalKiB": 768131,
+            "byRoleKiB": {
+              "browser-other": 153242,
+              "chromium-gpu": 40965,
+              "chromium-renderer": 573924
+            }
+          },
+          "usedJsBytes": 15020076,
+          "embedderHeapUsedBytes": 41409328,
+          "backingStorageBytes": 2542381,
+          "dom": {
+            "documents": 3,
+            "nodes": 1100,
+            "jsEventListeners": 601
+          },
+          "attached": {
+            "nodes": 521,
+            "canvases": 3,
+            "images": 1,
+            "nativeAnimations": 12,
+            "animationStates": {
+              "running": 2,
+              "paused": 10,
+              "finished": 0,
+              "idle": 0
+            }
+          },
+          "cssActive": 12,
+          "paintedPins": 15,
+          "canvasCacheBytes": 740932,
+          "canvasSurfaceBytes": 4
+        },
+        {
+          "label": "paused-settled-before-gc",
+          "pss": {
+            "totalKiB": 761519,
+            "byRoleKiB": {
+              "browser-other": 152990,
+              "chromium-gpu": 40339,
+              "chromium-renderer": 568190
+            }
+          },
+          "usedJsBytes": 15136080,
+          "embedderHeapUsedBytes": 42092568,
+          "backingStorageBytes": 2543648,
+          "dom": {
+            "documents": 3,
+            "nodes": 1119,
+            "jsEventListeners": 659
+          },
+          "attached": {
+            "nodes": 521,
+            "canvases": 3,
+            "images": 1,
+            "nativeAnimations": 11,
+            "animationStates": {
+              "running": 1,
+              "paused": 10,
+              "finished": 0,
+              "idle": 0
+            }
+          },
+          "cssActive": 11,
+          "paintedPins": 15,
+          "canvasCacheBytes": 740932,
+          "canvasSurfaceBytes": 4
+        },
+        {
+          "label": "paused-after-gc",
+          "pss": {
+            "totalKiB": 458727,
+            "byRoleKiB": {
+              "browser-other": 166894,
+              "chromium-gpu": 41648,
+              "chromium-renderer": 250185
+            }
+          },
+          "usedJsBytes": 10679612,
+          "embedderHeapUsedBytes": 4212904,
+          "backingStorageBytes": 2537390,
+          "dom": {
+            "documents": 3,
+            "nodes": 732,
+            "jsEventListeners": 308
+          },
+          "attached": {
+            "nodes": 521,
+            "canvases": 3,
+            "images": 1,
+            "nativeAnimations": 11,
+            "animationStates": {
+              "running": 1,
+              "paused": 10,
+              "finished": 0,
+              "idle": 0
+            }
+          },
+          "cssActive": 11,
+          "paintedPins": 15,
+          "canvasCacheBytes": 740932,
+          "canvasSurfaceBytes": 4
+        },
+        {
+          "label": "paused-after-snapshot",
+          "pss": {
+            "totalKiB": 465119,
+            "byRoleKiB": {
+              "browser-other": 169377,
+              "chromium-gpu": 35701,
+              "chromium-renderer": 260041
+            }
+          },
+          "usedJsBytes": 10749884,
+          "embedderHeapUsedBytes": 4482752,
+          "backingStorageBytes": 2537654,
+          "dom": {
+            "documents": 3,
+            "nodes": 732,
+            "jsEventListeners": 308
+          },
+          "attached": {
+            "nodes": 521,
+            "canvases": 3,
+            "images": 1,
+            "nativeAnimations": 11,
+            "animationStates": {
+              "running": 1,
+              "paused": 10,
+              "finished": 0,
+              "idle": 0
+            }
+          },
+          "cssActive": 11,
+          "paintedPins": 15,
+          "canvasCacheBytes": 740932,
+          "canvasSurfaceBytes": 4
+        },
+        {
+          "label": "home-before-gc",
+          "pss": {
+            "totalKiB": 461280,
+            "byRoleKiB": {
+              "browser-other": 169388,
+              "chromium-gpu": 35441,
+              "chromium-renderer": 256451
+            }
+          },
+          "usedJsBytes": 11713552,
+          "embedderHeapUsedBytes": 5211248,
+          "backingStorageBytes": 2543038,
+          "dom": {
+            "documents": 3,
+            "nodes": 804,
+            "jsEventListeners": 415
+          },
+          "attached": {
+            "nodes": 54,
+            "canvases": 0,
+            "images": 0,
+            "nativeAnimations": 0,
+            "animationStates": {
+              "running": 0,
+              "paused": 0,
+              "finished": 0,
+              "idle": 0
+            }
+          },
+          "cssActive": 0,
+          "paintedPins": 0,
+          "canvasCacheBytes": 0,
+          "canvasSurfaceBytes": 0
+        },
+        {
+          "label": "home-settled-before-gc",
+          "pss": {
+            "totalKiB": 455322,
+            "byRoleKiB": {
+              "browser-other": 167684,
+              "chromium-gpu": 42613,
+              "chromium-renderer": 245025
+            }
+          },
+          "usedJsBytes": 11084964,
+          "embedderHeapUsedBytes": 5211248,
+          "backingStorageBytes": 2543038,
+          "dom": {
+            "documents": 3,
+            "nodes": 804,
+            "jsEventListeners": 415
+          },
+          "attached": {
+            "nodes": 54,
+            "canvases": 0,
+            "images": 0,
+            "nativeAnimations": 0,
+            "animationStates": {
+              "running": 0,
+              "paused": 0,
+              "finished": 0,
+              "idle": 0
+            }
+          },
+          "cssActive": 0,
+          "paintedPins": 0,
+          "canvasCacheBytes": 0,
+          "canvasSurfaceBytes": 0
+        },
+        {
+          "label": "home-after-gc",
+          "pss": {
+            "totalKiB": 440078,
+            "byRoleKiB": {
+              "browser-other": 167660,
+              "chromium-gpu": 42613,
+              "chromium-renderer": 229805
+            }
+          },
+          "usedJsBytes": 9934096,
+          "embedderHeapUsedBytes": 2778704,
+          "backingStorageBytes": 2538457,
+          "dom": {
+            "documents": 3,
+            "nodes": 247,
+            "jsEventListeners": 210
+          },
+          "attached": {
+            "nodes": 54,
+            "canvases": 0,
+            "images": 0,
+            "nativeAnimations": 0,
+            "animationStates": {
+              "running": 0,
+              "paused": 0,
+              "finished": 0,
+              "idle": 0
+            }
+          },
+          "cssActive": 0,
+          "paintedPins": 0,
+          "canvasCacheBytes": 0,
+          "canvasSurfaceBytes": 0
+        },
+        {
+          "label": "home-after-snapshot",
+          "pss": {
+            "totalKiB": 429922,
+            "byRoleKiB": {
+              "browser-other": 170790,
+              "chromium-gpu": 28501,
+              "chromium-renderer": 230631
+            }
+          },
+          "usedJsBytes": 9976048,
+          "embedderHeapUsedBytes": 2907376,
+          "backingStorageBytes": 2538689,
+          "dom": {
+            "documents": 3,
+            "nodes": 247,
+            "jsEventListeners": 210
+          },
+          "attached": {
+            "nodes": 54,
+            "canvases": 0,
+            "images": 0,
+            "nativeAnimations": 0,
+            "animationStates": {
+              "running": 0,
+              "paused": 0,
+              "finished": 0,
+              "idle": 0
+            }
+          },
+          "cssActive": 0,
+          "paintedPins": 0,
+          "canvasCacheBytes": 0,
+          "canvasSurfaceBytes": 0
+        },
+        {
+          "label": "blank-before-gc",
+          "pss": {
+            "totalKiB": 410030,
+            "byRoleKiB": {
+              "browser-other": 169918,
+              "chromium-gpu": 25525,
+              "chromium-renderer": 214587
+            }
+          },
+          "usedJsBytes": 10434364,
+          "embedderHeapUsedBytes": 3418632,
+          "backingStorageBytes": 2538709,
+          "dom": {
+            "documents": 5,
+            "nodes": 255,
+            "jsEventListeners": 210
+          },
+          "attached": {
+            "nodes": 3,
+            "canvases": 0,
+            "images": 0,
+            "nativeAnimations": 0,
+            "animationStates": {
+              "running": 0,
+              "paused": 0,
+              "finished": 0,
+              "idle": 0
+            }
+          },
+          "cssActive": null,
+          "paintedPins": null,
+          "canvasCacheBytes": null,
+          "canvasSurfaceBytes": null
+        },
+        {
+          "label": "blank-after-gc",
+          "pss": {
+            "totalKiB": 345819,
+            "byRoleKiB": {
+              "browser-other": 169899,
+              "chromium-gpu": 25501,
+              "chromium-renderer": 150419
+            }
+          },
+          "usedJsBytes": 1099596,
+          "embedderHeapUsedBytes": 427440,
+          "backingStorageBytes": 261,
+          "dom": {
+            "documents": 1,
+            "nodes": 4,
+            "jsEventListeners": 0
+          },
+          "attached": {
+            "nodes": 3,
+            "canvases": 0,
+            "images": 0,
+            "nativeAnimations": 0,
+            "animationStates": {
+              "running": 0,
+              "paused": 0,
+              "finished": 0,
+              "idle": 0
+            }
+          },
+          "cssActive": null,
+          "paintedPins": null,
+          "canvasCacheBytes": null,
+          "canvasSurfaceBytes": null
+        }
+      ],
+      "trace": {
+        "file": "native-memory-infra.json.gz",
+        "events": 58,
+        "bytes": 16834535,
+        "compressedBytes": 990723,
+        "sha256": "9b36353094e972d575615ef8d45dc15cda778d4b2f225bfda6f6451cdc08f4b9",
+        "dataLossOccurred": false,
+        "collectorFault": null
+      },
+      "nativeCheckpoints": [
+        {
+          "label": "paused-settled-before-gc",
+          "pssBeforeDump": {
+            "totalKiB": 761519,
+            "byRoleKiB": {
+              "browser-other": 152990,
+              "chromium-gpu": 40339,
+              "chromium-renderer": 568190
+            }
+          },
+          "pssAfterDump": {
+            "totalKiB": 778791,
+            "byRoleKiB": {
+              "browser-other": 166906,
+              "chromium-gpu": 41648,
+              "chromium-renderer": 570237
+            }
+          },
+          "rendererFragments": [
+            {
+              "processId": 3224,
+              "fragmentIndex": 9,
+              "allocatorCount": 24761,
+              "categories": {
+                "blink_gc": 283312288,
+                "blink_objects": 41671728,
+                "v8": 65862412,
+                "malloc": 67581808,
+                "partition_alloc": 68976640,
+                "cc": 33628160,
+                "cc/image_memory": 17080320,
+                "skia": 13613898,
+                "discardable": 41984000,
+                "canvas": 1880312,
+                "media": 4462376,
+                "web_cache": 1793181,
+                "shared_memory": 67239936,
+                "gpu": null,
+                "gpu/shared_images": null
+              },
+              "reportedSizesMustNotBeSummed": true
+            }
+          ],
+          "blinkHeap": [
+            {
+              "processId": 3224,
+              "fragmentIndex": 9,
+              "heap": {
+                "path": "blink_gc/main/heap",
+                "bytes": 283312288,
+                "attributes": {
+                  "allocated_objects_size": 41671728,
+                  "committed_size": 283312288,
+                  "effective_size": 241639648,
+                  "pooled_size": 154927104,
+                  "size": 283312288
+                },
+                "unrepresentableByteScalars": {}
+              },
+              "focusedGlobalObjectTypes": [
+                {
+                  "type": "blink::HashTrieNode<blink::CSSVariableData>",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::HashTrieNode<blink::CSSVariableData> (0x2a8)",
+                      "bytes": 9015168,
+                      "attributes": {
+                        "allocated_objects_size": 9015168,
+                        "effective_size": 9015168,
+                        "size": 9015168
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                },
+                {
+                  "type": "blink::ComputedStyleBase::StyleSurroundData",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::ComputedStyleBase::StyleSurroundData (0x2a7)",
+                      "bytes": 2798952,
+                      "attributes": {
+                        "allocated_objects_size": 2798952,
+                        "effective_size": 2798952,
+                        "size": 2798952
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                },
+                {
+                  "type": "blink::ComputedStyle",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::ComputedStyle (0x1b9)",
+                      "bytes": 2233224,
+                      "attributes": {
+                        "allocated_objects_size": 2233224,
+                        "effective_size": 2233224,
+                        "size": 2233224
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                },
+                {
+                  "type": "blink::CachedMatchedProperties",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::CachedMatchedProperties (0x2ae)",
+                      "bytes": 2204560,
+                      "attributes": {
+                        "allocated_objects_size": 2204560,
+                        "effective_size": 2204560,
+                        "size": 2204560
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                },
+                {
+                  "type": "blink::ComputedStyleBase::StyleMiscData",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::ComputedStyleBase::StyleMiscData (0x1b3)",
+                      "bytes": 1884784,
+                      "attributes": {
+                        "allocated_objects_size": 1884784,
+                        "effective_size": 1884784,
+                        "size": 1884784
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                },
+                {
+                  "type": "blink::ComputedStyleBase::StyleSVGData",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::ComputedStyleBase::StyleSVGData (0x1c2)",
+                      "bytes": 1464320,
+                      "attributes": {
+                        "allocated_objects_size": 1464320,
+                        "effective_size": 1464320,
+                        "size": 1464320
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "paused-after-gc",
+          "pssBeforeDump": {
+            "totalKiB": 458727,
+            "byRoleKiB": {
+              "browser-other": 166894,
+              "chromium-gpu": 41648,
+              "chromium-renderer": 250185
+            }
+          },
+          "pssAfterDump": {
+            "totalKiB": 455699,
+            "byRoleKiB": {
+              "browser-other": 169573,
+              "chromium-gpu": 35071,
+              "chromium-renderer": 251055
+            }
+          },
+          "rendererFragments": [
+            {
+              "processId": 3224,
+              "fragmentIndex": 9,
+              "allocatorCount": 9834,
+              "categories": {
+                "blink_gc": 15429712,
+                "blink_objects": 4185256,
+                "v8": 13913004,
+                "malloc": 57711872,
+                "partition_alloc": 62472192,
+                "cc": 32759808,
+                "cc/image_memory": 17080320,
+                "skia": 13613898,
+                "discardable": 41984000,
+                "canvas": 1880312,
+                "media": 4462376,
+                "web_cache": 1793181,
+                "shared_memory": 66371584,
+                "gpu": null,
+                "gpu/shared_images": null
+              },
+              "reportedSizesMustNotBeSummed": true
+            }
+          ],
+          "blinkHeap": [
+            {
+              "processId": 3224,
+              "fragmentIndex": 9,
+              "heap": {
+                "path": "blink_gc/main/heap",
+                "bytes": 15429712,
+                "attributes": {
+                  "allocated_objects_size": 4185256,
+                  "committed_size": 68681808,
+                  "effective_size": 11244029,
+                  "pooled_size": 0,
+                  "size": 15429712
+                },
+                "unrepresentableByteScalars": {}
+              },
+              "focusedGlobalObjectTypes": [
+                {
+                  "type": "blink::HashTrieNode<blink::CSSVariableData>",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::HashTrieNode<blink::CSSVariableData> (0x275)",
+                      "bytes": 88944,
+                      "attributes": {
+                        "allocated_objects_size": 88944,
+                        "effective_size": 88944,
+                        "size": 88944
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                },
+                {
+                  "type": "blink::ComputedStyleBase::StyleSurroundData",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::ComputedStyleBase::StyleSurroundData (0x286)",
+                      "bytes": 55848,
+                      "attributes": {
+                        "allocated_objects_size": 55848,
+                        "effective_size": 55848,
+                        "size": 55848
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                },
+                {
+                  "type": "blink::ComputedStyle",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::ComputedStyle (0x17e)",
+                      "bytes": 71784,
+                      "attributes": {
+                        "allocated_objects_size": 71784,
+                        "effective_size": 71784,
+                        "size": 71784
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                },
+                {
+                  "type": "blink::CachedMatchedProperties",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::CachedMatchedProperties (0x294)",
+                      "bytes": 34952,
+                      "attributes": {
+                        "allocated_objects_size": 34952,
+                        "effective_size": 34952,
+                        "size": 34952
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                },
+                {
+                  "type": "blink::ComputedStyleBase::StyleMiscData",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::ComputedStyleBase::StyleMiscData (0x178)",
+                      "bytes": 56056,
+                      "attributes": {
+                        "allocated_objects_size": 56056,
+                        "effective_size": 56056,
+                        "size": 56056
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                },
+                {
+                  "type": "blink::ComputedStyleBase::StyleSVGData",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::ComputedStyleBase::StyleSVGData (0x187)",
+                      "bytes": 43680,
+                      "attributes": {
+                        "allocated_objects_size": 43680,
+                        "effective_size": 43680,
+                        "size": 43680
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "home-after-gc",
+          "pssBeforeDump": {
+            "totalKiB": 440078,
+            "byRoleKiB": {
+              "browser-other": 167660,
+              "chromium-gpu": 42613,
+              "chromium-renderer": 229805
+            }
+          },
+          "pssAfterDump": {
+            "totalKiB": 445859,
+            "byRoleKiB": {
+              "browser-other": 171444,
+              "chromium-gpu": 44791,
+              "chromium-renderer": 229624
+            }
+          },
+          "rendererFragments": [
+            {
+              "processId": 3224,
+              "fragmentIndex": 9,
+              "allocatorCount": 8306,
+              "categories": {
+                "blink_gc": 12054608,
+                "blink_objects": 2729560,
+                "v8": 13797300,
+                "malloc": 54379808,
+                "partition_alloc": 53428224,
+                "cc": 19177472,
+                "cc/image_memory": 17080320,
+                "skia": 12774130,
+                "discardable": 41984000,
+                "canvas": 1032192,
+                "media": null,
+                "web_cache": 1470079,
+                "shared_memory": 49799168,
+                "gpu": null,
+                "gpu/shared_images": null
+              },
+              "reportedSizesMustNotBeSummed": true
+            }
+          ],
+          "blinkHeap": [
+            {
+              "processId": 3224,
+              "fragmentIndex": 9,
+              "heap": {
+                "path": "blink_gc/main/heap",
+                "bytes": 12054608,
+                "attributes": {
+                  "allocated_objects_size": 2729560,
+                  "committed_size": 63307856,
+                  "effective_size": 9324865,
+                  "pooled_size": 0,
+                  "size": 12054608
+                },
+                "unrepresentableByteScalars": {}
+              },
+              "focusedGlobalObjectTypes": [
+                {
+                  "type": "blink::HashTrieNode<blink::CSSVariableData>",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::HashTrieNode<blink::CSSVariableData> (0x251)",
+                      "bytes": 45968,
+                      "attributes": {
+                        "allocated_objects_size": 45968,
+                        "effective_size": 45968,
+                        "size": 45968
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                },
+                {
+                  "type": "blink::ComputedStyleBase::StyleSurroundData",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::ComputedStyleBase::StyleSurroundData (0x257)",
+                      "bytes": 50856,
+                      "attributes": {
+                        "allocated_objects_size": 50856,
+                        "effective_size": 50856,
+                        "size": 50856
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                },
+                {
+                  "type": "blink::ComputedStyle",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::ComputedStyle (0x14e)",
+                      "bytes": 28152,
+                      "attributes": {
+                        "allocated_objects_size": 28152,
+                        "effective_size": 28152,
+                        "size": 28152
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                },
+                {
+                  "type": "blink::CachedMatchedProperties",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::CachedMatchedProperties (0x291)",
+                      "bytes": 22304,
+                      "attributes": {
+                        "allocated_objects_size": 22304,
+                        "effective_size": 22304,
+                        "size": 22304
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                },
+                {
+                  "type": "blink::ComputedStyleBase::StyleMiscData",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::ComputedStyleBase::StyleMiscData (0x14f)",
+                      "bytes": 16280,
+                      "attributes": {
+                        "allocated_objects_size": 16280,
+                        "effective_size": 16280,
+                        "size": 16280
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                },
+                {
+                  "type": "blink::ComputedStyleBase::StyleSVGData",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::ComputedStyleBase::StyleSVGData (0x157)",
+                      "bytes": 10080,
+                      "attributes": {
+                        "allocated_objects_size": 10080,
+                        "effective_size": 10080,
+                        "size": 10080
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "blank-after-gc",
+          "pssBeforeDump": {
+            "totalKiB": 345819,
+            "byRoleKiB": {
+              "browser-other": 169899,
+              "chromium-gpu": 25501,
+              "chromium-renderer": 150419
+            }
+          },
+          "pssAfterDump": {
+            "totalKiB": 349719,
+            "byRoleKiB": {
+              "browser-other": 172103,
+              "chromium-gpu": 26565,
+              "chromium-renderer": 151051
+            }
+          },
+          "rendererFragments": [
+            {
+              "processId": 3224,
+              "fragmentIndex": 9,
+              "allocatorCount": 4024,
+              "categories": {
+                "blink_gc": 3649536,
+                "blink_objects": 427672,
+                "v8": 5004320,
+                "malloc": 34770496,
+                "partition_alloc": 4030464,
+                "cc": 5242880,
+                "cc/image_memory": 5242880,
+                "skia": 12774130,
+                "discardable": 41984000,
+                "canvas": null,
+                "media": null,
+                "web_cache": null,
+                "shared_memory": 47697920,
+                "gpu": null,
+                "gpu/shared_images": null
+              },
+              "reportedSizesMustNotBeSummed": true
+            }
+          ],
+          "blinkHeap": [
+            {
+              "processId": 3224,
+              "fragmentIndex": 9,
+              "heap": {
+                "path": "blink_gc/main/heap",
+                "bytes": 3649536,
+                "attributes": {
+                  "allocated_objects_size": 427672,
+                  "committed_size": 25034752,
+                  "effective_size": 3221856,
+                  "pooled_size": 0,
+                  "size": 3649536
+                },
+                "unrepresentableByteScalars": {}
+              },
+              "focusedGlobalObjectTypes": [
+                {
+                  "type": "blink::HashTrieNode<blink::CSSVariableData>",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::HashTrieNode<blink::CSSVariableData> (0x165)",
+                      "bytes": 544,
+                      "attributes": {
+                        "allocated_objects_size": 544,
+                        "effective_size": 544,
+                        "size": 544
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                },
+                {
+                  "type": "blink::ComputedStyleBase::StyleSurroundData",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::ComputedStyleBase::StyleSurroundData (0x16b)",
+                      "bytes": 624,
+                      "attributes": {
+                        "allocated_objects_size": 624,
+                        "effective_size": 624,
+                        "size": 624
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                },
+                {
+                  "type": "blink::ComputedStyle",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::ComputedStyle (0xcc)",
+                      "bytes": 1008,
+                      "attributes": {
+                        "allocated_objects_size": 1008,
+                        "effective_size": 1008,
+                        "size": 1008
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                },
+                {
+                  "type": "blink::CachedMatchedProperties",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::CachedMatchedProperties (0x1a2)",
+                      "bytes": 544,
+                      "attributes": {
+                        "allocated_objects_size": 544,
+                        "effective_size": 544,
+                        "size": 544
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                },
+                {
+                  "type": "blink::ComputedStyleBase::StyleMiscData",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::ComputedStyleBase::StyleMiscData (0xcd)",
+                      "bytes": 352,
+                      "attributes": {
+                        "allocated_objects_size": 352,
+                        "effective_size": 352,
+                        "size": 352
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                },
+                {
+                  "type": "blink::ComputedStyleBase::StyleSVGData",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::ComputedStyleBase::StyleSVGData (0xd5)",
+                      "bytes": 80,
+                      "attributes": {
+                        "allocated_objects_size": 80,
+                        "effective_size": 80,
+                        "size": 80
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "observedHomeOwnershipReleased": true,
+      "physicalPhoneAcceptanceEstablished": false,
+      "nativeTerminationCauseMeasured": false,
+      "whiteScreenFixed": false,
+      "limits": "Unseeded synthetic Linux runs; sampled renderer PSS is not exact peak, retained bytes or phone RAM. Native categories overlap and inactive dumps/GC influence memory."
+    },
+    {
+      "cell": {
+        "condition": "control",
+        "seconds": 1200,
+        "replica": 2
+      },
+      "sourceCommit": "8d5fe35e24d5b09b8ac4016a69b56368335b4c27",
+      "sourceTree": "91d459326f736db7e83891ced5f00df203bc9c8a",
+      "completeAttributionCapture": false,
+      "classification": "unexpected-pause-during-active-observation",
+      "failure": {
+        "code": "attribution-failed",
+        "message": "Expected values to be strictly equal:\n+ actual - expected\n\n+ 'paused'\n- 'playing'\n"
+      },
+      "completedMeasuredActiveMs": null,
+      "engineVersion": "151.0.7922.34",
+      "actualInstalledPackages": {
+        "react": "19.2.4",
+        "react-dom": "19.2.4",
+        "react-router-dom": "7.13.2",
+        "vite": "7.3.1",
+        "typescript": "5.9.3"
+      },
+      "lockSha256": "b6d496c5725bf24ddb4f51b576b0597ced9f35c5ea7927a65165a5fb6311ad1a",
+      "longMemoryObservation": false,
+      "shortFidelityOnly": false,
+      "partialSamples": {
+        "count": 156,
+        "firstMinuteSamples": 12,
+        "firstMinuteRendererMeanKiB": 386151.4166666667,
+        "lastSampledActiveMs": 801999.7999999999,
+        "lastSampledCoreVolley": 285,
+        "sampledRendererPeakKiB": 2369668,
+        "lastSampledRendererKiB": 2369668,
+        "sampledTotalBrowserPeakKiB": 2555114
+      },
+      "fullTwentyMinuteRendererMetrics": null,
+      "nativeMemoryMeasurement": null,
+      "heapAnalysis": null,
+      "observedHomeOwnershipReleased": null,
+      "lastFailureObservationAvailable": false,
+      "physicalPhoneAcceptanceEstablished": false,
+      "nativeTerminationCauseMeasured": false,
+      "whiteScreenFixed": false,
+      "limits": "Last sampled time is not exact failure time. This source does not save the final scene/clock in its catch. A pause after high PSS does not identify GC, clock-gap, OS pressure, a white screen or a native termination cause."
+    },
+    {
+      "cell": {
+        "condition": "leaves",
+        "seconds": 1200,
+        "replica": 1
+      },
+      "sourceCommit": "8d5fe35e24d5b09b8ac4016a69b56368335b4c27",
+      "sourceTree": "91d459326f736db7e83891ced5f00df203bc9c8a",
+      "completeAttributionCapture": true,
+      "observedActiveMs": 1200000,
+      "observedWallMs": 1201640,
+      "volleysAdvanced": 428,
+      "engineVersion": "151.0.7922.34",
+      "actualInstalledPackages": {
+        "react": "19.2.4",
+        "react-dom": "19.2.4",
+        "react-router-dom": "7.13.2",
+        "vite": "7.3.1",
+        "typescript": "5.9.3"
+      },
+      "lockSha256": "b6d496c5725bf24ddb4f51b576b0597ced9f35c5ea7927a65165a5fb6311ad1a",
+      "longMemoryObservation": true,
+      "shortFidelityOnly": false,
+      "fidelity": null,
+      "buildProof": {
+        "version": 1,
+        "condition": "leaves",
+        "originalBlobs": {
+          "BossHullView": "68dd74e598caa060ae8825d3c56b199ba0d08449",
+          "BossReactorView": "0d92e39aba2eb68aa25ba6239932cd4437f4ebf7"
+        },
+        "transformedBlobs": {
+          "BossHullView": "570a0db4dec6abb59f90b39f515156916043517a",
+          "BossReactorView": "33cc560e042963b548c6757384b0d9f21aa221b8"
+        },
+        "originalFormulasAndFiringOverrideRetained": true,
+        "originalMemoizedArtworkRetained": true,
+        "onlyExistingConsumersReceiveDirectProperties": true,
+        "newDomNodes": false,
+        "newTimersOrFrames": false,
+        "newEffectsOrGlobalListeners": false,
+        "gameOrAnimationClocksChanged": false,
+        "runtimeSourceFilesEdited": false,
+        "physicalDevice": false,
+        "whiteScreenFixed": false
+      },
+      "rendererPssKiB": {
+        "firstMinuteSamples": 12,
+        "lastMinuteSamples": 12,
+        "firstMinuteMean": 226330.08333333334,
+        "lastMinuteMean": 303924.5,
+        "firstToLastMinuteGrowth": 77594.41666666666,
+        "sampledPeak": 305381,
+        "observedUntilActiveMs": 1200000,
+        "unobservedTailMs": 0
+      },
+      "totalBrowserPssKiB": {
+        "firstMinuteMedian": 408955,
+        "lastMinuteMedian": 488935,
+        "peakSample": 492267
+      },
+      "sampledMaxima": {
+        "cssActive": 24,
+        "cssConfiguredCumulative": 23309,
+        "paintedPins": 15,
+        "paintedEstimatedBytes": 6973056,
+        "canvasCacheBytes": 1059028,
+        "canvasSurfaceBytes": 83952
+      },
+      "checkpoints": [
+        {
+          "label": "paused-before-gc",
+          "pss": {
+            "totalKiB": 496325,
+            "byRoleKiB": {
+              "browser-other": 153512,
+              "chromium-gpu": 38433,
+              "chromium-renderer": 304380
+            }
+          },
+          "usedJsBytes": 14410524,
+          "embedderHeapUsedBytes": 17005680,
+          "backingStorageBytes": 2539313,
+          "dom": {
+            "documents": 3,
+            "nodes": 960,
+            "jsEventListeners": 561
+          },
+          "attached": {
+            "nodes": 520,
+            "canvases": 3,
+            "images": 1,
+            "nativeAnimations": 11,
+            "animationStates": {
+              "running": 2,
+              "paused": 9,
+              "finished": 0,
+              "idle": 0
+            }
+          },
+          "cssActive": 11,
+          "paintedPins": 15,
+          "canvasCacheBytes": 740932,
+          "canvasSurfaceBytes": 4
+        },
+        {
+          "label": "paused-settled-before-gc",
+          "pss": {
+            "totalKiB": 491076,
+            "byRoleKiB": {
+              "browser-other": 153218,
+              "chromium-gpu": 36952,
+              "chromium-renderer": 300906
+            }
+          },
+          "usedJsBytes": 14526740,
+          "embedderHeapUsedBytes": 17746264,
+          "backingStorageBytes": 2540580,
+          "dom": {
+            "documents": 3,
+            "nodes": 977,
+            "jsEventListeners": 619
+          },
+          "attached": {
+            "nodes": 520,
+            "canvases": 3,
+            "images": 1,
+            "nativeAnimations": 10,
+            "animationStates": {
+              "running": 1,
+              "paused": 9,
+              "finished": 0,
+              "idle": 0
+            }
+          },
+          "cssActive": 10,
+          "paintedPins": 15,
+          "canvasCacheBytes": 740932,
+          "canvasSurfaceBytes": 4
+        },
+        {
+          "label": "paused-after-gc",
+          "pss": {
+            "totalKiB": 446910,
+            "byRoleKiB": {
+              "browser-other": 164221,
+              "chromium-gpu": 38932,
+              "chromium-renderer": 243757
+            }
+          },
+          "usedJsBytes": 10694668,
+          "embedderHeapUsedBytes": 3971256,
+          "backingStorageBytes": 2537517,
+          "dom": {
+            "documents": 3,
+            "nodes": 731,
+            "jsEventListeners": 306
+          },
+          "attached": {
+            "nodes": 520,
+            "canvases": 3,
+            "images": 1,
+            "nativeAnimations": 10,
+            "animationStates": {
+              "running": 1,
+              "paused": 9,
+              "finished": 0,
+              "idle": 0
+            }
+          },
+          "cssActive": 10,
+          "paintedPins": 15,
+          "canvasCacheBytes": 740932,
+          "canvasSurfaceBytes": 4
+        },
+        {
+          "label": "paused-after-snapshot",
+          "pss": {
+            "totalKiB": 455334,
+            "byRoleKiB": {
+              "browser-other": 167170,
+              "chromium-gpu": 34732,
+              "chromium-renderer": 253432
+            }
+          },
+          "usedJsBytes": 10764552,
+          "embedderHeapUsedBytes": 4318016,
+          "backingStorageBytes": 2537781,
+          "dom": {
+            "documents": 3,
+            "nodes": 731,
+            "jsEventListeners": 306
+          },
+          "attached": {
+            "nodes": 520,
+            "canvases": 3,
+            "images": 1,
+            "nativeAnimations": 10,
+            "animationStates": {
+              "running": 1,
+              "paused": 9,
+              "finished": 0,
+              "idle": 0
+            }
+          },
+          "cssActive": 10,
+          "paintedPins": 15,
+          "canvasCacheBytes": 740932,
+          "canvasSurfaceBytes": 4
+        },
+        {
+          "label": "home-before-gc",
+          "pss": {
+            "totalKiB": 453888,
+            "byRoleKiB": {
+              "browser-other": 167188,
+              "chromium-gpu": 35316,
+              "chromium-renderer": 251384
+            }
+          },
+          "usedJsBytes": 11728972,
+          "embedderHeapUsedBytes": 5100984,
+          "backingStorageBytes": 2543165,
+          "dom": {
+            "documents": 3,
+            "nodes": 803,
+            "jsEventListeners": 411
+          },
+          "attached": {
+            "nodes": 54,
+            "canvases": 0,
+            "images": 0,
+            "nativeAnimations": 0,
+            "animationStates": {
+              "running": 0,
+              "paused": 0,
+              "finished": 0,
+              "idle": 0
+            }
+          },
+          "cssActive": 0,
+          "paintedPins": 0,
+          "canvasCacheBytes": 0,
+          "canvasSurfaceBytes": 0
+        },
+        {
+          "label": "home-settled-before-gc",
+          "pss": {
+            "totalKiB": 444772,
+            "byRoleKiB": {
+              "browser-other": 165536,
+              "chromium-gpu": 39884,
+              "chromium-renderer": 239352
+            }
+          },
+          "usedJsBytes": 11099584,
+          "embedderHeapUsedBytes": 5100984,
+          "backingStorageBytes": 2543165,
+          "dom": {
+            "documents": 3,
+            "nodes": 803,
+            "jsEventListeners": 411
+          },
+          "attached": {
+            "nodes": 54,
+            "canvases": 0,
+            "images": 0,
+            "nativeAnimations": 0,
+            "animationStates": {
+              "running": 0,
+              "paused": 0,
+              "finished": 0,
+              "idle": 0
+            }
+          },
+          "cssActive": 0,
+          "paintedPins": 0,
+          "canvasCacheBytes": 0,
+          "canvasSurfaceBytes": 0
+        },
+        {
+          "label": "home-after-gc",
+          "pss": {
+            "totalKiB": 430637,
+            "byRoleKiB": {
+              "browser-other": 165494,
+              "chromium-gpu": 39884,
+              "chromium-renderer": 225259
+            }
+          },
+          "usedJsBytes": 9935756,
+          "embedderHeapUsedBytes": 2664640,
+          "backingStorageBytes": 2538594,
+          "dom": {
+            "documents": 3,
+            "nodes": 247,
+            "jsEventListeners": 210
+          },
+          "attached": {
+            "nodes": 54,
+            "canvases": 0,
+            "images": 0,
+            "nativeAnimations": 0,
+            "animationStates": {
+              "running": 0,
+              "paused": 0,
+              "finished": 0,
+              "idle": 0
+            }
+          },
+          "cssActive": 0,
+          "paintedPins": 0,
+          "canvasCacheBytes": 0,
+          "canvasSurfaceBytes": 0
+        },
+        {
+          "label": "home-after-snapshot",
+          "pss": {
+            "totalKiB": 420309,
+            "byRoleKiB": {
+              "browser-other": 168503,
+              "chromium-gpu": 25754,
+              "chromium-renderer": 226052
+            }
+          },
+          "usedJsBytes": 9977684,
+          "embedderHeapUsedBytes": 2819600,
+          "backingStorageBytes": 2538826,
+          "dom": {
+            "documents": 3,
+            "nodes": 247,
+            "jsEventListeners": 210
+          },
+          "attached": {
+            "nodes": 54,
+            "canvases": 0,
+            "images": 0,
+            "nativeAnimations": 0,
+            "animationStates": {
+              "running": 0,
+              "paused": 0,
+              "finished": 0,
+              "idle": 0
+            }
+          },
+          "cssActive": 0,
+          "paintedPins": 0,
+          "canvasCacheBytes": 0,
+          "canvasSurfaceBytes": 0
+        },
+        {
+          "label": "blank-before-gc",
+          "pss": {
+            "totalKiB": 402385,
+            "byRoleKiB": {
+              "browser-other": 167722,
+              "chromium-gpu": 24830,
+              "chromium-renderer": 209833
+            }
+          },
+          "usedJsBytes": 10435988,
+          "embedderHeapUsedBytes": 3360928,
+          "backingStorageBytes": 2538846,
+          "dom": {
+            "documents": 5,
+            "nodes": 255,
+            "jsEventListeners": 210
+          },
+          "attached": {
+            "nodes": 3,
+            "canvases": 0,
+            "images": 0,
+            "nativeAnimations": 0,
+            "animationStates": {
+              "running": 0,
+              "paused": 0,
+              "finished": 0,
+              "idle": 0
+            }
+          },
+          "cssActive": null,
+          "paintedPins": null,
+          "canvasCacheBytes": null,
+          "canvasSurfaceBytes": null
+        },
+        {
+          "label": "blank-after-gc",
+          "pss": {
+            "totalKiB": 340910,
+            "byRoleKiB": {
+              "browser-other": 167733,
+              "chromium-gpu": 24825,
+              "chromium-renderer": 148352
+            }
+          },
+          "usedJsBytes": 1098912,
+          "embedderHeapUsedBytes": 428040,
+          "backingStorageBytes": 261,
+          "dom": {
+            "documents": 1,
+            "nodes": 4,
+            "jsEventListeners": 0
+          },
+          "attached": {
+            "nodes": 3,
+            "canvases": 0,
+            "images": 0,
+            "nativeAnimations": 0,
+            "animationStates": {
+              "running": 0,
+              "paused": 0,
+              "finished": 0,
+              "idle": 0
+            }
+          },
+          "cssActive": null,
+          "paintedPins": null,
+          "canvasCacheBytes": null,
+          "canvasSurfaceBytes": null
+        }
+      ],
+      "trace": {
+        "file": "native-memory-infra.json.gz",
+        "events": 58,
+        "bytes": 13280717,
+        "compressedBytes": 839843,
+        "sha256": "d5f4cc18389182e425e903a672738044cc4f1bec18823d02e7d6060c8830bb21",
+        "dataLossOccurred": false,
+        "collectorFault": null
+      },
+      "nativeCheckpoints": [
+        {
+          "label": "paused-settled-before-gc",
+          "pssBeforeDump": {
+            "totalKiB": 491076,
+            "byRoleKiB": {
+              "browser-other": 153218,
+              "chromium-gpu": 36952,
+              "chromium-renderer": 300906
+            }
+          },
+          "pssAfterDump": {
+            "totalKiB": 506150,
+            "byRoleKiB": {
+              "browser-other": 164233,
+              "chromium-gpu": 38576,
+              "chromium-renderer": 303341
+            }
+          },
+          "rendererFragments": [
+            {
+              "processId": 3020,
+              "fragmentIndex": 9,
+              "allocatorCount": 14845,
+              "categories": {
+                "blink_gc": 57671680,
+                "blink_objects": 17378544,
+                "v8": 29584300,
+                "malloc": 59300928,
+                "partition_alloc": 59678720,
+                "cc": 35872768,
+                "cc/image_memory": 17080320,
+                "skia": 13604390,
+                "discardable": 41984000,
+                "canvas": 1880312,
+                "media": 4460904,
+                "web_cache": 1793181,
+                "shared_memory": 69484544,
+                "gpu": null,
+                "gpu/shared_images": null
+              },
+              "reportedSizesMustNotBeSummed": true
+            }
+          ],
+          "blinkHeap": [
+            {
+              "processId": 3020,
+              "fragmentIndex": 9,
+              "heap": {
+                "path": "blink_gc/main/heap",
+                "bytes": 57671680,
+                "attributes": {
+                  "allocated_objects_size": 17378544,
+                  "committed_size": 57671680,
+                  "effective_size": 40293022,
+                  "pooled_size": 9568256,
+                  "size": 57671680
+                },
+                "unrepresentableByteScalars": {}
+              },
+              "focusedGlobalObjectTypes": [
+                {
+                  "type": "blink::HashTrieNode<blink::CSSVariableData>",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::HashTrieNode<blink::CSSVariableData> (0x2af)",
+                      "bytes": 2526880,
+                      "attributes": {
+                        "allocated_objects_size": 2526880,
+                        "effective_size": 2526880,
+                        "size": 2526880
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                },
+                {
+                  "type": "blink::ComputedStyleBase::StyleSurroundData",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::ComputedStyleBase::StyleSurroundData (0x2c2)",
+                      "bytes": 1021488,
+                      "attributes": {
+                        "allocated_objects_size": 1021488,
+                        "effective_size": 1021488,
+                        "size": 1021488
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                },
+                {
+                  "type": "blink::ComputedStyle",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::ComputedStyle (0x1ba)",
+                      "bytes": 614664,
+                      "attributes": {
+                        "allocated_objects_size": 614664,
+                        "effective_size": 614664,
+                        "size": 614664
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                },
+                {
+                  "type": "blink::CachedMatchedProperties",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::CachedMatchedProperties (0x2dd)",
+                      "bytes": 357680,
+                      "attributes": {
+                        "allocated_objects_size": 357680,
+                        "effective_size": 357680,
+                        "size": 357680
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                },
+                {
+                  "type": "blink::ComputedStyleBase::StyleMiscData",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::ComputedStyleBase::StyleMiscData (0x1b4)",
+                      "bytes": 476344,
+                      "attributes": {
+                        "allocated_objects_size": 476344,
+                        "effective_size": 476344,
+                        "size": 476344
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                },
+                {
+                  "type": "blink::ComputedStyleBase::StyleSVGData",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::ComputedStyleBase::StyleSVGData (0x1c2)",
+                      "bytes": 327680,
+                      "attributes": {
+                        "allocated_objects_size": 327680,
+                        "effective_size": 327680,
+                        "size": 327680
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "paused-after-gc",
+          "pssBeforeDump": {
+            "totalKiB": 446910,
+            "byRoleKiB": {
+              "browser-other": 164221,
+              "chromium-gpu": 38932,
+              "chromium-renderer": 243757
+            }
+          },
+          "pssAfterDump": {
+            "totalKiB": 451122,
+            "byRoleKiB": {
+              "browser-other": 167497,
+              "chromium-gpu": 38992,
+              "chromium-renderer": 244633
+            }
+          },
+          "rendererFragments": [
+            {
+              "processId": 3020,
+              "fragmentIndex": 9,
+              "allocatorCount": 8838,
+              "categories": {
+                "blink_gc": 13381632,
+                "blink_objects": 3956864,
+                "v8": 14113740,
+                "malloc": 56507760,
+                "partition_alloc": 59301888,
+                "cc": 32497664,
+                "cc/image_memory": 17080320,
+                "skia": 13604390,
+                "discardable": 41984000,
+                "canvas": 1880312,
+                "media": 4460904,
+                "web_cache": 1793181,
+                "shared_memory": 66109440,
+                "gpu": null,
+                "gpu/shared_images": null
+              },
+              "reportedSizesMustNotBeSummed": true
+            }
+          ],
+          "blinkHeap": [
+            {
+              "processId": 3020,
+              "fragmentIndex": 9,
+              "heap": {
+                "path": "blink_gc/main/heap",
+                "bytes": 13381632,
+                "attributes": {
+                  "allocated_objects_size": 3956864,
+                  "committed_size": 36306944,
+                  "effective_size": 9424635,
+                  "pooled_size": 0,
+                  "size": 13381632
+                },
+                "unrepresentableByteScalars": {}
+              },
+              "focusedGlobalObjectTypes": [
+                {
+                  "type": "blink::HashTrieNode<blink::CSSVariableData>",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::HashTrieNode<blink::CSSVariableData> (0x27f)",
+                      "bytes": 65008,
+                      "attributes": {
+                        "allocated_objects_size": 65008,
+                        "effective_size": 65008,
+                        "size": 65008
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                },
+                {
+                  "type": "blink::ComputedStyleBase::StyleSurroundData",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::ComputedStyleBase::StyleSurroundData (0x285)",
+                      "bytes": 55224,
+                      "attributes": {
+                        "allocated_objects_size": 55224,
+                        "effective_size": 55224,
+                        "size": 55224
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                },
+                {
+                  "type": "blink::ComputedStyle",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::ComputedStyle (0x17f)",
+                      "bytes": 71640,
+                      "attributes": {
+                        "allocated_objects_size": 71640,
+                        "effective_size": 71640,
+                        "size": 71640
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                },
+                {
+                  "type": "blink::CachedMatchedProperties",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::CachedMatchedProperties (0x2ff)",
+                      "bytes": 34952,
+                      "attributes": {
+                        "allocated_objects_size": 34952,
+                        "effective_size": 34952,
+                        "size": 34952
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                },
+                {
+                  "type": "blink::ComputedStyleBase::StyleMiscData",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::ComputedStyleBase::StyleMiscData (0x179)",
+                      "bytes": 55792,
+                      "attributes": {
+                        "allocated_objects_size": 55792,
+                        "effective_size": 55792,
+                        "size": 55792
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                },
+                {
+                  "type": "blink::ComputedStyleBase::StyleSVGData",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::ComputedStyleBase::StyleSVGData (0x187)",
+                      "bytes": 43520,
+                      "attributes": {
+                        "allocated_objects_size": 43520,
+                        "effective_size": 43520,
+                        "size": 43520
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "home-after-gc",
+          "pssBeforeDump": {
+            "totalKiB": 430637,
+            "byRoleKiB": {
+              "browser-other": 165494,
+              "chromium-gpu": 39884,
+              "chromium-renderer": 225259
+            }
+          },
+          "pssAfterDump": {
+            "totalKiB": 436357,
+            "byRoleKiB": {
+              "browser-other": 169231,
+              "chromium-gpu": 42082,
+              "chromium-renderer": 225044
+            }
+          },
+          "rendererFragments": [
+            {
+              "processId": 3020,
+              "fragmentIndex": 9,
+              "allocatorCount": 7538,
+              "categories": {
+                "blink_gc": 10780672,
+                "blink_objects": 2631880,
+                "v8": 13482956,
+                "malloc": 53024064,
+                "partition_alloc": 51224576,
+                "cc": 19177472,
+                "cc/image_memory": 17080320,
+                "skia": 12771512,
+                "discardable": 41984000,
+                "canvas": 1032192,
+                "media": null,
+                "web_cache": 1470079,
+                "shared_memory": 49799168,
+                "gpu": null,
+                "gpu/shared_images": null
+              },
+              "reportedSizesMustNotBeSummed": true
+            }
+          ],
+          "blinkHeap": [
+            {
+              "processId": 3020,
+              "fragmentIndex": 9,
+              "heap": {
+                "path": "blink_gc/main/heap",
+                "bytes": 10780672,
+                "attributes": {
+                  "allocated_objects_size": 2631880,
+                  "committed_size": 35127296,
+                  "effective_size": 8148702,
+                  "pooled_size": 0,
+                  "size": 10780672
+                },
+                "unrepresentableByteScalars": {}
+              },
+              "focusedGlobalObjectTypes": [
+                {
+                  "type": "blink::HashTrieNode<blink::CSSVariableData>",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::HashTrieNode<blink::CSSVariableData> (0x250)",
+                      "bytes": 35632,
+                      "attributes": {
+                        "allocated_objects_size": 35632,
+                        "effective_size": 35632,
+                        "size": 35632
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                },
+                {
+                  "type": "blink::ComputedStyleBase::StyleSurroundData",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::ComputedStyleBase::StyleSurroundData (0x256)",
+                      "bytes": 50232,
+                      "attributes": {
+                        "allocated_objects_size": 50232,
+                        "effective_size": 50232,
+                        "size": 50232
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                },
+                {
+                  "type": "blink::ComputedStyle",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::ComputedStyle (0x14e)",
+                      "bytes": 28008,
+                      "attributes": {
+                        "allocated_objects_size": 28008,
+                        "effective_size": 28008,
+                        "size": 28008
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                },
+                {
+                  "type": "blink::CachedMatchedProperties",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::CachedMatchedProperties (0x2c8)",
+                      "bytes": 22168,
+                      "attributes": {
+                        "allocated_objects_size": 22168,
+                        "effective_size": 22168,
+                        "size": 22168
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                },
+                {
+                  "type": "blink::ComputedStyleBase::StyleMiscData",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::ComputedStyleBase::StyleMiscData (0x14f)",
+                      "bytes": 16104,
+                      "attributes": {
+                        "allocated_objects_size": 16104,
+                        "effective_size": 16104,
+                        "size": 16104
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                },
+                {
+                  "type": "blink::ComputedStyleBase::StyleSVGData",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::ComputedStyleBase::StyleSVGData (0x157)",
+                      "bytes": 9920,
+                      "attributes": {
+                        "allocated_objects_size": 9920,
+                        "effective_size": 9920,
+                        "size": 9920
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "blank-after-gc",
+          "pssBeforeDump": {
+            "totalKiB": 340910,
+            "byRoleKiB": {
+              "browser-other": 167733,
+              "chromium-gpu": 24825,
+              "chromium-renderer": 148352
+            }
+          },
+          "pssAfterDump": {
+            "totalKiB": 346794,
+            "byRoleKiB": {
+              "browser-other": 170801,
+              "chromium-gpu": 25877,
+              "chromium-renderer": 150116
+            }
+          },
+          "rendererFragments": [
+            {
+              "processId": 3020,
+              "fragmentIndex": 9,
+              "allocatorCount": 3828,
+              "categories": {
+                "blink_gc": 3428352,
+                "blink_objects": 428272,
+                "v8": 5004320,
+                "malloc": 33837904,
+                "partition_alloc": 3129344,
+                "cc": 5242880,
+                "cc/image_memory": 5242880,
+                "skia": 12771512,
+                "discardable": 41984000,
+                "canvas": null,
+                "media": null,
+                "web_cache": null,
+                "shared_memory": 47697920,
+                "gpu": null,
+                "gpu/shared_images": null
+              },
+              "reportedSizesMustNotBeSummed": true
+            }
+          ],
+          "blinkHeap": [
+            {
+              "processId": 3020,
+              "fragmentIndex": 9,
+              "heap": {
+                "path": "blink_gc/main/heap",
+                "bytes": 3428352,
+                "attributes": {
+                  "allocated_objects_size": 428272,
+                  "committed_size": 18743296,
+                  "effective_size": 2999990,
+                  "pooled_size": 0,
+                  "size": 3428352
+                },
+                "unrepresentableByteScalars": {}
+              },
+              "focusedGlobalObjectTypes": [
+                {
+                  "type": "blink::HashTrieNode<blink::CSSVariableData>",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::HashTrieNode<blink::CSSVariableData> (0x166)",
+                      "bytes": 544,
+                      "attributes": {
+                        "allocated_objects_size": 544,
+                        "effective_size": 544,
+                        "size": 544
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                },
+                {
+                  "type": "blink::ComputedStyleBase::StyleSurroundData",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::ComputedStyleBase::StyleSurroundData (0x16c)",
+                      "bytes": 624,
+                      "attributes": {
+                        "allocated_objects_size": 624,
+                        "effective_size": 624,
+                        "size": 624
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                },
+                {
+                  "type": "blink::ComputedStyle",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::ComputedStyle (0xcc)",
+                      "bytes": 1008,
+                      "attributes": {
+                        "allocated_objects_size": 1008,
+                        "effective_size": 1008,
+                        "size": 1008
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                },
+                {
+                  "type": "blink::CachedMatchedProperties",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::CachedMatchedProperties (0x1a0)",
+                      "bytes": 544,
+                      "attributes": {
+                        "allocated_objects_size": 544,
+                        "effective_size": 544,
+                        "size": 544
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                },
+                {
+                  "type": "blink::ComputedStyleBase::StyleMiscData",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::ComputedStyleBase::StyleMiscData (0xcd)",
+                      "bytes": 352,
+                      "attributes": {
+                        "allocated_objects_size": 352,
+                        "effective_size": 352,
+                        "size": 352
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                },
+                {
+                  "type": "blink::ComputedStyleBase::StyleSVGData",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::ComputedStyleBase::StyleSVGData (0xd5)",
+                      "bytes": 80,
+                      "attributes": {
+                        "allocated_objects_size": 80,
+                        "effective_size": 80,
+                        "size": 80
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "observedHomeOwnershipReleased": true,
+      "physicalPhoneAcceptanceEstablished": false,
+      "nativeTerminationCauseMeasured": false,
+      "whiteScreenFixed": false,
+      "limits": "Unseeded synthetic Linux runs; sampled renderer PSS is not exact peak, retained bytes or phone RAM. Native categories overlap and inactive dumps/GC influence memory."
+    },
+    {
+      "cell": {
+        "condition": "leaves",
+        "seconds": 1200,
+        "replica": 2
+      },
+      "sourceCommit": "8d5fe35e24d5b09b8ac4016a69b56368335b4c27",
+      "sourceTree": "91d459326f736db7e83891ced5f00df203bc9c8a",
+      "completeAttributionCapture": true,
+      "observedActiveMs": 1200000.0999999999,
+      "observedWallMs": 1201082,
+      "volleysAdvanced": 428,
+      "engineVersion": "151.0.7922.34",
+      "actualInstalledPackages": {
+        "react": "19.2.4",
+        "react-dom": "19.2.4",
+        "react-router-dom": "7.13.2",
+        "vite": "7.3.1",
+        "typescript": "5.9.3"
+      },
+      "lockSha256": "b6d496c5725bf24ddb4f51b576b0597ced9f35c5ea7927a65165a5fb6311ad1a",
+      "longMemoryObservation": true,
+      "shortFidelityOnly": false,
+      "fidelity": null,
+      "buildProof": {
+        "version": 1,
+        "condition": "leaves",
+        "originalBlobs": {
+          "BossHullView": "68dd74e598caa060ae8825d3c56b199ba0d08449",
+          "BossReactorView": "0d92e39aba2eb68aa25ba6239932cd4437f4ebf7"
+        },
+        "transformedBlobs": {
+          "BossHullView": "570a0db4dec6abb59f90b39f515156916043517a",
+          "BossReactorView": "33cc560e042963b548c6757384b0d9f21aa221b8"
+        },
+        "originalFormulasAndFiringOverrideRetained": true,
+        "originalMemoizedArtworkRetained": true,
+        "onlyExistingConsumersReceiveDirectProperties": true,
+        "newDomNodes": false,
+        "newTimersOrFrames": false,
+        "newEffectsOrGlobalListeners": false,
+        "gameOrAnimationClocksChanged": false,
+        "runtimeSourceFilesEdited": false,
+        "physicalDevice": false,
+        "whiteScreenFixed": false
+      },
+      "rendererPssKiB": {
+        "firstMinuteSamples": 12,
+        "lastMinuteSamples": 12,
+        "firstMinuteMean": 231989.66666666666,
+        "lastMinuteMean": 315134.8333333333,
+        "firstToLastMinuteGrowth": 83145.16666666666,
+        "sampledPeak": 317029,
+        "observedUntilActiveMs": 1198000.0999999999,
+        "unobservedTailMs": 2000
+      },
+      "totalBrowserPssKiB": {
+        "firstMinuteMedian": 415964,
+        "lastMinuteMedian": 501165,
+        "peakSample": 502969
+      },
+      "sampledMaxima": {
+        "cssActive": 25,
+        "cssConfiguredCumulative": 23261,
+        "paintedPins": 15,
+        "paintedEstimatedBytes": 6973056,
+        "canvasCacheBytes": 1059028,
+        "canvasSurfaceBytes": 82620
+      },
+      "checkpoints": [
+        {
+          "label": "paused-before-gc",
+          "pss": {
+            "totalKiB": 506756,
+            "byRoleKiB": {
+              "browser-other": 154242,
+              "chromium-gpu": 38360,
+              "chromium-renderer": 314154
+            }
+          },
+          "usedJsBytes": 14230348,
+          "embedderHeapUsedBytes": 16935072,
+          "backingStorageBytes": 2539135,
+          "dom": {
+            "documents": 3,
+            "nodes": 937,
+            "jsEventListeners": 521
+          },
+          "attached": {
+            "nodes": 520,
+            "canvases": 3,
+            "images": 1,
+            "nativeAnimations": 11,
+            "animationStates": {
+              "running": 2,
+              "paused": 9,
+              "finished": 0,
+              "idle": 0
+            }
+          },
+          "cssActive": 11,
+          "paintedPins": 15,
+          "canvasCacheBytes": 740932,
+          "canvasSurfaceBytes": 4
+        },
+        {
+          "label": "paused-settled-before-gc",
+          "pss": {
+            "totalKiB": 499213,
+            "byRoleKiB": {
+              "browser-other": 153939,
+              "chromium-gpu": 35172,
+              "chromium-renderer": 310102
+            }
+          },
+          "usedJsBytes": 14344812,
+          "embedderHeapUsedBytes": 17546744,
+          "backingStorageBytes": 2540402,
+          "dom": {
+            "documents": 3,
+            "nodes": 956,
+            "jsEventListeners": 579
+          },
+          "attached": {
+            "nodes": 520,
+            "canvases": 3,
+            "images": 1,
+            "nativeAnimations": 10,
+            "animationStates": {
+              "running": 1,
+              "paused": 9,
+              "finished": 0,
+              "idle": 0
+            }
+          },
+          "cssActive": 10,
+          "paintedPins": 15,
+          "canvasCacheBytes": 740932,
+          "canvasSurfaceBytes": 4
+        },
+        {
+          "label": "paused-after-gc",
+          "pss": {
+            "totalKiB": 439548,
+            "byRoleKiB": {
+              "browser-other": 164108,
+              "chromium-gpu": 37119,
+              "chromium-renderer": 238321
+            }
+          },
+          "usedJsBytes": 10689168,
+          "embedderHeapUsedBytes": 4047072,
+          "backingStorageBytes": 2537513,
+          "dom": {
+            "documents": 3,
+            "nodes": 731,
+            "jsEventListeners": 306
+          },
+          "attached": {
+            "nodes": 520,
+            "canvases": 3,
+            "images": 1,
+            "nativeAnimations": 10,
+            "animationStates": {
+              "running": 1,
+              "paused": 9,
+              "finished": 0,
+              "idle": 0
+            }
+          },
+          "cssActive": 10,
+          "paintedPins": 15,
+          "canvasCacheBytes": 740932,
+          "canvasSurfaceBytes": 4
+        },
+        {
+          "label": "paused-after-snapshot",
+          "pss": {
+            "totalKiB": 452373,
+            "byRoleKiB": {
+              "browser-other": 168031,
+              "chromium-gpu": 34543,
+              "chromium-renderer": 249799
+            }
+          },
+          "usedJsBytes": 10753356,
+          "embedderHeapUsedBytes": 4266704,
+          "backingStorageBytes": 2537777,
+          "dom": {
+            "documents": 3,
+            "nodes": 731,
+            "jsEventListeners": 306
+          },
+          "attached": {
+            "nodes": 520,
+            "canvases": 3,
+            "images": 1,
+            "nativeAnimations": 10,
+            "animationStates": {
+              "running": 1,
+              "paused": 9,
+              "finished": 0,
+              "idle": 0
+            }
+          },
+          "cssActive": 10,
+          "paintedPins": 15,
+          "canvasCacheBytes": 740932,
+          "canvasSurfaceBytes": 4
+        },
+        {
+          "label": "home-before-gc",
+          "pss": {
+            "totalKiB": 450841,
+            "byRoleKiB": {
+              "browser-other": 168035,
+              "chromium-gpu": 35173,
+              "chromium-renderer": 247633
+            }
+          },
+          "usedJsBytes": 11725648,
+          "embedderHeapUsedBytes": 5099256,
+          "backingStorageBytes": 2543116,
+          "dom": {
+            "documents": 3,
+            "nodes": 803,
+            "jsEventListeners": 411
+          },
+          "attached": {
+            "nodes": 54,
+            "canvases": 0,
+            "images": 0,
+            "nativeAnimations": 0,
+            "animationStates": {
+              "running": 0,
+              "paused": 0,
+              "finished": 0,
+              "idle": 0
+            }
+          },
+          "cssActive": 0,
+          "paintedPins": 0,
+          "canvasCacheBytes": 0,
+          "canvasSurfaceBytes": 0
+        },
+        {
+          "label": "home-settled-before-gc",
+          "pss": {
+            "totalKiB": 441905,
+            "byRoleKiB": {
+              "browser-other": 166251,
+              "chromium-gpu": 40039,
+              "chromium-renderer": 235615
+            }
+          },
+          "usedJsBytes": 11094900,
+          "embedderHeapUsedBytes": 5099256,
+          "backingStorageBytes": 2543116,
+          "dom": {
+            "documents": 3,
+            "nodes": 803,
+            "jsEventListeners": 411
+          },
+          "attached": {
+            "nodes": 54,
+            "canvases": 0,
+            "images": 0,
+            "nativeAnimations": 0,
+            "animationStates": {
+              "running": 0,
+              "paused": 0,
+              "finished": 0,
+              "idle": 0
+            }
+          },
+          "cssActive": 0,
+          "paintedPins": 0,
+          "canvasCacheBytes": 0,
+          "canvasSurfaceBytes": 0
+        },
+        {
+          "label": "home-after-gc",
+          "pss": {
+            "totalKiB": 427860,
+            "byRoleKiB": {
+              "browser-other": 166197,
+              "chromium-gpu": 40039,
+              "chromium-renderer": 221624
+            }
+          },
+          "usedJsBytes": 9925744,
+          "embedderHeapUsedBytes": 2658384,
+          "backingStorageBytes": 2538593,
+          "dom": {
+            "documents": 3,
+            "nodes": 247,
+            "jsEventListeners": 210
+          },
+          "attached": {
+            "nodes": 54,
+            "canvases": 0,
+            "images": 0,
+            "nativeAnimations": 0,
+            "animationStates": {
+              "running": 0,
+              "paused": 0,
+              "finished": 0,
+              "idle": 0
+            }
+          },
+          "cssActive": 0,
+          "paintedPins": 0,
+          "canvasCacheBytes": 0,
+          "canvasSurfaceBytes": 0
+        },
+        {
+          "label": "home-after-snapshot",
+          "pss": {
+            "totalKiB": 416304,
+            "byRoleKiB": {
+              "browser-other": 168125,
+              "chromium-gpu": 25308,
+              "chromium-renderer": 222871
+            }
+          },
+          "usedJsBytes": 9968672,
+          "embedderHeapUsedBytes": 2777928,
+          "backingStorageBytes": 2538825,
+          "dom": {
+            "documents": 3,
+            "nodes": 247,
+            "jsEventListeners": 210
+          },
+          "attached": {
+            "nodes": 54,
+            "canvases": 0,
+            "images": 0,
+            "nativeAnimations": 0,
+            "animationStates": {
+              "running": 0,
+              "paused": 0,
+              "finished": 0,
+              "idle": 0
+            }
+          },
+          "cssActive": 0,
+          "paintedPins": 0,
+          "canvasCacheBytes": 0,
+          "canvasSurfaceBytes": 0
+        },
+        {
+          "label": "blank-before-gc",
+          "pss": {
+            "totalKiB": 399097,
+            "byRoleKiB": {
+              "browser-other": 168338,
+              "chromium-gpu": 24371,
+              "chromium-renderer": 206388
+            }
+          },
+          "usedJsBytes": 10426988,
+          "embedderHeapUsedBytes": 3431144,
+          "backingStorageBytes": 2538845,
+          "dom": {
+            "documents": 5,
+            "nodes": 255,
+            "jsEventListeners": 210
+          },
+          "attached": {
+            "nodes": 3,
+            "canvases": 0,
+            "images": 0,
+            "nativeAnimations": 0,
+            "animationStates": {
+              "running": 0,
+              "paused": 0,
+              "finished": 0,
+              "idle": 0
+            }
+          },
+          "cssActive": null,
+          "paintedPins": null,
+          "canvasCacheBytes": null,
+          "canvasSurfaceBytes": null
+        },
+        {
+          "label": "blank-after-gc",
+          "pss": {
+            "totalKiB": 336596,
+            "byRoleKiB": {
+              "browser-other": 168349,
+              "chromium-gpu": 24365,
+              "chromium-renderer": 143882
+            }
+          },
+          "usedJsBytes": 1098948,
+          "embedderHeapUsedBytes": 425776,
+          "backingStorageBytes": 261,
+          "dom": {
+            "documents": 1,
+            "nodes": 4,
+            "jsEventListeners": 0
+          },
+          "attached": {
+            "nodes": 3,
+            "canvases": 0,
+            "images": 0,
+            "nativeAnimations": 0,
+            "animationStates": {
+              "running": 0,
+              "paused": 0,
+              "finished": 0,
+              "idle": 0
+            }
+          },
+          "cssActive": null,
+          "paintedPins": null,
+          "canvasCacheBytes": null,
+          "canvasSurfaceBytes": null
+        }
+      ],
+      "trace": {
+        "file": "native-memory-infra.json.gz",
+        "events": 58,
+        "bytes": 13332991,
+        "compressedBytes": 834650,
+        "sha256": "ff418d2d073039d6f1978c6302644a07308e1a5a5cddd689dc6f05e21e220c8e",
+        "dataLossOccurred": false,
+        "collectorFault": null
+      },
+      "nativeCheckpoints": [
+        {
+          "label": "paused-settled-before-gc",
+          "pssBeforeDump": {
+            "totalKiB": 499213,
+            "byRoleKiB": {
+              "browser-other": 153939,
+              "chromium-gpu": 35172,
+              "chromium-renderer": 310102
+            }
+          },
+          "pssAfterDump": {
+            "totalKiB": 512892,
+            "byRoleKiB": {
+              "browser-other": 164120,
+              "chromium-gpu": 37119,
+              "chromium-renderer": 311653
+            }
+          },
+          "rendererFragments": [
+            {
+              "processId": 3243,
+              "fragmentIndex": 9,
+              "allocatorCount": 15019,
+              "categories": {
+                "blink_gc": 69599232,
+                "blink_objects": 17112080,
+                "v8": 30355396,
+                "malloc": 58755664,
+                "partition_alloc": 60473344,
+                "cc": 36282368,
+                "cc/image_memory": 17080320,
+                "skia": 13605082,
+                "discardable": 37650432,
+                "canvas": 1880312,
+                "media": 4464424,
+                "web_cache": 1793181,
+                "shared_memory": 65560576,
+                "gpu": null,
+                "gpu/shared_images": null
+              },
+              "reportedSizesMustNotBeSummed": true
+            }
+          ],
+          "blinkHeap": [
+            {
+              "processId": 3243,
+              "fragmentIndex": 9,
+              "heap": {
+                "path": "blink_gc/main/heap",
+                "bytes": 69599232,
+                "attributes": {
+                  "allocated_objects_size": 17112080,
+                  "committed_size": 69599232,
+                  "effective_size": 52486772,
+                  "pooled_size": 11796480,
+                  "size": 69599232
+                },
+                "unrepresentableByteScalars": {}
+              },
+              "focusedGlobalObjectTypes": [
+                {
+                  "type": "blink::HashTrieNode<blink::CSSVariableData>",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::HashTrieNode<blink::CSSVariableData> (0x2ae)",
+                      "bytes": 2523616,
+                      "attributes": {
+                        "allocated_objects_size": 2523616,
+                        "effective_size": 2523616,
+                        "size": 2523616
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                },
+                {
+                  "type": "blink::ComputedStyleBase::StyleSurroundData",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::ComputedStyleBase::StyleSurroundData (0x2a9)",
+                      "bytes": 1027416,
+                      "attributes": {
+                        "allocated_objects_size": 1027416,
+                        "effective_size": 1027416,
+                        "size": 1027416
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                },
+                {
+                  "type": "blink::ComputedStyle",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::ComputedStyle (0x1b0)",
+                      "bytes": 600696,
+                      "attributes": {
+                        "allocated_objects_size": 600696,
+                        "effective_size": 600696,
+                        "size": 600696
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                },
+                {
+                  "type": "blink::CachedMatchedProperties",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::CachedMatchedProperties (0x2b2)",
+                      "bytes": 368152,
+                      "attributes": {
+                        "allocated_objects_size": 368152,
+                        "effective_size": 368152,
+                        "size": 368152
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                },
+                {
+                  "type": "blink::ComputedStyleBase::StyleMiscData",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::ComputedStyleBase::StyleMiscData (0x1af)",
+                      "bytes": 469656,
+                      "attributes": {
+                        "allocated_objects_size": 469656,
+                        "effective_size": 469656,
+                        "size": 469656
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                },
+                {
+                  "type": "blink::ComputedStyleBase::StyleSVGData",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::ComputedStyleBase::StyleSVGData (0x1ae)",
+                      "bytes": 322400,
+                      "attributes": {
+                        "allocated_objects_size": 322400,
+                        "effective_size": 322400,
+                        "size": 322400
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "paused-after-gc",
+          "pssBeforeDump": {
+            "totalKiB": 439548,
+            "byRoleKiB": {
+              "browser-other": 164108,
+              "chromium-gpu": 37119,
+              "chromium-renderer": 238321
+            }
+          },
+          "pssAfterDump": {
+            "totalKiB": 446055,
+            "byRoleKiB": {
+              "browser-other": 168137,
+              "chromium-gpu": 37252,
+              "chromium-renderer": 240666
+            }
+          },
+          "rendererFragments": [
+            {
+              "processId": 3243,
+              "fragmentIndex": 9,
+              "allocatorCount": 8923,
+              "categories": {
+                "blink_gc": 13545472,
+                "blink_objects": 3952176,
+                "v8": 13871060,
+                "malloc": 54736208,
+                "partition_alloc": 60051456,
+                "cc": 32825344,
+                "cc/image_memory": 17080320,
+                "skia": 13605082,
+                "discardable": 37650432,
+                "canvas": 1880312,
+                "media": 4464424,
+                "web_cache": 1793181,
+                "shared_memory": 62103552,
+                "gpu": null,
+                "gpu/shared_images": null
+              },
+              "reportedSizesMustNotBeSummed": true
+            }
+          ],
+          "blinkHeap": [
+            {
+              "processId": 3243,
+              "fragmentIndex": 9,
+              "heap": {
+                "path": "blink_gc/main/heap",
+                "bytes": 13545472,
+                "attributes": {
+                  "allocated_objects_size": 3952176,
+                  "committed_size": 43384832,
+                  "effective_size": 9593113,
+                  "pooled_size": 0,
+                  "size": 13545472
+                },
+                "unrepresentableByteScalars": {}
+              },
+              "focusedGlobalObjectTypes": [
+                {
+                  "type": "blink::HashTrieNode<blink::CSSVariableData>",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::HashTrieNode<blink::CSSVariableData> (0x273)",
+                      "bytes": 62288,
+                      "attributes": {
+                        "allocated_objects_size": 62288,
+                        "effective_size": 62288,
+                        "size": 62288
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                },
+                {
+                  "type": "blink::ComputedStyleBase::StyleSurroundData",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::ComputedStyleBase::StyleSurroundData (0x272)",
+                      "bytes": 55224,
+                      "attributes": {
+                        "allocated_objects_size": 55224,
+                        "effective_size": 55224,
+                        "size": 55224
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                },
+                {
+                  "type": "blink::ComputedStyle",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::ComputedStyle (0x184)",
+                      "bytes": 71712,
+                      "attributes": {
+                        "allocated_objects_size": 71712,
+                        "effective_size": 71712,
+                        "size": 71712
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                },
+                {
+                  "type": "blink::CachedMatchedProperties",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::CachedMatchedProperties (0x26f)",
+                      "bytes": 34952,
+                      "attributes": {
+                        "allocated_objects_size": 34952,
+                        "effective_size": 34952,
+                        "size": 34952
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                },
+                {
+                  "type": "blink::ComputedStyleBase::StyleMiscData",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::ComputedStyleBase::StyleMiscData (0x17e)",
+                      "bytes": 55880,
+                      "attributes": {
+                        "allocated_objects_size": 55880,
+                        "effective_size": 55880,
+                        "size": 55880
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                },
+                {
+                  "type": "blink::ComputedStyleBase::StyleSVGData",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::ComputedStyleBase::StyleSVGData (0x18c)",
+                      "bytes": 43600,
+                      "attributes": {
+                        "allocated_objects_size": 43600,
+                        "effective_size": 43600,
+                        "size": 43600
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "home-after-gc",
+          "pssBeforeDump": {
+            "totalKiB": 427860,
+            "byRoleKiB": {
+              "browser-other": 166197,
+              "chromium-gpu": 40039,
+              "chromium-renderer": 221624
+            }
+          },
+          "pssAfterDump": {
+            "totalKiB": 433760,
+            "byRoleKiB": {
+              "browser-other": 169882,
+              "chromium-gpu": 42238,
+              "chromium-renderer": 221640
+            }
+          },
+          "rendererFragments": [
+            {
+              "processId": 3243,
+              "fragmentIndex": 9,
+              "allocatorCount": 7653,
+              "categories": {
+                "blink_gc": 10866688,
+                "blink_objects": 2631000,
+                "v8": 13576148,
+                "malloc": 53220592,
+                "partition_alloc": 52158464,
+                "cc": 19177472,
+                "cc/image_memory": 17080320,
+                "skia": 12777056,
+                "discardable": 37650432,
+                "canvas": 1032192,
+                "media": null,
+                "web_cache": 1470079,
+                "shared_memory": 45465600,
+                "gpu": null,
+                "gpu/shared_images": null
+              },
+              "reportedSizesMustNotBeSummed": true
+            }
+          ],
+          "blinkHeap": [
+            {
+              "processId": 3243,
+              "fragmentIndex": 9,
+              "heap": {
+                "path": "blink_gc/main/heap",
+                "bytes": 10866688,
+                "attributes": {
+                  "allocated_objects_size": 2631000,
+                  "committed_size": 41287680,
+                  "effective_size": 8235535,
+                  "pooled_size": 0,
+                  "size": 10866688
+                },
+                "unrepresentableByteScalars": {}
+              },
+              "focusedGlobalObjectTypes": [
+                {
+                  "type": "blink::HashTrieNode<blink::CSSVariableData>",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::HashTrieNode<blink::CSSVariableData> (0x251)",
+                      "bytes": 34544,
+                      "attributes": {
+                        "allocated_objects_size": 34544,
+                        "effective_size": 34544,
+                        "size": 34544
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                },
+                {
+                  "type": "blink::ComputedStyleBase::StyleSurroundData",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::ComputedStyleBase::StyleSurroundData (0x257)",
+                      "bytes": 50232,
+                      "attributes": {
+                        "allocated_objects_size": 50232,
+                        "effective_size": 50232,
+                        "size": 50232
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                },
+                {
+                  "type": "blink::ComputedStyle",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::ComputedStyle (0x151)",
+                      "bytes": 28008,
+                      "attributes": {
+                        "allocated_objects_size": 28008,
+                        "effective_size": 28008,
+                        "size": 28008
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                },
+                {
+                  "type": "blink::CachedMatchedProperties",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::CachedMatchedProperties (0x290)",
+                      "bytes": 22168,
+                      "attributes": {
+                        "allocated_objects_size": 22168,
+                        "effective_size": 22168,
+                        "size": 22168
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                },
+                {
+                  "type": "blink::ComputedStyleBase::StyleMiscData",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::ComputedStyleBase::StyleMiscData (0x152)",
+                      "bytes": 16104,
+                      "attributes": {
+                        "allocated_objects_size": 16104,
+                        "effective_size": 16104,
+                        "size": 16104
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                },
+                {
+                  "type": "blink::ComputedStyleBase::StyleSVGData",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::ComputedStyleBase::StyleSVGData (0x15a)",
+                      "bytes": 9920,
+                      "attributes": {
+                        "allocated_objects_size": 9920,
+                        "effective_size": 9920,
+                        "size": 9920
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "blank-after-gc",
+          "pssBeforeDump": {
+            "totalKiB": 336596,
+            "byRoleKiB": {
+              "browser-other": 168349,
+              "chromium-gpu": 24365,
+              "chromium-renderer": 143882
+            }
+          },
+          "pssAfterDump": {
+            "totalKiB": 342296,
+            "byRoleKiB": {
+              "browser-other": 171341,
+              "chromium-gpu": 25409,
+              "chromium-renderer": 145546
+            }
+          },
+          "rendererFragments": [
+            {
+              "processId": 3243,
+              "fragmentIndex": 9,
+              "allocatorCount": 3893,
+              "categories": {
+                "blink_gc": 3452928,
+                "blink_objects": 426008,
+                "v8": 5004320,
+                "malloc": 33376848,
+                "partition_alloc": 3252224,
+                "cc": 5242880,
+                "cc/image_memory": 5242880,
+                "skia": 12777056,
+                "discardable": 37650432,
+                "canvas": null,
+                "media": null,
+                "web_cache": null,
+                "shared_memory": 43364352,
+                "gpu": null,
+                "gpu/shared_images": null
+              },
+              "reportedSizesMustNotBeSummed": true
+            }
+          ],
+          "blinkHeap": [
+            {
+              "processId": 3243,
+              "fragmentIndex": 9,
+              "heap": {
+                "path": "blink_gc/main/heap",
+                "bytes": 3452928,
+                "attributes": {
+                  "allocated_objects_size": 426008,
+                  "committed_size": 20578304,
+                  "effective_size": 3026831,
+                  "pooled_size": 0,
+                  "size": 3452928
+                },
+                "unrepresentableByteScalars": {}
+              },
+              "focusedGlobalObjectTypes": [
+                {
+                  "type": "blink::HashTrieNode<blink::CSSVariableData>",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::HashTrieNode<blink::CSSVariableData> (0x166)",
+                      "bytes": 544,
+                      "attributes": {
+                        "allocated_objects_size": 544,
+                        "effective_size": 544,
+                        "size": 544
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                },
+                {
+                  "type": "blink::ComputedStyleBase::StyleSurroundData",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::ComputedStyleBase::StyleSurroundData (0x16c)",
+                      "bytes": 624,
+                      "attributes": {
+                        "allocated_objects_size": 624,
+                        "effective_size": 624,
+                        "size": 624
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                },
+                {
+                  "type": "blink::ComputedStyle",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::ComputedStyle (0xce)",
+                      "bytes": 1008,
+                      "attributes": {
+                        "allocated_objects_size": 1008,
+                        "effective_size": 1008,
+                        "size": 1008
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                },
+                {
+                  "type": "blink::CachedMatchedProperties",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::CachedMatchedProperties (0x1a3)",
+                      "bytes": 544,
+                      "attributes": {
+                        "allocated_objects_size": 544,
+                        "effective_size": 544,
+                        "size": 544
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                },
+                {
+                  "type": "blink::ComputedStyleBase::StyleMiscData",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::ComputedStyleBase::StyleMiscData (0xcf)",
+                      "bytes": 352,
+                      "attributes": {
+                        "allocated_objects_size": 352,
+                        "effective_size": 352,
+                        "size": 352
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                },
+                {
+                  "type": "blink::ComputedStyleBase::StyleSVGData",
+                  "rows": [
+                    {
+                      "path": "blink_objects/blink_gc/main/blink::ComputedStyleBase::StyleSVGData (0xd7)",
+                      "bytes": 80,
+                      "attributes": {
+                        "allocated_objects_size": 80,
+                        "effective_size": 80,
+                        "size": 80
+                      },
+                      "unrepresentableByteScalars": {}
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "observedHomeOwnershipReleased": true,
+      "physicalPhoneAcceptanceEstablished": false,
+      "nativeTerminationCauseMeasured": false,
+      "whiteScreenFixed": false,
+      "limits": "Unseeded synthetic Linux runs; sampled renderer PSS is not exact peak, retained bytes or phone RAM. Native categories overlap and inactive dumps/GC influence memory."
     }
   ],
-  "cohort": null,
+  "cohort": {
+    "classification": "incomplete-protocol-no-predeclared-memory-acceptance",
+    "completedShortGates": 2,
+    "completedLongObservations": 3,
+    "failedLongObservations": 1,
+    "missingLongObservations": 0,
+    "predeclaredActiveCriteria": null,
+    "repeatedActiveMemoryBenefitUnderDeclaredCriteria": false,
+    "physicalPhoneAcceptanceEstablished": false,
+    "nativeTerminationCauseMeasured": false,
+    "whiteScreenFixed": false
+  },
   "physicalPhoneAcceptanceEstablished": false,
   "whiteScreenFixed": false
 }

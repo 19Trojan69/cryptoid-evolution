@@ -76,3 +76,57 @@ export function compareLocalStyleCohort(rows) {
     physicalPhoneAcceptanceEstablished: false, nativeTerminationCauseMeasured: false, whiteScreenFixed: false,
     limits: 'Two independent unseeded runs per condition; no general effect size, native termination attribution, deployment approval or permanent phone stability inferred.' };
 }
+// Preserve an aborted active interval without inventing its missing twenty-
+// minute tail, inactive allocator dump, snapshot, cleanup result or pause cause.
+export function summarizeFailedLocalStyles(capture, cell) {
+  assert.equal(capture.sourceCommit, measured.source); assert.equal(capture.sourceTree, measured.tree);
+  assert.equal(capture.complete, false); assert.equal(capture.requestedSeconds, cell.seconds);
+  assert.equal(cell.seconds, 1200); assert.ok(['control', 'leaves'].includes(cell.condition)); assert.ok([1, 2].includes(cell.replica));
+  assert.deepEqual(capture.localStyleComparison, { condition: cell.condition, replica: cell.replica, fidelity: false });
+  assert.deepEqual(capture.localStyleBuildProof, builds[cell.condition]);
+  assert.equal(capture.activeStyleWriteProbe, false); assert.equal(capture.activeNativeApiWrappers, false);
+  for (const k of ['physicalDevice', 'physicalPiBrowser', 'whiteScreenFixed', 'nativeTerminationCauseMeasured',
+    'clocksAccelerated', 'automaticResume', 'fullRecording', 'activeHeapProfilerAttached', 'activeForcedGc',
+    'activeHeapSnapshots', 'activeScreenshots', 'activeNativeAnimationScans', 'activeNativeTracing']) assert.equal(capture[k], false);
+  assert.equal(capture.checkpoints.length, 0); assert.equal(capture.snapshots.length, 0);
+  assert.equal(capture.inactiveNativeAllocation, undefined); assert.equal(capture.localStyleFidelity, undefined);
+  assert.equal(capture.observedActiveMs, undefined); assert.equal(capture.observedWallMs, undefined);
+  assert.ok(capture.failure?.code); assert.ok(typeof capture.failure.message === 'string' && capture.failure.message.length <= 4096);
+  assert.ok(capture.points.length > 0); assert.equal(capture.points[0].activeMs, 0);
+  for (const [i, p] of capture.points.entries()) {
+    assert.ok(Number.isFinite(p.activeMs) && p.activeMs >= 0 && p.activeMs < cell.seconds * 1000);
+    if (i) assert.ok(p.activeMs > capture.points[i - 1].activeMs);
+    processPss(p.memory); assert.deepEqual(p.canvas.failures, []);
+  }
+  const renderer = p => processPss(p.memory).byRoleKiB['chromium-renderer'], last = capture.points.at(-1);
+  const paused = capture.failure.code === 'attribution-failed' && capture.failure.message.includes("+ 'paused'") && capture.failure.message.includes("- 'playing'");
+  return { cell, sourceCommit: measured.source, sourceTree: measured.tree, completeAttributionCapture: false,
+    classification: paused ? 'unexpected-pause-during-active-observation' : 'active-protocol-failed',
+    failure: capture.failure, completedMeasuredActiveMs: null,
+    engineVersion: capture.engineVersion, actualInstalledPackages: capture.actualInstalledPackages, lockSha256: capture.lockSha256,
+    longMemoryObservation: false, shortFidelityOnly: false,
+    partialSamples: { count: capture.points.length,
+      firstMinuteSamples: capture.points.filter(p => p.activeMs < 60000).length,
+      firstMinuteRendererMeanKiB: mean(capture.points.filter(p => p.activeMs < 60000).map(renderer)),
+      lastSampledActiveMs: last.activeMs, lastSampledCoreVolley: last.coreVolley,
+      sampledRendererPeakKiB: Math.max(...capture.points.map(renderer)), lastSampledRendererKiB: renderer(last),
+      sampledTotalBrowserPeakKiB: Math.max(...capture.points.map(p => p.memory.summedPssKiB)) },
+    fullTwentyMinuteRendererMetrics: null, nativeMemoryMeasurement: null, heapAnalysis: null, observedHomeOwnershipReleased: null,
+    lastFailureObservationAvailable: !!capture.lastObservation,
+    physicalPhoneAcceptanceEstablished: false, nativeTerminationCauseMeasured: false, whiteScreenFixed: false,
+    limits: 'Last sampled time is not exact failure time. This source does not save the final scene/clock in its catch. A pause after high PSS does not identify GC, clock-gap, OS pressure, a white screen or a native termination cause.' };
+}
+export function classifyLocalStyleCohort(rows) {
+  assert.ok(rows.length >= 2 && rows.length <= 6);
+  const keys = rows.map(r => `${r.cell.condition}/${r.cell.seconds}/${r.cell.replica}`); assert.equal(new Set(keys).size, rows.length);
+  const shorts = rows.filter(r => r.cell.seconds === 60);
+  assert.deepEqual(shorts.map(r => r.cell.condition).sort(), ['control', 'leaves']);
+  assert.ok(shorts.every(r => r.completeAttributionCapture && r.shortFidelityOnly));
+  const longs = rows.filter(r => r.cell.seconds === 1200), failed = longs.filter(r => !r.completeAttributionCapture);
+  if (rows.length === 6 && failed.length === 0) return { classification: 'complete-paired-protocol', ...compareLocalStyleCohort(rows) };
+  return { classification: failed.length ? 'incomplete-protocol-no-predeclared-memory-acceptance' : 'long-observation-pending',
+    completedShortGates: shorts.length, completedLongObservations: longs.length - failed.length,
+    failedLongObservations: failed.length, missingLongObservations: 4 - longs.length,
+    predeclaredActiveCriteria: null, repeatedActiveMemoryBenefitUnderDeclaredCriteria: false,
+    physicalPhoneAcceptanceEstablished: false, nativeTerminationCauseMeasured: false, whiteScreenFixed: false };
+}

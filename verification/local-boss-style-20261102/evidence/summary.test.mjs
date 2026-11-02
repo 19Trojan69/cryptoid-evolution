@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { gunzipSync } from 'node:zlib';
-import { summarizeLocalStyles, compareLocalStyleCohort, measured } from './summary.mjs';
+import { summarizeLocalStyles, summarizeFailedLocalStyles, compareLocalStyleCohort, classifyLocalStyleCohort, measured } from './summary.mjs';
 const read = file => readFileSync(new URL(file, import.meta.url));
 function actual(condition) {
   const name = condition + '-r1-60';
@@ -53,4 +53,30 @@ test('active profiling, changed artwork, incomplete native traces, unaccounted p
     const { c, trace, cell } = actual('leaves'); change(c); assert.throws(() => summarizeLocalStyles(c, trace, cell));
   }
   const { c, trace, cell } = actual('control'); assert.throws(() => summarizeLocalStyles(c, trace.subarray(1), cell));
+});
+test('the real aborted control preserves its 802-second last sample and missing measurements without becoming a twenty-minute success', () => {
+  const c = JSON.parse(gunzipSync(read('control-r2-1200.json.gz'))), cell = { condition: 'control', replica: 2, seconds: 1200 };
+  const s = summarizeFailedLocalStyles(c, cell);
+  assert.equal(s.classification, 'unexpected-pause-during-active-observation'); assert.equal(s.partialSamples.count, 156);
+  assert.equal(s.partialSamples.lastSampledActiveMs, 801999.7999999999);
+  assert.equal(s.partialSamples.sampledRendererPeakKiB, 2369668);
+  for (const k of ['completedMeasuredActiveMs', 'fullTwentyMinuteRendererMetrics', 'nativeMemoryMeasurement', 'heapAnalysis', 'observedHomeOwnershipReleased']) assert.equal(s[k], null);
+  assert.equal(s.lastFailureObservationAvailable, false); assert.equal(s.nativeTerminationCauseMeasured, false);
+  assert.throws(() => summarizeLocalStyles(c, Buffer.alloc(0), cell));
+  c.complete = true; assert.throws(() => summarizeFailedLocalStyles(c, cell));
+});
+test('all six real cells remain present; two completed lower-memory candidates do not erase a failed control or satisfy the predeclared complete cohort', () => {
+  const m = JSON.parse(read('manifest.json'));
+  const rows = m.captures.map(e => { const c = JSON.parse(gunzipSync(read(e.file)));
+    return c.complete ? summarizeLocalStyles(c, read(e.nativeTrace.file), e.cell) : summarizeFailedLocalStyles(c, e.cell); });
+  const cohort = classifyLocalStyleCohort(rows);
+  assert.equal(cohort.completedLongObservations, 3); assert.equal(cohort.failedLongObservations, 1);
+  assert.equal(cohort.missingLongObservations, 0); assert.equal(cohort.predeclaredActiveCriteria, null);
+  assert.equal(cohort.repeatedActiveMemoryBenefitUnderDeclaredCriteria, false);
+  assert.equal(cohort.whiteScreenFixed, false); assert.throws(() => compareLocalStyleCohort(rows));
+  const completed = rows.filter(r => r.cell.seconds === 1200 && r.completeAttributionCapture);
+  const control = completed.find(r => r.cell.condition === 'control'), leaves = completed.filter(r => r.cell.condition === 'leaves');
+  assert.equal(leaves.length, 2);
+  for (const leaf of leaves) for (const k of ['sampledPeak', 'lastMinuteMean', 'firstToLastMinuteGrowth'])
+    assert.ok(leaf.rendererPssKiB[k] < control.rendererPssKiB[k]);
 });

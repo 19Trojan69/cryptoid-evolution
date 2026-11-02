@@ -3,8 +3,8 @@
   "source": "8d5fe35e24d5b09b8ac4016a69b56368335b4c27",
   "tree": "91d459326f736db7e83891ced5f00df203bc9c8a",
   "workflowRun": 41427163697,
-  "status": "short-only-long-pending",
-  "workflowConclusion": null,
+  "status": "finished-with-protocol-failure",
+  "workflowConclusion": "failure",
   "rawOwnerReportsIncluded": false,
   "rawHeapSnapshotsIncluded": false,
   "captures": [
@@ -95,6 +95,174 @@
       "file": "leaves-r1-60.json.gz",
       "bytes": 32298,
       "sha256": "2c60694f5b9df0643e92f8f13d5b921abffc4d3086c6f9cc00c7d5f02bbdf179"
+    },
+    {
+      "name": "control-r1-1200",
+      "cell": {
+        "condition": "control",
+        "seconds": 1200,
+        "replica": 1
+      },
+      "jobId": 125218791588,
+      "jobConclusion": "success",
+      "sourceGatesConclusion": "success",
+      "scopeAfterConclusion": "success",
+      "artifact": {
+        "id": 13133394601,
+        "name": "local-style-control-r1-1200",
+        "size_in_bytes": 9256470,
+        "digest": "sha256:322020464033aed9651f6d345386ef24ac21f40c5cd8d3e911eeb764f1a24835",
+        "head_sha": "8d5fe35e24d5b09b8ac4016a69b56368335b4c27",
+        "sha256": "322020464033aed9651f6d345386ef24ac21f40c5cd8d3e911eeb764f1a24835",
+        "githubDigestMatched": true,
+        "zipIntegrityPassed": true
+      },
+      "activePointLogExactlyMatched": true,
+      "activePointLogSha256": "f7867df8f237b2decac5828386ca93236bed5185fa63d374ed72ba3b18f4c216",
+      "uncompressedBytes": 1274865,
+      "originalJsonSha256": "829f1161af7ad659760af0acfb25bc6a532a5fbb5612b99861f6594476ee4cbb",
+      "nativeTrace": {
+        "file": "control-r1-1200-native.json.gz",
+        "bytes": 990723,
+        "sha256": "9b36353094e972d575615ef8d45dc15cda778d4b2f225bfda6f6451cdc08f4b9"
+      },
+      "scopeAfter": {
+        "file": "control-r1-1200-source-scope.txt",
+        "bytes": 74,
+        "sha256": "aca06e79ccdf8bb490a75b7319a60d8c0362fcd98db05a7155fb8e1c0e8780a3"
+      },
+      "heapAnalysis": {
+        "file": "control-r1-1200-heaps.json",
+        "bytes": 18105,
+        "sha256": "ce21ff67b74bf83eee1481e573206b7b1df6e672fcb755f27d823d935020dc64"
+      },
+      "file": "control-r1-1200.json.gz",
+      "bytes": 51352,
+      "sha256": "9fe2d5f2b4952516af2897323309efc77a2983f49fbbab53ce69e7ebae971da1"
+    },
+    {
+      "name": "control-r2-1200",
+      "cell": {
+        "condition": "control",
+        "seconds": 1200,
+        "replica": 2
+      },
+      "jobId": 125218791584,
+      "jobConclusion": "failure",
+      "sourceGatesConclusion": "success",
+      "scopeAfterConclusion": "success",
+      "artifact": {
+        "id": 13132724173,
+        "name": "local-style-control-r2-1200",
+        "size_in_bytes": 34855,
+        "digest": "sha256:2f92245425cc0ae261735712e140221f081b7d60d53e0adb02d6df49b48f2f1d",
+        "head_sha": "8d5fe35e24d5b09b8ac4016a69b56368335b4c27",
+        "sha256": "2f92245425cc0ae261735712e140221f081b7d60d53e0adb02d6df49b48f2f1d",
+        "githubDigestMatched": true,
+        "zipIntegrityPassed": true
+      },
+      "activePointLogExactlyMatched": true,
+      "activePointLogSha256": "0ef67fd9077bc03db284c9076ec1072e06801c60447e5b09da8d37259b1ef5cc",
+      "uncompressedBytes": 573264,
+      "originalJsonSha256": "e9fed8cf576a0cbbf6058c21fb882ce119ba75761607104d9b50e66ea5564e7c",
+      "nativeTrace": null,
+      "scopeAfter": {
+        "file": "control-r2-1200-source-scope.txt",
+        "bytes": 74,
+        "sha256": "aca06e79ccdf8bb490a75b7319a60d8c0362fcd98db05a7155fb8e1c0e8780a3"
+      },
+      "heapAnalysis": null,
+      "file": "control-r2-1200.json.gz",
+      "bytes": 17202,
+      "sha256": "1e0cf0ccfdeb8db3f7e7b2cf09907c4c7812f585ca71b5385dd300da49d3bd29"
+    },
+    {
+      "name": "leaves-r1-1200",
+      "cell": {
+        "condition": "leaves",
+        "seconds": 1200,
+        "replica": 1
+      },
+      "jobId": 125218791539,
+      "jobConclusion": "success",
+      "sourceGatesConclusion": "success",
+      "scopeAfterConclusion": "success",
+      "artifact": {
+        "id": 13132904650,
+        "name": "local-style-leaves-r1-1200",
+        "size_in_bytes": 9175837,
+        "digest": "sha256:8a7dcb0aab7fdc8db5f0a5853f12fe48f5416961c5b801f792f0456bb31c9844",
+        "head_sha": "8d5fe35e24d5b09b8ac4016a69b56368335b4c27",
+        "sha256": "8a7dcb0aab7fdc8db5f0a5853f12fe48f5416961c5b801f792f0456bb31c9844",
+        "githubDigestMatched": true,
+        "zipIntegrityPassed": true
+      },
+      "activePointLogExactlyMatched": true,
+      "activePointLogSha256": "97985ba7f4f4258996a71170aa7594c5c0e24b3b03f363aaab3b6f7faab713e5",
+      "uncompressedBytes": 1278288,
+      "originalJsonSha256": "369e84b3d0b059f7dd1e1c5b4cf1a4282288c3b17eeded4f30e7000a3d888c69",
+      "nativeTrace": {
+        "file": "leaves-r1-1200-native.json.gz",
+        "bytes": 839843,
+        "sha256": "d5f4cc18389182e425e903a672738044cc4f1bec18823d02e7d6060c8830bb21"
+      },
+      "scopeAfter": {
+        "file": "leaves-r1-1200-source-scope.txt",
+        "bytes": 74,
+        "sha256": "aca06e79ccdf8bb490a75b7319a60d8c0362fcd98db05a7155fb8e1c0e8780a3"
+      },
+      "heapAnalysis": {
+        "file": "leaves-r1-1200-heaps.json",
+        "bytes": 18065,
+        "sha256": "9d887687de76d358c7f135ea3ce199640dd45eddd5771ceaab47bb42a7f3069f"
+      },
+      "file": "leaves-r1-1200.json.gz",
+      "bytes": 51280,
+      "sha256": "fd495823b1bc7adad8d11b71b20e76d77b4ea3262533070fad025be0231208fe"
+    },
+    {
+      "name": "leaves-r2-1200",
+      "cell": {
+        "condition": "leaves",
+        "seconds": 1200,
+        "replica": 2
+      },
+      "jobId": 125218791509,
+      "jobConclusion": "success",
+      "sourceGatesConclusion": "success",
+      "scopeAfterConclusion": "success",
+      "artifact": {
+        "id": 13134048390,
+        "name": "local-style-leaves-r2-1200",
+        "size_in_bytes": 9124359,
+        "digest": "sha256:f58815efac5fa336ae44abc012926d7537756b72da013554f3e35e8f3a21c765",
+        "head_sha": "8d5fe35e24d5b09b8ac4016a69b56368335b4c27",
+        "sha256": "f58815efac5fa336ae44abc012926d7537756b72da013554f3e35e8f3a21c765",
+        "githubDigestMatched": true,
+        "zipIntegrityPassed": true
+      },
+      "activePointLogExactlyMatched": true,
+      "activePointLogSha256": "9328ac78a95df80f55745465f80d4640dbefda0c90f202942cc4d441033af9f2",
+      "uncompressedBytes": 1274849,
+      "originalJsonSha256": "5f8618a48bebd0a44691e437ae849e1a42d9695bed9a970b229c56533b2c1c26",
+      "nativeTrace": {
+        "file": "leaves-r2-1200-native.json.gz",
+        "bytes": 834650,
+        "sha256": "ff418d2d073039d6f1978c6302644a07308e1a5a5cddd689dc6f05e21e220c8e"
+      },
+      "scopeAfter": {
+        "file": "leaves-r2-1200-source-scope.txt",
+        "bytes": 74,
+        "sha256": "aca06e79ccdf8bb490a75b7319a60d8c0362fcd98db05a7155fb8e1c0e8780a3"
+      },
+      "heapAnalysis": {
+        "file": "leaves-r2-1200-heaps.json",
+        "bytes": 18065,
+        "sha256": "5631852a128814ba2cfbdc315fa832235968ee4fced42b4f28a653f7497997a0"
+      },
+      "file": "leaves-r2-1200.json.gz",
+      "bytes": 51423,
+      "sha256": "7812053887d4051f161ce6e8a1b46dd7360105f56a26e98e2fc2c3352aa3f491"
     }
   ]
 }

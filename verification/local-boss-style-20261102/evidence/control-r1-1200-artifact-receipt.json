@@ -1,0 +1,10 @@
+{
+  "id": 13133394601,
+  "name": "local-style-control-r1-1200",
+  "size_in_bytes": 9256470,
+  "digest": "sha256:322020464033aed9651f6d345386ef24ac21f40c5cd8d3e911eeb764f1a24835",
+  "head_sha": "8d5fe35e24d5b09b8ac4016a69b56368335b4c27",
+  "sha256": "322020464033aed9651f6d345386ef24ac21f40c5cd8d3e911eeb764f1a24835",
+  "githubDigestMatched": true,
+  "zipIntegrityPassed": true
+}

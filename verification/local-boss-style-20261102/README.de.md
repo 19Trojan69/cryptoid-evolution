@@ -98,8 +98,70 @@ Besitzerberichte werden nicht ins Repository aufgenommen. Vier Auswertungs-
 Regressionen trennen kurze Belege, verfehlte Replikation, aktive Profilierung,
 Ressourcen-/Darstellungsfehler und gemischte Quellen von einem positiven Urteil.
 
-Die vier Langläufe sind in diesem Zwischenstand noch **ausstehend**.
-`evidence/results.json` setzt deshalb den Langvergleich auf `null`; es wird
-kein aktiver Speichervorteil oder Geräte-Fix daraus abgeleitet. Die nächste
-Belegversion ergänzt die beendeten Langläufe; sie ersetzt keine fehlgeschlagenen
-oder unqualifizierten Messungen durch erfolgreiche Werte.
+Der getrennte Zwischenstand `498d3f6f` und seine unabhängige
+[Beleg-CI 41428939659](https://github.com/19Trojan69/cryptoid-evolution/actions/runs/41428939659)
+halten beide abgeschlossenen kurzen Gates mit damals ausstehendem Langvergleich
+fest. Die nachfolgende Version ergänzt sämtliche vier beendeten Langläufe.
+
+## Beendeter Langvergleich: Kandidaten bestehen, Kontrollabbruch bleibt erhalten
+
+Die gesamte Mess-CI endet **fehlgeschlagen**, weil `control-r2-1200` während der
+aktiven Beobachtung unerwartet `paused` statt `playing` meldet. Alle anderen Jobs
+einschließlich beider Kandidaten bestehen. Es findet kein automatisches Resume
+und keine Wiederholung zur Ersetzung des fehlgeschlagenen Kontrolllaufs statt.
+
+Die Tabelle zeigt **Renderer-PSS in MiB**, keine native Heap-Größe und kein
+physisches Smartphone-RAM. Die Mittelwerte beziehen sich auf die Prozess-
+Stichproben der jeweiligen ersten/letzten 60 aktiven Sekunden; Spitzen sind
+ebenfalls Stichproben, keine exakten Peaks.
+
+| Lauf | Aktive Beobachtung | Anfangsmittel | Schlussmittel | Wachstum | Gemessene Spitze |
+| --- | --- | --- | --- | --- | --- |
+| Original 1 | 20:01, 428 Salven | 245,8 | 558,4 | 312,5 | 589,2 |
+| Original 2 | unvollständig; letzter Sample 13:22 | 377,1 | nicht gemessen | nicht gemessen | 2.314,1 bis Abbruch |
+| Kandidat 1 | 20:00, 428 Salven | 221,0 | 296,8 | 75,8 | 298,2 |
+| Kandidat 2 | 20:00, 428 Salven | 226,6 | 307,7 | 81,2 | 309,6 |
+
+Beide Kandidaten und Original 1 bestehen anschließend sämtliche zehn inaktiven
+Prüfpunkte, native Rohtrace-Prüfung, die beiden nach GC aufgenommenen Heap-
+Zusammenfassungen sowie die beobachteten Home-Freigaben. Während aller aktiven
+Messungen bleiben Tracing, Heap-Profiler, angeforderte GC, Wrapper und Fidelity-
+Mutation ausgeschaltet. Jeder Nach-Scope-Beleg bestätigt die Originalquellen.
+
+Original 2 enthält 156 unveränderte Samples, zuletzt bei `801999.7999999999` ms
+und Salve 285. Seine höchste gemessene gesamte Browser-PSS beträgt 2.495,2 MiB;
+die Renderer-Rolle davon 2.314,1 MiB. Der Fehler ist eine **unerwartete Pause**,
+kein nachgewiesener White Screen oder nativer Kill. Diese Collector-Quelle
+speichert im Catch keinen letzten Scene-/Clock-Snapshot: Ein Zeitlücken-/GC-/
+Speicherdruck-Auslöser ist deshalb **Vermutung**, keine bestätigte Diagnose.
+Es gibt für diesen Lauf keinen vollständigen 20-Minuten-Zeitwert, keinen
+inaktiven Dump, keinen Heap-Snapshot und keine bestätigte Home-Freigabe. Alle
+diese fehlenden Messungen stehen als `null`, nicht als null Byte oder Erfolg.
+
+**Bestätigte Beobachtung:** In dieser Serie liegen beide vollständigen
+Kandidaten bei Renderer-Spitze, Schlussmittel und Wachstum unter der einen
+vollständig beobachteten Original-Kontrolle. Die eigenständige vorangehende
+Style-Serie belegt weiterhin kausal 5 statt 95 Berechnungen je Schritt bei
+gleicher Darstellung. **Vorab festgelegtes Speicherziel nicht erfüllt:** Die
+geforderte vollständige zweite Original-Kontrolle fehlt. Die Kriterienmatrix
+bleibt deshalb `null`, die wiederholte Speicher-Abnahme `false`; der schlechte
+Kontrolllauf wird weder entfernt noch als vollständiger Vergleich umgedeutet.
+Eine dauerhafte iOS-/Android-/Pi-Browser-Stabilität ist nicht bestätigt.
+
+Alle sechs Beobachtungen, fünf vollständigen nativen Rohtraces, sechs Nach-Scope-
+Belege und sechs gegen GitHub geprüften Artefakt-Digests bleiben erhalten.
+Zehn Original-Heap-Dateien wurden lokal anhand ihrer gespeicherten Größen,
+Digests und Summen unabhängig nachgerechnet; ausschließlich ihre gefilterten
+Zusammenfassungen werden übernommen. Zwei zusätzliche Regressionen halten den
+Abbruch und die unqualifizierte Sechser-Serie ausdrücklich fest. Es gibt keinen
+automatisch übernommenen Runtime-Patch und keine neue Geräte-Testadresse.
+
+**Nächste Eingrenzung:** Vor einer Gerätefreigabe sind die dynamische React-
+Aktualisierung und native Darstellungsäquivalenz auch unter WebKit zu prüfen.
+Bei einem weiteren gezielt benötigten aktiven Lauf sollte der Fehlerpfad einmalig
+den vorhandenen begrenzten Scene-/Clock-Zustand speichern, um eine unerwartete
+Pause von einer Zeitlücke oder einer verlorenen Seite unterscheiden zu können.
+Die alte Messserie darf dadurch nicht nachträglich ergänzt oder umklassifiziert
+werden. Ein weiterer unveränderter 20-Minuten-Lauf allein ersetzt diese fehlende
+Diagnose nicht. Main, Veröffentlichung und eingefrorene Geräte-Referenzen bleiben
+unverändert.
