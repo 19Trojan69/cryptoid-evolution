@@ -18,7 +18,8 @@
     "errorCode": "BUILD_UTILS_SPAWN_1",
     "errorStep": "buildStep",
     "errorMessage": "Command \"node verification/direct-boss-style-device-20261102/buildDevicePreview.mjs\" exited with 1",
-    "buildFailureCauseEstablished": false
+    "buildFailureCauseEstablished": true,
+    "confirmedCause": "AssertionError: No inherited diagnostic treatment at buildDevicePreview.mjs:8:52"
   },
   "isolatedBuildDiagnostic": {
     "sourceCommit": "dbbac5406e8b2b803823ba3ac161cde380ebee0f",
@@ -35,9 +36,12 @@
     "protectedDiagnosticFetch": "403 forbidden at read_protection_bypass",
     "protectedShareLink": "404 lookup_deployment with explicit known team",
     "authenticatedLocalCliAvailable": false,
-    "userTeamProjectAuthorizationRequired": true,
+    "userTeamProjectAuthorizationRequired": null,
     "protectionChanged": false,
-    "browserFallbackAttempted": false
+    "browserFallbackAttempted": false,
+    "userAuthorizationReported": true,
+    "currentCauseOfAccessDenialEstablished": false,
+    "authenticatedBrowserFallbackApproved": false
   },
   "hostedPlayableCandidateVerified": false,
   "phoneTestReady": false,
@@ -45,5 +49,31 @@
   "physicalDeviceAccepted": false,
   "whiteScreenFixed": false,
   "ownerReportsIncluded": false,
-  "credentialsOrShareTokensIncluded": false
+  "credentialsOrShareTokensIncluded": false,
+  "originalBuildFailureCauseEstablished": true,
+  "originalBuildFailureCause": "AssertionError: No inherited diagnostic treatment at buildDevicePreview.mjs:8:52; inherited key/value not measured",
+  "followupSources": [
+    {
+      "sourceCommit": "3d4cb0c17d1b3d91de9a9b87eb9a2761832f2efe",
+      "sourceTree": "b70e43a631a3bd32a14ef73d122b81462eed876d",
+      "runId": 41484913176,
+      "completeNativePackageFlows": 2
+    },
+    {
+      "sourceCommit": "ce8cc4ab6630e502b796adfde082d75238c5095b",
+      "sourceTree": "5cf24892e16ffbf4f3ba0ed5d939e0dd646c675e",
+      "runId": 41485674562,
+      "completeNativePackageFlows": 2
+    }
+  ],
+  "latestPreviewAttempt": {
+    "id": "dpl_5wo2k7XPFSH6Reg9dsn5KYUVHbRQ",
+    "hostname": "cryptoid-evolution-testnet-1qgwdaamc-19-trojan69.vercel.app",
+    "sourceCommit": "ce8cc4ab6630e502b796adfde082d75238c5095b",
+    "target": null,
+    "readyState": "ERROR",
+    "errorCode": "BUILD_UTILS_SPAWN_1",
+    "errorMessage": "Command \"node verification/direct-boss-style-device-20261102/installDevicePreview.mjs\" exited with 1",
+    "concreteInstallFailureCauseEstablished": false
+  }
 }

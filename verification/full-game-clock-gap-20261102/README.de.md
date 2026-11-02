@@ -182,3 +182,45 @@ Freigabe bis zur Autorisierung des bestehenden Projekts/Teams offen. Kein
 Schutz wurde abgeschaltet, keine Browser-Anmeldung begonnen und keine
 öffentliche Stammadresse geändert. Die exakten Quellen und Zustände stehen in
 `hosted-preview-status.json`; Zugangsdaten oder Freigabetokens sind nicht enthalten.
+
+## Fortsetzung nach dem vom Eigentümer bereitgestellten Buildlog
+
+Der konkrete ursprüngliche Abbruch ist jetzt belegt: `AssertionError: No
+inherited diagnostic treatment` in Zeile 8 des Paket-Builders, unter Node
+24.22.2. Der Builder lehnte schon die Anwesenheit irgendeiner `CRYPTOID_`-
+Variable ab. Welcher Schlüssel oder Wert vorhanden war, ist nicht bekannt und
+wurde nicht aus der Projektumgebung ausgelesen. Die npm-Warnung zu esbuild ist
+nicht die hier belegte Abbruchursache.
+
+Quelle `3d4cb0c17d1b3d91de9a9b87eb9a2761832f2efe`, Baum
+`b70e43a631a3bd32a14ef73d122b81462eed876d`,
+[CI 41484913176](https://github.com/19Trojan69/cryptoid-evolution/actions/runs/41484913176):
+Der Builder verwirft geerbte `CRYPTOID_`-Variablen nur in seinem eigenen Prozess
+und setzt danach die unveränderten sechs Paketwerte. Beide nativen 60/10/10-
+Sekunden-Paketabläufe bestehen trotz absichtlich widersprüchlicher Einstellungen.
+Die Vercel-Projektvariablen und Spielquellen werden nicht geändert.
+
+Eine lokale Wiederholung des tatsächlichen Installationsbefehls belegte zudem
+eine npm-Umschreibung von `frontend/yarn.lock`, die den strengen Scope-Guard
+scheitern ließ. Auch `--no-save` verhinderte sie unter dem vorhandenen npm nicht.
+Ein separater Installer prüft nun vor npm sämtliche Original-Runtime-Bäume,
+sichert die unveränderten Yarn-Bytes, stellt ausschließlich diese Datei nach
+npm wieder her und verlangt danach erneut den vollständigen Scope sowie einen
+erfolgreichen npm-Abschluss. Andere Quellenänderungen bleiben Fehler.
+
+Quelle `ce8cc4ab6630e502b796adfde082d75238c5095b`, Baum
+`5cf24892e16ffbf4f3ba0ed5d939e0dd646c675e`,
+[CI 41485674562](https://github.com/19Trojan69/cryptoid-evolution/actions/runs/41485674562):
+Beide nativen Paketabläufe bestehen auch mit diesem identischen Installer und
+den widersprüchlichen Build-Einstellungen. Die vier neuen Rohbeobachtungen,
+Build-Belege, Scope-Belege und vollständigen Punktlogs beider Quellen sind
+getrennt unter `environment-fix-evidence/` archiviert; alle alten Daten bleiben.
+Sie bestätigen keine weitere 20-Minuten-Serie und keine Smartphone-Abnahme.
+
+Der getrennte gehostete Versuch `dpl_5wo2k7XPFSH6Reg9dsn5KYUVHbRQ` aus exakt
+`ce8cc4ab` scheitert jedoch jetzt am Installationsskript. Die verfügbare
+Vercel-Meldung nennt nur dessen Exit-Code 1; die konkrete Ursache ist noch
+nicht bekannt. Dieser gehostete Fehlschlag wird trotz bestandener nativer CI
+als offen beibehalten. Die Handy-Preview bleibt bis zur Auswertung dieses
+Installationsfehlers und erfolgreicher gehosteter Prüfung gesperrt. Keine
+Produktion, Schutz- oder Kontoeinstellung wurde geändert.

@@ -1,0 +1,227 @@
+{
+  "version": 1,
+  "rawOwnerReportsIncluded": false,
+  "finalCandidateSource": "ce8cc4ab6630e502b796adfde082d75238c5095b",
+  "captures": [
+    {
+      "sourceCommit": "3d4cb0c17d1b3d91de9a9b87eb9a2761832f2efe",
+      "sourceTree": "b70e43a631a3bd32a14ef73d122b81462eed876d",
+      "runId": 41484913176,
+      "engine": "webkit",
+      "jobId": 125412574303,
+      "jobConclusion": "success",
+      "artifact": {
+        "id": 13161387039,
+        "name": "direct-style-device-webkit",
+        "size_in_bytes": 6817,
+        "digest": "sha256:bf12f7e3cf2ef53671f1dee09acba366ee5031ff7f353c774bdf1e393d63a629",
+        "workflow_run": {
+          "id": 41484913176,
+          "repository_id": 1379416967,
+          "head_repository_id": 1379416967,
+          "head_branch": "codex/direct-boss-style-device-20261102",
+          "head_sha": "3d4cb0c17d1b3d91de9a9b87eb9a2761832f2efe"
+        },
+        "githubDigestMatched": true,
+        "zipIntegrityPassed": true
+      },
+      "observation": {
+        "file": "3d4cb0c1-webkit-verification.json",
+        "bytes": 23464,
+        "sha256": "97a4578c7cda9c9bc35ae3325fa0c876ce052ae50ad9a3105edd9d23c80f6ec7"
+      },
+      "build": {
+        "file": "3d4cb0c1-webkit-build-info.json",
+        "bytes": 4429,
+        "sha256": "50f399baedb9b87ef341187bbea11d08cbf172a649b384e4f99b16ece658eb9d"
+      },
+      "scope": {
+        "file": "3d4cb0c1-webkit-source-scope.txt",
+        "bytes": 116,
+        "sha256": "637865c37ae36c99b43c78525af2d67611de5a1c7488e508c4d9aef70eb1c732"
+      },
+      "pointLogs": [
+        {
+          "file": "3d4cb0c1-webkit-cycle-0.jsonl",
+          "bytes": 7899,
+          "sha256": "1372c36073098dc9b8309dd595895c2e64b18b687e78e40e485b3c7579d61262"
+        },
+        {
+          "file": "3d4cb0c1-webkit-cycle-1.jsonl",
+          "bytes": 1966,
+          "sha256": "994575a8a7701419e761860d8f540cd56c280dc084377dd8201098f8d0abcd68"
+        },
+        {
+          "file": "3d4cb0c1-webkit-cycle-2.jsonl",
+          "bytes": 1966,
+          "sha256": "df9fa776cc80c61181fadbad7dbb76a7c9480e68cc34bc54c03a40bd99495f5a"
+        }
+      ]
+    },
+    {
+      "sourceCommit": "3d4cb0c17d1b3d91de9a9b87eb9a2761832f2efe",
+      "sourceTree": "b70e43a631a3bd32a14ef73d122b81462eed876d",
+      "runId": 41484913176,
+      "engine": "chromium",
+      "jobId": 125412573618,
+      "jobConclusion": "success",
+      "artifact": {
+        "id": 13160673856,
+        "name": "direct-style-device-chromium",
+        "size_in_bytes": 7264,
+        "digest": "sha256:f018b088bd2763015073d8a7f9107baafa1792a1d3485126036b806c0ee02fae",
+        "workflow_run": {
+          "id": 41484913176,
+          "repository_id": 1379416967,
+          "head_repository_id": 1379416967,
+          "head_branch": "codex/direct-boss-style-device-20261102",
+          "head_sha": "3d4cb0c17d1b3d91de9a9b87eb9a2761832f2efe"
+        },
+        "githubDigestMatched": true,
+        "zipIntegrityPassed": true
+      },
+      "observation": {
+        "file": "3d4cb0c1-chromium-verification.json",
+        "bytes": 24959,
+        "sha256": "c218e16eaa835acec524f4ce92313331cfeb48f93d56c630899eb197d02fea31"
+      },
+      "build": {
+        "file": "3d4cb0c1-chromium-build-info.json",
+        "bytes": 4429,
+        "sha256": "50f399baedb9b87ef341187bbea11d08cbf172a649b384e4f99b16ece658eb9d"
+      },
+      "scope": {
+        "file": "3d4cb0c1-chromium-source-scope.txt",
+        "bytes": 116,
+        "sha256": "637865c37ae36c99b43c78525af2d67611de5a1c7488e508c4d9aef70eb1c732"
+      },
+      "pointLogs": [
+        {
+          "file": "3d4cb0c1-chromium-cycle-0.jsonl",
+          "bytes": 8835,
+          "sha256": "aaa7392535c940786ed3e93cb441538716bc2be0c6ac2921223548dd9d3efa0b"
+        },
+        {
+          "file": "3d4cb0c1-chromium-cycle-1.jsonl",
+          "bytes": 1988,
+          "sha256": "610b75d0933f47c6e94169f6857d648b120a00e599e27bb7934904306d33ec09"
+        },
+        {
+          "file": "3d4cb0c1-chromium-cycle-2.jsonl",
+          "bytes": 1962,
+          "sha256": "cd16b87e066e00805e14ee5bb9eb6e10f4b6232670c3a1744609478433e2486f"
+        }
+      ]
+    },
+    {
+      "sourceCommit": "ce8cc4ab6630e502b796adfde082d75238c5095b",
+      "sourceTree": "5cf24892e16ffbf4f3ba0ed5d939e0dd646c675e",
+      "runId": 41485674562,
+      "engine": "chromium",
+      "jobId": 125415244840,
+      "jobConclusion": "success",
+      "artifact": {
+        "id": 13162357315,
+        "name": "direct-style-device-chromium",
+        "size_in_bytes": 7114,
+        "digest": "sha256:59660786ca3ae8ddfd075a359f959e99c23db9d8184e68b60e006291ba0348d6",
+        "workflow_run": {
+          "id": 41485674562,
+          "repository_id": 1379416967,
+          "head_repository_id": 1379416967,
+          "head_branch": "codex/direct-boss-style-device-20261102",
+          "head_sha": "ce8cc4ab6630e502b796adfde082d75238c5095b"
+        },
+        "githubDigestMatched": true,
+        "zipIntegrityPassed": true
+      },
+      "observation": {
+        "file": "ce8cc4ab-chromium-verification.json",
+        "bytes": 22605,
+        "sha256": "3481498158c6b554a0c163511094c03b84e9e0f6dc28d070335d5ecd50eee3c8"
+      },
+      "build": {
+        "file": "ce8cc4ab-chromium-build-info.json",
+        "bytes": 4429,
+        "sha256": "43841d64e4397cf2fe2720fefa6ea962219f858935c8ff1c8b96a38dbc7170d1"
+      },
+      "scope": {
+        "file": "ce8cc4ab-chromium-source-scope.txt",
+        "bytes": 116,
+        "sha256": "637865c37ae36c99b43c78525af2d67611de5a1c7488e508c4d9aef70eb1c732"
+      },
+      "pointLogs": [
+        {
+          "file": "ce8cc4ab-chromium-cycle-0.jsonl",
+          "bytes": 8141,
+          "sha256": "bccdf6fcaaf54124869d17772789ac95d609371f945021737625d6dac906d8bd"
+        },
+        {
+          "file": "ce8cc4ab-chromium-cycle-1.jsonl",
+          "bytes": 1988,
+          "sha256": "417eb9738ff4e34b6778e1bba25b948ff4f7a37a02fd88eedfebd0a40ae45e44"
+        },
+        {
+          "file": "ce8cc4ab-chromium-cycle-2.jsonl",
+          "bytes": 1319,
+          "sha256": "620993403ddf5b53c2aa8facefb538ec0e876a7dc748ca6c09614514b83b2798"
+        }
+      ]
+    },
+    {
+      "sourceCommit": "ce8cc4ab6630e502b796adfde082d75238c5095b",
+      "sourceTree": "5cf24892e16ffbf4f3ba0ed5d939e0dd646c675e",
+      "runId": 41485674562,
+      "engine": "webkit",
+      "jobId": 125415245022,
+      "jobConclusion": "success",
+      "artifact": {
+        "id": 13162317514,
+        "name": "direct-style-device-webkit",
+        "size_in_bytes": 6851,
+        "digest": "sha256:a49c5a3df4ea8235de5ee1582cee2dcb1e6f857e1aec6588add7a66314ccbd59",
+        "workflow_run": {
+          "id": 41485674562,
+          "repository_id": 1379416967,
+          "head_repository_id": 1379416967,
+          "head_branch": "codex/direct-boss-style-device-20261102",
+          "head_sha": "ce8cc4ab6630e502b796adfde082d75238c5095b"
+        },
+        "githubDigestMatched": true,
+        "zipIntegrityPassed": true
+      },
+      "observation": {
+        "file": "ce8cc4ab-webkit-verification.json",
+        "bytes": 23515,
+        "sha256": "d779f3ed630d7fa5b44b06843c2f1695d0331e6613f2f20213119e32d1f2e920"
+      },
+      "build": {
+        "file": "ce8cc4ab-webkit-build-info.json",
+        "bytes": 4429,
+        "sha256": "43841d64e4397cf2fe2720fefa6ea962219f858935c8ff1c8b96a38dbc7170d1"
+      },
+      "scope": {
+        "file": "ce8cc4ab-webkit-source-scope.txt",
+        "bytes": 116,
+        "sha256": "637865c37ae36c99b43c78525af2d67611de5a1c7488e508c4d9aef70eb1c732"
+      },
+      "pointLogs": [
+        {
+          "file": "ce8cc4ab-webkit-cycle-0.jsonl",
+          "bytes": 7952,
+          "sha256": "2d52f471217c51ad1c32b040bd160a57c0367219e5ce648555b366e3a14360ae"
+        },
+        {
+          "file": "ce8cc4ab-webkit-cycle-1.jsonl",
+          "bytes": 1964,
+          "sha256": "598d980722be01e0f85d737b1998710deaf0861369528a63df584e74c24deba7"
+        },
+        {
+          "file": "ce8cc4ab-webkit-cycle-2.jsonl",
+          "bytes": 1965,
+          "sha256": "fdb79dfe93b354c265b91722b07e4ebd3d122582558fbf05c304a0e61d109735"
+        }
+      ]
+    }
+  ]
+}
