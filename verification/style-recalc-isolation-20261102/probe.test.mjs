@@ -12,6 +12,7 @@ function fixture(firing = false) {
       this.name = name; this.attrs = new Map([['class', classes]]); this.props = new Map();
       if (style !== null) this.setAttribute('style', style);
       this.style = { setProperty: (key, value) => {
+        this.styleTouched = true;
         calls.push({ node: name, key, value, firing: svg.classList.contains('boss-special-weapon-firing') });
         this.props.set(key, value); this.attrs.set('style', [...this.props].map(([k, v]) => k + ':' + v).join(';'));
       }, removeProperty: key => { const prior = this.props.get(key) || ''; this.props.delete(key);
@@ -40,6 +41,8 @@ function fixture(firing = false) {
     __crossDeviceTest: { inspect: () => state }, performance: { mark: name => marks.push(name) }, throwAfter: Infinity,
     getComputedStyle: n => {
       if (++reads > host.throwAfter) throw Error('Synthetic native-read failure');
+      if (host.materializeEmptySvg && lights.includes(n) && n.styleTouched && n.props.size === 0)
+        n.attrs.set('style', '');
       if (engines.includes(n)) return { height: n.props.get('height') || root.props.get('--boss-thrust') };
       const flash = svg.classList.contains('boss-special-weapon-firing') && n.classList.contains('boss-special-muzzle');
       return { opacity: String(flash ? 1 : n.props.has('opacity') ? Number(n.props.get('opacity')) : .25 + Number(svg.props.get('--weapon-charge')) * .75) };
@@ -66,6 +69,11 @@ test('a failed native read restores the exact original scene; active/hidden or u
     const h = fixture(); change(h); assert.throws(() => pausedSceneProbe(args('root'), h.host)); assert.deepEqual(h.calls, []);
   }
   assert.throws(() => pausedSceneProbe({ ...args('root'), pairs: pairs.slice(1) }, fixture().host));
+});
+test('an empty SVG style materialized by native reads is removed after the final style/animation flush without weakening exact restoration', () => {
+  const h = fixture(); h.host.materializeEmptySvg = true;
+  const result = pausedSceneProbe(args('both-local'), h.host);
+  assert.equal(result.originalInlineAttributesRestored, true); assert.deepEqual(h.original(), h.before);
 });
 const prefix = 'cryptoid-recalc-r1-root-', frameId = 'frame-fixture';
 function nativeEvents() {

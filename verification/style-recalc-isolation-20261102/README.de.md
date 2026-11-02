@@ -96,3 +96,12 @@ partiellen Daten werden nicht als abgeschlossener Vergleich gewertet.
 Die nächste Quellenänderung ergänzt zunächst begrenzte Roh-/kanonische
 Vor-/Nachwerte der abweichenden Inline-Attribute in der Fehlermeldung. Die
 Wiederherstellungsanforderung wird nicht gelockert. Spielquellen bleiben gleich.
+
+Der Diagnoseabruf `15ef6827`, [CI 41422549736](https://github.com/19Trojan69/cryptoid-evolution/actions/runs/41422549736),
+grenzt die Abweichung auf drei SVG-Pfade ein: ursprünglich `style` nicht vorhanden,
+nach dem nativen Read `style=""`, kanonische CSS-Texte jeweils leer. Alle anderen
+Attribute erfüllen die exakte Prüfung. Auch dieser Lauf bleibt fehlgeschlagen;
+die Wiederholung wird übersprungen. Die Korrektur ordnet die exakte erneute
+Raw-Attribut-Wiederherstellung **hinter** die letzten berechneten Style-/Animations-
+Reads. Die unveränderte strenge Prüfung der originalen Attribute folgt danach.
+Eine neue Regression bildet die beobachtete Materialisierung leerer SVG-Styles ab.

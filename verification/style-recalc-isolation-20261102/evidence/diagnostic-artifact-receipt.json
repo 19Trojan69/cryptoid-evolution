@@ -1,0 +1,10 @@
+{
+  "id": 13130228021,
+  "name": "diagnostic-r1",
+  "size_in_bytes": 4630,
+  "digest": "sha256:4b30753e0893d8158cf53b793c7f5d871f9bef27e865bf74b9eaf940dc130441",
+  "head_sha": "15ef6827050cc0fab1178458f53e6439f72f3f30",
+  "sha256": "4b30753e0893d8158cf53b793c7f5d871f9bef27e865bf74b9eaf940dc130441",
+  "githubDigestMatched": true,
+  "zipIntegrityPassed": true
+}

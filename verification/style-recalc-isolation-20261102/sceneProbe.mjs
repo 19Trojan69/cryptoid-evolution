@@ -52,14 +52,18 @@ export function pausedSceneProbe({ condition, pairs, prefix, firingFidelity = fa
       const observed = read(); host.performance.mark(prefix + i + ':end'); outputs.push(observed);
     }
     restore(); check(same(before, read()), 'Original browser-computed outputs restored');
-    const restorationDifferences = nodes.map((n, i) => ({ index: i, tag: n.tagName,
-      before: originals[i], canonicalBefore: originalCanonical[i], after: n.getAttribute('style'), canonical: n.style.cssText }))
-      .filter(row => row.before !== row.after);
-    check(restorationDifferences.length === 0, 'Exact original inline attributes restored: ' + JSON.stringify(restorationDifferences));
-    check(svg.getAttribute('class') === originalClass, 'Original firing class restored');
     const afterAnimations = root.getAnimations({ subtree: true });
     check(afterAnimations.length === animations.length && animations.every(row => afterAnimations.includes(row.animation)
       && row.animation.startTime === row.start && row.animation.playbackRate === row.rate), 'Same native animation objects, starts and rates');
+    // Native SVG style synchronization during computed-style/animation reads
+    // can materialize an empty style attribute. Reapply the exact original raw
+    // attributes after these reads, while retaining the strict original check.
+    restore();
+    const restorationDifferences = nodes.map((n, i) => ({ index: i, tag: n.tagName, before: originals[i], after: n.getAttribute('style') }))
+      .filter(row => row.before !== row.after).map(row => ({ ...row,
+        canonicalBefore: originalCanonical[row.index], canonical: nodes[row.index].style.cssText }));
+    check(restorationDifferences.length === 0, 'Exact original inline attributes restored: ' + JSON.stringify(restorationDifferences));
+    check(svg.getAttribute('class') === originalClass, 'Original firing class restored');
     check(host.__crossDeviceTest.inspect().status === 'paused', 'No automatic Resume');
     return { condition, prefix, steps: pairs.length, engines: engines.length, chargeConsumers: lights.length, firing,
       outputs, firingFidelityCases: fidelityCases, originalInlineAttributesRestored: true, originalFiringClassRestored: true,
