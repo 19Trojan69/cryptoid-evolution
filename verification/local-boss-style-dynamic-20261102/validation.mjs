@@ -15,9 +15,9 @@ export function compareDynamicSnapshots(control, leaves, expected) {
   control.engines.forEach((c, i) => {
     const l = leaves.engines[i];
     check(c.inlineHeight === '' && l.inlineHeight.endsWith('px'), 'Direct height only at existing candidate engines');
-    check(Math.abs(parseFloat(l.inlineHeight) - parseFloat(expected.thrust)) <= Math.max(1, parseFloat(expected.thrust)) * 1e-6,
+    check(typeof expected.canonicalThrust === 'string' && expected.canonicalThrust.endsWith('px') && l.inlineHeight === expected.canonicalThrust,
       'Candidate height must reflect the current nested model values: ' + JSON.stringify({ inline: l.inlineHeight,
-        expected: expected.thrust, nativeControl: c.computedHeight, nativeCandidate: l.computedHeight }));
+        expected: expected.thrust, canonical: expected.canonicalThrust, nativeControl: c.computedHeight, nativeCandidate: l.computedHeight }));
     check(c.computedHeight === l.computedHeight, 'Exactly equal native heights');
   });
   control.lights.forEach((c, i) => {

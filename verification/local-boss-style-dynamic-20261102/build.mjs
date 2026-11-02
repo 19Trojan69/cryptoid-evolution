@@ -53,6 +53,7 @@ const result = { version: 1, sourceCommit: git('rev-parse', 'HEAD'), sourceTree:
   actualInstalledPackages: Object.fromEntries(['react', 'react-dom', 'vite', 'typescript'].map(n => [n, require(n + '/package.json').version])),
   lockSha256: createHash('sha256').update(readFileSync(root + '/frontend/yarn.lock')).digest('hex'),
   componentInputTestOnly: true, originalCssRetained: true, syntheticInputSequence: true,
+  validationContract: 2, inlineHeightCheck: 'exact-engine-cssom-serialization', nativeHeightCheck: 'exact-control-candidate-equality',
   normalization: ['paired React useId prefixes', 'declared thrust/charge property redistribution', 'empty style only on charge consumers after removing declared opacity'],
   gameControllerStarted: false, gameClockStarted: false, liveBackend: false, authentication: false, payments: false,
   physicalDevice: false, runtimeSourceFilesEdited: false, whiteScreenFixed: false };

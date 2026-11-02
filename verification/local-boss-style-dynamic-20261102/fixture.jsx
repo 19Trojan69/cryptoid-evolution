@@ -20,6 +20,9 @@ const entries = Object.entries({ control: Control, leaves: Leaves }).map(([condi
   return { condition, View, container, root: null, originalNodes: null, animations: [] };
 });
 let boss = null, now = 20000, fall = null;
+// Detached fixture-only CSSOM parser: the same engine serializes the expected
+// current px input. No tolerance is added to the actual native height check.
+const expectedHeightStyle = document.createElement('i').style;
 const stats = { dynamicCases: 0, fallingCases: 0, absentCases: 0, sameNodeChecks: 0,
   retainedNativeAnimationChecks: 0, retainedStartedAnimationChecks: 0, enginesChecked: 0, lightsChecked: 0 };
 
@@ -88,6 +91,7 @@ function step({ exposed, volley, elapsed, thrust, flightElapsed }, stable) {
   const expected = { charge: exposed ? Math.min(1, elapsed / coreInterval(boss)) : 0,
     firing: exposed && volley > 0 && elapsed < 180,
     thrust: String(6 + boss.height * engineFlamePercent(thrust, flightElapsed < BOSS_ENTRY_MS ? 'launch' : 'idle') / 100) + 'px' };
+  expectedHeightStyle.height = expected.thrust; expected.canonicalThrust = expectedHeightStyle.height;
   render(expected, stable); stats.dynamicCases++;
 }
 window.__localStyleDynamic = {

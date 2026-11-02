@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { compareDynamicSnapshots } from './validation.mjs';
 function fixture(firing = false) {
-  const expected = { thrust: '15px', charge: .4, firing };
+  const expected = { thrust: '15px', canonicalThrust: '15px', charge: .4, firing };
   const c = { canonicalMarkup: '<original-art>', rootThrust: '15px', svgCharge: '0.4', firing,
     engines: [{ inlineHeight: '', computedHeight: '15px' }],
     lights: ['boss-special-conductor', 'boss-special-muzzle'].map(kind => ({ kind, inlineOpacity: '',
@@ -24,6 +24,19 @@ test('native equality still requires current direct consumer values, original ma
       const broken = structuredClone(l); change(broken); assert.throws(() => compareDynamicSnapshots(c, broken, expected));
     }
   }
+});
+test('the real Chromium CSSOM rounding can pass only with exact current canonical input AND exact native height', () => {
+  const { c, l, expected } = fixture();
+  expected.thrust = '29.29525px'; expected.canonicalThrust = '29.2952px';
+  c.rootThrust = expected.thrust; c.engines[0].computedHeight = '29.2812px';
+  l.engines[0] = { inlineHeight: '29.2952px', computedHeight: '29.2812px' };
+  assert.deepEqual(compareDynamicSnapshots(c, l, expected), { engines: 1, lights: 2 });
+  l.engines[0].computedHeight = '29.2813px';
+  assert.throws(() => compareDynamicSnapshots(c, l, expected), /Exactly equal native heights/);
+  l.engines[0].computedHeight = '29.2812px'; l.engines[0].inlineHeight = '29.2951px';
+  assert.throws(() => compareDynamicSnapshots(c, l, expected), /current nested model/);
+  l.engines[0].inlineHeight = '29.2952px'; delete expected.canonicalThrust;
+  assert.throws(() => compareDynamicSnapshots(c, l, expected));
 });
 test('matching stale native values cannot conceal a context update failure; fall and absence cannot acquire consumers', () => {
   const { c, l, expected } = fixture();
