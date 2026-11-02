@@ -1,0 +1,817 @@
+{
+  "workflowRun": 41413213131,
+  "conclusion": "failure",
+  "captures": [
+    {
+      "cell": {
+        "mode": "calibration",
+        "replica": 1
+      },
+      "sourceCommit": "79f70ae9868151de2e01f5e0d0c7b67e230656a8",
+      "sourceTree": "5517bb7b76cd16baca31d31ff3710919c6655011",
+      "runtimeComplete": true,
+      "outcome": "calibration-collected",
+      "failure": null,
+      "classification": "calibration-pass",
+      "observedActiveMs": 60002.70000000001,
+      "observedWallMs": 59697,
+      "engineVersion": "151.0.7922.34",
+      "actualInstalledPackages": {
+        "react": "19.2.4",
+        "react-dom": "19.2.4",
+        "react-router-dom": "7.13.2",
+        "vite": "7.3.1",
+        "typescript": "5.9.3"
+      },
+      "lockSha256": "b6d496c5725bf24ddb4f51b576b0597ced9f35c5ea7927a65165a5fb6311ad1a",
+      "workingTreeStatus": [
+        "?? frontend/package-lock.json",
+        "?? verification/boss2-forensics-20261028/package-lock.json"
+      ],
+      "buildWorkingTreeDirty": true,
+      "points": 13,
+      "maximumSampledRendererPssKiB": 316676,
+      "pressureEvidenceQualified": false,
+      "native": {
+        "collectionComplete": true,
+        "pssKiB": {
+          "trigger": 316676,
+          "beforeDump": 315008,
+          "afterDump": 318178,
+          "afterTrace": 316164
+        },
+        "captureWallMs": 1800,
+        "requestWallMs": 389,
+        "trace": {
+          "file": "active-detailed-memory.json.gz",
+          "bytes": 6571927,
+          "compressedBytes": 359757,
+          "sha256": "418411d42db5850d7d92a8d141bf752dba6c8f285eb4d500c72012f6d4fac39c",
+          "events": 19,
+          "dataLossOccurred": false,
+          "collectorFault": null
+        },
+        "pressureVerifiedAtSampledBoundariesOnly": true,
+        "rendererFragments": [
+          {
+            "processId": 3500,
+            "fragmentIndex": 4,
+            "allocatorCount": 0,
+            "categories": {
+              "blink_gc": null,
+              "blink_gc/main/heap": null,
+              "blink_gc/main/allocated_objects": null,
+              "blink_objects": null,
+              "v8": null,
+              "malloc": null,
+              "partition_alloc": null,
+              "cc": null,
+              "cc/image_memory": null,
+              "skia": null,
+              "discardable": null,
+              "canvas": null,
+              "media": null,
+              "web_cache": null,
+              "shared_memory": null,
+              "gpu": null,
+              "gpu/shared_images": null
+            },
+            "blinkHeap": null,
+            "reportedHeapFragmentation": {
+              "value": null,
+              "reportedUnits": null,
+              "reason": "not-reported"
+            },
+            "heapUnusedFractionPercentDerived": null,
+            "heapSpaces": [],
+            "globalTypeRows": 0,
+            "positiveGlobalTypeRows": 0,
+            "largestGlobalObjectTypes": [],
+            "focusedGlobalObjectTypes": [
+              {
+                "type": "blink::HashTrieNode<blink::CSSVariableData>",
+                "rows": []
+              },
+              {
+                "type": "blink::ComputedStyleBase::StyleSurroundData",
+                "rows": []
+              },
+              {
+                "type": "blink::ComputedStyle",
+                "rows": []
+              },
+              {
+                "type": "blink::CachedMatchedProperties",
+                "rows": []
+              },
+              {
+                "type": "blink::ComputedStyleBase::StyleMiscData",
+                "rows": []
+              },
+              {
+                "type": "blink::ComputedStyleBase::StyleSVGData",
+                "rows": []
+              }
+            ],
+            "typeNamesAreNotAllocationStacksOrRetainerPaths": true
+          },
+          {
+            "processId": 3500,
+            "fragmentIndex": 9,
+            "allocatorCount": 18601,
+            "categories": {
+              "blink_gc": 100565232,
+              "blink_gc/main/heap": 100565232,
+              "blink_gc/main/allocated_objects": 26054760,
+              "blink_objects": 26054760,
+              "v8": 29589412,
+              "malloc": 63229440,
+              "partition_alloc": 42070016,
+              "cc": 50450432,
+              "cc/image_memory": 26054656,
+              "skia": 11595437,
+              "discardable": 27148288,
+              "canvas": 1956344,
+              "media": 4399784,
+              "web_cache": 7416149,
+              "shared_memory": 60563456,
+              "gpu": null,
+              "gpu/shared_images": null
+            },
+            "blinkHeap": {
+              "path": "blink_gc/main/heap",
+              "bytes": 100565232,
+              "attributes": {
+                "allocated_objects_size": 26054760,
+                "committed_size": 100565232,
+                "effective_size": 74510138,
+                "pooled_size": 3145728,
+                "size": 100565232
+              },
+              "unrepresentableByteScalars": {}
+            },
+            "reportedHeapFragmentation": {
+              "value": 74,
+              "reportedUnits": "objects"
+            },
+            "heapUnusedFractionPercentDerived": 74.09168210341323,
+            "heapSpaces": [
+              {
+                "path": "blink_gc/main/heap/<unspecified>",
+                "bytes": 3145728,
+                "attributes": {
+                  "effective_size": 2330722,
+                  "size": 3145728
+                },
+                "unrepresentableByteScalars": {}
+              },
+              {
+                "path": "blink_gc/main/heap/CustomSpace0",
+                "bytes": 19398656,
+                "attributes": {
+                  "allocated_objects_size": 1064384,
+                  "committed_size": 19398656,
+                  "effective_size": 14372724,
+                  "size": 19398656
+                },
+                "unrepresentableByteScalars": {}
+              },
+              {
+                "path": "blink_gc/main/heap/CustomSpace1",
+                "bytes": 2752512,
+                "attributes": {
+                  "allocated_objects_size": 221616,
+                  "committed_size": 2752512,
+                  "effective_size": 2039373,
+                  "size": 2752512
+                },
+                "unrepresentableByteScalars": {}
+              },
+              {
+                "path": "blink_gc/main/heap/CustomSpace2",
+                "bytes": 131072,
+                "attributes": {
+                  "allocated_objects_size": 19024,
+                  "committed_size": 131072,
+                  "effective_size": 97113,
+                  "size": 131072
+                },
+                "unrepresentableByteScalars": {}
+              },
+              {
+                "path": "blink_gc/main/heap/CustomSpace3",
+                "bytes": 5111808,
+                "attributes": {
+                  "allocated_objects_size": 989784,
+                  "committed_size": 5111808,
+                  "effective_size": 3787407,
+                  "size": 5111808
+                },
+                "unrepresentableByteScalars": {}
+              },
+              {
+                "path": "blink_gc/main/heap/CustomSpace4",
+                "bytes": 262144,
+                "attributes": {
+                  "allocated_objects_size": 117616,
+                  "committed_size": 262144,
+                  "effective_size": 194226,
+                  "size": 262144
+                },
+                "unrepresentableByteScalars": {}
+              },
+              {
+                "path": "blink_gc/main/heap/CustomSpace5",
+                "bytes": 786432,
+                "attributes": {
+                  "allocated_objects_size": 95088,
+                  "committed_size": 786432,
+                  "effective_size": 582678,
+                  "size": 786432
+                },
+                "unrepresentableByteScalars": {}
+              },
+              {
+                "path": "blink_gc/main/heap/LargePageSpace",
+                "bytes": 557296,
+                "attributes": {
+                  "allocated_objects_size": 557080,
+                  "committed_size": 557296,
+                  "effective_size": 412909,
+                  "size": 557296
+                },
+                "unrepresentableByteScalars": {}
+              },
+              {
+                "path": "blink_gc/main/heap/NormalPageSpace0",
+                "bytes": 1179648,
+                "attributes": {
+                  "allocated_objects_size": 357928,
+                  "committed_size": 1179648,
+                  "effective_size": 874017,
+                  "size": 1179648
+                },
+                "unrepresentableByteScalars": {}
+              },
+              {
+                "path": "blink_gc/main/heap/NormalPageSpace1",
+                "bytes": 4587520,
+                "attributes": {
+                  "allocated_objects_size": 1628768,
+                  "committed_size": 4587520,
+                  "effective_size": 3398955,
+                  "size": 4587520
+                },
+                "unrepresentableByteScalars": {}
+              },
+              {
+                "path": "blink_gc/main/heap/NormalPageSpace2",
+                "bytes": 18481152,
+                "attributes": {
+                  "allocated_objects_size": 7251904,
+                  "committed_size": 18481152,
+                  "effective_size": 13692933,
+                  "size": 18481152
+                },
+                "unrepresentableByteScalars": {}
+              },
+              {
+                "path": "blink_gc/main/heap/NormalPageSpace3",
+                "bytes": 44171264,
+                "attributes": {
+                  "allocated_objects_size": 13751568,
+                  "committed_size": 44171264,
+                  "effective_size": 32727081,
+                  "size": 44171264
+                },
+                "unrepresentableByteScalars": {}
+              }
+            ],
+            "globalTypeRows": 1224,
+            "positiveGlobalTypeRows": 1224,
+            "largestGlobalObjectTypes": [
+              {
+                "type": "blink::HashTrieNode<blink::CSSVariableData>",
+                "typeId": "0x282",
+                "bytes": 3531648,
+                "objectCount": {
+                  "value": 12984
+                }
+              },
+              {
+                "type": "blink::CachedMatchedProperties",
+                "typeId": "0x288",
+                "bytes": 1850824,
+                "objectCount": {
+                  "value": 13609
+                }
+              },
+              {
+                "type": "blink::ComputedStyleBase::StyleSurroundData",
+                "typeId": "0x281",
+                "bytes": 1726920,
+                "objectCount": {
+                  "value": 5535
+                }
+              },
+              {
+                "type": "blink::ComputedStyle",
+                "typeId": "0x194",
+                "bytes": 1622304,
+                "objectCount": {
+                  "value": 22532
+                }
+              },
+              {
+                "type": "blink::ComputedStyleBase::StyleMiscData",
+                "typeId": "0x193",
+                "bytes": 1497936,
+                "objectCount": {
+                  "value": 17022
+                }
+              },
+              {
+                "type": "blink::ComputedStyleBase::StyleSVGData",
+                "typeId": "0x192",
+                "bytes": 1204960,
+                "objectCount": {
+                  "value": 15062
+                }
+              },
+              {
+                "type": "blink::ComputedStyleBase::StyleBoxData",
+                "typeId": "0x280",
+                "bytes": 869264,
+                "objectCount": {
+                  "value": 4939
+                }
+              },
+              {
+                "type": "blink::CSSAnimationData",
+                "typeId": "0x285",
+                "bytes": 833952,
+                "objectCount": {
+                  "value": 2044
+                }
+              },
+              {
+                "type": "blink::ComputedStyleBase::StyleMisc2Data",
+                "typeId": "0x287",
+                "bytes": 568664,
+                "objectCount": {
+                  "value": 2293
+                }
+              },
+              {
+                "type": "blink::ComputedStyleBase::StyleMisc7Data",
+                "typeId": "0x284",
+                "bytes": 510720,
+                "objectCount": {
+                  "value": 3192
+                }
+              },
+              {
+                "type": "blink::ComputedStyleBase::StyleStrokeData",
+                "typeId": "0x19a",
+                "bytes": 493920,
+                "objectCount": {
+                  "value": 4116
+                }
+              },
+              {
+                "type": "blink::ComputedStyleBase::StyleGeometryData",
+                "typeId": "0x198",
+                "bytes": 492192,
+                "objectCount": {
+                  "value": 6836
+                }
+              },
+              {
+                "type": "blink::ComputedStyleBase::StyleInheritedData",
+                "typeId": "0x27f",
+                "bytes": 474776,
+                "objectCount": {
+                  "value": 3491
+                }
+              },
+              {
+                "type": "blink::GeometryMapperTransformCache::PlaneRootTransform",
+                "typeId": "0x290",
+                "bytes": 447264,
+                "objectCount": {
+                  "value": 1553
+                }
+              },
+              {
+                "type": "blink::ComputedStyleBase::StyleMisc1Data",
+                "typeId": "0x286",
+                "bytes": 356832,
+                "objectCount": {
+                  "value": 2124
+                }
+              },
+              {
+                "type": "blink::HeapHashTableBacking<blink::HashTable<cppgc::internal::BasicMember<const blink::ImageResourceObserver, cppgc::internal::StrongMemberTag, cppgc::internal::DijkstraWriteBarrierPolicy>, blink::KeyValuePair<cppgc::internal::BasicMember<const blink::ImageResourceObserver, cppgc::internal::StrongMemberTag, cppgc::internal::DijkstraWriteBarrierPolicy>, blink::SizeAndCount>, blink::KeyValuePairExtractor, blink::HashMapValueTraits<blink::HashTraits<cppgc::internal::BasicMember<const blink::ImageResourceObserver, cppgc::internal::StrongMemberTag, cppgc::internal::DijkstraWriteBarrierPolicy>>, blink::HashTraits<blink::SizeAndCount>>, blink::HashTraits<cppgc::internal::BasicMember<const blink::ImageResourceObserver, cppgc::internal::StrongMemberTag, cppgc::internal::DijkstraWriteBarrierPolicy>>, blink::HeapAllocator>>",
+                "typeId": "0x289",
+                "bytes": 340000,
+                "objectCount": {
+                  "value": 2500
+                }
+              },
+              {
+                "type": "blink::ComputedStyleBase::StyleBackgroundData",
+                "typeId": "0x195",
+                "bytes": 338112,
+                "objectCount": {
+                  "value": 3522
+                }
+              },
+              {
+                "type": "blink::Font",
+                "typeId": "0x283",
+                "bytes": 334152,
+                "objectCount": {
+                  "value": 1989
+                }
+              },
+              {
+                "type": "blink::HeapHashTableBacking<blink::HashTable<unsigned int, blink::KeyValuePair<unsigned int, blink::CalculationValueHandleMap::MemberWithCount>, blink::KeyValuePairExtractor, blink::HashMapValueTraits<blink::HashTraits<unsigned int>, blink::HashTraits<blink::CalculationValueHandleMap::MemberWithCount>>, blink::HashTraits<unsigned int>, blink::HeapAllocator>>",
+                "typeId": "0x37f",
+                "bytes": 294928,
+                "objectCount": {
+                  "value": 2
+                }
+              },
+              {
+                "type": "blink::HeapVectorBacking<blink::PendingLayer>",
+                "typeId": "0x291",
+                "bytes": 294136,
+                "objectCount": {
+                  "value": 47
+                }
+              }
+            ],
+            "focusedGlobalObjectTypes": [
+              {
+                "type": "blink::HashTrieNode<blink::CSSVariableData>",
+                "rows": [
+                  {
+                    "type": "blink::HashTrieNode<blink::CSSVariableData>",
+                    "typeId": "0x282",
+                    "bytes": 3531648,
+                    "objectCount": {
+                      "value": 12984
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "blink::ComputedStyleBase::StyleSurroundData",
+                "rows": [
+                  {
+                    "type": "blink::ComputedStyleBase::StyleSurroundData",
+                    "typeId": "0x281",
+                    "bytes": 1726920,
+                    "objectCount": {
+                      "value": 5535
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "blink::ComputedStyle",
+                "rows": [
+                  {
+                    "type": "blink::ComputedStyle",
+                    "typeId": "0x194",
+                    "bytes": 1622304,
+                    "objectCount": {
+                      "value": 22532
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "blink::CachedMatchedProperties",
+                "rows": [
+                  {
+                    "type": "blink::CachedMatchedProperties",
+                    "typeId": "0x288",
+                    "bytes": 1850824,
+                    "objectCount": {
+                      "value": 13609
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "blink::ComputedStyleBase::StyleMiscData",
+                "rows": [
+                  {
+                    "type": "blink::ComputedStyleBase::StyleMiscData",
+                    "typeId": "0x193",
+                    "bytes": 1497936,
+                    "objectCount": {
+                      "value": 17022
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "blink::ComputedStyleBase::StyleSVGData",
+                "rows": [
+                  {
+                    "type": "blink::ComputedStyleBase::StyleSVGData",
+                    "typeId": "0x192",
+                    "bytes": 1204960,
+                    "objectCount": {
+                      "value": 15062
+                    }
+                  }
+                ]
+              }
+            ],
+            "typeNamesAreNotAllocationStacksOrRetainerPaths": true
+          }
+        ],
+        "categoriesAndFragmentsMustNotBeSummed": true,
+        "classSizesAreNotPostGcRetainedBytes": true,
+        "classObjectCountsAreNotLiveCacheEntryCounts": true
+      },
+      "physicalPhoneAcceptanceEstablished": false,
+      "nativeTerminationCauseMeasured": false,
+      "whiteScreenFixed": false,
+      "volleysAdvanced": 21,
+      "lifecyclePssKiB": [
+        {
+          "label": "paused-immediate",
+          "renderer": 315980,
+          "total": 533406
+        },
+        {
+          "label": "paused-settled-without-requested-gc",
+          "renderer": 311204,
+          "total": 528146
+        },
+        {
+          "label": "home-settled-without-requested-gc",
+          "renderer": 288816,
+          "total": 507405
+        }
+      ],
+      "homeCountersAtUnmount": {
+        "css": {
+          "mode": "native-easing",
+          "targetHz": 60,
+          "active": 0,
+          "configured": 1200,
+          "fallbacks": 0,
+          "jsFrameWrites": 0
+        },
+        "painted": {
+          "painted": 6,
+          "estimatedBytes": 2200455,
+          "sources": 8,
+          "pending": 0,
+          "retained": 0,
+          "retainCount": 0,
+          "sourceRetained": 0,
+          "sourceRetainCount": 0,
+          "jobsStarted": 0,
+          "jobsFinished": 0,
+          "queueWaitMaxMs": 0,
+          "materialTotalMs": 0,
+          "materialMaxMs": 0,
+          "encodeTotalMs": 0,
+          "decodeTotalMs": 0,
+          "sourceWorkTotalMs": 0,
+          "sourceWorkMaxMs": 0
+        },
+        "canvas": {
+          "activeDrawFrame": false,
+          "registeredEffects": 0,
+          "sourceImages": 0,
+          "textureEntries": 0,
+          "cacheBytes": 0,
+          "surfaceBytes": 0,
+          "imageBytes": 0,
+          "textureBytes": 0,
+          "hullLoads": 0,
+          "hullEvictions": 0,
+          "retainedHullUsers": 0,
+          "draws": 0,
+          "fragmentDraws": 0,
+          "failures": []
+        }
+      },
+      "nativeCleanupEstablishedByCounters": false
+    },
+    {
+      "cell": {
+        "mode": "pressure",
+        "replica": 1
+      },
+      "sourceCommit": "79f70ae9868151de2e01f5e0d0c7b67e230656a8",
+      "sourceTree": "5517bb7b76cd16baca31d31ff3710919c6655011",
+      "runtimeComplete": false,
+      "outcome": "pressure-threshold-not-observed",
+      "failure": {
+        "code": "pressure-threshold-not-observed",
+        "message": "Declared active high-pressure attribution target was not obtained; this is not a measured game crash."
+      },
+      "classification": "diagnostic-objective-unmet",
+      "observedActiveMs": 1200000.0999999999,
+      "observedWallMs": 1200190,
+      "engineVersion": "151.0.7922.34",
+      "actualInstalledPackages": {
+        "react": "19.2.4",
+        "react-dom": "19.2.4",
+        "react-router-dom": "7.13.2",
+        "vite": "7.3.1",
+        "typescript": "5.9.3"
+      },
+      "lockSha256": "b6d496c5725bf24ddb4f51b576b0597ced9f35c5ea7927a65165a5fb6311ad1a",
+      "workingTreeStatus": [
+        "?? frontend/package-lock.json",
+        "?? verification/boss2-forensics-20261028/package-lock.json"
+      ],
+      "buildWorkingTreeDirty": true,
+      "points": 240,
+      "maximumSampledRendererPssKiB": 398252,
+      "pressureEvidenceQualified": false,
+      "native": null,
+      "physicalPhoneAcceptanceEstablished": false,
+      "nativeTerminationCauseMeasured": false,
+      "whiteScreenFixed": false,
+      "volleysAdvanced": 428,
+      "lifecyclePssKiB": [
+        {
+          "label": "paused-immediate",
+          "renderer": 387950,
+          "total": 571698
+        },
+        {
+          "label": "paused-settled-without-requested-gc",
+          "renderer": 384154,
+          "total": 569330
+        },
+        {
+          "label": "home-settled-without-requested-gc",
+          "renderer": 213677,
+          "total": 402407
+        }
+      ],
+      "homeCountersAtUnmount": {
+        "css": {
+          "mode": "native-easing",
+          "targetHz": 60,
+          "active": 0,
+          "configured": 23308,
+          "fallbacks": 0,
+          "jsFrameWrites": 0
+        },
+        "painted": {
+          "painted": 6,
+          "estimatedBytes": 2176023,
+          "sources": 8,
+          "pending": 0,
+          "retained": 0,
+          "retainCount": 0,
+          "sourceRetained": 0,
+          "sourceRetainCount": 0,
+          "jobsStarted": 0,
+          "jobsFinished": 0,
+          "queueWaitMaxMs": 0,
+          "materialTotalMs": 0,
+          "materialMaxMs": 0,
+          "encodeTotalMs": 0,
+          "decodeTotalMs": 0,
+          "sourceWorkTotalMs": 0,
+          "sourceWorkMaxMs": 0
+        },
+        "canvas": {
+          "activeDrawFrame": false,
+          "registeredEffects": 0,
+          "sourceImages": 0,
+          "textureEntries": 0,
+          "cacheBytes": 0,
+          "surfaceBytes": 0,
+          "imageBytes": 0,
+          "textureBytes": 0,
+          "hullLoads": 0,
+          "hullEvictions": 0,
+          "retainedHullUsers": 0,
+          "draws": 0,
+          "fragmentDraws": 0,
+          "failures": []
+        }
+      },
+      "nativeCleanupEstablishedByCounters": false
+    },
+    {
+      "cell": {
+        "mode": "pressure",
+        "replica": 2
+      },
+      "sourceCommit": "79f70ae9868151de2e01f5e0d0c7b67e230656a8",
+      "sourceTree": "5517bb7b76cd16baca31d31ff3710919c6655011",
+      "runtimeComplete": false,
+      "outcome": "pressure-threshold-not-observed",
+      "failure": {
+        "code": "pressure-threshold-not-observed",
+        "message": "Declared active high-pressure attribution target was not obtained; this is not a measured game crash."
+      },
+      "classification": "diagnostic-objective-unmet",
+      "observedActiveMs": 1200000,
+      "observedWallMs": 1200742,
+      "engineVersion": "151.0.7922.34",
+      "actualInstalledPackages": {
+        "react": "19.2.4",
+        "react-dom": "19.2.4",
+        "react-router-dom": "7.13.2",
+        "vite": "7.3.1",
+        "typescript": "5.9.3"
+      },
+      "lockSha256": "b6d496c5725bf24ddb4f51b576b0597ced9f35c5ea7927a65165a5fb6311ad1a",
+      "workingTreeStatus": [
+        "?? frontend/package-lock.json",
+        "?? verification/boss2-forensics-20261028/package-lock.json"
+      ],
+      "buildWorkingTreeDirty": true,
+      "points": 239,
+      "maximumSampledRendererPssKiB": 355794,
+      "pressureEvidenceQualified": false,
+      "native": null,
+      "physicalPhoneAcceptanceEstablished": false,
+      "nativeTerminationCauseMeasured": false,
+      "whiteScreenFixed": false,
+      "volleysAdvanced": 428,
+      "lifecyclePssKiB": [
+        {
+          "label": "paused-immediate",
+          "renderer": 351746,
+          "total": 537138
+        },
+        {
+          "label": "paused-settled-without-requested-gc",
+          "renderer": 346804,
+          "total": 533546
+        },
+        {
+          "label": "home-settled-without-requested-gc",
+          "renderer": 206694,
+          "total": 395442
+        }
+      ],
+      "homeCountersAtUnmount": {
+        "css": {
+          "mode": "native-easing",
+          "targetHz": 60,
+          "active": 0,
+          "configured": 23353,
+          "fallbacks": 0,
+          "jsFrameWrites": 0
+        },
+        "painted": {
+          "painted": 6,
+          "estimatedBytes": 2176023,
+          "sources": 8,
+          "pending": 0,
+          "retained": 0,
+          "retainCount": 0,
+          "sourceRetained": 0,
+          "sourceRetainCount": 0,
+          "jobsStarted": 0,
+          "jobsFinished": 0,
+          "queueWaitMaxMs": 0,
+          "materialTotalMs": 0,
+          "materialMaxMs": 0,
+          "encodeTotalMs": 0,
+          "decodeTotalMs": 0,
+          "sourceWorkTotalMs": 0,
+          "sourceWorkMaxMs": 0
+        },
+        "canvas": {
+          "activeDrawFrame": false,
+          "registeredEffects": 0,
+          "sourceImages": 0,
+          "textureEntries": 0,
+          "cacheBytes": 0,
+          "surfaceBytes": 0,
+          "imageBytes": 0,
+          "textureBytes": 0,
+          "hullLoads": 0,
+          "hullEvictions": 0,
+          "retainedHullUsers": 0,
+          "draws": 0,
+          "fragmentDraws": 0,
+          "failures": []
+        }
+      },
+      "nativeCleanupEstablishedByCounters": false
+    }
+  ],
+  "qualifiedPressureCaptures": 0,
+  "physicalPhoneAcceptanceEstablished": false,
+  "whiteScreenFixed": false
+}

@@ -1,0 +1,110 @@
+{
+  "version": 1,
+  "source": "79f70ae9868151de2e01f5e0d0c7b67e230656a8",
+  "tree": "5517bb7b76cd16baca31d31ff3710919c6655011",
+  "workflowRun": 41413213131,
+  "conclusion": "failure",
+  "sourceGatesJobId": 125170786004,
+  "sourceGatesConclusion": "success",
+  "rawOwnerReportsIncluded": false,
+  "rawHeapSnapshotsIncluded": false,
+  "captures": [
+    {
+      "file": "calibration-r1.json.gz",
+      "bytes": 61978,
+      "sha256": "27523baaa048bbe8305aef6a11e2d0f2d8aa7df211fd7123f52c9087e71e384e",
+      "cell": {
+        "mode": "calibration",
+        "replica": 1
+      },
+      "jobId": 125171162919,
+      "jobConclusion": "success",
+      "scopeAfterConclusion": "success",
+      "scopeAfter": {
+        "file": "calibration-r1-source-scope.txt",
+        "bytes": 74,
+        "sha256": "aca06e79ccdf8bb490a75b7319a60d8c0362fcd98db05a7155fb8e1c0e8780a3"
+      },
+      "artifact": {
+        "id": 13126921389,
+        "name": "active-blink-detail-calibration",
+        "size_in_bytes": 423684,
+        "digest": "sha256:31d0c88b1b78eb8c10581a897533caa4b1ccd41f4f941464425c62dd0c2dd673",
+        "head_sha": "79f70ae9868151de2e01f5e0d0c7b67e230656a8",
+        "sha256": "31d0c88b1b78eb8c10581a897533caa4b1ccd41f4f941464425c62dd0c2dd673",
+        "githubDigestMatched": true,
+        "zipIntegrityPassed": true
+      },
+      "uncompressedBytes": 1097163,
+      "originalJsonSha256": "b75c828e5d9aa9edd6eb24d577c69d88e5f2aead4dd9e2f7baceb6236bb1684d",
+      "activePointLogExactlyMatched": true,
+      "nativeTrace": {
+        "file": "calibration-r1-native.json.gz",
+        "bytes": 359757,
+        "sha256": "418411d42db5850d7d92a8d141bf752dba6c8f285eb4d500c72012f6d4fac39c"
+      }
+    },
+    {
+      "file": "pressure-r1.json.gz",
+      "bytes": 26805,
+      "sha256": "6da1aecebcb514400041c401431017b2fadb7a0a11fce8f914583b2656bca3fd",
+      "cell": {
+        "mode": "pressure",
+        "replica": 1
+      },
+      "jobId": 125172360008,
+      "jobConclusion": "failure",
+      "scopeAfterConclusion": "success",
+      "scopeAfter": {
+        "file": "pressure-r1-source-scope.txt",
+        "bytes": 74,
+        "sha256": "aca06e79ccdf8bb490a75b7319a60d8c0362fcd98db05a7155fb8e1c0e8780a3"
+      },
+      "artifact": {
+        "id": 13126679599,
+        "name": "active-blink-detail-r1",
+        "size_in_bytes": 55029,
+        "digest": "sha256:9e97ab390d4c2ae5b2a3287e61120412cd7f676e1563f64c9e51c1d15f23aedf",
+        "head_sha": "79f70ae9868151de2e01f5e0d0c7b67e230656a8",
+        "sha256": "9e97ab390d4c2ae5b2a3287e61120412cd7f676e1563f64c9e51c1d15f23aedf",
+        "githubDigestMatched": true,
+        "zipIntegrityPassed": true
+      },
+      "uncompressedBytes": 903080,
+      "originalJsonSha256": "185c72a5b48a46e3c866adc913b3879d73c09b5919526202a1b13842d8b3e4b9",
+      "activePointLogExactlyMatched": true,
+      "nativeTrace": null
+    },
+    {
+      "file": "pressure-r2.json.gz",
+      "bytes": 27051,
+      "sha256": "60a96721055c8192df944e682f60f2af32aae50ff349bb478ea621294490fc8f",
+      "cell": {
+        "mode": "pressure",
+        "replica": 2
+      },
+      "jobId": 125172360014,
+      "jobConclusion": "failure",
+      "scopeAfterConclusion": "success",
+      "scopeAfter": {
+        "file": "pressure-r2-source-scope.txt",
+        "bytes": 74,
+        "sha256": "aca06e79ccdf8bb490a75b7319a60d8c0362fcd98db05a7155fb8e1c0e8780a3"
+      },
+      "artifact": {
+        "id": 13127961314,
+        "name": "active-blink-detail-r2",
+        "size_in_bytes": 55201,
+        "digest": "sha256:858e5f630ef684f0bed034b5a95b60e783a6cd54f530a3421ffdbcdb8beae06e",
+        "head_sha": "79f70ae9868151de2e01f5e0d0c7b67e230656a8",
+        "sha256": "858e5f630ef684f0bed034b5a95b60e783a6cd54f530a3421ffdbcdb8beae06e",
+        "githubDigestMatched": true,
+        "zipIntegrityPassed": true
+      },
+      "uncompressedBytes": 899395,
+      "originalJsonSha256": "154dd4b9e3c390658e03d3c0cab97fbb8ab18781cb91ef624ec1b45b3f60c0dd",
+      "activePointLogExactlyMatched": true,
+      "nativeTrace": null
+    }
+  ]
+}
