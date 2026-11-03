@@ -133,3 +133,25 @@ Vier-Minuten-Budget; Transportfehler erfassen nun auch ihre `cause`-Information.
 Die native Kontrollseite und die vertrauenswürdige Berührung bleiben zwingend.
 Ein einzelnes Fehlerbild verwendet das native JPEG-Ausgabeformat, mit derselben
 2-MiB-Grenze; ein fehlendes Bild wird weiterhin als fehlend erfasst.
+
+
+## WDA-Projektsuche korrigiert und vor dem Mac-Lauf geprüft
+
+Quelle `47bed1ef078f74567f849fd0b70d2616cb4d1c78`,
+https://github.com/19Trojan69/cryptoid-evolution/actions/runs/41609401004
+
+SDK-Katalog und Werkzeuginstallation bestanden. Die folgende Projektsuche mit
+`require.resolve('appium-webdriveragent')` scheiterte jedoch sofort mit
+`ERR_PACKAGE_PATH_NOT_EXPORTED`: Das installierte Paket bietet keinen
+CommonJS-Haupteinstieg an. Das war ein Fehler des Testskripts vor Appium-Start,
+WDA-Bau, Simulator-Boot und Spielzugriff. Es gab daher noch keinen
+`ENVIRONMENT_RESULT`-Datensatz; das vollständige Jobprotokoll bleibt erhalten.
+
+Die korrigierte Suche liest Projektdaten über die tatsächlichen
+Abhängigkeitssuchpfade des installierten XCUITest-Treibers, ohne das Paket als
+CommonJS-Modul zu laden. Sie verlangt den passenden Paketnamen, eine Version
+und das vorhandene Xcode-Projekt. Zwei lokale Tests bestätigen verschachtelte
+und hochgezogene ESM-only-Pakete sowie die Ablehnung eines unvollständigen
+Pakets. Dieselben Tests laufen im Workflow vor jeder Werkzeuginstallation.
+Die Projektsuche liegt nun außerdem innerhalb des strukturiert protokollierten
+Fehlerpfads. Keine Bau-, Safari-, Touch- oder Spielbedingung wurde gelockert.

@@ -21,7 +21,9 @@ jobs:
       - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
         with: {node-version: '24'}
       - name: Validate the control script syntax
-        run: node --check lab/verification/ios-safari-environment-20261103/probe.mjs
+        run: |
+          node --check lab/verification/ios-safari-environment-20261103/probe.mjs
+          node --test lab/verification/ios-safari-environment-20261103/locateWda.test.mjs
       - name: Initialize the preinstalled simulator catalogue before loading Appium
         timeout-minutes: 3
         run: |
