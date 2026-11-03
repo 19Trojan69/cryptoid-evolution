@@ -26,7 +26,8 @@ test('WebDriver protocol errors and desktop fallback fail instead of yielding a 
   await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
   try {
     const driver = new SafariClient('http://127.0.0.1:' + server.address().port);
-    await assert.rejects(driver.start('test-simulator'), /session not created/);
-    mode = 'desktop'; await assert.rejects(driver.start('test-simulator'), /Never silently fall back/);
+    const initialUrl = 'http://127.0.0.1:3333';
+    await assert.rejects(driver.start('test-simulator', initialUrl), /session not created/);
+    mode = 'desktop'; await assert.rejects(driver.start('test-simulator', initialUrl), /Never silently fall back/);
   } finally { await new Promise(resolve => server.close(resolve)); }
 });

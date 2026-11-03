@@ -12,9 +12,11 @@ export class SafariClient {
       + ': ' + String(result.value?.message || '').slice(0, 2000));
     return result.value;
   }
-  async start(udid) {
+  async start(udid, initialUrl) {
+    assert.equal(new URL(initialUrl).hostname, '127.0.0.1', 'Only the isolated local guest server is opened');
     const value = await this.request('POST', '/session', { capabilities: { alwaysMatch: {
       browserName: 'Safari', platformName: 'iOS', 'appium:automationName': 'XCUITest',
+      'appium:initialDeeplinkUrl': initialUrl,
       'appium:udid': udid, 'appium:deviceName': 'iPhone 16 Pro Max', 'appium:platformVersion': '26.2',
       'appium:nativeWebTap': true, 'appium:safariGarbageCollect': false,
       'appium:skipLogCapture': true, 'appium:disableAutomaticScreenshots': true,

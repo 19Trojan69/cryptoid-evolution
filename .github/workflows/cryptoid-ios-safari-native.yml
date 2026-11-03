@@ -38,7 +38,7 @@ jobs:
       - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
         with: {node-version: '24'}
       - name: Test driver failure gates without starting the game
-        run: node --test lab/verification/ios-safari-native-20261103/tools.test.mjs
+        run: node --test lab/verification/ios-safari-native-20261103/tools.test.mjs lab/verification/ios-safari-native-20261103/evidenceOutput.test.mjs
       - name: Install the pinned free Appium and compatible XCUITest tools outside the source checkout
         run: |
           export APPIUM_HOME="$RUNNER_TEMP/cryptoid-appium-home"

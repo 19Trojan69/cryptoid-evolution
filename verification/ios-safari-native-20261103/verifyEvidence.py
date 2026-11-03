@@ -16,10 +16,26 @@ MARKER = re.compile(r'^\ufeff?\d{4}-\d\d-\d\dT\S+Z CRYPTOID_IOS_([A-Z_]+) (\{.*\
 
 def read_events(raw: bytes) -> list[tuple[str, dict]]:
     events = []
+    chunks = {}
     for line in raw.decode('utf-8-sig').splitlines():
         match = MARKER.match(line)
         if match:
-            events.append((match[1], json.loads(match[2])))
+            kind, value = match[1], json.loads(match[2])
+            if kind != 'CHUNK':
+                events.append((kind, value))
+                continue
+            item = chunks.setdefault(value['id'], {'parts': [], 'total': value['total'],
+                'sha256': value['sha256'], 'kind': value['kind']})
+            assert value['index'] == len(item['parts']), 'Missing, duplicate or reordered evidence fragment'
+            assert value['total'] == item['total'] and value['sha256'] == item['sha256']
+            assert value['kind'] == item['kind']
+            item['parts'].append(value['data'])
+            if len(item['parts']) == item['total']:
+                text = ''.join(item['parts'])
+                assert hashlib.sha256(text.encode('utf-8')).hexdigest() == item['sha256']
+                events.append((item['kind'], json.loads(text)))
+                del chunks[value['id']]
+    assert not chunks, 'Incomplete original evidence fragments must fail'
     return events
 
 
@@ -61,6 +77,7 @@ def verify(raw: bytes) -> dict:
         assert result['environment']['secureContext'] is True
         assert result['sourceAndPackageUnchangedVerified'] is True
         assert result['normalReportVerified'] is True
+        assert result['initialLocalGuestDeeplinkVerified'] is True
         for key in ['physicalDevice', 'physicalPiBrowser', 'whiteScreenFixed', 'clocksAccelerated',
                     'automaticResume', 'additionalFullRecording', 'gameSourceEdited', 'servedPackageEdited',
                     'activeScreenshots', 'extraGameCollectors', 'newGameTimers', 'newAnimationFrames',

@@ -9,6 +9,7 @@ import { SafariClient, delay } from './safariClient.mjs';
 import { sampleNativeMemory } from './nativeMemory.mjs';
 import { readSourceState } from '../mobile-30m-source-proof-20261102/sourceState.mjs';
 import { STOPWATCH_KEY } from '../boss2-stopwatch-20261029/stopwatchState.mjs';
+import { createEvidenceWriter } from './evidenceOutput.mjs';
 
 const SOURCE = 'ac98e95166b0e2013186257904da46323840dab5';
 const TREE = '99092ec24e843fb1e419dc382bc2523a4edc0b42';
@@ -70,7 +71,7 @@ const result = { version: 1, phase, complete: false, sourceCommit: SOURCE, sourc
     'No active screenshots, forced GC or heap snapshots. DOM/clock liveness does not establish native displayed pixel correctness.',
     'Any unexpected pause, document replacement or stalled frame fails; the harness never resumes it automatically.'], cycles: [] };
 let server, driverProcess, driver;
-const record = (kind, value) => console.log('CRYPTOID_IOS_' + kind + ' ' + JSON.stringify(value));
+const record = createEvidenceWriter();
 const observeScript = `return {timeOrigin:performance.timeOrigin, hidden:document.hidden,
   scene:window.__crossDeviceTest?.inspect() ?? null,
   clock:JSON.parse(localStorage.getItem(${JSON.stringify(STOPWATCH_KEY)}) || 'null'),
@@ -103,13 +104,15 @@ try {
     assert.ok(!driverFailure, driverFailure);
     try { return !!await driver.request('GET', '/status'); } catch { return false; }
   }, 'Appium WebDriver server', 30000);
-  result.capabilities = await driver.start(simulator.udid);
+  result.capabilities = await driver.start(simulator.udid, server.origin);
   await driver.command('POST', '/timeouts', { script: 30000, pageLoad: 90000, implicit: 0 });
-  await driver.command('POST', '/url', { url: server.origin });
+  await driver.waitFor(() => driver.execute(`return location.origin === arguments[0]
+    && document.readyState !== 'loading';`, [server.origin]), 'initial native deeplink loads the local guest document');
+  result.initialLocalGuestDeeplinkVerified = true;
   result.environment = await driver.execute(`return {userAgent:navigator.userAgent, platform:navigator.platform,
     width:innerWidth,height:innerHeight,devicePixelRatio,secureContext:isSecureContext,origin:location.origin};`);
   assert.match(result.environment.userAgent, /iPhone/); assert.equal(result.environment.secureContext, true);
-  record('BROWSER_READY', { phase, capabilities: result.capabilities, environment: result.environment });
+  await record('BROWSER_READY', { phase, capabilities: result.capabilities, environment: result.environment });
   for (let cycle = 0; cycle < 3; cycle++) {
     const row = { cycle, requestedActiveMs: (cycle ? 10 : seconds) * 1000, complete: false, nativePoints: 0 };
     result.cycles.push(row);
@@ -127,7 +130,7 @@ try {
       return p?.clockId === first.clock.latest.id && p.frameAt > 0 && p.audioBufferBytes > 0 && p.canvasFailureCount === 0;
     }, 'existing resource checkpoint');
     const firstMemory = sampleNativeMemory(simulator.udid);
-    record('MEMORY_PREFLIGHT', { phase, cycle, ...firstMemory });
+    await record('MEMORY_PREFLIGHT', { phase, cycle, ...firstMemory });
     assert.equal(firstMemory.webContentObserved, true, 'Require actual simulator WebContent RSS before a timed run');
     const started = Date.now(); let previous = first, progressAt = started, sampledAt = 0;
     while (previous.clock.latest.elapsedMs - first.clock.latest.elapsedMs < row.requestedActiveMs) {
@@ -141,7 +144,7 @@ try {
         const sample = { phase, cycle, activeMs: point.clock.latest.elapsedMs - first.clock.latest.elapsedMs,
           frameAt: point.scene.frameAt, coreVolley: point.scene.coreVolley, player: point.scene.player,
           audio: point.scene.audio, canvas: point.scene.canvas, memory };
-        row.nativePoints++; record('POINT', sample);
+        row.nativePoints++; await record('POINT', sample);
         if (!row.firstMemory) row.firstMemory = memory; row.lastMemory = memory;
         assert.equal(memory.webContentObserved, true, 'Native process observations must remain available');
       }
@@ -164,7 +167,7 @@ try {
     // The same post-unmount QA bridge cleanup as the existing Linux driver.
     await driver.execute('delete window.__crossDeviceTest; return true;');
     row.qaInspectionBridgeReleased = true; row.complete = true;
-    record('CYCLE', { phase, ...row });
+    await record('CYCLE', { phase, ...row });
   }
   await driver.clickButton('Letzten Testbericht vorbereiten');
   await driver.clickButton('Berichtstext in Teilen anzeigen');
@@ -179,7 +182,7 @@ try {
   assert.equal(report.reportDocumentOrigin, server.origin);
   assert.equal(report.briefDiagnostics.latest.resourceCheckpoint.clockId, report.stopwatch.latest.id);
   result.normalReportVerified = true;
-  record('NORMAL_REPORT', { phase, report });
+  await record('NORMAL_REPORT', { phase, report });
   result.complete = true;
 } catch (error) {
   result.failure = { message: String(error.message).slice(0, 4096), at: new Date().toISOString() };
@@ -191,10 +194,10 @@ try {
       '--style', 'compact', '--predicate',
       'process == "MobileSafari" OR process CONTAINS[c] "WebKit" OR eventMessage CONTAINS[c] "jetsam" OR eventMessage CONTAINS[c] "WebContent"'],
       { encoding: 'utf8', timeout: 30000, maxBuffer: 2 ** 22 });
-    record('NATIVE_LOG_TAIL', { phase, lastMinutes: 3, originalCharacters: logs.length,
+    await record('NATIVE_LOG_TAIL', { phase, lastMinutes: 3, originalCharacters: logs.length,
       truncated: logs.length > 65536, text: logs.slice(-65536) });
   } catch (error) {
-    record('NATIVE_LOG_UNAVAILABLE', { phase, message: String(error.message).slice(0, 1000) });
+    await record('NATIVE_LOG_UNAVAILABLE', { phase, message: String(error.message).slice(0, 1000) });
   }
   try {
     assert.deepEqual(readSourceState(candidate), sourceState);
@@ -211,11 +214,11 @@ try {
   const driverLog = resolve(output, 'appium.log');
   if (existsSync(driverLog)) {
     const text = readFileSync(driverLog, 'utf8');
-    record('DRIVER_LOG_TAIL', { phase, originalCharacters: text.length, truncated: text.length > 65536,
+    await record('DRIVER_LOG_TAIL', { phase, originalCharacters: text.length, truncated: text.length > 65536,
       text: text.slice(-65536) });
   }
   if (server) await server.close();
   result.finishedAt = new Date().toISOString();
   writeFileSync(resolve(output, 'receipt.json'), JSON.stringify(result, null, 2) + '\n');
-  record('RESULT', result);
+  await record('RESULT', result);
 }

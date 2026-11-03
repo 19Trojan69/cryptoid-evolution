@@ -91,6 +91,38 @@ den eigenen Werkzeugpfad erst in einem Runner-Schritt und übergibt ihn mit
 Spielminute. Referenz:
 https://docs.github.com/en/actions/reference/workflows-and-actions/contexts
 
+## Appium-Verbindungsversuch ohne vorab geladene Webseite
+
+Quelle `e3ec90bb0f610b7d88fe589269f0f1400727b49c`,
+https://github.com/19Trojan69/cryptoid-evolution/actions/runs/41596611695
+
+Werkzeuginstallation, Simulatorstart, Gast-Build und die abschließende Quellen-/
+Paketprüfung bestanden. Die Appium-Sitzung scheiterte vor dem ersten Spielzyklus:
+Der Remote-Debugger meldete nach 9966 ms keine verbundenen Web-Anwendungen.
+Das ist ein Einrichtungs-/Verbindungsfehler, kein gemessener Spielabsturz.
+Die nachträgliche Prozessabfrage lief in eine eigene Zeitüberschreitung und
+liefert keinen gültigen Speicherwert. Im nativen Log abgesuchte `jetsam`-Wörter
+werden nicht als belegte Prozessbeendigung ausgelegt.
+
+Die geprüfte Treiberquelle aktiviert zuerst den aktuellen Webview und setzt
+erst danach die normale Safari-Startadresse. Ein frischer Safari-Start ohne
+bereits vorhandene Webseite ist deshalb eine konkrete, noch unbestätigte
+Erklärung für fehlende Web-Anwendungen. Die nächste Einrichtung lädt die
+vorhandene lokale Gastadresse über das dokumentierte `initialDeeplinkUrl`
+bereits beim nativen Safari-Start; eine zusätzliche anschließende Navigation
+wird vermieden. Es werden keine geratenen privaten Inspector-Schalter gesetzt.
+Quelle: `lib/driver.ts` im unveränderten XCUITest-Tag `v12.22.8` und die
+Capability-Dokumentation oben.
+
+Zudem wurde eine vermischte Ausgabe erkannt: Auf eine große asynchrone
+`console.log`-Zeile folgte die direkte Ausgabe einer synchronen Quellenprüfung.
+Die betroffene native Logzeile ist im Original erhalten und wird nicht als
+vollständig parsebares JSON umgedeutet. Neue große Belege werden in nummerierten,
+SHA-256-gebundenen Fragmenten ausgegeben. Vor der nächsten Operation wird der
+vollständige Abschluss jeder Ausgabe abgewartet. Der Offline-Prüfer
+verlangt alle Fragmente in Reihenfolge und die exakten ursprünglichen Bytes.
+Diese Änderung betrifft ausschließlich den externen Testtreiber.
+
 ## Kostenloser Ablauf
 
 Das Repository wurde vor der Einrichtung als öffentlich bestätigt. Verwendet wird
