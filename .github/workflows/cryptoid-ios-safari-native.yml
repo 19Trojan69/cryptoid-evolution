@@ -16,7 +16,7 @@ jobs:
         with: {persist-credentials: false, path: lab}
       - name: Preserve Linux source filename semantics on a case-sensitive build volume
         run: |
-          hdiutil create -size 6g -fs APFSX -type SPARSE -volname CryptoidBuild "$RUNNER_TEMP/cryptoid-build.sparseimage"
+          hdiutil create -size 6g -fs 'Case-sensitive APFS' -type SPARSE -volname CryptoidBuild "$RUNNER_TEMP/cryptoid-build.sparseimage"
           mkdir "$GITHUB_WORKSPACE/case-sensitive"
           hdiutil attach -nobrowse -mountpoint "$GITHUB_WORKSPACE/case-sensitive" "$RUNNER_TEMP/cryptoid-build.sparseimage"
           python3 - <<'PY'

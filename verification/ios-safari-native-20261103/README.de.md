@@ -43,6 +43,13 @@ zum Ende der automatischen Checkout-Aufräumarbeiten auf dem temporären Runner
 und wird mit dessen Vernichtung verworfen. Der fehlgeschlagene erste Lauf
 bleibt erhalten.
 
+Der zweite Einrichtungsversuch `3b9f4c45c0a0f10f3731a1c473ac2b1ab029b5e2`,
+https://github.com/19Trojan69/cryptoid-evolution/actions/runs/41594163423,
+endete bereits beim Erzeugen des Volumes: `hdiutil` akzeptierte das verwendete
+Formatkürzel `APFSX` nicht (`Invalid argument`). Auch dieser Lauf enthält keine
+Spielprüfung. Der korrigierte Aufruf verwendet den Dateisystemnamen
+`Case-sensitive APFS`; die echte Dateiprobe bleibt unverändert vorgeschrieben.
+
 ## Kostenloser Ablauf
 
 Das Repository wurde vor der Einrichtung als öffentlich bestätigt. Verwendet wird
