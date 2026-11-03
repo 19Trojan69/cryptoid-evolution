@@ -1,8 +1,9 @@
 # Safari-Werkzeugkontrolle ohne das Spiel
 
 Diese kurze Prüfung untersucht die noch nicht erfolgreich verbundene mobile
-Testumgebung. Sie lädt weder das Spiel noch dessen Gast-Build. Zwei unabhängige
-Standard-Mac-Runner prüfen die bereits installierten iOS-Runtimes 18.5 und 26.2.
+Testumgebung. Sie lädt weder das Spiel noch dessen Gast-Build. Die aktuelle
+Kontrolle verwendet einen Standard-Mac-Runner mit der bereits installierten
+iOS-Runtime 18.5. Frühere Kontrollen erfassten zusätzlich 26.2.
 Eine fehlende Runtime bleibt ein Vorprüfungsfehler; es werden keine SDKs
 nachgeladen oder Konten/Dienste eingerichtet.
 
@@ -31,7 +32,7 @@ Das ist eine Werkzeugkalibrierung und kein Spiel-, Stabilitäts- oder
 White-Screen-Nachweis. Die Simulatorprofile sind eigenständige
 Testkonfigurationen und erlauben keine physische Geräteabnahme.
 Alle Spiel-/Grafik-/Tonquellen und `main` bleiben unverändert.
-Die beiden Jobs verwenden ausschließlich den für das öffentliche Repository
+Die Jobs verwenden ausschließlich den für das öffentliche Repository
 kostenlosen Standard-Runner `macos-15-intel`, keine Artefakt-Uploads oder Zusatzdienste.
 
 ## Erster Kontrollversuch auf dem 7-GB-ARM-Runner
@@ -99,3 +100,36 @@ bei genau einem WDA-Startversuch; die 120-Sekunden-Verbindungsfrist, die benöti
 Webview und die echte Berührung werden nicht ersetzt oder als Erfolg umgedeutet.
 Ein eventuelles einzelnes Fehlerbild wird begrenzt, mit SHA-256 versehen und
 als reine Simulator-/Werkzeugdiagnose gekennzeichnet. Das Spiel bleibt ungeladen.
+
+
+## Erster WDA-Vorbau: Verbindung beendet, Compiler noch tätig
+
+Quelle `65258409506f659b565d71359626f3cc2520e744`,
+https://github.com/19Trojan69/cryptoid-evolution/actions/runs/41606037254
+
+Appium wurde nach 1803 ms bereit, und iOS 18.5 bootete. Die native Sitzung
+scheiterte anschließend mit `fetch failed`. Im gesicherten Ende des Xcode-
+Protokolls lief noch die statische Analyse von WebDriverAgent; ein erfolgreicher
+Abschluss war darin nicht zu sehen. Die Fehlerursache des HTTP-Transports wurde
+in dieser Fassung nicht erfasst. Ein bestimmter HTTP-Timeout oder Speichermangel
+ist deshalb nicht bewiesen. Die Fehleraufnahme wurde zwar erzeugt, überschritt
+aber die eigene 2-MiB-Grenze und wurde ausdrücklich nicht gesichert.
+Auch dieser Versuch hat weder die Kontrollseite noch das Spiel erreicht.
+
+Die nächste Fassung baut die tatsächlich installierte WebDriverAgent-Version
+in einem eigenen `xcodebuild build-for-testing`-Unterprozess **vor** dem Booten
+des Simulators und **vor** der HTTP-Sitzungsanforderung. Sie führt keine
+zusätzliche `analyze`-Aktion aus. Projekt und Version werden aus der tatsächlich
+installierten Treiberabhängigkeit ermittelt; der Simulator verwendet keine
+Signierkonten (`CODE_SIGNING_ALLOWED=NO`). Nach spätestens sechs Minuten wird
+der Compiler beendet. Rückgabecode, Signal, Dauer, SHA-256 und bis zu 2 MiB
+Compilerprotokoll werden getrennt erfasst. Erst Rückgabecode 0 ohne Signal
+erlaubt den nächsten Schritt.
+
+Danach verwendet Appium `usePrebuiltWDA:true` und genau denselben
+`derivedDataPath`. Es bleibt bei einem Startversuch und 120 Sekunden
+WDA-Verbindungsfrist. Die HTTP-Sitzungsanforderung hat ein getrenntes
+Vier-Minuten-Budget; Transportfehler erfassen nun auch ihre `cause`-Information.
+Die native Kontrollseite und die vertrauenswürdige Berührung bleiben zwingend.
+Ein einzelnes Fehlerbild verwendet das native JPEG-Ausgabeformat, mit derselben
+2-MiB-Grenze; ein fehlendes Bild wird weiterhin als fehlend erfasst.
