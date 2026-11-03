@@ -62,6 +62,19 @@
       "name": "environment-prebuild-18.5.log",
       "kind": "environment-failure",
       "gitBlobSha": "9cf1ee257435f810cc79c4df4560c359e0252afd"
+    },
+    {
+      "name": "environment-explicit-build-discovery-18.5.log",
+      "kind": "dependency-discovery-failure",
+      "gitBlobSha": "c95e3da1164e23ecce4e4175340105f577f87878"
+    },
+    {
+      "name": "environment-native-page-no-webview-18.5.log",
+      "kind": "environment-failure",
+      "gitBlobSha": "f9ea5ec76b905894b0f7a04b8dc8a272d5e08def",
+      "expectedNativeSession": true,
+      "expectedWdaBuild": true,
+      "expectedFailureScreenshot": true
     }
   ]
 }

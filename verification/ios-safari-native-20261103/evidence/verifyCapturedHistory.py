@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import hashlib
+import base64
 import importlib.util
 import json
 from pathlib import Path
@@ -17,7 +18,9 @@ def verify() -> dict:
     assert index['syntheticCiDataOnly'] is True
     assert index['rawOwnerReportsIncluded'] is False
     assert len({entry['name'] for entry in index['logs']}) == len(index['logs'])
-    summary = {'version': 1, 'integrityVerified': False, 'phoneAcceptance': False,
+    summary = {'version': 2, 'captureBlobIntegrityVerified': False,
+               'acceptedStructuredRecordsIntegrityVerified': False,
+               'allOriginalStructuredRecordsVerified': False, 'phoneAcceptance': False,
                'whiteScreenFixed': False, 'newMobileGameCyclesCompleted': 0, 'captures': []}
     for entry in index['logs']:
         assert Path(entry['name']).name == entry['name']
@@ -25,6 +28,7 @@ def verify() -> dict:
         digest = hashlib.sha1(('blob ' + str(len(raw)) + '\0').encode() + raw).hexdigest()
         assert digest == entry['gitBlobSha'], entry['name']
         preserved_malformed = 0
+        preserved_compiler_hash_mismatches = 0
         parse_input = raw
         if entry['name'] == 'appium-no-webview.log':
             # Accept only this exact historical byte capture. Its original
@@ -42,7 +46,42 @@ def verify() -> dict:
                 lines.append(line)
             assert preserved_malformed == 1
             parse_input = ('\n'.join(lines) + '\n').encode('utf-8')
+        if entry['name'] == 'environment-native-page-no-webview-18.5.log':
+            # The delivered compiler record contains an explicitly masked export
+            # block. Its sender hash fails. Preserve the entire original job log
+            # but exclude only this exact, pinned, disclosed compiler record.
+            assert digest == 'f9ea5ec76b905894b0f7a04b8dc8a272d5e08def'
+            lines, parts = [], []
+            expected = '21ffe03811d9733c4421fcaac32415366222f6afb9dd03ad77315737cf8c21b3'
+            for line in raw.decode('utf-8-sig').splitlines():
+                match = module.MARKER.match(line)
+                if match and match[1] == 'CHUNK':
+                    value = json.loads(match[2])
+                    if value['kind'] == 'ENVIRONMENT_WDA_BUILD_LOG':
+                        assert value['id'] == '1-ENVIRONMENT_WDA_BUILD_LOG'
+                        assert value['total'] == 1053 and value['index'] == len(parts)
+                        assert value['sha256'] == expected
+                        parts.append(value['data'])
+                        continue
+                lines.append(line)
+            assert len(parts) == 1053
+            received = ''.join(parts)
+            assert hashlib.sha256(received.encode()).hexdigest() == '2dcbe2202ca7c14b68f465097e535db9edbf31f18e2ce4869fe8a82624ab51b9'
+            assert hashlib.sha256(received.encode()).hexdigest() != expected
+            compiler = json.loads(received)
+            assert 'export ***    export RCT_NO_LAUNCH_PACKAGER=1' in compiler['text']
+            assert compiler['logTruncated'] is True
+            preserved_compiler_hash_mismatches = 1
+            parse_input = ('\n'.join(lines) + '\n').encode('utf-8')
         events = module.read_events(parse_input)
+        failure_images = [value for kind, value in events if kind == 'ENVIRONMENT_FAILURE_SCREENSHOT']
+        for value in failure_images:
+            assert value['capturedAfterFailure'] is True and value['gameLoaded'] is False
+            assert value['mimeType'] == 'image/jpeg'
+            image_bytes = base64.b64decode(value['base64'], validate=True)
+            assert len(image_bytes) == value['bytes'] <= 2 ** 21
+            assert hashlib.sha256(image_bytes).hexdigest() == value['sha256']
+            assert image_bytes.startswith(b'\xff\xd8\xff') and image_bytes.endswith(b'\xff\xd9')
         native = [value for kind, value in events if kind == 'RESULT']
         controls = [value for kind, value in events if kind == 'ENVIRONMENT_RESULT']
         if entry['kind'].startswith('native-game-flow-failed-before-cycle'):
@@ -52,12 +91,22 @@ def verify() -> dict:
             assert native[0]['sourceTree'] == '99092ec24e843fb1e419dc382bc2523a4edc0b42'
             assert native[0]['sourceAndPackageUnchangedVerified'] is True
             assert native[0]['whiteScreenFixed'] is False
+        elif entry['kind'] == 'dependency-discovery-failure':
+            assert native == [] and controls == []
+            assert 'ERR_PACKAGE_PATH_NOT_EXPORTED' in raw.decode('utf-8-sig')
+            assert 'appium-webdriveragent/package.json' in raw.decode('utf-8-sig')
         elif entry['kind'].startswith('environment-'):
             assert len(controls) == 1
             value = controls[0]
             assert value['complete'] is entry.get('expectedComplete', False)
             assert value['gameLoaded'] is False and value['gameFilesEdited'] is False
             assert value['physicalDevice'] is False and value['whiteScreenFixed'] is False
+            if 'expectedNativeSession' in entry:
+                assert value.get('nativeSessionCreated', False) is entry['expectedNativeSession']
+            if 'expectedWdaBuild' in entry:
+                assert value.get('wdaBuildCompleted', False) is entry['expectedWdaBuild']
+            if 'expectedFailureScreenshot' in entry:
+                assert bool(failure_images) is entry['expectedFailureScreenshot']
             if value['complete']:
                 assert value['trustedNativeProbeTapVerified'] is True
                 assert value['nativeTapAttempted'] is True
@@ -67,6 +116,7 @@ def verify() -> dict:
         summary['captures'].append({'name': entry['name'], 'bytes': len(raw),
             'gitBlobSha': digest, 'sha256': hashlib.sha256(raw).hexdigest(),
             'parsedRecords': len(events), 'knownMalformedNativeRecordsPreserved': preserved_malformed,
+            'knownCompilerRecordsWithSenderHashMismatchPreserved': preserved_compiler_hash_mismatches,
             'nativeComplete': native[0]['complete'] if native else None,
             'environmentComplete': controls[0]['complete'] if controls else None})
     scope = json.loads((ROOT / 'source-scope.json').read_text())
@@ -84,7 +134,12 @@ def verify() -> dict:
     comparison = json.loads((ROOT / 'mac-linux-scripts-comparison.json').read_text())
     assert comparison['macBuildJsCssFiles'] == 11 and len(comparison['earlierLinuxComparisons']) == 6
     assert all(row['sameScriptsAndStyles'] is True for row in comparison['earlierLinuxComparisons'])
-    summary['integrityVerified'] = True
+    summary['captureBlobIntegrityVerified'] = True
+    summary['acceptedStructuredRecordsIntegrityVerified'] = True
+    summary['allOriginalStructuredRecordsVerified'] = all(
+        not row['knownMalformedNativeRecordsPreserved']
+        and not row['knownCompilerRecordsWithSenderHashMismatchPreserved']
+        for row in summary['captures'])
     return summary
 
 

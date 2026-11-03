@@ -1,6 +1,8 @@
 {
-  "version": 1,
-  "integrityVerified": true,
+  "version": 2,
+  "captureBlobIntegrityVerified": true,
+  "acceptedStructuredRecordsIntegrityVerified": true,
+  "allOriginalStructuredRecordsVerified": false,
   "phoneAcceptance": false,
   "whiteScreenFixed": false,
   "newMobileGameCyclesCompleted": 0,
@@ -12,6 +14,7 @@
       "sha256": "8b319fcf5911f362a7b1200dc0ac840a8b01b0454202476f1355158a6836f988",
       "parsedRecords": 2,
       "knownMalformedNativeRecordsPreserved": 0,
+      "knownCompilerRecordsWithSenderHashMismatchPreserved": 0,
       "nativeComplete": null,
       "environmentComplete": null
     },
@@ -22,6 +25,7 @@
       "sha256": "f08255c725221bc2cafc531e30ed89dfd8f7e4d3bd9a41b6a7739779066af405",
       "parsedRecords": 1,
       "knownMalformedNativeRecordsPreserved": 0,
+      "knownCompilerRecordsWithSenderHashMismatchPreserved": 0,
       "nativeComplete": null,
       "environmentComplete": null
     },
@@ -32,6 +36,7 @@
       "sha256": "3e48e01e250f580f04be4bfd290b56d9cc52d7802e20346d1cc838bc75181055",
       "parsedRecords": 4,
       "knownMalformedNativeRecordsPreserved": 0,
+      "knownCompilerRecordsWithSenderHashMismatchPreserved": 0,
       "nativeComplete": false,
       "environmentComplete": null
     },
@@ -42,6 +47,7 @@
       "sha256": "61d0da5ed681d0a0a754b32b6c79c11a9a2fd06fefbded18d04cee30c119d7d5",
       "parsedRecords": 4,
       "knownMalformedNativeRecordsPreserved": 1,
+      "knownCompilerRecordsWithSenderHashMismatchPreserved": 0,
       "nativeComplete": false,
       "environmentComplete": null
     },
@@ -52,6 +58,7 @@
       "sha256": "3bba43a8467a7cc49b31819f50ef05e7071909996ca74829a984bf793ccb2d6a",
       "parsedRecords": 5,
       "knownMalformedNativeRecordsPreserved": 0,
+      "knownCompilerRecordsWithSenderHashMismatchPreserved": 0,
       "nativeComplete": false,
       "environmentComplete": null
     },
@@ -62,6 +69,7 @@
       "sha256": "7f654f36c9c538b2257fcfca167190e8b8a45930a80d4c68215ff94411f6bba5",
       "parsedRecords": 3,
       "knownMalformedNativeRecordsPreserved": 0,
+      "knownCompilerRecordsWithSenderHashMismatchPreserved": 0,
       "nativeComplete": null,
       "environmentComplete": false
     },
@@ -72,6 +80,7 @@
       "sha256": "6f808c910d2ca289684ae89866fd22dd9d41d7ff79527a95d05e8255a772e71f",
       "parsedRecords": 3,
       "knownMalformedNativeRecordsPreserved": 0,
+      "knownCompilerRecordsWithSenderHashMismatchPreserved": 0,
       "nativeComplete": null,
       "environmentComplete": false
     },
@@ -82,6 +91,7 @@
       "sha256": "8baebeda2600bc8d9e96ae7cf712c5320946bed1e8ea7676b628f23a823ca5bf",
       "parsedRecords": 3,
       "knownMalformedNativeRecordsPreserved": 0,
+      "knownCompilerRecordsWithSenderHashMismatchPreserved": 0,
       "nativeComplete": null,
       "environmentComplete": false
     },
@@ -92,6 +102,7 @@
       "sha256": "941327e5dfebff344a3fa606471e708baff77e555628b530a6d6b4667655d766",
       "parsedRecords": 3,
       "knownMalformedNativeRecordsPreserved": 0,
+      "knownCompilerRecordsWithSenderHashMismatchPreserved": 0,
       "nativeComplete": null,
       "environmentComplete": false
     },
@@ -102,6 +113,7 @@
       "sha256": "983dea20ed5dddd3cf642bb0f5738d7bb9e7192ea4d738c80eb66babed165532",
       "parsedRecords": 5,
       "knownMalformedNativeRecordsPreserved": 0,
+      "knownCompilerRecordsWithSenderHashMismatchPreserved": 0,
       "nativeComplete": null,
       "environmentComplete": false
     },
@@ -112,6 +124,7 @@
       "sha256": "693ffca55e11ca11b6c444f572f361f4cc7a2821ca61815378dbf7b51f56d695",
       "parsedRecords": 5,
       "knownMalformedNativeRecordsPreserved": 0,
+      "knownCompilerRecordsWithSenderHashMismatchPreserved": 0,
       "nativeComplete": null,
       "environmentComplete": false
     },
@@ -122,6 +135,29 @@
       "sha256": "e7c58e36cb5cd1faad8b520f87091979f2605a3006fadee1c1a00aaab4e09241",
       "parsedRecords": 5,
       "knownMalformedNativeRecordsPreserved": 0,
+      "knownCompilerRecordsWithSenderHashMismatchPreserved": 0,
+      "nativeComplete": null,
+      "environmentComplete": false
+    },
+    {
+      "name": "environment-explicit-build-discovery-18.5.log",
+      "bytes": 29369,
+      "gitBlobSha": "c95e3da1164e23ecce4e4175340105f577f87878",
+      "sha256": "da79c48a6f4c1065e8432af230ea775adf6de23cccc419cb6c6f33945a3c509f",
+      "parsedRecords": 1,
+      "knownMalformedNativeRecordsPreserved": 0,
+      "knownCompilerRecordsWithSenderHashMismatchPreserved": 0,
+      "nativeComplete": null,
+      "environmentComplete": null
+    },
+    {
+      "name": "environment-native-page-no-webview-18.5.log",
+      "bytes": 2719701,
+      "gitBlobSha": "f9ea5ec76b905894b0f7a04b8dc8a272d5e08def",
+      "sha256": "5eafceb685696f6f1883e1eb95dbb9cd08af706a87fbeb20bdc88a5a645b785d",
+      "parsedRecords": 11,
+      "knownMalformedNativeRecordsPreserved": 0,
+      "knownCompilerRecordsWithSenderHashMismatchPreserved": 1,
       "nativeComplete": null,
       "environmentComplete": false
     }

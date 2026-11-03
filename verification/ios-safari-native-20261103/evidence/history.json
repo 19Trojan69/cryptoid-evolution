@@ -118,6 +118,33 @@
       "stage": "Simulator booted; native session fetch failed while the captured compiler tail still contained static analysis; transport cause not captured",
       "gameLoaded": false,
       "failureScreenshotEmitted": false
+    },
+    {
+      "source": "47bed1ef078f74567f849fd0b70d2616cb4d1c78",
+      "runId": 41609401004,
+      "jobId": 125827208488,
+      "runtime": "18.5",
+      "result": "failure",
+      "stage": "Test harness project lookup failed with ERR_PACKAGE_PATH_NOT_EXPORTED before the explicit build, simulator boot or native session",
+      "gameLoaded": false,
+      "structuredEnvironmentResultEmitted": false
+    },
+    {
+      "source": "84687baee154b00dc8afbb6898210071c80bd15d",
+      "runId": 41610544065,
+      "jobId": 125831033838,
+      "runtime": "18.5",
+      "result": "failure",
+      "stage": "WDA build, native iOS Safari session and visible local page passed; inspectable web context absent; no tap attempted",
+      "gameLoaded": false,
+      "wdaBuildCompleted": true,
+      "wdaBuildMs": 136875,
+      "nativeSessionCreated": true,
+      "nativeSourceRead": true,
+      "compilerLogTruncated": true,
+      "postFailureSimulatorScreenshot": true,
+      "compilerRecordSenderHashVerified": false,
+      "maskedCompilerExportBlockPresent": true
     }
   ],
   "limits": [
@@ -125,16 +152,16 @@
     "Native simulator logs and host memory are not a cause diagnosis for an owner's phone.",
     "Original owner diagnostics and identifying owner device facts are excluded from this public evidence."
   ],
-  "snapshotAt": "2026-11-03T09:15:22.658Z",
+  "snapshotAt": "2026-11-03T09:51:04.057Z",
   "pending": {
-    "source": "47bed1ef078f74567f849fd0b70d2616cb4d1c78",
-    "runId": 41609401004,
+    "source": "8a453df0d354c3a6bbe1c3c0e8c1fb94e94d551d",
+    "runId": 41613247477,
     "runtime": "18.5",
     "runner": "macos-15-intel",
     "gameLoaded": false,
-    "description": "Explicit build-for-testing before simulator boot and before HTTP session; outcome pending",
+    "description": "Safari browser mode with the same proven WDA build and local initial URL; outcome pending",
     "jobIds": [
-      125827208488
+      125840192820
     ]
   }
 }

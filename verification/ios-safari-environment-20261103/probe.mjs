@@ -3,10 +3,10 @@ import { createServer } from 'node:http';
 import { createHash } from 'node:crypto';
 import { execFileSync, spawn } from 'node:child_process';
 import { mkdirSync, readFileSync, writeFileSync, openSync, closeSync, existsSync } from 'node:fs';
-import { createRequire } from 'node:module';
-import { resolve, dirname } from 'node:path';
+import { resolve } from 'node:path';
 import { SafariClient, delay } from '../ios-safari-native-20261103/safariClient.mjs';
 import { createEvidenceWriter } from '../ios-safari-native-20261103/evidenceOutput.mjs';
+import { locateWda } from './locateWda.mjs';
 
 assert.equal(process.platform, 'darwin');
 const [outputArg, version] = process.argv.slice(2);
@@ -24,18 +24,11 @@ const appiumHome = resolve(process.env.RUNNER_TEMP, 'cryptoid-appium-home');
 assert.equal(process.env.APPIUM_HOME, appiumHome);
 assert.equal(JSON.parse(readFileSync(resolve(toolsRoot, 'node_modules/appium/package.json'))).version, '3.9.0');
 assert.equal(JSON.parse(readFileSync(resolve(appiumHome, 'node_modules/appium-xcuitest-driver/package.json'))).version, '12.22.8');
-const driverRequire = createRequire(resolve(appiumHome, 'node_modules/appium-xcuitest-driver/package.json'));
-let wdaRoot = dirname(driverRequire.resolve('appium-webdriveragent'));
-while (!existsSync(resolve(wdaRoot, 'WebDriverAgent.xcodeproj'))) {
-  assert.notEqual(wdaRoot, dirname(wdaRoot), 'The installed WebDriverAgent project must exist');
-  wdaRoot = dirname(wdaRoot);
-}
-const wdaVersion = JSON.parse(readFileSync(resolve(wdaRoot, 'package.json'))).version;
 const derivedDataPath = resolve(output, 'wda-derived-data');
 const result = { version: 1, kind: 'Safari toolchain calibration without the game', complete: false,
   requestedRuntimeVersion: version, startedAt: new Date().toISOString(), gameLoaded: false,
   gameFilesEdited: false, physicalDevice: false, whiteScreenFixed: false,
-  tools: { appium: '3.9.0', xcuitest: '12.22.8', webdriveragent: wdaVersion }, nativeTapAttempted: false,
+  tools: { appium: '3.9.0', xcuitest: '12.22.8' }, nativeTapAttempted: false,
   activeScreenshots: false, postFailureSimulatorScreenshot: false,
   limits: ['A simulator and a constant local HTML page, not Cryptoid Evolution or a phone acceptance test.',
     'Reading native accessibility XML can expose first-launch UI; no unknown dialogs are accepted.',
@@ -45,6 +38,9 @@ let udid, server, driverProcess, driver, logFd;
 const hostSnapshot = () => ({ at: new Date().toISOString(), vmStat: execute('vm_stat', []),
   swapUsage: execute('sysctl', ['vm.swapusage']), hostMemoryBytes: Number(execute('sysctl', ['-n', 'hw.memsize'])) });
 try {
+  const { root: wdaRoot, version: wdaVersion } = locateWda(resolve(appiumHome,
+    'node_modules/appium-xcuitest-driver/package.json'));
+  result.tools.webdriveragent = wdaVersion;
   result.hostBefore = hostSnapshot();
   result.hostArchitecture = execute('uname', ['-m']);
   // Bring up the transport before the simulator competes for resources.
@@ -130,10 +126,12 @@ try {
   await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
   const origin = 'http://127.0.0.1:' + server.address().port;
   result.probeOrigin = origin;
-  // Deliberately start in NATIVE_APP. This avoids waiting for a Web Inspector
-  // page before we can read which Safari screen the clean simulator displays.
+  // Native mode previously proved that Safari visibly loaded this exact page,
+  // but exposed no inspectable web context. Test the driver's Safari startup
+  // path with the same independently successful WDA build and connection gates.
   const session = await driver.request('POST', '/session', { capabilities: { alwaysMatch: {
-    platformName: 'iOS', 'appium:automationName': 'XCUITest', 'appium:udid': udid,
+    browserName: 'Safari', platformName: 'iOS', 'appium:automationName': 'XCUITest', 'appium:udid': udid,
+    'appium:initialDeeplinkUrl': origin, 'appium:safariInitialUrl': origin,
     'appium:deviceName': 'iPhone 16 Pro Max', 'appium:platformVersion': version,
     'appium:bundleId': 'com.apple.mobilesafari', 'appium:includeSafariInWebviews': true,
     'appium:nativeWebTap': true, 'appium:disableAutomaticScreenshots': true,
@@ -144,7 +142,10 @@ try {
   } } }, 240000);
   driver.session = session.sessionId; assert.ok(driver.session);
   assert.equal(String(session.capabilities.platformName).toLowerCase(), 'ios');
+  assert.equal(String(session.capabilities.browserName).toLowerCase(), 'safari');
   result.nativeSessionCreated = true; result.capabilities = session.capabilities;
+  result.safariBrowserSessionCreated = true;
+  await driver.command('POST', '/context', { name: 'NATIVE_APP' });
   await record('ENVIRONMENT_NATIVE_SOURCE_BEFORE', { version, xml: await driver.command('GET', '/source') });
   result.nativeSourceRead = true;
   await driver.execute('mobile: deepLink', [{ url: origin, bundleId: 'com.apple.mobilesafari' }]);

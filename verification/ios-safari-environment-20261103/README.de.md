@@ -133,3 +133,58 @@ Vier-Minuten-Budget; Transportfehler erfassen nun auch ihre `cause`-Information.
 Die native Kontrollseite und die vertrauenswürdige Berührung bleiben zwingend.
 Ein einzelnes Fehlerbild verwendet das native JPEG-Ausgabeformat, mit derselben
 2-MiB-Grenze; ein fehlendes Bild wird weiterhin als fehlend erfasst.
+
+
+## WDA-Projektsuche korrigiert und vor dem Mac-Lauf geprüft
+
+Quelle `47bed1ef078f74567f849fd0b70d2616cb4d1c78`,
+https://github.com/19Trojan69/cryptoid-evolution/actions/runs/41609401004
+
+SDK-Katalog und Werkzeuginstallation bestanden. Die folgende Projektsuche mit
+`require.resolve('appium-webdriveragent')` scheiterte jedoch sofort mit
+`ERR_PACKAGE_PATH_NOT_EXPORTED`: Das installierte Paket bietet keinen
+CommonJS-Haupteinstieg an. Das war ein Fehler des Testskripts vor Appium-Start,
+WDA-Bau, Simulator-Boot und Spielzugriff. Es gab daher noch keinen
+`ENVIRONMENT_RESULT`-Datensatz; das vollständige Jobprotokoll bleibt erhalten.
+
+Die korrigierte Suche liest Projektdaten über die tatsächlichen
+Abhängigkeitssuchpfade des installierten XCUITest-Treibers, ohne das Paket als
+CommonJS-Modul zu laden. Sie verlangt den passenden Paketnamen, eine Version
+und das vorhandene Xcode-Projekt. Zwei lokale Tests bestätigen verschachtelte
+und hochgezogene ESM-only-Pakete sowie die Ablehnung eines unvollständigen
+Pakets. Dieselben Tests laufen im Workflow vor jeder Werkzeuginstallation.
+Die Projektsuche liegt nun außerdem innerhalb des strukturiert protokollierten
+Fehlerpfads. Keine Bau-, Safari-, Touch- oder Spielbedingung wurde gelockert.
+
+
+## WDA-Bau und native Safari-Sitzung bestanden, Webkontext fehlt
+
+Quelle `84687baee154b00dc8afbb6898210071c80bd15d`,
+https://github.com/19Trojan69/cryptoid-evolution/actions/runs/41610544065
+
+Die Vorprüfungen bestanden. Die tatsächlich installierte WebDriverAgent-Version
+ist 16.17.7; deren separater Bau endete nach 136875 ms mit Rückgabecode 0 und
+`TEST BUILD SUCCEEDED`. Die vollständige lokale Compilerdatei hatte 3148545
+Byte; gesichert ist ausdrücklich nur ihr Ende von maximal 2 MiB samt Länge
+und SHA-256 der vollständigen lokalen Datei. Das ist keine vollständige
+Aufbewahrung der Compilerdatei.
+
+Simulator-Boot, native iOS-Sitzung und Lesen der Accessibility-XML bestanden.
+Nach dem lokalen Deep Link belegen XML und genau ein erst nach dem Fehlschlag
+erstelltes JPEG die geladene konstante Kontrollseite. Das JPEG hat 133627 Byte;
+sein SHA-256 ist
+`b87e24a04c3c2716fbf6050ed76db4c68dd1201c10ec47931f194a92ba7c007b`.
+Es gab keinen Einführungsdialog. Die Kontextabfrage lieferte jedoch nur
+`NATIVE_APP`, keinen inspizierbaren Webkontext. Die zwingende DOM-/Touch-Prüfung
+wurde daher nicht erreicht; `complete` bleibt falsch und das Spiel ungeladen.
+
+Die veröffentlichte npm-Quelle von XCUITest 12.22.8 wurde zusätzlich gegen ihre
+npm-SHA-512-Integritätsangabe geprüft (Archiv-SHA-256:
+`59861cb31678fd630aba8aa22ccd7683a731240e457e7ae44af1c3e97abf38bd`).
+Deren `configureAUT()` setzt den Safari-Modus ausschließlich bei
+`browserName: Safari`; dieser Wert fließt auch in den Remote-Debugger ein.
+Die folgende Variante prüft deshalb diesen Browsermodus mit demselben lokalen
+Anfangslink. Anschließend wird für die native Quellenprüfung ausdrücklich auf
+`NATIVE_APP` umgeschaltet. WDA-Bau, Startbudgets, DOM-Abgleich und genau eine
+vertrauenswürdige Berührung bleiben unverändert. Das ist ein gezielter
+Werkzeugvergleich, keine bereits bewiesene Ursache des fehlenden Webkontexts.
