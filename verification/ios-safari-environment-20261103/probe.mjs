@@ -133,7 +133,7 @@ try {
     browserName: 'Safari', platformName: 'iOS', 'appium:automationName': 'XCUITest', 'appium:udid': udid,
     'appium:initialDeeplinkUrl': origin, 'appium:safariInitialUrl': origin,
     'appium:deviceName': 'iPhone 16 Pro Max', 'appium:platformVersion': version,
-    'appium:bundleId': 'com.apple.mobilesafari', 'appium:includeSafariInWebviews': true,
+    'appium:includeSafariInWebviews': true,
     'appium:nativeWebTap': true, 'appium:disableAutomaticScreenshots': true,
     'appium:skipLogCapture': true, 'appium:safariGarbageCollect': false,
     'appium:usePrebuiltWDA': true, 'appium:derivedDataPath': derivedDataPath, 'appium:showXcodeLog': true,

@@ -188,3 +188,37 @@ Anfangslink. Anschließend wird für die native Quellenprüfung ausdrücklich au
 `NATIVE_APP` umgeschaltet. WDA-Bau, Startbudgets, DOM-Abgleich und genau eine
 vertrauenswürdige Berührung bleiben unverändert. Das ist ein gezielter
 Werkzeugvergleich, keine bereits bewiesene Ursache des fehlenden Webkontexts.
+
+## Safari-Browsermodus: widersprüchliche App-Kennung entfernt
+
+Quelle `8a453df0d354c3a6bbe1c3c0e8c1fb94e94d551d`,
+https://github.com/19Trojan69/cryptoid-evolution/actions/runs/41613247477
+
+Die Vorprüfungen und der getrennte WDA-Bau bestanden erneut. Der Versuch
+scheiterte danach bereits beim Anlegen der Sitzung mit der ausdrücklichen
+Treiberprüfung `'browserName' cannot be set together with 'bundleId' capability`.
+Das ist ein Konfigurationsfehler dieses Testskripts; eine native Safari-Sitzung,
+ein Webkontext und die Kontrollberührung wurden in diesem Lauf nicht erreicht.
+Die nachträgliche Simulatoraufnahme lief in ihr eigenes Zeitlimit und fehlt.
+Der Lauf ist insgesamt fehlgeschlagen; das Spiel wurde nicht geladen.
+
+Die folgende Fassung entfernt genau die explizite `appium:bundleId`-Capability
+aus dem Safari-Browserstart. Der App-Name bleibt nur im späteren `mobile: deepLink`-
+Befehl erhalten, wo er die bereits laufende Safari-App bezeichnet. Browsermodus,
+lokale Anfangsadresse, WDA-Vorbau und Startbudgets bleiben gleich. DOM-Abgleich
+und genau eine native, vertrauenswürdige Berührung sind weiterhin zwingend.
+Die bereits vorhandene `SafariClient.start()`-Konfiguration kombiniert den
+Safari-Browsernamen ebenfalls nicht mit einer App-Kennung.
+
+Die acht lokal gelesenen Testdateien stimmen vor der Änderung mit ihren
+Git-Blob-IDs überein. Das gelieferte Jobprotokoll hat 2398138 Byte und SHA-256
+`58b5b83ed5fbbf37d9fa0342d4582068a8c12dc291ab0736c4fd7ff48077c092`.
+Die strenge Fragmentprüfung lehnt dieses Protokoll ab; es wird ausdrücklich
+nicht als vollständig integritätsbestätigter Capture bezeichnet. Der einzeln
+lesbare Schlussdatensatz enthält den oben genannten Konfigurationsfehler.
+Die bekannte Lücke im großen Compilerblock wird nicht rekonstruiert.
+
+Die ursprünglichen Verzeichnisse `frontend`, `backend`, `api`, `assets` und
+`private-preview` besitzen weiterhin exakt die Git-Objekt-IDs des eingefrorenen
+Spielstands `ac98e95166b0e2013186257904da46323840dab5`. Es gibt keine Änderung
+an Spielmechanik, Grafik oder Ton und kein neues Vercel-Deployment.
