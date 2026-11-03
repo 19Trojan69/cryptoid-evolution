@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "runId": 41667317065,
+  "jobId": 126025998506,
+  "testCommit": "838636a05c7dd8de9283d321de0175a15a5be4e3",
+  "conclusion": "failure",
+  "gameLoaded": false,
+  "controlVerified": false,
+  "gamePilotAttempted": false,
+  "sharedSessionHandoffExercised": false,
+  "whiteScreenFixed": false,
+  "physicalDevice": false,
+  "syntheticGuestDataOnly": true,
+  "archive": {
+    "file": "job-126025998506.log.gz",
+    "bytes": 79749,
+    "sha256": "9d488bcd4d50aa658e2fede447b03d431f05f0fca3b06c1110c37f9486c59e07",
+    "rawBytes": 2443470,
+    "rawSha256": "f129f8249b51ab5eef0b77b963abe535fab5878726496ab7716e59308d8b666c"
+  },
+  "chunkChecks": [
+    {
+      "id": "1-ENVIRONMENT_WDA_BUILD_LOG",
+      "kind": "ENVIRONMENT_WDA_BUILD_LOG",
+      "expectedFragments": 1053,
+      "deliveredFragments": 1053,
+      "expectedSha256": "7e29a12256d197d8ec319c2f51b457bee84e8cb3121ee30057df4368b774c95d",
+      "actualSha256": "88d68c02902032851574a6edbd702346a7d7f6a18c4f2194ec77f8be4dad5f30",
+      "accepted": false
+    },
+    {
+      "id": "2-ENVIRONMENT_DRIVER_LOG",
+      "kind": "ENVIRONMENT_DRIVER_LOG",
+      "expectedFragments": 9,
+      "deliveredFragments": 9,
+      "expectedSha256": "fb30d58828c1f8922f6264d9e5fd044ec0265e2d3e8ed124a3e455b40a263bdc",
+      "actualSha256": "fb30d58828c1f8922f6264d9e5fd044ec0265e2d3e8ed124a3e455b40a263bdc",
+      "accepted": true
+    }
+  ]
+}

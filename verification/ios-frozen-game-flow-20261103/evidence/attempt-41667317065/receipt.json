@@ -1,0 +1,69 @@
+{
+  "version": 1,
+  "kind": "Frozen original guest game after verified Safari startup",
+  "complete": false,
+  "requestedRuntimeVersion": "18.5",
+  "startedAt": "2026-11-03T15:55:30.197Z",
+  "gameLoaded": false,
+  "gameFilesEdited": false,
+  "physicalDevice": false,
+  "whiteScreenFixed": false,
+  "tools": {
+    "appium": "3.9.0",
+    "xcuitest": "12.22.8",
+    "webdriveragent": "16.17.7"
+  },
+  "nativeTapAttempted": false,
+  "activeScreenshots": false,
+  "postFailureSimulatorScreenshot": false,
+  "limits": [
+    "Apple iOS simulator Safari: a constant-page gate followed by the unchanged frozen guest game, not a phone acceptance test.",
+    "Reading native accessibility XML can expose first-launch UI; no unknown dialogs are accepted.",
+    "No active screenshots or video. A single simulator image may be captured only after failure, without the game loaded.",
+    "No forced GC, payment, account or device-provider service is used."
+  ],
+  "hostBefore": {
+    "at": "2026-11-03T15:55:30.198Z",
+    "vmStat": "Mach Virtual Memory Statistics: (page size of 4096 bytes)\nPages free:                              148244.\nPages active:                           1079664.\nPages inactive:                         1189883.\nPages speculative:                       773291.\nPages throttled:                              0.\nPages wired down:                        477788.\nPages purgeable:                          18229.\n\"Translation faults\":                  58547226.\nPages copy-on-write:                    2565497.\nPages zero filled:                     44645539.\nPages reactivated:                        14727.\nPages purged:                              7679.\nFile-backed pages:                      2481042.\nAnonymous pages:                         561796.\nPages stored in compressor:                   0.\nPages occupied by compressor:                 0.\nDecompressions:                               0.\nCompressions:                                 0.\nPageins:                                1088461.\nPageouts:                                     2.\nSwapins:                                      0.\nSwapouts:                                     0.",
+    "swapUsage": "vm.swapusage: total = 0.00M  used = 0.00M  free = 0.00M  (encrypted)",
+    "hostMemoryBytes": 15032385536
+  },
+  "hostArchitecture": "x86_64",
+  "serverProcessId": 17380,
+  "serverStartupMs": 1829,
+  "preinitializedCatalogueBytes": 256038,
+  "simulator": {
+    "udid": "5740C28F-CA8A-4768-B59E-6B268FD74ED9",
+    "runtime": {
+      "version": "18.5",
+      "identifier": "com.apple.CoreSimulator.SimRuntime.iOS-18-5",
+      "buildversion": "22F77"
+    },
+    "deviceType": "com.apple.CoreSimulator.SimDeviceType.iPhone-16-Pro-Max"
+  },
+  "wdaBuild": {
+    "code": 0,
+    "signal": null,
+    "timedOut": false,
+    "elapsedMs": 162530,
+    "logBytes": 3139194,
+    "logSha256": "334f1313debb821b2ff67b1274c8bba60af51eaa43a987df7905fd9d1206cab9",
+    "logTruncated": true
+  },
+  "wdaBuildCompleted": true,
+  "simulatorBooted": true,
+  "probeOrigin": "http://127.0.0.1:49738",
+  "controlPagePreopened": true,
+  "wdaInitialDeeplinkRequested": false,
+  "preopenedPageResetSuppressed": true,
+  "failure": "The operation was aborted due to timeout",
+  "failureScreenshotUnavailable": "xcrun [\"simctl\",\"io\",\"5740C28F-CA8A-4768-B59E-6B268FD74ED9\",\"screenshot\",\"--type=jpeg\",\"/Users/runner/work/cryptoid-evolution/cryptoid-evolution/lab/verification/ios-frozen-game-flow-20261103/results/18.5/simulator-after-failure.jpeg\"] failed after 20006 ms: spawnSync xcrun ETIMEDOUT",
+  "failureNativeLogUnavailable": "xcrun [\"simctl\",\"spawn\",\"5740C28F-CA8A-4768-B59E-6B268FD74ED9\",\"log\",\"show\",\"--last\",\"3m\",\"--style\",\"compact\",\"--predicate\",\"process == \\\"MobileSafari\\\" OR process == \\\"SpringBoard\\\" OR process CONTAINS[c] \\\"WebKit\\\"\"] failed after 20007 ms: spawnSync xcrun ETIMEDOUT",
+  "hostAfter": {
+    "at": "2026-11-03T16:07:40.811Z",
+    "vmStat": "Mach Virtual Memory Statistics: (page size of 4096 bytes)\nPages free:                                5718.\nPages active:                           1429303.\nPages inactive:                         1411091.\nPages speculative:                        17841.\nPages throttled:                              0.\nPages wired down:                        727137.\nPages purgeable:                          20696.\n\"Translation faults\":                  87884391.\nPages copy-on-write:                    5782262.\nPages zero filled:                     54904989.\nPages reactivated:                       306719.\nPages purged:                             45446.\nFile-backed pages:                      1693875.\nAnonymous pages:                        1164360.\nPages stored in compressor:              190901.\nPages occupied by compressor:             77760.\nDecompressions:                           18939.\nCompressions:                            214755.\nPageins:                                2800800.\nPageouts:                                 34346.\nSwapins:                                      0.\nSwapouts:                                     0.",
+    "swapUsage": "vm.swapusage: total = 0.00M  used = 0.00M  free = 0.00M  (encrypted)",
+    "hostMemoryBytes": 15032385536
+  },
+  "finishedAt": "2026-11-03T16:07:40.933Z"
+}
