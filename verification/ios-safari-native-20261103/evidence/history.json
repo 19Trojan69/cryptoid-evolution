@@ -1,0 +1,112 @@
+{
+  "version": 1,
+  "physicalDevice": false,
+  "whiteScreenFixed": false,
+  "newNativeGameCyclesCompleted": 0,
+  "attempts": [
+    {
+      "source": "85c512de4b1a1718f5ce8307463cd55d4cb50cec",
+      "runId": 41593146394,
+      "jobId": 125774274254,
+      "result": "failure",
+      "stage": "macOS build; case-insensitive resolution",
+      "nativeGameCyclesCompleted": 0
+    },
+    {
+      "source": "3b9f4c45c0a0f10f3731a1c473ac2b1ab029b5e2",
+      "runId": 41594163423,
+      "jobId": 125777496410,
+      "result": "failure",
+      "stage": "unsupported hdiutil filesystem argument",
+      "nativeGameCyclesCompleted": 0
+    },
+    {
+      "source": "53668ae36250da278f5d0c48e61103fb20b484a0",
+      "runId": 41594414579,
+      "jobId": 125778302729,
+      "result": "failure",
+      "stage": "Apple safaridriver session; no Safari RWIApplication",
+      "nativeGameCyclesCompleted": 0
+    },
+    {
+      "source": "3fdb936f7b6be027cac2600fef76a644444e0071",
+      "runId": 41596062504,
+      "jobIds": [],
+      "result": "failure",
+      "stage": "workflow validation; runner context not allowed at job env",
+      "nativeGameCyclesCompleted": 0
+    },
+    {
+      "source": "e3ec90bb0f610b7d88fe589269f0f1400727b49c",
+      "runId": 41596611695,
+      "jobId": 125785357388,
+      "result": "failure",
+      "stage": "Appium initial webview connection",
+      "nativeGameCyclesCompleted": 0,
+      "nativeLogTailHasInterleavedIncompleteJson": true
+    },
+    {
+      "source": "44362fcb9b8e7074c9a78b22de4665ab2dab246c",
+      "runId": 41599422188,
+      "jobId": 125794364332,
+      "result": "failure",
+      "stage": "Appium WDA could not launch Safari with initial deeplink",
+      "nativeGameCyclesCompleted": 0
+    },
+    {
+      "source": "9ad59a8014662e93a3202f126064537b80213c51",
+      "runId": 41601229054,
+      "jobId": 125800187130,
+      "runtime": "18.5",
+      "result": "failure",
+      "stage": "Appium readiness deadline after simulator boot; no native session",
+      "gameLoaded": false
+    },
+    {
+      "source": "9ad59a8014662e93a3202f126064537b80213c51",
+      "runId": 41601229054,
+      "jobId": 125800187415,
+      "runtime": "26.2",
+      "result": "failure",
+      "stage": "Appium readiness deadline after simulator boot; no native session",
+      "gameLoaded": false
+    },
+    {
+      "source": "3ed179dae4a16414fde0025da4f4ab73425e8800",
+      "runId": 41602272635,
+      "jobId": 125803594260,
+      "runtime": "18.5",
+      "result": "failure",
+      "stage": "Appium ready in 3612 ms; cold simulator catalogue reached 45 s timeout",
+      "gameLoaded": false,
+      "hostMemoryBytes": 15032385536
+    },
+    {
+      "source": "3ed179dae4a16414fde0025da4f4ab73425e8800",
+      "runId": 41602272635,
+      "jobId": 125803593734,
+      "runtime": "26.2",
+      "result": "failure",
+      "stage": "Appium ready in 4152 ms; cold simulator catalogue reached 45 s timeout",
+      "gameLoaded": false,
+      "hostMemoryBytes": 15032385536
+    }
+  ],
+  "pending": {
+    "source": "c992d328954c2f17dcaa8b8e1c1a46774fc15e48",
+    "runId": 41603725777,
+    "jobIds": [
+      125808338166,
+      125808337889
+    ],
+    "runner": "macos-15-intel",
+    "gameLoaded": false,
+    "description": "SDK catalogue initialization passed; both native Safari controls pending; no outcome claimed"
+  },
+  "limits": [
+    "All new failed setup attempts remain failures, not long game runs or phone acceptance.",
+    "Native simulator logs and host memory are not a cause diagnosis for an owner's phone.",
+    "Original owner diagnostics and identifying owner device facts are excluded from this public evidence."
+  ],
+  "snapshotAt": "2026-11-03T08:42:21.329Z"
+}

@@ -1,0 +1,31 @@
+{
+  "head": "c992d328954c2f17dcaa8b8e1c1a46774fc15e48",
+  "tree": "45905b8f3e24fdc5cadb4d5bfb1edbf4e1c9e663",
+  "passed": true,
+  "originalRuntimeTrees": [
+    {
+      "path": "api",
+      "sha": "ccac7cd576a079771d7d7fe4f0085492ebbe6813"
+    },
+    {
+      "path": "assets",
+      "sha": "a9860b12db58a96dafde818d9a58a6ea0e03c5e5"
+    },
+    {
+      "path": "backend",
+      "sha": "6e93bfbac9e6cc70a1edfb8bd55d737f612ba261"
+    },
+    {
+      "path": "frontend",
+      "sha": "890df8a38e13ef1fe315a5c0eb109c1d72b80aab"
+    },
+    {
+      "path": "private-preview",
+      "sha": "b733d4dc70b4ac407391720eab131dbaf1d60e37"
+    }
+  ],
+  "whiteScreenFixed": false,
+  "frozenGuestSource": "ac98e95166b0e2013186257904da46323840dab5",
+  "frozenGuestTree": "99092ec24e843fb1e419dc382bc2523a4edc0b42",
+  "sourceProof": "GitHub tree read: all five original runtime directories match their pinned Git object IDs"
+}

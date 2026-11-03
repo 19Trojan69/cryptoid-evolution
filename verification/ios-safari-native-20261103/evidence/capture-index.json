@@ -1,0 +1,52 @@
+{
+  "version": 1,
+  "syntheticCiDataOnly": true,
+  "rawOwnerReportsIncluded": false,
+  "logs": [
+    {
+      "name": "initial-macos-build.log",
+      "kind": "pre-build-failure",
+      "gitBlobSha": "288e1eff5e4fd6197dbf2bf9100d62aa4454fbe7"
+    },
+    {
+      "name": "invalid-volume-name.log",
+      "kind": "volume-preflight-failure",
+      "gitBlobSha": "eb282c1a07ad99e7ad5507c6ecfe12ee0fb07979"
+    },
+    {
+      "name": "direct-safari-session.log",
+      "kind": "native-game-flow-failed-before-cycle",
+      "gitBlobSha": "d57748e6bf73bf27949a00334183b37395994c20"
+    },
+    {
+      "name": "appium-no-webview.log",
+      "kind": "native-game-flow-failed-before-cycle-with-known-incomplete-native-log-line",
+      "gitBlobSha": "569b9aaac759efb60b4ee9a3c2b56173fe48ed51"
+    },
+    {
+      "name": "appium-preloaded-launch.log",
+      "kind": "native-game-flow-failed-before-cycle",
+      "gitBlobSha": "5d487635f23f321318002cd7bc101ce2280cc7f9"
+    },
+    {
+      "name": "environment-arm-18.5.log",
+      "kind": "environment-failure",
+      "gitBlobSha": "d90aefd07b4da7c39b13f5c0386f6529874c7c6b"
+    },
+    {
+      "name": "environment-arm-26.2.log",
+      "kind": "environment-failure",
+      "gitBlobSha": "977240c4c01b8d25a6e24cf3332916f9cfe5abed"
+    },
+    {
+      "name": "environment-intel-inventory-18.5.log",
+      "kind": "environment-failure",
+      "gitBlobSha": "b87645f19c1da150c83c6c1e667ddd3d06a7eb84"
+    },
+    {
+      "name": "environment-intel-inventory-26.2.log",
+      "kind": "environment-failure",
+      "gitBlobSha": "1120ec1e0c631c69dfb3fd4dbab0c7c15a3f89cb"
+    }
+  ]
+}

@@ -1,0 +1,678 @@
+﻿2026-11-03T06:57:34.2219830Z Current runner version: '2.338.2'
+2026-11-03T06:57:34.2242710Z ##[group]Runner Image Provisioner
+2026-11-03T06:57:34.2243470Z Hosted Compute Agent
+2026-11-03T06:57:34.2243890Z Version: 20261021.618
+2026-11-03T06:57:34.2244400Z Commit: 21505ad2541d5be6135ed84fc33697146cf75b8e
+2026-11-03T06:57:34.2244940Z Build Date: 2026-10-21T00:45:21Z
+2026-11-03T06:57:34.2245880Z Worker ID: {67a86666-1be0-4317-9de6-58e6c857cd33}
+2026-11-03T06:57:34.2247170Z Region: westus
+2026-11-03T06:57:34.2247600Z Cloud: MacCloud
+2026-11-03T06:57:34.2248070Z ##[endgroup]
+2026-11-03T06:57:34.2249270Z ##[group]Operating System
+2026-11-03T06:57:34.2249770Z macOS
+2026-11-03T06:57:34.2250220Z 15.8.2
+2026-11-03T06:57:34.2250530Z 24H232
+2026-11-03T06:57:34.2250880Z ##[endgroup]
+2026-11-03T06:57:34.2251220Z ##[group]Runner Image
+2026-11-03T06:57:34.2251590Z Image: macos-15-arm64
+2026-11-03T06:57:34.2251950Z Version: 20261028.0489.1
+2026-11-03T06:57:34.2253090Z Included Software: https://github.com/actions/runner-images/blob/macos-15-arm64/20261028.0489/images/macos/macos-15-arm64-Readme.md
+2026-11-03T06:57:34.2254380Z Image Release: https://github.com/actions/runner-images/releases/tag/macos-15-arm64%2F20261028.0489
+2026-11-03T06:57:34.2255100Z ##[endgroup]
+2026-11-03T06:57:34.2255970Z ##[group]GITHUB_TOKEN Permissions
+2026-11-03T06:57:34.2258660Z Contents: read
+2026-11-03T06:57:34.2259070Z Metadata: read
+2026-11-03T06:57:34.2259440Z ##[endgroup]
+2026-11-03T06:57:34.2261120Z Secret source: Actions
+2026-11-03T06:57:34.2261800Z Cache mode: write
+2026-11-03T06:57:34.2262270Z Prepare workflow directory
+2026-11-03T06:57:34.3368890Z Prepare all required actions
+2026-11-03T06:57:34.3485090Z Getting action download info
+2026-11-03T06:57:34.6843590Z Download action repository 'actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803' (SHA:d23441a48e516b6c34aea4fa41551a30e30af803)
+2026-11-03T06:57:35.0931420Z Download action repository 'actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38' (SHA:249970729cb0ef3589644e2896645e5dc5ba9c38)
+2026-11-03T06:57:35.3428830Z Complete job name: ios-safari
+2026-11-03T06:57:35.5602920Z ##[group]Run actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+2026-11-03T06:57:35.5604390Z with:
+2026-11-03T06:57:35.5605160Z   persist-credentials: false
+2026-11-03T06:57:35.5605620Z   path: lab
+2026-11-03T06:57:35.5606480Z   repository: 19Trojan69/cryptoid-evolution
+2026-11-03T06:57:35.5611330Z   token: ***
+2026-11-03T06:57:35.5611800Z   ssh-strict: true
+2026-11-03T06:57:35.5612240Z   ssh-user: git
+2026-11-03T06:57:35.5612590Z   clean: true
+2026-11-03T06:57:35.5613410Z   sparse-checkout-cone-mode: true
+2026-11-03T06:57:35.5613910Z   fetch-depth: 1
+2026-11-03T06:57:35.5614420Z   fetch-tags: false
+2026-11-03T06:57:35.5614840Z   show-progress: true
+2026-11-03T06:57:35.5615250Z   lfs: false
+2026-11-03T06:57:35.5615580Z   submodules: false
+2026-11-03T06:57:35.5658720Z   set-safe-directory: true
+2026-11-03T06:57:35.5660770Z   allow-unsafe-pr-checkout: false
+2026-11-03T06:57:35.5664680Z ##[endgroup]
+2026-11-03T06:57:36.0801880Z Syncing repository: 19Trojan69/cryptoid-evolution
+2026-11-03T06:57:36.0803600Z ##[group]Getting Git version info
+2026-11-03T06:57:36.0804300Z Working directory is '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/lab'
+2026-11-03T06:57:36.0805470Z [command]/opt/homebrew/bin/git version
+2026-11-03T06:57:36.1152590Z git version 2.56.0
+2026-11-03T06:57:36.1166230Z ##[endgroup]
+2026-11-03T06:57:36.1180330Z Copying '/Users/runner/.gitconfig' to '/Users/runner/work/_temp/9d344172-0820-4a85-b2b2-1b4a8ad34d7b/.gitconfig'
+2026-11-03T06:57:36.1191690Z Temporarily overriding HOME='/Users/runner/work/_temp/9d344172-0820-4a85-b2b2-1b4a8ad34d7b' before making global git config changes
+2026-11-03T06:57:36.1195050Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-03T06:57:36.1198250Z [command]/opt/homebrew/bin/git config --global --add safe.directory /Users/runner/work/cryptoid-evolution/cryptoid-evolution/lab
+2026-11-03T06:57:36.1321900Z ##[group]Determining repository object format
+2026-11-03T06:57:36.1325620Z ##[endgroup]
+2026-11-03T06:57:36.1327500Z ##[group]Initializing the repository
+2026-11-03T06:57:36.1329580Z [command]/opt/homebrew/bin/git init /Users/runner/work/cryptoid-evolution/cryptoid-evolution/lab
+2026-11-03T06:57:36.1589440Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-11-03T06:57:36.1592000Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-11-03T06:57:36.1598950Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-11-03T06:57:36.1603660Z hint: call:
+2026-11-03T06:57:36.1604140Z hint:
+2026-11-03T06:57:36.1604880Z hint: 	git config --global init.defaultBranch <name>
+2026-11-03T06:57:36.1605560Z hint:
+2026-11-03T06:57:36.1606180Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-11-03T06:57:36.1607030Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-11-03T06:57:36.1607810Z hint:
+2026-11-03T06:57:36.1608330Z hint: 	git branch -m <name>
+2026-11-03T06:57:36.1608870Z hint:
+2026-11-03T06:57:36.1609430Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-11-03T06:57:36.1611190Z Initialized empty Git repository in /Users/runner/work/cryptoid-evolution/cryptoid-evolution/lab/.git/
+2026-11-03T06:57:36.1622970Z [command]/opt/homebrew/bin/git remote add origin https://github.com/19Trojan69/cryptoid-evolution
+2026-11-03T06:57:36.1714580Z ##[endgroup]
+2026-11-03T06:57:36.1716630Z ##[group]Disabling automatic garbage collection
+2026-11-03T06:57:36.1718460Z [command]/opt/homebrew/bin/git config --local gc.auto 0
+2026-11-03T06:57:36.1803730Z ##[endgroup]
+2026-11-03T06:57:36.1806510Z ##[group]Setting up auth
+2026-11-03T06:57:36.1807380Z Removing SSH command configuration
+2026-11-03T06:57:36.1808060Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-03T06:57:36.1884550Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-03T06:57:36.3102920Z Removing HTTP extra header
+2026-11-03T06:57:36.3105350Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-03T06:57:36.3178470Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-03T06:57:36.4815850Z Removing includeIf entries pointing to credentials config files
+2026-11-03T06:57:36.4832960Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-03T06:57:36.4835670Z [command]/opt/homebrew/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-03T06:57:36.5760850Z [command]/opt/homebrew/bin/git config --file /Users/runner/work/_temp/git-credentials-17859ed9-0002-4aa8-876f-fce77987ec21.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-11-03T06:57:36.5773610Z [command]/opt/homebrew/bin/git config --local includeIf.gitdir:/Users/runner/work/cryptoid-evolution/cryptoid-evolution/lab/.git.path /Users/runner/work/_temp/git-credentials-17859ed9-0002-4aa8-876f-fce77987ec21.config
+2026-11-03T06:57:36.5776650Z [command]/opt/homebrew/bin/git config --local includeIf.gitdir:/Users/runner/work/cryptoid-evolution/cryptoid-evolution/lab/.git/worktrees/*.path /Users/runner/work/_temp/git-credentials-17859ed9-0002-4aa8-876f-fce77987ec21.config
+2026-11-03T06:57:36.5779590Z [command]/opt/homebrew/bin/git config --local includeIf.gitdir:/github/workspace/lab/.git.path /github/runner_temp/git-credentials-17859ed9-0002-4aa8-876f-fce77987ec21.config
+2026-11-03T06:57:36.5881900Z [command]/opt/homebrew/bin/git config --local includeIf.gitdir:/github/workspace/lab/.git/worktrees/*.path /github/runner_temp/git-credentials-17859ed9-0002-4aa8-876f-fce77987ec21.config
+2026-11-03T06:57:36.5953990Z ##[endgroup]
+2026-11-03T06:57:36.5961330Z ##[group]Fetching the repository
+2026-11-03T06:57:36.5966370Z [command]/opt/homebrew/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +85c512de4b1a1718f5ce8307463cd55d4cb50cec:refs/remotes/origin/codex/ios-safari-native-20261103
+2026-11-03T06:57:46.1101030Z From https://github.com/19Trojan69/cryptoid-evolution
+2026-11-03T06:57:46.1102160Z  * [new ref]         85c512de4b1a1718f5ce8307463cd55d4cb50cec -> origin/codex/ios-safari-native-20261103
+2026-11-03T06:57:46.1128720Z [command]/opt/homebrew/bin/git branch --list --remote origin/codex/ios-safari-native-20261103
+2026-11-03T06:57:46.1251280Z   origin/codex/ios-safari-native-20261103
+2026-11-03T06:57:46.1262430Z [command]/opt/homebrew/bin/git rev-parse refs/remotes/origin/codex/ios-safari-native-20261103
+2026-11-03T06:57:46.1327430Z 85c512de4b1a1718f5ce8307463cd55d4cb50cec
+2026-11-03T06:57:46.1332380Z ##[endgroup]
+2026-11-03T06:57:46.1333870Z ##[group]Determining the checkout info
+2026-11-03T06:57:46.1335720Z ##[endgroup]
+2026-11-03T06:57:46.1345000Z [command]/opt/homebrew/bin/git sparse-checkout disable
+2026-11-03T06:57:46.1441760Z [command]/opt/homebrew/bin/git config --local --unset-all extensions.worktreeConfig
+2026-11-03T06:57:46.1511000Z ##[group]Checking out the ref
+2026-11-03T06:57:46.1513200Z [command]/opt/homebrew/bin/git checkout --progress --force -B codex/ios-safari-native-20261103 refs/remotes/origin/codex/ios-safari-native-20261103
+2026-11-03T06:57:47.2976160Z Updating files:  18% (524/2888)
+2026-11-03T06:57:47.3155900Z Updating files:  19% (549/2888)
+2026-11-03T06:57:47.3217290Z Updating files:  20% (578/2888)
+2026-11-03T06:57:47.3527450Z Updating files:  21% (607/2888)
+2026-11-03T06:57:47.3567750Z Updating files:  22% (636/2888)
+2026-11-03T06:57:47.3889360Z Updating files:  23% (665/2888)
+2026-11-03T06:57:47.4165170Z Updating files:  24% (694/2888)
+2026-11-03T06:57:47.4270740Z Updating files:  25% (722/2888)
+2026-11-03T06:57:47.4336550Z Updating files:  26% (751/2888)
+2026-11-03T06:57:47.5097530Z Updating files:  27% (780/2888)
+2026-11-03T06:57:47.7436250Z Updating files:  28% (809/2888)
+2026-11-03T06:57:47.8152030Z Updating files:  29% (838/2888)
+2026-11-03T06:57:47.9258220Z Updating files:  30% (867/2888)
+2026-11-03T06:57:47.9861610Z Updating files:  31% (896/2888)
+2026-11-03T06:57:48.0428200Z Updating files:  32% (925/2888)
+2026-11-03T06:57:48.0688950Z Updating files:  33% (954/2888)
+2026-11-03T06:57:48.1027830Z Updating files:  34% (982/2888)
+2026-11-03T06:57:48.1672230Z Updating files:  35% (1011/2888)
+2026-11-03T06:57:48.1740350Z Updating files:  35% (1038/2888)
+2026-11-03T06:57:48.2226140Z Updating files:  36% (1040/2888)
+2026-11-03T06:57:48.2494790Z Updating files:  37% (1069/2888)
+2026-11-03T06:57:48.3065720Z Updating files:  38% (1098/2888)
+2026-11-03T06:57:48.3395950Z Updating files:  39% (1127/2888)
+2026-11-03T06:57:48.3722560Z Updating files:  40% (1156/2888)
+2026-11-03T06:57:48.4232480Z Updating files:  41% (1185/2888)
+2026-11-03T06:57:48.4346010Z Updating files:  42% (1213/2888)
+2026-11-03T06:57:48.4558390Z Updating files:  43% (1242/2888)
+2026-11-03T06:57:48.4957320Z Updating files:  44% (1271/2888)
+2026-11-03T06:57:48.5006010Z Updating files:  45% (1300/2888)
+2026-11-03T06:57:48.5012580Z Updating files:  46% (1329/2888)
+2026-11-03T06:57:48.5039300Z Updating files:  47% (1358/2888)
+2026-11-03T06:57:48.5569740Z Updating files:  48% (1387/2888)
+2026-11-03T06:57:48.5674930Z Updating files:  49% (1416/2888)
+2026-11-03T06:57:48.5913740Z Updating files:  50% (1444/2888)
+2026-11-03T06:57:48.5944020Z Updating files:  51% (1473/2888)
+2026-11-03T06:57:48.5989270Z Updating files:  52% (1502/2888)
+2026-11-03T06:57:48.6046380Z Updating files:  53% (1531/2888)
+2026-11-03T06:57:48.6100460Z Updating files:  54% (1560/2888)
+2026-11-03T06:57:48.6131370Z Updating files:  55% (1589/2888)
+2026-11-03T06:57:48.6171030Z Updating files:  56% (1618/2888)
+2026-11-03T06:57:48.6205270Z Updating files:  57% (1647/2888)
+2026-11-03T06:57:48.6582060Z Updating files:  58% (1676/2888)
+2026-11-03T06:57:48.6624590Z Updating files:  59% (1704/2888)
+2026-11-03T06:57:48.6656270Z Updating files:  60% (1733/2888)
+2026-11-03T06:57:48.6687370Z Updating files:  61% (1762/2888)
+2026-11-03T06:57:48.6719440Z Updating files:  62% (1791/2888)
+2026-11-03T06:57:48.6778310Z Updating files:  63% (1820/2888)
+2026-11-03T06:57:48.6779310Z Updating files:  64% (1849/2888)
+2026-11-03T06:57:48.6816250Z Updating files:  65% (1878/2888)
+2026-11-03T06:57:48.6888610Z Updating files:  66% (1907/2888)
+2026-11-03T06:57:48.6950350Z Updating files:  67% (1935/2888)
+2026-11-03T06:57:48.7807330Z Updating files:  68% (1964/2888)
+2026-11-03T06:57:48.8167770Z Updating files:  69% (1993/2888)
+2026-11-03T06:57:48.8330430Z Updating files:  70% (2022/2888)
+2026-11-03T06:57:48.8396350Z Updating files:  71% (2051/2888)
+2026-11-03T06:57:48.8472240Z Updating files:  72% (2080/2888)
+2026-11-03T06:57:48.8538850Z Updating files:  73% (2109/2888)
+2026-11-03T06:57:48.8597880Z Updating files:  74% (2138/2888)
+2026-11-03T06:57:48.8644880Z Updating files:  75% (2166/2888)
+2026-11-03T06:57:48.8682550Z Updating files:  76% (2195/2888)
+2026-11-03T06:57:48.9083310Z Updating files:  77% (2224/2888)
+2026-11-03T06:57:48.9241430Z Updating files:  78% (2253/2888)
+2026-11-03T06:57:48.9301400Z Updating files:  79% (2282/2888)
+2026-11-03T06:57:48.9353600Z Updating files:  80% (2311/2888)
+2026-11-03T06:57:48.9396340Z Updating files:  81% (2340/2888)
+2026-11-03T06:57:48.9443300Z Updating files:  82% (2369/2888)
+2026-11-03T06:57:48.9522440Z Updating files:  83% (2398/2888)
+2026-11-03T06:57:48.9624120Z Updating files:  84% (2426/2888)
+2026-11-03T06:57:49.0064970Z Updating files:  85% (2455/2888)
+2026-11-03T06:57:49.0557030Z Updating files:  86% (2484/2888)
+2026-11-03T06:57:49.0690980Z Updating files:  87% (2513/2888)
+2026-11-03T06:57:49.1048210Z Updating files:  88% (2542/2888)
+2026-11-03T06:57:49.1090950Z Updating files:  89% (2571/2888)
+2026-11-03T06:57:49.1183580Z Updating files:  90% (2600/2888)
+2026-11-03T06:57:49.1275880Z Updating files:  91% (2629/2888)
+2026-11-03T06:57:49.1393740Z Updating files:  92% (2657/2888)
+2026-11-03T06:57:49.1715800Z Updating files:  93% (2686/2888)
+2026-11-03T06:57:49.1885230Z Updating files:  94% (2715/2888)
+2026-11-03T06:57:49.2405020Z Updating files:  95% (2744/2888)
+2026-11-03T06:57:49.2463020Z Updating files:  96% (2773/2888)
+2026-11-03T06:57:49.2526660Z Updating files:  97% (2802/2888)
+2026-11-03T06:57:49.2574110Z Updating files:  98% (2831/2888)
+2026-11-03T06:57:49.2633490Z Updating files:  99% (2860/2888)
+2026-11-03T06:57:49.2633900Z Updating files: 100% (2888/2888)
+2026-11-03T06:57:49.2635020Z Updating files: 100% (2888/2888), done.
+2026-11-03T06:57:49.2713080Z Switched to a new branch 'codex/ios-safari-native-20261103'
+2026-11-03T06:57:49.2759130Z branch 'codex/ios-safari-native-20261103' set up to track 'origin/codex/ios-safari-native-20261103'.
+2026-11-03T06:57:49.2765240Z ##[endgroup]
+2026-11-03T06:57:49.2939410Z [command]/opt/homebrew/bin/git log -1 --format=%H
+2026-11-03T06:57:49.3052440Z 85c512de4b1a1718f5ce8307463cd55d4cb50cec
+2026-11-03T06:57:49.3074410Z ##[group]Removing auth
+2026-11-03T06:57:49.3075210Z Removing SSH command configuration
+2026-11-03T06:57:49.3078730Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-03T06:57:49.3157140Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-03T06:57:49.4380680Z Removing HTTP extra header
+2026-11-03T06:57:49.4381520Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-03T06:57:49.4472190Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-03T06:57:49.5689810Z Removing includeIf entries pointing to credentials config files
+2026-11-03T06:57:49.5791230Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-03T06:57:49.5891380Z includeif.gitdir:/Users/runner/work/cryptoid-evolution/cryptoid-evolution/lab/.git.path
+2026-11-03T06:57:49.5992760Z includeif.gitdir:/Users/runner/work/cryptoid-evolution/cryptoid-evolution/lab/.git/worktrees/*.path
+2026-11-03T06:57:49.6092840Z includeif.gitdir:/github/workspace/lab/.git.path
+2026-11-03T06:57:49.6194330Z includeif.gitdir:/github/workspace/lab/.git/worktrees/*.path
+2026-11-03T06:57:49.6504360Z [command]/opt/homebrew/bin/git config --local --get-all includeif.gitdir:/Users/runner/work/cryptoid-evolution/cryptoid-evolution/lab/.git.path
+2026-11-03T06:57:49.6612840Z /Users/runner/work/_temp/git-credentials-17859ed9-0002-4aa8-876f-fce77987ec21.config
+2026-11-03T06:57:49.6919840Z [command]/opt/homebrew/bin/git config --local --unset includeif.gitdir:/Users/runner/work/cryptoid-evolution/cryptoid-evolution/lab/.git.path /Users/runner/work/_temp/git-credentials-17859ed9-0002-4aa8-876f-fce77987ec21.config
+2026-11-03T06:57:49.7222840Z [command]/opt/homebrew/bin/git config --local --get-all includeif.gitdir:/Users/runner/work/cryptoid-evolution/cryptoid-evolution/lab/.git/worktrees/*.path
+2026-11-03T06:57:49.7321650Z /Users/runner/work/_temp/git-credentials-17859ed9-0002-4aa8-876f-fce77987ec21.config
+2026-11-03T06:57:49.7628010Z [command]/opt/homebrew/bin/git config --local --unset includeif.gitdir:/Users/runner/work/cryptoid-evolution/cryptoid-evolution/lab/.git/worktrees/*.path /Users/runner/work/_temp/git-credentials-17859ed9-0002-4aa8-876f-fce77987ec21.config
+2026-11-03T06:57:49.7929920Z [command]/opt/homebrew/bin/git config --local --get-all includeif.gitdir:/github/workspace/lab/.git.path
+2026-11-03T06:57:49.8029820Z /github/runner_temp/git-credentials-17859ed9-0002-4aa8-876f-fce77987ec21.config
+2026-11-03T06:57:49.8336120Z [command]/opt/homebrew/bin/git config --local --unset includeif.gitdir:/github/workspace/lab/.git.path /github/runner_temp/git-credentials-17859ed9-0002-4aa8-876f-fce77987ec21.config
+2026-11-03T06:57:49.8508080Z [command]/opt/homebrew/bin/git config --local --get-all includeif.gitdir:/github/workspace/lab/.git/worktrees/*.path
+2026-11-03T06:57:49.8522230Z /github/runner_temp/git-credentials-17859ed9-0002-4aa8-876f-fce77987ec21.config
+2026-11-03T06:57:49.8524140Z [command]/opt/homebrew/bin/git config --local --unset includeif.gitdir:/github/workspace/lab/.git/worktrees/*.path /github/runner_temp/git-credentials-17859ed9-0002-4aa8-876f-fce77987ec21.config
+2026-11-03T06:57:49.8525580Z [command]/opt/homebrew/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-03T06:57:49.8526630Z Removing credentials config '/Users/runner/work/_temp/git-credentials-17859ed9-0002-4aa8-876f-fce77987ec21.config'
+2026-11-03T06:57:49.8527590Z ##[endgroup]
+2026-11-03T06:57:49.8826850Z ##[group]Run actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+2026-11-03T06:57:49.8827180Z with:
+2026-11-03T06:57:49.8827340Z   persist-credentials: false
+2026-11-03T06:57:49.8827510Z   path: candidate
+2026-11-03T06:57:49.8827680Z   ref: ac98e95166b0e2013186257904da46323840dab5
+2026-11-03T06:57:49.8827910Z   repository: 19Trojan69/cryptoid-evolution
+2026-11-03T06:57:49.8830140Z   token: ***
+2026-11-03T06:57:49.8830280Z   ssh-strict: true
+2026-11-03T06:57:49.8830420Z   ssh-user: git
+2026-11-03T06:57:49.8830590Z   clean: true
+2026-11-03T06:57:49.8830810Z   sparse-checkout-cone-mode: true
+2026-11-03T06:57:49.8831020Z   fetch-depth: 1
+2026-11-03T06:57:49.8831170Z   fetch-tags: false
+2026-11-03T06:57:49.8831340Z   show-progress: true
+2026-11-03T06:57:49.8831500Z   lfs: false
+2026-11-03T06:57:49.8831620Z   submodules: false
+2026-11-03T06:57:49.8831800Z   set-safe-directory: true
+2026-11-03T06:57:49.8832000Z   allow-unsafe-pr-checkout: false
+2026-11-03T06:57:49.8832340Z ##[endgroup]
+2026-11-03T06:57:50.0724910Z Syncing repository: 19Trojan69/cryptoid-evolution
+2026-11-03T06:57:50.0725990Z ##[group]Getting Git version info
+2026-11-03T06:57:50.0726360Z Working directory is '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate'
+2026-11-03T06:57:50.0755340Z [command]/opt/homebrew/bin/git version
+2026-11-03T06:57:50.0830320Z git version 2.56.0
+2026-11-03T06:57:50.0842130Z ##[endgroup]
+2026-11-03T06:57:50.0849980Z Copying '/Users/runner/.gitconfig' to '/Users/runner/work/_temp/a64628c0-a4ea-42e9-81c9-515b83c1a9b1/.gitconfig'
+2026-11-03T06:57:50.0858990Z Temporarily overriding HOME='/Users/runner/work/_temp/a64628c0-a4ea-42e9-81c9-515b83c1a9b1' before making global git config changes
+2026-11-03T06:57:50.0861100Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-03T06:57:50.0862370Z [command]/opt/homebrew/bin/git config --global --add safe.directory /Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate
+2026-11-03T06:57:50.0925360Z ##[group]Determining repository object format
+2026-11-03T06:57:50.0926520Z ##[endgroup]
+2026-11-03T06:57:50.0927290Z ##[group]Initializing the repository
+2026-11-03T06:57:50.0930370Z [command]/opt/homebrew/bin/git init /Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate
+2026-11-03T06:57:50.1059510Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-11-03T06:57:50.1061140Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-11-03T06:57:50.1061600Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-11-03T06:57:50.1061930Z hint: call:
+2026-11-03T06:57:50.1062090Z hint:
+2026-11-03T06:57:50.1062310Z hint: 	git config --global init.defaultBranch <name>
+2026-11-03T06:57:50.1062550Z hint:
+2026-11-03T06:57:50.1062790Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-11-03T06:57:50.1063220Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-11-03T06:57:50.1063570Z hint:
+2026-11-03T06:57:50.1063730Z hint: 	git branch -m <name>
+2026-11-03T06:57:50.1063920Z hint:
+2026-11-03T06:57:50.1064250Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-11-03T06:57:50.1064770Z Initialized empty Git repository in /Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/.git/
+2026-11-03T06:57:50.1075180Z [command]/opt/homebrew/bin/git remote add origin https://github.com/19Trojan69/cryptoid-evolution
+2026-11-03T06:57:50.1141100Z ##[endgroup]
+2026-11-03T06:57:50.1141490Z ##[group]Disabling automatic garbage collection
+2026-11-03T06:57:50.1143970Z [command]/opt/homebrew/bin/git config --local gc.auto 0
+2026-11-03T06:57:50.1370380Z ##[endgroup]
+2026-11-03T06:57:50.1378140Z ##[group]Setting up auth
+2026-11-03T06:57:50.1391530Z Removing SSH command configuration
+2026-11-03T06:57:50.1395190Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-03T06:57:50.1410130Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-03T06:57:50.2141310Z Removing HTTP extra header
+2026-11-03T06:57:50.2152140Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-03T06:57:50.2184070Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-03T06:57:50.3576620Z Removing includeIf entries pointing to credentials config files
+2026-11-03T06:57:50.3735610Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-03T06:57:50.4091910Z [command]/opt/homebrew/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-03T06:57:50.5971860Z [command]/opt/homebrew/bin/git config --file /Users/runner/work/_temp/git-credentials-2e558a17-a73b-4c8c-9b90-5e62711b939d.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-11-03T06:57:50.6274570Z [command]/opt/homebrew/bin/git config --local includeIf.gitdir:/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/.git.path /Users/runner/work/_temp/git-credentials-2e558a17-a73b-4c8c-9b90-5e62711b939d.config
+2026-11-03T06:57:50.6577270Z [command]/opt/homebrew/bin/git config --local includeIf.gitdir:/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/.git/worktrees/*.path /Users/runner/work/_temp/git-credentials-2e558a17-a73b-4c8c-9b90-5e62711b939d.config
+2026-11-03T06:57:50.6880220Z [command]/opt/homebrew/bin/git config --local includeIf.gitdir:/github/workspace/candidate/.git.path /github/runner_temp/git-credentials-2e558a17-a73b-4c8c-9b90-5e62711b939d.config
+2026-11-03T06:57:50.7182700Z [command]/opt/homebrew/bin/git config --local includeIf.gitdir:/github/workspace/candidate/.git/worktrees/*.path /github/runner_temp/git-credentials-2e558a17-a73b-4c8c-9b90-5e62711b939d.config
+2026-11-03T06:57:50.7472410Z ##[endgroup]
+2026-11-03T06:57:50.7530510Z ##[group]Fetching the repository
+2026-11-03T06:57:50.7543990Z [command]/opt/homebrew/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin ac98e95166b0e2013186257904da46323840dab5
+2026-11-03T06:58:01.6197740Z From https://github.com/19Trojan69/cryptoid-evolution
+2026-11-03T06:58:01.6198580Z  * branch            ac98e95166b0e2013186257904da46323840dab5 -> FETCH_HEAD
+2026-11-03T06:58:01.6217160Z [command]/opt/homebrew/bin/git rev-parse --verify --quiet ac98e95166b0e2013186257904da46323840dab5^{object}
+2026-11-03T06:58:01.6298120Z ac98e95166b0e2013186257904da46323840dab5
+2026-11-03T06:58:01.6304430Z ##[endgroup]
+2026-11-03T06:58:01.6305720Z ##[group]Determining the checkout info
+2026-11-03T06:58:01.6306650Z ##[endgroup]
+2026-11-03T06:58:01.6307800Z [command]/opt/homebrew/bin/git sparse-checkout disable
+2026-11-03T06:58:01.6385610Z [command]/opt/homebrew/bin/git config --local --unset-all extensions.worktreeConfig
+2026-11-03T06:58:01.6444110Z ##[group]Checking out the ref
+2026-11-03T06:58:01.6446470Z [command]/opt/homebrew/bin/git checkout --progress --force ac98e95166b0e2013186257904da46323840dab5
+2026-11-03T06:58:02.8048400Z Updating files:  27% (801/2863)
+2026-11-03T06:58:02.9461330Z Updating files:  28% (802/2863)
+2026-11-03T06:58:03.0276600Z Updating files:  29% (831/2863)
+2026-11-03T06:58:03.0703580Z Updating files:  30% (859/2863)
+2026-11-03T06:58:03.1195820Z Updating files:  31% (888/2863)
+2026-11-03T06:58:03.1689400Z Updating files:  32% (917/2863)
+2026-11-03T06:58:03.2101560Z Updating files:  33% (945/2863)
+2026-11-03T06:58:03.2445820Z Updating files:  34% (974/2863)
+2026-11-03T06:58:03.3033240Z Updating files:  35% (1003/2863)
+2026-11-03T06:58:03.3289520Z Updating files:  36% (1031/2863)
+2026-11-03T06:58:03.3490280Z Updating files:  37% (1060/2863)
+2026-11-03T06:58:03.4008540Z Updating files:  38% (1088/2863)
+2026-11-03T06:58:03.4240020Z Updating files:  39% (1117/2863)
+2026-11-03T06:58:03.4521090Z Updating files:  40% (1146/2863)
+2026-11-03T06:58:03.5064090Z Updating files:  41% (1174/2863)
+2026-11-03T06:58:03.5207150Z Updating files:  42% (1203/2863)
+2026-11-03T06:58:03.5303000Z Updating files:  43% (1232/2863)
+2026-11-03T06:58:03.5360130Z Updating files:  44% (1260/2863)
+2026-11-03T06:58:03.5414650Z Updating files:  45% (1289/2863)
+2026-11-03T06:58:03.5450180Z Updating files:  46% (1317/2863)
+2026-11-03T06:58:03.5488700Z Updating files:  47% (1346/2863)
+2026-11-03T06:58:03.5527180Z Updating files:  48% (1375/2863)
+2026-11-03T06:58:03.5852240Z Updating files:  49% (1403/2863)
+2026-11-03T06:58:03.5907170Z Updating files:  50% (1432/2863)
+2026-11-03T06:58:03.5960720Z Updating files:  51% (1461/2863)
+2026-11-03T06:58:03.6017590Z Updating files:  52% (1489/2863)
+2026-11-03T06:58:03.6076200Z Updating files:  53% (1518/2863)
+2026-11-03T06:58:03.6114830Z Updating files:  54% (1547/2863)
+2026-11-03T06:58:03.6143960Z Updating files:  55% (1575/2863)
+2026-11-03T06:58:03.6175900Z Updating files:  56% (1604/2863)
+2026-11-03T06:58:03.6212140Z Updating files:  57% (1632/2863)
+2026-11-03T06:58:03.6243330Z Updating files:  58% (1661/2863)
+2026-11-03T06:58:03.6554210Z Updating files:  59% (1690/2863)
+2026-11-03T06:58:03.6566760Z Updating files:  59% (1707/2863)
+2026-11-03T06:58:03.6597920Z Updating files:  60% (1718/2863)
+2026-11-03T06:58:03.6652590Z Updating files:  61% (1747/2863)
+2026-11-03T06:58:03.6683250Z Updating files:  62% (1776/2863)
+2026-11-03T06:58:03.6740990Z Updating files:  63% (1804/2863)
+2026-11-03T06:58:03.6789540Z Updating files:  64% (1833/2863)
+2026-11-03T06:58:03.6817510Z Updating files:  65% (1861/2863)
+2026-11-03T06:58:03.6849700Z Updating files:  66% (1890/2863)
+2026-11-03T06:58:03.6914320Z Updating files:  67% (1919/2863)
+2026-11-03T06:58:03.7033100Z Updating files:  68% (1947/2863)
+2026-11-03T06:58:03.7441830Z Updating files:  69% (1976/2863)
+2026-11-03T06:58:03.7911960Z Updating files:  70% (2005/2863)
+2026-11-03T06:58:03.7972980Z Updating files:  71% (2033/2863)
+2026-11-03T06:58:03.8017200Z Updating files:  72% (2062/2863)
+2026-11-03T06:58:03.8059790Z Updating files:  73% (2090/2863)
+2026-11-03T06:58:03.8109740Z Updating files:  74% (2119/2863)
+2026-11-03T06:58:03.8195820Z Updating files:  75% (2148/2863)
+2026-11-03T06:58:03.8252660Z Updating files:  76% (2176/2863)
+2026-11-03T06:58:03.8337250Z Updating files:  77% (2205/2863)
+2026-11-03T06:58:03.8694930Z Updating files:  78% (2234/2863)
+2026-11-03T06:58:03.8907710Z Updating files:  79% (2262/2863)
+2026-11-03T06:58:03.8982600Z Updating files:  80% (2291/2863)
+2026-11-03T06:58:03.9054230Z Updating files:  81% (2320/2863)
+2026-11-03T06:58:03.9097060Z Updating files:  82% (2348/2863)
+2026-11-03T06:58:03.9133840Z Updating files:  83% (2377/2863)
+2026-11-03T06:58:03.9183290Z Updating files:  84% (2405/2863)
+2026-11-03T06:58:03.9277490Z Updating files:  85% (2434/2863)
+2026-11-03T06:58:03.9466080Z Updating files:  86% (2463/2863)
+2026-11-03T06:58:03.9870970Z Updating files:  87% (2491/2863)
+2026-11-03T06:58:04.0174700Z Updating files:  88% (2520/2863)
+2026-11-03T06:58:04.0205470Z Updating files:  89% (2549/2863)
+2026-11-03T06:58:04.0265320Z Updating files:  90% (2577/2863)
+2026-11-03T06:58:04.0339840Z Updating files:  91% (2606/2863)
+2026-11-03T06:58:04.0441340Z Updating files:  92% (2634/2863)
+2026-11-03T06:58:04.0505660Z Updating files:  93% (2663/2863)
+2026-11-03T06:58:04.0598930Z Updating files:  94% (2692/2863)
+2026-11-03T06:58:04.0658470Z Updating files:  95% (2720/2863)
+2026-11-03T06:58:04.1022860Z Updating files:  96% (2749/2863)
+2026-11-03T06:58:04.1056640Z Updating files:  97% (2778/2863)
+2026-11-03T06:58:04.1090090Z Updating files:  98% (2806/2863)
+2026-11-03T06:58:04.1124690Z Updating files:  99% (2835/2863)
+2026-11-03T06:58:04.1125490Z Updating files: 100% (2863/2863)
+2026-11-03T06:58:04.1126380Z Updating files: 100% (2863/2863), done.
+2026-11-03T06:58:04.1180820Z HEAD is now at ac98e95 Preserve one bounded resource checkpoint in the isolated device report
+2026-11-03T06:58:04.1204280Z ##[endgroup]
+2026-11-03T06:58:04.1344440Z [command]/opt/homebrew/bin/git log -1 --format=%H
+2026-11-03T06:58:04.1440920Z ac98e95166b0e2013186257904da46323840dab5
+2026-11-03T06:58:04.1455630Z ##[group]Removing auth
+2026-11-03T06:58:04.1456040Z Removing SSH command configuration
+2026-11-03T06:58:04.1459990Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-03T06:58:04.1527740Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-03T06:58:04.2403760Z Removing HTTP extra header
+2026-11-03T06:58:04.2406510Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-03T06:58:04.2476230Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-03T06:58:04.3655830Z Removing includeIf entries pointing to credentials config files
+2026-11-03T06:58:04.3759240Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-03T06:58:04.3863260Z includeif.gitdir:/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/.git.path
+2026-11-03T06:58:04.3966200Z includeif.gitdir:/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/.git/worktrees/*.path
+2026-11-03T06:58:04.4069050Z includeif.gitdir:/github/workspace/candidate/.git.path
+2026-11-03T06:58:04.4175180Z includeif.gitdir:/github/workspace/candidate/.git/worktrees/*.path
+2026-11-03T06:58:04.4263620Z [command]/opt/homebrew/bin/git config --local --get-all includeif.gitdir:/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/.git.path
+2026-11-03T06:58:04.4264750Z /Users/runner/work/_temp/git-credentials-2e558a17-a73b-4c8c-9b90-5e62711b939d.config
+2026-11-03T06:58:04.4266140Z [command]/opt/homebrew/bin/git config --local --unset includeif.gitdir:/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/.git.path /Users/runner/work/_temp/git-credentials-2e558a17-a73b-4c8c-9b90-5e62711b939d.config
+2026-11-03T06:58:04.4351600Z [command]/opt/homebrew/bin/git config --local --get-all includeif.gitdir:/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/.git/worktrees/*.path
+2026-11-03T06:58:04.4352460Z /Users/runner/work/_temp/git-credentials-2e558a17-a73b-4c8c-9b90-5e62711b939d.config
+2026-11-03T06:58:04.4354000Z [command]/opt/homebrew/bin/git config --local --unset includeif.gitdir:/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/.git/worktrees/*.path /Users/runner/work/_temp/git-credentials-2e558a17-a73b-4c8c-9b90-5e62711b939d.config
+2026-11-03T06:58:04.4355480Z [command]/opt/homebrew/bin/git config --local --get-all includeif.gitdir:/github/workspace/candidate/.git.path
+2026-11-03T06:58:04.4356280Z /github/runner_temp/git-credentials-2e558a17-a73b-4c8c-9b90-5e62711b939d.config
+2026-11-03T06:58:04.4359830Z [command]/opt/homebrew/bin/git config --local --unset includeif.gitdir:/github/workspace/candidate/.git.path /github/runner_temp/git-credentials-2e558a17-a73b-4c8c-9b90-5e62711b939d.config
+2026-11-03T06:58:04.4363110Z [command]/opt/homebrew/bin/git config --local --get-all includeif.gitdir:/github/workspace/candidate/.git/worktrees/*.path
+2026-11-03T06:58:04.4418490Z /github/runner_temp/git-credentials-2e558a17-a73b-4c8c-9b90-5e62711b939d.config
+2026-11-03T06:58:04.4433000Z [command]/opt/homebrew/bin/git config --local --unset includeif.gitdir:/github/workspace/candidate/.git/worktrees/*.path /github/runner_temp/git-credentials-2e558a17-a73b-4c8c-9b90-5e62711b939d.config
+2026-11-03T06:58:04.4511980Z [command]/opt/homebrew/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-03T06:58:04.5489730Z Removing credentials config '/Users/runner/work/_temp/git-credentials-2e558a17-a73b-4c8c-9b90-5e62711b939d.config'
+2026-11-03T06:58:04.5500340Z ##[endgroup]
+2026-11-03T06:58:04.5687540Z ##[group]Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+2026-11-03T06:58:04.5687940Z with:
+2026-11-03T06:58:04.5688180Z   node-version: 24
+2026-11-03T06:58:04.5688380Z   check-latest: false
+2026-11-03T06:58:04.5690500Z   token: ***
+2026-11-03T06:58:04.5690660Z   package-manager-cache: true
+2026-11-03T06:58:04.5690900Z ##[endgroup]
+2026-11-03T06:58:04.7911750Z Found in cache @ /Users/runner/hostedtoolcache/node/24.22.1/arm64
+2026-11-03T06:58:04.7919250Z ##[group]Environment details
+2026-11-03T06:58:05.5994040Z node: v24.22.1
+2026-11-03T06:58:05.6026110Z npm: 11.19.1
+2026-11-03T06:58:05.6027390Z yarn: 1.22.22
+2026-11-03T06:58:05.6028560Z ##[endgroup]
+2026-11-03T06:58:05.6181310Z ##[group]Run node --test lab/verification/ios-safari-native-20261103/tools.test.mjs
+2026-11-03T06:58:05.6181930Z [36;1mnode --test lab/verification/ios-safari-native-20261103/tools.test.mjs[0m
+2026-11-03T06:58:05.6285480Z shell: /bin/bash -e {0}
+2026-11-03T06:58:05.6286070Z ##[endgroup]
+2026-11-03T06:58:05.8518230Z ✔ Only an available pinned iOS runtime can be selected (21.545333ms)
+2026-11-03T06:58:05.8519080Z ✔ RSS joins only numeric process IDs actually enumerated inside the selected simulator (1.100833ms)
+2026-11-03T06:58:05.8876850Z ✔ WebDriver protocol errors and desktop fallback fail instead of yielding a green test (50.041041ms)
+2026-11-03T06:58:05.9339260Z ℹ tests 3
+2026-11-03T06:58:05.9340240Z ℹ suites 0
+2026-11-03T06:58:05.9341090Z ℹ pass 3
+2026-11-03T06:58:05.9341880Z ℹ fail 0
+2026-11-03T06:58:05.9342360Z ℹ cancelled 0
+2026-11-03T06:58:05.9343050Z ℹ skipped 0
+2026-11-03T06:58:05.9343510Z ℹ todo 0
+2026-11-03T06:58:05.9344030Z ℹ duration_ms 189.48525
+2026-11-03T06:58:05.9415580Z ##[group]Run sudo xcode-select --switch /Applications/Xcode_26.2.app/Contents/Developer
+2026-11-03T06:58:05.9416150Z [36;1msudo xcode-select --switch /Applications/Xcode_26.2.app/Contents/Developer[0m
+2026-11-03T06:58:05.9416590Z [36;1msudo /usr/bin/safaridriver --enable[0m
+2026-11-03T06:58:05.9417090Z [36;1mnode lab/verification/ios-safari-native-20261103/prepareSimulator.mjs lab/verification/ios-safari-native-20261103/results[0m
+2026-11-03T06:58:05.9452300Z shell: /bin/bash -e {0}
+2026-11-03T06:58:05.9452510Z ##[endgroup]
+2026-11-03T06:58:34.6134590Z CRYPTOID_IOS_PREFLIGHT {"version":1,"physicalDevice":false,"runtime":{"isAvailable":true,"version":"26.2","isInternal":false,"buildversion":"23C54","supportedArchitectures":["x86_64","arm64"],"supportedDeviceTypes":[{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 17 Pro.simdevicetype","name":"iPhone 17 Pro","identifier":"com.apple.CoreSimulator.SimDeviceType.iPhone-17-Pro","productFamily":"iPhone"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 17 Pro Max.simdevicetype","name":"iPhone 17 Pro Max","identifier":"com.apple.CoreSimulator.SimDeviceType.iPhone-17-Pro-Max","productFamily":"iPhone"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone Air.simdevicetype","name":"iPhone Air","identifier":"com.apple.CoreSimulator.SimDeviceType.iPhone-Air","productFamily":"iPhone"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 17.simdevicetype","name":"iPhone 17","identifier":"com.apple.CoreSimulator.SimDeviceType.iPhone-17","productFamily":"iPhone"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 16 Pro.simdevicetype","name":"iPhone 16 Pro","identifier":"com.apple.CoreSimulator.SimDeviceType.iPhone-16-Pro","productFamily":"iPhone"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 16 Pro Max.simdevicetype","name":"iPhone 16 Pro Max","identifier":"com.apple.CoreSimulator.SimDeviceType.iPhone-16-Pro-Max","productFamily":"iPhone"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 16e.simdevicetype","name":"iPhone 16e","identifier":"com.apple.CoreSimulator.SimDeviceType.iPhone-16e","productFamily":"iPhone"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 16.simdevicetype","name":"iPhone 16","identifier":"com.apple.CoreSimulator.SimDeviceType.iPhone-16","productFamily":"iPhone"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 16 Plus.simdevicetype","name":"iPhone 16 Plus","identifier":"com.apple.CoreSimulator.SimDeviceType.iPhone-16-Plus","productFamily":"iPhone"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 15 Pro.simdevicetype","name":"iPhone 15 Pro","identifier":"com.apple.CoreSimulator.SimDeviceType.iPhone-15-Pro","productFamily":"iPhone"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 15 Pro Max.simdevicetype","name":"iPhone 15 Pro Max","identifier":"com.apple.CoreSimulator.SimDeviceType.iPhone-15-Pro-Max","productFamily":"iPhone"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 15.simdevicetype","name":"iPhone 15","identifier":"com.apple.CoreSimulator.SimDeviceType.iPhone-15","productFamily":"iPhone"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 15 Plus.simdevicetype","name":"iPhone 15 Plus","identifier":"com.apple.CoreSimulator.SimDeviceType.iPhone-15-Plus","productFamily":"iPhone"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 14 Pro.simdevicetype","name":"iPhone 14 Pro","identifier":"com.apple.CoreSimulator.SimDeviceType.iPhone-14-Pro","productFamily":"iPhone"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 14 Pro Max.simdevicetype","name":"iPhone 14 Pro Max","identifier":"com.apple.CoreSimulator.SimDeviceType.iPhone-14-Pro-Max","productFamily":"iPhone"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 14.simdevicetype","name":"iPhone 14","identifier":"com.apple.CoreSimulator.SimDeviceType.iPhone-14","productFamily":"iPhone"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 14 Plus.simdevicetype","name":"iPhone 14 Plus","identifier":"com.apple.CoreSimulator.SimDeviceType.iPhone-14-Plus","productFamily":"iPhone"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone SE (3rd generation).simdevicetype","name":"iPhone SE (3rd generation)","identifier":"com.apple.CoreSimulator.SimDeviceType.iPhone-SE-3rd-generation","productFamily":"iPhone"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 13 Pro.simdevicetype","name":"iPhone 13 Pro","identifier":"com.apple.CoreSimulator.SimDeviceType.iPhone-13-Pro","productFamily":"iPhone"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 13 Pro Max.simdevicetype","name":"iPhone 13 Pro Max","identifier":"com.apple.CoreSimulator.SimDeviceType.iPhone-13-Pro-Max","productFamily":"iPhone"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 13.simdevicetype","name":"iPhone 13","identifier":"com.apple.CoreSimulator.SimDeviceType.iPhone-13","productFamily":"iPhone"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 13 mini.simdevicetype","name":"iPhone 13 mini","identifier":"com.apple.CoreSimulator.SimDeviceType.iPhone-13-mini","productFamily":"iPhone"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 12 Pro.simdevicetype","name":"iPhone 12 Pro","identifier":"com.apple.CoreSimulator.SimDeviceType.iPhone-12-Pro","productFamily":"iPhone"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 12 Pro Max.simdevicetype","name":"iPhone 12 Pro Max","identifier":"com.apple.CoreSimulator.SimDeviceType.iPhone-12-Pro-Max","productFamily":"iPhone"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 12.simdevicetype","name":"iPhone 12","identifier":"com.apple.CoreSimulator.SimDeviceType.iPhone-12","productFamily":"iPhone"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 12 mini.simdevicetype","name":"iPhone 12 mini","identifier":"com.apple.CoreSimulator.SimDeviceType.iPhone-12-mini","productFamily":"iPhone"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone SE (2nd generation).simdevicetype","name":"iPhone SE (2nd generation)","identifier":"com.apple.CoreSimulator.SimDeviceType.iPhone-SE--2nd-generation-","productFamily":"iPhone"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 11 Pro.simdevicetype","name":"iPhone 11 Pro","identifier":"com.apple.CoreSimulator.SimDeviceType.iPhone-11-Pro","productFamily":"iPhone"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 11 Pro Max.simdevicetype","name":"iPhone 11 Pro Max","identifier":"com.apple.CoreSimulator.SimDeviceType.iPhone-11-Pro-Max","productFamily":"iPhone"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 11.simdevicetype","name":"iPhone 11","identifier":"com.apple.CoreSimulator.SimDeviceType.iPhone-11","productFamily":"iPhone"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Pro 13-inch (M5) (16GB).simdevicetype","name":"iPad Pro 13-inch (M5) (16GB)","identifier":"com.apple.CoreSimulator.SimDeviceType.iPad-Pro-13-inch-M5-16GB","productFamily":"iPad"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Pro 13-inch (M5).simdevicetype","name":"iPad Pro 13-inch (M5)","identifier":"com.apple.CoreSimulator.SimDeviceType.iPad-Pro-13-inch-M5-12GB","productFamily":"iPad"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Pro 11-inch (M5) (16GB).simdevicetype","name":"iPad Pro 11-inch (M5) (16GB)","identifier":"com.apple.CoreSimulator.SimDeviceType.iPad-Pro-11-inch-M5-16GB","productFamily":"iPad"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Pro 11-inch (M5).simdevicetype","name":"iPad Pro 11-inch (M5)","identifier":"com.apple.CoreSimulator.SimDeviceType.iPad-Pro-11-inch-M5-12GB","productFamily":"iPad"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Pro 11-inch (M4) (16GB).simdevicetype","name":"iPad Pro 11-inch (M4) (16GB)","identifier":"com.apple.CoreSimulator.SimDeviceType.iPad-Pro-11-inch-M4-16GB","productFamily":"iPad"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Pro 11-inch (M4).simdevicetype","name":"iPad Pro 11-inch (M4)","identifier":"com.apple.CoreSimulator.SimDeviceType.iPad-Pro-11-inch-M4-8GB","productFamily":"iPad"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Pro 13-inch (M4) (16GB).simdevicetype","name":"iPad Pro 13-inch (M4) (16GB)","identifier":"com.apple.CoreSimulator.SimDeviceType.iPad-Pro-13-inch-M4-16GB","productFamily":"iPad"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Pro 13-inch (M4).simdevicetype","name":"iPad Pro 13-inch (M4)","identifier":"com.apple.CoreSimulator.SimDeviceType.iPad-Pro-13-inch-M4-8GB","productFamily":"iPad"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad (A16).simdevicetype","name":"iPad (A16)","identifier":"com.apple.CoreSimulator.SimDeviceType.iPad-A16","productFamily":"iPad"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Air 13-inch (M3).simdevicetype","name":"iPad Air 13-inch (M3)","identifier":"com.apple.CoreSimulator.SimDeviceType.iPad-Air-13-inch-M3","productFamily":"iPad"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Air 11-inch (M3).simdevicetype","name":"iPad Air 11-inch (M3)","identifier":"com.apple.CoreSimulator.SimDeviceType.iPad-Air-11-inch-M3","productFamily":"iPad"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Air 11-inch (M2).simdevicetype","name":"iPad Air 11-inch (M2)","identifier":"com.apple.CoreSimulator.SimDeviceType.iPad-Air-11-inch-M2","productFamily":"iPad"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Air 13-inch (M2).simdevicetype","name":"iPad Air 13-inch (M2)","identifier":"com.apple.CoreSimulator.SimDeviceType.iPad-Air-13-inch-M2","productFamily":"iPad"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad mini (A17 Pro).simdevicetype","name":"iPad mini (A17 Pro)","identifier":"com.apple.CoreSimulator.SimDeviceType.iPad-mini-A17-Pro","productFamily":"iPad"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Pro (11-inch) (4th generation) (16GB).simdevicetype","name":"iPad Pro (11-inch) (4th generation) (16GB)","identifier":"com.apple.CoreSimulator.SimDeviceType.iPad-Pro-11-inch-4th-generation-16GB","productFamily":"iPad"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Pro (11-inch) (4th generation).simdevicetype","name":"iPad Pro (11-inch) (4th generation)","identifier":"com.apple.CoreSimulator.SimDeviceType.iPad-Pro-11-inch-4th-generation-8GB","productFamily":"iPad"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Pro (12.9-inch) (6th generation) (16GB).simdevicetype","name":"iPad Pro (12.9-inch) (6th generation) (16GB)","identifier":"com.apple.CoreSimulator.SimDeviceType.iPad-Pro-12-9-inch-6th-generation-16GB","productFamily":"iPad"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Pro (12.9-inch) (6th generation).simdevicetype","name":"iPad Pro (12.9-inch) (6th generation)","identifier":"com.apple.CoreSimulator.SimDeviceType.iPad-Pro-12-9-inch-6th-generation-8GB","productFamily":"iPad"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad (10th generation).simdevicetype","name":"iPad (10th generation)","identifier":"com.apple.CoreSimulator.SimDeviceType.iPad-10th-generation","productFamily":"iPad"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Air (5th generation).simdevicetype","name":"iPad Air (5th generation)","identifier":"com.apple.CoreSimulator.SimDeviceType.iPad-Air-5th-generation","productFamily":"iPad"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad mini (6th generation).simdevicetype","name":"iPad mini (6th generation)","identifier":"com.apple.CoreSimulator.SimDeviceType.iPad-mini-6th-generation","productFamily":"iPad"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Pro (11-inch) (3rd generation).simdevicetype","name":"iPad Pro (11-inch) (3rd generation)","identifier":"com.apple.CoreSimulator.SimDeviceType.iPad-Pro-11-inch-3rd-generation","productFamily":"iPad"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Pro (12.9-inch) (5th generation).simdevicetype","name":"iPad Pro (12.9-inch) (5th generation)","identifier":"com.apple.CoreSimulator.SimDeviceType.iPad-Pro-12-9-inch-5th-generation","productFamily":"iPad"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad (9th generation).simdevicetype","name":"iPad (9th generation)","identifier":"com.apple.CoreSimulator.SimDeviceType.iPad-9th-generation","productFamily":"iPad"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Air (4th generation).simdevicetype","name":"iPad Air (4th generation)","identifier":"com.apple.CoreSimulator.SimDeviceType.iPad-Air--4th-generation-","productFamily":"iPad"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad (8th generation).simdevicetype","name":"iPad (8th generation)","identifier":"com.apple.CoreSimulator.SimDeviceType.iPad--8th-generation-","productFamily":"iPad"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Air (3rd generation).simdevicetype","name":"iPad Air (3rd generation)","identifier":"com.apple.CoreSimulator.SimDeviceType.iPad-Air--3rd-generation-","productFamily":"iPad"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad mini (5th generation).simdevicetype","name":"iPad mini (5th generation)","identifier":"com.apple.CoreSimulator.SimDeviceType.iPad-mini--5th-generation-","productFamily":"iPad"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Pro (11-inch) (2nd generation).simdevicetype","name":"iPad Pro (11-inch) (2nd generation)","identifier":"com.apple.CoreSimulator.SimDeviceType.iPad-Pro--11-inch---2nd-generation-","productFamily":"iPad"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Pro (12.9-inch) (4th generation).simdevicetype","name":"iPad Pro (12.9-inch) (4th generation)","identifier":"com.apple.CoreSimulator.SimDeviceType.iPad-Pro--12-9-inch---4th-generation-","productFamily":"iPad"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Pro (11-inch) (1st generation).simdevicetype","name":"iPad Pro (11-inch) (1st generation)","identifier":"com.apple.CoreSimulator.SimDeviceType.iPad-Pro--11-inch-","productFamily":"iPad"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Pro (12.9-inch) (3rd generation).simdevicetype","name":"iPad Pro (12.9-inch) (3rd generation)","identifier":"com.apple.CoreSimulator.SimDeviceType.iPad-Pro--12-9-inch---3rd-generation-","productFamily":"iPad"}],"identifier":"com.apple.CoreSimulator.SimRuntime.iOS-26-2","platform":"iOS","bundlePath":"/Library/Developer/CoreSimulator/Volumes/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime","runtimeRoot":"/Library/Developer/CoreSimulator/Volumes/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot","lastUsage":{"arm64":"0001-01-01T00:00:00Z","x86_64":"0001-01-01T00:00:00Z"},"name":"iOS 26.2"},"deviceType":{"productFamily":"iPhone","bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 16 Pro Max.simdevicetype","maxRuntimeVersion":4294967295,"maxRuntimeVersionString":"65535.255.255","identifier":"com.apple.CoreSimulator.SimDeviceType.iPhone-16-Pro-Max","modelIdentifier":"iPhone17,2","minRuntimeVersionString":"18.0.0","minRuntimeVersion":1179648,"name":"iPhone 16 Pro Max"},"udid":"6643CAFD-80A0-4901-A0AB-1D1965188544","hostOS":"ProductName:\t\tmacOS\nProductVersion:\t\t15.8.2\nBuildVersion:\t\t24H232","hostArchitecture":"arm64","hostMemoryBytes":7516192768,"xcode":"Xcode 26.2\nBuild version 17C52","safariDriver":"Included with Safari 27.2 (20625.2.8.18.4)","nativeAccountRequired":false,"paidServiceEnabled":false,"booted":false}
+2026-11-03T07:00:24.7822410Z CRYPTOID_IOS_SIMULATOR_READY {"version":1,"physicalDevice":false,"runtime":{"isAvailable":true,"version":"26.2","isInternal":false,"buildversion":"23C54","supportedArchitectures":["x86_64","arm64"],"supportedDeviceTypes":[{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 17 Pro.simdevicetype","name":"iPhone 17 Pro","identifier":"com.apple.CoreSimulator.SimDeviceType.iPhone-17-Pro","productFamily":"iPhone"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 17 Pro Max.simdevicetype","name":"iPhone 17 Pro Max","identifier":"com.apple.CoreSimulator.SimDeviceType.iPhone-17-Pro-Max","productFamily":"iPhone"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone Air.simdevicetype","name":"iPhone Air","identifier":"com.apple.CoreSimulator.SimDeviceType.iPhone-Air","productFamily":"iPhone"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 17.simdevicetype","name":"iPhone 17","identifier":"com.apple.CoreSimulator.SimDeviceType.iPhone-17","productFamily":"iPhone"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 16 Pro.simdevicetype","name":"iPhone 16 Pro","identifier":"com.apple.CoreSimulator.SimDeviceType.iPhone-16-Pro","productFamily":"iPhone"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 16 Pro Max.simdevicetype","name":"iPhone 16 Pro Max","identifier":"com.apple.CoreSimulator.SimDeviceType.iPhone-16-Pro-Max","productFamily":"iPhone"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 16e.simdevicetype","name":"iPhone 16e","identifier":"com.apple.CoreSimulator.SimDeviceType.iPhone-16e","productFamily":"iPhone"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 16.simdevicetype","name":"iPhone 16","identifier":"com.apple.CoreSimulator.SimDeviceType.iPhone-16","productFamily":"iPhone"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 16 Plus.simdevicetype","name":"iPhone 16 Plus","identifier":"com.apple.CoreSimulator.SimDeviceType.iPhone-16-Plus","productFamily":"iPhone"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 15 Pro.simdevicetype","name":"iPhone 15 Pro","identifier":"com.apple.CoreSimulator.SimDeviceType.iPhone-15-Pro","productFamily":"iPhone"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 15 Pro Max.simdevicetype","name":"iPhone 15 Pro Max","identifier":"com.apple.CoreSimulator.SimDeviceType.iPhone-15-Pro-Max","productFamily":"iPhone"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 15.simdevicetype","name":"iPhone 15","identifier":"com.apple.CoreSimulator.SimDeviceType.iPhone-15","productFamily":"iPhone"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 15 Plus.simdevicetype","name":"iPhone 15 Plus","identifier":"com.apple.CoreSimulator.SimDeviceType.iPhone-15-Plus","productFamily":"iPhone"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 14 Pro.simdevicetype","name":"iPhone 14 Pro","identifier":"com.apple.CoreSimulator.SimDeviceType.iPhone-14-Pro","productFamily":"iPhone"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 14 Pro Max.simdevicetype","name":"iPhone 14 Pro Max","identifier":"com.apple.CoreSimulator.SimDeviceType.iPhone-14-Pro-Max","productFamily":"iPhone"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 14.simdevicetype","name":"iPhone 14","identifier":"com.apple.CoreSimulator.SimDeviceType.iPhone-14","productFamily":"iPhone"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 14 Plus.simdevicetype","name":"iPhone 14 Plus","identifier":"com.apple.CoreSimulator.SimDeviceType.iPhone-14-Plus","productFamily":"iPhone"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone SE (3rd generation).simdevicetype","name":"iPhone SE (3rd generation)","identifier":"com.apple.CoreSimulator.SimDeviceType.iPhone-SE-3rd-generation","productFamily":"iPhone"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 13 Pro.simdevicetype","name":"iPhone 13 Pro","identifier":"com.apple.CoreSimulator.SimDeviceType.iPhone-13-Pro","productFamily":"iPhone"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 13 Pro Max.simdevicetype","name":"iPhone 13 Pro Max","identifier":"com.apple.CoreSimulator.SimDeviceType.iPhone-13-Pro-Max","productFamily":"iPhone"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 13.simdevicetype","name":"iPhone 13","identifier":"com.apple.CoreSimulator.SimDeviceType.iPhone-13","productFamily":"iPhone"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 13 mini.simdevicetype","name":"iPhone 13 mini","identifier":"com.apple.CoreSimulator.SimDeviceType.iPhone-13-mini","productFamily":"iPhone"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 12 Pro.simdevicetype","name":"iPhone 12 Pro","identifier":"com.apple.CoreSimulator.SimDeviceType.iPhone-12-Pro","productFamily":"iPhone"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 12 Pro Max.simdevicetype","name":"iPhone 12 Pro Max","identifier":"com.apple.CoreSimulator.SimDeviceType.iPhone-12-Pro-Max","productFamily":"iPhone"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 12.simdevicetype","name":"iPhone 12","identifier":"com.apple.CoreSimulator.SimDeviceType.iPhone-12","productFamily":"iPhone"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 12 mini.simdevicetype","name":"iPhone 12 mini","identifier":"com.apple.CoreSimulator.SimDeviceType.iPhone-12-mini","productFamily":"iPhone"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone SE (2nd generation).simdevicetype","name":"iPhone SE (2nd generation)","identifier":"com.apple.CoreSimulator.SimDeviceType.iPhone-SE--2nd-generation-","productFamily":"iPhone"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 11 Pro.simdevicetype","name":"iPhone 11 Pro","identifier":"com.apple.CoreSimulator.SimDeviceType.iPhone-11-Pro","productFamily":"iPhone"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 11 Pro Max.simdevicetype","name":"iPhone 11 Pro Max","identifier":"com.apple.CoreSimulator.SimDeviceType.iPhone-11-Pro-Max","productFamily":"iPhone"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 11.simdevicetype","name":"iPhone 11","identifier":"com.apple.CoreSimulator.SimDeviceType.iPhone-11","productFamily":"iPhone"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Pro 13-inch (M5) (16GB).simdevicetype","name":"iPad Pro 13-inch (M5) (16GB)","identifier":"com.apple.CoreSimulator.SimDeviceType.iPad-Pro-13-inch-M5-16GB","productFamily":"iPad"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Pro 13-inch (M5).simdevicetype","name":"iPad Pro 13-inch (M5)","identifier":"com.apple.CoreSimulator.SimDeviceType.iPad-Pro-13-inch-M5-12GB","productFamily":"iPad"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Pro 11-inch (M5) (16GB).simdevicetype","name":"iPad Pro 11-inch (M5) (16GB)","identifier":"com.apple.CoreSimulator.SimDeviceType.iPad-Pro-11-inch-M5-16GB","productFamily":"iPad"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Pro 11-inch (M5).simdevicetype","name":"iPad Pro 11-inch (M5)","identifier":"com.apple.CoreSimulator.SimDeviceType.iPad-Pro-11-inch-M5-12GB","productFamily":"iPad"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Pro 11-inch (M4) (16GB).simdevicetype","name":"iPad Pro 11-inch (M4) (16GB)","identifier":"com.apple.CoreSimulator.SimDeviceType.iPad-Pro-11-inch-M4-16GB","productFamily":"iPad"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Pro 11-inch (M4).simdevicetype","name":"iPad Pro 11-inch (M4)","identifier":"com.apple.CoreSimulator.SimDeviceType.iPad-Pro-11-inch-M4-8GB","productFamily":"iPad"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Pro 13-inch (M4) (16GB).simdevicetype","name":"iPad Pro 13-inch (M4) (16GB)","identifier":"com.apple.CoreSimulator.SimDeviceType.iPad-Pro-13-inch-M4-16GB","productFamily":"iPad"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Pro 13-inch (M4).simdevicetype","name":"iPad Pro 13-inch (M4)","identifier":"com.apple.CoreSimulator.SimDeviceType.iPad-Pro-13-inch-M4-8GB","productFamily":"iPad"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad (A16).simdevicetype","name":"iPad (A16)","identifier":"com.apple.CoreSimulator.SimDeviceType.iPad-A16","productFamily":"iPad"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Air 13-inch (M3).simdevicetype","name":"iPad Air 13-inch (M3)","identifier":"com.apple.CoreSimulator.SimDeviceType.iPad-Air-13-inch-M3","productFamily":"iPad"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Air 11-inch (M3).simdevicetype","name":"iPad Air 11-inch (M3)","identifier":"com.apple.CoreSimulator.SimDeviceType.iPad-Air-11-inch-M3","productFamily":"iPad"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Air 11-inch (M2).simdevicetype","name":"iPad Air 11-inch (M2)","identifier":"com.apple.CoreSimulator.SimDeviceType.iPad-Air-11-inch-M2","productFamily":"iPad"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Air 13-inch (M2).simdevicetype","name":"iPad Air 13-inch (M2)","identifier":"com.apple.CoreSimulator.SimDeviceType.iPad-Air-13-inch-M2","productFamily":"iPad"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad mini (A17 Pro).simdevicetype","name":"iPad mini (A17 Pro)","identifier":"com.apple.CoreSimulator.SimDeviceType.iPad-mini-A17-Pro","productFamily":"iPad"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Pro (11-inch) (4th generation) (16GB).simdevicetype","name":"iPad Pro (11-inch) (4th generation) (16GB)","identifier":"com.apple.CoreSimulator.SimDeviceType.iPad-Pro-11-inch-4th-generation-16GB","productFamily":"iPad"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Pro (11-inch) (4th generation).simdevicetype","name":"iPad Pro (11-inch) (4th generation)","identifier":"com.apple.CoreSimulator.SimDeviceType.iPad-Pro-11-inch-4th-generation-8GB","productFamily":"iPad"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Pro (12.9-inch) (6th generation) (16GB).simdevicetype","name":"iPad Pro (12.9-inch) (6th generation) (16GB)","identifier":"com.apple.CoreSimulator.SimDeviceType.iPad-Pro-12-9-inch-6th-generation-16GB","productFamily":"iPad"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Pro (12.9-inch) (6th generation).simdevicetype","name":"iPad Pro (12.9-inch) (6th generation)","identifier":"com.apple.CoreSimulator.SimDeviceType.iPad-Pro-12-9-inch-6th-generation-8GB","productFamily":"iPad"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad (10th generation).simdevicetype","name":"iPad (10th generation)","identifier":"com.apple.CoreSimulator.SimDeviceType.iPad-10th-generation","productFamily":"iPad"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Air (5th generation).simdevicetype","name":"iPad Air (5th generation)","identifier":"com.apple.CoreSimulator.SimDeviceType.iPad-Air-5th-generation","productFamily":"iPad"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad mini (6th generation).simdevicetype","name":"iPad mini (6th generation)","identifier":"com.apple.CoreSimulator.SimDeviceType.iPad-mini-6th-generation","productFamily":"iPad"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Pro (11-inch) (3rd generation).simdevicetype","name":"iPad Pro (11-inch) (3rd generation)","identifier":"com.apple.CoreSimulator.SimDeviceType.iPad-Pro-11-inch-3rd-generation","productFamily":"iPad"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Pro (12.9-inch) (5th generation).simdevicetype","name":"iPad Pro (12.9-inch) (5th generation)","identifier":"com.apple.CoreSimulator.SimDeviceType.iPad-Pro-12-9-inch-5th-generation","productFamily":"iPad"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad (9th generation).simdevicetype","name":"iPad (9th generation)","identifier":"com.apple.CoreSimulator.SimDeviceType.iPad-9th-generation","productFamily":"iPad"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Air (4th generation).simdevicetype","name":"iPad Air (4th generation)","identifier":"com.apple.CoreSimulator.SimDeviceType.iPad-Air--4th-generation-","productFamily":"iPad"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad (8th generation).simdevicetype","name":"iPad (8th generation)","identifier":"com.apple.CoreSimulator.SimDeviceType.iPad--8th-generation-","productFamily":"iPad"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Air (3rd generation).simdevicetype","name":"iPad Air (3rd generation)","identifier":"com.apple.CoreSimulator.SimDeviceType.iPad-Air--3rd-generation-","productFamily":"iPad"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad mini (5th generation).simdevicetype","name":"iPad mini (5th generation)","identifier":"com.apple.CoreSimulator.SimDeviceType.iPad-mini--5th-generation-","productFamily":"iPad"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Pro (11-inch) (2nd generation).simdevicetype","name":"iPad Pro (11-inch) (2nd generation)","identifier":"com.apple.CoreSimulator.SimDeviceType.iPad-Pro--11-inch---2nd-generation-","productFamily":"iPad"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Pro (12.9-inch) (4th generation).simdevicetype","name":"iPad Pro (12.9-inch) (4th generation)","identifier":"com.apple.CoreSimulator.SimDeviceType.iPad-Pro--12-9-inch---4th-generation-","productFamily":"iPad"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Pro (11-inch) (1st generation).simdevicetype","name":"iPad Pro (11-inch) (1st generation)","identifier":"com.apple.CoreSimulator.SimDeviceType.iPad-Pro--11-inch-","productFamily":"iPad"},{"bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Pro (12.9-inch) (3rd generation).simdevicetype","name":"iPad Pro (12.9-inch) (3rd generation)","identifier":"com.apple.CoreSimulator.SimDeviceType.iPad-Pro--12-9-inch---3rd-generation-","productFamily":"iPad"}],"identifier":"com.apple.CoreSimulator.SimRuntime.iOS-26-2","platform":"iOS","bundlePath":"/Library/Developer/CoreSimulator/Volumes/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime","runtimeRoot":"/Library/Developer/CoreSimulator/Volumes/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot","lastUsage":{"arm64":"0001-01-01T00:00:00Z","x86_64":"0001-01-01T00:00:00Z"},"name":"iOS 26.2"},"deviceType":{"productFamily":"iPhone","bundlePath":"/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 16 Pro Max.simdevicetype","maxRuntimeVersion":4294967295,"maxRuntimeVersionString":"65535.255.255","identifier":"com.apple.CoreSimulator.SimDeviceType.iPhone-16-Pro-Max","modelIdentifier":"iPhone17,2","minRuntimeVersionString":"18.0.0","minRuntimeVersion":1179648,"name":"iPhone 16 Pro Max"},"udid":"6643CAFD-80A0-4901-A0AB-1D1965188544","hostOS":"ProductName:\t\tmacOS\nProductVersion:\t\t15.8.2\nBuildVersion:\t\t24H232","hostArchitecture":"arm64","hostMemoryBytes":7516192768,"xcode":"Xcode 26.2\nBuild version 17C52","safariDriver":"Included with Safari 27.2 (20625.2.8.18.4)","nativeAccountRequired":false,"paidServiceEnabled":false,"booted":true}
+2026-11-03T07:00:26.1173140Z ##[group]Run node verification/direct-boss-style-device-20261102/installDevicePreview.mjs --ignore-scripts
+2026-11-03T07:00:26.1178560Z [36;1mnode verification/direct-boss-style-device-20261102/installDevicePreview.mjs --ignore-scripts[0m
+2026-11-03T07:00:26.1180920Z [36;1mnpm install --prefix verification/boss2-forensics-20261028 --ignore-scripts --no-audit --no-fund[0m
+2026-11-03T07:00:26.1182950Z [36;1mnode verification/direct-boss-style-device-20261102/buildDevicePreview.mjs[0m
+2026-11-03T07:00:26.1184860Z [36;1mnode verification/device-resource-checkpoint-20261102/verifyPackage.mjs[0m
+2026-11-03T07:00:26.6321130Z shell: /bin/bash -e {0}
+2026-11-03T07:00:26.6326640Z env:
+2026-11-03T07:00:26.6327270Z   VERCEL_ENV: preview
+2026-11-03T07:00:26.6327960Z ##[endgroup]
+2026-11-03T07:00:32.3232030Z CRYPTOID_DIRECT_STYLE_DEVICE_SCOPE {"passed":true,"originalRuntimeTreesUnchanged":true,"automaticDeployment":false}
+2026-11-03T07:02:33.0918480Z npm warn deprecated eslint@9.39.4: This version is no longer supported. Please see https://eslint.org/version-support for other options.
+2026-11-03T07:02:50.8205930Z 
+2026-11-03T07:02:50.8267750Z added 252 packages in 2m
+2026-11-03T07:02:52.1596910Z CRYPTOID_DIRECT_STYLE_DEVICE_SCOPE {"passed":true,"originalRuntimeTreesUnchanged":true,"automaticDeployment":false}
+2026-11-03T07:02:52.1706340Z CRYPTOID_DIRECT_STYLE_DEVICE_INSTALL {"originalRuntimeTreesUnchanged":true,"originalYarnLockRestored":true,"projectEnvironmentChanged":false}
+2026-11-03T07:02:55.0586650Z 
+2026-11-03T07:02:55.0587420Z added 3 packages in 2s
+2026-11-03T07:02:55.2569540Z CRYPTOID_DIRECT_STYLE_DEVICE_SCOPE {"passed":true,"originalRuntimeTreesUnchanged":true,"automaticDeployment":false}
+2026-11-03T07:02:55.8192070Z (node:13944) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/backend/src/shipLoadout.ts is not specified and it doesn't parse as CommonJS.
+2026-11-03T07:02:55.8198280Z Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+2026-11-03T07:02:55.8199610Z To eliminate this warning, add "type": "module" to /Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/backend/package.json.
+2026-11-03T07:02:55.8206130Z (Use `node --trace-warnings ...` to show where the warning was created)
+2026-11-03T07:03:18.7770120Z {"revision":"ff8b0a21000dd2a992b0","variants":1740,"totalBytes":95450326,"dimensions":"original","canvasVersion":"0.1.100"}
+2026-11-03T07:03:18.9189110Z [36mvite v7.3.1 [32mbuilding client environment for production...[36m[39m
+2026-11-03T07:03:19.1458480Z transforming...
+2026-11-03T07:03:22.2097440Z [31m✗[39m Build failed in 3.07s
+2026-11-03T07:03:22.2102630Z [32m✓[39m 367 modules transformed.
+2026-11-03T07:03:22.2113700Z node:internal/modules/run_main:107
+2026-11-03T07:03:22.2124640Z     triggerUncaughtException(
+2026-11-03T07:03:22.2125740Z     ^
+2026-11-03T07:03:22.2126140Z 
+2026-11-03T07:03:22.2135310Z [31mfrontend/src/pages/GameShipVisual.tsx (2:7): "default" is not exported by "frontend/src/pages/paintedShip.ts", imported by "frontend/src/pages/GameShipVisual.tsx".[39m
+2026-11-03T07:03:22.2152390Z file: [36m/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/pages/GameShipVisual.tsx:2:7[39m
+2026-11-03T07:03:22.2206600Z [33m
+2026-11-03T07:03:22.2207190Z 1: import { memo, type ComponentProps } from "react";
+2026-11-03T07:03:22.2207660Z 2: import PaintedShip from "./PaintedShip";
+2026-11-03T07:03:22.2208210Z           ^
+2026-11-03T07:03:22.2208790Z 3: import HullDamage from "./HullDamage";
+2026-11-03T07:03:22.2211230Z 4: import { shipNozzleStyles, type PlayerColorId } from "./shipFleet";
+2026-11-03T07:03:22.2212690Z [39m
+2026-11-03T07:03:22.2213500Z     at getRollupError (file:///Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/node_modules/rollup/dist/es/shared/parseAst.js:406:41)
+2026-11-03T07:03:22.2221940Z     at error (file:///Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/node_modules/rollup/dist/es/shared/parseAst.js:402:42)
+2026-11-03T07:03:22.2234900Z     at Module.error (file:///Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/node_modules/rollup/dist/es/shared/node-entry.js:17065:16)
+2026-11-03T07:03:22.2238470Z     at Module.traceVariable (file:///Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/node_modules/rollup/dist/es/shared/node-entry.js:17477:29)
+2026-11-03T07:03:22.2243580Z     at ModuleScope.findVariable (file:///Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/node_modules/rollup/dist/es/shared/node-entry.js:15090:39)
+2026-11-03T07:03:22.2245200Z     at ChildScope.findVariable (file:///Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/node_modules/rollup/dist/es/shared/node-entry.js:5676:38)
+2026-11-03T07:03:22.2250950Z     at FunctionScope.findVariable (file:///Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/node_modules/rollup/dist/es/shared/node-entry.js:5676:38)
+2026-11-03T07:03:22.2257380Z     at FunctionBodyScope.findVariable (file:///Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/node_modules/rollup/dist/es/shared/node-entry.js:5676:38)
+2026-11-03T07:03:22.2263560Z     at Identifier.bind (file:///Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/node_modules/rollup/dist/es/shared/node-entry.js:5450:40)
+2026-11-03T07:03:22.2270570Z     at CallExpression.bind (file:///Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/node_modules/rollup/dist/es/shared/node-entry.js:2828:28) {
+2026-11-03T07:03:22.2275490Z   binding: 'default',
+2026-11-03T07:03:22.2276480Z   code: 'MISSING_EXPORT',
+2026-11-03T07:03:22.2278520Z   exporter: '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/pages/paintedShip.ts',
+2026-11-03T07:03:22.2280920Z   id: '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/pages/GameShipVisual.tsx',
+2026-11-03T07:03:22.2283400Z   url: 'https://rollupjs.org/troubleshooting/#error-name-is-not-exported-by-module',
+2026-11-03T07:03:22.2284580Z   pos: 84,
+2026-11-03T07:03:22.2285120Z   loc: {
+2026-11-03T07:03:22.2285830Z     column: 7,
+2026-11-03T07:03:22.2287500Z     file: '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/pages/GameShipVisual.tsx',
+2026-11-03T07:03:22.2289220Z     line: 2
+2026-11-03T07:03:22.2290020Z   },
+2026-11-03T07:03:22.2291540Z   frame: '1: import { memo, type ComponentProps } from "react";\n' +
+2026-11-03T07:03:22.2292850Z     '2: import PaintedShip from "./PaintedShip";\n' +
+2026-11-03T07:03:22.2293880Z     '          ^\n' +
+2026-11-03T07:03:22.2295000Z     '3: import HullDamage from "./HullDamage";\n' +
+2026-11-03T07:03:22.2296350Z     '4: import { shipNozzleStyles, type PlayerColorId } from "./shipFleet";',
+2026-11-03T07:03:22.2297640Z   watchFiles: [
+2026-11-03T07:03:22.2301330Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/index.html',
+2026-11-03T07:03:22.2302480Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/main.tsx',
+2026-11-03T07:03:22.2305400Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/package.json',
+2026-11-03T07:03:22.2308780Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/node_modules/react/jsx-runtime.js',
+2026-11-03T07:03:22.2310590Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/node_modules/react/index.js',
+2026-11-03T07:03:22.2312370Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/node_modules/react-dom/client.js',
+2026-11-03T07:03:22.2314680Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/lib/cssFramePacing.ts',
+2026-11-03T07:03:22.2316440Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/lib/aggregateUsage.ts',
+2026-11-03T07:03:22.2318490Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/App.tsx',
+2026-11-03T07:03:22.2320070Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/gameViewport.css',
+2026-11-03T07:03:22.2327380Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/floatingNotices.css',
+2026-11-03T07:03:22.2328780Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/missionDialogMobile.css',
+2026-11-03T07:03:22.2330140Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/homeTypeMobile.css',
+2026-11-03T07:03:22.2338640Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/index.css',
+2026-11-03T07:03:22.2340030Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/quickAccessMobile.css',
+2026-11-03T07:03:22.2358290Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/mobileDeepMenus.css',
+2026-11-03T07:03:22.2381000Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/locales/typography.css',
+2026-11-03T07:03:22.2385670Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/hudDepth.css',
+2026-11-03T07:03:22.2389860Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/mobileMenus.css',
+2026-11-03T07:03:22.2390860Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/smartphoneUi.css',
+2026-11-03T07:03:22.2391640Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/fleetMenus.css',
+2026-11-03T07:03:22.2392860Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/selectionControls.css',
+2026-11-03T07:03:22.2393970Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/cockpitMenus.css',
+2026-11-03T07:03:22.2398530Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/pages/feedbackCompact.css',
+2026-11-03T07:03:22.2400020Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/node_modules/react/cjs/react.production.js',
+2026-11-03T07:03:22.2406300Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/node_modules/react/cjs/react-jsx-runtime.production.js',
+2026-11-03T07:03:22.2407550Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/verification/boss2-forensics-20261028/devicePreviewApp.jsx',
+2026-11-03T07:03:22.2415780Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/node_modules/react-dom/cjs/react-dom-client.production.js',
+2026-11-03T07:03:22.2418340Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/lib/nativeFrameEasing.ts',
+2026-11-03T07:03:22.2420830Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/node_modules/react-dom/index.js',
+2026-11-03T07:03:22.2421870Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/node_modules/scheduler/index.js',
+2026-11-03T07:03:22.2425680Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/verification/boss2-forensics-20261028/package.json',
+2026-11-03T07:03:22.2432680Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/node_modules/react-router-dom/dist/index.mjs',
+2026-11-03T07:03:22.2438050Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/pages/flightRecorderReport.mjs',
+2026-11-03T07:03:22.2439540Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/verification/boss2-forensics-20261028/deviceReturnEvidence.mjs',
+2026-11-03T07:03:22.2442440Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/pages/fullSessionStore.ts',
+2026-11-03T07:03:22.2446220Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/pages/crashTail.ts',
+2026-11-03T07:03:22.2450030Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/pages/fullSessionTransfer.ts',
+2026-11-03T07:03:22.2455180Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/verification/boss2-forensics-20261028/devicePreviewAuth.mjs',
+2026-11-03T07:03:22.2456670Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/verification/boss2-brief-report-20261030/briefState.mjs',
+2026-11-03T07:03:22.2457820Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/verification/boss2-brief-report-20261030/briefBrowser.mjs',
+2026-11-03T07:03:22.2461710Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/lib/menuViewport.ts',
+2026-11-03T07:03:22.2464650Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/pages/gameAudio.ts',
+2026-11-03T07:03:22.2467330Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/pages/gameFullscreen.ts',
+2026-11-03T07:03:22.2473010Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/pages/reloadDiagnostics.ts',
+2026-11-03T07:03:22.2474010Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/verification/boss2-forensics-20261028/devicePreviewWarmup.mjs',
+2026-11-03T07:03:22.2476560Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/verification/boss2-forensics-20261028/devicePreview.css',
+2026-11-03T07:03:22.2477910Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/pages/GamePage.tsx',
+2026-11-03T07:03:22.2478950Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/node_modules/react-dom/cjs/react-dom.production.js',
+2026-11-03T07:03:22.2480100Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/node_modules/scheduler/cjs/scheduler.production.js',
+2026-11-03T07:03:22.2484010Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/pages/timingReport.mjs',
+2026-11-03T07:03:22.2485940Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/verification/boss2-stopwatch-20261029/stopwatchState.mjs',
+2026-11-03T07:03:22.2487970Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/node_modules/react-router/dist/development/index.mjs',
+2026-11-03T07:03:22.2493270Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/pages/stabilityReport.mjs',
+2026-11-03T07:03:22.2497340Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/node_modules/react-router/dist/development/dom-export.mjs',
+2026-11-03T07:03:22.2498310Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/pages/paintedShip.ts',
+2026-11-03T07:03:22.2501850Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/pages/hullSourcePlan.ts',
+2026-11-03T07:03:22.2503080Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/pages/shipFleet.ts',
+2026-11-03T07:03:22.2503950Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/pages/bossManifest.ts',
+2026-11-03T07:03:22.2505530Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/pages/bossWeaponTextures.ts',
+2026-11-03T07:03:22.2509220Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/pages/technicalReportContext.mjs',
+2026-11-03T07:03:22.2510750Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/pages/crashProgress.ts',
+2026-11-03T07:03:22.2513170Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/pages/fullSessionFormat.ts',
+2026-11-03T07:03:22.2514650Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/lib/frameScheduler.ts',
+2026-11-03T07:03:22.2517340Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/pages/bossWeaponSound.ts',
+2026-11-03T07:03:22.2518640Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/pages/enemyWeaponSound.ts',
+2026-11-03T07:03:22.2519420Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/pages/gameDiagnostics.ts',
+2026-11-03T07:03:22.2520350Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/pages/ownerAudioAudit.ts',
+2026-11-03T07:03:22.2521220Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/pages/audioClockRecovery.ts',
+2026-11-03T07:03:22.2522090Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/lib/sessionDiagnosticEvents.ts',
+2026-11-03T07:03:22.2523150Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/pages/musicPreferences.ts',
+2026-11-03T07:03:22.2524060Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/lib/ownerLifecycleEvidence.mjs',
+2026-11-03T07:03:22.2529180Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/pages/crashRecoveryBoundary.mjs',
+2026-11-03T07:03:22.2531860Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/pages/audioAuditReport.mjs',
+2026-11-03T07:03:22.2533090Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/node_modules/react-router/dist/development/chunk-UALY5CBT.mjs',
+2026-11-03T07:03:22.2537130Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/node_modules/react-router/dist/development/chunk-UVKPFVEO.mjs',
+2026-11-03T07:03:22.2542780Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/pages/shipEvolution.ts',
+2026-11-03T07:03:22.2543530Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/pages/bonusChallenge.ts',
+2026-11-03T07:03:22.2545160Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/pages/blockFlights.ts',
+2026-11-03T07:03:22.2549410Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/pages/resourceCache.ts',
+2026-11-03T07:03:22.2550250Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/pages/staticHullAssets.ts',
+2026-11-03T07:03:22.2550970Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/pages/shipVisualCenter.ts',
+2026-11-03T07:03:22.2723850Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/pages/performanceDiagnostics.ts',
+2026-11-03T07:03:22.2729720Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/pages/hullPreparationDiagnostics.ts',
+2026-11-03T07:03:22.2734400Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/pages/bossEscorts.ts',
+2026-11-03T07:03:22.2735130Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/pages/cardAvailability.ts',
+2026-11-03T07:03:22.2736210Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/lib/requestDiagnosticCodes.ts',
+2026-11-03T07:03:22.2739890Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/pages/bossResourceDiagnostics.ts',
+2026-11-03T07:03:22.2741090Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/pages/pauseDiagnostics.ts',
+2026-11-03T07:03:22.2741850Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/pages/inputDiagnostics.ts',
+2026-11-03T07:03:22.2742580Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/pages/shipOverlayGeometry.ts',
+2026-11-03T07:03:22.2743360Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/node_modules/set-cookie-parser/lib/set-cookie.js',
+2026-11-03T07:03:22.2744740Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/node_modules/cookie/dist/index.js',
+2026-11-03T07:03:22.2747260Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/backend/package.json',
+2026-11-03T07:03:22.2747950Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/generated/paintedHullManifest.ts',
+2026-11-03T07:03:22.2748660Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/backend/src/shipLoadout.ts',
+2026-11-03T07:03:22.2749290Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/backend/src/blockFlights.ts',
+2026-11-03T07:03:22.2750020Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/pages/combatVariety.ts',
+2026-11-03T07:03:22.2751020Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/node_modules/axios/index.js',
+2026-11-03T07:03:22.2757020Z     '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate/frontend/src/pages/shardEarnings.ts',
+2026-11-03T07:03:22.2757600Z     ... 249 more items
+2026-11-03T07:03:22.2758010Z   ],
+2026-11-03T07:03:22.2758190Z   Symbol(augmented): true
+2026-11-03T07:03:22.2758430Z }
+2026-11-03T07:03:22.2758610Z 
+2026-11-03T07:03:22.2758890Z Node.js v24.22.1
+2026-11-03T07:03:22.2858610Z ##[error]Process completed with exit code 1.
+2026-11-03T07:03:22.3835480Z ##[group]Run node --input-type=module - <<'NODE'
+2026-11-03T07:03:22.3835940Z [36;1mnode --input-type=module - <<'NODE'[0m
+2026-11-03T07:03:22.3836190Z [36;1mimport {readFileSync} from 'node:fs';[0m
+2026-11-03T07:03:22.3836500Z [36;1mimport {spawnSync} from 'node:child_process';[0m
+2026-11-03T07:03:22.3836790Z [36;1mtry {[0m
+2026-11-03T07:03:22.3837180Z [36;1m  const {udid}=JSON.parse(readFileSync('lab/verification/ios-safari-native-20261103/results/simulator.json','utf8'));[0m
+2026-11-03T07:03:22.3837870Z [36;1m  spawnSync('xcrun',['simctl','shutdown',udid],{stdio:'inherit'});[0m
+2026-11-03T07:03:22.3838290Z [36;1m  spawnSync('xcrun',['simctl','delete',udid],{stdio:'inherit'});[0m
+2026-11-03T07:03:22.3838870Z [36;1m} catch (error) { console.log('CRYPTOID_IOS_CLEANUP '+JSON.stringify({message:String(error.message)})); }[0m
+2026-11-03T07:03:22.3839300Z [36;1mNODE[0m
+2026-11-03T07:03:23.1802390Z shell: /bin/bash -e {0}
+2026-11-03T07:03:23.1802620Z ##[endgroup]
+2026-11-03T07:03:33.3115770Z Post job cleanup.
+2026-11-03T07:03:34.0455280Z [command]/opt/homebrew/bin/git version
+2026-11-03T07:03:34.0683790Z git version 2.56.0
+2026-11-03T07:03:34.1194860Z Copying '/Users/runner/.gitconfig' to '/Users/runner/work/_temp/8fa68f72-94c8-49ca-80c7-4bc8e65cea43/.gitconfig'
+2026-11-03T07:03:34.1307080Z Temporarily overriding HOME='/Users/runner/work/_temp/8fa68f72-94c8-49ca-80c7-4bc8e65cea43' before making global git config changes
+2026-11-03T07:03:34.1411030Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-03T07:03:34.1513990Z [command]/opt/homebrew/bin/git config --global --add safe.directory /Users/runner/work/cryptoid-evolution/cryptoid-evolution/candidate
+2026-11-03T07:03:34.1819590Z Removing SSH command configuration
+2026-11-03T07:03:34.1924900Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-03T07:03:34.2230680Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-03T07:03:34.3712270Z Removing HTTP extra header
+2026-11-03T07:03:34.3901760Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-03T07:03:34.4209750Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-03T07:03:34.6193800Z Removing includeIf entries pointing to credentials config files
+2026-11-03T07:03:34.6297320Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-03T07:03:34.6555810Z [command]/opt/homebrew/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-03T07:03:34.8673520Z Post job cleanup.
+2026-11-03T07:03:35.1289970Z [command]/opt/homebrew/bin/git version
+2026-11-03T07:03:35.1391550Z git version 2.56.0
+2026-11-03T07:03:35.1920570Z Copying '/Users/runner/.gitconfig' to '/Users/runner/work/_temp/991a0947-88c7-479c-a20f-e0e6fdd52faf/.gitconfig'
+2026-11-03T07:03:35.2028080Z Temporarily overriding HOME='/Users/runner/work/_temp/991a0947-88c7-479c-a20f-e0e6fdd52faf' before making global git config changes
+2026-11-03T07:03:35.2130280Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-03T07:03:35.2235400Z [command]/opt/homebrew/bin/git config --global --add safe.directory /Users/runner/work/cryptoid-evolution/cryptoid-evolution/lab
+2026-11-03T07:03:35.2612630Z Removing SSH command configuration
+2026-11-03T07:03:35.2751980Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-03T07:03:35.3090230Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-03T07:03:35.4785410Z Removing HTTP extra header
+2026-11-03T07:03:35.4897580Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-03T07:03:35.5213470Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-03T07:03:35.7251410Z Removing includeIf entries pointing to credentials config files
+2026-11-03T07:03:35.7362080Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-03T07:03:35.7717990Z [command]/opt/homebrew/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-03T07:03:36.0038590Z Cleaning up orphan processes
+2026-11-03T07:03:38.2150560Z Terminate orphan process: pid (10114) (Simulator)

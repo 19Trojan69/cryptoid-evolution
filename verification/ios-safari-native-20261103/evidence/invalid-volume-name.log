@@ -1,0 +1,272 @@
+﻿2026-11-03T07:07:08.3608910Z Current runner version: '2.338.2'
+2026-11-03T07:07:08.3637990Z ##[group]Runner Image Provisioner
+2026-11-03T07:07:08.3638680Z Hosted Compute Agent
+2026-11-03T07:07:08.3639070Z Version: 20261021.618
+2026-11-03T07:07:08.3639490Z Commit: 21505ad2541d5be6135ed84fc33697146cf75b8e
+2026-11-03T07:07:08.3639970Z Build Date: 2026-10-21T00:45:21Z
+2026-11-03T07:07:08.3640440Z Worker ID: {090337d5-4431-4a5d-a5a2-3f975b6fa51a}
+2026-11-03T07:07:08.3640900Z Region: westus
+2026-11-03T07:07:08.3641330Z Cloud: MacCloud
+2026-11-03T07:07:08.3641700Z ##[endgroup]
+2026-11-03T07:07:08.3642740Z ##[group]Operating System
+2026-11-03T07:07:08.3643150Z macOS
+2026-11-03T07:07:08.3643540Z 15.8.2
+2026-11-03T07:07:08.3643890Z 24H232
+2026-11-03T07:07:08.3644230Z ##[endgroup]
+2026-11-03T07:07:08.3644590Z ##[group]Runner Image
+2026-11-03T07:07:08.3644980Z Image: macos-15-arm64
+2026-11-03T07:07:08.3645360Z Version: 20261028.0489.1
+2026-11-03T07:07:08.3646330Z Included Software: https://github.com/actions/runner-images/blob/macos-15-arm64/20261028.0489/images/macos/macos-15-arm64-Readme.md
+2026-11-03T07:07:08.3647450Z Image Release: https://github.com/actions/runner-images/releases/tag/macos-15-arm64%2F20261028.0489
+2026-11-03T07:07:08.3648140Z ##[endgroup]
+2026-11-03T07:07:08.3648960Z ##[group]GITHUB_TOKEN Permissions
+2026-11-03T07:07:08.3650390Z Contents: read
+2026-11-03T07:07:08.3650800Z Metadata: read
+2026-11-03T07:07:08.3651170Z ##[endgroup]
+2026-11-03T07:07:08.3652770Z Secret source: Actions
+2026-11-03T07:07:08.3653360Z Cache mode: write
+2026-11-03T07:07:08.3653890Z Prepare workflow directory
+2026-11-03T07:07:08.3969220Z Prepare all required actions
+2026-11-03T07:07:08.4007510Z Getting action download info
+2026-11-03T07:07:08.8152820Z Download action repository 'actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803' (SHA:d23441a48e516b6c34aea4fa41551a30e30af803)
+2026-11-03T07:07:09.2539330Z Download action repository 'actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38' (SHA:249970729cb0ef3589644e2896645e5dc5ba9c38)
+2026-11-03T07:07:09.5213410Z Complete job name: ios-safari
+2026-11-03T07:07:09.5794140Z ##[group]Run actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+2026-11-03T07:07:09.5795040Z with:
+2026-11-03T07:07:09.5795540Z   persist-credentials: false
+2026-11-03T07:07:09.5795940Z   path: lab
+2026-11-03T07:07:09.5796340Z   repository: 19Trojan69/cryptoid-evolution
+2026-11-03T07:07:09.5799730Z   token: ***
+2026-11-03T07:07:09.5800070Z   ssh-strict: true
+2026-11-03T07:07:09.5800420Z   ssh-user: git
+2026-11-03T07:07:09.5800750Z   clean: true
+2026-11-03T07:07:09.5801100Z   sparse-checkout-cone-mode: true
+2026-11-03T07:07:09.5801500Z   fetch-depth: 1
+2026-11-03T07:07:09.5830770Z   fetch-tags: false
+2026-11-03T07:07:09.5831530Z   show-progress: true
+2026-11-03T07:07:09.5831940Z   lfs: false
+2026-11-03T07:07:09.5832930Z   submodules: false
+2026-11-03T07:07:09.5833320Z   set-safe-directory: true
+2026-11-03T07:07:09.5833730Z   allow-unsafe-pr-checkout: false
+2026-11-03T07:07:09.5837330Z ##[endgroup]
+2026-11-03T07:07:10.0930760Z Syncing repository: 19Trojan69/cryptoid-evolution
+2026-11-03T07:07:10.0932940Z ##[group]Getting Git version info
+2026-11-03T07:07:10.0933720Z Working directory is '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/lab'
+2026-11-03T07:07:10.0934670Z [command]/opt/homebrew/bin/git version
+2026-11-03T07:07:10.1274770Z git version 2.56.0
+2026-11-03T07:07:10.1313100Z ##[endgroup]
+2026-11-03T07:07:10.1336400Z Copying '/Users/runner/.gitconfig' to '/Users/runner/work/_temp/02e9214d-6619-4d78-b2b8-740282df4731/.gitconfig'
+2026-11-03T07:07:10.1337860Z Temporarily overriding HOME='/Users/runner/work/_temp/02e9214d-6619-4d78-b2b8-740282df4731' before making global git config changes
+2026-11-03T07:07:10.1338960Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-03T07:07:10.1340090Z [command]/opt/homebrew/bin/git config --global --add safe.directory /Users/runner/work/cryptoid-evolution/cryptoid-evolution/lab
+2026-11-03T07:07:10.1510900Z ##[group]Determining repository object format
+2026-11-03T07:07:10.1515550Z ##[endgroup]
+2026-11-03T07:07:10.1517440Z ##[group]Initializing the repository
+2026-11-03T07:07:10.1519340Z [command]/opt/homebrew/bin/git init /Users/runner/work/cryptoid-evolution/cryptoid-evolution/lab
+2026-11-03T07:07:10.1864060Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-11-03T07:07:10.1865200Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-11-03T07:07:10.1865990Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-11-03T07:07:10.1866610Z hint: call:
+2026-11-03T07:07:10.1866970Z hint:
+2026-11-03T07:07:10.1868300Z hint: 	git config --global init.defaultBranch <name>
+2026-11-03T07:07:10.1868980Z hint:
+2026-11-03T07:07:10.1870820Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-11-03T07:07:10.1871740Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-11-03T07:07:10.1872410Z hint:
+2026-11-03T07:07:10.1872920Z hint: 	git branch -m <name>
+2026-11-03T07:07:10.1873440Z hint:
+2026-11-03T07:07:10.1874000Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-11-03T07:07:10.1884940Z Initialized empty Git repository in /Users/runner/work/cryptoid-evolution/cryptoid-evolution/lab/.git/
+2026-11-03T07:07:10.1901990Z [command]/opt/homebrew/bin/git remote add origin https://github.com/19Trojan69/cryptoid-evolution
+2026-11-03T07:07:10.2005770Z ##[endgroup]
+2026-11-03T07:07:10.2007920Z ##[group]Disabling automatic garbage collection
+2026-11-03T07:07:10.2009730Z [command]/opt/homebrew/bin/git config --local gc.auto 0
+2026-11-03T07:07:10.2093690Z ##[endgroup]
+2026-11-03T07:07:10.2094580Z ##[group]Setting up auth
+2026-11-03T07:07:10.2096380Z Removing SSH command configuration
+2026-11-03T07:07:10.2098560Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-03T07:07:10.2178140Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-03T07:07:10.3342020Z Removing HTTP extra header
+2026-11-03T07:07:10.3344550Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-03T07:07:10.3418350Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-03T07:07:10.4336340Z Removing includeIf entries pointing to credentials config files
+2026-11-03T07:07:10.4337980Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-03T07:07:10.4431530Z [command]/opt/homebrew/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-03T07:07:10.5526690Z [command]/opt/homebrew/bin/git config --file /Users/runner/work/_temp/git-credentials-00342b0c-075f-47ac-81a7-5fdef3fbe917.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-11-03T07:07:10.5633010Z [command]/opt/homebrew/bin/git config --local includeIf.gitdir:/Users/runner/work/cryptoid-evolution/cryptoid-evolution/lab/.git.path /Users/runner/work/_temp/git-credentials-00342b0c-075f-47ac-81a7-5fdef3fbe917.config
+2026-11-03T07:07:10.5738980Z [command]/opt/homebrew/bin/git config --local includeIf.gitdir:/Users/runner/work/cryptoid-evolution/cryptoid-evolution/lab/.git/worktrees/*.path /Users/runner/work/_temp/git-credentials-00342b0c-075f-47ac-81a7-5fdef3fbe917.config
+2026-11-03T07:07:10.5820200Z [command]/opt/homebrew/bin/git config --local includeIf.gitdir:/github/workspace/lab/.git.path /github/runner_temp/git-credentials-00342b0c-075f-47ac-81a7-5fdef3fbe917.config
+2026-11-03T07:07:10.5944870Z [command]/opt/homebrew/bin/git config --local includeIf.gitdir:/github/workspace/lab/.git/worktrees/*.path /github/runner_temp/git-credentials-00342b0c-075f-47ac-81a7-5fdef3fbe917.config
+2026-11-03T07:07:10.6063620Z ##[endgroup]
+2026-11-03T07:07:10.6065510Z ##[group]Fetching the repository
+2026-11-03T07:07:10.6069090Z [command]/opt/homebrew/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +3b9f4c45c0a0f10f3731a1c473ac2b1ab029b5e2:refs/remotes/origin/codex/ios-safari-native-20261103
+2026-11-03T07:07:17.6013330Z From https://github.com/19Trojan69/cryptoid-evolution
+2026-11-03T07:07:17.6016650Z  * [new ref]         3b9f4c45c0a0f10f3731a1c473ac2b1ab029b5e2 -> origin/codex/ios-safari-native-20261103
+2026-11-03T07:07:17.6049190Z [command]/opt/homebrew/bin/git branch --list --remote origin/codex/ios-safari-native-20261103
+2026-11-03T07:07:17.6136250Z   origin/codex/ios-safari-native-20261103
+2026-11-03T07:07:17.6148760Z [command]/opt/homebrew/bin/git rev-parse refs/remotes/origin/codex/ios-safari-native-20261103
+2026-11-03T07:07:17.6210530Z 3b9f4c45c0a0f10f3731a1c473ac2b1ab029b5e2
+2026-11-03T07:07:17.6215540Z ##[endgroup]
+2026-11-03T07:07:17.6216630Z ##[group]Determining the checkout info
+2026-11-03T07:07:17.6217780Z ##[endgroup]
+2026-11-03T07:07:17.6223230Z [command]/opt/homebrew/bin/git sparse-checkout disable
+2026-11-03T07:07:17.6323480Z [command]/opt/homebrew/bin/git config --local --unset-all extensions.worktreeConfig
+2026-11-03T07:07:17.6390940Z ##[group]Checking out the ref
+2026-11-03T07:07:17.6394830Z [command]/opt/homebrew/bin/git checkout --progress --force -B codex/ios-safari-native-20261103 refs/remotes/origin/codex/ios-safari-native-20261103
+2026-11-03T07:07:18.9699790Z Updating files:  28% (814/2888)
+2026-11-03T07:07:19.0707000Z Updating files:  29% (838/2888)
+2026-11-03T07:07:19.1562220Z Updating files:  30% (867/2888)
+2026-11-03T07:07:19.2211380Z Updating files:  31% (896/2888)
+2026-11-03T07:07:19.2634660Z Updating files:  32% (925/2888)
+2026-11-03T07:07:19.2804090Z Updating files:  33% (954/2888)
+2026-11-03T07:07:19.3094200Z Updating files:  34% (982/2888)
+2026-11-03T07:07:19.3402430Z Updating files:  35% (1011/2888)
+2026-11-03T07:07:19.3797470Z Updating files:  36% (1040/2888)
+2026-11-03T07:07:19.4097590Z Updating files:  37% (1069/2888)
+2026-11-03T07:07:19.4379600Z Updating files:  38% (1098/2888)
+2026-11-03T07:07:19.4641180Z Updating files:  39% (1127/2888)
+2026-11-03T07:07:19.5196810Z Updating files:  40% (1156/2888)
+2026-11-03T07:07:19.5965170Z Updating files:  41% (1185/2888)
+2026-11-03T07:07:19.6262450Z Updating files:  42% (1213/2888)
+2026-11-03T07:07:19.6422190Z Updating files:  43% (1242/2888)
+2026-11-03T07:07:19.6481440Z Updating files:  44% (1271/2888)
+2026-11-03T07:07:19.6519150Z Updating files:  45% (1300/2888)
+2026-11-03T07:07:19.6527380Z Updating files:  46% (1329/2888)
+2026-11-03T07:07:19.6573760Z Updating files:  46% (1332/2888)
+2026-11-03T07:07:19.6622290Z Updating files:  47% (1358/2888)
+2026-11-03T07:07:19.6656380Z Updating files:  48% (1387/2888)
+2026-11-03T07:07:19.6718020Z Updating files:  49% (1416/2888)
+2026-11-03T07:07:19.6814940Z Updating files:  50% (1444/2888)
+2026-11-03T07:07:19.6976260Z Updating files:  51% (1473/2888)
+2026-11-03T07:07:19.7131210Z Updating files:  52% (1502/2888)
+2026-11-03T07:07:19.7187670Z Updating files:  53% (1531/2888)
+2026-11-03T07:07:19.7249680Z Updating files:  54% (1560/2888)
+2026-11-03T07:07:19.7697860Z Updating files:  55% (1589/2888)
+2026-11-03T07:07:19.8233170Z Updating files:  56% (1618/2888)
+2026-11-03T07:07:19.8350970Z Updating files:  57% (1647/2888)
+2026-11-03T07:07:19.8398700Z Updating files:  58% (1676/2888)
+2026-11-03T07:07:19.8547020Z Updating files:  59% (1704/2888)
+2026-11-03T07:07:19.8791480Z Updating files:  60% (1733/2888)
+2026-11-03T07:07:19.8893360Z Updating files:  61% (1762/2888)
+2026-11-03T07:07:19.9007050Z Updating files:  62% (1791/2888)
+2026-11-03T07:07:19.9106150Z Updating files:  63% (1820/2888)
+2026-11-03T07:07:19.9268970Z Updating files:  64% (1849/2888)
+2026-11-03T07:07:19.9292630Z Updating files:  65% (1878/2888)
+2026-11-03T07:07:19.9434160Z Updating files:  66% (1907/2888)
+2026-11-03T07:07:19.9518190Z Updating files:  67% (1935/2888)
+2026-11-03T07:07:19.9619360Z Updating files:  68% (1964/2888)
+2026-11-03T07:07:19.9953130Z Updating files:  69% (1993/2888)
+2026-11-03T07:07:20.0147540Z Updating files:  70% (2022/2888)
+2026-11-03T07:07:20.0224040Z Updating files:  71% (2051/2888)
+2026-11-03T07:07:20.0327240Z Updating files:  72% (2080/2888)
+2026-11-03T07:07:20.0499570Z Updating files:  73% (2109/2888)
+2026-11-03T07:07:20.0713620Z Updating files:  74% (2138/2888)
+2026-11-03T07:07:20.0874100Z Updating files:  75% (2166/2888)
+2026-11-03T07:07:20.0993720Z Updating files:  76% (2195/2888)
+2026-11-03T07:07:20.1263620Z Updating files:  77% (2224/2888)
+2026-11-03T07:07:20.1612520Z Updating files:  78% (2253/2888)
+2026-11-03T07:07:20.1722510Z Updating files:  79% (2282/2888)
+2026-11-03T07:07:20.1799100Z Updating files:  80% (2311/2888)
+2026-11-03T07:07:20.1970990Z Updating files:  81% (2340/2888)
+2026-11-03T07:07:20.2043370Z Updating files:  82% (2369/2888)
+2026-11-03T07:07:20.2210420Z Updating files:  83% (2398/2888)
+2026-11-03T07:07:20.2259930Z Updating files:  84% (2426/2888)
+2026-11-03T07:07:20.3028760Z Updating files:  85% (2455/2888)
+2026-11-03T07:07:20.3109260Z Updating files:  86% (2484/2888)
+2026-11-03T07:07:20.3314720Z Updating files:  87% (2513/2888)
+2026-11-03T07:07:20.3711900Z Updating files:  88% (2542/2888)
+2026-11-03T07:07:20.3951330Z Updating files:  89% (2571/2888)
+2026-11-03T07:07:20.4167190Z Updating files:  90% (2600/2888)
+2026-11-03T07:07:20.4252720Z Updating files:  91% (2629/2888)
+2026-11-03T07:07:20.4372110Z Updating files:  92% (2657/2888)
+2026-11-03T07:07:20.4783120Z Updating files:  93% (2686/2888)
+2026-11-03T07:07:20.5110180Z Updating files:  94% (2715/2888)
+2026-11-03T07:07:20.5383310Z Updating files:  95% (2744/2888)
+2026-11-03T07:07:20.5443620Z Updating files:  96% (2773/2888)
+2026-11-03T07:07:20.5501650Z Updating files:  97% (2802/2888)
+2026-11-03T07:07:20.5620420Z Updating files:  98% (2831/2888)
+2026-11-03T07:07:20.5677490Z Updating files:  99% (2860/2888)
+2026-11-03T07:07:20.5678670Z Updating files: 100% (2888/2888)
+2026-11-03T07:07:20.5680120Z Updating files: 100% (2888/2888), done.
+2026-11-03T07:07:20.5787650Z Switched to a new branch 'codex/ios-safari-native-20261103'
+2026-11-03T07:07:20.5789970Z branch 'codex/ios-safari-native-20261103' set up to track 'origin/codex/ios-safari-native-20261103'.
+2026-11-03T07:07:20.5836710Z ##[endgroup]
+2026-11-03T07:07:20.6012420Z [command]/opt/homebrew/bin/git log -1 --format=%H
+2026-11-03T07:07:20.6253020Z 3b9f4c45c0a0f10f3731a1c473ac2b1ab029b5e2
+2026-11-03T07:07:20.6289670Z ##[group]Removing auth
+2026-11-03T07:07:20.6290670Z Removing SSH command configuration
+2026-11-03T07:07:20.6291850Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-03T07:07:20.6363080Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-03T07:07:20.7320200Z Removing HTTP extra header
+2026-11-03T07:07:20.7322730Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-03T07:07:20.7386140Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-03T07:07:20.8547480Z Removing includeIf entries pointing to credentials config files
+2026-11-03T07:07:20.8550330Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-03T07:07:20.8643480Z includeif.gitdir:/Users/runner/work/cryptoid-evolution/cryptoid-evolution/lab/.git.path
+2026-11-03T07:07:20.8645570Z includeif.gitdir:/Users/runner/work/cryptoid-evolution/cryptoid-evolution/lab/.git/worktrees/*.path
+2026-11-03T07:07:20.8646620Z includeif.gitdir:/github/workspace/lab/.git.path
+2026-11-03T07:07:20.8647060Z includeif.gitdir:/github/workspace/lab/.git/worktrees/*.path
+2026-11-03T07:07:20.8652110Z [command]/opt/homebrew/bin/git config --local --get-all includeif.gitdir:/Users/runner/work/cryptoid-evolution/cryptoid-evolution/lab/.git.path
+2026-11-03T07:07:20.8707910Z /Users/runner/work/_temp/git-credentials-00342b0c-075f-47ac-81a7-5fdef3fbe917.config
+2026-11-03T07:07:20.8716090Z [command]/opt/homebrew/bin/git config --local --unset includeif.gitdir:/Users/runner/work/cryptoid-evolution/cryptoid-evolution/lab/.git.path /Users/runner/work/_temp/git-credentials-00342b0c-075f-47ac-81a7-5fdef3fbe917.config
+2026-11-03T07:07:20.8797180Z [command]/opt/homebrew/bin/git config --local --get-all includeif.gitdir:/Users/runner/work/cryptoid-evolution/cryptoid-evolution/lab/.git/worktrees/*.path
+2026-11-03T07:07:20.8865720Z /Users/runner/work/_temp/git-credentials-00342b0c-075f-47ac-81a7-5fdef3fbe917.config
+2026-11-03T07:07:20.8871270Z [command]/opt/homebrew/bin/git config --local --unset includeif.gitdir:/Users/runner/work/cryptoid-evolution/cryptoid-evolution/lab/.git/worktrees/*.path /Users/runner/work/_temp/git-credentials-00342b0c-075f-47ac-81a7-5fdef3fbe917.config
+2026-11-03T07:07:20.8937330Z [command]/opt/homebrew/bin/git config --local --get-all includeif.gitdir:/github/workspace/lab/.git.path
+2026-11-03T07:07:20.8991810Z /github/runner_temp/git-credentials-00342b0c-075f-47ac-81a7-5fdef3fbe917.config
+2026-11-03T07:07:20.8996980Z [command]/opt/homebrew/bin/git config --local --unset includeif.gitdir:/github/workspace/lab/.git.path /github/runner_temp/git-credentials-00342b0c-075f-47ac-81a7-5fdef3fbe917.config
+2026-11-03T07:07:20.9061650Z [command]/opt/homebrew/bin/git config --local --get-all includeif.gitdir:/github/workspace/lab/.git/worktrees/*.path
+2026-11-03T07:07:20.9112270Z /github/runner_temp/git-credentials-00342b0c-075f-47ac-81a7-5fdef3fbe917.config
+2026-11-03T07:07:20.9117210Z [command]/opt/homebrew/bin/git config --local --unset includeif.gitdir:/github/workspace/lab/.git/worktrees/*.path /github/runner_temp/git-credentials-00342b0c-075f-47ac-81a7-5fdef3fbe917.config
+2026-11-03T07:07:20.9179690Z [command]/opt/homebrew/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-03T07:07:20.9975530Z Removing credentials config '/Users/runner/work/_temp/git-credentials-00342b0c-075f-47ac-81a7-5fdef3fbe917.config'
+2026-11-03T07:07:21.0005040Z ##[endgroup]
+2026-11-03T07:07:21.0494510Z ##[group]Run hdiutil create -size 6g -fs APFSX -type SPARSE -volname CryptoidBuild "$RUNNER_TEMP/cryptoid-build.sparseimage"
+2026-11-03T07:07:21.0495410Z [36;1mhdiutil create -size 6g -fs APFSX -type SPARSE -volname CryptoidBuild "$RUNNER_TEMP/cryptoid-build.sparseimage"[0m
+2026-11-03T07:07:21.0495930Z [36;1mmkdir "$GITHUB_WORKSPACE/case-sensitive"[0m
+2026-11-03T07:07:21.0496520Z [36;1mhdiutil attach -nobrowse -mountpoint "$GITHUB_WORKSPACE/case-sensitive" "$RUNNER_TEMP/cryptoid-build.sparseimage"[0m
+2026-11-03T07:07:21.0497040Z [36;1mpython3 - <<'PY'[0m
+2026-11-03T07:07:21.0497320Z [36;1mimport os[0m
+2026-11-03T07:07:21.0497530Z [36;1mfrom pathlib import Path[0m
+2026-11-03T07:07:21.0497810Z [36;1mroot=Path(os.environ['GITHUB_WORKSPACE'])/'case-sensitive'[0m
+2026-11-03T07:07:21.0498110Z [36;1mupper=root/'CryptoidCaseProbe'[0m
+2026-11-03T07:07:21.0498340Z [36;1mlower=root/'cryptoidcaseprobe'[0m
+2026-11-03T07:07:21.0498560Z [36;1mupper.write_text('upper')[0m
+2026-11-03T07:07:21.0498940Z [36;1massert not lower.exists(), 'The build volume must actually distinguish filename case'[0m
+2026-11-03T07:07:21.0499490Z [36;1mupper.unlink()[0m
+2026-11-03T07:07:21.0499790Z [36;1mprint('CRYPTOID_IOS_CASE_SENSITIVE_VOLUME_VERIFIED')[0m
+2026-11-03T07:07:21.0500060Z [36;1mPY[0m
+2026-11-03T07:07:21.0562860Z shell: /bin/bash -e {0}
+2026-11-03T07:07:21.0563080Z ##[endgroup]
+2026-11-03T07:07:22.2183210Z hdiutil: create failed - Invalid argument
+2026-11-03T07:07:22.2216090Z ##[error]Process completed with exit code 1.
+2026-11-03T07:07:22.2340780Z ##[group]Run node --input-type=module - <<'NODE'
+2026-11-03T07:07:22.2341120Z [36;1mnode --input-type=module - <<'NODE'[0m
+2026-11-03T07:07:22.2342590Z [36;1mimport {readFileSync} from 'node:fs';[0m
+2026-11-03T07:07:22.2343220Z [36;1mimport {spawnSync} from 'node:child_process';[0m
+2026-11-03T07:07:22.2343580Z [36;1mtry {[0m
+2026-11-03T07:07:22.2344000Z [36;1m  const {udid}=JSON.parse(readFileSync('lab/verification/ios-safari-native-20261103/results/simulator.json','utf8'));[0m
+2026-11-03T07:07:22.2344580Z [36;1m  spawnSync('xcrun',['simctl','shutdown',udid],{stdio:'inherit'});[0m
+2026-11-03T07:07:22.2345000Z [36;1m  spawnSync('xcrun',['simctl','delete',udid],{stdio:'inherit'});[0m
+2026-11-03T07:07:22.2345510Z [36;1m} catch (error) { console.log('CRYPTOID_IOS_CLEANUP '+JSON.stringify({message:String(error.message)})); }[0m
+2026-11-03T07:07:22.2345910Z [36;1mNODE[0m
+2026-11-03T07:07:22.2393690Z shell: /bin/bash -e {0}
+2026-11-03T07:07:22.2393950Z ##[endgroup]
+2026-11-03T07:07:22.5543680Z CRYPTOID_IOS_CLEANUP {"message":"ENOENT: no such file or directory, open 'lab/verification/ios-safari-native-20261103/results/simulator.json'"}
+2026-11-03T07:07:22.5754180Z Post job cleanup.
+2026-11-03T07:07:22.7258520Z [command]/opt/homebrew/bin/git version
+2026-11-03T07:07:22.7339780Z git version 2.56.0
+2026-11-03T07:07:22.7368630Z Copying '/Users/runner/.gitconfig' to '/Users/runner/work/_temp/b103f645-5a3c-430d-bb33-9c0ccab5977f/.gitconfig'
+2026-11-03T07:07:22.7378820Z Temporarily overriding HOME='/Users/runner/work/_temp/b103f645-5a3c-430d-bb33-9c0ccab5977f' before making global git config changes
+2026-11-03T07:07:22.7379510Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-03T07:07:22.7387250Z [command]/opt/homebrew/bin/git config --global --add safe.directory /Users/runner/work/cryptoid-evolution/cryptoid-evolution/lab
+2026-11-03T07:07:22.7461640Z Removing SSH command configuration
+2026-11-03T07:07:22.7467970Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-03T07:07:22.7540510Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-03T07:07:22.8473330Z Removing HTTP extra header
+2026-11-03T07:07:22.8478400Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-03T07:07:22.8789930Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-03T07:07:22.9904250Z Removing includeIf entries pointing to credentials config files
+2026-11-03T07:07:22.9910410Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-03T07:07:23.0006140Z [command]/opt/homebrew/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-03T07:07:23.0973440Z Cleaning up orphan processes

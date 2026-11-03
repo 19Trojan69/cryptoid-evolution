@@ -1,0 +1,29 @@
+{
+  "macBuildJsCssFiles": 11,
+  "earlierLinuxComparisons": [
+    {
+      "receipt": "reactor-line-chromium/lab/verification/reactor-line-load-20261103/results/chromium/field-contacts/smoke/receipt.json",
+      "sameScriptsAndStyles": true
+    },
+    {
+      "receipt": "reactor-line-chromium/lab/verification/reactor-line-load-20261103/results/chromium/field-contacts/soak/receipt.json",
+      "sameScriptsAndStyles": true
+    },
+    {
+      "receipt": "reactor-line-chromium/lab/verification/reactor-line-load-20261103/results/chromium/stationary/smoke/receipt.json",
+      "sameScriptsAndStyles": true
+    },
+    {
+      "receipt": "reactor-line-webkit/lab/verification/reactor-line-load-20261103/results/webkit/field-contacts/smoke/receipt.json",
+      "sameScriptsAndStyles": true
+    },
+    {
+      "receipt": "reactor-line-webkit/lab/verification/reactor-line-load-20261103/results/webkit/field-contacts/soak/receipt.json",
+      "sameScriptsAndStyles": true
+    },
+    {
+      "receipt": "reactor-line-webkit/lab/verification/reactor-line-load-20261103/results/webkit/stationary/smoke/receipt.json",
+      "sameScriptsAndStyles": true
+    }
+  ]
+}

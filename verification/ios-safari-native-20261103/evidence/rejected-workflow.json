@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "headSha": "3fdb936f7b6be027cac2600fef76a644444e0071",
+  "runId": 41596062504,
+  "url": "https://github.com/19Trojan69/cryptoid-evolution/actions/runs/41596062504",
+  "status": "completed",
+  "conclusion": "failure",
+  "createdAt": "2026-11-03T07:24:02Z",
+  "jobs": [],
+  "validationFailureBeforeJob": true,
+  "physicalDevice": false,
+  "whiteScreenFixed": false,
+  "gameCyclesCompleted": 0
+}

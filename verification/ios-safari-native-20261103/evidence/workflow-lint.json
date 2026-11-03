@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "tool": "actionlint",
+  "toolVersion": "1.7.12",
+  "officialArchiveSha256": "8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8",
+  "oldWorkflowRejected": true,
+  "oldDiagnostic": "../cryptoid-test-tools/rejected-workflow.yml:15:24: context \"runner\" is not allowed here. available contexts are \"github\", \"inputs\", \"matrix\", \"needs\", \"secrets\", \"strategy\", \"vars\". see https://docs.github.com/en/actions/learn-github-actions/contexts#context-availability for more details [expression]\n   |\n15 |       APPIUM_HOME: ${{ runner.temp }}/cryptoid-appium-home\n   |                        ^~~~~~~~~~~",
+  "currentWorkflowPassed": true,
+  "currentWorkflowSha256": "ecbb18dedab956f2e23c9a9b461cf79463e40fefbf70be642c3ef0ad540ee446",
+  "currentDiagnostic": ""
+}
