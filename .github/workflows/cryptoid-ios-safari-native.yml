@@ -14,10 +14,26 @@ jobs:
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
         with: {persist-credentials: false, path: lab}
+      - name: Preserve Linux source filename semantics on a case-sensitive build volume
+        run: |
+          hdiutil create -size 6g -fs APFSX -type SPARSE -volname CryptoidBuild "$RUNNER_TEMP/cryptoid-build.sparseimage"
+          mkdir "$GITHUB_WORKSPACE/case-sensitive"
+          hdiutil attach -nobrowse -mountpoint "$GITHUB_WORKSPACE/case-sensitive" "$RUNNER_TEMP/cryptoid-build.sparseimage"
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          root=Path(os.environ['GITHUB_WORKSPACE'])/'case-sensitive'
+          upper=root/'CryptoidCaseProbe'
+          lower=root/'cryptoidcaseprobe'
+          upper.write_text('upper')
+          assert not lower.exists(), 'The build volume must actually distinguish filename case'
+          upper.unlink()
+          print('CRYPTOID_IOS_CASE_SENSITIVE_VOLUME_VERIFIED')
+          PY
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
         with:
           persist-credentials: false
-          path: candidate
+          path: case-sensitive/candidate
           ref: ac98e95166b0e2013186257904da46323840dab5
       - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
         with: {node-version: '24'}
@@ -29,7 +45,7 @@ jobs:
           sudo /usr/bin/safaridriver --enable
           node lab/verification/ios-safari-native-20261103/prepareSimulator.mjs lab/verification/ios-safari-native-20261103/results
       - name: Install and build only the frozen guest checkout
-        working-directory: candidate
+        working-directory: case-sensitive/candidate
         env: {VERCEL_ENV: preview}
         run: |
           node verification/direct-boss-style-device-20261102/installDevicePreview.mjs --ignore-scripts
@@ -37,9 +53,9 @@ jobs:
           node verification/direct-boss-style-device-20261102/buildDevicePreview.mjs
           node verification/device-resource-checkpoint-20261102/verifyPackage.mjs
       - name: Require a complete native Safari short flow with process observations
-        run: node lab/verification/ios-safari-native-20261103/run.mjs candidate lab/verification/ios-safari-native-20261103/results pilot
+        run: node lab/verification/ios-safari-native-20261103/run.mjs case-sensitive/candidate lab/verification/ios-safari-native-20261103/results pilot
       - name: Require thirty real active minutes and two remounts in a fresh Safari session
-        run: node lab/verification/ios-safari-native-20261103/run.mjs candidate lab/verification/ios-safari-native-20261103/results soak
+        run: node lab/verification/ios-safari-native-20261103/run.mjs case-sensitive/candidate lab/verification/ios-safari-native-20261103/results soak
       - name: Release this job's simulator
         if: ${{ always() }}
         run: |

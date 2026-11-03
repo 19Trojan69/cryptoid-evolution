@@ -23,6 +23,26 @@ NPM-Lockdateien werden kontrolliert. Der Build entsteht diesmal auf macOS;
 Identität mit den Bytes des entfernten Vercel-Deployments wird nicht behauptet.
 Es entsteht kein Deployment, und `main` wird nicht verändert.
 
+## Erster Einrichtungsversuch: Build gestoppt
+
+Quelle `85c512de4b1a1718f5ce8307463cd55d4cb50cec`,
+https://github.com/19Trojan69/cryptoid-evolution/actions/runs/41593146394
+
+Treiber-Prüfungen und der Start des iOS-26.2-Simulators mit Xcode 26.2 bestanden.
+Der anschließende Build scheiterte, bevor Safari die Spielszene öffnete. Rollup
+meldete `MISSING_EXPORT`: Der vorhandene Import `./PaintedShip` wurde auf dem
+Mac als `paintedShip.ts` statt als `PaintedShip.tsx` aufgelöst. Auf diesem
+Dateisystem wird die Groß-/Kleinschreibung nicht wie im bisherigen Linux-Build
+unterschieden. Es gibt aus diesem Versuch keine bestandene Spielminute und
+keinen nachgestellten White-Screen.
+
+Die Einrichtungsänderung verwendet deshalb ein eigenes, mit einer echten
+Dateiprobe geprüftes APFSX-Volume für den eingefrorenen Kandidaten. Keine
+Quelldatei wird umbenannt oder inhaltlich angepasst. Das Volume verbleibt bis
+zum Ende der automatischen Checkout-Aufräumarbeiten auf dem temporären Runner
+und wird mit dessen Vernichtung verworfen. Der fehlgeschlagene erste Lauf
+bleibt erhalten.
+
 ## Kostenloser Ablauf
 
 Das Repository wurde vor der Einrichtung als öffentlich bestätigt. Verwendet wird
