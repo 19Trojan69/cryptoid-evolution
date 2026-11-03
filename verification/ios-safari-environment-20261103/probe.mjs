@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
+import { createHash } from 'node:crypto';
 import { execFileSync, spawn } from 'node:child_process';
 import { mkdirSync, readFileSync, writeFileSync, openSync, closeSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
@@ -26,9 +27,11 @@ const result = { version: 1, kind: 'Safari toolchain calibration without the gam
   requestedRuntimeVersion: version, startedAt: new Date().toISOString(), gameLoaded: false,
   gameFilesEdited: false, physicalDevice: false, whiteScreenFixed: false,
   tools: { appium: '3.9.0', xcuitest: '12.22.8' }, nativeTapAttempted: false,
+  activeScreenshots: false, postFailureSimulatorScreenshot: false,
   limits: ['A simulator and a constant local HTML page, not Cryptoid Evolution or a phone acceptance test.',
     'Reading native accessibility XML can expose first-launch UI; no unknown dialogs are accepted.',
-    'No screenshots, videos, forced GC, payment, account or device-provider service is used.'] };
+    'No active screenshots or video. A single simulator image may be captured only after failure, without the game loaded.',
+    'No forced GC, payment, account or device-provider service is used.'] };
 let udid, server, driverProcess, driver, logFd;
 const hostSnapshot = () => ({ at: new Date().toISOString(), vmStat: execute('vm_stat', []),
   swapUsage: execute('sysctl', ['vm.swapusage']), hostMemoryBytes: Number(execute('sysctl', ['-n', 'hw.memsize'])) });
@@ -87,9 +90,10 @@ try {
     'appium:bundleId': 'com.apple.mobilesafari', 'appium:includeSafariInWebviews': true,
     'appium:nativeWebTap': true, 'appium:disableAutomaticScreenshots': true,
     'appium:skipLogCapture': true, 'appium:safariGarbageCollect': false,
+    'appium:prebuildWDA': true, 'appium:showXcodeLog': true,
     'appium:waitForIdleTimeout': 1, 'appium:wdaStartupRetries': 1,
     'appium:wdaLaunchTimeout': 120000, 'appium:newCommandTimeout': 120
-  } } }, 360000);
+  } } }, 600000);
   driver.session = session.sessionId; assert.ok(driver.session);
   assert.equal(String(session.capabilities.platformName).toLowerCase(), 'ios');
   result.nativeSessionCreated = true; result.capabilities = session.capabilities;
@@ -119,6 +123,15 @@ try {
   result.trustedNativeProbeTapVerified = true; result.complete = true;
 } catch (error) {
   result.failure = String(error.message).slice(0, 4000); process.exitCode = 1;
+  if (udid && result.simulatorBooted) try {
+    const path = resolve(output, 'simulator-after-failure.png');
+    execute('xcrun', ['simctl', 'io', udid, 'screenshot', '--type=png', path], 20000);
+    const bytes = readFileSync(path); assert.ok(bytes.length <= 2 ** 21, 'Bounded failure-only diagnostic image');
+    await record('ENVIRONMENT_FAILURE_SCREENSHOT', { version, capturedAfterFailure: true, gameLoaded: false,
+      mimeType: 'image/png', bytes: bytes.length, sha256: createHash('sha256').update(bytes).digest('hex'),
+      base64: bytes.toString('base64') });
+    result.postFailureSimulatorScreenshot = true;
+  } catch (error) { result.failureScreenshotUnavailable = String(error.message).slice(0, 1000); }
   if (driver?.session) try {
     await driver.command('POST', '/context', { name: 'NATIVE_APP' });
     await record('ENVIRONMENT_NATIVE_SOURCE_FAILURE', { version, xml: await driver.command('GET', '/source') });

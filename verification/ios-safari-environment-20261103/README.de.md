@@ -11,7 +11,9 @@ native Sitzung mit MobileSafari, ohne `browserName=Safari`. Damit lässt sich
 die tatsächliche native Oberfläche lesen, bevor eine Web-Inspector-Verbindung
 vorausgesetzt wird. Die Prüfung akzeptiert keine unbekannten Einführungs- oder
 Berechtigungsdialoge. Erfasst wird nur die Accessibility-XML des eigenen frischen
-Simulators, keine Bildschirmaufnahme und kein Besitzergerät.
+Simulators und kein Besitzergerät. Nach einem Fehlschlag darf zusätzlich genau
+ein Bild des eigenen Simulators zur internen Diagnose erfasst werden; es gibt
+keine Aufnahme während der eigentlichen Kontrolle und kein Video.
 
 Danach wird eine konstante HTML-Seite auf dem lokalen Rechner geöffnet. Ein
 gültiger Erfolg verlangt die passende Safari-Webview, die tatsächliche lokale
@@ -75,3 +77,25 @@ Schritt vor Appium-Installation und -Start. Die kalte SDK-Abfrage hat höchstens
 Der folgende Probe liest ausschließlich den Katalog desselben frischen Jobs.
 Einzelne Kommandofehler nennen nun Befehl, Argumente und tatsächliche Dauer.
 Dieses separate Startbudget verändert keine Spieluhr und kein Safari-/Spielgate.
+
+## SDK-Initialisierung bestanden, native Begleit-App noch nicht erreichbar
+
+Quelle `c992d328954c2f17dcaa8b8e1c1a46774fc15e48`,
+https://github.com/19Trojan69/cryptoid-evolution/actions/runs/41603725777
+
+Beide SDK-Kataloge und Appium-Serverstarts bestanden. Unter iOS 18.5 bootete
+der Simulator; die WebDriverAgent-Begleit-App antwortete innerhalb der separaten
+120-Sekunden-Startfrist nicht auf Port 8100. Appium beendete danach den laufenden
+`xcodebuild`-Prozess. Ohne dessen bisher ausgeblendete Bauausgabe ist nicht
+belegt, ob der Compiler noch arbeitete oder die fertige App nicht startete.
+Unter iOS 26.2 lief dagegen bereits `simctl bootstatus` in sein eigenes Limit.
+Beide Kontrollen bleiben fehlgeschlagen, ohne native Sitzung oder Spielzugriff.
+
+Die weitere Kalibrierung konzentriert sich deshalb auf die bereits bootende
+Runtime 18.5. Das dokumentierte `prebuildWDA:true` trennt den ersten Bau vom
+Verbindungsstart; `showXcodeLog:true` sichert die konkreten Compiler-/Testmeldungen.
+Die gesamte kalte Sitzungseinrichtung ist auf zehn Minuten begrenzt. Es bleibt
+bei genau einem WDA-Startversuch; die 120-Sekunden-Verbindungsfrist, die benötigte
+Webview und die echte Berührung werden nicht ersetzt oder als Erfolg umgedeutet.
+Ein eventuelles einzelnes Fehlerbild wird begrenzt, mit SHA-256 versehen und
+als reine Simulator-/Werkzeugdiagnose gekennzeichnet. Das Spiel bleibt ungeladen.

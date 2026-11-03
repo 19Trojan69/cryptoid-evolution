@@ -12,7 +12,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        runtime: ['18.5', '26.2']
+        runtime: ['18.5']
     runs-on: macos-15-intel
     timeout-minutes: 20
     steps:
