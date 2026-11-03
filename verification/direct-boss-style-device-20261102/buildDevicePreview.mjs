@@ -57,3 +57,7 @@ info.diagnosticResourceCheckpoint = { version: 1, maxPointsPerRun: 1, maxSavedCh
   reportDocumentOriginAtExport: true, sourceGameFilesEdited: false, whiteScreenFixed: false };
 writeFileSync(path, JSON.stringify(info, null, 2) + '\n');
 console.log('CRYPTOID_DIRECT_STYLE_DEVICE_BUILD ' + JSON.stringify({ source: info.sourceCommit, candidate: info.directStyleDeviceCandidate }));
+
+// Owner-authorized separate mobile HUD candidate; original game and clock remain frozen.
+const { applyMobileHudCandidate } = await import('../mobile-hud-device-20261103/applyMobileHudCandidate.mjs');
+applyMobileHudCandidate(root, directory);
