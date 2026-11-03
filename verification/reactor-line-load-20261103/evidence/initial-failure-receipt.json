@@ -1,0 +1,85 @@
+{
+  "version": 1,
+  "runId": 41583486452,
+  "testCommit": "63b48555ecc1bc183f8e2db9516132ddee6e42b4",
+  "testTree": "091c58b0ffc10e42f76d92ab2f57bf698585e084",
+  "sourceCommit": "ac98e95166b0e2013186257904da46323840dab5",
+  "sourceTree": "99092ec24e843fb1e419dc382bc2523a4edc0b42",
+  "conclusion": "failure",
+  "completeNativeShortFlow": false,
+  "longFlowStarted": false,
+  "reason": "Incorrect new fixture assumption: device seed already starts centered. Not a game crash.",
+  "artifacts": [
+    {
+      "id": 13207590025,
+      "engine": "webkit",
+      "zipBytes": 16125,
+      "zipSha256": "27b3dbc310dca3c49e1b9a0f0ef4222d5b20e5846d85ae42f10f6782466c7c2a",
+      "jobId": 125743460791
+    },
+    {
+      "id": 13206747204,
+      "engine": "chromium",
+      "zipBytes": 16174,
+      "zipSha256": "25a491f9e8687e29404479f0f2a2526047a589d89e55e9705fc8341251dfc528",
+      "jobId": 125743461078
+    }
+  ],
+  "archive": {
+    "file": "initial-failed-captures.tar.gz",
+    "bytes": 23271,
+    "sha256": "22a6a6c87f021d5b53f518ee8f6814fa16e83c6efc80925aa67c14f0ad7a9131"
+  },
+  "files": [
+    {
+      "path": "reactor-line-chromium/candidate/verification/systematic-stability-20261101/results/chromium-original/smoke/verification.json",
+      "bytes": 4303,
+      "sha256": "f279e04d7adc7c1ff5eb233b9fc83ca93de2e3b4a6e54c4f3d5e08fb674913b6"
+    },
+    {
+      "path": "reactor-line-chromium/lab/verification/reactor-line-load-20261103/results/chromium/existing-left/smoke/build-info.json",
+      "bytes": 5134,
+      "sha256": "f17606725f6d202ed5ace50a5b04b34509427ae62b052a69af882ee1634ae945"
+    },
+    {
+      "path": "reactor-line-chromium/lab/verification/reactor-line-load-20261103/results/chromium/existing-left/smoke/external-driver.mjs",
+      "bytes": 23195,
+      "sha256": "5981c7d2d5cc7012cb366a8bc8a571c40341b4e03cbc2736a0c6712a7f6e4821"
+    },
+    {
+      "path": "reactor-line-chromium/lab/verification/reactor-line-load-20261103/results/chromium/existing-left/smoke/receipt.json",
+      "bytes": 4231,
+      "sha256": "29aab88c56e4f033be78f36ea5d1e1dd895e67479d73ccb1c114122bc76ddd3c"
+    },
+    {
+      "path": "reactor-line-chromium/lab/verification/reactor-line-load-20261103/results/chromium/existing-left/smoke/verification.json",
+      "bytes": 4303,
+      "sha256": "f279e04d7adc7c1ff5eb233b9fc83ca93de2e3b4a6e54c4f3d5e08fb674913b6"
+    },
+    {
+      "path": "reactor-line-webkit/candidate/verification/systematic-stability-20261101/results/webkit-original/smoke/verification.json",
+      "bytes": 4277,
+      "sha256": "92bf098b171d57918343d57ddcdf098632737f5860e2e23ed585eec7c2625e16"
+    },
+    {
+      "path": "reactor-line-webkit/lab/verification/reactor-line-load-20261103/results/webkit/existing-left/smoke/build-info.json",
+      "bytes": 5134,
+      "sha256": "f17606725f6d202ed5ace50a5b04b34509427ae62b052a69af882ee1634ae945"
+    },
+    {
+      "path": "reactor-line-webkit/lab/verification/reactor-line-load-20261103/results/webkit/existing-left/smoke/external-driver.mjs",
+      "bytes": 23195,
+      "sha256": "5981c7d2d5cc7012cb366a8bc8a571c40341b4e03cbc2736a0c6712a7f6e4821"
+    },
+    {
+      "path": "reactor-line-webkit/lab/verification/reactor-line-load-20261103/results/webkit/existing-left/smoke/receipt.json",
+      "bytes": 4229,
+      "sha256": "eed49604ad5a53460972ed7cbead306a6f4feb32980648d230f4a056980acfbe"
+    },
+    {
+      "path": "reactor-line-webkit/lab/verification/reactor-line-load-20261103/results/webkit/existing-left/smoke/verification.json",
+      "bytes": 4277,
+      "sha256": "92bf098b171d57918343d57ddcdf098632737f5860e2e23ed585eec7c2625e16"
+    }
+  ]
+}

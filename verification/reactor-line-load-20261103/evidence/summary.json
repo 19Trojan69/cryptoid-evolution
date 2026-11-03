@@ -1,0 +1,165 @@
+{
+  "version": 1,
+  "runId": 41584352581,
+  "sourceCommit": "ac98e95166b0e2013186257904da46323840dab5",
+  "physicalDeviceAccepted": false,
+  "whiteScreenFixed": false,
+  "flows": [
+    {
+      "engine": "chromium",
+      "engineVersion": "151.0.7922.34",
+      "workload": "stationary",
+      "phase": "smoke",
+      "complete": true,
+      "activeMs": [
+        60000,
+        10000,
+        10000.100000000006
+      ],
+      "verifiedNativeContacts": 0,
+      "maxRecordedAudioStalls": 0,
+      "maxRecordedCanvasFailures": 0,
+      "normalReportVerified": true,
+      "resourceCheckpointVerified": true,
+      "packages": {
+        "react": "19.2.4",
+        "react-dom": "19.2.4",
+        "react-router-dom": "7.13.2",
+        "vite": "7.3.1",
+        "typescript": "5.9.3",
+        "playwright": "1.62.1"
+      }
+    },
+    {
+      "engine": "chromium",
+      "engineVersion": "151.0.7922.34",
+      "workload": "field-contacts",
+      "phase": "smoke",
+      "complete": true,
+      "activeMs": [
+        60000,
+        10000,
+        10000
+      ],
+      "verifiedNativeContacts": 21,
+      "maxRecordedAudioStalls": 0,
+      "maxRecordedCanvasFailures": 0,
+      "normalReportVerified": true,
+      "resourceCheckpointVerified": true,
+      "packages": {
+        "react": "19.2.4",
+        "react-dom": "19.2.4",
+        "react-router-dom": "7.13.2",
+        "vite": "7.3.1",
+        "typescript": "5.9.3",
+        "playwright": "1.62.1"
+      }
+    },
+    {
+      "engine": "chromium",
+      "engineVersion": "151.0.7922.34",
+      "workload": "field-contacts",
+      "phase": "soak",
+      "complete": true,
+      "activeMs": [
+        1800001.4999999998,
+        10999.600000000093,
+        10999.900000000373
+      ],
+      "verifiedNativeContacts": 21,
+      "maxRecordedAudioStalls": 0,
+      "maxRecordedCanvasFailures": 0,
+      "normalReportVerified": true,
+      "resourceCheckpointVerified": true,
+      "packages": {
+        "react": "19.2.4",
+        "react-dom": "19.2.4",
+        "react-router-dom": "7.13.2",
+        "vite": "7.3.1",
+        "typescript": "5.9.3",
+        "playwright": "1.62.1"
+      }
+    },
+    {
+      "engine": "webkit",
+      "engineVersion": "26.5",
+      "workload": "stationary",
+      "phase": "smoke",
+      "complete": true,
+      "activeMs": [
+        61091,
+        10686,
+        11844
+      ],
+      "verifiedNativeContacts": 0,
+      "maxRecordedAudioStalls": 0,
+      "maxRecordedCanvasFailures": 0,
+      "normalReportVerified": true,
+      "resourceCheckpointVerified": true,
+      "packages": {
+        "react": "19.2.4",
+        "react-dom": "19.2.4",
+        "react-router-dom": "7.13.2",
+        "vite": "7.3.1",
+        "typescript": "5.9.3",
+        "playwright": "1.62.1"
+      }
+    },
+    {
+      "engine": "webkit",
+      "engineVersion": "26.5",
+      "workload": "field-contacts",
+      "phase": "smoke",
+      "complete": true,
+      "activeMs": [
+        60897,
+        10288,
+        10935
+      ],
+      "verifiedNativeContacts": 21,
+      "maxRecordedAudioStalls": 0,
+      "maxRecordedCanvasFailures": 0,
+      "normalReportVerified": true,
+      "resourceCheckpointVerified": true,
+      "packages": {
+        "react": "19.2.4",
+        "react-dom": "19.2.4",
+        "react-router-dom": "7.13.2",
+        "vite": "7.3.1",
+        "typescript": "5.9.3",
+        "playwright": "1.62.1"
+      }
+    },
+    {
+      "engine": "webkit",
+      "engineVersion": "26.5",
+      "workload": "field-contacts",
+      "phase": "soak",
+      "complete": true,
+      "activeMs": [
+        1800598,
+        10122,
+        10391
+      ],
+      "verifiedNativeContacts": 21,
+      "maxRecordedAudioStalls": 0,
+      "maxRecordedCanvasFailures": 0,
+      "normalReportVerified": true,
+      "resourceCheckpointVerified": true,
+      "packages": {
+        "react": "19.2.4",
+        "react-dom": "19.2.4",
+        "react-router-dom": "7.13.2",
+        "vite": "7.3.1",
+        "typescript": "5.9.3",
+        "playwright": "1.62.1"
+      }
+    }
+  ],
+  "ciScriptStyleManifests": [
+    "7da8ed4154457e19700b7f162b17a09ea6c6ed2db0d6e68424c8b9bf1d742347"
+  ],
+  "yarnLockDigests": [
+    "b6d496c5725bf24ddb4f51b576b0597ced9f35c5ea7927a65165a5fb6311ad1a"
+  ]
+}
