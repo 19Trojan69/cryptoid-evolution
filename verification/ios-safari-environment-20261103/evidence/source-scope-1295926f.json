@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "frozenSourceCommit": "ac98e95166b0e2013186257904da46323840dab5",
+  "frozenSourceTree": "99092ec24e843fb1e419dc382bc2523a4edc0b42",
+  "testCommit": "1295926f983cc1c62fa8946ff5247ac5efedf3f0",
+  "testTree": "1bf0300691976d271c4163dc05f23e1673b1d00e",
+  "frozenRuntimeDirectories": {
+    "frontend": "890df8a38e13ef1fe315a5c0eb109c1d72b80aab",
+    "backend": "6e93bfbac9e6cc70a1edfb8bd55d737f612ba261",
+    "api": "ccac7cd576a079771d7d7fe4f0085492ebbe6813",
+    "assets": "a9860b12db58a96dafde818d9a58a6ea0e03c5e5",
+    "private-preview": "b733d4dc70b4ac407391720eab131dbaf1d60e37"
+  },
+  "changedPaths": [
+    "verification/ios-safari-environment-20261103/probe.mjs",
+    "verification/ios-safari-environment-20261103/README.de.md"
+  ],
+  "gameDirectoryObjectsEqual": true,
+  "remoteVercelBuildBytesVerified": false,
+  "whiteScreenFixed": false,
+  "physicalDevice": false,
+  "calibrationRunUrl": "https://github.com/19Trojan69/cryptoid-evolution/actions/runs/41615341217"
+}

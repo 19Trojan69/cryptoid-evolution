@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "kind": "delivered GitHub Actions job log; incomplete compiler fragment group",
+  "runId": 41613247477,
+  "jobId": 125840192820,
+  "runUrl": "https://github.com/19Trojan69/cryptoid-evolution/actions/runs/41613247477",
+  "sourceCommit": "8a453df0d354c3a6bbe1c3c0e8c1fb94e94d551d",
+  "deliveredLogBytes": 2398138,
+  "deliveredLogSha256": "58b5b83ed5fbbf37d9fa0342d4582068a8c12dc291ab0736c4fd7ff48077c092",
+  "gzipBytes": 72299,
+  "gzipSha256": "618c81690f172825f014a5b8b5124da2e4c10519f7f891b7a07d08f3322006e1",
+  "allFragmentsVerified": false,
+  "originalGithubLogByteIdentityIndependentlyVerified": false,
+  "physicalDevice": false,
+  "gameLoaded": false,
+  "whiteScreenFixed": false,
+  "fragmentGroups": [
+    {
+      "id": "1-ENVIRONMENT_WDA_BUILD_LOG",
+      "kind": "ENVIRONMENT_WDA_BUILD_LOG",
+      "expectedParts": 1053,
+      "deliveredParts": 1052,
+      "ordered": false,
+      "expectedSha256": "7244ac7e19459800392829f448a2b0901be90dd1b8070d32c009157697ebd39a",
+      "deliveredSha256": "5772f21abfaff34ed73d6e0b554f8d0ec6e4bb1a6adb4a64146858259e1849eb",
+      "verified": false
+    }
+  ]
+}
