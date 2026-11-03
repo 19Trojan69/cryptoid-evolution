@@ -90,23 +90,51 @@
       "stage": "Appium ready in 4152 ms; cold simulator catalogue reached 45 s timeout",
       "gameLoaded": false,
       "hostMemoryBytes": 15032385536
+    },
+    {
+      "source": "c992d328954c2f17dcaa8b8e1c1a46774fc15e48",
+      "runId": 41603725777,
+      "jobId": 125808338166,
+      "runtime": "18.5",
+      "result": "failure",
+      "stage": "Simulator booted; WebDriverAgent did not answer its 120 s connection deadline; compiler output unavailable in this attempt",
+      "gameLoaded": false
+    },
+    {
+      "source": "c992d328954c2f17dcaa8b8e1c1a46774fc15e48",
+      "runId": 41603725777,
+      "jobId": 125808337889,
+      "runtime": "26.2",
+      "result": "failure",
+      "stage": "Simulator bootstatus timeout; SDK catalogue and Appium server passed",
+      "gameLoaded": false
+    },
+    {
+      "source": "65258409506f659b565d71359626f3cc2520e744",
+      "runId": 41606037254,
+      "jobId": 125815971153,
+      "runtime": "18.5",
+      "result": "failure",
+      "stage": "Simulator booted; native session fetch failed while the captured compiler tail still contained static analysis; transport cause not captured",
+      "gameLoaded": false,
+      "failureScreenshotEmitted": false
     }
   ],
-  "pending": {
-    "source": "c992d328954c2f17dcaa8b8e1c1a46774fc15e48",
-    "runId": 41603725777,
-    "jobIds": [
-      125808338166,
-      125808337889
-    ],
-    "runner": "macos-15-intel",
-    "gameLoaded": false,
-    "description": "SDK catalogue initialization passed; both native Safari controls pending; no outcome claimed"
-  },
   "limits": [
     "All new failed setup attempts remain failures, not long game runs or phone acceptance.",
     "Native simulator logs and host memory are not a cause diagnosis for an owner's phone.",
     "Original owner diagnostics and identifying owner device facts are excluded from this public evidence."
   ],
-  "snapshotAt": "2026-11-03T08:42:21.329Z"
+  "snapshotAt": "2026-11-03T09:15:22.658Z",
+  "pending": {
+    "source": "47bed1ef078f74567f849fd0b70d2616cb4d1c78",
+    "runId": 41609401004,
+    "runtime": "18.5",
+    "runner": "macos-15-intel",
+    "gameLoaded": false,
+    "description": "Explicit build-for-testing before simulator boot and before HTTP session; outcome pending",
+    "jobIds": [
+      125827208488
+    ]
+  }
 }

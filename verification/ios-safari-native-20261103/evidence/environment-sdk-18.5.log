@@ -1,0 +1,318 @@
+﻿2026-11-03T08:30:07.5395630Z Current runner version: '2.338.2'
+2026-11-03T08:30:07.5420530Z ##[group]Runner Image Provisioner
+2026-11-03T08:30:07.5421480Z Hosted Compute Agent
+2026-11-03T08:30:07.5422140Z Version: 20260819.586
+2026-11-03T08:30:07.5422860Z Commit: 3cc4a88dfa507ef76119ad1bb3eccc6378bb2b76
+2026-11-03T08:30:07.5423730Z Build Date: 2026-08-18T23:20:18Z
+2026-11-03T08:30:07.5424530Z Worker ID: {0caf52ff-030d-493e-a167-c6c01522b9b1}
+2026-11-03T08:30:07.5425380Z Azure Region: westus
+2026-11-03T08:30:07.5426010Z ##[endgroup]
+2026-11-03T08:30:07.5427850Z ##[group]Operating System
+2026-11-03T08:30:07.5428550Z macOS
+2026-11-03T08:30:07.5429120Z 15.7.9
+2026-11-03T08:30:07.5429680Z 24G830
+2026-11-03T08:30:07.5430250Z ##[endgroup]
+2026-11-03T08:30:07.5430850Z ##[group]Runner Image
+2026-11-03T08:30:07.5431510Z Image: macos-15
+2026-11-03T08:30:07.5432130Z Version: 20260824.0482.1
+2026-11-03T08:30:07.5433610Z Included Software: https://github.com/actions/runner-images/blob/macos-15/20260824.0482/images/macos/macos-15-Readme.md
+2026-11-03T08:30:07.5436030Z Image Release: https://github.com/actions/runner-images/releases/tag/macos-15%2F20260824.0482
+2026-11-03T08:30:07.5437310Z ##[endgroup]
+2026-11-03T08:30:07.5438650Z ##[group]GITHUB_TOKEN Permissions
+2026-11-03T08:30:07.5440550Z Contents: read
+2026-11-03T08:30:07.5441200Z Metadata: read
+2026-11-03T08:30:07.5441820Z ##[endgroup]
+2026-11-03T08:30:07.5444080Z Secret source: Actions
+2026-11-03T08:30:07.5445110Z Cache mode: write
+2026-11-03T08:30:07.5445920Z Prepare workflow directory
+2026-11-03T08:30:07.5874440Z Prepare all required actions
+2026-11-03T08:30:07.5936800Z Getting action download info
+2026-11-03T08:30:07.9983750Z Download action repository 'actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803' (SHA:d23441a48e516b6c34aea4fa41551a30e30af803)
+2026-11-03T08:30:08.2496400Z Download action repository 'actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38' (SHA:249970729cb0ef3589644e2896645e5dc5ba9c38)
+2026-11-03T08:30:08.6918880Z Complete job name: safari-control (18.5)
+2026-11-03T08:30:08.8173300Z ##[group]Run actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+2026-11-03T08:30:08.8176110Z with:
+2026-11-03T08:30:08.8177290Z   persist-credentials: false
+2026-11-03T08:30:08.8178260Z   path: lab
+2026-11-03T08:30:08.8179650Z   repository: 19Trojan69/cryptoid-evolution
+2026-11-03T08:30:08.8189370Z   token: ***
+2026-11-03T08:30:08.8190400Z   ssh-strict: true
+2026-11-03T08:30:08.8191420Z   ssh-user: git
+2026-11-03T08:30:08.8192400Z   clean: true
+2026-11-03T08:30:08.8193440Z   sparse-checkout-cone-mode: true
+2026-11-03T08:30:08.8194240Z   fetch-depth: 1
+2026-11-03T08:30:08.8194900Z   fetch-tags: false
+2026-11-03T08:30:08.8195720Z   show-progress: true
+2026-11-03T08:30:08.8196790Z   lfs: false
+2026-11-03T08:30:08.8198260Z   submodules: false
+2026-11-03T08:30:08.8199300Z   set-safe-directory: true
+2026-11-03T08:30:08.8200280Z   allow-unsafe-pr-checkout: false
+2026-11-03T08:30:08.8201990Z ##[endgroup]
+2026-11-03T08:30:09.1172550Z Syncing repository: 19Trojan69/cryptoid-evolution
+2026-11-03T08:30:09.1175950Z ##[group]Getting Git version info
+2026-11-03T08:30:09.1177310Z Working directory is '/Users/runner/work/cryptoid-evolution/cryptoid-evolution/lab'
+2026-11-03T08:30:09.1179080Z [command]/usr/local/bin/git version
+2026-11-03T08:30:09.1488280Z git version 2.55.0
+2026-11-03T08:30:09.1517910Z ##[endgroup]
+2026-11-03T08:30:09.1528720Z Copying '/Users/runner/.gitconfig' to '/Users/runner/work/_temp/d427ba1a-221b-4b3a-8d22-efc4e0cd6217/.gitconfig'
+2026-11-03T08:30:09.1545390Z Temporarily overriding HOME='/Users/runner/work/_temp/d427ba1a-221b-4b3a-8d22-efc4e0cd6217' before making global git config changes
+2026-11-03T08:30:09.1551230Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-03T08:30:09.1557440Z [command]/usr/local/bin/git config --global --add safe.directory /Users/runner/work/cryptoid-evolution/cryptoid-evolution/lab
+2026-11-03T08:30:09.1700550Z ##[group]Determining repository object format
+2026-11-03T08:30:09.1703810Z ##[endgroup]
+2026-11-03T08:30:09.1709770Z ##[group]Initializing the repository
+2026-11-03T08:30:09.1714010Z [command]/usr/local/bin/git init /Users/runner/work/cryptoid-evolution/cryptoid-evolution/lab
+2026-11-03T08:30:09.2056150Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-11-03T08:30:09.2066840Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-11-03T08:30:09.2068370Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-11-03T08:30:09.2069560Z hint: call:
+2026-11-03T08:30:09.2070220Z hint:
+2026-11-03T08:30:09.2071020Z hint: 	git config --global init.defaultBranch <name>
+2026-11-03T08:30:09.2071960Z hint:
+2026-11-03T08:30:09.2072860Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-11-03T08:30:09.2074290Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-11-03T08:30:09.2075440Z hint:
+2026-11-03T08:30:09.2076110Z hint: 	git branch -m <name>
+2026-11-03T08:30:09.2076890Z hint:
+2026-11-03T08:30:09.2078070Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-11-03T08:30:09.2079900Z Initialized empty Git repository in /Users/runner/work/cryptoid-evolution/cryptoid-evolution/lab/.git/
+2026-11-03T08:30:09.2082890Z [command]/usr/local/bin/git remote add origin https://github.com/19Trojan69/cryptoid-evolution
+2026-11-03T08:30:09.2192010Z ##[endgroup]
+2026-11-03T08:30:09.2193820Z ##[group]Disabling automatic garbage collection
+2026-11-03T08:30:09.2197140Z [command]/usr/local/bin/git config --local gc.auto 0
+2026-11-03T08:30:09.2279810Z ##[endgroup]
+2026-11-03T08:30:09.2281350Z ##[group]Setting up auth
+2026-11-03T08:30:09.2282220Z Removing SSH command configuration
+2026-11-03T08:30:09.2286060Z [command]/usr/local/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-03T08:30:09.2376990Z [command]/usr/local/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-03T08:30:09.3609450Z Removing HTTP extra header
+2026-11-03T08:30:09.3617270Z [command]/usr/local/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-03T08:30:09.3703470Z [command]/usr/local/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-03T08:30:09.6926930Z Removing includeIf entries pointing to credentials config files
+2026-11-03T08:30:09.7422020Z [command]/usr/local/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-03T08:30:09.7527780Z [command]/usr/local/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-03T08:30:09.7623030Z [command]/usr/local/bin/git config --file /Users/runner/work/_temp/git-credentials-4e4960d1-b0eb-4027-8060-9671b235fb45.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-11-03T08:30:09.7706620Z [command]/usr/local/bin/git config --local includeIf.gitdir:/Users/runner/work/cryptoid-evolution/cryptoid-evolution/lab/.git.path /Users/runner/work/_temp/git-credentials-4e4960d1-b0eb-4027-8060-9671b235fb45.config
+2026-11-03T08:30:09.7860460Z [command]/usr/local/bin/git config --local includeIf.gitdir:/Users/runner/work/cryptoid-evolution/cryptoid-evolution/lab/.git/worktrees/*.path /Users/runner/work/_temp/git-credentials-4e4960d1-b0eb-4027-8060-9671b235fb45.config
+2026-11-03T08:30:09.7865890Z [command]/usr/local/bin/git config --local includeIf.gitdir:/github/workspace/lab/.git.path /github/runner_temp/git-credentials-4e4960d1-b0eb-4027-8060-9671b235fb45.config
+2026-11-03T08:30:09.7871780Z [command]/usr/local/bin/git config --local includeIf.gitdir:/github/workspace/lab/.git/worktrees/*.path /github/runner_temp/git-credentials-4e4960d1-b0eb-4027-8060-9671b235fb45.config
+2026-11-03T08:30:09.7943580Z ##[endgroup]
+2026-11-03T08:30:09.7945950Z ##[group]Fetching the repository
+2026-11-03T08:30:09.7959500Z [command]/usr/local/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +c992d328954c2f17dcaa8b8e1c1a46774fc15e48:refs/remotes/origin/codex/ios-safari-environment-20261103
+2026-11-03T08:30:19.9865180Z From https://github.com/19Trojan69/cryptoid-evolution
+2026-11-03T08:30:19.9867910Z  * [new ref]         c992d328954c2f17dcaa8b8e1c1a46774fc15e48 -> origin/codex/ios-safari-environment-20261103
+2026-11-03T08:30:19.9874360Z [command]/usr/local/bin/git branch --list --remote origin/codex/ios-safari-environment-20261103
+2026-11-03T08:30:19.9978230Z   origin/codex/ios-safari-environment-20261103
+2026-11-03T08:30:19.9991390Z [command]/usr/local/bin/git rev-parse refs/remotes/origin/codex/ios-safari-environment-20261103
+2026-11-03T08:30:20.0082590Z c992d328954c2f17dcaa8b8e1c1a46774fc15e48
+2026-11-03T08:30:20.0089130Z ##[endgroup]
+2026-11-03T08:30:20.0092450Z ##[group]Determining the checkout info
+2026-11-03T08:30:20.0093770Z ##[endgroup]
+2026-11-03T08:30:20.0095210Z [command]/usr/local/bin/git sparse-checkout disable
+2026-11-03T08:30:20.0218570Z [command]/usr/local/bin/git config --local --unset-all extensions.worktreeConfig
+2026-11-03T08:30:20.0319400Z ##[group]Checking out the ref
+2026-11-03T08:30:20.0325970Z [command]/usr/local/bin/git checkout --progress --force -B codex/ios-safari-environment-20261103 refs/remotes/origin/codex/ios-safari-environment-20261103
+2026-11-03T08:30:21.5621270Z Updating files:  28% (811/2894)
+2026-11-03T08:30:21.6927980Z Updating files:  29% (840/2894)
+2026-11-03T08:30:21.8282030Z Updating files:  30% (869/2894)
+2026-11-03T08:30:21.9230280Z Updating files:  31% (898/2894)
+2026-11-03T08:30:21.9566240Z Updating files:  32% (927/2894)
+2026-11-03T08:30:21.9730760Z Updating files:  33% (956/2894)
+2026-11-03T08:30:21.9884760Z Updating files:  34% (984/2894)
+2026-11-03T08:30:22.0154060Z Updating files:  35% (1013/2894)
+2026-11-03T08:30:22.0380080Z Updating files:  36% (1042/2894)
+2026-11-03T08:30:22.0517890Z Updating files:  37% (1071/2894)
+2026-11-03T08:30:22.1864440Z Updating files:  37% (1076/2894)
+2026-11-03T08:30:22.4845760Z Updating files:  38% (1100/2894)
+2026-11-03T08:30:22.5117770Z Updating files:  39% (1129/2894)
+2026-11-03T08:30:22.7393230Z Updating files:  40% (1158/2894)
+2026-11-03T08:30:22.8423600Z Updating files:  41% (1187/2894)
+2026-11-03T08:30:22.9322710Z Updating files:  42% (1216/2894)
+2026-11-03T08:30:22.9326340Z Updating files:  43% (1245/2894)
+2026-11-03T08:30:22.9327080Z Updating files:  44% (1274/2894)
+2026-11-03T08:30:22.9328110Z Updating files:  45% (1303/2894)
+2026-11-03T08:30:22.9328720Z Updating files:  46% (1332/2894)
+2026-11-03T08:30:22.9329270Z Updating files:  47% (1361/2894)
+2026-11-03T08:30:22.9329780Z Updating files:  48% (1390/2894)
+2026-11-03T08:30:22.9384650Z Updating files:  49% (1419/2894)
+2026-11-03T08:30:22.9481940Z Updating files:  50% (1447/2894)
+2026-11-03T08:30:22.9600070Z Updating files:  51% (1476/2894)
+2026-11-03T08:30:22.9689360Z Updating files:  52% (1505/2894)
+2026-11-03T08:30:22.9769390Z Updating files:  53% (1534/2894)
+2026-11-03T08:30:22.9867480Z Updating files:  54% (1563/2894)
+2026-11-03T08:30:22.9951570Z Updating files:  55% (1592/2894)
+2026-11-03T08:30:23.0028280Z Updating files:  56% (1621/2894)
+2026-11-03T08:30:23.0117640Z Updating files:  57% (1650/2894)
+2026-11-03T08:30:23.0212590Z Updating files:  58% (1679/2894)
+2026-11-03T08:30:23.0311060Z Updating files:  59% (1708/2894)
+2026-11-03T08:30:23.0368410Z Updating files:  60% (1737/2894)
+2026-11-03T08:30:23.0488080Z Updating files:  61% (1766/2894)
+2026-11-03T08:30:23.0522730Z Updating files:  62% (1795/2894)
+2026-11-03T08:30:23.0599220Z Updating files:  62% (1804/2894)
+2026-11-03T08:30:23.0727050Z Updating files:  63% (1824/2894)
+2026-11-03T08:30:23.0835950Z Updating files:  64% (1853/2894)
+2026-11-03T08:30:23.0931240Z Updating files:  65% (1882/2894)
+2026-11-03T08:30:23.1041550Z Updating files:  66% (1911/2894)
+2026-11-03T08:30:23.1146380Z Updating files:  67% (1939/2894)
+2026-11-03T08:30:23.1250430Z Updating files:  68% (1968/2894)
+2026-11-03T08:30:23.1625270Z Updating files:  69% (1997/2894)
+2026-11-03T08:30:23.1744060Z Updating files:  70% (2026/2894)
+2026-11-03T08:30:23.1831610Z Updating files:  71% (2055/2894)
+2026-11-03T08:30:23.1923040Z Updating files:  72% (2084/2894)
+2026-11-03T08:30:23.2005910Z Updating files:  73% (2113/2894)
+2026-11-03T08:30:23.2112460Z Updating files:  74% (2142/2894)
+2026-11-03T08:30:23.2196430Z Updating files:  75% (2171/2894)
+2026-11-03T08:30:23.2300870Z Updating files:  76% (2200/2894)
+2026-11-03T08:30:23.2403170Z Updating files:  77% (2229/2894)
+2026-11-03T08:30:23.2584130Z Updating files:  78% (2258/2894)
+2026-11-03T08:30:23.2679840Z Updating files:  79% (2287/2894)
+2026-11-03T08:30:23.2771120Z Updating files:  80% (2316/2894)
+2026-11-03T08:30:23.2849600Z Updating files:  81% (2345/2894)
+2026-11-03T08:30:23.2943460Z Updating files:  82% (2374/2894)
+2026-11-03T08:30:23.3055090Z Updating files:  83% (2403/2894)
+2026-11-03T08:30:23.3156490Z Updating files:  84% (2431/2894)
+2026-11-03T08:30:23.3466550Z Updating files:  85% (2460/2894)
+2026-11-03T08:30:23.3586640Z Updating files:  86% (2489/2894)
+2026-11-03T08:30:23.3793680Z Updating files:  87% (2518/2894)
+2026-11-03T08:30:23.4163990Z Updating files:  88% (2547/2894)
+2026-11-03T08:30:23.5150160Z Updating files:  89% (2576/2894)
+2026-11-03T08:30:23.5620320Z Updating files:  90% (2605/2894)
+2026-11-03T08:30:23.5931170Z Updating files:  91% (2634/2894)
+2026-11-03T08:30:23.6949870Z Updating files:  92% (2663/2894)
+2026-11-03T08:30:23.7857430Z Updating files:  93% (2692/2894)
+2026-11-03T08:30:23.7903400Z Updating files:  94% (2721/2894)
+2026-11-03T08:30:23.7915290Z Updating files:  95% (2750/2894)
+2026-11-03T08:30:23.7967130Z Updating files:  96% (2779/2894)
+2026-11-03T08:30:23.7980480Z Updating files:  97% (2808/2894)
+2026-11-03T08:30:23.8003170Z Updating files:  98% (2837/2894)
+2026-11-03T08:30:23.8010500Z Updating files:  99% (2866/2894)
+2026-11-03T08:30:23.8012680Z Updating files: 100% (2894/2894)
+2026-11-03T08:30:23.8036070Z Updating files: 100% (2894/2894), done.
+2026-11-03T08:30:23.8038670Z Switched to a new branch 'codex/ios-safari-environment-20261103'
+2026-11-03T08:30:23.8041650Z branch 'codex/ios-safari-environment-20261103' set up to track 'origin/codex/ios-safari-environment-20261103'.
+2026-11-03T08:30:23.8054480Z ##[endgroup]
+2026-11-03T08:30:23.8102100Z [command]/usr/local/bin/git log -1 --format=%H
+2026-11-03T08:30:23.8107670Z c992d328954c2f17dcaa8b8e1c1a46774fc15e48
+2026-11-03T08:30:23.8125510Z ##[group]Removing auth
+2026-11-03T08:30:23.8126320Z Removing SSH command configuration
+2026-11-03T08:30:23.8128230Z [command]/usr/local/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-03T08:30:23.8272700Z [command]/usr/local/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-03T08:30:24.0480500Z Removing HTTP extra header
+2026-11-03T08:30:24.0515390Z [command]/usr/local/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-03T08:30:24.0598100Z [command]/usr/local/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-03T08:30:24.2030730Z Removing includeIf entries pointing to credentials config files
+2026-11-03T08:30:24.2032100Z [command]/usr/local/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-03T08:30:24.2129920Z includeif.gitdir:/Users/runner/work/cryptoid-evolution/cryptoid-evolution/lab/.git.path
+2026-11-03T08:30:24.2133340Z includeif.gitdir:/Users/runner/work/cryptoid-evolution/cryptoid-evolution/lab/.git/worktrees/*.path
+2026-11-03T08:30:24.2135420Z includeif.gitdir:/github/workspace/lab/.git.path
+2026-11-03T08:30:24.2150720Z includeif.gitdir:/github/workspace/lab/.git/worktrees/*.path
+2026-11-03T08:30:24.2165100Z [command]/usr/local/bin/git config --local --get-all includeif.gitdir:/Users/runner/work/cryptoid-evolution/cryptoid-evolution/lab/.git.path
+2026-11-03T08:30:24.2239230Z /Users/runner/work/_temp/git-credentials-4e4960d1-b0eb-4027-8060-9671b235fb45.config
+2026-11-03T08:30:24.2251330Z [command]/usr/local/bin/git config --local --unset includeif.gitdir:/Users/runner/work/cryptoid-evolution/cryptoid-evolution/lab/.git.path /Users/runner/work/_temp/git-credentials-4e4960d1-b0eb-4027-8060-9671b235fb45.config
+2026-11-03T08:30:24.2363920Z [command]/usr/local/bin/git config --local --get-all includeif.gitdir:/Users/runner/work/cryptoid-evolution/cryptoid-evolution/lab/.git/worktrees/*.path
+2026-11-03T08:30:24.2456520Z /Users/runner/work/_temp/git-credentials-4e4960d1-b0eb-4027-8060-9671b235fb45.config
+2026-11-03T08:30:24.2472240Z [command]/usr/local/bin/git config --local --unset includeif.gitdir:/Users/runner/work/cryptoid-evolution/cryptoid-evolution/lab/.git/worktrees/*.path /Users/runner/work/_temp/git-credentials-4e4960d1-b0eb-4027-8060-9671b235fb45.config
+2026-11-03T08:30:24.2588250Z [command]/usr/local/bin/git config --local --get-all includeif.gitdir:/github/workspace/lab/.git.path
+2026-11-03T08:30:24.2684440Z /github/runner_temp/git-credentials-4e4960d1-b0eb-4027-8060-9671b235fb45.config
+2026-11-03T08:30:24.2695790Z [command]/usr/local/bin/git config --local --unset includeif.gitdir:/github/workspace/lab/.git.path /github/runner_temp/git-credentials-4e4960d1-b0eb-4027-8060-9671b235fb45.config
+2026-11-03T08:30:24.2801080Z [command]/usr/local/bin/git config --local --get-all includeif.gitdir:/github/workspace/lab/.git/worktrees/*.path
+2026-11-03T08:30:24.2879470Z /github/runner_temp/git-credentials-4e4960d1-b0eb-4027-8060-9671b235fb45.config
+2026-11-03T08:30:24.2893520Z [command]/usr/local/bin/git config --local --unset includeif.gitdir:/github/workspace/lab/.git/worktrees/*.path /github/runner_temp/git-credentials-4e4960d1-b0eb-4027-8060-9671b235fb45.config
+2026-11-03T08:30:24.3001820Z [command]/usr/local/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-03T08:30:24.4785190Z Removing credentials config '/Users/runner/work/_temp/git-credentials-4e4960d1-b0eb-4027-8060-9671b235fb45.config'
+2026-11-03T08:30:24.4800150Z ##[endgroup]
+2026-11-03T08:30:24.5244940Z ##[group]Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+2026-11-03T08:30:24.5245860Z with:
+2026-11-03T08:30:24.5246510Z   node-version: 24
+2026-11-03T08:30:24.5247030Z   check-latest: false
+2026-11-03T08:30:24.5254630Z   token: ***
+2026-11-03T08:30:24.5255210Z   package-manager-cache: true
+2026-11-03T08:30:24.5255760Z ##[endgroup]
+2026-11-03T08:30:24.7273940Z Found in cache @ /Users/runner/hostedtoolcache/node/24.19.0/x64
+2026-11-03T08:30:24.7282230Z ##[group]Environment details
+2026-11-03T08:30:26.3215100Z node: v24.19.0
+2026-11-03T08:30:26.3251430Z npm: 11.17.0
+2026-11-03T08:30:26.3254140Z yarn: 1.22.22
+2026-11-03T08:30:26.3259910Z ##[endgroup]
+2026-11-03T08:30:26.3532130Z ##[group]Run node --check lab/verification/ios-safari-environment-20261103/probe.mjs
+2026-11-03T08:30:26.3533630Z [36;1mnode --check lab/verification/ios-safari-environment-20261103/probe.mjs[0m
+2026-11-03T08:30:26.3694570Z shell: /bin/bash -e {0}
+2026-11-03T08:30:26.3695240Z ##[endgroup]
+2026-11-03T08:30:26.4821800Z ##[group]Run sudo xcode-select --switch /Applications/Xcode_26.2.app/Contents/Developer
+2026-11-03T08:30:26.4823100Z [36;1msudo xcode-select --switch /Applications/Xcode_26.2.app/Contents/Developer[0m
+2026-11-03T08:30:26.4823960Z [36;1mpython3 - <<'PY'[0m
+2026-11-03T08:30:26.4824450Z [36;1mimport subprocess,json,time,os[0m
+2026-11-03T08:30:26.4825060Z [36;1mfrom pathlib import Path[0m
+2026-11-03T08:30:26.4825580Z [36;1mstarted=time.monotonic()[0m
+2026-11-03T08:30:26.4826630Z [36;1mresult=subprocess.run(['xcrun','simctl','list','--json'],capture_output=True,text=True,check=True,timeout=150)[0m
+2026-11-03T08:30:26.4827750Z [36;1minventory=json.loads(result.stdout)[0m
+2026-11-03T08:30:26.4829060Z [36;1mdestination=Path(os.environ['RUNNER_TEMP'])/'cryptoid-simulator-inventory.json'[0m
+2026-11-03T08:30:26.4830010Z [36;1mdestination.write_text(result.stdout)[0m
+2026-11-03T08:30:26.4832220Z [36;1mprint('CRYPTOID_IOS_SDK_CATALOGUE '+json.dumps({'elapsedMs':round((time.monotonic()-started)*1000),'gameLoaded':False,'availableRuntimes':[{'version':r['version'],'identifier':r['identifier']} for r in inventory['runtimes'] if r.get('isAvailable')]}))[0m
+2026-11-03T08:30:26.4834310Z [36;1mPY[0m
+2026-11-03T08:30:26.4896350Z shell: /bin/bash -e {0}
+2026-11-03T08:30:26.4896800Z ##[endgroup]
+2026-11-03T08:31:43.3495730Z CRYPTOID_IOS_SDK_CATALOGUE {"elapsedMs": 76642, "gameLoaded": false, "availableRuntimes": [{"version": "18.5", "identifier": "com.apple.CoreSimulator.SimRuntime.iOS-18-5"}, {"version": "18.6", "identifier": "com.apple.CoreSimulator.SimRuntime.iOS-18-6"}, {"version": "26.0.1", "identifier": "com.apple.CoreSimulator.SimRuntime.iOS-26-0"}, {"version": "26.1", "identifier": "com.apple.CoreSimulator.SimRuntime.iOS-26-1"}, {"version": "26.2", "identifier": "com.apple.CoreSimulator.SimRuntime.iOS-26-2"}, {"version": "18.5", "identifier": "com.apple.CoreSimulator.SimRuntime.tvOS-18-5"}, {"version": "26.1", "identifier": "com.apple.CoreSimulator.SimRuntime.tvOS-26-1"}, {"version": "26.2", "identifier": "com.apple.CoreSimulator.SimRuntime.tvOS-26-2"}, {"version": "11.5", "identifier": "com.apple.CoreSimulator.SimRuntime.watchOS-11-5"}, {"version": "26.1", "identifier": "com.apple.CoreSimulator.SimRuntime.watchOS-26-1"}, {"version": "26.2", "identifier": "com.apple.CoreSimulator.SimRuntime.watchOS-26-2"}]}
+2026-11-03T08:31:43.3613110Z ##[group]Run export APPIUM_HOME="$RUNNER_TEMP/cryptoid-appium-home"
+2026-11-03T08:31:43.3614110Z [36;1mexport APPIUM_HOME="$RUNNER_TEMP/cryptoid-appium-home"[0m
+2026-11-03T08:31:43.3614980Z [36;1mprintf 'APPIUM_HOME=%s\n' "$APPIUM_HOME" >> "$GITHUB_ENV"[0m
+2026-11-03T08:31:43.3616110Z [36;1mnpm install --prefix "$RUNNER_TEMP/cryptoid-appium-tools" --no-audit --no-fund appium@3.9.0[0m
+2026-11-03T08:31:43.3617550Z [36;1m"$RUNNER_TEMP/cryptoid-appium-tools/node_modules/.bin/appium" driver install xcuitest@12.22.8[0m
+2026-11-03T08:31:43.3793470Z shell: /bin/bash -e {0}
+2026-11-03T08:31:43.3794140Z ##[endgroup]
+2026-11-03T08:31:56.1756710Z npm warn allow-scripts 1 package has install scripts not yet covered by allowScripts:
+2026-11-03T08:31:56.1757700Z 
+2026-11-03T08:31:56.2720440Z npm warn allow-scripts   appium@3.9.0 (postinstall: node ./scripts/autoinstall-extensions.js)
+2026-11-03T08:31:56.2721620Z added 295 packages in 12s
+2026-11-03T08:31:56.2794500Z npm warn allow-scripts
+2026-11-03T08:31:56.2824040Z npm warn allow-scripts Run `npm approve-scripts --allow-scripts-pending` to review, or `npm approve-scripts <pkg>` to allow.
+2026-11-03T08:31:57.0897640Z - Checking if 'appium-xcuitest-driver' is compatible
+2026-11-03T08:31:57.7519330Z ✔ Checking if 'appium-xcuitest-driver' is compatible
+2026-11-03T08:31:57.7541180Z - Installing 'xcuitest@12.22.8'
+2026-11-03T08:33:43.5536200Z ✔ Installing 'xcuitest@12.22.8'
+2026-11-03T08:33:43.5552800Z - Validating 'xcuitest@12.22.8'
+2026-11-03T08:33:43.5553830Z ✔ Validating 'xcuitest@12.22.8'
+2026-11-03T08:33:43.5583580Z ℹ Driver xcuitest@12.22.8 successfully installed
+2026-11-03T08:33:43.5584390Z - automationName: XCUITest
+2026-11-03T08:33:43.5588770Z - platformNames: ["iOS","tvOS","watchOS"]
+2026-11-03T08:33:43.5797410Z ##[group]Run node lab/verification/ios-safari-environment-20261103/probe.mjs lab/verification/ios-safari-environment-20261103/results '18.5'
+2026-11-03T08:33:43.5799660Z [36;1mnode lab/verification/ios-safari-environment-20261103/probe.mjs lab/verification/ios-safari-environment-20261103/results '18.5'[0m
+2026-11-03T08:33:43.5866680Z shell: /bin/bash -e {0}
+2026-11-03T08:33:43.5867140Z env:
+2026-11-03T08:33:43.5867700Z   APPIUM_HOME: /Users/runner/work/_temp/cryptoid-appium-home
+2026-11-03T08:33:43.5868400Z ##[endgroup]
+2026-11-03T08:33:46.3886310Z CRYPTOID_IOS_ENVIRONMENT_SERVER_READY {"version":"18.5","startupMs":2550}
+2026-11-03T08:33:47.4718070Z CRYPTOID_IOS_ENVIRONMENT_PREFLIGHT {"version":1,"kind":"Safari toolchain calibration without the game","complete":false,"requestedRuntimeVersion":"18.5","startedAt":"2026-11-03T08:33:43.734Z","gameLoaded":false,"gameFilesEdited":false,"physicalDevice":false,"whiteScreenFixed":false,"tools":{"appium":"3.9.0","xcuitest":"12.22.8"},"nativeTapAttempted":false,"limits":["A simulator and a constant local HTML page, not Cryptoid Evolution or a phone acceptance test.","Reading native accessibility XML can expose first-launch UI; no unknown dialogs are accepted.","No screenshots, videos, forced GC, payment, account or device-provider service is used."],"hostBefore":{"at":"2026-11-03T08:33:43.736Z","vmStat":"Mach Virtual Memory Statistics: (page size of 4096 bytes)\nPages free:                             1331521.\nPages active:                            785500.\nPages inactive:                          775201.\nPages speculative:                       258509.\nPages throttled:                              0.\nPages wired down:                        517826.\nPages purgeable:                          13550.\n\"Translation faults\":                  59244657.\nPages copy-on-write:                    2233301.\nPages zero filled:                     46456236.\nPages reactivated:                        10646.\nPages purged:                              7286.\nFile-backed pages:                      1222158.\nAnonymous pages:                         597052.\nPages stored in compressor:                   0.\nPages occupied by compressor:                 0.\nDecompressions:                               0.\nCompressions:                                 0.\nPageins:                                1158367.\nPageouts:                                     0.\nSwapins:                                      0.\nSwapouts:                                     0.","swapUsage":"vm.swapusage: total = 0.00M  used = 0.00M  free = 0.00M  (encrypted)","hostMemoryBytes":15032385536},"hostArchitecture":"x86_64","serverProcessId":15527,"serverStartupMs":2550,"preinitializedCatalogueBytes":256038,"simulator":{"udid":"B6B56E0B-CCAC-477E-8146-82C0D83486AB","runtime":{"version":"18.5","identifier":"com.apple.CoreSimulator.SimRuntime.iOS-18-5","buildversion":"22F77"},"deviceType":"com.apple.CoreSimulator.SimDeviceType.iPhone-16-Pro-Max"}}
+2026-11-03T08:41:30.7387750Z CRYPTOID_IOS_CHUNK {"id":"1-ENVIRONMENT_DRIVER_LOG","kind":"ENVIRONMENT_DRIVER_LOG","index":0,"total":12,"sha256":"dcf01d556e68ace26a0911fb3b6be452aaab3dfff2fcb28745b97cd66b10620e","data":"{\"version\":\"18.5\",\"originalCharacters\":23285,\"truncated\":false,\"text\":\"[Appium] Welcome to Appium v3.9.0\\n[Appium] Non-default server args:\\n[Appium] { address: '127.0.0.1', loglevel: 'info', logNoColors: true, port: 4444 }\\n[Appium] Attempting to load driver xcuitest...\\n[Appium] Appium REST http interface listener started on http://127.0.0.1:4444\\n[Appium] Available drivers:\\n[Appium]   - xcuitest@12.22.8 (automationName 'XCUITest')\\n[Appium] No plugins have been installed. Use the \\\"appium plugin\\\" command to install the one(s) you want to use.\\n[HTTP] --> GET /status \\n[HTTP] <-- GET /status 200 4 ms - 110\\n[HTTP] --> POST /session {\\\"capabilities\\\":{\\\"alwaysMatch\\\":{\\\"platformName\\\":\\\"iOS\\\",\\\"appium:automationName\\\":\\\"XCUITest\\\",\\\"appium:udid\\\":\\\"B6B56E0B-CCAC-477E-8146-82C0D83486AB\\\",\\\"appium:deviceName\\\":\\\"iPhone 16 Pro Max\\\",\\\"appium:platformVersion\\\":\\\"18.5\\\",\\\"appium:bundleId\\\":\\\"com.apple.mobilesafari\\\",\\\"appium:includeSafariInWebviews\\\":true,\\\"appium:nativeWebTap\\\":true,\\\"appium:disableAutomaticScreenshots\\\":true,\\\"appium:skipLogCapture\\\":true,\\\"appium:safariGarbageCollect\\\":false,\\\"appium:waitForIdleTimeout\\\":1,\\\"appium:wdaStartupRetries\\\":1,\\\"appium:wdaLaunchTimeout\\\":120000,\\\"appium:newCommandTimeout\\\":120}}}\\n[Appium] Attempting to find matching driver for automationName 'XCUITest' and platformName 'iOS'\\n[Appium] The 'xcuitest' driver was installed and matched caps.\\n[Appium] Will require it at /Users/runner/work/_temp/cryptoid-appium-home/node_modules/appium-xcuitest-driver\\n[AppiumDriver@45a0] Appium v3.9.0 creating new XCUITestDriver (v12.22.8) session\\n[AppiumDriver@45a0] Checking BaseDriver versions for Appium and XCUITestDriver\\n[AppiumDriver@45a0] Appium's BaseDriver version is 10.8.2\\n[AppiumDriver@45a0] XCUITestDriver's BaseDriver version is 10.8.2\\n[6621367b][XCUITestDriver@fbcb] Session created with session id: 6621367b-268d-4d9e-9d4c-26a8a25476fa\\n[6621367b][XCUITest] RemoteXPC devices listing unavailable: Tunnel registry port not found."}
+2026-11-03T08:41:30.8409800Z CRYPTOID_IOS_CHUNK {"id":"1-ENVIRONMENT_DRIVER_LOG","kind":"ENVIRONMENT_DRIVER_LOG","index":1,"total":12,"sha256":"dcf01d556e68ace26a0911fb3b6be452aaab3dfff2fcb28745b97cd66b10620e","data":" Please run the tunnel creation script first See https://appium.github.io/appium-xcuitest-driver/latest/guides/remotexpc-tunnels-real-devices/ Falling back to appium-ios-device.\\n[6621367b][XCUITestDriver@fbcb] Constructing iOS simulator for Xcode version 26.2 with udid 'B6B56E0B-CCAC-477E-8146-82C0D83486AB'\\n[6621367b][XCUITestDriver@fbcb] Determining device to run tests on: udid: 'B6B56E0B-CCAC-477E-8146-82C0D83486AB', real device: false\\n[6621367b][BaseDriver] Subscribing fbcbe7a7-e695-4088-9264-8a78e829eb05 to topic 'xcuitest:sessionUdidClaimed'\\n[6621367b][BaseDriver] Subscribing fbcbe7a7-e695-4088-9264-8a78e829eb05 to topic 'xcuitest:sessionUdidContended'\\n[6621367b][BaseDriver] Subscribing fbcbe7a7-e695-4088-9264-8a78e829eb05 to topic 'xcuitest:sessionUdidReleased'\\n[6621367b][BaseDriver] Unsubscribing fbcbe7a7-e695-4088-9264-8a78e829eb05 from topic 'xcuitest:sessionUdidContended'\\n[6621367b][BaseDriver] Unsubscribing fbcbe7a7-e695-4088-9264-8a78e829eb05 from topic 'xcuitest:sessionUdidReleased'\\n[6621367b][XCUITestDriver@fbcb] Reset: failed to terminate Simulator application with id \\\"com.apple.mobilesafari\\\"\\n[6621367b][XCUITestDriver@fbcb] Found 1 com.apple.mobilesafari app file to scrub\\n[6621367b][XCUITestDriver@fbcb] Using WDA path: '/Users/runner/work/_temp/cryptoid-appium-home/node_modules/appium-xcuitest-driver/node_modules/appium-webdriveragent'\\n[6621367b][XCUITestDriver@fbcb] Using WDA agent: '/Users/runner/work/_temp/cryptoid-appium-home/node_modules/appium-xcuitest-driver/node_modules/appium-webdriveragent/WebDriverAgent.xcodeproj'\\n[6621367b][XCUITestDriver@fbcb] 'skipLogCapture' is set. Skipping starting logs such as crash, system, safari console and safari network.\\n[6621367b][XCUITestDriver@fbcb] Setting up simulator\\n[6621367b][XCUITestDriver@fbcb] Both Simulator with UDID 'B6B56E0B-CCAC-477E-8146-82C0D83486AB' and the UI client are currently running\\n[6621367b][XCUITestDriver@fbcb] Requesting connection for device B6B56E0B-CCAC-477E-8146-8"}
+2026-11-03T08:41:30.9498740Z CRYPTOID_IOS_CHUNK {"id":"1-ENVIRONMENT_DRIVER_LOG","kind":"ENVIRONMENT_DRIVER_LOG","index":2,"total":12,"sha256":"dcf01d556e68ace26a0911fb3b6be452aaab3dfff2fcb28745b97cd66b10620e","data":"2C0D83486AB on local port 8100\\n[6621367b][XCUITestDriver@fbcb] Successfully requested the connection for B6B56E0B-CCAC-477E-8146-82C0D83486AB:8100\\n[6621367b][WD Proxy] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] Selected 'simulator' WebDriverAgent startup strategy\\n[6621367b][XCUITestDriver@fbcb] Launching WebDriverAgent on the device\\n[6621367b][XCUITestDriver@fbcb] There is no need to perform the project cleanup. A fresh install has been detected\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n["}
+2026-11-03T08:41:31.0406630Z CRYPTOID_IOS_CHUNK {"id":"1-ENVIRONMENT_DRIVER_LOG","kind":"ENVIRONMENT_DRIVER_LOG","index":3,"total":12,"sha256":"dcf01d556e68ace26a0911fb3b6be452aaab3dfff2fcb28745b97cd66b10620e","data":"6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n"}
+2026-11-03T08:41:31.1407420Z CRYPTOID_IOS_CHUNK {"id":"1-ENVIRONMENT_DRIVER_LOG","kind":"ENVIRONMENT_DRIVER_LOG","index":4,"total":12,"sha256":"dcf01d556e68ace26a0911fb3b6be452aaab3dfff2fcb28745b97cd66b10620e","data":"[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\"}
+2026-11-03T08:41:31.2480450Z CRYPTOID_IOS_CHUNK {"id":"1-ENVIRONMENT_DRIVER_LOG","kind":"ENVIRONMENT_DRIVER_LOG","index":5,"total":12,"sha256":"dcf01d556e68ace26a0911fb3b6be452aaab3dfff2fcb28745b97cd66b10620e","data":"n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100"}
+2026-11-03T08:41:31.3478820Z CRYPTOID_IOS_CHUNK {"id":"1-ENVIRONMENT_DRIVER_LOG","kind":"ENVIRONMENT_DRIVER_LOG","index":6,"total":12,"sha256":"dcf01d556e68ace26a0911fb3b6be452aaab3dfff2fcb28745b97cd66b10620e","data":"\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:810"}
+2026-11-03T08:41:31.4502110Z CRYPTOID_IOS_CHUNK {"id":"1-ENVIRONMENT_DRIVER_LOG","kind":"ENVIRONMENT_DRIVER_LOG","index":7,"total":12,"sha256":"dcf01d556e68ace26a0911fb3b6be452aaab3dfff2fcb28745b97cd66b10620e","data":"0\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:81"}
+2026-11-03T08:41:31.5534220Z CRYPTOID_IOS_CHUNK {"id":"1-ENVIRONMENT_DRIVER_LOG","kind":"ENVIRONMENT_DRIVER_LOG","index":8,"total":12,"sha256":"dcf01d556e68ace26a0911fb3b6be452aaab3dfff2fcb28745b97cd66b10620e","data":"00\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8"}
+2026-11-03T08:41:31.6549410Z CRYPTOID_IOS_CHUNK {"id":"1-ENVIRONMENT_DRIVER_LOG","kind":"ENVIRONMENT_DRIVER_LOG","index":9,"total":12,"sha256":"dcf01d556e68ace26a0911fb3b6be452aaab3dfff2fcb28745b97cd66b10620e","data":"100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:"}
+2026-11-03T08:41:31.7554970Z CRYPTOID_IOS_CHUNK {"id":"1-ENVIRONMENT_DRIVER_LOG","kind":"ENVIRONMENT_DRIVER_LOG","index":10,"total":12,"sha256":"dcf01d556e68ace26a0911fb3b6be452aaab3dfff2fcb28745b97cd66b10620e","data":"8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] connect ECONNREFUSED 127.0.0.1:8100\\n[6621367b][XCUITestDriver@fbcb] Unable to start WebDriverAgent: Error: We were not able to retrieve the /status response from the WebDriverAgent server after 120000ms timeout.Try to increase the value of 'appium:wdaLaunchTimeout' capability as a possible workaround.\\n[6621367b][XCUITestDriver@fbcb] Quitting WebDriverAgent\\n[6621367b][XCUITestDriver@fbcb] Shutting down sub-processes\\n[6621367b][XCUITestDriver@fbcb] Shutting down 'xcodebuild' process (pid '20039')\\n[6621367b][Xcode] xcodebuild exited with code 'null' and signal 'SIGTERM'\\n[6621367b][XCUITestDriver@fbcb] Error: Unable to launch WebDriverAgent. Original error: Unable to start WebDriverAgent: Error: We were not able to retrieve the /status response from the WebDriverAgent server after 120000ms timeout.Try to increase the value of 'appium:wdaLaunchTimeout' capability as a possible workaround.\\n    at quitAndThrow (file:///Users/runner/work/_temp/cryptoid-appium-home/node_modules/appiu"}
+2026-11-03T08:41:31.8588550Z CRYPTOID_IOS_CHUNK {"id":"1-ENVIRONMENT_DRIVER_LOG","kind":"ENVIRONMENT_DRIVER_LOG","index":11,"total":12,"sha256":"dcf01d556e68ace26a0911fb3b6be452aaab3dfff2fcb28745b97cd66b10620e","data":"m-xcuitest-driver/build/lib/commands/wda/startup.js:345:11)\\n    at async handleLaunchFailure (file:///Users/runner/work/_temp/cryptoid-appium-home/node_modules/appium-xcuitest-driver/build/lib/commands/wda/startup.js:229:5)\\n    at async file:///Users/runner/work/_temp/cryptoid-appium-home/node_modules/appium-xcuitest-driver/build/lib/commands/wda/startup.js:187:13\\n    at async wrapped (file:///Users/runner/work/_temp/cryptoid-appium-home/node_modules/appium-xcuitest-driver/node_modules/asyncbox/build/esm/lib/retry.js:40:19)\\n    at async retry (file:///Users/runner/work/_temp/cryptoid-appium-home/node_modules/appium-xcuitest-driver/node_modules/asyncbox/build/esm/lib/retry.js:15:19)\\n    at async retryInterval (file:///Users/runner/work/_temp/cryptoid-appium-home/node_modules/appium-xcuitest-driver/node_modules/asyncbox/build/esm/lib/retry.js:51:12)\\n    at async runStartupWithRetries (file:///Users/runner/work/_temp/cryptoid-appium-home/node_modules/appium-xcuitest-driver/build/lib/commands/wda/startup.js:177:5)\\n    at async startUnderSynchronizationLock (file:///Users/runner/work/_temp/cryptoid-appium-home/node_modules/appium-xcuitest-driver/build/lib/commands/wda/startup.js:128:5)\\n    at async file:///Users/runner/work/_temp/cryptoid-appium-home/node_modules/appium-xcuitest-driver/build/lib/commands/wda/startup.js:22:9\\n[6621367b][BaseDriver] Unsubscribing fbcbe7a7-e695-4088-9264-8a78e829eb05 from topic 'xcuitest:sessionUdidClaimed'\\n[6621367b][XCUITestDriver@fbcb] Releasing connections for B6B56E0B-CCAC-477E-8146-82C0D83486AB device on any port number\\n[6621367b][XCUITestDriver@fbcb] Found cached connections to release: [\\\"B6B56E0B-CCAC-477E-8146-82C0D83486AB:8100\\\"]\\n\"}"}
+2026-11-03T08:41:31.9625130Z CRYPTOID_IOS_ENVIRONMENT_RESULT {"version":1,"kind":"Safari toolchain calibration without the game","complete":false,"requestedRuntimeVersion":"18.5","startedAt":"2026-11-03T08:33:43.734Z","gameLoaded":false,"gameFilesEdited":false,"physicalDevice":false,"whiteScreenFixed":false,"tools":{"appium":"3.9.0","xcuitest":"12.22.8"},"nativeTapAttempted":false,"limits":["A simulator and a constant local HTML page, not Cryptoid Evolution or a phone acceptance test.","Reading native accessibility XML can expose first-launch UI; no unknown dialogs are accepted.","No screenshots, videos, forced GC, payment, account or device-provider service is used."],"hostBefore":{"at":"2026-11-03T08:33:43.736Z","vmStat":"Mach Virtual Memory Statistics: (page size of 4096 bytes)\nPages free:                             1331521.\nPages active:                            785500.\nPages inactive:                          775201.\nPages speculative:                       258509.\nPages throttled:                              0.\nPages wired down:                        517826.\nPages purgeable:                          13550.\n\"Translation faults\":                  59244657.\nPages copy-on-write:                    2233301.\nPages zero filled:                     46456236.\nPages reactivated:                        10646.\nPages purged:                              7286.\nFile-backed pages:                      1222158.\nAnonymous pages:                         597052.\nPages stored in compressor:                   0.\nPages occupied by compressor:                 0.\nDecompressions:                               0.\nCompressions:                                 0.\nPageins:                                1158367.\nPageouts:                                     0.\nSwapins:                                      0.\nSwapouts:                                     0.","swapUsage":"vm.swapusage: total = 0.00M  used = 0.00M  free = 0.00M  (encrypted)","hostMemoryBytes":15032385536},"hostArchitecture":"x86_64","serverProcessId":15527,"serverStartupMs":2550,"preinitializedCatalogueBytes":256038,"simulator":{"udid":"B6B56E0B-CCAC-477E-8146-82C0D83486AB","runtime":{"version":"18.5","identifier":"com.apple.CoreSimulator.SimRuntime.iOS-18-5","buildversion":"22F77"},"deviceType":"com.apple.CoreSimulator.SimDeviceType.iPhone-16-Pro-Max"},"simulatorBooted":true,"probeOrigin":"http://127.0.0.1:49522","failure":"WebDriver unknown error: Unable to launch WebDriverAgent. Original error: Unable to start WebDriverAgent: Error: We were not able to retrieve the /status response from the WebDriverAgent server after 120000ms timeout.Try to increase the value of 'appium:wdaLaunchTimeout' capability as a possible workaround.","hostAfter":{"at":"2026-11-03T08:41:30.684Z","vmStat":"Mach Virtual Memory Statistics: (page size of 4096 bytes)\nPages free:                               61929.\nPages active:                           1393565.\nPages inactive:                         1419883.\nPages speculative:                         1605.\nPages throttled:                              0.\nPages wired down:                        724251.\nPages purgeable:                           4296.\n\"Translation faults\":                  83006739.\nPages copy-on-write:                    4636382.\nPages zero filled:                     55897835.\nPages reactivated:                       326486.\nPages purged:                             44931.\nFile-backed pages:                      1613988.\nAnonymous pages:                        1201065.\nPages stored in compressor:              160308.\nPages occupied by compressor:             67430.\nDecompressions:                           17053.\nCompressions:                            212815.\nPageins:                                2417664.\nPageouts:                                 12589.\nSwapins:                                      0.\nSwapouts:                                     0.","swapUsage":"vm.swapusage: total = 0.00M  used = 0.00M  free = 0.00M  (encrypted)","hostMemoryBytes":15032385536},"finishedAt":"2026-11-03T08:41:30.859Z"}
+2026-11-03T08:41:46.5373580Z ##[error]Process completed with exit code 1.
+2026-11-03T08:41:46.5802310Z Post job cleanup.
+2026-11-03T08:41:47.2062970Z [command]/usr/local/bin/git version
+2026-11-03T08:41:47.2313760Z git version 2.55.0
+2026-11-03T08:41:47.2550670Z Copying '/Users/runner/.gitconfig' to '/Users/runner/work/_temp/c2213559-7f1e-4d5d-807f-c79e3f8ee3f9/.gitconfig'
+2026-11-03T08:41:47.2618150Z Temporarily overriding HOME='/Users/runner/work/_temp/c2213559-7f1e-4d5d-807f-c79e3f8ee3f9' before making global git config changes
+2026-11-03T08:41:47.2754500Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-03T08:41:47.2806300Z [command]/usr/local/bin/git config --global --add safe.directory /Users/runner/work/cryptoid-evolution/cryptoid-evolution/lab
+2026-11-03T08:41:47.2990760Z Removing SSH command configuration
+2026-11-03T08:41:47.3112790Z [command]/usr/local/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-03T08:41:47.3311250Z [command]/usr/local/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-03T08:41:47.5249230Z Removing HTTP extra header
+2026-11-03T08:41:47.5281720Z [command]/usr/local/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-03T08:41:47.5503690Z [command]/usr/local/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-03T08:41:47.7685410Z Removing includeIf entries pointing to credentials config files
+2026-11-03T08:41:47.7715820Z [command]/usr/local/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-03T08:41:47.7777340Z [command]/usr/local/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-03T08:41:48.0108690Z Cleaning up orphan processes
+2026-11-03T08:41:48.4708590Z Terminate orphan process: pid (22405) (ibtoold)
+2026-11-03T08:41:48.7160740Z Terminate orphan process: pid (18236) (Simulator)

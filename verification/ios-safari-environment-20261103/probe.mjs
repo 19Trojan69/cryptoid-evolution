@@ -1,8 +1,10 @@
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
+import { createHash } from 'node:crypto';
 import { execFileSync, spawn } from 'node:child_process';
 import { mkdirSync, readFileSync, writeFileSync, openSync, closeSync, existsSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { createRequire } from 'node:module';
+import { resolve, dirname } from 'node:path';
 import { SafariClient, delay } from '../ios-safari-native-20261103/safariClient.mjs';
 import { createEvidenceWriter } from '../ios-safari-native-20261103/evidenceOutput.mjs';
 
@@ -22,13 +24,23 @@ const appiumHome = resolve(process.env.RUNNER_TEMP, 'cryptoid-appium-home');
 assert.equal(process.env.APPIUM_HOME, appiumHome);
 assert.equal(JSON.parse(readFileSync(resolve(toolsRoot, 'node_modules/appium/package.json'))).version, '3.9.0');
 assert.equal(JSON.parse(readFileSync(resolve(appiumHome, 'node_modules/appium-xcuitest-driver/package.json'))).version, '12.22.8');
+const driverRequire = createRequire(resolve(appiumHome, 'node_modules/appium-xcuitest-driver/package.json'));
+let wdaRoot = dirname(driverRequire.resolve('appium-webdriveragent'));
+while (!existsSync(resolve(wdaRoot, 'WebDriverAgent.xcodeproj'))) {
+  assert.notEqual(wdaRoot, dirname(wdaRoot), 'The installed WebDriverAgent project must exist');
+  wdaRoot = dirname(wdaRoot);
+}
+const wdaVersion = JSON.parse(readFileSync(resolve(wdaRoot, 'package.json'))).version;
+const derivedDataPath = resolve(output, 'wda-derived-data');
 const result = { version: 1, kind: 'Safari toolchain calibration without the game', complete: false,
   requestedRuntimeVersion: version, startedAt: new Date().toISOString(), gameLoaded: false,
   gameFilesEdited: false, physicalDevice: false, whiteScreenFixed: false,
-  tools: { appium: '3.9.0', xcuitest: '12.22.8' }, nativeTapAttempted: false,
+  tools: { appium: '3.9.0', xcuitest: '12.22.8', webdriveragent: wdaVersion }, nativeTapAttempted: false,
+  activeScreenshots: false, postFailureSimulatorScreenshot: false,
   limits: ['A simulator and a constant local HTML page, not Cryptoid Evolution or a phone acceptance test.',
     'Reading native accessibility XML can expose first-launch UI; no unknown dialogs are accepted.',
-    'No screenshots, videos, forced GC, payment, account or device-provider service is used.'] };
+    'No active screenshots or video. A single simulator image may be captured only after failure, without the game loaded.',
+    'No forced GC, payment, account or device-provider service is used.'] };
 let udid, server, driverProcess, driver, logFd;
 const hostSnapshot = () => ({ at: new Date().toISOString(), vmStat: execute('vm_stat', []),
   swapUsage: execute('sysctl', ['vm.swapusage']), hostMemoryBytes: Number(execute('sysctl', ['-n', 'hw.memsize'])) });
@@ -69,6 +81,45 @@ try {
   result.simulator = { udid, runtime: { version: runtime.version, identifier: runtime.identifier,
     buildversion: runtime.buildversion }, deviceType: type.identifier };
   await record('ENVIRONMENT_PREFLIGHT', result);
+  // Build explicitly before any WebDriver HTTP session request. There is no
+  // static-analysis action and no concurrent request waiting for this compiler.
+  const buildArgs = ['build-for-testing', '-project', resolve(wdaRoot, 'WebDriverAgent.xcodeproj'),
+    '-derivedDataPath', derivedDataPath, '-scheme', 'WebDriverAgentRunner',
+    '-destination', 'platform=iOS Simulator,id=' + udid, 'CODE_SIGNING_ALLOWED=NO'];
+  const buildLog = resolve(output, 'wda-build.log');
+  await record('ENVIRONMENT_WDA_BUILD_START', { version, webdriveragent: wdaVersion,
+    command: 'xcodebuild', args: buildArgs, timeoutMs: 360000, gameLoaded: false });
+  const buildStarted = Date.now();
+  const buildFd = openSync(buildLog, 'w');
+  let build;
+  try {
+    build = await new Promise(resolveBuild => {
+      const child = spawn('xcodebuild', buildArgs, { stdio: ['ignore', buildFd, buildFd] });
+      let timedOut = false, killTimer;
+      const timer = setTimeout(() => {
+        timedOut = true; child.kill('SIGTERM');
+        killTimer = setTimeout(() => child.kill('SIGKILL'), 5000);
+      }, 360000);
+      child.once('error', error => {
+        clearTimeout(timer); clearTimeout(killTimer);
+        resolveBuild({ error: String(error.message), timedOut });
+      });
+      child.once('exit', (code, signal) => {
+        clearTimeout(timer); clearTimeout(killTimer);
+        resolveBuild({ code, signal, timedOut });
+      });
+    });
+  } finally { closeSync(buildFd); }
+  const buildBytes = readFileSync(buildLog);
+  result.wdaBuild = { ...build, elapsedMs: Date.now() - buildStarted,
+    logBytes: buildBytes.length, logSha256: createHash('sha256').update(buildBytes).digest('hex'),
+    logTruncated: buildBytes.length > 2 ** 21 };
+  await record('ENVIRONMENT_WDA_BUILD_LOG', { version, ...result.wdaBuild,
+    text: buildBytes.length > 2 ** 21 ? buildBytes.subarray(-(2 ** 21)).toString('utf8') : buildBytes.toString('utf8') });
+  assert.equal(build.timedOut, false, 'The separate WebDriverAgent build must finish in its own budget');
+  assert.equal(build.code, 0, 'WebDriverAgent must build successfully before native session creation');
+  assert.equal(build.signal, null);
+  result.wdaBuildCompleted = true;
   execute('xcrun', ['simctl', 'boot', udid]);
   execute('xcrun', ['simctl', 'bootstatus', udid, '-b'], 240000);
   execute('open', ['-a', 'Simulator', '--args', '-CurrentDeviceUDID', udid]);
@@ -87,9 +138,10 @@ try {
     'appium:bundleId': 'com.apple.mobilesafari', 'appium:includeSafariInWebviews': true,
     'appium:nativeWebTap': true, 'appium:disableAutomaticScreenshots': true,
     'appium:skipLogCapture': true, 'appium:safariGarbageCollect': false,
+    'appium:usePrebuiltWDA': true, 'appium:derivedDataPath': derivedDataPath, 'appium:showXcodeLog': true,
     'appium:waitForIdleTimeout': 1, 'appium:wdaStartupRetries': 1,
     'appium:wdaLaunchTimeout': 120000, 'appium:newCommandTimeout': 120
-  } } }, 360000);
+  } } }, 240000);
   driver.session = session.sessionId; assert.ok(driver.session);
   assert.equal(String(session.capabilities.platformName).toLowerCase(), 'ios');
   result.nativeSessionCreated = true; result.capabilities = session.capabilities;
@@ -119,6 +171,17 @@ try {
   result.trustedNativeProbeTapVerified = true; result.complete = true;
 } catch (error) {
   result.failure = String(error.message).slice(0, 4000); process.exitCode = 1;
+  if (error.cause) result.failureCause = { name: String(error.cause.name), code: error.cause.code,
+    message: String(error.cause.message).slice(0, 2000) };
+  if (udid && result.simulatorBooted) try {
+    const path = resolve(output, 'simulator-after-failure.jpeg');
+    execute('xcrun', ['simctl', 'io', udid, 'screenshot', '--type=jpeg', path], 20000);
+    const bytes = readFileSync(path); assert.ok(bytes.length <= 2 ** 21, 'Bounded failure-only diagnostic image');
+    await record('ENVIRONMENT_FAILURE_SCREENSHOT', { version, capturedAfterFailure: true, gameLoaded: false,
+      mimeType: 'image/jpeg', bytes: bytes.length, sha256: createHash('sha256').update(bytes).digest('hex'),
+      base64: bytes.toString('base64') });
+    result.postFailureSimulatorScreenshot = true;
+  } catch (error) { result.failureScreenshotUnavailable = String(error.message).slice(0, 1000); }
   if (driver?.session) try {
     await driver.command('POST', '/context', { name: 'NATIVE_APP' });
     await record('ENVIRONMENT_NATIVE_SOURCE_FAILURE', { version, xml: await driver.command('GET', '/source') });

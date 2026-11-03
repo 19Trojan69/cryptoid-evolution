@@ -47,6 +47,21 @@
       "name": "environment-intel-inventory-26.2.log",
       "kind": "environment-failure",
       "gitBlobSha": "1120ec1e0c631c69dfb3fd4dbab0c7c15a3f89cb"
+    },
+    {
+      "name": "environment-sdk-18.5.log",
+      "kind": "environment-failure",
+      "gitBlobSha": "cbe6b3237e800641b7314e8500a16e32a7b7bf83"
+    },
+    {
+      "name": "environment-sdk-26.2.log",
+      "kind": "environment-failure",
+      "gitBlobSha": "64acb4c9587f25c33a6e1bcb3753a1d8e1d1ba68"
+    },
+    {
+      "name": "environment-prebuild-18.5.log",
+      "kind": "environment-failure",
+      "gitBlobSha": "9cf1ee257435f810cc79c4df4560c359e0252afd"
     }
   ]
 }

@@ -1,0 +1,129 @@
+{
+  "version": 1,
+  "integrityVerified": true,
+  "phoneAcceptance": false,
+  "whiteScreenFixed": false,
+  "newMobileGameCyclesCompleted": 0,
+  "captures": [
+    {
+      "name": "initial-macos-build.log",
+      "bytes": 97385,
+      "gitBlobSha": "288e1eff5e4fd6197dbf2bf9100d62aa4454fbe7",
+      "sha256": "8b319fcf5911f362a7b1200dc0ac840a8b01b0454202476f1355158a6836f988",
+      "parsedRecords": 2,
+      "knownMalformedNativeRecordsPreserved": 0,
+      "nativeComplete": null,
+      "environmentComplete": null
+    },
+    {
+      "name": "invalid-volume-name.log",
+      "bytes": 23622,
+      "gitBlobSha": "eb282c1a07ad99e7ad5507c6ecfe12ee0fb07979",
+      "sha256": "f08255c725221bc2cafc531e30ed89dfd8f7e4d3bd9a41b6a7739779066af405",
+      "parsedRecords": 1,
+      "knownMalformedNativeRecordsPreserved": 0,
+      "nativeComplete": null,
+      "environmentComplete": null
+    },
+    {
+      "name": "direct-safari-session.log",
+      "bytes": 455141,
+      "gitBlobSha": "d57748e6bf73bf27949a00334183b37395994c20",
+      "sha256": "3e48e01e250f580f04be4bfd290b56d9cc52d7802e20346d1cc838bc75181055",
+      "parsedRecords": 4,
+      "knownMalformedNativeRecordsPreserved": 0,
+      "nativeComplete": false,
+      "environmentComplete": null
+    },
+    {
+      "name": "appium-no-webview.log",
+      "bytes": 527079,
+      "gitBlobSha": "569b9aaac759efb60b4ee9a3c2b56173fe48ed51",
+      "sha256": "61d0da5ed681d0a0a754b32b6c79c11a9a2fd06fefbded18d04cee30c119d7d5",
+      "parsedRecords": 4,
+      "knownMalformedNativeRecordsPreserved": 1,
+      "nativeComplete": false,
+      "environmentComplete": null
+    },
+    {
+      "name": "appium-preloaded-launch.log",
+      "bytes": 592891,
+      "gitBlobSha": "5d487635f23f321318002cd7bc101ce2280cc7f9",
+      "sha256": "3bba43a8467a7cc49b31819f50ef05e7071909996ca74829a984bf793ccb2d6a",
+      "parsedRecords": 5,
+      "knownMalformedNativeRecordsPreserved": 0,
+      "nativeComplete": false,
+      "environmentComplete": null
+    },
+    {
+      "name": "environment-arm-18.5.log",
+      "bytes": 30759,
+      "gitBlobSha": "d90aefd07b4da7c39b13f5c0386f6529874c7c6b",
+      "sha256": "7f654f36c9c538b2257fcfca167190e8b8a45930a80d4c68215ff94411f6bba5",
+      "parsedRecords": 3,
+      "knownMalformedNativeRecordsPreserved": 0,
+      "nativeComplete": null,
+      "environmentComplete": false
+    },
+    {
+      "name": "environment-arm-26.2.log",
+      "bytes": 31003,
+      "gitBlobSha": "977240c4c01b8d25a6e24cf3332916f9cfe5abed",
+      "sha256": "6f808c910d2ca289684ae89866fd22dd9d41d7ff79527a95d05e8255a772e71f",
+      "parsedRecords": 3,
+      "knownMalformedNativeRecordsPreserved": 0,
+      "nativeComplete": null,
+      "environmentComplete": false
+    },
+    {
+      "name": "environment-intel-inventory-18.5.log",
+      "bytes": 30547,
+      "gitBlobSha": "b87645f19c1da150c83c6c1e667ddd3d06a7eb84",
+      "sha256": "8baebeda2600bc8d9e96ae7cf712c5320946bed1e8ea7676b628f23a823ca5bf",
+      "parsedRecords": 3,
+      "knownMalformedNativeRecordsPreserved": 0,
+      "nativeComplete": null,
+      "environmentComplete": false
+    },
+    {
+      "name": "environment-intel-inventory-26.2.log",
+      "bytes": 30304,
+      "gitBlobSha": "1120ec1e0c631c69dfb3fd4dbab0c7c15a3f89cb",
+      "sha256": "941327e5dfebff344a3fa606471e708baff77e555628b530a6d6b4667655d766",
+      "parsedRecords": 3,
+      "knownMalformedNativeRecordsPreserved": 0,
+      "nativeComplete": null,
+      "environmentComplete": false
+    },
+    {
+      "name": "environment-sdk-18.5.log",
+      "bytes": 60137,
+      "gitBlobSha": "cbe6b3237e800641b7314e8500a16e32a7b7bf83",
+      "sha256": "983dea20ed5dddd3cf642bb0f5738d7bb9e7192ea4d738c80eb66babed165532",
+      "parsedRecords": 5,
+      "knownMalformedNativeRecordsPreserved": 0,
+      "nativeComplete": null,
+      "environmentComplete": false
+    },
+    {
+      "name": "environment-sdk-26.2.log",
+      "bytes": 35342,
+      "gitBlobSha": "64acb4c9587f25c33a6e1bcb3753a1d8e1d1ba68",
+      "sha256": "693ffca55e11ca11b6c444f572f361f4cc7a2821ca61815378dbf7b51f56d695",
+      "parsedRecords": 5,
+      "knownMalformedNativeRecordsPreserved": 0,
+      "nativeComplete": null,
+      "environmentComplete": false
+    },
+    {
+      "name": "environment-prebuild-18.5.log",
+      "bytes": 178574,
+      "gitBlobSha": "9cf1ee257435f810cc79c4df4560c359e0252afd",
+      "sha256": "e7c58e36cb5cd1faad8b520f87091979f2605a3006fadee1c1a00aaab4e09241",
+      "parsedRecords": 5,
+      "knownMalformedNativeRecordsPreserved": 0,
+      "nativeComplete": null,
+      "environmentComplete": false
+    }
+  ]
+}
