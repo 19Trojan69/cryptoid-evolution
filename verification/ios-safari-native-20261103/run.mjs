@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { execFileSync, spawn } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { createRequire } from 'node:module';
-import { mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readFileSync, readdirSync, writeFileSync, existsSync } from 'node:fs';
 import { resolve, relative } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { SafariClient, delay } from './safariClient.mjs';
@@ -23,6 +23,13 @@ const seconds = phase === 'pilot' ? 60 : 1800;
 const git = ref => execFileSync('git', ['rev-parse', ref], { cwd: candidate, encoding: 'utf8' }).trim();
 assert.equal(git('HEAD'), SOURCE); assert.equal(git('HEAD^{tree}'), TREE);
 const sourceState = readSourceState(candidate);
+const toolsRoot = resolve(process.env.RUNNER_TEMP, 'cryptoid-appium-tools');
+const appiumHome = resolve(process.env.RUNNER_TEMP, 'cryptoid-appium-home');
+assert.equal(process.env.APPIUM_HOME, appiumHome, 'Dedicated disposable Appium home');
+const toolPackage = path => JSON.parse(readFileSync(path, 'utf8'));
+const appiumPackage = toolPackage(resolve(toolsRoot, 'node_modules/appium/package.json'));
+const xcuitestPackage = toolPackage(resolve(appiumHome, 'node_modules/appium-xcuitest-driver/package.json'));
+assert.equal(appiumPackage.version, '3.9.0'); assert.equal(xcuitestPackage.version, '12.22.8');
 execFileSync(process.execPath, ['verification/device-resource-checkpoint-20261102/verifyPackage.mjs'],
   { cwd: candidate, stdio: 'inherit' });
 const site = resolve(candidate, 'verification/boss2-forensics-20261028/results/device-preview/site');
@@ -44,6 +51,7 @@ const require = createRequire(resolve(candidate, 'frontend/package.json'));
 const result = { version: 1, phase, complete: false, sourceCommit: SOURCE, sourceTree: TREE,
   sourceClockSha256: CLOCK, sourceState, startedAt: new Date().toISOString(),
   nativeHostOS: process.platform, simulator, requestedActiveSeconds: seconds,
+  driverBackend: 'appium-xcuitest', toolVersions: { appium: appiumPackage.version, xcuitest: xcuitestPackage.version },
   physicalDevice: false, physicalPiBrowser: false, whiteScreenFixed: false,
   clocksAccelerated: false, automaticResume: false, additionalFullRecording: false,
   gameSourceEdited: false, servedPackageEdited: false, activeScreenshots: false,
@@ -57,7 +65,8 @@ const result = { version: 1, phase, complete: false, sourceCommit: SOURCE, sourc
     'Frozen source is built on macOS. All served files are hashed before and after each flow; remote Preview byte identity is not claimed.',
     'The simulator has host memory and graphics constraints, not a phone GPU or phone Jetsam limit.',
     'Host RSS of discovered simulator services is a partial process measurement, not unique/PSS memory or total browser/GPU allocation.',
-    'WebDriver runs in an isolated automation window. OS notifications, camera, screen recording and system interruptions are not reproduced.',
+    'Appium XCUITest and a companion WebDriverAgent control MobileSafari in a disposable simulator. This is a different driver from Apple safaridriver.',
+    'The companion process and Web Inspector connection can affect the environment. Camera, screen recording and real phone interruptions are not reproduced.',
     'No active screenshots, forced GC or heap snapshots. DOM/clock liveness does not establish native displayed pixel correctness.',
     'Any unexpected pause, document replacement or stalled frame fails; the harness never resumes it automatically.'], cycles: [] };
 let server, driverProcess, driver;
@@ -85,13 +94,15 @@ try {
   const { serveDevicePreview } = await import(pathToFileURL(resolve(candidate,
     'verification/boss2-forensics-20261028/devicePreviewServer.mjs')).href);
   server = await serveDevicePreview();
-  driverProcess = spawn('/usr/bin/safaridriver', ['--port', '4444'], { stdio: ['ignore', 'inherit', 'inherit'] });
+  driverProcess = spawn(process.execPath, [resolve(toolsRoot, 'node_modules/appium/index.js'),
+    '--address', '127.0.0.1', '--port', '4444', '--log-level', 'warn', '--log-no-colors',
+    '--log', resolve(output, 'appium.log')], { stdio: ['ignore', 'inherit', 'inherit'] });
   let driverFailure; driverProcess.once('error', error => { driverFailure = String(error.message); });
   driver = new SafariClient();
   await driver.waitFor(async () => {
     assert.ok(!driverFailure, driverFailure);
     try { return !!await driver.request('GET', '/status'); } catch { return false; }
-  }, 'Safari WebDriver server', 30000);
+  }, 'Appium WebDriver server', 30000);
   result.capabilities = await driver.start(simulator.udid);
   await driver.command('POST', '/timeouts', { script: 30000, pageLoad: 90000, implicit: 0 });
   await driver.command('POST', '/url', { url: server.origin });
@@ -197,6 +208,12 @@ try {
     result.complete = false; result.cleanupFailure = String(error.message).slice(0, 2000); process.exitCode = 1;
   }
   driverProcess?.kill('SIGTERM');
+  const driverLog = resolve(output, 'appium.log');
+  if (existsSync(driverLog)) {
+    const text = readFileSync(driverLog, 'utf8');
+    record('DRIVER_LOG_TAIL', { phase, originalCharacters: text.length, truncated: text.length > 65536,
+      text: text.slice(-65536) });
+  }
   if (server) await server.close();
   result.finishedAt = new Date().toISOString();
   writeFileSync(resolve(output, 'receipt.json'), JSON.stringify(result, null, 2) + '\n');

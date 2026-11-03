@@ -3,10 +3,10 @@ import assert from 'node:assert/strict';
 export const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 export class SafariClient {
   constructor(origin = 'http://127.0.0.1:4444') { this.origin = origin; this.session = null; }
-  async request(method, path, body) {
+  async request(method, path, body, timeout = 90000) {
     const response = await fetch(this.origin + path, { method,
       headers: { 'Content-Type': 'application/json' },
-      body: body === undefined ? undefined : JSON.stringify(body), signal: AbortSignal.timeout(90000) });
+      body: body === undefined ? undefined : JSON.stringify(body), signal: AbortSignal.timeout(timeout) });
     const result = await response.json();
     if (!response.ok || result.value?.error) throw Error('WebDriver ' + (result.value?.error || response.status)
       + ': ' + String(result.value?.message || '').slice(0, 2000));
@@ -14,9 +14,13 @@ export class SafariClient {
   }
   async start(udid) {
     const value = await this.request('POST', '/session', { capabilities: { alwaysMatch: {
-      browserName: 'Safari', platformName: 'ios', 'safari:useSimulator': true,
-      'safari:deviceUDID': udid, 'safari:automaticInspection': false, 'safari:automaticProfiling': false
-    } } });
+      browserName: 'Safari', platformName: 'iOS', 'appium:automationName': 'XCUITest',
+      'appium:udid': udid, 'appium:deviceName': 'iPhone 16 Pro Max', 'appium:platformVersion': '26.2',
+      'appium:nativeWebTap': true, 'appium:safariGarbageCollect': false,
+      'appium:skipLogCapture': true, 'appium:disableAutomaticScreenshots': true,
+      'appium:waitForIdleTimeout': 1, 'appium:wdaStartupRetries': 1,
+      'appium:wdaLaunchTimeout': 120000, 'appium:newCommandTimeout': 120
+    } } }, 360000);
     assert.ok(value.sessionId); this.session = value.sessionId;
     assert.equal(String(value.capabilities.platformName).toLowerCase(), 'ios', 'Never silently fall back to desktop Safari');
     return value.capabilities;

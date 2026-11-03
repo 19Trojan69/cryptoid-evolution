@@ -50,6 +50,37 @@ Formatkürzel `APFSX` nicht (`Invalid argument`). Auch dieser Lauf enthält kein
 Spielprüfung. Der korrigierte Aufruf verwendet den Dateisystemnamen
 `Case-sensitive APFS`; die echte Dateiprobe bleibt unverändert vorgeschrieben.
 
+## Direkter Safari-Treiber: Verbindung vor Spielstart gescheitert
+
+Quelle `53668ae36250da278f5d0c48e61103fb20b484a0`,
+https://github.com/19Trojan69/cryptoid-evolution/actions/runs/41594414579
+
+Der Dateisystemtest, Simulatorstart und unveränderte Gast-Build bestanden.
+Apples direkter Treiber konnte die Sitzung allerdings nicht öffnen:
+`session not created`, Zeitüberschreitung beim Suchen/Starten einer kompatiblen
+Safari-Instanz und Warten auf deren `RWIApplication`. Es gab noch keinen
+Spielzyklus und keinen beobachteten Spielabsturz. Die abschließenden Quellen-
+und Paketprüfungen bestanden. Das Ergebnis bleibt `complete:false`.
+
+Die nächste Ausführung verwendet deshalb Appium **3.9.0** mit dem dazu
+kompatiblen XCUITest-Treiber **12.22.8**. Version 13 des Treibers wurde bewusst
+nicht gewählt, weil dessen Paket Appium 4 als Beta voraussetzt. Die beiden
+gewählten Versionen und ihre Peer-Anforderungen wurden an den offiziellen
+Veröffentlichungen/Paketdateien geprüft. Installation und Begleit-App bleiben
+außerhalb des eingefrorenen Spiel-Checkouts. WDA wird ausschließlich für den
+Simulator gebaut; es gibt keinen Geräte-Account oder Signierdienst.
+
+`nativeWebTap:true` verlangt normale native Berührungen statt JavaScript-Klicks.
+Automatische XCTest-Screenshots, laufende Appium-Logsammler und angeforderte
+Safari-GC bleiben ausgeschaltet. `waitForIdleTimeout:1` begrenzt allein das
+Warten des Testwerkzeugs auf eine ruhige native Oberfläche; es verändert keine
+Spieluhr. Die initiale WDA-Erstellung hat eine getrennte begrenzte Startfrist.
+Eine unerwartete Unterbrechung im laufenden Spiel wird weiterhin nicht wiederholt
+oder automatisch fortgesetzt. Quellen: 
+https://github.com/appium/appium/releases/tag/appium%403.9.0
+https://github.com/appium/appium-xcuitest-driver/blob/v12.22.8/package.json
+https://appium.github.io/appium-xcuitest-driver/latest/reference/capabilities/
+
 ## Kostenloser Ablauf
 
 Das Repository wurde vor der Einrichtung als öffentlich bestätigt. Verwendet wird
@@ -58,11 +89,10 @@ GitHub dokumentiert kostenlose Standard-Runner für öffentliche Repositories:
 https://docs.github.com/en/actions/concepts/billing-and-usage
 
 Der bereits vorhandene Xcode-26.2-Simulator wird verwendet. Kein Apple-Konto,
-Testabo, Geräteanbieter oder kostenpflichtiger Dienst wird eingerichtet. Apples
-vorinstallierter `safaridriver` steuert Safari direkt über W3C WebDriver; eine
-zusätzliche Appium-Installation ist deshalb nicht notwendig. Die Unterstützung
-für iOS-Simulatoren ist hier dokumentiert:
-https://webkit.org/blog/9395/webdriver-is-coming-to-safari-in-ios-13/
+Testabo, Geräteanbieter oder kostenpflichtiger Dienst wird eingerichtet.
+Appium und XCUITest steuern MobileSafari über W3C WebDriver und Apples XCTest.
+Die Unterstützung für iOS-Simulatoren ist hier dokumentiert:
+https://appium.github.io/appium-xcuitest-driver/latest/overview/
 
 Es gibt keine zusätzlichen hochgeladenen Actions-Artefakte oder Caches. Die
 synthetischen Belege werden mit eindeutigen JSON-Markern in das vorhandene
@@ -90,8 +120,11 @@ RSS ist geteilter/privater residenter Host-Speicher ohne saubere Aufteilung und
 ohne vollständigen GPU-Speicher. Diese Teilmenge wird weder als iPhone-RAM noch
 als gesamter Browserspeicher oder nativer Absturzgrund ausgegeben. Der Simulator
 hat andere Speicher-/Grafikgrenzen und ist kein Test des Pi Browsers. Die
-WebDriver-Fenster verwenden isolierte Daten und unterdrücken bestimmte
-Systemunterbrechungen. Kamera und Bildschirmaufnahme werden nicht nachgestellt.
+XCUITest-Begleit-App und die Web-Inspector-Verbindung beeinflussen die
+Testumgebung. Es gibt keine fremden Safari-Daten auf dem frischen Simulator.
+Kamera, Bildschirmaufnahme und echte Handy-Unterbrechungen werden nicht
+nachgestellt. Die früher beschriebenen Einschränkungen von Apples direktem
+Automatisierungsfenster werden nicht pauschal auf Appium übertragen.
 
 Es gibt keine aktiven Bildschirmaufnahmen, Heap-Snapshots oder erzwungene
 Speicherbereinigung. DOM- und Uhrfortschritt beweisen keine korrekten nativen
