@@ -1,4 +1,4 @@
-name: Frozen source reactor firing-lane coverage
+name: Frozen source field-contact then hold coverage
 on:
   push:
     branches: [codex/reactor-line-load-20261103]
@@ -41,12 +41,12 @@ jobs:
         run: |
           node verification/direct-boss-style-device-20261102/buildDevicePreview.mjs
           node verification/device-resource-checkpoint-20261102/verifyPackage.mjs
-      - name: Pass the existing left-lane complete short flow
-        run: node lab/verification/reactor-line-load-20261103/run.mjs candidate lab/verification/reactor-line-load-20261103/results ${{ matrix.engine }} existing-left smoke
-      - name: Prove native center placement, actual reactor damage and the complete short flow
-        run: node lab/verification/reactor-line-load-20261103/run.mjs candidate lab/verification/reactor-line-load-20261103/results ${{ matrix.engine }} reactor-line smoke
-      - name: Require thirty real active minutes in the uncovered firing lane
-        run: node lab/verification/reactor-line-load-20261103/run.mjs candidate lab/verification/reactor-line-load-20261103/results ${{ matrix.engine }} reactor-line soak
+      - name: Pass the existing centered complete short flow
+        run: node lab/verification/reactor-line-load-20261103/run.mjs candidate lab/verification/reactor-line-load-20261103/results ${{ matrix.engine }} stationary smoke
+      - name: Prove native position changes and the complete short flow
+        run: node lab/verification/reactor-line-load-20261103/run.mjs candidate lab/verification/reactor-line-load-20261103/results ${{ matrix.engine }} field-contacts smoke
+      - name: Require thirty real active minutes after releasing the field contacts
+        run: node lab/verification/reactor-line-load-20261103/run.mjs candidate lab/verification/reactor-line-load-20261103/results ${{ matrix.engine }} field-contacts soak
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: ${{ !cancelled() }}
         with:

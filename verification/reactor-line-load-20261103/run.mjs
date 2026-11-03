@@ -14,9 +14,9 @@ const CLOCK = '5e5845d5e5beef85ca5dadac597b8d751e81f931374b942b22fdedc7d83bbb5c'
 const [candidateArg, outputArg, engine, workload, phase] = process.argv.slice(2);
 assert.ok(candidateArg && outputArg);
 assert.ok(['chromium', 'webkit'].includes(engine));
-assert.ok(['existing-left', 'reactor-line'].includes(workload));
+assert.ok(['stationary', 'field-contacts'].includes(workload));
 assert.ok(['smoke', 'soak'].includes(phase));
-if (phase === 'soak') assert.equal(workload, 'reactor-line', 'Only the newly uncovered workload gets a new long run');
+if (phase === 'soak') assert.equal(workload, 'field-contacts', 'Only the contact-then-hold workload gets a new long run');
 const candidate = resolve(candidateArg), output = resolve(outputArg, engine, workload, phase);
 mkdirSync(output, { recursive: true });
 const seconds = phase === 'smoke' ? 60 : 1800;
@@ -53,12 +53,12 @@ const receipt = { version: 1, complete: false, sourceCommit: SOURCE, sourceTree:
   originalClockSha256: CLOCK, installedPackages: packages,
   lockSha256: digest(resolve(candidate, 'frontend/yarn.lock')), generatedLockfiles: locks,
   scriptsAndStyles: scripts, viewport: { width: 430, height: 825 }, deviceScaleFactor: 3,
-  ordinaryNativeFieldTap: workload === 'reactor-line', directGameStateWrites: false,
+  ordinaryNativeFieldContacts: workload === 'field-contacts', directGameStateWrites: false,
   runtimeSourceChanged: false, servedPackageChanged: false, automaticResume: false,
   clocksAccelerated: false, physicalDevice: false, whiteScreenFixed: false,
   memoryComparisonEligible: false, errors: [],
-  limits: ['Same frozen application; external driver adds one ordinary field tap per reactor-line cycle.',
-    'Initial damage proves an actual reactor hit, not a complete history of all later impacts.',
+  limits: ['Same frozen application; external driver adds seven ordinary single-finger field contacts per contact cycle.',
+    'This is a synthetic contact sequence, not a replay of private phone coordinates, continuous dragging or multitouch.',
     'Placement setup adds test-inspector reads; the existing long-loop read cadence stays unchanged.',
     'Unseeded Linux native engines and synthetic viewport are not a physical iOS/Android test.',
     'Linux PSS and app counters do not identify native phone/GPU termination causes.',
@@ -73,7 +73,7 @@ receipt.childExit = await new Promise(done => {
   child.once('exit', (code, signal) => done({ code, signal }));
 });
 try {
-  const results = resolve(candidate, 'verification/systematic-stability-20261101/results', engine + '-original', phase);
+  const results = resolve(candidate, 'verification/systematic-stability-20261101/results', engine + '-original', phase, workload);
   const resultPath = resolve(results, 'verification.json');
   const result = JSON.parse(readFileSync(resultPath, 'utf8'));
   copyFileSync(resultPath, resolve(output, 'verification.json'));
@@ -94,10 +94,9 @@ try {
     assert.equal(row.complete, true); assert.ok(row.observedActiveMs >= (i ? 10 : seconds) * 1000);
     for (const key of ['pauseFreezeVerified', 'weaponRoundtripVerified', 'normalExitVerified']) assert.equal(row[key], true);
     assert.equal(row.reactorLineWorkload.condition, workload);
-    if (workload === 'reactor-line') {
-      assert.equal(row.reactorLineWorkload.nativeFieldTap, true);
-      assert.equal(row.reactorLineWorkload.initialBossDamageVerified, true);
-    }
+    assert.equal(row.reactorLineWorkload.nativeContacts.length, workload === 'field-contacts' ? 7 : 0);
+    if (workload === 'field-contacts') for (const contact of row.reactorLineWorkload.nativeContacts)
+      assert.ok(Math.abs(contact.requestedX - contact.actualPlayer.x) < .02);
   }
   execFileSync(process.execPath, ['verification/direct-boss-style-device-20261102/verifyScope.mjs'], { cwd: candidate, stdio: 'inherit' });
   assert.deepEqual(readSourceState(candidate), locks, 'Frozen source and both generated lockfiles remain identical');

@@ -12,30 +12,31 @@ const once = (text, before, after) => {
 // No served source/build file or browser/application API is patched.
 export function adaptVerifier(original, originalUrl, workload) {
   assert.equal(digest(original), VERIFIER_SHA256, 'Exact unchanged source verifier required');
-  assert.ok(['existing-left', 'reactor-line'].includes(workload));
+  assert.ok(['stationary', 'field-contacts'].includes(workload));
   const setupAnchor = '    const first = await observe(); if (clockProbe) probeFirst = first; verifyActive(first, first);';
   const setup = `    const reactorLineWorkload = ${JSON.stringify(workload)};
     const placementBefore = await observe();
     verifyActive(placementBefore, placementBefore);
-    assert.ok(Math.abs(placementBefore.scene.player.x - .075) < .01, 'Original reactor seed starts left');
+    assert.ok(Math.abs(placementBefore.scene.player.x - .5) < .02, 'Actual prepared device seed starts centered');
     row.reactorLineWorkload = { condition: reactorLineWorkload,
       playerBefore: { ...placementBefore.scene.player }, bossHealthBefore: placementBefore.scene.bossHealth,
-      nativeFieldTap: false, initialBossDamageVerified: false };
-    if (reactorLineWorkload === 'reactor-line') {
+      nativeContacts: [] };
+    if (reactorLineWorkload === 'field-contacts') {
       const fieldBox = await page.locator('.game-field').boundingBox();
       assert.ok(fieldBox && fieldBox.width > 0 && fieldBox.height > 0);
-      // Ordinary one-finger field tap; never set player/game state in evaluate.
-      await page.touchscreen.tap(fieldBox.x + fieldBox.width * .5, fieldBox.y + fieldBox.height * .84);
-      await page.waitForFunction(() => {
-        const s = window.__crossDeviceTest?.inspect();
-        return s?.status === 'playing' && Math.abs(s.player.x - .5) < .02;
-      }, null, { timeout: 10000 });
-      await page.waitForFunction(health => {
-        const s = window.__crossDeviceTest?.inspect();
-        return s?.status === 'playing' && s.bossHealth < health;
-      }, placementBefore.scene.bossHealth, { timeout: 45000 });
-      row.reactorLineWorkload.nativeFieldTap = true;
-      row.reactorLineWorkload.initialBossDamageVerified = true;
+      // Ordinary single-finger contacts; never set game state in evaluate.
+      // End centered so the held-position phase uses the established lane.
+      for (const x of [.25, .75, .35, .65, .25, .75, .5]) {
+        await page.touchscreen.tap(fieldBox.x + fieldBox.width * x, fieldBox.y + fieldBox.height * .84);
+        await page.waitForFunction(target => {
+          const s = window.__crossDeviceTest?.inspect();
+          return s?.status === 'playing' && Math.abs(s.player.x - target) < .02;
+        }, x, { timeout: 10000 });
+        const moved = await observe(); verifyActive(moved, placementBefore);
+        row.reactorLineWorkload.nativeContacts.push({ requestedX: x, actualPlayer: { ...moved.scene.player },
+          elapsedMs: moved.clock.latest.elapsedMs });
+        await page.waitForTimeout(300);
+      }
     }
 ${setupAnchor}
     row.reactorLineWorkload.playerAtStart = { ...first.scene.player };
@@ -43,8 +44,8 @@ ${setupAnchor}
     console.log('CRYPTOID_REACTOR_WORKLOAD_READY ' + JSON.stringify({ engine, cycle, ...row.reactorLineWorkload }));`;
   const observeAnchor = '      const observed = await observe(); verifyActive(observed, first);';
   const observe = `${observeAnchor}
-      assert.ok(Math.abs(observed.scene.player.x - (reactorLineWorkload === 'reactor-line' ? .5 : .075)) < .02,
-        'Native placement remains in the selected firing lane');
+      assert.ok(Math.abs(observed.scene.player.x - .5) < .02,
+        'Held-position phase remains centered after releasing the contacts');
       row.reactorLineWorkload.lastPlayer = { ...observed.scene.player };
       row.reactorLineWorkload.lastBossHealth = observed.scene.bossHealth;`;
   const pointAnchor = '          coreVolley: observed.scene.coreVolley, shots: observed.scene.shots, hostileShots: observed.scene.hostileShots,';
@@ -55,7 +56,7 @@ ${setupAnchor}
   ordinaryNativeInputOnly: true, gameSourceChanged: false, servedPackageChanged: false,
   sourceVerifierSha256: ${JSON.stringify(VERIFIER_SHA256)},
   extraSetupInspectorReads: true, activeLoopSamplingMs: 1000,
-  initialDamageIsNotAnEveryHitCounter: true,
+  nativeContactSequence: true, continuousDragOrMultiTouchReplayed: false,
   phoneViewportIsConfigurationNotDeviceAttestation: true };
 result.memoryComparisonEligible = false;
 result.comparedConditionsAreVisuallyDifferent = true;
@@ -64,9 +65,12 @@ ${metaAnchor}`;
   adapted = once(adapted, observeAnchor, observe);
   adapted = once(adapted, pointAnchor, point);
   adapted = once(adapted, metaAnchor, meta);
+  const outputAnchor = "  : resolve(root, 'verification/systematic-stability-20261101/results', `${engine}-${condition}`, run);";
+  const scopedOutput = "  : resolve(root, 'verification/systematic-stability-20261101/results', `${engine}-${condition}`, run, " + JSON.stringify(workload) + ");";
+  adapted = once(adapted, outputAnchor, scopedOutput);
   // Exact reverse proves that no original lifecycle/clock/failure gate changed.
   assert.equal(adapted.replace(setup, setupAnchor).replace(observe, observeAnchor)
-    .replace(point, pointAnchor).replace(meta, metaAnchor), original);
+    .replace(point, pointAnchor).replace(meta, metaAnchor).replace(scopedOutput, outputAnchor), original);
   adapted = adapted.replace(/\bfrom\s+(['"])(\.\.?\/[^'"]+)\1/g,
     (_match, _quote, specifier) => 'from ' + JSON.stringify(new URL(specifier, originalUrl).href));
   return adapted.replaceAll('import.meta.url', JSON.stringify(originalUrl));
