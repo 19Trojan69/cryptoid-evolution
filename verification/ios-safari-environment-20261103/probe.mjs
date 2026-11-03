@@ -126,10 +126,12 @@ try {
   await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
   const origin = 'http://127.0.0.1:' + server.address().port;
   result.probeOrigin = origin;
-  // Deliberately start in NATIVE_APP. This avoids waiting for a Web Inspector
-  // page before we can read which Safari screen the clean simulator displays.
+  // Native mode previously proved that Safari visibly loaded this exact page,
+  // but exposed no inspectable web context. Test the driver's Safari startup
+  // path with the same independently successful WDA build and connection gates.
   const session = await driver.request('POST', '/session', { capabilities: { alwaysMatch: {
-    platformName: 'iOS', 'appium:automationName': 'XCUITest', 'appium:udid': udid,
+    browserName: 'Safari', platformName: 'iOS', 'appium:automationName': 'XCUITest', 'appium:udid': udid,
+    'appium:initialDeeplinkUrl': origin, 'appium:safariInitialUrl': origin,
     'appium:deviceName': 'iPhone 16 Pro Max', 'appium:platformVersion': version,
     'appium:bundleId': 'com.apple.mobilesafari', 'appium:includeSafariInWebviews': true,
     'appium:nativeWebTap': true, 'appium:disableAutomaticScreenshots': true,
@@ -140,7 +142,10 @@ try {
   } } }, 240000);
   driver.session = session.sessionId; assert.ok(driver.session);
   assert.equal(String(session.capabilities.platformName).toLowerCase(), 'ios');
+  assert.equal(String(session.capabilities.browserName).toLowerCase(), 'safari');
   result.nativeSessionCreated = true; result.capabilities = session.capabilities;
+  result.safariBrowserSessionCreated = true;
+  await driver.command('POST', '/context', { name: 'NATIVE_APP' });
   await record('ENVIRONMENT_NATIVE_SOURCE_BEFORE', { version, xml: await driver.command('GET', '/source') });
   result.nativeSourceRead = true;
   await driver.execute('mobile: deepLink', [{ url: origin, bundleId: 'com.apple.mobilesafari' }]);
