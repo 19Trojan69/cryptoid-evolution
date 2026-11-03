@@ -1,0 +1,34 @@
+name: Verify the targeted mobile HUD cascade correction
+on:
+  push:
+    branches: [codex/ios-safari-environment-20261103]
+    paths:
+      - '.github/workflows/cryptoid-mobile-hud-cascade.yml'
+      - 'verification/mobile-hud-cascade-20261103/**'
+permissions:
+  contents: read
+jobs:
+  hud-cascade:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with: {persist-credentials: false, path: lab}
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          persist-credentials: false
+          path: candidate
+          ref: ac98e95166b0e2013186257904da46323840dab5
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with: {node-version: '24'}
+      - name: Install the same pinned browser tools outside the game checkout
+        run: |
+          npm install --prefix "$RUNNER_TEMP/cryptoid-fix-tools" --ignore-scripts --no-audit --no-fund playwright@1.62.1
+          "$RUNNER_TEMP/cryptoid-fix-tools/node_modules/.bin/playwright" install --with-deps chromium webkit
+      - name: Apply only the reviewed CSS rule-order patch in the disposable test checkout
+        working-directory: candidate
+        run: |
+          git apply --check ../lab/verification/mobile-hud-cascade-20261103/mobile-hud-cascade.patch
+          git apply ../lab/verification/mobile-hud-cascade-20261103/mobile-hud-cascade.patch
+      - name: Require twelve real browser comparisons with unchanged other properties and layout
+        run: node lab/verification/mobile-hud-cascade-20261103/verify.mjs candidate "$RUNNER_TEMP/cryptoid-hud-cascade-results"
