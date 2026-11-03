@@ -1,0 +1,132 @@
+{
+  "version": 1,
+  "sourceCommit": "f0d01cb4533e8ee1bb59485a9cca75dd928c98da",
+  "sourceTree": "bf84880d6044eb89e969ffee2e0886ff6d34b6e2",
+  "runId": 41718408959,
+  "jobId": 126204391299,
+  "jobConclusion": "success",
+  "result": {
+    "version": 1,
+    "complete": true,
+    "sourceBlob": "d73579b3f9abe575adacfa978259aec9bdb0e7fd",
+    "originalSha256": "6b500123cb1443bbcb52809f0dbd06520ea0aee02a550ec346ab5ce1f186f277",
+    "virtualCandidateSha256": "528394facb5624a960087fd5ac3bb8e7c20cd8bf4c640567a81af2d5c7d3c967",
+    "sourceGameFilesEdited": false,
+    "fullGameRun": false,
+    "physicalDevice": false,
+    "nativeMemoryMeasured": false,
+    "performanceGainMeasured": false,
+    "whiteScreenFixed": false,
+    "cases": [
+      {
+        "engine": "chromium",
+        "browserVersion": "151.0.7922.34",
+        "cases": [
+          {
+            "case": "1000-identical-input-updates",
+            "controlWrites": 4000,
+            "candidateWrites": 4,
+            "nativeStyleMutations": [
+              4,
+              4
+            ],
+            "computedConsumersEqual": true
+          },
+          {
+            "case": "360-changing-input-updates",
+            "controlWrites": 1440,
+            "candidateWrites": 1438,
+            "nativeStyleMutations": [
+              1438,
+              1438
+            ],
+            "computedConsumersEqual": true
+          },
+          {
+            "case": "important",
+            "candidateWrites": 4,
+            "inlineValueAndPriorityEqual": true
+          },
+          {
+            "case": "external-write",
+            "candidateWrites": 4,
+            "inlineValueAndPriorityEqual": true
+          },
+          {
+            "case": "remove-inline",
+            "candidateWrites": 4,
+            "inlineValueAndPriorityEqual": true
+          },
+          {
+            "case": "remount",
+            "candidateWrites": 4,
+            "inlineValueAndPriorityEqual": true
+          }
+        ]
+      },
+      {
+        "engine": "webkit",
+        "browserVersion": "26.5",
+        "cases": [
+          {
+            "case": "1000-identical-input-updates",
+            "controlWrites": 4000,
+            "candidateWrites": 4,
+            "nativeStyleMutations": [
+              4,
+              4
+            ],
+            "computedConsumersEqual": true
+          },
+          {
+            "case": "360-changing-input-updates",
+            "controlWrites": 1440,
+            "candidateWrites": 1438,
+            "nativeStyleMutations": [
+              1438,
+              1438
+            ],
+            "computedConsumersEqual": true
+          },
+          {
+            "case": "important",
+            "candidateWrites": 4,
+            "inlineValueAndPriorityEqual": true
+          },
+          {
+            "case": "external-write",
+            "candidateWrites": 4,
+            "inlineValueAndPriorityEqual": true
+          },
+          {
+            "case": "remove-inline",
+            "candidateWrites": 4,
+            "inlineValueAndPriorityEqual": true
+          },
+          {
+            "case": "remount",
+            "candidateWrites": 4,
+            "inlineValueAndPriorityEqual": true
+          }
+        ]
+      }
+    ]
+  },
+  "scope": {
+    "beforeCommit": "8d3b0111b90ebfa48e0f7608e8cffcc0c21f6be2",
+    "tree": "bf84880d6044eb89e969ffee2e0886ff6d34b6e2",
+    "changed": [
+      ".github/workflows/cryptoid-player-style-writes.yml",
+      "verification/player-style-writes-20261103/README.de.md",
+      "verification/player-style-writes-20261103/candidate.mjs",
+      "verification/player-style-writes-20261103/verify.mjs"
+    ],
+    "protectedUnchanged": true
+  },
+  "decision": {
+    "adoptIntoGame": false,
+    "reason": "Both engines already suppress unchanged native style mutations. Lower JavaScript write counts alone do not demonstrate lower allocation, process memory or CPU cost; the candidate adds inline reads.",
+    "physicalRetestRequested": false,
+    "whiteScreenCauseEstablished": false
+  }
+}

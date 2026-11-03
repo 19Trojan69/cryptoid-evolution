@@ -35,3 +35,30 @@ Ressourcenvergleich und der vollständige Spieleinstieg sind noch gesondert
 erforderlich, bevor dieser Kandidat ins Spiel übernommen werden kann. Die
 Darstellungsfixture ist keine vollständige Grafik-/Spiel-/Geräteabnahme.
 Der mobile White Screen bleibt offen. Keine privaten Handydateien enthalten.
+
+## Abgeschlossenes Ergebnis und Entscheidung
+
+Quelle f0d01cb4533e8ee1bb59485a9cca75dd928c98da, Baum
+bf84880d6044eb89e969ffee2e0886ff6d34b6e2,
+[CI 41718408959](https://github.com/19Trojan69/cryptoid-evolution/actions/runs/41718408959),
+Job 126204391299: erfolgreich. Chromium 151.0.7922.34 und WebKit 26.5 bestehen
+jeweils alle sechs Verträge einschließlich geänderter Priorität und Fremdwerten.
+Die kurze Fixture startet kein Spiel und misst keine echte Smartphone-Laufzeit.
+
+| 1.000 identische synthetische Updates | Original | Kandidat |
+| --- | ---: | ---: |
+| JavaScript-setProperty-Aufrufe | 4.000 | 4 |
+| Native Style-Attributmutationen, Chromium | 4 | 4 |
+| Native Style-Attributmutationen, WebKit | 4 | 4 |
+
+Bei 360 wechselnden Updates entstehen in beiden Varianten je Engine genau
+1.438 native Attributmutationen; alle berechneten Verbraucherwerte bleiben gleich.
+Die niedrigere API-Aufrufzahl darf daher nicht als Vermeidung von 3.996 nativen
+Style-Änderungen beschrieben werden. Der Originalbrowser vermeidet diese schon.
+Interne Parser-Allokationen, CPU-Zeit und Prozessspeicher sind hier nicht gemessen.
+
+Entscheidung: Den Kandidaten nicht als nachgewiesenen Ressourcen- oder White-
+Screen-Fix übernehmen. Ein bloß grüner Darstellungsvertrag rechtfertigt keinen
+weiteren unveränderten Besitzer-Langtest und keine neue Spielversion. Es wird
+auch nicht behauptet, dass jede mögliche Allokatorwirkung ausgeschlossen wäre.
+Alle fünf Runtime-Verzeichnisse und vercel.json bleiben auf den geprüften Pins.
