@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "kind": "Hosted desktop Chromium functional check, not a native phone acceptance",
+  "sourceCommit": "7e4fe78e4889457a181d06543f50551658a83aa2",
+  "elapsedMs": 114007.70000000298,
+  "mode": "ended",
+  "entryVerified": true,
+  "pauseFreezeVisibleVerified": true,
+  "manualResumeVerified": true,
+  "weaponMenuRoundtripVerified": true,
+  "ordinaryExitVerified": true,
+  "actualFileDownloadVerified": true,
+  "reportAndResourceClockMatch": true,
+  "transientClockStalls": [
+    {
+      "kind": "state",
+      "at": 1793726398186,
+      "elapsedMs": 41999.89999999851,
+      "mode": "stalled",
+      "target": "document",
+      "trusted": false
+    },
+    {
+      "kind": "state",
+      "at": 1793726460186,
+      "elapsedMs": 102004.5,
+      "mode": "stalled",
+      "target": "document",
+      "trusted": false
+    }
+  ],
+  "uninterruptedClockRun": false,
+  "viewport": {
+    "width": 1363,
+    "height": 936,
+    "devicePixelRatio": 1
+  },
+  "mobileViewportExercised": false,
+  "liveHudBackdrop": "blur(10px) at desktop width; original mobile media query retained in delivered HTML",
+  "activeScreenshots": false,
+  "screenRecording": false,
+  "physicalDeviceAccepted": false,
+  "whiteScreenFixed": false,
+  "downloadBytes": 7404,
+  "downloadSha256": "1ca7563571f29179af551de7d466ede6bf9754768231880dc9d4101336150153"
+}

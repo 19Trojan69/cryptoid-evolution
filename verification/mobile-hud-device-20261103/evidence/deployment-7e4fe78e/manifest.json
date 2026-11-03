@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "syntheticGuestDataOnly": true,
+  "files": [
+    {
+      "file": "index.html",
+      "bytes": 6325,
+      "sha256": "99b60e58be9301af3a23fef1484ff44ccae25413bfe98c78368448e2023365bd"
+    },
+    {
+      "file": "device-preview-info.json",
+      "bytes": 6269,
+      "sha256": "345c7938b8c50ab0d4e04c23f9a847add28a1523ab4caac48b86780d357c768d"
+    },
+    {
+      "file": "delivery-verification.json",
+      "bytes": 1055,
+      "sha256": "218f3550f7d071f17a4b61c08951942068fd4f77ffdbd1677372ba98503d7752"
+    },
+    {
+      "file": "normal-browser-report.json",
+      "bytes": 7404,
+      "sha256": "1ca7563571f29179af551de7d466ede6bf9754768231880dc9d4101336150153"
+    },
+    {
+      "file": "browser-functional-verification.json",
+      "bytes": 1338,
+      "sha256": "8ec2193fe67738bb779a03b6dfc1bf02b86c98fa52576d363c98572d7e207f38"
+    },
+    {
+      "file": "deployment-receipt.json",
+      "bytes": 1442,
+      "sha256": "6dabe3af0f00198f6c611a20b80ce0ea8a01891f79a7c3f623ed088a6830949d"
+    },
+    {
+      "file": "README.de.md",
+      "bytes": 2491,
+      "sha256": "20f39c3956b4c25918fc252222321dd1e93ca6ae1d4d989f5a6c1e586744dbc9"
+    }
+  ]
+}

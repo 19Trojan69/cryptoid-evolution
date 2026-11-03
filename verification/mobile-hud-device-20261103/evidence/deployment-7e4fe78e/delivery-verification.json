@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "deploymentId": "dpl_6MAuVaYw8UjJhrQ6dLXxgYuBgn7E",
+  "origin": "https://cryptoid-evolution-testnet-lxdsgxjr9-19-trojan69.vercel.app",
+  "sourceCommit": "7e4fe78e4889457a181d06543f50551658a83aa2",
+  "checks": {
+    "servedHtmlMatchesCandidate": true,
+    "removingOnlyHudRuleRestoresBuiltHtml": true,
+    "oneStyleRule": true,
+    "noToolbarInjection": true
+  },
+  "resources": {
+    "diagnostic-stopwatch-state.js": {
+      "status": 200,
+      "bytes": 5241,
+      "sha256": "5e5845d5e5beef85ca5dadac597b8d751e81f931374b942b22fdedc7d83bbb5c"
+    },
+    "diagnostic-stopwatch.js": {
+      "status": 200,
+      "bytes": 6206,
+      "sha256": "1fb70e564c5c30e87dc845f6a875fcb4e52e3d8d0986a8fcd4ccc78a97f7d89a"
+    },
+    "diagnostic-stopwatch.css": {
+      "status": 200,
+      "bytes": 1471,
+      "sha256": "c6269b2566f58207dc9c58907e0a980c9e49a11477a4bcd5002a3f407d94b601"
+    }
+  },
+  "anonymousShareAccessVerified": true,
+  "shareLinkExpiryUnixSeconds": 1793808906,
+  "physicalDeviceAccepted": false,
+  "whiteScreenFixed": false
+}

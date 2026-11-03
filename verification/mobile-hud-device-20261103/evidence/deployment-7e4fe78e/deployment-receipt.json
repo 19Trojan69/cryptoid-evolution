@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "ownerApprovalReceived": true,
+  "scope": "new separate HUD phone preview only",
+  "deployment": {
+    "id": "dpl_6MAuVaYw8UjJhrQ6dLXxgYuBgn7E",
+    "url": "https://cryptoid-evolution-testnet-lxdsgxjr9-19-trojan69.vercel.app",
+    "projectId": "prj_JpvzU9ZS8bFkn9jZgE51Gct8TZpF",
+    "target": "preview",
+    "readyState": "READY",
+    "createdAt": 1793725710655,
+    "readyAt": 1793725955008,
+    "sourceCommit": "7e4fe78e4889457a181d06543f50551658a83aa2",
+    "sourceBranch": "codex/mobile-hud-device-20261103"
+  },
+  "originalAliasesUnchanged": [
+    {
+      "alias": "cryptoid-evolution.vercel.app",
+      "deploymentId": "dpl_6N3FdS9XGXasCWrpMksngxCPNPRk",
+      "projectId": "prj_BAIJH4BzLLwun36kWVEnTdx69j0q"
+    },
+    {
+      "alias": "cryptoid-evolution-testnet.vercel.app",
+      "deploymentId": "dpl_239zEifRV84KCpbyHumnuHmSGm9T",
+      "projectId": "prj_JpvzU9ZS8bFkn9jZgE51Gct8TZpF"
+    },
+    {
+      "alias": "cryptoid-evolution-testnet-git-codex-device-a6d6f5-19-trojan69.vercel.app",
+      "deploymentId": "dpl_7bP26Ltvbi68CxrdqbaFU7PSTURk",
+      "projectId": "prj_JpvzU9ZS8bFkn9jZgE51Gct8TZpF"
+    }
+  ],
+  "shareLinkExpiryUnixSeconds": 1793808906,
+  "shareSecretIncluded": false,
+  "consoleCheck": {
+    "limitedTo": 10,
+    "allReturnedRows": "browser extension metadata messages",
+    "completeApplicationConsoleCoverage": false
+  },
+  "physicalDeviceAccepted": false,
+  "whiteScreenFixed": false
+}
