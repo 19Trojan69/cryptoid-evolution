@@ -1,0 +1,57 @@
+name: Frozen source reactor firing-lane coverage
+on:
+  push:
+    branches: [codex/reactor-line-load-20261103]
+    paths:
+      - '.github/workflows/cryptoid-reactor-line-load.yml'
+      - 'verification/reactor-line-load-20261103/*.mjs'
+permissions:
+  contents: read
+jobs:
+  native-reactor-line:
+    strategy:
+      fail-fast: false
+      matrix:
+        engine: [chromium, webkit]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with: {persist-credentials: false, path: lab}
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          persist-credentials: false
+          path: candidate
+          ref: ac98e95166b0e2013186257904da46323840dab5
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with: {node-version: '24'}
+      - name: Verify the external adapter and strict source-state guard
+        run: node --test lab/verification/reactor-line-load-20261103/adaptVerifier.test.mjs lab/verification/mobile-30m-source-proof-20261102/sourceState.test.mjs
+      - name: Install tools only in the frozen source checkout
+        working-directory: candidate
+        env: {VERCEL_ENV: preview}
+        run: |
+          node verification/direct-boss-style-device-20261102/installDevicePreview.mjs --ignore-scripts
+          npm install --prefix verification/boss2-forensics-20261028 --ignore-scripts --no-audit --no-fund
+          cd verification/boss2-forensics-20261028
+          npx playwright install --with-deps ${{ matrix.engine }}
+      - name: Build the exact frozen diagnostic package
+        working-directory: candidate
+        env: {VERCEL_ENV: preview}
+        run: |
+          node verification/direct-boss-style-device-20261102/buildDevicePreview.mjs
+          node verification/device-resource-checkpoint-20261102/verifyPackage.mjs
+      - name: Pass the existing left-lane complete short flow
+        run: node lab/verification/reactor-line-load-20261103/run.mjs candidate lab/verification/reactor-line-load-20261103/results ${{ matrix.engine }} existing-left smoke
+      - name: Prove native center placement, actual reactor damage and the complete short flow
+        run: node lab/verification/reactor-line-load-20261103/run.mjs candidate lab/verification/reactor-line-load-20261103/results ${{ matrix.engine }} reactor-line smoke
+      - name: Require thirty real active minutes in the uncovered firing lane
+        run: node lab/verification/reactor-line-load-20261103/run.mjs candidate lab/verification/reactor-line-load-20261103/results ${{ matrix.engine }} reactor-line soak
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: ${{ !cancelled() }}
+        with:
+          name: reactor-line-${{ matrix.engine }}
+          path: |
+            lab/verification/reactor-line-load-20261103/results/
+            candidate/verification/systematic-stability-20261101/results/
+          retention-days: 14
