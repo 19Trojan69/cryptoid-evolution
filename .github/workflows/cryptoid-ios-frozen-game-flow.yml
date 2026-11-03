@@ -1,0 +1,71 @@
+name: Frozen game pilot and thirty active minutes in calibrated iOS Safari
+on:
+  push:
+    branches: [codex/ios-safari-environment-20261103]
+    paths:
+      - '.github/workflows/cryptoid-ios-frozen-game-flow.yml'
+      - 'verification/ios-frozen-game-flow-20261103/*.mjs'
+permissions:
+  contents: read
+jobs:
+  ios-safari:
+    runs-on: macos-15-intel
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with: {persist-credentials: false, path: lab}
+      - name: Preserve Linux source filename semantics on a case-sensitive build volume
+        run: |
+          hdiutil create -size 6g -fs 'Case-sensitive APFS' -type SPARSE -volname CryptoidBuild "$RUNNER_TEMP/cryptoid-build.sparseimage"
+          mkdir "$GITHUB_WORKSPACE/case-sensitive"
+          hdiutil attach -nobrowse -mountpoint "$GITHUB_WORKSPACE/case-sensitive" "$RUNNER_TEMP/cryptoid-build.sparseimage"
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          root=Path(os.environ['GITHUB_WORKSPACE'])/'case-sensitive'
+          upper=root/'CryptoidCaseProbe'
+          lower=root/'cryptoidcaseprobe'
+          upper.write_text('upper')
+          assert not lower.exists(), 'The build volume must actually distinguish filename case'
+          upper.unlink()
+          print('CRYPTOID_IOS_CASE_SENSITIVE_VOLUME_VERIFIED')
+          PY
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          persist-credentials: false
+          path: case-sensitive/candidate
+          ref: ac98e95166b0e2013186257904da46323840dab5
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with: {node-version: '24'}
+      - name: Test driver failure gates without starting the game
+        run: node --test lab/verification/ios-safari-native-20261103/tools.test.mjs lab/verification/ios-safari-native-20261103/evidenceOutput.test.mjs lab/verification/ios-frozen-game-flow-20261103/calibratedSafariClient.test.mjs
+      - name: Initialize the already installed simulator catalogue before Appium
+        timeout-minutes: 3
+        run: |
+          sudo xcode-select --switch /Applications/Xcode_26.2.app/Contents/Developer
+          python3 - <<'PY'
+          import subprocess,json,time,os
+          from pathlib import Path
+          started=time.monotonic()
+          p=subprocess.run(['xcrun','simctl','list','--json'],capture_output=True,text=True,check=True,timeout=150)
+          inventory=json.loads(p.stdout)
+          (Path(os.environ['RUNNER_TEMP'])/'cryptoid-simulator-inventory.json').write_text(p.stdout)
+          assert any(r.get('isAvailable') and r.get('version')=='18.5' for r in inventory['runtimes'])
+          print('CRYPTOID_FROZEN_GAME_SDK_READY '+json.dumps({'elapsedMs':round((time.monotonic()-started)*1000),'gameLoaded':False}))
+          PY
+      - name: Install the pinned free Appium and compatible XCUITest tools outside the source checkout
+        run: |
+          export APPIUM_HOME="$RUNNER_TEMP/cryptoid-appium-home"
+          printf 'APPIUM_HOME=%s\n' "$APPIUM_HOME" >> "$GITHUB_ENV"
+          npm install --prefix "$RUNNER_TEMP/cryptoid-appium-tools" --no-audit --no-fund appium@3.9.0
+          "$RUNNER_TEMP/cryptoid-appium-tools/node_modules/.bin/appium" driver install xcuitest@12.22.8
+      - name: Install and build only the frozen guest checkout
+        working-directory: case-sensitive/candidate
+        env: {VERCEL_ENV: preview}
+        run: |
+          node verification/direct-boss-style-device-20261102/installDevicePreview.mjs --ignore-scripts
+          npm install --prefix verification/boss2-forensics-20261028 --ignore-scripts --no-audit --no-fund
+          node verification/direct-boss-style-device-20261102/buildDevicePreview.mjs
+          node verification/device-resource-checkpoint-20261102/verifyPackage.mjs
+      - name: Require the calibrated native control, complete game pilot, then thirty active minutes
+        run: node lab/verification/ios-frozen-game-flow-20261103/run.mjs lab/verification/ios-frozen-game-flow-20261103/results '18.5' case-sensitive/candidate
