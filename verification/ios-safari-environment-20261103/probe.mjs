@@ -30,6 +30,26 @@ const hostSnapshot = () => ({ at: new Date().toISOString(), vmStat: execute('vm_
   swapUsage: execute('sysctl', ['vm.swapusage']), hostMemoryBytes: Number(execute('sysctl', ['-n', 'hw.memsize'])) });
 try {
   result.hostBefore = hostSnapshot();
+  result.hostArchitecture = execute('uname', ['-m']);
+  // Bring up the transport before the simulator competes for resources.
+  // A ready transport is required independently of all Safari/game behavior.
+  const logPath = resolve(output, 'appium-console.log'); logFd = openSync(logPath, 'a');
+  driverProcess = spawn(process.execPath, [resolve(toolsRoot, 'node_modules/appium/index.js'),
+    '--address', '127.0.0.1', '--port', '4444', '--log-level', 'info', '--log-no-colors'],
+    { stdio: ['ignore', logFd, logFd] });
+  result.serverProcessId = driverProcess.pid;
+  let spawnError, earlyExit;
+  driverProcess.once('error', error => { spawnError = String(error.message); });
+  driverProcess.once('exit', (code, signal) => { earlyExit = { code, signal }; });
+  driver = new SafariClient();
+  const serverStarted = Date.now();
+  await driver.waitFor(async () => {
+    assert.ok(!spawnError, spawnError);
+    assert.ok(!earlyExit, 'Appium exited before readiness: ' + JSON.stringify(earlyExit));
+    try { return (await driver.request('GET', '/status')).ready === true; } catch { return false; }
+  }, 'Appium server before simulator boot', 60000);
+  result.serverStartupMs = Date.now() - serverStarted;
+  await record('ENVIRONMENT_SERVER_READY', { version, startupMs: result.serverStartupMs });
   const inventory = JSON.parse(execute('xcrun', ['simctl', 'list', '--json']));
   const runtime = inventory.runtimes.find(r => r.isAvailable === true
     && r.identifier.startsWith('com.apple.CoreSimulator.SimRuntime.iOS-')
@@ -51,16 +71,6 @@ try {
   await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
   const origin = 'http://127.0.0.1:' + server.address().port;
   result.probeOrigin = origin;
-  const logPath = resolve(output, 'appium-console.log'); logFd = openSync(logPath, 'a');
-  driverProcess = spawn(process.execPath, [resolve(toolsRoot, 'node_modules/appium/index.js'),
-    '--address', '127.0.0.1', '--port', '4444', '--log-level', 'info', '--log-no-colors'],
-    { stdio: ['ignore', logFd, logFd] });
-  let spawnError; driverProcess.once('error', error => { spawnError = String(error.message); });
-  driver = new SafariClient();
-  await driver.waitFor(async () => {
-    assert.ok(!spawnError, spawnError);
-    try { return !!await driver.request('GET', '/status'); } catch { return false; }
-  }, 'Appium server', 30000);
   // Deliberately start in NATIVE_APP. This avoids waiting for a Web Inspector
   // page before we can read which Safari screen the clean simulator displays.
   const session = await driver.request('POST', '/session', { capabilities: { alwaysMatch: {
