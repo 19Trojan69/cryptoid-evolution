@@ -1,0 +1,54 @@
+name: Frozen guest source in native iOS Simulator Safari
+on:
+  push:
+    branches: [codex/ios-safari-native-20261103]
+    paths:
+      - '.github/workflows/cryptoid-ios-safari-native.yml'
+      - 'verification/ios-safari-native-20261103/*.mjs'
+permissions:
+  contents: read
+jobs:
+  ios-safari:
+    runs-on: macos-15
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with: {persist-credentials: false, path: lab}
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          persist-credentials: false
+          path: candidate
+          ref: ac98e95166b0e2013186257904da46323840dab5
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with: {node-version: '24'}
+      - name: Test driver failure gates without starting the game
+        run: node --test lab/verification/ios-safari-native-20261103/tools.test.mjs
+      - name: Select preinstalled Xcode and enable automation on this disposable runner
+        run: |
+          sudo xcode-select --switch /Applications/Xcode_26.2.app/Contents/Developer
+          sudo /usr/bin/safaridriver --enable
+          node lab/verification/ios-safari-native-20261103/prepareSimulator.mjs lab/verification/ios-safari-native-20261103/results
+      - name: Install and build only the frozen guest checkout
+        working-directory: candidate
+        env: {VERCEL_ENV: preview}
+        run: |
+          node verification/direct-boss-style-device-20261102/installDevicePreview.mjs --ignore-scripts
+          npm install --prefix verification/boss2-forensics-20261028 --ignore-scripts --no-audit --no-fund
+          node verification/direct-boss-style-device-20261102/buildDevicePreview.mjs
+          node verification/device-resource-checkpoint-20261102/verifyPackage.mjs
+      - name: Require a complete native Safari short flow with process observations
+        run: node lab/verification/ios-safari-native-20261103/run.mjs candidate lab/verification/ios-safari-native-20261103/results pilot
+      - name: Require thirty real active minutes and two remounts in a fresh Safari session
+        run: node lab/verification/ios-safari-native-20261103/run.mjs candidate lab/verification/ios-safari-native-20261103/results soak
+      - name: Release this job's simulator
+        if: ${{ always() }}
+        run: |
+          node --input-type=module - <<'NODE'
+          import {readFileSync} from 'node:fs';
+          import {spawnSync} from 'node:child_process';
+          try {
+            const {udid}=JSON.parse(readFileSync('lab/verification/ios-safari-native-20261103/results/simulator.json','utf8'));
+            spawnSync('xcrun',['simctl','shutdown',udid],{stdio:'inherit'});
+            spawnSync('xcrun',['simctl','delete',udid],{stdio:'inherit'});
+          } catch (error) { console.log('CRYPTOID_IOS_CLEANUP '+JSON.stringify({message:String(error.message)})); }
+          NODE
