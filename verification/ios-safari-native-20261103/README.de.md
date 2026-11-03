@@ -81,6 +81,16 @@ https://github.com/appium/appium/releases/tag/appium%403.9.0
 https://github.com/appium/appium-xcuitest-driver/blob/v12.22.8/package.json
 https://appium.github.io/appium-xcuitest-driver/latest/reference/capabilities/
 
+Der erste Appium-Workflow-Entwurf `3fdb936f7b6be027cac2600fef76a644444e0071`,
+https://github.com/19Trojan69/cryptoid-evolution/actions/runs/41596062504,
+wurde vor der Job-Zuweisung abgelehnt; die Jobliste ist leer. Der Entwurf
+verwendete `runner.temp` an der nicht erlaubten Stelle `jobs.<job_id>.env`.
+Die offizielle Kontexttabelle erlaubt `runner` dort nicht. Die Korrektur setzt
+den eigenen Werkzeugpfad erst in einem Runner-Schritt und übergibt ihn mit
+`GITHUB_ENV` an die folgenden Schritte. Auch dieser Entwurf liefert keine
+Spielminute. Referenz:
+https://docs.github.com/en/actions/reference/workflows-and-actions/contexts
+
 ## Kostenloser Ablauf
 
 Das Repository wurde vor der Einrichtung als öffentlich bestätigt. Verwendet wird

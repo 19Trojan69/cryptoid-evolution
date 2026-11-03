@@ -11,8 +11,6 @@ jobs:
   ios-safari:
     runs-on: macos-15
     timeout-minutes: 60
-    env:
-      APPIUM_HOME: ${{ runner.temp }}/cryptoid-appium-home
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
         with: {persist-credentials: false, path: lab}
@@ -43,6 +41,8 @@ jobs:
         run: node --test lab/verification/ios-safari-native-20261103/tools.test.mjs
       - name: Install the pinned free Appium and compatible XCUITest tools outside the source checkout
         run: |
+          export APPIUM_HOME="$RUNNER_TEMP/cryptoid-appium-home"
+          printf 'APPIUM_HOME=%s\n' "$APPIUM_HOME" >> "$GITHUB_ENV"
           npm install --prefix "$RUNNER_TEMP/cryptoid-appium-tools" --no-audit --no-fund appium@3.9.0
           "$RUNNER_TEMP/cryptoid-appium-tools/node_modules/.bin/appium" driver install xcuitest@12.22.8
       - name: Select preinstalled Xcode and boot this job's simulator
