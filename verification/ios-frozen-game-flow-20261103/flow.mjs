@@ -20,6 +20,7 @@ assert.equal(process.platform, 'darwin'); assert.ok(['pilot', 'soak'].includes(p
 const candidate = resolve(candidateArg), outputRoot = resolve(outputArg), output = resolve(outputRoot, phase);
 mkdirSync(output, { recursive: true });
 const simulator = JSON.parse(readFileSync(resolve(outputRoot, 'simulator.json'), 'utf8'));
+const handoff = JSON.parse(readFileSync(resolve(outputRoot, 'session.json'), 'utf8'));
 assert.equal(simulator.booted, true);
 assert.equal(simulator.runtime.version, '18.5');
 assert.equal(simulator.calibrationVerified, true);
@@ -106,13 +107,16 @@ try {
     try { return (await driver.request('GET', '/status')).ready === true; } catch { return false; }
   }, 'calibrated Appium server', 60000);
   result.sharedCalibratedAppium = true;
-  result.capabilities = await driver.start(simulator.udid, server.origin, simulator);
-  result.preopenedLocalGuestVerified = true;
+  result.capabilities = await driver.start(simulator.udid, server.origin, simulator, handoff, phase);
+  result.borrowedCalibratedSession = true;
+  result.freshWebDriverSession = false;
+  result.nativeNavigation = driver.nativeNavigation;
+  result.ordinaryLocalGuestNavigationVerified = true;
   result.wdaInitialDeeplinkRequested = false;
   await driver.command('POST', '/timeouts', { script: 30000, pageLoad: 90000, implicit: 0 });
   await driver.waitFor(() => driver.execute(`return location.origin === arguments[0]
-    && document.readyState !== 'loading';`, [server.origin]), 'initial native deeplink loads the local guest document');
-  result.initialLocalGuestDeeplinkVerified = true;
+    && document.readyState !== 'loading';`, [server.origin]), 'ordinary navigation loads the new local guest document');
+  result.initialLocalGuestNavigationVerified = true;
   result.environment = await driver.execute(`return {userAgent:navigator.userAgent, platform:navigator.platform,
     width:innerWidth,height:innerHeight,devicePixelRatio,secureContext:isSecureContext,origin:location.origin};`);
   assert.match(result.environment.userAgent, /iPhone/); assert.equal(result.environment.secureContext, true);

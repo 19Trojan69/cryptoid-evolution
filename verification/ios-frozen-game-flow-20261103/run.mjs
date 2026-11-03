@@ -173,7 +173,8 @@ try {
   assert.ok(webContext, 'The constant local probe must be exposed as an inspectable Safari page');
   result.probeWebContext = webContext;
   result.page = await driver.execute(`return {heading:document.querySelector('#probe-heading')?.textContent,
-    userAgent:navigator.userAgent,origin:location.origin,width:innerWidth,height:innerHeight,devicePixelRatio};`);
+    userAgent:navigator.userAgent,origin:location.origin,timeOrigin:performance.timeOrigin,
+    width:innerWidth,height:innerHeight,devicePixelRatio};`);
   assert.equal(result.page.heading, 'Cryptoid Safari environment probe');
   assert.match(result.page.userAgent, /iPhone/);
   await driver.click('#probe-tap'); result.nativeTapAttempted = true;
@@ -184,7 +185,6 @@ try {
   result.controlVerified = true;
   await record('CALIBRATED_CONTROL_READY', { complete: true, runtime: version,
     simulator: result.simulator, trustedNativeProbeTapVerified: true, gameLoaded: false });
-  await driver.close();
   const gameOutput = resolve(outputArg, 'game');
   mkdirSync(gameOutput, { recursive: true });
   const prepared = { version: 1, udid, runtime: result.simulator.runtime,
@@ -195,13 +195,33 @@ try {
   await record('SIMULATOR_READY', prepared);
   result.complete = false;
   result.completedGamePhases = [];
+  let expectedPreviousOrigin = result.probeOrigin, expectedPreviousTimeOrigin = result.page.timeOrigin;
+  result.sessionIsolation = 'fresh local origins and documents in one calibrated native session';
   for (const phase of ['pilot', 'soak']) {
+    const previous = await driver.execute(`return {origin:location.origin,timeOrigin:performance.timeOrigin,
+      mounted:!!document.querySelector('.game-shell')};`);
+    assert.equal(previous.mounted, false, 'Only navigate while no game is mounted');
+    assert.equal(previous.origin, expectedPreviousOrigin, 'The previous verified origin must remain active');
+    assert.equal(previous.timeOrigin, expectedPreviousTimeOrigin, 'No unobserved document replacement');
+    const handoff = { version: 1, phase, udid, sessionId: driver.session, capabilities: result.capabilities,
+      controlVerified: true, trustedNativeProbeTapVerified: true,
+      previousOrigin: previous.origin, previousTimeOrigin: previous.timeOrigin,
+      previousGamePhaseCompleted: phase === 'soak' && result.completedGamePhases.includes('pilot') };
+    writeFileSync(resolve(gameOutput, 'session.json'), JSON.stringify(handoff, null, 2) + '\n');
     result.gameFlowAttempted = true;
     if (phase === 'pilot') result.gameLoaded = null;
     await record('FROZEN_GAME_FLOW_START', { phase, candidate, source: 'ac98e95166b0e2013186257904da46323840dab5',
       requestedActiveSeconds: phase === 'pilot' ? 60 : 1800, physicalDevice: false });
     execFileSync(process.execPath, [resolve(new URL('./flow.mjs', import.meta.url).pathname),
       candidate, gameOutput, phase], { stdio: 'inherit', timeout: phase === 'pilot' ? 600000 : 2400000 });
+    const flow = JSON.parse(readFileSync(resolve(gameOutput, phase, 'receipt.json'), 'utf8'));
+    assert.equal(flow.complete, true);assert.equal(flow.borrowedCalibratedSession, true);
+    assert.equal(flow.nativeNavigation?.newDocumentAndOriginVerified, true);
+    assert.equal(flow.nativeNavigation.before.origin, previous.origin);
+    assert.equal(flow.nativeNavigation.before.timeOrigin, previous.timeOrigin);
+    expectedPreviousOrigin = flow.environment.origin;
+    expectedPreviousTimeOrigin = flow.nativeNavigation.after.timeOrigin;
+    result.sharedVerifiedSession = true;
     result.gameLoaded = true;
     result.completedGamePhases.push(phase);
   }

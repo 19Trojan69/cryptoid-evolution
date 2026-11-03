@@ -1,31 +1,53 @@
 import assert from 'node:assert/strict';
-import { execFileSync } from 'node:child_process';
 import { isAbsolute } from 'node:path';
 import { SafariClient } from '../ios-safari-native-20261103/safariClient.mjs';
 export class CalibratedSafariClient extends SafariClient {
-  constructor(origin, preopen = (udid,url) => execFileSync('xcrun',['simctl','openurl',udid,url],
-    {encoding:'utf8',timeout:45000,maxBuffer:2**20})) {super(origin);this.preopen=preopen;}
-  async start(udid,initialUrl,simulator) {
+  async start(udid,initialUrl,simulator,handoff,phase) {
     const url=new URL(initialUrl);
     assert.equal(url.protocol,'http:');assert.equal(url.hostname,'127.0.0.1');
+    assert.equal(url.pathname,'/');assert.equal(url.search,'');assert.equal(url.hash,'');
+    assert.equal(this.origin,'http://127.0.0.1:4444','Only the local calibrated transport');
     assert.equal(simulator.udid,udid);assert.equal(simulator.runtime.version,'18.5');
     assert.equal(simulator.booted,true);assert.equal(simulator.calibrationVerified,true);
     assert.equal(simulator.physicalDevice,false);assert.ok(isAbsolute(simulator.wdaDerivedDataPath));
-    this.preopen(udid,initialUrl);
-    const value=await this.request('POST','/session',{capabilities:{alwaysMatch:{
-      browserName:'Safari',platformName:'iOS','appium:automationName':'XCUITest','appium:udid':udid,
-      'appium:safariInitialUrl':initialUrl,'appium:noReset':true,
-      'appium:deviceName':'iPhone 16 Pro Max','appium:platformVersion':'18.5',
-      'appium:includeSafariInWebviews':true,'appium:nativeWebTap':true,
-      'appium:disableAutomaticScreenshots':true,'appium:skipLogCapture':true,
-      'appium:safariGarbageCollect':false,'appium:usePrebuiltWDA':true,
-      'appium:derivedDataPath':simulator.wdaDerivedDataPath,'appium:showXcodeLog':true,
-      'appium:waitForIdleTimeout':1,'appium:wdaStartupRetries':1,
-      'appium:wdaLaunchTimeout':120000,'appium:newCommandTimeout':120
-    }}},240000);
-    assert.ok(value.sessionId);this.session=value.sessionId;
-    assert.equal(String(value.capabilities.platformName).toLowerCase(),'ios','No desktop fallback');
-    assert.equal(String(value.capabilities.browserName).toLowerCase(),'safari');
-    return value.capabilities;
+    assert.ok(['pilot','soak'].includes(phase));
+    assert.equal(handoff.phase,phase);assert.equal(handoff.udid,udid);
+    assert.equal(handoff.controlVerified,true);assert.equal(handoff.trustedNativeProbeTapVerified,true);
+    assert.equal(handoff.previousGamePhaseCompleted,phase==='soak');
+    assert.match(handoff.sessionId,/^[0-9a-f]{8}-[0-9a-f-]{27}$/i);
+    assert.ok(Number.isFinite(handoff.previousTimeOrigin)&&handoff.previousTimeOrigin>0);
+    const previous=new URL(handoff.previousOrigin);
+    assert.equal(previous.protocol,'http:');assert.equal(previous.hostname,'127.0.0.1');
+    assert.notEqual(previous.origin,url.origin,'Each game phase needs its own origin');
+    const caps=handoff.capabilities;
+    assert.equal(String(caps.platformName).toLowerCase(),'ios','No desktop fallback');
+    assert.equal(String(caps.browserName).toLowerCase(),'safari');assert.equal(caps.udid,udid);
+    assert.equal(caps.nativeWebTap,true);assert.equal(caps.safariGarbageCollect,false);
+    assert.equal(caps.disableAutomaticScreenshots,true);
+    // The parent retains ownership. No new session, reset, reopen or fallback.
+    this.borrowedCalibratedSession=true;this.session=handoff.sessionId;
+    const contextBefore=await this.command('GET','/context');
+    assert.match(contextBefore,/^WEBVIEW_/);
+    const before=await this.execute(`return {origin:location.origin,timeOrigin:performance.timeOrigin,
+      mounted:!!document.querySelector('.game-shell')};`);
+    assert.equal(before.origin,handoff.previousOrigin);
+    assert.equal(before.timeOrigin,handoff.previousTimeOrigin);assert.equal(before.mounted,false);
+    await this.command('POST','/timeouts',{script:30000,pageLoad:90000,implicit:0});
+    await this.command('POST','/url',{url:initialUrl});
+    const after=await this.waitFor(async()=>{
+      const point=await this.execute(`return {origin:location.origin,timeOrigin:performance.timeOrigin,
+        ready:document.readyState,mounted:!!document.querySelector('.game-shell')};`);
+      return point.origin===url.origin&&point.ready!=='loading'?point:false;
+    },'new local guest document in the verified session');
+    assert.notEqual(after.timeOrigin,before.timeOrigin,'No reuse of the previous document');
+    assert.equal(after.mounted,false,'Never navigate over an active game');
+    const contextAfter=await this.command('GET','/context');assert.match(contextAfter,/^WEBVIEW_/);
+    this.nativeNavigation={method:'WebDriver POST /url',contextBefore,contextAfter,before,after,
+      newDocumentAndOriginVerified:true,newWebDriverSession:false};
+    return caps;
+  }
+  async close() {
+    if(this.borrowedCalibratedSession){this.session=null;return;}
+    await super.close();
   }
 }
