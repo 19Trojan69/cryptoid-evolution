@@ -7,21 +7,22 @@ iOS-Runtime 18.5. Frühere Kontrollen erfassten zusätzlich 26.2.
 Eine fehlende Runtime bleibt ein Vorprüfungsfehler; es werden keine SDKs
 nachgeladen oder Konten/Dienste eingerichtet.
 
-Appium 3.9.0 und der kompatible XCUITest-Treiber 12.22.8 starten zuerst eine
-native Sitzung mit MobileSafari, ohne `browserName=Safari`. Damit lässt sich
-die tatsächliche native Oberfläche lesen, bevor eine Web-Inspector-Verbindung
-vorausgesetzt wird. Die Prüfung akzeptiert keine unbekannten Einführungs- oder
+Appium 3.9.0 und der kompatible XCUITest-Treiber 12.22.8 steuern MobileSafari
+im Safari-Browsermodus. Die konstante lokale Kontrollseite wird auf dem jeweils
+frisch erzeugten Simulator vor der HTTP-Sitzungsanforderung mit `simctl openurl`
+geöffnet. `noReset:true` erhält ausschließlich diese vorbereitete Testseite;
+beim WDA-Sitzungsstart wird keine initiale Deep-Link-URL mehr angefordert. Die Prüfung akzeptiert keine unbekannten Einführungs- oder
 Berechtigungsdialoge. Erfasst wird nur die Accessibility-XML des eigenen frischen
 Simulators und kein Besitzergerät. Nach einem Fehlschlag darf zusätzlich genau
 ein Bild des eigenen Simulators zur internen Diagnose erfasst werden; es gibt
 keine Aufnahme während der eigentlichen Kontrolle und kein Video.
 
-Danach wird eine konstante HTML-Seite auf dem lokalen Rechner geöffnet. Ein
-gültiger Erfolg verlangt die passende Safari-Webview, die tatsächliche lokale
-DOM-Überschrift und genau eine native Berührung mit `event.isTrusted=true`.
-Eine nur gestartete Begleit-App oder eine vorhandene XML-Oberfläche reicht
-nicht aus. `includeSafariInWebviews=true` stellt sicher, dass Safari-Kontexte in
-dieser anfangs nativen Sitzung überhaupt berücksichtigt werden.
+Ein gültiger Erfolg verlangt die passende Safari-Webview, die tatsächliche
+lokale DOM-Überschrift und eine angeforderte native Berührung mit einem
+gezählten Klick und `event.isTrusted=true`. Eine nur gestartete Begleit-App
+oder eine vorhandene XML-Oberfläche reicht nicht aus. Safari-Kontexte bleiben
+mit `includeSafariInWebviews=true` ausdrücklich einbezogen. Es werden keine
+unbekannten Dialoge bestätigt.
 
 Native Quellen und Appium-Protokolle werden begrenzt und mit dem bereits
 getesteten Fragment-/SHA-256-Verfahren gesichert. Unterprozesse schreiben in
@@ -222,3 +223,47 @@ Die ursprünglichen Verzeichnisse `frontend`, `backend`, `api`, `assets` und
 `private-preview` besitzen weiterhin exakt die Git-Objekt-IDs des eingefrorenen
 Spielstands `ac98e95166b0e2013186257904da46323840dab5`. Es gibt keine Änderung
 an Spielmechanik, Grafik oder Ton und kein neues Vercel-Deployment.
+
+
+## Browserkonfiguration akzeptiert, Safari-Start über WDA fehlgeschlagen
+
+Quelle `1295926f983cc1c62fa8946ff5247ac5efedf3f0`,
+https://github.com/19Trojan69/cryptoid-evolution/actions/runs/41615341217
+
+Die widersprüchliche Capability wurde nicht mehr zurückgewiesen. WDA-Bau
+(109833 ms, Rückgabecode 0), Simulator-Boot und der WDA-Serverstart sind
+protokolliert. Die anschließende WDA-Sitzung meldete jedoch `Cannot launch
+com.apple.mobilesafari application`, unmittelbar nach der Meldung über die
+initiale Deep-Link-URL. Ein konkreter nativer Absturzgrund ist damit nicht
+belegt. Die Safari-Sitzung, DOM-Prüfung und Kontrollberührung wurden nicht
+erreicht. Die nachträgliche Simulatoraufnahme erreichte ihre eigene Zeitgrenze.
+Der Versuch bleibt insgesamt fehlgeschlagen, das Spiel wurde nicht geladen.
+
+Der gelieferte Appium-Protokollblock ist mit allen acht Fragmenten und SHA-256
+`57c9a2ab513962021a089e389bba03752436e1786bf8634aaee3ea4629a5cf85`
+vollständig geprüft. Der große Compilerblock enthält erneut nur 1052 von 1053
+erwarteten Fragmenten und bleibt abgelehnt. Das gesamte gelieferte Jobprotokoll
+hat 2410445 Byte und SHA-256
+`f7e334824ca2390542bb0ab2a72f6d11bfed0cf81683f0740e9dedd22713451e`.
+Die gelieferten Bytes, der Schlussdatensatz und die getrennten Integritätswerte
+werden unter `evidence/41615341217-*` erhalten. Ein geprüfter Appium-Block
+bestätigt nicht nachträglich die fehlenden Compilerbytes.
+
+Die nächste funktionale Startvariante öffnet dieselbe konstante HTML-Seite vor
+der Appium-Sitzung mit `xcrun simctl openurl`. Der Safari-Browsermodus bleibt
+bestehen; nur der initiale WDA-Deep-Link-Start entfällt. `noReset:true` verhindert,
+dass der Treiber diese vorbereitete Seite vor dem Inspector-Verbindungsaufbau
+beendet und bereinigt. Die passende Reset-Semantik ist im unveränderten
+XCUITest-Tag `v12.22.8`, `lib/device/simulator-management.ts`, geprüft.
+Der Simulator wird weiterhin pro Job neu erzeugt und am Ende gelöscht.
+Dies ist eine funktionale Werkzeugvariante, kein kausaler Vergleich und keine
+Änderung einer Spiel-, Grafik- oder Toneinstellung.
+
+Der Kontrollbutton zählt nun tatsächlich die empfangenen Klicks, statt nur den
+Wert 1 zu setzen. Die bestehende Erwartung bleibt genau ein gezählter,
+vertrauenswürdiger Klick. Nach einem Fehlschlag wird zusätzlich einmal ein
+begrenztes, gefiltertes natives Protokoll des eigenen Simulators angefordert;
+es gibt weiterhin kein Spiel und keine laufende Bildschirmaufnahme. Scheitert
+auch diese Abfrage, bleibt sie ausdrücklich als nicht verfügbar markiert.
+Alle ursprünglichen Zeitbudgets und die harten DOM-/Touch-Bedingungen bleiben
+erhalten. Das Ergebnis dieser neuen Variante ist noch offen.

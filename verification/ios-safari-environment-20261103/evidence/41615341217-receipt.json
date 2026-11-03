@@ -1,0 +1,65 @@
+{
+  "version": 1,
+  "kind": "Safari toolchain calibration without the game",
+  "complete": false,
+  "requestedRuntimeVersion": "18.5",
+  "startedAt": "2026-11-03T10:01:22.131Z",
+  "gameLoaded": false,
+  "gameFilesEdited": false,
+  "physicalDevice": false,
+  "whiteScreenFixed": false,
+  "tools": {
+    "appium": "3.9.0",
+    "xcuitest": "12.22.8",
+    "webdriveragent": "16.17.7"
+  },
+  "nativeTapAttempted": false,
+  "activeScreenshots": false,
+  "postFailureSimulatorScreenshot": false,
+  "limits": [
+    "A simulator and a constant local HTML page, not Cryptoid Evolution or a phone acceptance test.",
+    "Reading native accessibility XML can expose first-launch UI; no unknown dialogs are accepted.",
+    "No active screenshots or video. A single simulator image may be captured only after failure, without the game loaded.",
+    "No forced GC, payment, account or device-provider service is used."
+  ],
+  "hostBefore": {
+    "at": "2026-11-03T10:01:22.133Z",
+    "vmStat": "Mach Virtual Memory Statistics: (page size of 4096 bytes)\nPages free:                              227305.\nPages active:                            985787.\nPages inactive:                         1061264.\nPages speculative:                       951106.\nPages throttled:                              0.\nPages wired down:                        443197.\nPages purgeable:                          12889.\n\"Translation faults\":                  49246886.\nPages copy-on-write:                    1445362.\nPages zero filled:                     39517354.\nPages reactivated:                        15947.\nPages purged:                              6761.\nFile-backed pages:                      2433497.\nAnonymous pages:                         564660.\nPages stored in compressor:                   0.\nPages occupied by compressor:                 0.\nDecompressions:                               0.\nCompressions:                                 0.\nPageins:                                1062410.\nPageouts:                                     0.\nSwapins:                                      0.\nSwapouts:                                     0.",
+    "swapUsage": "vm.swapusage: total = 0.00M  used = 0.00M  free = 0.00M  (encrypted)",
+    "hostMemoryBytes": 15032385536
+  },
+  "hostArchitecture": "x86_64",
+  "serverProcessId": 10754,
+  "serverStartupMs": 2051,
+  "preinitializedCatalogueBytes": 256038,
+  "simulator": {
+    "udid": "83E1EA6B-EBCE-48C7-8DA7-F47556578495",
+    "runtime": {
+      "version": "18.5",
+      "identifier": "com.apple.CoreSimulator.SimRuntime.iOS-18-5",
+      "buildversion": "22F77"
+    },
+    "deviceType": "com.apple.CoreSimulator.SimDeviceType.iPhone-16-Pro-Max"
+  },
+  "wdaBuild": {
+    "code": 0,
+    "signal": null,
+    "timedOut": false,
+    "elapsedMs": 109833,
+    "logBytes": 3148545,
+    "logSha256": "699ae31c93da894bb25c61c1b36c90877e22b4a8e035d7eb1b9dd54b1538b8f0",
+    "logTruncated": true
+  },
+  "wdaBuildCompleted": true,
+  "simulatorBooted": true,
+  "probeOrigin": "http://127.0.0.1:49641",
+  "failure": "WebDriver unknown error: Unable to start WebDriverAgent session. Original error: A new session could not be created. Details: Cannot launch com.apple.mobilesafari application. Make sure the correct bundle identifier has been provided in capabilities and check the device log for possible crash report occurrences",
+  "failureScreenshotUnavailable": "xcrun [\"simctl\",\"io\",\"83E1EA6B-EBCE-48C7-8DA7-F47556578495\",\"screenshot\",\"--type=jpeg\",\"/Users/runner/work/cryptoid-evolution/cryptoid-evolution/lab/verification/ios-safari-environment-20261103/results/18.5/simulator-after-failure.jpeg\"] failed after 20037 ms: spawnSync xcrun ETIMEDOUT",
+  "hostAfter": {
+    "at": "2026-11-03T10:08:27.571Z",
+    "vmStat": "Mach Virtual Memory Statistics: (page size of 4096 bytes)\nPages free:                               18280.\nPages active:                           1371642.\nPages inactive:                         1352228.\nPages speculative:                        19323.\nPages throttled:                              0.\nPages wired down:                        782491.\nPages purgeable:                          11887.\n\"Translation faults\":                  84232445.\nPages copy-on-write:                    3768579.\nPages zero filled:                     58139738.\nPages reactivated:                       369763.\nPages purged:                             38858.\nFile-backed pages:                      1717103.\nAnonymous pages:                        1026090.\nPages stored in compressor:              292759.\nPages occupied by compressor:            125100.\nDecompressions:                           32796.\nCompressions:                            338879.\nPageins:                                2712632.\nPageouts:                                 30639.\nSwapins:                                      0.\nSwapouts:                                     0.",
+    "swapUsage": "vm.swapusage: total = 0.00M  used = 0.00M  free = 0.00M  (encrypted)",
+    "hostMemoryBytes": 15032385536
+  },
+  "finishedAt": "2026-11-03T10:08:27.744Z"
+}

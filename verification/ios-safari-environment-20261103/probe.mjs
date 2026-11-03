@@ -120,7 +120,7 @@ try {
   execute('xcrun', ['simctl', 'bootstatus', udid, '-b'], 240000);
   execute('open', ['-a', 'Simulator', '--args', '-CurrentDeviceUDID', udid]);
   result.simulatorBooted = true;
-  const html = '<!doctype html><html><head><meta name="viewport" content="width=device-width, initial-scale=1"><title>Cryptoid Safari environment probe</title></head><body><h1 id="probe-heading">Cryptoid Safari environment probe</h1><button id="probe-tap">Probe touch</button><output id="probe-count">0</output><script>document.getElementById("probe-tap").addEventListener("click",event=>{document.getElementById("probe-count").textContent="1";document.getElementById("probe-count").dataset.trusted=String(event.isTrusted);});</script></body></html>';
+  const html = '<!doctype html><html><head><meta name="viewport" content="width=device-width, initial-scale=1"><title>Cryptoid Safari environment probe</title></head><body><h1 id="probe-heading">Cryptoid Safari environment probe</h1><button id="probe-tap">Probe touch</button><output id="probe-count">0</output><script>document.getElementById("probe-tap").addEventListener("click",event=>{document.getElementById("probe-count").textContent=String(Number(document.getElementById("probe-count").textContent)+1);document.getElementById("probe-count").dataset.trusted=String(event.isTrusted);});</script></body></html>';
   server = createServer((req, res) => res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8',
     'Cache-Control': 'no-store' }).end(html));
   await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
@@ -129,9 +129,17 @@ try {
   // Native mode previously proved that Safari visibly loaded this exact page,
   // but exposed no inspectable web context. Test the driver's Safari startup
   // path with the same independently successful WDA build and connection gates.
+  // Open the constant page independently of WDA's failing initial-deeplink launch.
+  // This disposable simulator is fresh; noReset preserves only this authored page.
+  execute('xcrun', ['simctl', 'openurl', udid, origin], 45000);
+  result.controlPagePreopened = true;
+  result.wdaInitialDeeplinkRequested = false;
+  result.preopenedPageResetSuppressed = true;
+  await record('ENVIRONMENT_PAGE_PREOPENED', { version, origin, gameLoaded: false,
+    method: 'xcrun simctl openurl', noReset: true, initialDeeplinkRequested: false });
   const session = await driver.request('POST', '/session', { capabilities: { alwaysMatch: {
     browserName: 'Safari', platformName: 'iOS', 'appium:automationName': 'XCUITest', 'appium:udid': udid,
-    'appium:initialDeeplinkUrl': origin, 'appium:safariInitialUrl': origin,
+    'appium:safariInitialUrl': origin, 'appium:noReset': true,
     'appium:deviceName': 'iPhone 16 Pro Max', 'appium:platformVersion': version,
     'appium:includeSafariInWebviews': true,
     'appium:nativeWebTap': true, 'appium:disableAutomaticScreenshots': true,
@@ -183,6 +191,15 @@ try {
       base64: bytes.toString('base64') });
     result.postFailureSimulatorScreenshot = true;
   } catch (error) { result.failureScreenshotUnavailable = String(error.message).slice(0, 1000); }
+  if (udid && result.simulatorBooted) try {
+    const text = execute('xcrun', ['simctl', 'spawn', udid, 'log', 'show', '--last', '3m',
+      '--style', 'compact', '--predicate',
+      'process == "MobileSafari" OR process == "SpringBoard" OR process CONTAINS[c] "WebKit"'], 20000);
+    await record('ENVIRONMENT_FAILURE_NATIVE_LOG', { version, gameLoaded: false,
+      capturedAfterFailure: true, originalCharacters: text.length,
+      truncated: text.length > 65536, text: text.slice(-65536) });
+    result.postFailureNativeLogRead = true;
+  } catch (error) { result.failureNativeLogUnavailable = String(error.message).slice(0, 1000); }
   if (driver?.session) try {
     await driver.command('POST', '/context', { name: 'NATIVE_APP' });
     await record('ENVIRONMENT_NATIVE_SOURCE_FAILURE', { version, xml: await driver.command('GET', '/source') });

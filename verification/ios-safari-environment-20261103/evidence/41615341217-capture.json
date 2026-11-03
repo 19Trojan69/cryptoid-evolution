@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "kind": "delivered failed Safari-start calibration; driver fragments complete, compiler fragments incomplete",
+  "runId": 41615341217,
+  "jobId": 125847283584,
+  "runUrl": "https://github.com/19Trojan69/cryptoid-evolution/actions/runs/41615341217",
+  "sourceCommit": "1295926f983cc1c62fa8946ff5247ac5efedf3f0",
+  "deliveredLogBytes": 2410445,
+  "deliveredLogSha256": "f7e334824ca2390542bb0ab2a72f6d11bfed0cf81683f0740e9dedd22713451e",
+  "gzipBytes": 73755,
+  "gzipSha256": "9d891c798bef31f0731cdea9a8df7de5f3d31660df1d5534e3dee1ef2fae4f6c",
+  "allFragmentsVerified": false,
+  "driverLogFragmentsVerified": true,
+  "originalGithubLogByteIdentityIndependentlyVerified": false,
+  "physicalDevice": false,
+  "gameLoaded": false,
+  "whiteScreenFixed": false,
+  "fragmentGroups": [
+    {
+      "id": "1-ENVIRONMENT_WDA_BUILD_LOG",
+      "kind": "ENVIRONMENT_WDA_BUILD_LOG",
+      "expectedParts": 1053,
+      "deliveredParts": 1052,
+      "verified": false,
+      "expectedSha256": "1bf96b44659d4ac92a859aaf4a2bf4ba12efe73814e1e213a210d248776af1db",
+      "deliveredSha256": "ce2e71d4ee4311e8b0a54e1e27ad3d5b14d8b0554d59f6c8b4ab005effb2447a"
+    },
+    {
+      "id": "2-ENVIRONMENT_DRIVER_LOG",
+      "kind": "ENVIRONMENT_DRIVER_LOG",
+      "expectedParts": 8,
+      "deliveredParts": 8,
+      "verified": true,
+      "expectedSha256": "57c9a2ab513962021a089e389bba03752436e1786bf8634aaee3ea4629a5cf85",
+      "deliveredSha256": "57c9a2ab513962021a089e389bba03752436e1786bf8634aaee3ea4629a5cf85"
+    }
+  ]
+}
