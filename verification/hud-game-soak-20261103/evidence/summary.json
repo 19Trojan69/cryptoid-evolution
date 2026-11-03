@@ -1,0 +1,106 @@
+{
+  "version": 1,
+  "hudRunId": 41626481637,
+  "nativeRunId": 41625231628,
+  "physicalDeviceAccepted": false,
+  "whiteScreenFixed": false,
+  "memoryReductionProven": false,
+  "entireNativeJobIntegrityClaimed": false,
+  "rejectedEvidence": [
+    {
+      "jobId": 125880789952,
+      "kind": "ENVIRONMENT_WDA_BUILD_LOG",
+      "reason": "sha256 mismatch",
+      "expected": "675f359c4aa7ef19e9dfe879a8f7431ca43f32fc6a2358b118961bcda269b66c",
+      "actual": "74113e02ea50b29e926175bffb8a4fcd02106dead042aed107af6d3ae09510b1",
+      "deliveredFragments": 1053,
+      "expectedFragments": 1053
+    }
+  ],
+  "flows": [
+    {
+      "engine": "chromium",
+      "workload": "stationary",
+      "phase": "smoke",
+      "complete": true,
+      "activeMs": [
+        60000,
+        10000.099999999977,
+        10000.100000000035
+      ],
+      "verifiedNativeContacts": 0
+    },
+    {
+      "engine": "chromium",
+      "workload": "field-contacts",
+      "phase": "smoke",
+      "complete": true,
+      "activeMs": [
+        61999.90000000002,
+        10999.900000000023,
+        10000.100000000093
+      ],
+      "verifiedNativeContacts": 21
+    },
+    {
+      "engine": "chromium",
+      "workload": "field-contacts",
+      "phase": "soak",
+      "complete": true,
+      "activeMs": [
+        1801000,
+        10000,
+        10000
+      ],
+      "verifiedNativeContacts": 21
+    },
+    {
+      "engine": "webkit",
+      "workload": "stationary",
+      "phase": "smoke",
+      "complete": true,
+      "activeMs": [
+        61006,
+        10615,
+        10974
+      ],
+      "verifiedNativeContacts": 0
+    },
+    {
+      "engine": "webkit",
+      "workload": "field-contacts",
+      "phase": "smoke",
+      "complete": true,
+      "activeMs": [
+        60391,
+        10502,
+        10592
+      ],
+      "verifiedNativeContacts": 21
+    },
+    {
+      "engine": "webkit",
+      "workload": "field-contacts",
+      "phase": "soak",
+      "complete": true,
+      "activeMs": [
+        1800068,
+        10583,
+        12194
+      ],
+      "verifiedNativeContacts": 21
+    }
+  ],
+  "nativeAttempt": {
+    "complete": false,
+    "controlVerified": true,
+    "verifiedGameCycles": 0,
+    "gameLoaded": null,
+    "longFlowStarted": false,
+    "failure": {
+      "message": "WebDriver unknown error: The remote debugger did not return any connected web applications after 7262ms. Make sure your web application is debuggable and could be inspected in Safari Web Inspector. You may try to change the 'webviewConnectTimeout' capability value to customize the retrieval timeout.",
+      "at": "2026-11-03T11:33:40.712Z"
+    },
+    "nativePhoneCauseProven": false
+  }
+}

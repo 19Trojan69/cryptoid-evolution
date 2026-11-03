@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "syntheticGuestDataOnly": true,
+  "privateOwnerFilesIncluded": false,
+  "logs": [
+    {
+      "jobId": 125885011041,
+      "file": "job-125885011041.log.gz",
+      "bytes": 60231,
+      "sha256": "c0825d2c4e63fd59fa94badef6efaff4c3bba4c6fba82efec7894956ab3d09b8",
+      "rawBytes": 146513,
+      "rawSha256": "f33a9dc9acfe431a77ea51c0000e0d4882231890643b7c59f5b942eebcc49ac4"
+    },
+    {
+      "jobId": 125885011808,
+      "file": "job-125885011808.log.gz",
+      "bytes": 73019,
+      "sha256": "e61f7ba51e93f00c7b498d9801171c5825f6ae57cab2288ce8b8e47a2245f8fd",
+      "rawBytes": 232762,
+      "rawSha256": "4dcf05cf4b67347c9dcf0d104659e05ab99771404eb54810cc47cd9b19f6d3ac"
+    },
+    {
+      "jobId": 125880789952,
+      "file": "job-125880789952.log.gz",
+      "bytes": 200261,
+      "sha256": "98972f079e52c0bfddf206befd18ea0266da60a35afe9a85460174b6e63433f4",
+      "rawBytes": 2927539,
+      "rawSha256": "a948be1bc63499d335a0b5d7d3c69588725e973e9f3fe739ad0dc3ced229b2bc"
+    }
+  ]
+}
