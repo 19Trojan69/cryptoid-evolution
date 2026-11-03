@@ -22,13 +22,25 @@ jobs:
         with: {node-version: '24'}
       - name: Validate the control script syntax
         run: node --check lab/verification/ios-safari-environment-20261103/probe.mjs
+      - name: Initialize the preinstalled simulator catalogue before loading Appium
+        timeout-minutes: 3
+        run: |
+          sudo xcode-select --switch /Applications/Xcode_26.2.app/Contents/Developer
+          python3 - <<'PY'
+          import subprocess,json,time,os
+          from pathlib import Path
+          started=time.monotonic()
+          result=subprocess.run(['xcrun','simctl','list','--json'],capture_output=True,text=True,check=True,timeout=150)
+          inventory=json.loads(result.stdout)
+          destination=Path(os.environ['RUNNER_TEMP'])/'cryptoid-simulator-inventory.json'
+          destination.write_text(result.stdout)
+          print('CRYPTOID_IOS_SDK_CATALOGUE '+json.dumps({'elapsedMs':round((time.monotonic()-started)*1000),'gameLoaded':False,'availableRuntimes':[{'version':r['version'],'identifier':r['identifier']} for r in inventory['runtimes'] if r.get('isAvailable')]}))
+          PY
       - name: Install pinned free native test tools outside the checkout
         run: |
           export APPIUM_HOME="$RUNNER_TEMP/cryptoid-appium-home"
           printf 'APPIUM_HOME=%s\n' "$APPIUM_HOME" >> "$GITHUB_ENV"
           npm install --prefix "$RUNNER_TEMP/cryptoid-appium-tools" --no-audit --no-fund appium@3.9.0
           "$RUNNER_TEMP/cryptoid-appium-tools/node_modules/.bin/appium" driver install xcuitest@12.22.8
-      - name: Select preinstalled Xcode
-        run: sudo xcode-select --switch /Applications/Xcode_26.2.app/Contents/Developer
       - name: Inspect native Safari and require a trusted touch on constant local HTML
         run: node lab/verification/ios-safari-environment-20261103/probe.mjs lab/verification/ios-safari-environment-20261103/results '${{ matrix.runtime }}'

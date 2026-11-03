@@ -11,8 +11,12 @@ const [outputArg, version] = process.argv.slice(2);
 assert.ok(['18.5', '26.2'].includes(version));
 const output = resolve(outputArg, version); mkdirSync(output, { recursive: true });
 const record = createEvidenceWriter();
-const execute = (name, args, timeout = 45000) => execFileSync(name, args,
-  { encoding: 'utf8', timeout, maxBuffer: 2 ** 20 }).trim();
+const execute = (name, args, timeout = 45000) => {
+  const started = Date.now();
+  try { return execFileSync(name, args, { encoding: 'utf8', timeout, maxBuffer: 2 ** 20 }).trim(); }
+  catch (error) { throw Error(name + ' ' + JSON.stringify(args) + ' failed after '
+    + (Date.now() - started) + ' ms: ' + String(error.message)); }
+};
 const toolsRoot = resolve(process.env.RUNNER_TEMP, 'cryptoid-appium-tools');
 const appiumHome = resolve(process.env.RUNNER_TEMP, 'cryptoid-appium-home');
 assert.equal(process.env.APPIUM_HOME, appiumHome);
@@ -50,7 +54,11 @@ try {
   }, 'Appium server before simulator boot', 60000);
   result.serverStartupMs = Date.now() - serverStarted;
   await record('ENVIRONMENT_SERVER_READY', { version, startupMs: result.serverStartupMs });
-  const inventory = JSON.parse(execute('xcrun', ['simctl', 'list', '--json']));
+  // Read the catalogue obtained by this same job before Appium was installed.
+  // The SDK runtime selection is not inferred from a different runner.
+  const catalogue = readFileSync(resolve(process.env.RUNNER_TEMP, 'cryptoid-simulator-inventory.json'), 'utf8');
+  const inventory = JSON.parse(catalogue);
+  result.preinitializedCatalogueBytes = Buffer.byteLength(catalogue);
   const runtime = inventory.runtimes.find(r => r.isAvailable === true
     && r.identifier.startsWith('com.apple.CoreSimulator.SimRuntime.iOS-')
     && (r.version === version || r.version.startsWith(version + '.')));

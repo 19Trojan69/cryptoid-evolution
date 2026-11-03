@@ -54,3 +54,24 @@ Ein vorzeitiges Serverende wird gesondert erfasst. Für den Serverstart gelten
 höchstens 60 Sekunden; die native Kontrollseite und die echten Spielgates werden
 nicht abgeschwächt. Das ist eine neue funktionale Einrichtung, kein kausaler
 Speichervergleich der beiden Host-Konfigurationen.
+
+## Erste Intel-Kontrolle: Transport bereit, kalte SDK-Abfrage nicht fertig
+
+Quelle `3ed179dae4a16414fde0025da4f4ab73425e8800`,
+https://github.com/19Trojan69/cryptoid-evolution/actions/runs/41602272635
+
+Appium 3.9.0 samt geladenem XCUITest 12.22.8 war in beiden Jobs tatsächlich
+betriebsbereit: nach 3612 ms für den angeforderten 18.5-Job und 4152 ms für
+den 26.2-Job. Beide Rechner meldeten `x86_64` und 15032385536 Byte Host-RAM.
+Das ist ein bestandener Transportstart, noch keine native Safari-Sitzung.
+
+Die darauffolgende kalte Abfrage `xcrun simctl list --json` erreichte die eigene
+45-Sekunden-Grenze. Es wurde daher noch kein Simulator für diesen Job erzeugt.
+Auch diese beiden Kontrollen bleiben insgesamt fehlgeschlagen.
+
+Die folgende Einrichtung initialisiert den Katalog zuerst in einem eigenen
+Schritt vor Appium-Installation und -Start. Die kalte SDK-Abfrage hat höchstens
+150 Sekunden; bei Fehlschlag werden die weiteren Schritte nicht ausgeführt.
+Der folgende Probe liest ausschließlich den Katalog desselben frischen Jobs.
+Einzelne Kommandofehler nennen nun Befehl, Argumente und tatsächliche Dauer.
+Dieses separate Startbudget verändert keine Spieluhr und kein Safari-/Spielgate.
