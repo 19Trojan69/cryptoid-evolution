@@ -1,0 +1,115 @@
+{
+  "version": 1,
+  "complete": true,
+  "source": "ac98e95166b0e2013186257904da46323840dab5",
+  "originalCssSha256": "cf48ca4553ac7fa425f37e84a334acc3fec2f2163b72d31bfe9b35f7d33c27b5",
+  "candidateCssSha256": "b41b63594231603a78a046180f1ac07809d97299f4a59e997963545185c99396",
+  "cases": [
+    {
+      "engine": "chromium",
+      "width": 390,
+      "before": "blur(10px)",
+      "after": "none",
+      "otherComputedPropertiesEqual": true,
+      "layoutEqual": true
+    },
+    {
+      "engine": "chromium",
+      "width": 430,
+      "before": "blur(10px)",
+      "after": "none",
+      "otherComputedPropertiesEqual": true,
+      "layoutEqual": true
+    },
+    {
+      "engine": "chromium",
+      "width": 700,
+      "before": "blur(10px)",
+      "after": "none",
+      "otherComputedPropertiesEqual": true,
+      "layoutEqual": true
+    },
+    {
+      "engine": "chromium",
+      "width": 701,
+      "before": "blur(10px)",
+      "after": "blur(10px)",
+      "otherComputedPropertiesEqual": true,
+      "layoutEqual": true
+    },
+    {
+      "engine": "chromium",
+      "width": 844,
+      "before": "blur(10px)",
+      "after": "blur(10px)",
+      "otherComputedPropertiesEqual": true,
+      "layoutEqual": true
+    },
+    {
+      "engine": "chromium",
+      "width": 1024,
+      "before": "blur(10px)",
+      "after": "blur(10px)",
+      "otherComputedPropertiesEqual": true,
+      "layoutEqual": true
+    },
+    {
+      "engine": "webkit",
+      "width": 390,
+      "before": "blur(10px)",
+      "after": "none",
+      "otherComputedPropertiesEqual": true,
+      "layoutEqual": true
+    },
+    {
+      "engine": "webkit",
+      "width": 430,
+      "before": "blur(10px)",
+      "after": "none",
+      "otherComputedPropertiesEqual": true,
+      "layoutEqual": true
+    },
+    {
+      "engine": "webkit",
+      "width": 700,
+      "before": "blur(10px)",
+      "after": "none",
+      "otherComputedPropertiesEqual": true,
+      "layoutEqual": true
+    },
+    {
+      "engine": "webkit",
+      "width": 701,
+      "before": "blur(10px)",
+      "after": "blur(10px)",
+      "otherComputedPropertiesEqual": true,
+      "layoutEqual": true
+    },
+    {
+      "engine": "webkit",
+      "width": 844,
+      "before": "blur(10px)",
+      "after": "blur(10px)",
+      "otherComputedPropertiesEqual": true,
+      "layoutEqual": true
+    },
+    {
+      "engine": "webkit",
+      "width": 1024,
+      "before": "blur(10px)",
+      "after": "blur(10px)",
+      "otherComputedPropertiesEqual": true,
+      "layoutEqual": true
+    }
+  ],
+  "fullGameRun": false,
+  "physicalAndroid": false,
+  "physicalIPhone": false,
+  "nativeProcessMemoryMeasured": false,
+  "whiteScreenFixed": false,
+  "limits": [
+    "Synthetic HUD fixture using all actual main-entry CSS imports; no game or account starts.",
+    "External requests including fonts/images blocked equally; no screenshot or pixel identity claim.",
+    "Computed styles/layout verify the cascade repair, not memory reduction or smartphone stability."
+  ]
+}

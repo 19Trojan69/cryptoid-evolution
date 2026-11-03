@@ -1,0 +1,119 @@
+{
+  "runId": 41617489198,
+  "jobId": 125854475631,
+  "source": "64d61bef89d7f8fb4049e47032eba2c411794415",
+  "receipt": {
+    "version": 1,
+    "kind": "Safari toolchain calibration without the game",
+    "complete": true,
+    "requestedRuntimeVersion": "18.5",
+    "startedAt": "2026-11-03T10:17:19.860Z",
+    "gameLoaded": false,
+    "gameFilesEdited": false,
+    "physicalDevice": false,
+    "whiteScreenFixed": false,
+    "tools": {
+      "appium": "3.9.0",
+      "xcuitest": "12.22.8",
+      "webdriveragent": "16.17.7"
+    },
+    "nativeTapAttempted": true,
+    "activeScreenshots": false,
+    "postFailureSimulatorScreenshot": false,
+    "limits": [
+      "A simulator and a constant local HTML page, not Cryptoid Evolution or a phone acceptance test.",
+      "Reading native accessibility XML can expose first-launch UI; no unknown dialogs are accepted.",
+      "No active screenshots or video. A single simulator image may be captured only after failure, without the game loaded.",
+      "No forced GC, payment, account or device-provider service is used."
+    ],
+    "hostBefore": {
+      "at": "2026-11-03T10:17:19.861Z",
+      "vmStat": "Mach Virtual Memory Statistics: (page size of 4096 bytes)\nPages free:                             1312296.\nPages active:                            796676.\nPages inactive:                          781947.\nPages speculative:                       256477.\nPages throttled:                              0.\nPages wired down:                        521085.\nPages purgeable:                          13244.\n\"Translation faults\":                  57925030.\nPages copy-on-write:                    1868180.\nPages zero filled:                     46476315.\nPages reactivated:                        15976.\nPages purged:                              7653.\nFile-backed pages:                      1229452.\nAnonymous pages:                         605648.\nPages stored in compressor:                   0.\nPages occupied by compressor:                 0.\nDecompressions:                               0.\nCompressions:                                 0.\nPageins:                                1147356.\nPageouts:                                     0.\nSwapins:                                      0.\nSwapouts:                                     0.",
+      "swapUsage": "vm.swapusage: total = 0.00M  used = 0.00M  free = 0.00M  (encrypted)",
+      "hostMemoryBytes": 15032385536
+    },
+    "hostArchitecture": "x86_64",
+    "serverProcessId": 13274,
+    "serverStartupMs": 2552,
+    "preinitializedCatalogueBytes": 256038,
+    "simulator": {
+      "udid": "87884005-1AE3-46C6-BE39-2193496F1093",
+      "runtime": {
+        "version": "18.5",
+        "identifier": "com.apple.CoreSimulator.SimRuntime.iOS-18-5",
+        "buildversion": "22F77"
+      },
+      "deviceType": "com.apple.CoreSimulator.SimDeviceType.iPhone-16-Pro-Max"
+    },
+    "wdaBuild": {
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "elapsedMs": 83194,
+      "logBytes": 3148545,
+      "logSha256": "84ef784980a911982ecfb0b6f86413547c09235d0cf9b059c1db019a2022e90a",
+      "logTruncated": true
+    },
+    "wdaBuildCompleted": true,
+    "simulatorBooted": true,
+    "probeOrigin": "http://127.0.0.1:49587",
+    "controlPagePreopened": true,
+    "wdaInitialDeeplinkRequested": false,
+    "preopenedPageResetSuppressed": true,
+    "nativeSessionCreated": true,
+    "capabilities": {
+      "webStorageEnabled": false,
+      "locationContextEnabled": false,
+      "browserName": "Safari",
+      "platform": "MAC",
+      "javascriptEnabled": true,
+      "databaseEnabled": false,
+      "takesScreenshot": true,
+      "networkConnectionEnabled": false,
+      "platformName": "iOS",
+      "automationName": "XCUITest",
+      "udid": "87884005-1AE3-46C6-BE39-2193496F1093",
+      "safariInitialUrl": "http://127.0.0.1:49587",
+      "noReset": true,
+      "deviceName": "iPhone 16 Pro Max",
+      "platformVersion": "18.5",
+      "includeSafariInWebviews": true,
+      "nativeWebTap": true,
+      "disableAutomaticScreenshots": true,
+      "skipLogCapture": true,
+      "safariGarbageCollect": false,
+      "usePrebuiltWDA": true,
+      "derivedDataPath": "/Users/runner/work/cryptoid-evolution/cryptoid-evolution/lab/verification/ios-safari-environment-20261103/results/18.5/wda-derived-data",
+      "showXcodeLog": true,
+      "waitForIdleTimeout": 1,
+      "wdaStartupRetries": 1,
+      "wdaLaunchTimeout": 120000,
+      "newCommandTimeout": 120
+    },
+    "safariBrowserSessionCreated": true,
+    "nativeSourceRead": true,
+    "contexts": [
+      "NATIVE_APP",
+      "WEBVIEW_18040.1"
+    ],
+    "probeWebContext": "WEBVIEW_18040.1",
+    "page": {
+      "heading": "Cryptoid Safari environment probe",
+      "userAgent": "Mozilla/5.0 (iPhone; CPU iPhone OS 18_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.5 Mobile/15E148 Safari/604.1",
+      "origin": "http://127.0.0.1:49587",
+      "width": 440,
+      "height": 760,
+      "devicePixelRatio": 3
+    },
+    "trustedNativeProbeTapVerified": true,
+    "hostAfter": {
+      "at": "2026-11-03T10:24:11.385Z",
+      "vmStat": "Mach Virtual Memory Statistics: (page size of 4096 bytes)\nPages free:                               31499.\nPages active:                           1356071.\nPages inactive:                         1347509.\nPages speculative:                         8265.\nPages throttled:                              0.\nPages wired down:                        782780.\nPages purgeable:                           6464.\n\"Translation faults\":                  87052475.\nPages copy-on-write:                    4080300.\nPages zero filled:                     59337064.\nPages reactivated:                       446822.\nPages purged:                             49803.\nFile-backed pages:                      1643722.\nAnonymous pages:                        1068123.\nPages stored in compressor:              303191.\nPages occupied by compressor:            143610.\nDecompressions:                           53426.\nCompressions:                            378031.\nPageins:                                2714423.\nPageouts:                                 24804.\nSwapins:                                      0.\nSwapouts:                                     0.",
+      "swapUsage": "vm.swapusage: total = 0.00M  used = 0.00M  free = 0.00M  (encrypted)",
+      "hostMemoryBytes": 15032385536
+    },
+    "finishedAt": "2026-11-03T10:24:11.517Z"
+  },
+  "wholeJobFragmentIntegrityClaimed": false,
+  "physicalPhone": false
+}

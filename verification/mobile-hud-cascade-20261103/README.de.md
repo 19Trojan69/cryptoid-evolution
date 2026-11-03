@@ -34,3 +34,18 @@ Vercel-Deployments oder Produktionsversionen verändert.
 
 Technische Primärquelle zum zu prüfenden Performance-Risiko:
 https://web.dev/articles/backdrop-filter
+
+## Ergebnis
+
+Lauf 41624042675 besteht. Der Schlussdatensatz enthält alle zwölf geforderten
+Vergleiche: Chromium und WebKit, Breiten 390/430/700/701/844/1024. Vorher ist
+überall blur(10px) aktiv. Danach gilt bis 700 Pixel none; oberhalb bleiben die
+bisherigen Werte erhalten. Alle anderen geprüften berechneten HUD-Eigenschaften
+und die Geometrie sind gleich. Das sind echte Linux-Browserprüfungen des
+synthetischen HUD, keine physische Geräte- oder Spielabnahme.
+
+https://github.com/19Trojan69/cryptoid-evolution/actions/runs/41624042675
+
+Die native Spiel-Baseline wird getrennt in Lauf 41625231628 geprüft; ihr Ergebnis
+ist bei dieser Fortschreibung noch offen. Der HUD-Patch wird in diesem ersten
+unveränderten Baseline-Lauf ausdrücklich nicht angewendet.

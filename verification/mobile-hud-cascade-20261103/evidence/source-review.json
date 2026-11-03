@@ -1,0 +1,29 @@
+{
+  "source": "ac98e95166b0e2013186257904da46323840dab5",
+  "confirmedCssCascadeDefect": {
+    "file": "frontend/src/index.css",
+    "lines": [
+      303,
+      304
+    ],
+    "mobileMaxWidth": 700,
+    "sourceBlob": "43dea6284bc694bac6026e5928aaf42e4a461ec2"
+  },
+  "candidate": {
+    "onlyUnchangedRuleOrderMoved": true,
+    "originalCssSha256": "cf48ca4553ac7fa425f37e84a334acc3fec2f2163b72d31bfe9b35f7d33c27b5",
+    "candidateCssSha256": "b41b63594231603a78a046180f1ac07809d97299f4a59e997963545185c99396"
+  },
+  "all15ActualMainCssImportsReviewed": true,
+  "existingMitigations": {
+    "effectRasterScaleMaximum": 1,
+    "sharedJavascriptFrameTargetHz": 60,
+    "originalImageAndTextureCacheBounds": true,
+    "canvasContextLossFallback": true,
+    "audioVoiceRelease": true,
+    "sourceImagePendingCoalescing": true
+  },
+  "whiteScreenCauseProven": false,
+  "nativeProcessMemoryMeasured": false,
+  "physicalDeviceAccepted": false
+}
