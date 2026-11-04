@@ -1,0 +1,207 @@
+{
+  "version": 1,
+  "run": 41799229475,
+  "sourceCommit": "3511b0b59ddebd97b6dfa5e4b79fb450eb407849",
+  "artifacts": [
+    {
+      "id": 13306399928,
+      "name": "critical-failure-journal-chromium",
+      "zipBytes": 10346,
+      "zipSha256": "97d35f3295462d6745f78c64ded3ddb419952e82288b90b7d5a7cfe1125bf004",
+      "githubDigestVerified": true,
+      "files": [
+        {
+          "path": "build/app.json",
+          "bytes": 172,
+          "sha256": "f916413c5270a69a952e2e5a8806b7226dbb5950641ed81ca924c701c97e03ab",
+          "gitBlob": "d5e1eaf6df0711db6f5d444c5aa5b6163277c3c7",
+          "archivedPath": "artifacts/critical-failure-journal-chromium/build/app.json.gz",
+          "gzipBytes": 146,
+          "gzipSha256": "97ccf4ee7290eeae4e8a302e1b7dbe9ca371b559265bc93da09e98a4b4ce9e8d",
+          "gzipGitBlob": "2261c70adf4a48fd3ccfe722b45b372ffd1bee3e"
+        },
+        {
+          "path": "build/browser.json",
+          "bytes": 172,
+          "sha256": "a31852f4059d4f4f2a7b9603bcf70801ea763c1773bbf6e16547b989410f72ea",
+          "gitBlob": "490a44bdc303f6a0552324a31f2c9198287e04ea",
+          "archivedPath": "artifacts/critical-failure-journal-chromium/build/browser.json.gz",
+          "gzipBytes": 147,
+          "gzipSha256": "d55da0a77db0201ca7df8ff43f133084065abbba35ecc852004542181bcde242",
+          "gzipGitBlob": "bce20e25dbd16dfdc47f62907c9c3e91888058f8"
+        },
+        {
+          "path": "chromium-fixture/fixture.json",
+          "bytes": 3329,
+          "sha256": "06235108d6c0571221e79c54a877d3ad14fd108e5698702c5625fb8cbf6da696",
+          "gitBlob": "30e46b4f6ebef2d34758a4d1fbea5949d9e67dc6",
+          "archivedPath": "artifacts/critical-failure-journal-chromium/chromium-fixture/fixture.json.gz",
+          "gzipBytes": 609,
+          "gzipSha256": "310d2f9593608d190d712deb53d11e54fb4800118883d9421a56de43be986357",
+          "gzipGitBlob": "d49826c89fe04ee4f46d8d5934890461aa5d1473"
+        },
+        {
+          "path": "chromium-flow/build-info.json",
+          "bytes": 9027,
+          "sha256": "65bdc52bb34c30d42cde97e3ddf2a68d08b2ea45aa9c77f68e1743da48ce8605",
+          "gitBlob": "d0e1a4ccff8c50e8148f8704ca78cedbc21f699e",
+          "archivedPath": "artifacts/critical-failure-journal-chromium/chromium-flow/build-info.json.gz",
+          "gzipBytes": 3532,
+          "gzipSha256": "ea8e693881a3c0485cd8bdb7f1707d9682dd2aae08b7e4e52aa5a2cbedfb9045",
+          "gzipGitBlob": "e0abdd896546f0704c73623e75637793a0d9648e"
+        },
+        {
+          "path": "chromium-flow/cycle-0.jsonl",
+          "bytes": 8107,
+          "sha256": "9221f47ac3175af011be529b1103a86da94deefd9b22b339512145a65e989b3b",
+          "gitBlob": "76fe0fcc267d41ed4aa5e6bb63a92d825ec2e57b",
+          "archivedPath": "artifacts/critical-failure-journal-chromium/chromium-flow/cycle-0.jsonl.gz",
+          "gzipBytes": 824,
+          "gzipSha256": "6ccd4fba47b71f5830dcc4fe2529b7a3550d09b05a96ac85abc17f82bc1cba5f",
+          "gzipGitBlob": "171c150fa8becd7458dc44a9af2f772660d89e92"
+        },
+        {
+          "path": "chromium-flow/cycle-1.jsonl",
+          "bytes": 1975,
+          "sha256": "f9b3b6fc670ab52064e2ce7c1e96936143a5321aac8faab3be06c5efd2e7bea0",
+          "gitBlob": "e72b1c60e7f7dc4118222f81f520a95485acfb63",
+          "archivedPath": "artifacts/critical-failure-journal-chromium/chromium-flow/cycle-1.jsonl.gz",
+          "gzipBytes": 430,
+          "gzipSha256": "a956b2939a1d75e32a442d535f27a16bdf2568ca1ad154f9b2ab1d953aed0113",
+          "gzipGitBlob": "5663d321e6c3ddb27f3fa5f2865e3dbc3110edaf"
+        },
+        {
+          "path": "chromium-flow/cycle-2.jsonl",
+          "bytes": 1962,
+          "sha256": "6a4a3f39fd770860964e3a6a9c2931f9f082ba2a3abbdbc306f6cc17c806e701",
+          "gitBlob": "d848e2456d85160e612cbdd123244d984d57aff6",
+          "archivedPath": "artifacts/critical-failure-journal-chromium/chromium-flow/cycle-2.jsonl.gz",
+          "gzipBytes": 421,
+          "gzipSha256": "aa2827a52d7e2380f314ca8db27b8f47955a484b4682efda187995976fc49456",
+          "gzipGitBlob": "3117b814244759c1a9b014f1ee8f7fb8a4d04824"
+        },
+        {
+          "path": "chromium-flow/receipt.json",
+          "bytes": 510,
+          "sha256": "b327e2a419593ca086b393d0f5a0f16c4c9b8ee02efc735d5e79cf4a6206c9d7",
+          "gitBlob": "54b3fe15d6c61abf9d70a64f0f983c9c4d39a1d6",
+          "archivedPath": "artifacts/critical-failure-journal-chromium/chromium-flow/receipt.json.gz",
+          "gzipBytes": 329,
+          "gzipSha256": "92777403d3715e1beddc1d25ead022008198e91c606ff5f47aa73d37bf1783ca",
+          "gzipGitBlob": "feb23a8a4afba23143232c80fe706e0f2652f39b"
+        },
+        {
+          "path": "chromium-flow/verification.json",
+          "bytes": 25366,
+          "sha256": "3d26e338dc4d878f6650605ffe7ffae9cb70c11f0195ff89a0550408f1a9845d",
+          "gitBlob": "ce220220b83dc8f74a6ff7dbf7fe3e33e43a8677",
+          "archivedPath": "artifacts/critical-failure-journal-chromium/chromium-flow/verification.json.gz",
+          "gzipBytes": 2619,
+          "gzipSha256": "861bcdc05ead49fdcc8e11b88276c0a5c46a530e52b7189969f577668422b126",
+          "gzipGitBlob": "b13dcaa667cb3a79269e4ac821626bfead8680d9"
+        }
+      ]
+    },
+    {
+      "id": 13306169587,
+      "name": "critical-failure-journal-webkit",
+      "zipBytes": 10122,
+      "zipSha256": "ff60ac05c958551cba894818aa64277fea144d14e7371f982e8161f62f568e3e",
+      "githubDigestVerified": true,
+      "files": [
+        {
+          "path": "build/browser.json",
+          "bytes": 172,
+          "sha256": "a31852f4059d4f4f2a7b9603bcf70801ea763c1773bbf6e16547b989410f72ea",
+          "gitBlob": "490a44bdc303f6a0552324a31f2c9198287e04ea",
+          "archivedPath": "artifacts/critical-failure-journal-webkit/build/browser.json.gz",
+          "gzipBytes": 147,
+          "gzipSha256": "d55da0a77db0201ca7df8ff43f133084065abbba35ecc852004542181bcde242",
+          "gzipGitBlob": "bce20e25dbd16dfdc47f62907c9c3e91888058f8"
+        },
+        {
+          "path": "webkit-flow/build-info.json",
+          "bytes": 9027,
+          "sha256": "65bdc52bb34c30d42cde97e3ddf2a68d08b2ea45aa9c77f68e1743da48ce8605",
+          "gitBlob": "d0e1a4ccff8c50e8148f8704ca78cedbc21f699e",
+          "archivedPath": "artifacts/critical-failure-journal-webkit/webkit-flow/build-info.json.gz",
+          "gzipBytes": 3532,
+          "gzipSha256": "ea8e693881a3c0485cd8bdb7f1707d9682dd2aae08b7e4e52aa5a2cbedfb9045",
+          "gzipGitBlob": "e0abdd896546f0704c73623e75637793a0d9648e"
+        },
+        {
+          "path": "build/app.json",
+          "bytes": 172,
+          "sha256": "f916413c5270a69a952e2e5a8806b7226dbb5950641ed81ca924c701c97e03ab",
+          "gitBlob": "d5e1eaf6df0711db6f5d444c5aa5b6163277c3c7",
+          "archivedPath": "artifacts/critical-failure-journal-webkit/build/app.json.gz",
+          "gzipBytes": 146,
+          "gzipSha256": "97ccf4ee7290eeae4e8a302e1b7dbe9ca371b559265bc93da09e98a4b4ce9e8d",
+          "gzipGitBlob": "2261c70adf4a48fd3ccfe722b45b372ffd1bee3e"
+        },
+        {
+          "path": "webkit-fixture/fixture.json",
+          "bytes": 3329,
+          "sha256": "5cb017963752b1e6c9f9d1d5cc40b16c5ec1f122f9b0cd4b48263f7aee6a3416",
+          "gitBlob": "7af4847a8a92573ecc1f20f10b7f10fc69ca2569",
+          "archivedPath": "artifacts/critical-failure-journal-webkit/webkit-fixture/fixture.json.gz",
+          "gzipBytes": 612,
+          "gzipSha256": "ba80c797dc88dea429fc70f56eedced82a18e9c020bd280f2de5b1925b36013f",
+          "gzipGitBlob": "7bbe2be9747b6e9fd069ee0aea76d31e7cb4fad7"
+        },
+        {
+          "path": "webkit-flow/cycle-0.jsonl",
+          "bytes": 7965,
+          "sha256": "f87873405066a732c3fee2aa84bad209c6b16431f4cf37253a30f58b2db5911c",
+          "gitBlob": "c168f9d35dcdd036f065ddcf8b45a5d9f4fa7350",
+          "archivedPath": "artifacts/critical-failure-journal-webkit/webkit-flow/cycle-0.jsonl.gz",
+          "gzipBytes": 739,
+          "gzipSha256": "8bce89ecfa0fc9d012a19f8b422e2c8d6f498bbd6ee6bf1384d6323c2b4b32b8",
+          "gzipGitBlob": "723459244443e603d5f7a6869294e9aeceed0057"
+        },
+        {
+          "path": "webkit-flow/cycle-1.jsonl",
+          "bytes": 1965,
+          "sha256": "956fddea29b60b16275ffa2a870016fba042a0f019b2dce66ab0569f0a83b0b1",
+          "gitBlob": "c1a3c9127fd024bbeca29d8f78dd0f1336e0a476",
+          "archivedPath": "artifacts/critical-failure-journal-webkit/webkit-flow/cycle-1.jsonl.gz",
+          "gzipBytes": 422,
+          "gzipSha256": "45c0392ac04268840ca2507688bb41d10a80e7853a9234749109cfa0a98ac753",
+          "gzipGitBlob": "02420cda8792edd8aedc41e39ab4020249952bd5"
+        },
+        {
+          "path": "webkit-flow/cycle-2.jsonl",
+          "bytes": 1965,
+          "sha256": "25ad23fc93ade05883828e3a4118b5b58d7954377db48d976129c56c6b494f1f",
+          "gitBlob": "f51b2cca275a6caa1cbf4cee742aabea4e5b340c",
+          "archivedPath": "artifacts/critical-failure-journal-webkit/webkit-flow/cycle-2.jsonl.gz",
+          "gzipBytes": 427,
+          "gzipSha256": "dd59292ba1fe1f5853b08c9102ec56062c6bf9c99206df0986e62a711b66a672",
+          "gzipGitBlob": "8a4c1f2a450c393bc26c6fa5fec266bf05096b28"
+        },
+        {
+          "path": "webkit-flow/receipt.json",
+          "bytes": 508,
+          "sha256": "9c62879a9606fe9608187a09ede4b475e92851aabbe87acab87f391bddf3d989",
+          "gitBlob": "962550fae5de8ebb87b6e0de269c31590c25b2ca",
+          "archivedPath": "artifacts/critical-failure-journal-webkit/webkit-flow/receipt.json.gz",
+          "gzipBytes": 328,
+          "gzipSha256": "bd18eb19cc1da7d323a6b4a9c92a36fffd696452f6183554415d3e483857081b",
+          "gzipGitBlob": "bc94bc56d1e3e613e48fda3b8c664b11adc4634c"
+        },
+        {
+          "path": "webkit-flow/verification.json",
+          "bytes": 25206,
+          "sha256": "dd79417cf6292099a3db4520d3d9e96a69c088f369e8bf702ccbf95efa664806",
+          "gitBlob": "d97292406b166bbf906cd84ff93b924af36e5fd4",
+          "archivedPath": "artifacts/critical-failure-journal-webkit/webkit-flow/verification.json.gz",
+          "gzipBytes": 2535,
+          "gzipSha256": "acc4891c77f66243236f154caeeda17d3fb2b9d7fe12c07c3fd2e127e8485470",
+          "gzipGitBlob": "40b175fce82a293b72b06e056bc8c0f9c2110551"
+        }
+      ]
+    }
+  ],
+  "physicalDevice": false,
+  "whiteScreenFixed": false
+}

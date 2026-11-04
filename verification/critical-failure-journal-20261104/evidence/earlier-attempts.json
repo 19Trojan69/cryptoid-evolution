@@ -1,0 +1,57 @@
+[
+  {
+    "run": 41798626064,
+    "job": 126468648092,
+    "engine": "webkit",
+    "sourceCommit": "a6e501b18a3b2322998c37ac92f7bfdf484ffeb3",
+    "reason": "Fixture incorrectly expected the repaired listener not to flush the legacy ring on exit; the full game was not run.",
+    "unitTestsPassed": true,
+    "diagnosticCodeChangedToCorrectTheseTests": false,
+    "assertionExcerpt": [
+      "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:",
+      "    at file:///home/runner/work/cryptoid-evolution/cryptoid-evolution/verification/critical-failure-journal-20261104/fixture.mjs:82:14 {",
+      "  actual: true,",
+      "  expected: false,"
+    ]
+  },
+  {
+    "run": 41798626064,
+    "job": 126468648458,
+    "engine": "chromium",
+    "sourceCommit": "a6e501b18a3b2322998c37ac92f7bfdf484ffeb3",
+    "reason": "Same fixture expectation error; the full game was not run.",
+    "unitTestsPassed": true,
+    "diagnosticCodeChangedToCorrectTheseTests": false,
+    "assertionExcerpt": [
+      "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:",
+      "    at file:///home/runner/work/cryptoid-evolution/cryptoid-evolution/verification/critical-failure-journal-20261104/fixture.mjs:82:14 {",
+      "  actual: true,",
+      "  expected: false,"
+    ]
+  },
+  {
+    "run": 41798899107,
+    "job": 126469545107,
+    "engine": "webkit",
+    "sourceCommit": "f5ac48a6794699ea5ca18a9d1ff030aac3ca82b2",
+    "reason": "Fixture incorrectly required every native fault to have isTrusted=true; WebKit reported false for a native unhandled rejection. The actual flag is now preserved and compared to the independent event observation. The full game was skipped.",
+    "unitTestsPassed": true,
+    "diagnosticCodeChangedToCorrectTheseTests": false,
+    "assertionExcerpt": [
+      "AssertionError [ERR_ASSERTION]: Fault is emitted by the browser, not dispatchEvent",
+      "    at file:///home/runner/work/cryptoid-evolution/cryptoid-evolution/verification/critical-failure-journal-20261104/fixture.mjs:74:16 {",
+      "  actual: false,",
+      "  expected: true,"
+    ]
+  },
+  {
+    "run": 41798899107,
+    "job": 126469545016,
+    "engine": "chromium",
+    "sourceCommit": "f5ac48a6794699ea5ca18a9d1ff030aac3ca82b2",
+    "reason": "Native fixtures and the full short game flow passed with the same diagnostic implementation.",
+    "unitTestsPassed": true,
+    "diagnosticCodeChangedToCorrectTheseTests": false,
+    "assertionExcerpt": []
+  }
+]
