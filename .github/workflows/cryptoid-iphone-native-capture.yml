@@ -1,0 +1,31 @@
+name: Validate Windows USB diagnostic reader without a phone
+on:
+  push:
+    branches: [codex/ios-safari-environment-20261103]
+    paths:
+      - '.github/workflows/cryptoid-iphone-native-capture.yml'
+      - 'verification/iphone-native-capture-20261104/*.py'
+      - 'verification/iphone-native-capture-20261104/*.cmd'
+permissions:
+  contents: read
+jobs:
+  windows-reader-contract:
+    runs-on: windows-2025
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with: {persist-credentials: false}
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1
+        with: {python-version: '3.12'}
+      - name: Install exact official helper version without a phone
+        run: python -m pip --isolated install --disable-pip-version-check --index-url https://pypi.org/simple pymobiledevice3==11.49.5
+      - name: Test filtering bounds disconnects and strict USB routing with synthetic data
+        run: python -m unittest discover -s verification/iphone-native-capture-20261104 -p test_collect.py -v
+      - name: Verify real pinned API contract without opening any device or service
+        run: python verification/iphone-native-capture-20261104/verify_api.py
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: ${{ !cancelled() }}
+        with:
+          name: iphone-native-windows-synthetic-validation
+          path: verification/iphone-native-capture-20261104/results/
+          retention-days: 7

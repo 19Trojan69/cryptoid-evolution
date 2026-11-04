@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "checks": [
+    {
+      "condition": "leaf",
+      "replica": 1,
+      "nativeDumpsReparsed": 4,
+      "rawTraceDigestVerified": true
+    },
+    {
+      "condition": "control",
+      "replica": 1,
+      "nativeDumpsReparsed": 4,
+      "rawTraceDigestVerified": true
+    },
+    {
+      "condition": "control",
+      "replica": 2,
+      "nativeDumpsReparsed": 4,
+      "rawTraceDigestVerified": true
+    },
+    {
+      "condition": "leaf",
+      "replica": 2,
+      "nativeDumpsReparsed": 4,
+      "rawTraceDigestVerified": true
+    }
+  ],
+  "physicalDevice": false,
+  "whiteScreenFixed": false
+}

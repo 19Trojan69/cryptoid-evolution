@@ -1,0 +1,115 @@
+{
+  "version": 1,
+  "short": [
+    {
+      "engine": "chromium",
+      "activeMs": [
+        60999.899999999994,
+        10000,
+        10000.100000000006
+      ],
+      "complete": true
+    },
+    {
+      "engine": "webkit",
+      "activeMs": [
+        60368,
+        10408,
+        10188
+      ],
+      "complete": true
+    }
+  ],
+  "memory": [
+    {
+      "condition": "leaf",
+      "replica": 1,
+      "complete": true,
+      "failure": null,
+      "observedActiveMs": 1200000,
+      "volleysAdvanced": 428,
+      "firstMinuteMedianRendererPssMiB": 226.0400390625,
+      "lastMinuteMedianRendererPssMiB": 281.646484375,
+      "peakSampleRendererPssMiB": 288.0029296875,
+      "nativeBeforeExplicitGc": {
+        "totalReportedRendererBlinkObjectBytes": 10430456,
+        "byProcess": {
+          "3423": 10430456
+        }
+      }
+    },
+    {
+      "condition": "control",
+      "replica": 1,
+      "complete": true,
+      "failure": null,
+      "observedActiveMs": 1200000,
+      "volleysAdvanced": 428,
+      "firstMinuteMedianRendererPssMiB": 230.0654296875,
+      "lastMinuteMedianRendererPssMiB": 304.708984375,
+      "peakSampleRendererPssMiB": 410.1171875,
+      "nativeBeforeExplicitGc": {
+        "totalReportedRendererBlinkObjectBytes": 8224136,
+        "byProcess": {
+          "3361": 8224136
+        }
+      }
+    },
+    {
+      "condition": "control",
+      "replica": 2,
+      "complete": true,
+      "failure": null,
+      "observedActiveMs": 1200000.1,
+      "volleysAdvanced": 428,
+      "firstMinuteMedianRendererPssMiB": 229.1416015625,
+      "lastMinuteMedianRendererPssMiB": 285.6328125,
+      "peakSampleRendererPssMiB": 288.1025390625,
+      "nativeBeforeExplicitGc": {
+        "totalReportedRendererBlinkObjectBytes": 9660576,
+        "byProcess": {
+          "3168": 9660576
+        }
+      }
+    },
+    {
+      "condition": "leaf",
+      "replica": 2,
+      "complete": true,
+      "failure": null,
+      "observedActiveMs": 1200000.0000000002,
+      "volleysAdvanced": 428,
+      "firstMinuteMedianRendererPssMiB": 239.0107421875,
+      "lastMinuteMedianRendererPssMiB": 286.45703125,
+      "peakSampleRendererPssMiB": 288.126953125,
+      "nativeBeforeExplicitGc": {
+        "totalReportedRendererBlinkObjectBytes": 13610856,
+        "byProcess": {
+          "3214": 13610856
+        }
+      }
+    }
+  ],
+  "pairs": [
+    {
+      "replica": 1,
+      "lastMinuteRendererPssReduction": 0.07568697079052122,
+      "nativeObjectBytesLower": false,
+      "predeclaredGatePassed": false
+    },
+    {
+      "replica": 2,
+      "lastMinuteRendererPssReduction": -0.002885588468586775,
+      "nativeObjectBytesLower": false,
+      "predeclaredGatePassed": false
+    }
+  ],
+  "completeCohort": true,
+  "predeclaredResourceGatePassed": false,
+  "physicalDeviceAccepted": false,
+  "whiteScreenFixed": false,
+  "limits": [
+    "Two unseeded independent host repeats per arm; not phone RAM, GPU memory or a native termination cause.",
+    "Native allocator dumps are inactive observations and may themselves affect collection."
+  ]
+}

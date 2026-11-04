@@ -1,0 +1,37 @@
+{
+  "runId": 41769708523,
+  "archives": [
+    {
+      "name": "player-muzzle-memory-control-1.zip",
+      "bytes": 9140083,
+      "sha256": "07e6708c8bbd32b6af4e65091d5a732be546de4fb9947860bc7fa357fad8bf2f"
+    },
+    {
+      "name": "player-muzzle-memory-control-2.zip",
+      "bytes": 9144425,
+      "sha256": "307f8aa03f435552aa7de5b0df7674f82acc91e26b8996a777f02b64082ab319"
+    },
+    {
+      "name": "player-muzzle-memory-leaf-1.zip",
+      "bytes": 9130713,
+      "sha256": "972b7d78b288934b5fa6093244e216e79a26accf1895f26aa37f76147531004c"
+    },
+    {
+      "name": "player-muzzle-memory-leaf-2.zip",
+      "bytes": 9143597,
+      "sha256": "12006a717c3da19cd1a03c9d61724b893cd8bf2a20b7ea4076ecff0e24516408"
+    },
+    {
+      "name": "player-muzzle-short-chromium.zip",
+      "bytes": 9264,
+      "sha256": "93d0a40f0bd2dae7afcebc994d5eccbd2ee39ae81ca6de224a86acda594a6f71"
+    },
+    {
+      "name": "player-muzzle-short-webkit.zip",
+      "bytes": 8755,
+      "sha256": "f7edc0d7f2a1244ab26a73392af76bbf930b9ded1329d77af61970e3cb6b5ee0"
+    }
+  ],
+  "zipIntegrityAndCapturedFilesCompared": true,
+  "rawHeapsResummarized": false
+}

@@ -59,3 +59,33 @@ Spielablauf in dieser Serie; alle vier Speicherjobs bleiben übersprungen.
 Das ist ein Fehler meiner Testzusammenstellung, kein beobachteter Spielabsturz.
 Der folgende Stand wendet ausdrücklich denselben bytegleichen geprüften HUD-
 Helper auf beide Arme an. Die Forderung nach der HUD-Regel wird nicht gelockert.
+
+## Abgeschlossener Vergleich: kein nachgewiesener Ressourcen-Fix
+
+Quelle 2a2bef5eb5fd57279eb5349dfa297246adc05803, CI 41769708523:
+Beide kurzen echten Gastablaeufe bestehen in Chromium 151.0.7922.34 und
+Linux-WebKit 26.5 einschliesslich Pause/Resume, Waffenmenue, Home und Bericht.
+Die nativen DOM-Pruefungen bestehen. Neue Feldkontakt-/Bewegungssequenzen
+wurden in dieser Serie nicht ausgefuehrt. Das ist keine physische iOS-Freigabe.
+
+Alle vier Chromium-Laeufe beobachten mindestens 1.200.000 aktive ms und 428
+fortgeschrittene Salven. Schlussmedian des Linux-Renderer-PSS in MiB:
+
+| Wiederholung | Kontrolle | Verbraucher | Abnahme | native Blink-Objektbytes Kontrolle / Verbraucher |
+|---|---:|---:|---:|---:|
+| 1 | 304.7090 | 281.6465 | 7.5687 % | 8.224.136 / 10.430.456 |
+| 2 | 285.6328 | 286.4570 | -0.2886 % | 9.660.576 / 13.610.856 |
+
+Kein Paar erfuellt die vorab festgelegte Ressourcenentscheidung. Die unabhaengigen
+unseeded Prozesse begruenden auch keine kausale Verschlechterung. Der Kandidat
+wird nicht als White-Screen-Fix uebernommen und rechtfertigt keinen neuen langen
+Handytest. Kein neues Telefon-Preview, kein Deployment, keine Runtime-Aenderung.
+
+Alle sechs CI-Artefakt-ZIP-Hashes und ihre erfassten JSON-/Trace-Dateien wurden
+abgeglichen; alle 16 nativen Dumps wurden mit dem unveraenderten bisherigen
+Parser neu gelesen. Roh-Heaps sind archiviert, wurden hier nicht neu ausgewertet.
+manifest.json beschreibt die exakten gzip-Quellbytes. Native Trace-Dateien haben
+zwei gzip-Huellen (.gz.gz); die erste ist die unveraenderte Capture-Transporthuelle.
+compare.py, comparison.json und verifyNative.mjs/native-reparse.json halten die
+Entscheidung und die Nachpruefung mit ihren Grenzen fest. Keine privaten
+Telefondateien sind Bestandteil dieser Belege.
