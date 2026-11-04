@@ -50,10 +50,10 @@ try {
         if (scenario !== 'error-before-removal') document.querySelector('.game-shell').remove();
         const code = document.createElement('script');
         if (scenario === 'rejection-after-removal') {
-          window.addEventListener('unhandledrejection', () => { window.__nativeFaultSeen = true; }, { once: true });
+          window.addEventListener('unhandledrejection', event => { window.__nativeFaultSeen = true; window.__nativeFaultTrusted = event.isTrusted; }, { once: true });
           code.textContent = 'Promise.reject(new RangeError("synthetic-fixture-rejection"));';
         } else {
-          window.addEventListener('error', () => { window.__nativeFaultSeen = true; }, { once: true });
+          window.addEventListener('error', event => { window.__nativeFaultSeen = true; window.__nativeFaultTrusted = event.isTrusted; }, { once: true });
           code.textContent = 'throw new TypeError("synthetic-fixture-error");';
         }
         document.head.append(code);
@@ -64,14 +64,15 @@ try {
       const beforeNavigation = await page.evaluate(() => ({
         legacy: JSON.parse(localStorage.getItem('cryptoid_private_brief_v1')),
         journal: JSON.parse(localStorage.getItem('cryptoid_private_critical_v1')),
-        latency: window.__faultLatencyMs }));
+        latency: window.__faultLatencyMs, nativeFaultTrusted: window.__nativeFaultTrusted }));
       if (scenario !== 'rejection-after-removal') assert.ok(beforeNavigation.latency < 250, 'Exercise the actual legacy write gap');
       const kind = scenario === 'rejection-after-removal' ? 'unhandledrejection' : 'error';
       const oldKept = beforeNavigation.legacy.latest.events.some(e => e.kind === kind);
       assert.equal(oldKept, false, 'The original fails to persist this native fault');
       if (arm === 'journal') {
         const slot = beforeNavigation.journal.latest.events[kind];
-        assert.equal(slot.first.trusted, true, 'Fault is emitted by the browser, not dispatchEvent');
+        assert.equal(typeof beforeNavigation.nativeFaultTrusted, 'boolean');
+        assert.equal(slot.first.trusted, beforeNavigation.nativeFaultTrusted, 'Preserve the actual browser flag; isTrusted is not assumed identical across engines');
         assert.equal(slot.first.errorName, kind === 'error' ? 'TypeError' : 'RangeError');
         assert.equal(slot.count, 1);
       } else assert.equal(beforeNavigation.journal, null);
@@ -88,10 +89,12 @@ try {
         assert.doesNotMatch(JSON.stringify(saved.journal), /synthetic-fixture|127\.0\.0\.1|stack|message/);
       }
       assert.ok(nativeUncaughtCount > 0, 'Automation observed an actual uncaught browser fault');
-      rows.push({ arm, scenario, nativeFault: true, legacyPersistedBeforeNavigation: oldKept, legacyPersistedAfterNavigation: legacyAfterNavigation,
+      rows.push({ arm, scenario, nativeFault: true, nativeFaultTrusted: beforeNavigation.nativeFaultTrusted,
+        legacyPersistedBeforeNavigation: oldKept, legacyPersistedAfterNavigation: legacyAfterNavigation,
         persistedBeforeNavigation: arm === 'journal',
         persistedAfterNavigation: arm === 'journal', pagehideAfterSceneRemovalKept: arm === 'journal',
         errorNameKept: arm === 'journal', noSensitiveStrings: true, complete: true });
+      console.log('CRITICAL_JOURNAL_FIXTURE_ROW '+JSON.stringify(rows.at(-1)));
     } finally { await context.close(); }
   }
   const output = directory+'/results/'+engine+'-fixture'; mkdirSync(output, { recursive: true });
