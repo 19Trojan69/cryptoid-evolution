@@ -104,8 +104,9 @@ for row in manifest['memory']:
     result, build, receipt = [load(row, name) for name in ['attribution.json', 'build-info.json', 'receipt.json']]
     require_build(row, result, build, receipt)
     for key in ['activeHeapProfilerAttached', 'activeForcedGc', 'activeHeapSnapshots', 'activeScreenshots',
-                'activeNativeAnimationScans', 'activeNativeTracing']:
+                'activeNativeAnimationScans', 'activeNativeTracing', 'activeStyleWriteProbe', 'activeNativeApiWrappers']:
         assert result[key] is False
+    assert result['snapshotsOnlyAfterInactiveGate'] and result['qaControllerBridgeRemoved']
     assert receipt['shortReuseObserver'] is False and receipt['activeNativeWrappersAdded'] is False
     assert result['fullRecording'] is False and result['collisionProtection'] is True
     assert result['localStyleComparison']['condition'] == 'leaves'

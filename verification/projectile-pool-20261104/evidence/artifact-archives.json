@@ -1,0 +1,71 @@
+{
+  "runId": 41777900101,
+  "archives": [
+    {
+      "name": "projectile-pool-short-chromium-control",
+      "artifactId": 13298117218,
+      "bytes": 9909,
+      "sha256": "dfe1167469c5b62167fd097eae9a2c8eaa8fdb4605a637946f6beb33e34aa6c7",
+      "capturedFilesCompared": 3,
+      "rawHeapGzipDigestsVerified": 0
+    },
+    {
+      "name": "projectile-pool-short-webkit-pool",
+      "artifactId": 13297424605,
+      "bytes": 9599,
+      "sha256": "2978204e98cf8c5b23c711ad32179c76ffee20e67164401a4cd7625647519182",
+      "capturedFilesCompared": 3,
+      "rawHeapGzipDigestsVerified": 0
+    },
+    {
+      "name": "projectile-pool-short-chromium-pool",
+      "artifactId": 13298440260,
+      "bytes": 10077,
+      "sha256": "6894667e1298ff66798b95a41081eea1f933aaec936338943c8b05887eed8bbe",
+      "capturedFilesCompared": 3,
+      "rawHeapGzipDigestsVerified": 0
+    },
+    {
+      "name": "projectile-pool-short-webkit-control",
+      "artifactId": 13297907832,
+      "bytes": 9597,
+      "sha256": "f5e2043cc66244a2640e89086b835a01c944adbfd4dfaaa9ba8fb74edf41e28d",
+      "capturedFilesCompared": 3,
+      "rawHeapGzipDigestsVerified": 0
+    },
+    {
+      "name": "projectile-pool-memory-pool-2",
+      "artifactId": 13299046633,
+      "bytes": 9143842,
+      "sha256": "bfb781c45ef4f672323e6f928aa4f1c5cd8d9fa39df70cfb8a46de115ac5cf9b",
+      "capturedFilesCompared": 4,
+      "rawHeapGzipDigestsVerified": 2
+    },
+    {
+      "name": "projectile-pool-memory-control-2",
+      "artifactId": 13299500114,
+      "bytes": 9114567,
+      "sha256": "3c461b9ec7ea3d299c9ce571ce440caeab7f95ec353f4a57a8ba64b6b2cabb0f",
+      "capturedFilesCompared": 4,
+      "rawHeapGzipDigestsVerified": 2
+    },
+    {
+      "name": "projectile-pool-memory-pool-1",
+      "artifactId": 13298439087,
+      "bytes": 9131002,
+      "sha256": "2f3dd3e8573293aef667b21014732b195d1d32fc46ca13c83625e8d7f58cb93e",
+      "capturedFilesCompared": 4,
+      "rawHeapGzipDigestsVerified": 2
+    },
+    {
+      "name": "projectile-pool-memory-control-1",
+      "artifactId": 13298324284,
+      "bytes": 9123308,
+      "sha256": "16967b1b71060f5aad7f9445b01ac431cb899784e9dc5805867546eaed828626",
+      "capturedFilesCompared": 4,
+      "rawHeapGzipDigestsVerified": 2
+    }
+  ],
+  "rawHeapsResummarized": false,
+  "rawNativeTracesCheckedSeparately": true
+}

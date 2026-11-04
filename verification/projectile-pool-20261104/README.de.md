@@ -52,3 +52,40 @@ Die neu eingefuehrte Variantenwahl lag irrtuemlich ebenfalls in diesem Bereich.
 Kein Spieleinstieg und keine Speicherlaeufe dieser Serie. Die Korrektur gibt
 nur dieser Build-Einstellung einen separaten Namen; Quell-/Paketpruefungen und
 die absichtliche Entfernung der anderen Diagnose-Schalter bleiben unveraendert.
+
+## Abschluss: kein verlasslicher Speichervorteil, nicht als Fix uebernehmen
+
+Korrigierte Quelle bdb81737eb35bca32542381119b0b046290a1242,
+CI41777900101: alle vier Kurzablaeufe und alle vier Speicherlaeufe bestehen.
+Jeder Speicherlauf beobachtet1.200.000 aktive ms und428 fortgeschrittene
+Reaktor-Salven. Derselbe vorhandene private Boss-2-Aufbau, keine komplette
+Kampagne und kein physisches Smartphone. Die Langlaeufe installieren den
+kurzen Wiederverwendungs-Beobachter ausdruecklich nicht.
+
+| Wiederholung | Kontrolle Schlussmedian MiB | Pool Schlussmedian MiB | Abnahme |
+|---|---:|---:|---:|
+| 1 | 295.9902 | 293.0088 | 1.0073 % |
+| 2 | 285.9033 | 296.5771 | -3.7334 % |
+
+Kein Paar erfuellt die vorab festgelegten15%. Die nativen Blink-Objektbytes
+am inaktiven Punkt vor ausdruecklicher GC sind12.730.200/7.969.656 und
+9.538.296/10.092.520 fuer Kontrolle/Pool. Das ist keine einheitliche Abnahme.
+Zwei unseeded unabhaengige Host-Prozesse pro Arm beweisen auch keine kausale
+Verschlechterung. Deutlich weniger neue native DOM-Elemente sind somit in
+dieser Serie kein nachgewiesener Renderer-PSS- oder White-Screen-Vorteil.
+
+Entscheidung: den Pool nicht als White-Screen-Fix uebernehmen, kein neuer
+Besitzer-Dauertest und kein Telefon-Preview aus diesem Ergebnis. Keine
+Runtime-/Grafik-/Audio-/Input-/Uhr-Aenderung und kein Deployment. Der native
+Abbruchgrund und eine dauerhafte iOS-/Android-Behebung bleiben ungeklaert.
+
+Alle28 transportkomprimierten Ergebnisdateien wurden byte-/hashgeprueft.
+Alle acht Original-Artefakt-ZIPs stimmen in Groesse und SHA256 mit GitHub
+ueberein; ihre erfassten Dateien sind identisch. Acht Heap-gzip-Digests und
+Dekompressionsgroessen bestehen, ohne neue Heap-Graph-Auswertung dieser Serie.
+Alle16 nativen Dumps wurden mit dem unveraenderten bestehenden Parser erneut
+eingelesen und alle Kategorien/Fragmentzuordnungen verglichen. Vergleich,
+Manifeste und Nachpruefer stehen unter evidence/. Native Traces haben wegen
+der unveraenderten Transporthuelle zwei gzip-Huellen (.json.gz.gz).
+Die ZIPs haben die normale siebentaegige CI-Aufbewahrung; die komprimierten
+erfassten Ergebnisse, nativen Traces, Quittungen und Entscheidung stehen im Git.

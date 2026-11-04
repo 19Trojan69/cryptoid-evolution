@@ -1,0 +1,204 @@
+{
+  "version": 1,
+  "short": [
+    {
+      "engine": "chromium",
+      "condition": "control",
+      "complete": true,
+      "activeMs": [
+        60000.00000000003,
+        10000,
+        10000
+      ],
+      "reuseProof": [
+        {
+          "added": 212,
+          "unique": 212,
+          "reused": 0
+        },
+        {
+          "added": 254,
+          "unique": 254,
+          "reused": 0
+        },
+        {
+          "added": 294,
+          "unique": 294,
+          "reused": 0
+        }
+      ]
+    },
+    {
+      "engine": "webkit",
+      "condition": "pool",
+      "complete": true,
+      "activeMs": [
+        60382,
+        10685,
+        10831
+      ],
+      "reuseProof": [
+        {
+          "added": 93,
+          "unique": 5,
+          "reused": 88
+        },
+        {
+          "added": 116,
+          "unique": 10,
+          "reused": 106
+        },
+        {
+          "added": 140,
+          "unique": 15,
+          "reused": 125
+        }
+      ]
+    },
+    {
+      "engine": "chromium",
+      "condition": "pool",
+      "complete": true,
+      "activeMs": [
+        60000.100000000006,
+        10002.399999999994,
+        10002.299999999988
+      ],
+      "reuseProof": [
+        {
+          "added": 211,
+          "unique": 6,
+          "reused": 205
+        },
+        {
+          "added": 253,
+          "unique": 12,
+          "reused": 241
+        },
+        {
+          "added": 295,
+          "unique": 18,
+          "reused": 277
+        }
+      ]
+    },
+    {
+      "engine": "webkit",
+      "condition": "control",
+      "complete": true,
+      "activeMs": [
+        60388,
+        10529,
+        10644
+      ],
+      "reuseProof": [
+        {
+          "added": 93,
+          "unique": 93,
+          "reused": 0
+        },
+        {
+          "added": 115,
+          "unique": 115,
+          "reused": 0
+        },
+        {
+          "added": 139,
+          "unique": 139,
+          "reused": 0
+        }
+      ]
+    }
+  ],
+  "memory": [
+    {
+      "condition": "pool",
+      "replica": 2,
+      "complete": true,
+      "failure": null,
+      "observedActiveMs": 1200000,
+      "volleysAdvanced": 428,
+      "firstMinuteMedianRendererPssMiB": 228.8212890625,
+      "lastMinuteMedianRendererPssMiB": 296.5771484375,
+      "peakSampleRendererPssMiB": 301.6494140625,
+      "nativeBeforeExplicitGc": {
+        "totalReportedRendererBlinkObjectBytes": 10092520,
+        "byProcess": {
+          "3442": 10092520
+        }
+      }
+    },
+    {
+      "condition": "control",
+      "replica": 2,
+      "complete": true,
+      "failure": null,
+      "observedActiveMs": 1200000,
+      "volleysAdvanced": 428,
+      "firstMinuteMedianRendererPssMiB": 220.146484375,
+      "lastMinuteMedianRendererPssMiB": 285.9033203125,
+      "peakSampleRendererPssMiB": 287.8564453125,
+      "nativeBeforeExplicitGc": {
+        "totalReportedRendererBlinkObjectBytes": 9538296,
+        "byProcess": {
+          "3148": 9538296
+        }
+      }
+    },
+    {
+      "condition": "pool",
+      "replica": 1,
+      "complete": true,
+      "failure": null,
+      "observedActiveMs": 1200000,
+      "volleysAdvanced": 428,
+      "firstMinuteMedianRendererPssMiB": 229.94091796875,
+      "lastMinuteMedianRendererPssMiB": 293.0087890625,
+      "peakSampleRendererPssMiB": 296.1376953125,
+      "nativeBeforeExplicitGc": {
+        "totalReportedRendererBlinkObjectBytes": 7969656,
+        "byProcess": {
+          "3374": 7969656
+        }
+      }
+    },
+    {
+      "condition": "control",
+      "replica": 1,
+      "complete": true,
+      "failure": null,
+      "observedActiveMs": 1200000,
+      "volleysAdvanced": 428,
+      "firstMinuteMedianRendererPssMiB": 231.00537109375,
+      "lastMinuteMedianRendererPssMiB": 295.990234375,
+      "peakSampleRendererPssMiB": 297.0146484375,
+      "nativeBeforeExplicitGc": {
+        "totalReportedRendererBlinkObjectBytes": 12730200,
+        "byProcess": {
+          "3372": 12730200
+        }
+      }
+    }
+  ],
+  "pairs": [
+    {
+      "replica": 1,
+      "lastMinuteRendererPssReduction": 0.010072782701076255,
+      "predeclaredGatePassed": false
+    },
+    {
+      "replica": 2,
+      "lastMinuteRendererPssReduction": -0.03733369767561023,
+      "predeclaredGatePassed": false
+    }
+  ],
+  "completeCohort": true,
+  "predeclaredResourceGatePassed": false,
+  "physicalDeviceAccepted": false,
+  "whiteScreenFixed": false,
+  "limits": [
+    "Two unseeded independent Linux renderer processes per arm, not phone RAM or GPU memory.",
+    "Short flow has an explicit test observer; only the separate long cohort is resource-eligible.",
+    "Native dumps and heaps occur only after inactive gates and may influence collection."
+  ]
+}
