@@ -2,7 +2,7 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": null,
   "installCommand": "node verification/direct-boss-style-device-20261102/installDevicePreview.mjs",
-  "buildCommand": "node verification/direct-boss-style-device-20261102/buildDevicePreview.mjs",
+  "buildCommand": "node verification/critical-failure-journal-20261104/build.mjs",
   "outputDirectory": "verification/boss2-forensics-20261028/results/device-preview/site",
   "redirects": [
     {
