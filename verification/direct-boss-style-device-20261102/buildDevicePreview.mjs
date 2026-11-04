@@ -3,6 +3,10 @@ import { readFileSync, writeFileSync, readdirSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { createHash } from 'node:crypto';
 import { localStyleProof } from '../local-boss-style-20261102/transform.mjs';
+const journalDeviceDirectEntry = process.argv[1] && resolve(process.argv[1]) === resolve(new URL(import.meta.url).pathname);
+if (journalDeviceDirectEntry) {
+  await import('../critical-failure-journal-20261104/build.mjs');
+} else {
 assert.equal(process.env.VERCEL_ENV, 'preview', 'Isolated guest Preview only');
 assert.equal(process.argv.includes('--clock-probe'), false, 'Active scalar trace is excluded from the owner Preview');
 // Project settings may include unrelated or older CRYPTOID controls. Discard
@@ -57,3 +61,5 @@ info.diagnosticResourceCheckpoint = { version: 1, maxPointsPerRun: 1, maxSavedCh
   reportDocumentOriginAtExport: true, sourceGameFilesEdited: false, whiteScreenFixed: false };
 writeFileSync(path, JSON.stringify(info, null, 2) + '\n');
 console.log('CRYPTOID_DIRECT_STYLE_DEVICE_BUILD ' + JSON.stringify({ source: info.sourceCommit, candidate: info.directStyleDeviceCandidate }));
+
+}
