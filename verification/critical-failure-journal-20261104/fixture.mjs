@@ -79,7 +79,8 @@ try {
       const saved = await page.evaluate(() => ({
         legacy: JSON.parse(localStorage.getItem('cryptoid_private_brief_v1')),
         journal: JSON.parse(localStorage.getItem('cryptoid_private_critical_v1')) }));
-      assert.equal(saved.legacy.latest.events.some(e => e.kind === kind), false);
+      const legacyAfterNavigation = saved.legacy.latest.events.some(e => e.kind === kind);
+      assert.equal(legacyAfterNavigation, arm === 'journal', 'Only the corrected listener can also flush the legacy ring on exit after scene removal');
       if (arm === 'journal') {
         assert.equal(saved.journal.latest.events[kind].count, 1);
         assert.equal(saved.journal.latest.events.pagehide.first.trusted, true);
@@ -87,7 +88,8 @@ try {
         assert.doesNotMatch(JSON.stringify(saved.journal), /synthetic-fixture|127\.0\.0\.1|stack|message/);
       }
       assert.ok(nativeUncaughtCount > 0, 'Automation observed an actual uncaught browser fault');
-      rows.push({ arm, scenario, nativeFault: true, persistedBeforeNavigation: arm === 'journal',
+      rows.push({ arm, scenario, nativeFault: true, legacyPersistedBeforeNavigation: oldKept, legacyPersistedAfterNavigation: legacyAfterNavigation,
+        persistedBeforeNavigation: arm === 'journal',
         persistedAfterNavigation: arm === 'journal', pagehideAfterSceneRemovalKept: arm === 'journal',
         errorNameKept: arm === 'journal', noSensitiveStrings: true, complete: true });
     } finally { await context.close(); }
