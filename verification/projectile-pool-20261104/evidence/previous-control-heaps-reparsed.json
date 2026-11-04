@@ -1,0 +1,703 @@
+{
+  "version": 1,
+  "inputs": [
+    {
+      "archive": "player-muzzle-memory-control-1.zip",
+      "archiveSha256": "07e6708c8bbd32b6af4e65091d5a732be546de4fb9947860bc7fa357fad8bf2f",
+      "runId": 41769708523,
+      "sourceCommit": "2a2bef5eb5fd57279eb5349dfa297246adc05803",
+      "heaps": [
+        {
+          "nodes": 221533,
+          "edges": 959028,
+          "nativeCounts": {
+            "AudioBuffer": 46,
+            "AudioBufferSourceNode": 0,
+            "AudioContext": 3,
+            "CSSAnimation": 12,
+            "CanvasRenderingContext2D": 11,
+            "DOMRectReadOnly": 882,
+            "KeyframeEffect": 12
+          },
+          "firstObjectShortestPaths": {
+            "AudioContext": [
+              {
+                "type": "synthetic",
+                "name": "",
+                "nodeId": 1,
+                "incoming": null
+              },
+              {
+                "type": "synthetic",
+                "name": "(GC roots)",
+                "nodeId": 3,
+                "incoming": "element:1"
+              },
+              {
+                "type": "synthetic",
+                "name": "C++ Persistent roots",
+                "nodeId": 355411,
+                "incoming": "element:29"
+              },
+              {
+                "type": "native",
+                "name": "AudioContext",
+                "nodeId": 114303,
+                "incoming": "internal:blink::AudioContext::AudioContext(LocalDOMWindow &, const WebAudioLatencyHint &, std::optional<float>, WebAudioSinkDescriptor, bool, std::optional<uint32_t>)@../../third_party/blink/renderer/modules/webaudio/audio_context.cc:572"
+              }
+            ],
+            "CanvasRenderingContext2D": [
+              {
+                "type": "synthetic",
+                "name": "",
+                "nodeId": 1,
+                "incoming": null
+              },
+              {
+                "type": "synthetic",
+                "name": "(GC roots)",
+                "nodeId": 3,
+                "incoming": "element:1"
+              },
+              {
+                "type": "synthetic",
+                "name": "(Global handles)",
+                "nodeId": 23,
+                "incoming": "element:10"
+              },
+              {
+                "type": "native",
+                "name": "system / NativeContext / http://127.0.0.1:46703",
+                "nodeId": 7269,
+                "incoming": "internal:1 / V8PerContextData::context_"
+              },
+              {
+                "type": "object",
+                "name": "Window [JSGlobalObject] / http://127.0.0.1:46703",
+                "nodeId": 112419,
+                "incoming": "internal:global_object"
+              },
+              {
+                "type": "closure",
+                "name": "",
+                "nodeId": 143805,
+                "incoming": "property:__lifetimeAttributionStats"
+              },
+              {
+                "type": "object",
+                "name": "system / Context / scope @81267",
+                "nodeId": 84283,
+                "incoming": "internal:context"
+              },
+              {
+                "type": "native",
+                "name": "<canvas class=\"normal-effects-surface\" aria-hidden=\"true\" width=\"1\" height=\"1\" style=\"position: absolute; left: 0px; top: 0px; width: 1px; height: 1px; pointer-events: none; z-index: 2;\">",
+                "nodeId": 113323,
+                "incoming": "context:Ae"
+              },
+              {
+                "type": "native",
+                "name": "CanvasRenderingContext2D",
+                "nodeId": 331671,
+                "incoming": "element:7"
+              }
+            ],
+            "DOMRectReadOnly": [
+              {
+                "type": "synthetic",
+                "name": "",
+                "nodeId": 1,
+                "incoming": null
+              },
+              {
+                "type": "synthetic",
+                "name": "(GC roots)",
+                "nodeId": 3,
+                "incoming": "element:1"
+              },
+              {
+                "type": "synthetic",
+                "name": "(Global handles)",
+                "nodeId": 23,
+                "incoming": "element:10"
+              },
+              {
+                "type": "object",
+                "name": "UtilityScript",
+                "nodeId": 7279,
+                "incoming": "internal:9 / DevTools console"
+              },
+              {
+                "type": "object",
+                "name": "Object",
+                "nodeId": 199687,
+                "incoming": "property:builtins"
+              },
+              {
+                "type": "native",
+                "name": "Performance",
+                "nodeId": 194641,
+                "incoming": "property:performance"
+              },
+              {
+                "type": "native",
+                "name": "blink::HeapVectorBacking<cppgc::internal::BasicMember<blink::PerformanceEntry, cppgc::internal::StrongMemberTag, cppgc::internal::DijkstraWriteBarrierPolicy>>",
+                "nodeId": 69720,
+                "incoming": "element:10"
+              },
+              {
+                "type": "native",
+                "name": "LayoutShift",
+                "nodeId": 76118,
+                "incoming": "element:124"
+              },
+              {
+                "type": "native",
+                "name": "LayoutShiftAttribution",
+                "nodeId": 15800,
+                "incoming": "element:2"
+              },
+              {
+                "type": "native",
+                "name": "DOMRectReadOnly",
+                "nodeId": 15796,
+                "incoming": "element:1"
+              }
+            ]
+          },
+          "phase": "paused",
+          "compressedSha256": "90a4e872e26bb4cbe5e322ac1095eef1afed33b6d7e9fc21c9070183a3afbd97",
+          "rawSha256": "7c99b153caa36eba2b8426ca7d91b864bdd46293e3000391144bb0b5be274697",
+          "afterExplicitInactiveGc": true
+        },
+        {
+          "nodes": 192041,
+          "edges": 834114,
+          "nativeCounts": {
+            "AudioBuffer": 0,
+            "AudioBufferSourceNode": 0,
+            "AudioContext": 1,
+            "CSSAnimation": 0,
+            "CanvasRenderingContext2D": 7,
+            "DOMRectReadOnly": 882,
+            "KeyframeEffect": 0
+          },
+          "firstObjectShortestPaths": {
+            "AudioContext": [
+              {
+                "type": "synthetic",
+                "name": "",
+                "nodeId": 1,
+                "incoming": null
+              },
+              {
+                "type": "synthetic",
+                "name": "(GC roots)",
+                "nodeId": 3,
+                "incoming": "element:1"
+              },
+              {
+                "type": "synthetic",
+                "name": "C++ Persistent roots",
+                "nodeId": 415675,
+                "incoming": "element:29"
+              },
+              {
+                "type": "native",
+                "name": "AudioContext",
+                "nodeId": 269827,
+                "incoming": "internal:blink::AudioContext::AudioContext(LocalDOMWindow &, const WebAudioLatencyHint &, std::optional<float>, WebAudioSinkDescriptor, bool, std::optional<uint32_t>)@../../third_party/blink/renderer/modules/webaudio/audio_context.cc:572"
+              }
+            ],
+            "DOMRectReadOnly": [
+              {
+                "type": "synthetic",
+                "name": "",
+                "nodeId": 1,
+                "incoming": null
+              },
+              {
+                "type": "synthetic",
+                "name": "(GC roots)",
+                "nodeId": 3,
+                "incoming": "element:1"
+              },
+              {
+                "type": "synthetic",
+                "name": "(Global handles)",
+                "nodeId": 23,
+                "incoming": "element:10"
+              },
+              {
+                "type": "object",
+                "name": "UtilityScript",
+                "nodeId": 7279,
+                "incoming": "internal:9 / DevTools console"
+              },
+              {
+                "type": "object",
+                "name": "Object",
+                "nodeId": 199687,
+                "incoming": "property:builtins"
+              },
+              {
+                "type": "native",
+                "name": "Performance",
+                "nodeId": 194641,
+                "incoming": "property:performance"
+              },
+              {
+                "type": "native",
+                "name": "blink::HeapVectorBacking<cppgc::internal::BasicMember<blink::PerformanceEntry, cppgc::internal::StrongMemberTag, cppgc::internal::DijkstraWriteBarrierPolicy>>",
+                "nodeId": 69720,
+                "incoming": "element:10"
+              },
+              {
+                "type": "native",
+                "name": "LayoutShift",
+                "nodeId": 76382,
+                "incoming": "element:133"
+              },
+              {
+                "type": "native",
+                "name": "LayoutShiftAttribution",
+                "nodeId": 15914,
+                "incoming": "element:2"
+              },
+              {
+                "type": "native",
+                "name": "DOMRectReadOnly",
+                "nodeId": 15910,
+                "incoming": "element:1"
+              }
+            ],
+            "CanvasRenderingContext2D": [
+              {
+                "type": "synthetic",
+                "name": "",
+                "nodeId": 1,
+                "incoming": null
+              },
+              {
+                "type": "synthetic",
+                "name": "(GC roots)",
+                "nodeId": 3,
+                "incoming": "element:1"
+              },
+              {
+                "type": "synthetic",
+                "name": "(Global handles)",
+                "nodeId": 23,
+                "incoming": "element:10"
+              },
+              {
+                "type": "native",
+                "name": "system / NativeContext / http://127.0.0.1:46703",
+                "nodeId": 7269,
+                "incoming": "internal:1 / V8PerContextData::context_"
+              },
+              {
+                "type": "object",
+                "name": "Window [JSGlobalObject] / http://127.0.0.1:46703",
+                "nodeId": 112419,
+                "incoming": "internal:global_object"
+              },
+              {
+                "type": "closure",
+                "name": "",
+                "nodeId": 143805,
+                "incoming": "property:__lifetimeAttributionStats"
+              },
+              {
+                "type": "object",
+                "name": "system / Context / scope @81267",
+                "nodeId": 84283,
+                "incoming": "internal:context"
+              },
+              {
+                "type": "object",
+                "name": "Map",
+                "nodeId": 269615,
+                "incoming": "context:nc"
+              },
+              {
+                "type": "array",
+                "name": "",
+                "nodeId": 225831,
+                "incoming": "internal:table"
+              },
+              {
+                "type": "native",
+                "name": "<canvas height=\"192\" width=\"192\">",
+                "nodeId": 225837,
+                "incoming": "internal:14"
+              },
+              {
+                "type": "native",
+                "name": "CanvasRenderingContext2D",
+                "nodeId": 76612,
+                "incoming": "element:3"
+              }
+            ]
+          },
+          "phase": "home",
+          "compressedSha256": "c3b6f3bf6165244095a1f8a3524a6a3a893b78fa3b4f70511321f9a113e1ed69",
+          "rawSha256": "132e9e8c6fb3f73064c7ca8597c6ce5751079eeabf513c9bd456aeb56e66ccec",
+          "afterExplicitInactiveGc": true
+        }
+      ]
+    },
+    {
+      "archive": "player-muzzle-memory-control-2.zip",
+      "archiveSha256": "307f8aa03f435552aa7de5b0df7674f82acc91e26b8996a777f02b64082ab319",
+      "runId": 41769708523,
+      "sourceCommit": "2a2bef5eb5fd57279eb5349dfa297246adc05803",
+      "heaps": [
+        {
+          "nodes": 221702,
+          "edges": 958480,
+          "nativeCounts": {
+            "AudioBuffer": 46,
+            "AudioBufferSourceNode": 0,
+            "AudioContext": 3,
+            "CSSAnimation": 12,
+            "CanvasRenderingContext2D": 11,
+            "DOMRectReadOnly": 890,
+            "KeyframeEffect": 12
+          },
+          "firstObjectShortestPaths": {
+            "CanvasRenderingContext2D": [
+              {
+                "type": "synthetic",
+                "name": "",
+                "nodeId": 1,
+                "incoming": null
+              },
+              {
+                "type": "synthetic",
+                "name": "(GC roots)",
+                "nodeId": 3,
+                "incoming": "element:1"
+              },
+              {
+                "type": "synthetic",
+                "name": "(Global handles)",
+                "nodeId": 23,
+                "incoming": "element:10"
+              },
+              {
+                "type": "native",
+                "name": "system / NativeContext / http://127.0.0.1:45613",
+                "nodeId": 7269,
+                "incoming": "internal:1 / V8PerContextData::context_"
+              },
+              {
+                "type": "object",
+                "name": "Window [JSGlobalObject] / http://127.0.0.1:45613",
+                "nodeId": 84823,
+                "incoming": "internal:global_object"
+              },
+              {
+                "type": "closure",
+                "name": "",
+                "nodeId": 291717,
+                "incoming": "property:__lifetimeAttributionStats"
+              },
+              {
+                "type": "object",
+                "name": "system / Context / scope @81489",
+                "nodeId": 89833,
+                "incoming": "internal:context"
+              },
+              {
+                "type": "native",
+                "name": "<canvas class=\"normal-effects-surface\" aria-hidden=\"true\" width=\"1\" height=\"1\" style=\"position: absolute; left: 0px; top: 0px; width: 1px; height: 1px; pointer-events: none; z-index: 2;\">",
+                "nodeId": 181699,
+                "incoming": "context:Ae"
+              },
+              {
+                "type": "native",
+                "name": "CanvasRenderingContext2D",
+                "nodeId": 128389,
+                "incoming": "element:7"
+              }
+            ],
+            "AudioContext": [
+              {
+                "type": "synthetic",
+                "name": "",
+                "nodeId": 1,
+                "incoming": null
+              },
+              {
+                "type": "synthetic",
+                "name": "(GC roots)",
+                "nodeId": 3,
+                "incoming": "element:1"
+              },
+              {
+                "type": "synthetic",
+                "name": "C++ Persistent roots",
+                "nodeId": 355693,
+                "incoming": "element:29"
+              },
+              {
+                "type": "native",
+                "name": "AudioContext",
+                "nodeId": 240643,
+                "incoming": "internal:blink::AudioContext::AudioContext(LocalDOMWindow &, const WebAudioLatencyHint &, std::optional<float>, WebAudioSinkDescriptor, bool, std::optional<uint32_t>)@../../third_party/blink/renderer/modules/webaudio/audio_context.cc:572"
+              }
+            ],
+            "DOMRectReadOnly": [
+              {
+                "type": "synthetic",
+                "name": "",
+                "nodeId": 1,
+                "incoming": null
+              },
+              {
+                "type": "synthetic",
+                "name": "(GC roots)",
+                "nodeId": 3,
+                "incoming": "element:1"
+              },
+              {
+                "type": "synthetic",
+                "name": "(Global handles)",
+                "nodeId": 23,
+                "incoming": "element:10"
+              },
+              {
+                "type": "object",
+                "name": "UtilityScript",
+                "nodeId": 7279,
+                "incoming": "internal:9 / DevTools console"
+              },
+              {
+                "type": "object",
+                "name": "Object",
+                "nodeId": 195515,
+                "incoming": "property:builtins"
+              },
+              {
+                "type": "native",
+                "name": "Performance",
+                "nodeId": 276687,
+                "incoming": "property:performance"
+              },
+              {
+                "type": "native",
+                "name": "blink::HeapVectorBacking<cppgc::internal::BasicMember<blink::PerformanceEntry, cppgc::internal::StrongMemberTag, cppgc::internal::DijkstraWriteBarrierPolicy>>",
+                "nodeId": 68948,
+                "incoming": "element:10"
+              },
+              {
+                "type": "native",
+                "name": "LayoutShift",
+                "nodeId": 75534,
+                "incoming": "element:142"
+              },
+              {
+                "type": "native",
+                "name": "LayoutShiftAttribution",
+                "nodeId": 15980,
+                "incoming": "element:2"
+              },
+              {
+                "type": "native",
+                "name": "DOMRectReadOnly",
+                "nodeId": 15976,
+                "incoming": "element:1"
+              }
+            ]
+          },
+          "phase": "paused",
+          "compressedSha256": "4daec262a85efb0ffd77201f2817a48961feff39e61d0820265e33f41ead5370",
+          "rawSha256": "57c616586309bca846a87daaed28b1087b5d73ca90d474b9b0d45fd719e68db8",
+          "afterExplicitInactiveGc": true
+        },
+        {
+          "nodes": 192080,
+          "edges": 833766,
+          "nativeCounts": {
+            "AudioBuffer": 0,
+            "AudioBufferSourceNode": 0,
+            "AudioContext": 1,
+            "CSSAnimation": 0,
+            "CanvasRenderingContext2D": 7,
+            "DOMRectReadOnly": 890,
+            "KeyframeEffect": 0
+          },
+          "firstObjectShortestPaths": {
+            "AudioContext": [
+              {
+                "type": "synthetic",
+                "name": "",
+                "nodeId": 1,
+                "incoming": null
+              },
+              {
+                "type": "synthetic",
+                "name": "(GC roots)",
+                "nodeId": 3,
+                "incoming": "element:1"
+              },
+              {
+                "type": "synthetic",
+                "name": "C++ Persistent roots",
+                "nodeId": 415953,
+                "incoming": "element:29"
+              },
+              {
+                "type": "native",
+                "name": "AudioContext",
+                "nodeId": 275745,
+                "incoming": "internal:blink::AudioContext::AudioContext(LocalDOMWindow &, const WebAudioLatencyHint &, std::optional<float>, WebAudioSinkDescriptor, bool, std::optional<uint32_t>)@../../third_party/blink/renderer/modules/webaudio/audio_context.cc:572"
+              }
+            ],
+            "DOMRectReadOnly": [
+              {
+                "type": "synthetic",
+                "name": "",
+                "nodeId": 1,
+                "incoming": null
+              },
+              {
+                "type": "synthetic",
+                "name": "(GC roots)",
+                "nodeId": 3,
+                "incoming": "element:1"
+              },
+              {
+                "type": "synthetic",
+                "name": "(Global handles)",
+                "nodeId": 23,
+                "incoming": "element:10"
+              },
+              {
+                "type": "object",
+                "name": "UtilityScript",
+                "nodeId": 7279,
+                "incoming": "internal:9 / DevTools console"
+              },
+              {
+                "type": "object",
+                "name": "Object",
+                "nodeId": 195515,
+                "incoming": "property:builtins"
+              },
+              {
+                "type": "native",
+                "name": "Performance",
+                "nodeId": 276687,
+                "incoming": "property:performance"
+              },
+              {
+                "type": "native",
+                "name": "blink::HeapVectorBacking<cppgc::internal::BasicMember<blink::PerformanceEntry, cppgc::internal::StrongMemberTag, cppgc::internal::DijkstraWriteBarrierPolicy>>",
+                "nodeId": 68948,
+                "incoming": "element:10"
+              },
+              {
+                "type": "native",
+                "name": "LayoutShift",
+                "nodeId": 75712,
+                "incoming": "element:136"
+              },
+              {
+                "type": "native",
+                "name": "LayoutShiftAttribution",
+                "nodeId": 16066,
+                "incoming": "element:2"
+              },
+              {
+                "type": "native",
+                "name": "DOMRectReadOnly",
+                "nodeId": 16062,
+                "incoming": "element:1"
+              }
+            ],
+            "CanvasRenderingContext2D": [
+              {
+                "type": "synthetic",
+                "name": "",
+                "nodeId": 1,
+                "incoming": null
+              },
+              {
+                "type": "synthetic",
+                "name": "(GC roots)",
+                "nodeId": 3,
+                "incoming": "element:1"
+              },
+              {
+                "type": "synthetic",
+                "name": "(Global handles)",
+                "nodeId": 23,
+                "incoming": "element:10"
+              },
+              {
+                "type": "native",
+                "name": "system / NativeContext / http://127.0.0.1:45613",
+                "nodeId": 7269,
+                "incoming": "internal:1 / V8PerContextData::context_"
+              },
+              {
+                "type": "object",
+                "name": "Window [JSGlobalObject] / http://127.0.0.1:45613",
+                "nodeId": 84823,
+                "incoming": "internal:global_object"
+              },
+              {
+                "type": "closure",
+                "name": "",
+                "nodeId": 291717,
+                "incoming": "property:__lifetimeAttributionStats"
+              },
+              {
+                "type": "object",
+                "name": "system / Context / scope @81489",
+                "nodeId": 89833,
+                "incoming": "internal:context"
+              },
+              {
+                "type": "object",
+                "name": "Map",
+                "nodeId": 277693,
+                "incoming": "context:nc"
+              },
+              {
+                "type": "array",
+                "name": "",
+                "nodeId": 167885,
+                "incoming": "internal:table"
+              },
+              {
+                "type": "native",
+                "name": "<canvas height=\"192\" width=\"192\">",
+                "nodeId": 167887,
+                "incoming": "internal:8"
+              },
+              {
+                "type": "native",
+                "name": "CanvasRenderingContext2D",
+                "nodeId": 77068,
+                "incoming": "element:3"
+              }
+            ]
+          },
+          "phase": "home",
+          "compressedSha256": "3f871e63d4f55ae0c4cb170fd13365b8dbb7c6b838f3526f430f5c3439ac6afb",
+          "rawSha256": "f3f0c7f6d47e437e67f48bcadbe88da3c7b5206917f661799f898a1cd57fd1bd",
+          "afterExplicitInactiveGc": true
+        }
+      ]
+    }
+  ],
+  "limits": [
+    "Existing Linux Chromium inactive snapshots after explicit GC.",
+    "Counts and shortest graph paths only; not dominator retained size or phone/GPU memory.",
+    "A native count without a growth trend is not a demonstrated leak."
+  ],
+  "nativeWhiteScreenCauseEstablished": false
+}

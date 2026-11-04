@@ -1,0 +1,198 @@
+{
+  "sourceCommit": "bdb81737eb35bca32542381119b0b046290a1242",
+  "indexedCssSha256": "cf48ca4553ac7fa425f37e84a334acc3fec2f2163b72d31bfe9b35f7d33c27b5",
+  "otherStylesheets": [
+    {
+      "path": "frontend/src/cockpitMenus.css",
+      "sha": "66fdc631d84b5939853ecc26e92746636eeb66eb",
+      "projectileSelectors": []
+    },
+    {
+      "path": "frontend/src/fleetMenus.css",
+      "sha": "9e89ceb9db8547776df68ad45708a2fb0bb29e8e",
+      "projectileSelectors": []
+    },
+    {
+      "path": "frontend/src/floatingNotices.css",
+      "sha": "0651cd0312bed0c5f97e2f7f627768b74209c79e",
+      "projectileSelectors": []
+    },
+    {
+      "path": "frontend/src/gameViewport.css",
+      "sha": "ed22e9a650b956d930f0febf71361a5ded9e4c46",
+      "projectileSelectors": []
+    },
+    {
+      "path": "frontend/src/homeTypeMobile.css",
+      "sha": "d5cd0f255864036a6ce15b176a4a89a9121d0575",
+      "projectileSelectors": []
+    },
+    {
+      "path": "frontend/src/hudDepth.css",
+      "sha": "6f8c37b40f315c3327aef7cb1c45c1a6b5d850fb",
+      "projectileSelectors": []
+    },
+    {
+      "path": "frontend/src/locales/typography.css",
+      "sha": "30d284f1399194e18e27e0952cc243a5427291ab",
+      "projectileSelectors": []
+    },
+    {
+      "path": "frontend/src/metallic.css",
+      "sha": "b51419a8c67311bd2cd41f8f578e1b0b4d581aca",
+      "projectileSelectors": []
+    },
+    {
+      "path": "frontend/src/missionDialogMobile.css",
+      "sha": "998970c7479c471150adb6468c0d4f5559202de7",
+      "projectileSelectors": []
+    },
+    {
+      "path": "frontend/src/mobileDeepMenus.css",
+      "sha": "167ead2a6e915250cb37d6afcaa8f3ad48043ab4",
+      "projectileSelectors": []
+    },
+    {
+      "path": "frontend/src/mobileMenus.css",
+      "sha": "9133721c333c61b403ec5e9133b3631414d9d3e1",
+      "projectileSelectors": []
+    },
+    {
+      "path": "frontend/src/pages/admin.css",
+      "sha": "992358faf6daf7622eaf4a8f58e0ab85274f3500",
+      "projectileSelectors": []
+    },
+    {
+      "path": "frontend/src/pages/bossDossier.css",
+      "sha": "eb7b1f0bdd35abbbc82c67c33e056e536399f11e",
+      "projectileSelectors": []
+    },
+    {
+      "path": "frontend/src/pages/bossExplosionBudget.css",
+      "sha": "d4b88783dba8795e42eb3ce72656684992916f3a",
+      "projectileSelectors": []
+    },
+    {
+      "path": "frontend/src/pages/bossIntermission.css",
+      "sha": "2791d02a0b320dec4b0b458d8478f8031391bf69",
+      "projectileSelectors": []
+    },
+    {
+      "path": "frontend/src/pages/bossPortrait.css",
+      "sha": "f65c0a41434709da13a3de62724670f7f7643a98",
+      "projectileSelectors": []
+    },
+    {
+      "path": "frontend/src/pages/bossReward.css",
+      "sha": "959f680a4642416e1fa0f871678996edc8faf4b7",
+      "projectileSelectors": []
+    },
+    {
+      "path": "frontend/src/pages/cinematicHome.css",
+      "sha": "af02df613dd5a7dbe0904546855e71e2a3c82a1a",
+      "projectileSelectors": []
+    },
+    {
+      "path": "frontend/src/pages/collection.css",
+      "sha": "14831c8b8759230bb2e39e261b1c79b624e8758a",
+      "projectileSelectors": []
+    },
+    {
+      "path": "frontend/src/pages/combatVariety.css",
+      "sha": "4dcfb78a115af979ccdaa8519bf33d476ef087db",
+      "projectileSelectors": []
+    },
+    {
+      "path": "frontend/src/pages/controlCenter.css",
+      "sha": "70a55e729fc92ad3062c9d02bb10f684d81258de",
+      "projectileSelectors": []
+    },
+    {
+      "path": "frontend/src/pages/equipmentEdge.css",
+      "sha": "fec17f4b0ca7141c1ee9601e2cf74834bf5b0376",
+      "projectileSelectors": []
+    },
+    {
+      "path": "frontend/src/pages/feedbackCompact.css",
+      "sha": "d4cae09e10e39758042c042433a7ab9c293bcae0",
+      "projectileSelectors": []
+    },
+    {
+      "path": "frontend/src/pages/galaxyArt.css",
+      "sha": "30c0dcad87d362887eeb34236eafcdd65cbeb05e",
+      "projectileSelectors": []
+    },
+    {
+      "path": "frontend/src/pages/galaxyEntry.css",
+      "sha": "75c9127ea2608977ae962ef626d37a93cd3133fa",
+      "projectileSelectors": []
+    },
+    {
+      "path": "frontend/src/pages/galaxyMap.css",
+      "sha": "a2186d1d1a6b86f9f2611a3e5fdea70e16b3326c",
+      "projectileSelectors": []
+    },
+    {
+      "path": "frontend/src/pages/hullArrival.css",
+      "sha": "5c8038af6138916089cea4dd4544a459d8d0ebef",
+      "projectileSelectors": []
+    },
+    {
+      "path": "frontend/src/pages/missionWeaponShop.css",
+      "sha": "d5d1b9b135486f5858995c6289f4a996e5dab14b",
+      "projectileSelectors": []
+    },
+    {
+      "path": "frontend/src/pages/shopPurchase.css",
+      "sha": "a5cba3f0cf88b3dca02b8126fe0021cfeb1dc8be",
+      "projectileSelectors": []
+    },
+    {
+      "path": "frontend/src/pages/transitionNotices.css",
+      "sha": "0dbf0f7de17311aa9545a1cd7d0bc93f855825f1",
+      "projectileSelectors": []
+    },
+    {
+      "path": "frontend/src/pages/weaponNotices.css",
+      "sha": "8aee11b42b9e50b9d5bcd8d5b7c9f80977bc3052",
+      "projectileSelectors": []
+    },
+    {
+      "path": "frontend/src/pages/weaponPreview.css",
+      "sha": "02f0381a1db9ef93d728d1546550209ed94337b8",
+      "projectileSelectors": []
+    },
+    {
+      "path": "frontend/src/pages/weaponSelection.css",
+      "sha": "bce2ea81248a5ac968f88f5f5ff7f81193383f46",
+      "projectileSelectors": []
+    },
+    {
+      "path": "frontend/src/pages/weaponStock.css",
+      "sha": "d048c5b29d26b397730587bbbc440e80c3dbc266",
+      "projectileSelectors": []
+    },
+    {
+      "path": "frontend/src/pages/weaponTutorial.css",
+      "sha": "9830fdd08904ef96bd3ac56fe87fa2cdd586ac19",
+      "projectileSelectors": []
+    },
+    {
+      "path": "frontend/src/quickAccessMobile.css",
+      "sha": "03c1f339da0c6cf0774125f34027679cdaec56fa",
+      "projectileSelectors": []
+    },
+    {
+      "path": "frontend/src/selectionControls.css",
+      "sha": "00b52968f172f14b9cb630bafbfc93d3a7f44fc1",
+      "projectileSelectors": []
+    },
+    {
+      "path": "frontend/src/smartphoneUi.css",
+      "sha": "418b6b91a2f66ca96b5fe694ed591d1bd2195bf8",
+      "projectileSelectors": []
+    }
+  ],
+  "otherProjectileSelectorFiles": 0,
+  "limits": "Pinned source text scan; does not independently prove all computed inherited style configurations."
+}
