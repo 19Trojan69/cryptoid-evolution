@@ -1,0 +1,43 @@
+name: Verify bounded critical fault recording in the isolated guest preview
+on:
+  push:
+    branches: [codex/ios-safari-environment-20261103]
+    paths:
+      - '.github/workflows/cryptoid-critical-failure-journal.yml'
+      - 'verification/critical-failure-journal-20261104/*.mjs'
+permissions:
+  contents: read
+jobs:
+  native-fault-and-normal-flow:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix: {engine: [chromium, webkit]}
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with: {persist-credentials: false}
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with: {node-version: '24'}
+      - name: Install the frozen application and browser tools
+        env: {VERCEL_ENV: preview}
+        run: |
+          node verification/direct-boss-style-device-20261102/installDevicePreview.mjs --ignore-scripts
+          npm install --prefix verification/boss2-forensics-20261028 --ignore-scripts --no-audit --no-fund
+          cd verification/boss2-forensics-20261028
+          npx playwright install --with-deps ${{ matrix.engine }}
+      - name: Prove the legacy loss and immediate bounded critical persistence
+        run: |
+          node --test verification/critical-failure-journal-20261104/state.test.mjs
+          node verification/critical-failure-journal-20261104/fixture.mjs ${{ matrix.engine }}
+      - name: Compile and verify the unchanged full-game flow and report
+        env: {VERCEL_ENV: preview}
+        run: |
+          node verification/critical-failure-journal-20261104/build.mjs
+          node verification/critical-failure-journal-20261104/run.mjs ${{ matrix.engine }}
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: ${{ !cancelled() }}
+        with:
+          name: critical-failure-journal-${{ matrix.engine }}
+          path: verification/critical-failure-journal-20261104/results/
+          retention-days: 7
