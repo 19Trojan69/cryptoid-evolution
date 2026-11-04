@@ -40,3 +40,15 @@ PSS-Schlussmedian zeigen. Reine API-/Erzeugungszahlen reichen nicht. Ein
 bestandener Host-Vergleich beweist noch keine native iPhone-/Android-Stabilitaet.
 Bei fehlendem Vorteil kein neuer Besitzer-Dauertest aus diesem Kandidaten.
 Keine privaten Handydateien, kein oeffentliches Deployment oder neuer Spielstand.
+
+## Erster Paketversuch vor dem Spielstart gestoppt
+
+CI41777545605 aus e32b10094996a114974b4970f575a35b49f3fb72 besteht in allen
+vier Jobs die reversible Quelle und die native Darstellungspruefung:24.000
+synthetische Schuesse,24.002 statt14 erzeugte Elemente einschliesslich zweier
+Gruppen. Der folgende Build stoppt in beiden Armen und Engines, weil der
+bestehende Paket-Builder alle CRYPTOID_-Umgebungsvariablen absichtlich entfernt.
+Die neu eingefuehrte Variantenwahl lag irrtuemlich ebenfalls in diesem Bereich.
+Kein Spieleinstieg und keine Speicherlaeufe dieser Serie. Die Korrektur gibt
+nur dieser Build-Einstellung einen separaten Namen; Quell-/Paketpruefungen und
+die absichtliche Entfernung der anderen Diagnose-Schalter bleiben unveraendert.

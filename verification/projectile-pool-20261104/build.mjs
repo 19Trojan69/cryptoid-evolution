@@ -34,7 +34,7 @@ const old="  const base = readFileSync(basePath, 'utf8');";
 const hook="  plugins: [react(), { name: 'isolated-device-boss2', enforce: 'pre', transform(code, id) {";
 const injected=hook+`
     if (id.replaceAll('\\\\','/').endsWith('/src/pages/projectilePresentation.ts')) {
-      const mode=process.env.CRYPTOID_PROJECTILE_POOL_CONDITION;
+      const mode=process.env.PROJECTILE_POOL_BUILD_CONDITION;
       writeFileSync(${JSON.stringify(recordPath)},JSON.stringify(projectileProof(code,mode),null,2)+'\\n');
       return projectileTransform(code,mode);
     }`;
@@ -42,9 +42,9 @@ change(old,`  const rawBase=readFileSync(basePath,'utf8');
   assert.equal(rawBase.split(${JSON.stringify(hook)}).length,2);
   const base=${JSON.stringify('import { transform as projectileTransform, proof as projectileProof } from '+JSON.stringify(transformUrl)+';\n')}+rawBase.replace(${JSON.stringify(hook)},${JSON.stringify(injected)});`);
 const temporary=builderPath.replace(/\.mjs$/,`.projectile-${process.pid}.mjs`);
-const previous=process.env.CRYPTOID_PROJECTILE_POOL_CONDITION;
+const previous=process.env.PROJECTILE_POOL_BUILD_CONDITION;
 try {
-  process.env.CRYPTOID_PROJECTILE_POOL_CONDITION=condition;
+  process.env.PROJECTILE_POOL_BUILD_CONDITION=condition;
   writeFileSync(temporary,code);
   await import(pathToFileURL(temporary).href);
   const compiled=JSON.parse(readFileSync(recordPath,'utf8'));
@@ -59,7 +59,7 @@ try {
   console.log('PROJECTILE_POOL_BUILD '+JSON.stringify(info.projectilePoolCandidate));
 } finally {
   unlinkSync(temporary);
-  if(previous===undefined)delete process.env.CRYPTOID_PROJECTILE_POOL_CONDITION;
-  else process.env.CRYPTOID_PROJECTILE_POOL_CONDITION=previous;
+  if(previous===undefined)delete process.env.PROJECTILE_POOL_BUILD_CONDITION;
+  else process.env.PROJECTILE_POOL_BUILD_CONDITION=previous;
   assert.equal(readFileSync(modulePath,'utf8'),original);
 }
