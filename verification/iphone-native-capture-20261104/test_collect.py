@@ -86,6 +86,14 @@ class TransportTests(unittest.TestCase):
             with self.assertRaises(RuntimeError):
                 c.select_device(value)
 
+    def test_worker_failure_keeps_only_error_class(self):
+        result = SimpleNamespace(returncode=1, stdout='', stderr=json.dumps({'readerErrorType': 'NoDeviceConnectedError', 'private': TARGET}))
+        with patch.object(c.subprocess, 'run', return_value=result):
+            with self.assertRaises(RuntimeError) as caught:
+                c.native_json('devices')
+        self.assertEqual(caught.exception.reader_error_type, 'NoDeviceConnectedError')
+        self.assertNotIn(TARGET, str(caught.exception))
+
     def test_commands_are_only_own_fixed_read_worker(self):
         for kind in ['devices', 'info', 'probe', 'record']:
             args = c.command(kind)

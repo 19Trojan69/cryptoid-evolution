@@ -177,7 +177,15 @@ def native_json(kind, udid=None):
     result = subprocess.run(command(kind), env=child_env(udid), stdin=subprocess.DEVNULL,
                             capture_output=True, text=True, encoding='utf-8', errors='replace', timeout=35)
     if result.returncode:
-        raise RuntimeError('USB- bzw. Apple-Dienstzugriff fehlgeschlagen. iPhone entsperren und USB-Verbindung/Vertrauen pruefen.')
+        failure = RuntimeError('USB- bzw. Apple-Dienstzugriff fehlgeschlagen. iPhone entsperren und USB-Verbindung/Vertrauen pruefen.')
+        # Preserve only a class name, never the worker's raw message/device data.
+        try:
+            error_type = json.loads(result.stderr.strip().splitlines()[-1]).get('readerErrorType', '')
+            if re.fullmatch(r'[A-Za-z][A-Za-z0-9_]{0,95}', error_type):
+                failure.reader_error_type = error_type
+        except (ValueError, TypeError, AttributeError, IndexError):
+            pass
+        raise failure
     return json.loads(ANSI.sub('', result.stdout))
 
 
@@ -264,6 +272,7 @@ def capture(mode, destination):
         return report
     except Exception as error:
         report.update(status='PRUEFUNG_NICHT_BESTANDEN', error=redact(str(error))[:1200])
+        report['readerErrorType'] = getattr(error, 'reader_error_type', type(error).__name__)
         print(report['error'])
         return report
     finally:

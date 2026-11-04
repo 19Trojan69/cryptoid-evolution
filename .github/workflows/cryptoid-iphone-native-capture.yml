@@ -23,6 +23,8 @@ jobs:
         run: python -m unittest discover -s verification/iphone-native-capture-20261104 -p test_collect.py -v
       - name: Verify real pinned API contract without opening any device or service
         run: python verification/iphone-native-capture-20261104/verify_api.py
+      - name: Run genuine CMD setup in a path with spaces and require honest no-device failure
+        run: python verification/iphone-native-capture-20261104/smoke_windows.py
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: ${{ !cancelled() }}
         with:
