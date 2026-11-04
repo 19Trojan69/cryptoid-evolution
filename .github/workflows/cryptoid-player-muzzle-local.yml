@@ -1,0 +1,71 @@
+name: Compare local player muzzle styles in the frozen game
+on:
+  push:
+    branches: [codex/ios-safari-environment-20261103]
+    paths:
+      - '.github/workflows/cryptoid-player-muzzle-local.yml'
+      - 'verification/player-muzzle-local-20261104/*.mjs'
+permissions:
+  contents: read
+jobs:
+  complete-short-flow:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix: {engine: [chromium, webkit]}
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with: {persist-credentials: false}
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with: {node-version: '24'}
+      - name: Install frozen application and pinned existing browser tools
+        env: {VERCEL_ENV: preview}
+        run: |
+          node verification/direct-boss-style-device-20261102/installDevicePreview.mjs --ignore-scripts
+          npm install --prefix verification/boss2-forensics-20261028 --ignore-scripts --no-audit --no-fund
+          cd verification/boss2-forensics-20261028
+          npx playwright install --with-deps ${{ matrix.engine }}
+      - name: Require exact reversible source and full original package build
+        env: {VERCEL_ENV: preview}
+        run: |
+          node --test verification/player-muzzle-local-20261104/transform.test.mjs
+          node verification/player-muzzle-local-20261104/build.mjs leaf
+      - name: Require full native flow and unchanged existing player presentation
+        run: node verification/player-muzzle-local-20261104/run.mjs short ${{ matrix.engine }} leaf 1
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: ${{ !cancelled() }}
+        with:
+          name: player-muzzle-short-${{ matrix.engine }}
+          path: verification/player-muzzle-local-20261104/results/
+          retention-days: 7
+  repeated-memory-comparison:
+    needs: complete-short-flow
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix: {condition: [control, leaf], replica: [1, 2]}
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with: {persist-credentials: false}
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with: {node-version: '24'}
+      - name: Install identical frozen application and Chromium tools
+        env: {VERCEL_ENV: preview}
+        run: |
+          node verification/direct-boss-style-device-20261102/installDevicePreview.mjs --ignore-scripts
+          npm install --prefix verification/boss2-forensics-20261028 --ignore-scripts --no-audit --no-fund
+          cd verification/boss2-forensics-20261028
+          npx playwright install --with-deps chromium
+      - name: Build only the assigned reversible treatment
+        env: {VERCEL_ENV: preview}
+        run: node verification/player-muzzle-local-20261104/build.mjs ${{ matrix.condition }}
+      - name: Observe twenty real active minutes before original inactive profiler gates
+        run: node verification/player-muzzle-local-20261104/run.mjs memory chromium ${{ matrix.condition }} ${{ matrix.replica }}
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: ${{ !cancelled() }}
+        with:
+          name: player-muzzle-memory-${{ matrix.condition }}-${{ matrix.replica }}
+          path: verification/player-muzzle-local-20261104/results/
+          retention-days: 7
