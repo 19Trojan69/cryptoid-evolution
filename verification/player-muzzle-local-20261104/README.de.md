@@ -48,3 +48,14 @@ Unseeded Linux-Vergleiche, kleine Stichproben und inaktive Dumps beweisen noch
 keinen nativen Telefon-Absturzgrund oder dauerhafte iOS-/Android-Behebung.
 Kein öffentliches Deployment und kein neuer manueller Handytest werden allein
 aus grünen Quell-/Darstellungsprüfungen abgeleitet. Private Handydateien fehlen.
+
+## Erster Paketversuch, vor Spieleinstieg gestoppt
+
+Quelle 092a1e05675a5cb4892e8d3247051bd1fac17e69, CI 41769337197:
+Beide Controller-Quellprüfungen und Vite-Kompilierungen bestehen. Der anschließende
+Paketvertrag scheitert in beiden Engines, weil der Analysezweig die separate
+HUD-Build-Ergänzung des Telefonzweigs nicht enthält. Es gibt keinen erfolgreichen
+Spielablauf in dieser Serie; alle vier Speicherjobs bleiben übersprungen.
+Das ist ein Fehler meiner Testzusammenstellung, kein beobachteter Spielabsturz.
+Der folgende Stand wendet ausdrücklich denselben bytegleichen geprüften HUD-
+Helper auf beide Arme an. Die Forderung nach der HUD-Regel wird nicht gelockert.

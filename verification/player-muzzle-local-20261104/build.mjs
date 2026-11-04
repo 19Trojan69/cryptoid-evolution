@@ -3,6 +3,7 @@ import { readFileSync, writeFileSync, unlinkSync, readdirSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
 import { resolve } from 'node:path';
 import { transformController, proof, digest } from './transform.mjs';
+import { applyMobileHudCandidate } from './hudBaseline.mjs';
 
 const root = resolve(new URL('../..', import.meta.url).pathname);
 const condition = process.argv[2];
@@ -58,6 +59,7 @@ try {
   sources.push({ path: 'phone-package-builder', sha256: digest(phone) });
   await import(phoneUrl);
   const dir = root + '/verification/boss2-forensics-20261028/results/device-preview/site';
+  applyMobileHudCandidate(root, dir);
   const infoPath = dir + '/device-preview-info.json';
   const info = JSON.parse(readFileSync(infoPath, 'utf8'));
   const applied = JSON.parse(readFileSync(recordPath, 'utf8'));
@@ -66,7 +68,8 @@ try {
   assert.equal(info.mobileHudBackdropCandidate.value, 'none');
   info.playerMuzzleLocalCandidate = { ...applied, builderSources: sources,
     onlyDeclaredConsumersFound: consumers, originalCssSha256: digest(css),
-    baselineDirectBossStyleAndHudRetained: true };
+    baselineDirectBossStyleAndHudRetained: true,
+    commonHudHelperSha256: digest(readFileSync(root + '/verification/player-muzzle-local-20261104/hudBaseline.mjs')) };
   writeFileSync(infoPath, JSON.stringify(info, null, 2) + '\n');
   console.log('CRYPTOID_MUZZLE_BUILD ' + JSON.stringify(info.playerMuzzleLocalCandidate));
 } finally {

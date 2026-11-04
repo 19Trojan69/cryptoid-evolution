@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "sourceCommit": "092a1e05675a5cb4892e8d3247051bd1fac17e69",
+  "sourceTree": "82df2a8db1c18859490321b52c5d0cbc5931eaa2",
+  "runId": 41769337197,
+  "jobs": [
+    {
+      "jobId": 126375092412,
+      "conclusion": "failure",
+      "sourceTestsPassed": true,
+      "viteCompilationPassed": true,
+      "completeGameFlow": false,
+      "error": "TypeError at build.mjs:66: info.mobileHudBackdropCandidate is undefined",
+      "failureStage": "package-contract-before-browser-entry"
+    },
+    {
+      "jobId": 126375092523,
+      "conclusion": "failure",
+      "sourceTestsPassed": true,
+      "viteCompilationPassed": true,
+      "completeGameFlow": false,
+      "error": "TypeError at build.mjs:66: info.mobileHudBackdropCandidate is undefined",
+      "failureStage": "package-contract-before-browser-entry"
+    }
+  ],
+  "memoryJobs": "skipped",
+  "whiteScreenReproduced": false,
+  "phoneRetestRequested": false,
+  "correction": "Apply the existing verified HUD helper explicitly in both comparison arms."
+}
