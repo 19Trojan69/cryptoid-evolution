@@ -46,3 +46,9 @@ Primaerquellen, am 04.11.2026 geprueft:
 https://github.com/doronz88/pymobiledevice3
 https://github.com/doronz88/pymobiledevice3/blob/103647ae12ed50d955fa6910d7d3a9363cc36608/docs/installation.md
 https://pypi.org/project/pymobiledevice3/11.49.5/
+
+Automatisch unter Windows 2025 geprueft: CI 41775573520, Job 126395010959,
+Quelle 374aa04d2a182133ff2a977847cf278a88ebd6b7. Alle 19 synthetischen Tests,
+der echte installierte API-Vertrag und die vollstaendige CMD-Ersteinrichtung
+in einem Pfad mit Leerzeichen bestehen. Ohne iPhone liefert der Starter wie
+vorgesehen Fehlerstatus und eine Statusdatei. Kein physisches Geraet getestet.

@@ -1,0 +1,34 @@
+{
+  "sourceCommit": "374aa04d2a182133ff2a977847cf278a88ebd6b7",
+  "runId": 41775573520,
+  "jobId": 126395010959,
+  "conclusion": "success",
+  "syntheticTestsPassed": 19,
+  "api": {
+    "packageVersion": "11.49.5",
+    "os": "Windows",
+    "python": "3.12.10",
+    "directUsbApiContractPassed": true,
+    "physicalIphoneConnected": false,
+    "physicalUsbAccepted": false,
+    "nativeWhiteScreenCauseEstablished": false,
+    "gameModified": false,
+    "files": {
+      "collect_iphone.py": "8113ad94b11f4496460d19fa9bc817a0ede6746db2cbe66b6ffb8f3dd1172688",
+      "iphone_usb.py": "0df2b3160431f4924bc43e3b0406ab9eec9d4b999ebd8e840bd5c00dd53c5e36",
+      "PRUEFEN.cmd": "cb07a3841ae88458466eb6c4b7f7f8a64c9b7af4b28612365a95300887abb946",
+      "AUFZEICHNEN.cmd": "fd521fef755162ceac5e4ab164d5730f9903d81a8c8a2cc41f0877278b024adc"
+    }
+  },
+  "launcher": {
+    "genuineWindowsCmdStarterExecuted": true,
+    "isolatedPinnedRuntimeCreated": true,
+    "expectedNoDeviceFailurePreserved": true,
+    "readerErrorType": "ConnectionFailedToUsbmuxdError",
+    "pathWithSpacesPassed": true,
+    "physicalDeviceTested": false
+  },
+  "physicalUsbAccepted": false,
+  "whiteScreenFixed": false,
+  "gameModified": false
+}
