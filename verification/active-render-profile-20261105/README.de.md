@@ -8,7 +8,12 @@ Kein Deployment, keine Smartphone-Prüfung und keine Wiederaufnahme der Simulato
 Ein Chromium-Lauf prüft zunächst an acht bekannten Änderungen einer kleinen
 Fixture, dass der native Trace Style-Spans, Invalidierungen und den tatsächlichen
 DOM-Besitzer liefert. Erst danach startet das unveränderte echte Spiel regulär.
-Im offenen Bosskampf werden sechs Sekunden native Style-Ereignisse erfasst.
+Im offenen Bosskampf folgen zunächst vier Sekunden ohne Trace; danach werden
+zwei Sekunden native Style-Ereignisse erfasst. Die ursprüngliche sechssekündige
+Aufnahme überschritt das feste Bytebudget und bleibt als Fehlschlag erhalten.
+Die Erfassungsgrenzen wurden dafür nicht erhöht. Der Vor-/Nachnachweis bleibt
+mindestens sechs aktive Wandsekunden breit; innerhalb des kürzeren Trace-Fensters
+müssen Herzschlag und unveränderte Diagnoseuhr zusätzlich voranschreiten.
 Während dieses Fensters gibt es keine zusätzlichen aktiven DOM-/Style-Reads,
 API-Wrapper, Game-Timer, RAF, GC, Heap-Snapshots oder Speicherdumps.
 Inspektor und unveränderte Uhr werden vor und nach dem Fenster gelesen.

@@ -14,7 +14,7 @@ const output=root+'/verification/active-render-profile-20261105/results';mkdirSy
 const result={version:1,kind:'short-active-native-style-origin-profile',complete:false,
  sourceCommit:git('rev-parse','HEAD'),sourceTree:git('rev-parse','HEAD^{tree}'),
  baseDeviceCommit:'9f3bf451c01d6976ea1a50342cdec1470e2e080b',physicalDevice:false,physicalPiBrowser:false,
- limits,categories,profileHostWaitMs:6000,requestedGc:false,memoryDumps:0,heapSnapshots:false,
+ limits,categories,profileHostWaitMs:2000,preProfileHostWaitMs:4000,requestedGc:false,memoryDumps:0,heapSnapshots:false,
  gameSourceFilesEdited:false,activeApiWrappers:false,extraGameTimersOrFrames:false,
  gameOrAnimationClocksWritten:false,memoryBenefitMeasured:false,whiteScreenFixed:false};
 let browser,server,page,fatal;const blocked=[],assetErrors=[];
@@ -67,12 +67,18 @@ try{
  await page.waitForFunction(()=>{const s=window.__crossDeviceTest?.inspect();return s?.status==='playing'&&s.encounter==='boss-fight'&&s.reactorOpen&&s.coreVolley>0},null,{timeout:45000});
  const ps=await context.newCDPSession(page),frameId=(await ps.send('Page.getFrameTree')).frameTree.frame.id;
  result.before=await observe();running(result.before);
+ await new Promise(resolve=>setTimeout(resolve,result.preProfileHostWaitMs));
+ result.profileBefore=await observe();running(result.profileBefore);
+ assert.equal(result.profileBefore.timeOrigin,result.before.timeOrigin);
+ assert.equal(result.profileBefore.clock.latest.id,result.before.clock.latest.id);
  const active=await capture({session:await browser.newBrowserCDPSession(),save:x=>save('active-trace.json.gz',x),run:async()=>{
   const at=Date.now();await new Promise(resolve=>setTimeout(resolve,result.profileHostWaitMs));return{hostWaitObservedMs:Date.now()-at,noInGamePollDuringTrace:true};}});
  result.active={...active.result,frameId};
  result.after=await observe();running(result.after);assert.equal(result.after.timeOrigin,result.before.timeOrigin);
  assert.equal(result.after.clock.latest.id,result.before.clock.latest.id);assert.ok(result.after.clock.latest.elapsedMs>result.before.clock.latest.elapsedMs);
  assert.ok(result.after.scene.frameAt>result.before.scene.frameAt);assert.ok(result.after.scene.coreVolley>result.before.scene.coreVolley);
+ assert.ok(result.after.scene.frameAt>result.profileBefore.scene.frameAt);
+ assert.ok(result.after.clock.latest.elapsedMs>result.profileBefore.clock.latest.elapsedMs);
  assert.equal(active.result.complete,true,active.result.failure);
  // Node labels are read only after native tracing ends and an actual manual pause is visible.
  await tap(page.locator('.home-control'));await page.locator('#leave-mission-title').waitFor();
