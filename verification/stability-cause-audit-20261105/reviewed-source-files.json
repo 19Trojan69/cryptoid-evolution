@@ -1,0 +1,174 @@
+{
+  "version": 1,
+  "frozenSource": "b092f6462a623c3ad2c12e634963028d462c5fcf",
+  "frozenTree": "c8e1befee2bf1fdfa283d5684c33ded759147118",
+  "partialSourceReview": true,
+  "runtimeModified": false,
+  "files": [
+    {
+      "path": "frontend/src/App.tsx",
+      "bytes": 299,
+      "gitBlob": "2b4c6bf3a2c2ee9e78cbf10b296ea86e96a24d60"
+    },
+    {
+      "path": "frontend/src/components/GameAccessGate.tsx",
+      "bytes": 1024,
+      "gitBlob": "a64a23a2f5ce5e583a6e647c2cbb09a04acdd97e"
+    },
+    {
+      "path": "frontend/src/components/GameRoute.tsx",
+      "bytes": 398,
+      "gitBlob": "7aa253f25c5196baf20a81259b5df4fd531b22a8"
+    },
+    {
+      "path": "frontend/src/hooks/useAuth.ts",
+      "bytes": 10004,
+      "gitBlob": "23c1c83fabb05d430a578553fd3caa2ff158b540"
+    },
+    {
+      "path": "frontend/src/index.css",
+      "bytes": 320899,
+      "gitBlob": "43dea6284bc694bac6026e5928aaf42e4a461ec2"
+    },
+    {
+      "path": "frontend/src/lib/aggregateUsage.ts",
+      "bytes": 2853,
+      "gitBlob": "7118bd88a4bd1ac62e0e3366ddbc8da139e33288"
+    },
+    {
+      "path": "frontend/src/lib/cssFramePacing.ts",
+      "bytes": 3861,
+      "gitBlob": "5d9cc3e5b40792277d9813b2953196affbc0eaf3"
+    },
+    {
+      "path": "frontend/src/lib/frameScheduler.ts",
+      "bytes": 2202,
+      "gitBlob": "5de751102dd2f9c9adf640a9b24f8a83413f47f4"
+    },
+    {
+      "path": "frontend/src/lib/gameViewport.ts",
+      "bytes": 1980,
+      "gitBlob": "aaa89b5e0e9b45737ea32877160118c5da1b556f"
+    },
+    {
+      "path": "frontend/src/lib/nativeFrameEasing.ts",
+      "bytes": 2663,
+      "gitBlob": "cb0b45871da02de5bf0bb02800dda10fb8193488"
+    },
+    {
+      "path": "frontend/src/main.tsx",
+      "bytes": 1019,
+      "gitBlob": "1c52081f56e265942ffd98860b79b398082097f9"
+    },
+    {
+      "path": "frontend/src/pages/BossHullView.tsx",
+      "bytes": 4677,
+      "gitBlob": "68dd74e598caa060ae8825d3c56b199ba0d08449"
+    },
+    {
+      "path": "frontend/src/pages/BossReactorView.tsx",
+      "bytes": 8387,
+      "gitBlob": "0d92e39aba2eb68aa25ba6239932cd4437f4ebf7"
+    },
+    {
+      "path": "frontend/src/pages/CanvasEffects.tsx",
+      "bytes": 17630,
+      "gitBlob": "73e6239d7d6be8a886279bcd38d6cd230e9834af"
+    },
+    {
+      "path": "frontend/src/pages/EarthGlobe.tsx",
+      "bytes": 439,
+      "gitBlob": "9b43e6cf1d1d550bc7fac699c0dac2fa203cad48"
+    },
+    {
+      "path": "frontend/src/pages/GamePage.tsx",
+      "bytes": 218260,
+      "gitBlob": "d73579b3f9abe575adacfa978259aec9bdb0e7fd"
+    },
+    {
+      "path": "frontend/src/pages/GameSceneBoundary.tsx",
+      "bytes": 704,
+      "gitBlob": "f076d939b5555b791aff933d7c2effbfd43419f3"
+    },
+    {
+      "path": "frontend/src/pages/GameShipVisual.tsx",
+      "bytes": 1623,
+      "gitBlob": "54ed214a7fa2fdb024d46b639dd25e7bae32a2db"
+    },
+    {
+      "path": "frontend/src/pages/PaintedShip.tsx",
+      "bytes": 608,
+      "gitBlob": "a44265358da3edfe2988b3ebd5b28640de5a9901"
+    },
+    {
+      "path": "frontend/src/pages/SectorBackdrop.tsx",
+      "bytes": 1846,
+      "gitBlob": "4bbe0661927b166bc5e987d0629325e182bbb9df"
+    },
+    {
+      "path": "frontend/src/pages/Starfield.tsx",
+      "bytes": 5966,
+      "gitBlob": "1b2715d4ee1dc6c5e93c19695d728ea9134b6631"
+    },
+    {
+      "path": "frontend/src/pages/cardSound.ts",
+      "bytes": 2446,
+      "gitBlob": "4e43891ef3e1ba761427fbf49b87de97a8683f70"
+    },
+    {
+      "path": "frontend/src/pages/crashRecoveryBoundary.mjs",
+      "bytes": 3203,
+      "gitBlob": "c96b3a7119172a9eb948d3262de23129f8ca5e15"
+    },
+    {
+      "path": "frontend/src/pages/gameAudio.ts",
+      "bytes": 24602,
+      "gitBlob": "857ec045e694a8fc3c3a4d632b98857df37bfe36"
+    },
+    {
+      "path": "frontend/src/pages/gameLoop.ts",
+      "bytes": 3564,
+      "gitBlob": "440422812a457300b16070385ec19f77630f284b"
+    },
+    {
+      "path": "frontend/src/pages/musicPlayback.ts",
+      "bytes": 11768,
+      "gitBlob": "c057ee378d8ef273a2b9faac40d5d723afbb6763"
+    },
+    {
+      "path": "frontend/src/pages/paintedShip.ts",
+      "bytes": 13255,
+      "gitBlob": "3ec258eb5eb70d02254a492a4b11354f598955a1"
+    },
+    {
+      "path": "frontend/src/pages/projectilePresentation.ts",
+      "bytes": 4428,
+      "gitBlob": "d476a006722c6c6a2c936c1cb1b4d265234464ed"
+    },
+    {
+      "path": "frontend/src/pages/reloadDiagnostics.ts",
+      "bytes": 21678,
+      "gitBlob": "6ba6d0dc8e20a93b6dfcd7284420e9549116f015"
+    },
+    {
+      "path": "frontend/src/pages/renderResolution.ts",
+      "bytes": 378,
+      "gitBlob": "f6dfdc5a857db53d9d66911491b51bacb69dd01e"
+    },
+    {
+      "path": "frontend/src/pages/resourceCache.ts",
+      "bytes": 2686,
+      "gitBlob": "c0d3a03fc90a7a830728d45d8bcf4d17fb61fd6d"
+    },
+    {
+      "path": "frontend/src/pages/staticHullAssets.ts",
+      "bytes": 1024,
+      "gitBlob": "77df0c351f9c35305539e8419a8450a9d203eead"
+    },
+    {
+      "path": "frontend/src/pages/usePreparedGameHulls.ts",
+      "bytes": 1956,
+      "gitBlob": "d07bfdccf4a0e3739988adf75c06e75c71339efd"
+    }
+  ]
+}

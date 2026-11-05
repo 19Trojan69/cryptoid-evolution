@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "complete": false,
+  "phase": "observe",
+  "source": "13039345b00dfb8f6a0b270298133ba5898f4841",
+  "simulator": "7A1F5715-066A-4C75-98DB-79396F73BD4C",
+  "samples": [],
+  "physicalDeviceTest": false,
+  "fullBrowserMemoryMeasured": false,
+  "gpuMemoryMeasured": false,
+  "nativeTerminationCauseMeasured": false,
+  "whiteScreenFixed": false,
+  "sampleScope": "selected services in this simulator bootstrap; host RSS, no unique/PSS total",
+  "anchorScope": "nearest native UI snapshot before and after CLI calls; not exact frame time",
+  "maxAnchorAgeMs": 10000,
+  "startedAt": 1793861704.9136121,
+  "stage": "observe",
+  "baselineWebContentPids": [],
+  "stopObserved": true,
+  "error": {
+    "kind": "AssertionError",
+    "detail": "Two distinct active native anchors with readable renderer RSS required"
+  },
+  "endedAt": 1793861843.927542,
+  "checkpointAt": 1793861843.927776
+}

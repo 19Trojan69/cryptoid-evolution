@@ -1,0 +1,44 @@
+{
+  "version": 1,
+  "complete": true,
+  "phase": "baseline",
+  "source": "13039345b00dfb8f6a0b270298133ba5898f4841",
+  "simulator": "7A1F5715-066A-4C75-98DB-79396F73BD4C",
+  "samples": [],
+  "physicalDeviceTest": false,
+  "fullBrowserMemoryMeasured": false,
+  "gpuMemoryMeasured": false,
+  "nativeTerminationCauseMeasured": false,
+  "whiteScreenFixed": false,
+  "sampleScope": "selected services in this simulator bootstrap; host RSS, no unique/PSS total",
+  "anchorScope": "nearest native UI snapshot before and after CLI calls; not exact frame time",
+  "maxAnchorAgeMs": 10000,
+  "startedAt": 1793861700.9499772,
+  "stage": "baseline",
+  "commands": [
+    {
+      "command": [
+        "xcrun",
+        "simctl"
+      ],
+      "startedAt": 1793861700.949993,
+      "finished": true,
+      "timedOut": false,
+      "log": "services-0.log",
+      "exitCode": 0,
+      "elapsedMs": 3709,
+      "directChildExited": true,
+      "processGroupStopConfirmed": null,
+      "logBytes": 11228,
+      "logSha256": "aa6f469b142a9170e73efc48d19383dde2ac4deff0e07881994dcdc564f6d6cc"
+    }
+  ],
+  "checkpointAt": 1793861704.665241,
+  "baseline": {
+    "startedAtMs": 1793861700949.991,
+    "endedAtMs": 1793861704669.974,
+    "services": [],
+    "rows": []
+  },
+  "baselineWebContentPids": []
+}
