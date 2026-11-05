@@ -35,13 +35,13 @@ async function capture(label,seconds){await trackNative();const begin=Date.now()
  stage.finishedAt=new Date().toISOString();save();console.log('WEBKIT_MEMORY_STAGE '+JSON.stringify({label,pssMiB:stage.pssMiB,mounted:stage.after.mounted,status:stage.after.scene?.status??null}));return stage;}
 async function trackNative(){
  const connection=page._connection;assert.equal(typeof connection.toImpl,'function','Pinned in-process Playwright implementation bridge must exist');
- const current=connection.toImpl(page)._delegate._session;assert.ok(current?.send);if(current===nativeSession)return;
+ const current=connection.toImpl(page).delegate._session;assert.ok(current?.send);if(current===nativeSession)return;
  nativeSession=current;current.on('Memory.trackingUpdate',payload=>nativeUpdates.push({hostAt:Date.now(),...payload}));
  current.on('Memory.memoryPressure',payload=>pressure.push({hostAt:Date.now(),...payload}));
  await current.send('Memory.enable');await current.send('Memory.startTracking');
 }
 async function layerOwners(){
- const session=page._connection.toImpl(page)._delegate._session;await session.send('LayerTree.enable');
+ const session=page._connection.toImpl(page).delegate._session;await session.send('LayerTree.enable');
  const nodes=new Map();const visit=n=>{if(!n||typeof n!=='object')return;if(n.nodeId){const a=n.attributes??[];const attrs={};
   for(let i=0;i<a.length;i+=2)if(['class','id'].includes(a[i]))attrs[a[i]]=a[i+1];nodes.set(n.nodeId,{nodeId:n.nodeId,nodeName:n.nodeName,...attrs});}
   for(const c of n.children??[])visit(c);for(const c of n.pseudoElements??[])visit(c);};
