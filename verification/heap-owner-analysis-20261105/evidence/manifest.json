@@ -1,0 +1,152 @@
+{
+  "version": 1,
+  "method": "unchanged Chrome DevTools HeapSnapshotManager offline",
+  "package": {
+    "name": "chrome-devtools-mcp",
+    "version": "1.12.0",
+    "tarballSha256": "4aade3167c3e781c797d6109ed603a0ca5b8cb363a289e2eaacaa9b0c5d2a360",
+    "npmIntegrity": "sha512-lAGpH0zXT1ZdaPefP1KK/MvxwihOlu7VGQ7p4wbhD9OhN17vUC4KWk/ImUYR9DE4s+7r4r0ySV4xr2OkTa7ZMA==",
+    "gitHead": "af2834411a564d366f9cab63efb046d9084f4dba",
+    "devtoolsFrontendCommit": "f22c645573adc85e4553747c577eebb874c3fb43"
+  },
+  "newBrowserRuns": 0,
+  "runtimePatch": false,
+  "whiteScreenFixed": false,
+  "artifacts": [
+    {
+      "id": 13097191129,
+      "bytes": 8331966,
+      "sha256": "c135493c43c13582ba7fd3624b97d0e0f355e94022a859a655250b8e66c7c527",
+      "sourceCommit": "9cfe6ae1df777524d84c1a7301694490a4ed3a13",
+      "sourceTree": "44fe46c19cfd3d13838866457ea9cbadf6c153f7",
+      "observedActiveMs": 60000,
+      "snapshots": [
+        {
+          "label": "paused",
+          "bytes": 20210243,
+          "compressedBytes": 4517350,
+          "sha256": "aba07a1f3ce2ed47001fce51c8eceb7c599f03c15bb3389fd1157b6b1745ad94",
+          "nodes": 223508,
+          "selfBytes": 19102536,
+          "afterExplicitInactiveGc": true
+        },
+        {
+          "label": "home",
+          "bytes": 17927936,
+          "compressedBytes": 4107797,
+          "sha256": "a83bb96570fcb7aa938a62a0d5a88a378db77705675bd95164c99d72a5ab531e",
+          "nodes": 194616,
+          "selfBytes": 17288242,
+          "afterExplicitInactiveGc": true
+        }
+      ]
+    },
+    {
+      "id": 13098035874,
+      "bytes": 8286661,
+      "sha256": "9c58bd6d8408a90da6cc59ad2f62dc757ef3d8344fab377d1eda25ad2c2181ea",
+      "sourceCommit": "9cfe6ae1df777524d84c1a7301694490a4ed3a13",
+      "sourceTree": "44fe46c19cfd3d13838866457ea9cbadf6c153f7",
+      "observedActiveMs": 1200992.2999999998,
+      "snapshots": [
+        {
+          "label": "paused",
+          "bytes": 20070225,
+          "compressedBytes": 4477815,
+          "sha256": "d2e97bc0aaf0b0249dd43cc580c322c28abb7fa75f27ec83629df13337ab0eb5",
+          "nodes": 220941,
+          "selfBytes": 19411437,
+          "afterExplicitInactiveGc": true
+        },
+        {
+          "label": "home",
+          "bytes": 17762002,
+          "compressedBytes": 4063127,
+          "sha256": "2f3ed524d7ce617c8d75cb121d09583d51083ac31c870557500477a88f9595a5",
+          "nodes": 191821,
+          "selfBytes": 17415860,
+          "afterExplicitInactiveGc": true
+        }
+      ]
+    },
+    {
+      "id": 13295227013,
+      "bytes": 9140083,
+      "sha256": "07e6708c8bbd32b6af4e65091d5a732be546de4fb9947860bc7fa357fad8bf2f",
+      "sourceCommit": "2a2bef5eb5fd57279eb5349dfa297246adc05803",
+      "sourceTree": "4be5ff2ddf1339811fd5375474e546c7ea2bb52e",
+      "observedActiveMs": 1200000,
+      "snapshots": [
+        {
+          "label": "paused",
+          "bytes": 20128434,
+          "compressedBytes": 4495073,
+          "sha256": "90a4e872e26bb4cbe5e322ac1095eef1afed33b6d7e9fc21c9070183a3afbd97",
+          "nodes": 221533,
+          "selfBytes": 19407394,
+          "afterExplicitInactiveGc": true
+        },
+        {
+          "label": "home",
+          "bytes": 17786670,
+          "compressedBytes": 4086774,
+          "sha256": "c3b6f3bf6165244095a1f8a3524a6a3a893b78fa3b4f70511321f9a113e1ed69",
+          "nodes": 192041,
+          "selfBytes": 17423970,
+          "afterExplicitInactiveGc": true
+        }
+      ]
+    }
+  ],
+  "analyses": [
+    {
+      "file": "evidence/13097191129-home.json.gz",
+      "bytes": 223688,
+      "sha256": "cc6910031e193a7e6afc36e10759bc8c2f229e182c575b21f5c9c0462dcdd35d",
+      "uncompressedBytes": 6550245,
+      "uncompressedSha256": "58b4377873f846691e6b62b3f85f1c04503f7a76e6b364509191776abaa027b0",
+      "snapshotSha256": "73eda5654b03dbd06bb4d6ca30f7a7fa10df8418254ba6b734de49b312c76139"
+    },
+    {
+      "file": "evidence/13097191129-paused.json.gz",
+      "bytes": 299192,
+      "sha256": "14e92190200f65e8cd55fbdb105141bfe1fc0ff566da9c93ed456bf2012eec54",
+      "uncompressedBytes": 8582740,
+      "uncompressedSha256": "30f4f47f9a6ea24e482b3247f635cd421072ef280bead2a2168a1fe97fd7a8e8",
+      "snapshotSha256": "35171029cff21f2208381211edf6874bac3630cdbc95605d738b108294c1fb3f"
+    },
+    {
+      "file": "evidence/13098035874-home.json.gz",
+      "bytes": 218278,
+      "sha256": "d1867130578fca1b603d0fed26b43c40d6b8286ca18ff8ee47ae319a5cfa2e6f",
+      "uncompressedBytes": 6477080,
+      "uncompressedSha256": "eb77eb5e0eb219889eefc34a9e1cb4d86090d526bfd6915b44683932e67ca9a0",
+      "snapshotSha256": "4d8798f7d609d73d895bff6b741fe0deb4cc7d372636fd16fced44df7ea4d1ab"
+    },
+    {
+      "file": "evidence/13098035874-paused.json.gz",
+      "bytes": 298154,
+      "sha256": "ea18bd22af7b6a37d0c91e74bb5dd77a4866dad9a1673ba5b399bbfe1ba9e290",
+      "uncompressedBytes": 8535036,
+      "uncompressedSha256": "89e5ba1879b8c7f9ede5aed7582db51962db070ad6afe8c8193c66fc391eeeb4",
+      "snapshotSha256": "0f39fe3971b07eb5ec275b56a83e638d74d8a4e3130f2763dbd6e236503de06e"
+    },
+    {
+      "file": "evidence/13295227013-home.json.gz",
+      "bytes": 215422,
+      "sha256": "e614fc59db68201140641d15597d36110821234af08e2ad8bb42ce9a64650e16",
+      "uncompressedBytes": 6352521,
+      "uncompressedSha256": "5b85ec5e3964e1cb620b457bb1a01feefd1521ded41891a651ebfcdbe67381cc",
+      "snapshotSha256": "132e9e8c6fb3f73064c7ca8597c6ce5751079eeabf513c9bd456aeb56e66ccec"
+    },
+    {
+      "file": "evidence/13295227013-paused.json.gz",
+      "bytes": 295092,
+      "sha256": "11b0f78f672a2d178753091d63464bd36951f4c80a5ab253165b6367d95f790c",
+      "uncompressedBytes": 8584325,
+      "uncompressedSha256": "bc1c54b665c35b3fbd104d166562a0d64fca260d077148335e13a1c89a81a8c4",
+      "snapshotSha256": "7c99b153caa36eba2b8426ca7d91b864bdd46293e3000391144bb0b5be274697"
+    }
+  ],
+  "inputDatasetFile": "Cryptoid_Original-Heaps_20261105.zip"
+}

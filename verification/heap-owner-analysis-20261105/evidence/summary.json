@@ -1,0 +1,806 @@
+[
+  {
+    "artifact": 13097191129,
+    "phase": "paused",
+    "totalSnapshotSelfBytes": 19102536,
+    "nodeCount": 223508,
+    "exactClassCounts": {
+      "canvas": {
+        "<canvas class=\"normal-effects-surface\" aria-hidden=\"true\" width=\"1\" height=\"1\" style=\"position: absolute; left: 0px; top: 0px; width: 1px; height: 1px; pointer-events: none; z-index: 2;\">": 1,
+        "<canvas class=\"boss-weapons-canvas\" aria-hidden=\"true\" width=\"545\" height=\"341\">": 1,
+        "Detached <canvas height=\"192\" width=\"192\">": 7,
+        "Detached <canvas height=\"99\" width=\"99\">": 1,
+        "Detached <canvas height=\"128\" width=\"128\">": 1,
+        "Detached CanvasRenderingContext2D": 9,
+        "CanvasRenderingContext2D": 2,
+        "<canvas width=\"1\" height=\"1\" class=\"bonus-rock-layer\" aria-hidden=\"true\" style=\"position: absolute; inset: 0px; width: 1px; height: 1px; z-index: 2; pointer-events: none;\">": 1
+      },
+      "audio": {
+        "Detached <audio preload=\"auto\" src=\"/audio/dreadnought-duel.mp3\">": 1,
+        "AudioContext": 2,
+        "Detached AudioContext": 1,
+        "AudioBuffer": 46,
+        "AudioDestinationNode": 2,
+        "Detached AudioDestinationNode": 1
+      },
+      "animation": {
+        "KeyframeEffect": 11,
+        "CSSAnimation": 11,
+        "DocumentTimeline": 3
+      },
+      "performance": {
+        "Performance": 3,
+        "LayoutShift": 150,
+        "LayoutShiftAttribution": 441,
+        "DOMRectReadOnly": 882
+      }
+    },
+    "detachedFlaggedNativeAndSupportingObjects": 283,
+    "mainMatchedStyleCache": {
+      "id": 70464,
+      "retainedBytes": 239640,
+      "dominatorChain": [
+        {
+          "nodeId": 70464,
+          "nodeIndex": 1295634,
+          "nodeName": "blink::HeapHashTableBacking<blink::HashTable<unsigned int, blink::KeyValuePair<unsigned int, cppgc::internal::BasicMember<blink::CachedMatchedProperties, cppgc::internal::StrongMemberTag, cppgc::internal::DijkstraWriteBarrierPolicy>>, blink::KeyValuePairExtractor, blink::HashMapValueTraits<blink::AlreadyHashedTraits, blink::HashTraits<cppgc::internal::BasicMember<blink::CachedMatchedProperties, cppgc::internal::StrongMemberTag, cppgc::internal::DijkstraWriteBarrierPolicy>>>, blink::AlreadyHashedTraits, blink::HeapAllocator>>",
+          "retainedSize": 239640,
+          "selfSize": 65544
+        },
+        {
+          "nodeId": 70448,
+          "nodeIndex": 1295586,
+          "nodeName": "blink::StyleResolver",
+          "retainedSize": 241232,
+          "selfSize": 1448
+        },
+        {
+          "nodeId": 70444,
+          "nodeIndex": 1295574,
+          "nodeName": "StyleEngine",
+          "retainedSize": 244472,
+          "selfSize": 944
+        },
+        {
+          "nodeId": 183647,
+          "nodeIndex": 550620,
+          "nodeName": "HTMLDocument",
+          "retainedSize": 282080,
+          "selfSize": 3352
+        },
+        {
+          "nodeId": 3,
+          "nodeIndex": 6,
+          "nodeName": "(GC roots)",
+          "retainedSize": 19102536,
+          "selfSize": 0
+        },
+        {
+          "nodeId": 1,
+          "nodeIndex": 0,
+          "nodeName": "",
+          "retainedSize": 19102536,
+          "selfSize": 0
+        }
+      ],
+      "boundedPathsMayTruncate": {
+        "depth": true,
+        "siblings": true,
+        "nodes": true
+      }
+    },
+    "exampleCanvasDominatorChain": [
+      {
+        "nodeId": 131345,
+        "nodeIndex": 394014,
+        "nodeName": "Detached <canvas height=\"192\" width=\"192\">",
+        "retainedSize": 3832,
+        "selfSize": 592
+      },
+      {
+        "nodeId": 131343,
+        "nodeIndex": 394008,
+        "nodeName": "",
+        "retainedSize": 26956,
+        "selfSize": 132
+      },
+      {
+        "nodeId": 164419,
+        "nodeIndex": 492894,
+        "nodeName": "Map",
+        "retainedSize": 26972,
+        "selfSize": 16
+      },
+      {
+        "nodeId": 87153,
+        "nodeIndex": 261444,
+        "nodeName": "system / Context / scope @87151",
+        "retainedSize": 873083,
+        "selfSize": 2424
+      },
+      {
+        "nodeId": 3,
+        "nodeIndex": 6,
+        "nodeName": "(GC roots)",
+        "retainedSize": 19102536,
+        "selfSize": 0
+      },
+      {
+        "nodeId": 1,
+        "nodeIndex": 0,
+        "nodeName": "",
+        "retainedSize": 19102536,
+        "selfSize": 0
+      }
+    ],
+    "largestPerformance": {
+      "id": 187033,
+      "selfSize": 1424,
+      "retainedSize": 118984
+    }
+  },
+  {
+    "artifact": 13097191129,
+    "phase": "home",
+    "totalSnapshotSelfBytes": 17288242,
+    "nodeCount": 194616,
+    "exactClassCounts": {
+      "canvas": {
+        "Detached <canvas height=\"192\" width=\"192\">": 7,
+        "Detached CanvasRenderingContext2D": 7
+      },
+      "audio": {
+        "AudioContext": 1,
+        "AudioDestinationNode": 1
+      },
+      "animation": {
+        "DocumentTimeline": 3
+      },
+      "performance": {
+        "Performance": 3,
+        "LayoutShift": 150,
+        "LayoutShiftAttribution": 441,
+        "DOMRectReadOnly": 882
+      }
+    },
+    "detachedFlaggedNativeAndSupportingObjects": 187,
+    "mainMatchedStyleCache": {
+      "id": 70464,
+      "retainedBytes": 416296,
+      "dominatorChain": [
+        {
+          "nodeId": 70464,
+          "nodeIndex": 1138422,
+          "nodeName": "blink::HeapHashTableBacking<blink::HashTable<unsigned int, blink::KeyValuePair<unsigned int, cppgc::internal::BasicMember<blink::CachedMatchedProperties, cppgc::internal::StrongMemberTag, cppgc::internal::DijkstraWriteBarrierPolicy>>, blink::KeyValuePairExtractor, blink::HashMapValueTraits<blink::AlreadyHashedTraits, blink::HashTraits<cppgc::internal::BasicMember<blink::CachedMatchedProperties, cppgc::internal::StrongMemberTag, cppgc::internal::DijkstraWriteBarrierPolicy>>>, blink::AlreadyHashedTraits, blink::HeapAllocator>>",
+          "retainedSize": 416296,
+          "selfSize": 65544
+        },
+        {
+          "nodeId": 70448,
+          "nodeIndex": 1138380,
+          "nodeName": "blink::StyleResolver",
+          "retainedSize": 417888,
+          "selfSize": 1448
+        },
+        {
+          "nodeId": 70444,
+          "nodeIndex": 1138368,
+          "nodeName": "StyleEngine",
+          "retainedSize": 420864,
+          "selfSize": 944
+        },
+        {
+          "nodeId": 183647,
+          "nodeIndex": 448872,
+          "nodeName": "HTMLDocument",
+          "retainedSize": 456456,
+          "selfSize": 3352
+        },
+        {
+          "nodeId": 3,
+          "nodeIndex": 6,
+          "nodeName": "(GC roots)",
+          "retainedSize": 17288242,
+          "selfSize": 0
+        },
+        {
+          "nodeId": 1,
+          "nodeIndex": 0,
+          "nodeName": "",
+          "retainedSize": 17288242,
+          "selfSize": 0
+        }
+      ],
+      "boundedPathsMayTruncate": {
+        "depth": true,
+        "siblings": true,
+        "nodes": true
+      }
+    },
+    "exampleCanvasDominatorChain": [
+      {
+        "nodeId": 131345,
+        "nodeIndex": 293106,
+        "nodeName": "Detached <canvas height=\"192\" width=\"192\">",
+        "retainedSize": 3832,
+        "selfSize": 592
+      },
+      {
+        "nodeId": 131343,
+        "nodeIndex": 293100,
+        "nodeName": "",
+        "retainedSize": 26956,
+        "selfSize": 132
+      },
+      {
+        "nodeId": 164419,
+        "nodeIndex": 390162,
+        "nodeName": "Map",
+        "retainedSize": 26972,
+        "selfSize": 16
+      },
+      {
+        "nodeId": 87153,
+        "nodeIndex": 389970,
+        "nodeName": "system / Context / scope @87151",
+        "retainedSize": 766194,
+        "selfSize": 2424
+      },
+      {
+        "nodeId": 3,
+        "nodeIndex": 6,
+        "nodeName": "(GC roots)",
+        "retainedSize": 17288242,
+        "selfSize": 0
+      },
+      {
+        "nodeId": 1,
+        "nodeIndex": 0,
+        "nodeName": "",
+        "retainedSize": 17288242,
+        "selfSize": 0
+      }
+    ],
+    "largestPerformance": {
+      "id": 187033,
+      "selfSize": 1424,
+      "retainedSize": 120736
+    }
+  },
+  {
+    "artifact": 13098035874,
+    "phase": "paused",
+    "totalSnapshotSelfBytes": 19411437,
+    "nodeCount": 220941,
+    "exactClassCounts": {
+      "canvas": {
+        "<canvas class=\"boss-weapons-canvas\" aria-hidden=\"true\" width=\"545\" height=\"341\">": 1,
+        "<canvas class=\"normal-effects-surface\" aria-hidden=\"true\" width=\"1\" height=\"1\" style=\"position: absolute; left: 0px; top: 0px; width: 1px; height: 1px; pointer-events: none; z-index: 2;\">": 1,
+        "Detached <canvas height=\"192\" width=\"192\">": 7,
+        "Detached <canvas height=\"128\" width=\"128\">": 1,
+        "Detached <canvas height=\"99\" width=\"99\">": 1,
+        "Detached CanvasRenderingContext2D": 9,
+        "CanvasRenderingContext2D": 2,
+        "<canvas width=\"1\" height=\"1\" class=\"bonus-rock-layer\" aria-hidden=\"true\" style=\"position: absolute; inset: 0px; width: 1px; height: 1px; z-index: 2; pointer-events: none;\">": 1
+      },
+      "audio": {
+        "Detached <audio preload=\"auto\" src=\"/audio/dreadnought-duel.mp3\">": 1,
+        "AudioContext": 2,
+        "Detached AudioContext": 1,
+        "AudioBuffer": 46,
+        "Detached AudioDestinationNode": 1,
+        "AudioDestinationNode": 2
+      },
+      "animation": {
+        "KeyframeEffect": 10,
+        "CSSAnimation": 10,
+        "DocumentTimeline": 3
+      },
+      "performance": {
+        "Performance": 3,
+        "LayoutShift": 150,
+        "LayoutShiftAttribution": 440,
+        "DOMRectReadOnly": 880
+      }
+    },
+    "detachedFlaggedNativeAndSupportingObjects": 283,
+    "mainMatchedStyleCache": {
+      "id": 76630,
+      "retainedBytes": 172440,
+      "dominatorChain": [
+        {
+          "nodeId": 76630,
+          "nodeIndex": 1294542,
+          "nodeName": "blink::HeapHashTableBacking<blink::HashTable<unsigned int, blink::KeyValuePair<unsigned int, cppgc::internal::BasicMember<blink::CachedMatchedProperties, cppgc::internal::StrongMemberTag, cppgc::internal::DijkstraWriteBarrierPolicy>>, blink::KeyValuePairExtractor, blink::HashMapValueTraits<blink::AlreadyHashedTraits, blink::HashTraits<cppgc::internal::BasicMember<blink::CachedMatchedProperties, cppgc::internal::StrongMemberTag, cppgc::internal::DijkstraWriteBarrierPolicy>>>, blink::AlreadyHashedTraits, blink::HeapAllocator>>",
+          "retainedSize": 172440,
+          "selfSize": 0
+        },
+        {
+          "nodeId": 76618,
+          "nodeIndex": 1294506,
+          "nodeName": "blink::StyleResolver",
+          "retainedSize": 174032,
+          "selfSize": 1448
+        },
+        {
+          "nodeId": 76614,
+          "nodeIndex": 1294494,
+          "nodeName": "StyleEngine",
+          "retainedSize": 177272,
+          "selfSize": 944
+        },
+        {
+          "nodeId": 92151,
+          "nodeIndex": 276420,
+          "nodeName": "HTMLDocument",
+          "retainedSize": 237396,
+          "selfSize": 3352
+        },
+        {
+          "nodeId": 3,
+          "nodeIndex": 6,
+          "nodeName": "(GC roots)",
+          "retainedSize": 19411437,
+          "selfSize": 0
+        },
+        {
+          "nodeId": 1,
+          "nodeIndex": 0,
+          "nodeName": "",
+          "retainedSize": 19411437,
+          "selfSize": 0
+        }
+      ],
+      "boundedPathsMayTruncate": {
+        "depth": true,
+        "siblings": true,
+        "nodes": true
+      }
+    },
+    "exampleCanvasDominatorChain": [
+      {
+        "nodeId": 241565,
+        "nodeIndex": 724668,
+        "nodeName": "Detached <canvas height=\"192\" width=\"192\">",
+        "retainedSize": 3832,
+        "selfSize": 592
+      },
+      {
+        "nodeId": 180147,
+        "nodeIndex": 540384,
+        "nodeName": "",
+        "retainedSize": 26956,
+        "selfSize": 132
+      },
+      {
+        "nodeId": 180145,
+        "nodeIndex": 540378,
+        "nodeName": "Map",
+        "retainedSize": 26972,
+        "selfSize": 16
+      },
+      {
+        "nodeId": 92169,
+        "nodeIndex": 276480,
+        "nodeName": "system / Context / scope @87641",
+        "retainedSize": 998492,
+        "selfSize": 2424
+      },
+      {
+        "nodeId": 3,
+        "nodeIndex": 6,
+        "nodeName": "(GC roots)",
+        "retainedSize": 19411437,
+        "selfSize": 0
+      },
+      {
+        "nodeId": 1,
+        "nodeIndex": 0,
+        "nodeName": "",
+        "retainedSize": 19411437,
+        "selfSize": 0
+      }
+    ],
+    "largestPerformance": {
+      "id": 275367,
+      "selfSize": 1424,
+      "retainedSize": 137624
+    }
+  },
+  {
+    "artifact": 13098035874,
+    "phase": "home",
+    "totalSnapshotSelfBytes": 17415860,
+    "nodeCount": 191821,
+    "exactClassCounts": {
+      "canvas": {
+        "Detached <canvas height=\"192\" width=\"192\">": 7,
+        "Detached CanvasRenderingContext2D": 7
+      },
+      "audio": {
+        "AudioContext": 1,
+        "AudioDestinationNode": 1
+      },
+      "animation": {
+        "DocumentTimeline": 3
+      },
+      "performance": {
+        "Performance": 3,
+        "LayoutShift": 150,
+        "LayoutShiftAttribution": 440,
+        "DOMRectReadOnly": 880
+      }
+    },
+    "detachedFlaggedNativeAndSupportingObjects": 187,
+    "mainMatchedStyleCache": {
+      "id": 76630,
+      "retainedBytes": 349704,
+      "dominatorChain": [
+        {
+          "nodeId": 76630,
+          "nodeIndex": 1107174,
+          "nodeName": "blink::HeapHashTableBacking<blink::HashTable<unsigned int, blink::KeyValuePair<unsigned int, cppgc::internal::BasicMember<blink::CachedMatchedProperties, cppgc::internal::StrongMemberTag, cppgc::internal::DijkstraWriteBarrierPolicy>>, blink::KeyValuePairExtractor, blink::HashMapValueTraits<blink::AlreadyHashedTraits, blink::HashTraits<cppgc::internal::BasicMember<blink::CachedMatchedProperties, cppgc::internal::StrongMemberTag, cppgc::internal::DijkstraWriteBarrierPolicy>>>, blink::AlreadyHashedTraits, blink::HeapAllocator>>",
+          "retainedSize": 349704,
+          "selfSize": 0
+        },
+        {
+          "nodeId": 76618,
+          "nodeIndex": 1107132,
+          "nodeName": "blink::StyleResolver",
+          "retainedSize": 351296,
+          "selfSize": 1448
+        },
+        {
+          "nodeId": 76614,
+          "nodeIndex": 1107120,
+          "nodeName": "StyleEngine",
+          "retainedSize": 354272,
+          "selfSize": 944
+        },
+        {
+          "nodeId": 92151,
+          "nodeIndex": 243708,
+          "nodeName": "HTMLDocument",
+          "retainedSize": 404916,
+          "selfSize": 3352
+        },
+        {
+          "nodeId": 3,
+          "nodeIndex": 6,
+          "nodeName": "(GC roots)",
+          "retainedSize": 17415860,
+          "selfSize": 0
+        },
+        {
+          "nodeId": 1,
+          "nodeIndex": 0,
+          "nodeName": "",
+          "retainedSize": 17415860,
+          "selfSize": 0
+        }
+      ],
+      "boundedPathsMayTruncate": {
+        "depth": true,
+        "siblings": true,
+        "nodes": true
+      }
+    },
+    "exampleCanvasDominatorChain": [
+      {
+        "nodeId": 241565,
+        "nodeIndex": 368544,
+        "nodeName": "Detached <canvas height=\"192\" width=\"192\">",
+        "retainedSize": 3832,
+        "selfSize": 592
+      },
+      {
+        "nodeId": 180147,
+        "nodeIndex": 674310,
+        "nodeName": "",
+        "retainedSize": 26956,
+        "selfSize": 132
+      },
+      {
+        "nodeId": 180145,
+        "nodeIndex": 569688,
+        "nodeName": "Map",
+        "retainedSize": 26972,
+        "selfSize": 16
+      },
+      {
+        "nodeId": 92169,
+        "nodeIndex": 252690,
+        "nodeName": "system / Context / scope @87641",
+        "retainedSize": 798729,
+        "selfSize": 2424
+      },
+      {
+        "nodeId": 3,
+        "nodeIndex": 6,
+        "nodeName": "(GC roots)",
+        "retainedSize": 17415860,
+        "selfSize": 0
+      },
+      {
+        "nodeId": 1,
+        "nodeIndex": 0,
+        "nodeName": "",
+        "retainedSize": 17415860,
+        "selfSize": 0
+      }
+    ],
+    "largestPerformance": {
+      "id": 275367,
+      "selfSize": 1424,
+      "retainedSize": 139224
+    }
+  },
+  {
+    "artifact": 13295227013,
+    "phase": "paused",
+    "totalSnapshotSelfBytes": 19407394,
+    "nodeCount": 221533,
+    "exactClassCounts": {
+      "canvas": {
+        "<canvas class=\"boss-weapons-canvas\" aria-hidden=\"true\" width=\"545\" height=\"341\">": 1,
+        "<canvas class=\"normal-effects-surface\" aria-hidden=\"true\" width=\"1\" height=\"1\" style=\"position: absolute; left: 0px; top: 0px; width: 1px; height: 1px; pointer-events: none; z-index: 2;\">": 1,
+        "Detached <canvas height=\"192\" width=\"192\">": 7,
+        "Detached <canvas height=\"99\" width=\"99\">": 1,
+        "Detached <canvas height=\"128\" width=\"128\">": 1,
+        "Detached CanvasRenderingContext2D": 9,
+        "CanvasRenderingContext2D": 2,
+        "<canvas width=\"1\" height=\"1\" class=\"bonus-rock-layer\" aria-hidden=\"true\" style=\"position: absolute; inset: 0px; width: 1px; height: 1px; z-index: 2; pointer-events: none;\">": 1
+      },
+      "audio": {
+        "Detached <audio preload=\"auto\" src=\"/audio/dreadnought-duel.mp3\">": 1,
+        "AudioContext": 2,
+        "Detached AudioContext": 1,
+        "AudioBuffer": 46,
+        "AudioDestinationNode": 2,
+        "Detached AudioDestinationNode": 1
+      },
+      "animation": {
+        "KeyframeEffect": 12,
+        "CSSAnimation": 12,
+        "DocumentTimeline": 3
+      },
+      "performance": {
+        "Performance": 3,
+        "LayoutShift": 150,
+        "LayoutShiftAttribution": 441,
+        "DOMRectReadOnly": 882
+      }
+    },
+    "detachedFlaggedNativeAndSupportingObjects": 283,
+    "mainMatchedStyleCache": {
+      "id": 69680,
+      "retainedBytes": 219808,
+      "dominatorChain": [
+        {
+          "nodeId": 69680,
+          "nodeIndex": 1275276,
+          "nodeName": "blink::HeapHashTableBacking<blink::HashTable<unsigned int, blink::KeyValuePair<unsigned int, cppgc::internal::BasicMember<blink::CachedMatchedProperties, cppgc::internal::StrongMemberTag, cppgc::internal::DijkstraWriteBarrierPolicy>>, blink::KeyValuePairExtractor, blink::HashMapValueTraits<blink::AlreadyHashedTraits, blink::HashTraits<cppgc::internal::BasicMember<blink::CachedMatchedProperties, cppgc::internal::StrongMemberTag, cppgc::internal::DijkstraWriteBarrierPolicy>>>, blink::AlreadyHashedTraits, blink::HeapAllocator>>",
+          "retainedSize": 219808,
+          "selfSize": 32776
+        },
+        {
+          "nodeId": 69662,
+          "nodeIndex": 1275222,
+          "nodeName": "blink::StyleResolver",
+          "retainedSize": 221400,
+          "selfSize": 1448
+        },
+        {
+          "nodeId": 69658,
+          "nodeIndex": 1275210,
+          "nodeName": "StyleEngine",
+          "retainedSize": 224960,
+          "selfSize": 944
+        },
+        {
+          "nodeId": 126339,
+          "nodeIndex": 378978,
+          "nodeName": "HTMLDocument",
+          "retainedSize": 268864,
+          "selfSize": 3352
+        },
+        {
+          "nodeId": 3,
+          "nodeIndex": 6,
+          "nodeName": "(GC roots)",
+          "retainedSize": 19407394,
+          "selfSize": 0
+        },
+        {
+          "nodeId": 1,
+          "nodeIndex": 0,
+          "nodeName": "",
+          "retainedSize": 19407394,
+          "selfSize": 0
+        }
+      ],
+      "boundedPathsMayTruncate": {
+        "depth": true,
+        "siblings": true,
+        "nodes": true
+      }
+    },
+    "exampleCanvasDominatorChain": [
+      {
+        "nodeId": 225833,
+        "nodeIndex": 677460,
+        "nodeName": "Detached <canvas height=\"192\" width=\"192\">",
+        "retainedSize": 3832,
+        "selfSize": 592
+      },
+      {
+        "nodeId": 225831,
+        "nodeIndex": 677454,
+        "nodeName": "",
+        "retainedSize": 26956,
+        "selfSize": 132
+      },
+      {
+        "nodeId": 269615,
+        "nodeIndex": 808824,
+        "nodeName": "Map",
+        "retainedSize": 26972,
+        "selfSize": 16
+      },
+      {
+        "nodeId": 84283,
+        "nodeIndex": 252828,
+        "nodeName": "system / Context / scope @81267",
+        "retainedSize": 959720,
+        "selfSize": 2432
+      },
+      {
+        "nodeId": 3,
+        "nodeIndex": 6,
+        "nodeName": "(GC roots)",
+        "retainedSize": 19407394,
+        "selfSize": 0
+      },
+      {
+        "nodeId": 1,
+        "nodeIndex": 0,
+        "nodeName": "",
+        "retainedSize": 19407394,
+        "selfSize": 0
+      }
+    ],
+    "largestPerformance": {
+      "id": 194641,
+      "selfSize": 1424,
+      "retainedSize": 138824
+    }
+  },
+  {
+    "artifact": 13295227013,
+    "phase": "home",
+    "totalSnapshotSelfBytes": 17423970,
+    "nodeCount": 192041,
+    "exactClassCounts": {
+      "canvas": {
+        "Detached <canvas height=\"192\" width=\"192\">": 7,
+        "Detached CanvasRenderingContext2D": 7
+      },
+      "audio": {
+        "AudioContext": 1,
+        "AudioDestinationNode": 1
+      },
+      "animation": {
+        "DocumentTimeline": 3
+      },
+      "performance": {
+        "Performance": 3,
+        "LayoutShift": 150,
+        "LayoutShiftAttribution": 441,
+        "DOMRectReadOnly": 882
+      }
+    },
+    "detachedFlaggedNativeAndSupportingObjects": 187,
+    "mainMatchedStyleCache": {
+      "id": 69680,
+      "retainedBytes": 368528,
+      "dominatorChain": [
+        {
+          "nodeId": 69680,
+          "nodeIndex": 1123326,
+          "nodeName": "blink::HeapHashTableBacking<blink::HashTable<unsigned int, blink::KeyValuePair<unsigned int, cppgc::internal::BasicMember<blink::CachedMatchedProperties, cppgc::internal::StrongMemberTag, cppgc::internal::DijkstraWriteBarrierPolicy>>, blink::KeyValuePairExtractor, blink::HashMapValueTraits<blink::AlreadyHashedTraits, blink::HashTraits<cppgc::internal::BasicMember<blink::CachedMatchedProperties, cppgc::internal::StrongMemberTag, cppgc::internal::DijkstraWriteBarrierPolicy>>>, blink::AlreadyHashedTraits, blink::HeapAllocator>>",
+          "retainedSize": 368528,
+          "selfSize": 32776
+        },
+        {
+          "nodeId": 69662,
+          "nodeIndex": 1123284,
+          "nodeName": "blink::StyleResolver",
+          "retainedSize": 370120,
+          "selfSize": 1448
+        },
+        {
+          "nodeId": 69658,
+          "nodeIndex": 1123272,
+          "nodeName": "StyleEngine",
+          "retainedSize": 373416,
+          "selfSize": 944
+        },
+        {
+          "nodeId": 126339,
+          "nodeIndex": 489414,
+          "nodeName": "HTMLDocument",
+          "retainedSize": 407968,
+          "selfSize": 3352
+        },
+        {
+          "nodeId": 3,
+          "nodeIndex": 6,
+          "nodeName": "(GC roots)",
+          "retainedSize": 17423970,
+          "selfSize": 0
+        },
+        {
+          "nodeId": 1,
+          "nodeIndex": 0,
+          "nodeName": "",
+          "retainedSize": 17423970,
+          "selfSize": 0
+        }
+      ],
+      "boundedPathsMayTruncate": {
+        "depth": true,
+        "siblings": true,
+        "nodes": true
+      }
+    },
+    "exampleCanvasDominatorChain": [
+      {
+        "nodeId": 225833,
+        "nodeIndex": 469926,
+        "nodeName": "Detached <canvas height=\"192\" width=\"192\">",
+        "retainedSize": 3832,
+        "selfSize": 592
+      },
+      {
+        "nodeId": 225831,
+        "nodeIndex": 469920,
+        "nodeName": "",
+        "retainedSize": 26956,
+        "selfSize": 132
+      },
+      {
+        "nodeId": 269615,
+        "nodeIndex": 615780,
+        "nodeName": "Map",
+        "retainedSize": 26972,
+        "selfSize": 16
+      },
+      {
+        "nodeId": 84283,
+        "nodeIndex": 252162,
+        "nodeName": "system / Context / scope @81267",
+        "retainedSize": 797277,
+        "selfSize": 2432
+      },
+      {
+        "nodeId": 3,
+        "nodeIndex": 6,
+        "nodeName": "(GC roots)",
+        "retainedSize": 17423970,
+        "selfSize": 0
+      },
+      {
+        "nodeId": 1,
+        "nodeIndex": 0,
+        "nodeName": "",
+        "retainedSize": 17423970,
+        "selfSize": 0
+      }
+    ],
+    "largestPerformance": {
+      "id": 194641,
+      "selfSize": 1424,
+      "retainedSize": 140424
+    }
+  }
+]

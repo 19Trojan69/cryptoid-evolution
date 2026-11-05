@@ -1,0 +1,247 @@
+{
+  "reviewedAt": "2026-11-05",
+  "scope": {
+    "runtimeSource": "b092f6462a623c3ad2c12e634963028d462c5fcf",
+    "allApplicationStylesheets": {
+      "count": 39,
+      "registrationTokensFound": 0,
+      "files": [
+        {
+          "path": "frontend/src/cockpitMenus.css",
+          "blobSha": "66fdc631d84b5939853ecc26e92746636eeb66eb",
+          "bytes": 14817
+        },
+        {
+          "path": "frontend/src/fleetMenus.css",
+          "blobSha": "9e89ceb9db8547776df68ad45708a2fb0bb29e8e",
+          "bytes": 17297
+        },
+        {
+          "path": "frontend/src/floatingNotices.css",
+          "blobSha": "0651cd0312bed0c5f97e2f7f627768b74209c79e",
+          "bytes": 4519
+        },
+        {
+          "path": "frontend/src/gameViewport.css",
+          "blobSha": "ed22e9a650b956d930f0febf71361a5ded9e4c46",
+          "bytes": 1131
+        },
+        {
+          "path": "frontend/src/homeTypeMobile.css",
+          "blobSha": "d5cd0f255864036a6ce15b176a4a89a9121d0575",
+          "bytes": 2250
+        },
+        {
+          "path": "frontend/src/hudDepth.css",
+          "blobSha": "6f8c37b40f315c3327aef7cb1c45c1a6b5d850fb",
+          "bytes": 6242
+        },
+        {
+          "path": "frontend/src/index.css",
+          "blobSha": "43dea6284bc694bac6026e5928aaf42e4a461ec2",
+          "bytes": 320899
+        },
+        {
+          "path": "frontend/src/locales/typography.css",
+          "blobSha": "30d284f1399194e18e27e0952cc243a5427291ab",
+          "bytes": 1909
+        },
+        {
+          "path": "frontend/src/metallic.css",
+          "blobSha": "b51419a8c67311bd2cd41f8f578e1b0b4d581aca",
+          "bytes": 9819
+        },
+        {
+          "path": "frontend/src/missionDialogMobile.css",
+          "blobSha": "998970c7479c471150adb6468c0d4f5559202de7",
+          "bytes": 3428
+        },
+        {
+          "path": "frontend/src/mobileDeepMenus.css",
+          "blobSha": "167ead2a6e915250cb37d6afcaa8f3ad48043ab4",
+          "bytes": 14772
+        },
+        {
+          "path": "frontend/src/mobileMenus.css",
+          "blobSha": "9133721c333c61b403ec5e9133b3631414d9d3e1",
+          "bytes": 11837
+        },
+        {
+          "path": "frontend/src/pages/admin.css",
+          "blobSha": "992358faf6daf7622eaf4a8f58e0ab85274f3500",
+          "bytes": 12700
+        },
+        {
+          "path": "frontend/src/pages/bossDossier.css",
+          "blobSha": "eb7b1f0bdd35abbbc82c67c33e056e536399f11e",
+          "bytes": 3762
+        },
+        {
+          "path": "frontend/src/pages/bossExplosionBudget.css",
+          "blobSha": "d4b88783dba8795e42eb3ce72656684992916f3a",
+          "bytes": 369
+        },
+        {
+          "path": "frontend/src/pages/bossIntermission.css",
+          "blobSha": "2791d02a0b320dec4b0b458d8478f8031391bf69",
+          "bytes": 818
+        },
+        {
+          "path": "frontend/src/pages/bossPortrait.css",
+          "blobSha": "f65c0a41434709da13a3de62724670f7f7643a98",
+          "bytes": 387
+        },
+        {
+          "path": "frontend/src/pages/bossReward.css",
+          "blobSha": "959f680a4642416e1fa0f871678996edc8faf4b7",
+          "bytes": 2912
+        },
+        {
+          "path": "frontend/src/pages/cinematicHome.css",
+          "blobSha": "af02df613dd5a7dbe0904546855e71e2a3c82a1a",
+          "bytes": 12968
+        },
+        {
+          "path": "frontend/src/pages/collection.css",
+          "blobSha": "14831c8b8759230bb2e39e261b1c79b624e8758a",
+          "bytes": 11186
+        },
+        {
+          "path": "frontend/src/pages/combatVariety.css",
+          "blobSha": "4dcfb78a115af979ccdaa8519bf33d476ef087db",
+          "bytes": 361
+        },
+        {
+          "path": "frontend/src/pages/controlCenter.css",
+          "blobSha": "70a55e729fc92ad3062c9d02bb10f684d81258de",
+          "bytes": 2999
+        },
+        {
+          "path": "frontend/src/pages/equipmentEdge.css",
+          "blobSha": "fec17f4b0ca7141c1ee9601e2cf74834bf5b0376",
+          "bytes": 4648
+        },
+        {
+          "path": "frontend/src/pages/feedbackCompact.css",
+          "blobSha": "d4cae09e10e39758042c042433a7ab9c293bcae0",
+          "bytes": 4060
+        },
+        {
+          "path": "frontend/src/pages/galaxyArt.css",
+          "blobSha": "30c0dcad87d362887eeb34236eafcdd65cbeb05e",
+          "bytes": 6023
+        },
+        {
+          "path": "frontend/src/pages/galaxyEntry.css",
+          "blobSha": "75c9127ea2608977ae962ef626d37a93cd3133fa",
+          "bytes": 976
+        },
+        {
+          "path": "frontend/src/pages/galaxyMap.css",
+          "blobSha": "a2186d1d1a6b86f9f2611a3e5fdea70e16b3326c",
+          "bytes": 11523
+        },
+        {
+          "path": "frontend/src/pages/hullArrival.css",
+          "blobSha": "5c8038af6138916089cea4dd4544a459d8d0ebef",
+          "bytes": 387
+        },
+        {
+          "path": "frontend/src/pages/missionWeaponShop.css",
+          "blobSha": "d5d1b9b135486f5858995c6289f4a996e5dab14b",
+          "bytes": 9709
+        },
+        {
+          "path": "frontend/src/pages/shopPurchase.css",
+          "blobSha": "a5cba3f0cf88b3dca02b8126fe0021cfeb1dc8be",
+          "bytes": 2296
+        },
+        {
+          "path": "frontend/src/pages/transitionNotices.css",
+          "blobSha": "0dbf0f7de17311aa9545a1cd7d0bc93f855825f1",
+          "bytes": 2768
+        },
+        {
+          "path": "frontend/src/pages/weaponNotices.css",
+          "blobSha": "8aee11b42b9e50b9d5bcd8d5b7c9f80977bc3052",
+          "bytes": 2093
+        },
+        {
+          "path": "frontend/src/pages/weaponPreview.css",
+          "blobSha": "02f0381a1db9ef93d728d1546550209ed94337b8",
+          "bytes": 2424
+        },
+        {
+          "path": "frontend/src/pages/weaponSelection.css",
+          "blobSha": "bce2ea81248a5ac968f88f5f5ff7f81193383f46",
+          "bytes": 5883
+        },
+        {
+          "path": "frontend/src/pages/weaponStock.css",
+          "blobSha": "d048c5b29d26b397730587bbbc440e80c3dbc266",
+          "bytes": 4913
+        },
+        {
+          "path": "frontend/src/pages/weaponTutorial.css",
+          "blobSha": "9830fdd08904ef96bd3ac56fe87fa2cdd586ac19",
+          "bytes": 2534
+        },
+        {
+          "path": "frontend/src/quickAccessMobile.css",
+          "blobSha": "03c1f339da0c6cf0774125f34027679cdaec56fa",
+          "bytes": 6624
+        },
+        {
+          "path": "frontend/src/selectionControls.css",
+          "blobSha": "00b52968f172f14b9cb630bafbfc93d3a7f44fc1",
+          "bytes": 2559
+        },
+        {
+          "path": "frontend/src/smartphoneUi.css",
+          "blobSha": "418b6b91a2f66ca96b5fe694ed591d1bd2195bf8",
+          "bytes": 15442
+        }
+      ]
+    },
+    "javascriptRegistration": {
+      "reviewedLocalModulesNoMatch": true,
+      "defaultBranchSearchNoMatch": true,
+      "defaultBranchSearchProvesFrozenTree": false
+    },
+    "physicalIosVersion": null,
+    "physicalPiBrowserVersion": null
+  },
+  "issues": [
+    {
+      "id": 312236,
+      "url": "https://bugs.webkit.org/show_bug.cgi?id=312236",
+      "fixCommit": "ebcf88c1bc303388b4d1ed89f3bd812631b719e2",
+      "commitURL": "https://github.com/WebKit/WebKit/commit/ebcf88c1bc303388b4d1ed89f3bd812631b719e2",
+      "nativeFile": "Source/WebCore/style/MatchedDeclarationsCache.cpp",
+      "resultingBlob": "dcfbbaf01aa7485ce58ab539a06db6bd763a0e3f",
+      "fixDescription": "WebKit begrenzt den zuvor möglicherweise unbeschränkt wachsenden MatchedDeclarationsCache auf 16384 Hash-Schlüssel.",
+      "applicability": "Der berichtete Auslöser verwendet registrierte animierte Custom Properties mit calc(). In allen 39 Anwendungs-CSS-Dateien fehlen Registrierungen. Kein identischer Reproduktionsfall des Spiels nachgewiesen. Der native Cache-Mechanismus ist ein Quellbezug, kein gemessener iPhone-Cache.",
+      "whiteScreenCauseConfirmed": false,
+      "installedAppleReleaseContainsFix": null
+    },
+    {
+      "id": 305864,
+      "url": "https://bugs.webkit.org/show_bug.cgi?id=305864",
+      "fixCommit": "45684cc85f9f3fbdd873b03a237528d3433e6138",
+      "commitURL": "https://github.com/WebKit/WebKit/commit/45684cc85f9f3fbdd873b03a237528d3433e6138",
+      "nativeFile": "Source/WebCore/style/MatchedDeclarationsCache.cpp",
+      "resultingBlob": "89bc70ad9bb9ed51b8a7a02feb6ed58405dbe126",
+      "fixDescription": "Ein intern berechneter Hash konnte mit einem reservierten HashTable-Wert kollidieren und einen nativen Release-Assert auslösen. WebKit maskiert diesen Fall im Hash-Ergebnis.",
+      "applicability": "Der veröffentlichte native Stack führt über Style-Auflösung und SVG. Diese API-Arten sind im Spiel vorhanden; das beweist weder den genauen Fehler noch seine Häufigkeit. Kein entsprechender Telefon-Stack, unbekannte installierte Browser-/OS-Version. Kein JavaScript-Patch kann diese C++-Hashfunktion ersetzen.",
+      "whiteScreenCauseConfirmed": false,
+      "installedAppleReleaseContainsFix": null
+    }
+  ],
+  "interpretation": "Gefixte Main-/GLib-Commits werden nicht ohne Releasebeleg einer bestimmten installierten iOS-Fassung zugeordnet. Unveränderte Handytests und eine Wiederaufnahme der Simulatorserie folgen daraus nicht.",
+  "officialMethodSources": [
+    "https://developer.chrome.com/docs/devtools/memory-problems/heap-snapshots",
+    "https://developer.chrome.com/docs/devtools/memory-problems/get-started",
+    "https://webkit.org/blog/17333/webkit-features-in-safari-26-0/"
+  ],
+  "uaLimit": "WebKit dokumentiert seit Safari/iOS26 eine eingefrorene OS-Kennung im User-Agent; diese ersetzt keine tatsächliche iOS-Versionsangabe."
+}
