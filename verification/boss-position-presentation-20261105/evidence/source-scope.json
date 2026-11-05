@@ -1,0 +1,99 @@
+{
+  "base": "b092f6462a623c3ad2c12e634963028d462c5fcf",
+  "testedSource": "76065b260e9fc8cdfad377c8c3d0f1d95e01ce6f",
+  "testedTree": "8727461a808f26262453712eba24c562499eb8b7",
+  "originalRootsPreserved": 18,
+  "unchanged": [
+    {
+      "path": ".env.example",
+      "sha": "3c1315d71abc4f1018e44689a4393ac957589a10",
+      "type": "blob"
+    },
+    {
+      "path": ".gitignore",
+      "sha": "cd7e92f139003c1255300c3f5a1da1a02ef024f6",
+      "type": "blob"
+    },
+    {
+      "path": "FLOWS.md",
+      "sha": "ebe02798639fc4d6cbdd94dfe10fe948e772d3f9",
+      "type": "blob"
+    },
+    {
+      "path": "LICENSE.md",
+      "sha": "2f70d2c40a85bda3292aaaf3f60847e4844d05bb",
+      "type": "blob"
+    },
+    {
+      "path": "PRIVACY_POLICY.md",
+      "sha": "649a78815bed427fe6091da18a7a5088bfa2089a",
+      "type": "blob"
+    },
+    {
+      "path": "README.md",
+      "sha": "8b7b66a136ac65f953fcb66ca2a5ae06a2b76e9c",
+      "type": "blob"
+    },
+    {
+      "path": "TERMS_OF_SERVICE.md",
+      "sha": "f9b95e723ec55dd126d91252de155308297c4aec",
+      "type": "blob"
+    },
+    {
+      "path": "TODO.md",
+      "sha": "b88f8f247ea59606a7d9dcb178ca89e34bec8006",
+      "type": "blob"
+    },
+    {
+      "path": "api",
+      "sha": "ccac7cd576a079771d7d7fe4f0085492ebbe6813",
+      "type": "tree"
+    },
+    {
+      "path": "assets",
+      "sha": "a9860b12db58a96dafde818d9a58a6ea0e03c5e5",
+      "type": "tree"
+    },
+    {
+      "path": "backend",
+      "sha": "6e93bfbac9e6cc70a1edfb8bd55d737f612ba261",
+      "type": "tree"
+    },
+    {
+      "path": "doc",
+      "sha": "705194c92b583559f115470ce53a0dafd0b3151b",
+      "type": "tree"
+    },
+    {
+      "path": "docker-compose.yml",
+      "sha": "d949f25514b178aab5f160d613e807e4166647b8",
+      "type": "blob"
+    },
+    {
+      "path": "docs",
+      "sha": "352c5d5e9678a6864b50f7d3ab8aca30200c24f1",
+      "type": "tree"
+    },
+    {
+      "path": "frontend",
+      "sha": "890df8a38e13ef1fe315a5c0eb109c1d72b80aab",
+      "type": "tree"
+    },
+    {
+      "path": "private-preview",
+      "sha": "b733d4dc70b4ac407391720eab131dbaf1d60e37",
+      "type": "tree"
+    },
+    {
+      "path": "reverse-proxy",
+      "sha": "3fca5f417f85fdbb0a6f7ec7ade623e02cf1d023",
+      "type": "tree"
+    },
+    {
+      "path": "vercel.json",
+      "sha": "49956b406c1e97441e71e1f652f7c0d164d1ed16",
+      "type": "blob"
+    }
+  ],
+  "gameRuntimeModified": false
+}

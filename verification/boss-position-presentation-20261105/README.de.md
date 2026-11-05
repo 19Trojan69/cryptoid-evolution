@@ -41,3 +41,32 @@ Webstandard oder Rechtfertigung für eine eigene Positionsrundung verwendet. Gem
 Besitzeranweisung vom 05.11.2026 werden nur passende dokumentierte Empfehlungen
 verwendet. Es gibt kein selbstgewähltes prozentuales RAM-Einsparziel, keine aus
 Fremdgeräten abgeleitete allgemeine Speichergrenze und keinen neuen Handy-Dauertest.
+
+## Tatsächlich abgeschlossene kleine Prüfung
+
+Quelle `76065b260e9fc8cdfad377c8c3d0f1d95e01ce6f`, Baum
+`8727461a808f26262453712eba24c562499eb8b7`,
+[CI 41992899988](https://github.com/19Trojan69/cryptoid-evolution/actions/runs/41992899988).
+Beide Jobs bestehen die zwei Prüfungen des exakt reversiblen Quelltransforms.
+Die eigentliche Geometrieprüfung wird in beiden Engines tatsächlich ausgeführt,
+verfehlt aber ihre zuvor benannte projektspezifische exakte Gleichheit. Beide
+Jobs bleiben im Original rot, keine Umwertung.
+
+| Engine | Fälle | Exakt gleiche Rechtecke | größte native Differenz |
+| --- | ---: | ---: | ---: |
+| Chromium 151.0.7922.34 | 696 | 0 | 0,01557159423828125 CSS-px |
+| Linux-WebKit 26.5 | 696 | 0 | 0,01556396484375 CSS-px |
+
+Die Werte betreffen Rechtecke eines synthetischen Elements und seines Kindes.
+Ein kompletter Pixel-/Grafikvergleich wurde nicht durchgeführt. Die kleine
+Subpixelabweichung beweist weder einen sichtbaren Grafikfehler noch eine falsche
+Standardempfehlung oder einen White-Screen-Auslöser. Der vorgesehene nachfolgende
+Layoutzähler-Vergleich wurde wegen des engen Geometrie-Gates nicht ausgeführt.
+Somit kein gemessener RAM-/CPU-/FPS-Vorteil. Kein ursprünglicher Spielzyklus,
+keine physische Geräteabnahme, kein neuer Link, kein Deployment.
+
+Die Idee wird nicht als Fix übernommen und nicht mit einer eigenen festen Rundung
+zum Bestehen gebracht. Aktuelle verbindliche Arbeitsweise:
+[Dokumentierte Entwicklerempfehlungen](../stability-cause-audit-20261105/DEVELOPER-GUIDANCE.de.md).
+Die beiden Original-ZIPs, Einzeldateien, Hashquittungen und Grenzen der Auswertung
+liegen unter evidence/; frühere Simulatorfehlschläge bleiben unberührt.

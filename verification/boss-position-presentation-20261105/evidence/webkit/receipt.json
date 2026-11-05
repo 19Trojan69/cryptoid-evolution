@@ -1,0 +1,12 @@
+{
+  "runId": 41992899988,
+  "artifactId": 13398528329,
+  "archiveBytes": 810,
+  "archiveSha256": "f04abbea143b87d5f29ce55431055c5fbb852baf67ddd5add81ca6df7f6ef803",
+  "archiveGitBlob": "7dc7e36e59bbcda6dfa4d9c7b9c15907111ad589",
+  "member": {
+    "path": "webkit.json",
+    "bytes": 1807,
+    "sha256": "fa36638c49f9319deb09d2db1ab2e0cba10bd4dc00420e4ff1775665cd8ab63a"
+  }
+}

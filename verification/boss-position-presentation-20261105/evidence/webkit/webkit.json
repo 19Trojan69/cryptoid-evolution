@@ -1,0 +1,71 @@
+{
+  "version": 1,
+  "engine": "webkit",
+  "complete": false,
+  "base": "b092f6462a623c3ad2c12e634963028d462c5fcf",
+  "source": "76065b260e9fc8cdfad377c8c3d0f1d95e01ce6f",
+  "originalBossBlob": "68dd74e598caa060ae8825d3c56b199ba0d08449",
+  "virtualBossSha256": "fc40e49d2808529a034d26ea2fa78b03f6e139a2ab9a1945f046aa0fdcbcc932",
+  "geometryFixtureOnly": true,
+  "actualGameLoaded": false,
+  "physicalDeviceTest": false,
+  "fullArtworkVerified": false,
+  "nativeMemoryMeasured": false,
+  "whiteScreenFixed": false,
+  "browserVersion": "26.5",
+  "geometry": {
+    "cases": 696,
+    "exact": 0,
+    "maxDifference": 0.01556396484375,
+    "firstMismatch": {
+      "x": -400.337,
+      "y": -0.015625,
+      "transform": "translate(-50%, -50%)",
+      "baseline": [
+        [
+          -503.7916564941406,
+          -166.52606201171875,
+          233.359375,
+          347.203125,
+          -166.52606201171875,
+          -270.4322814941406,
+          180.67706298828125,
+          -503.7916564941406
+        ],
+        [
+          -447.9635314941406,
+          -99.26043701171875,
+          77.109375,
+          164.890625,
+          -99.26043701171875,
+          -370.8541564941406,
+          65.63018798828125,
+          -447.9635314941406
+        ]
+      ],
+      "candidate": [
+        [
+          -503.800537109375,
+          -166.52606201171875,
+          233.359375,
+          347.203125,
+          -166.52606201171875,
+          -270.441162109375,
+          180.67706298828125,
+          -503.800537109375
+        ],
+        [
+          -447.972412109375,
+          -99.26043701171875,
+          77.109375,
+          164.890625,
+          -99.26043701171875,
+          -370.863037109375,
+          65.63018798828125,
+          -447.972412109375
+        ]
+      ]
+    },
+    "candidateExact": false
+  }
+}

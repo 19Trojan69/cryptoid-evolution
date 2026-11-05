@@ -1,0 +1,26 @@
+{
+  "source": "76065b260e9fc8cdfad377c8c3d0f1d95e01ce6f",
+  "runId": 41992899988,
+  "measurementType": "geometry fixture only",
+  "engines": [
+    {
+      "engine": "chromium",
+      "version": "151.0.7922.34",
+      "cases": 696,
+      "maxDifference": 0.01557159423828125,
+      "archiveSha256": "cac49fc327edf37891bf8be9640ffaf9bf7ead8d85fbf317bf49d670bf59414e"
+    },
+    {
+      "engine": "webkit",
+      "version": "26.5",
+      "cases": 696,
+      "maxDifference": 0.01556396484375,
+      "archiveSha256": "f04abbea143b87d5f29ce55431055c5fbb852baf67ddd5add81ca6df7f6ef803"
+    }
+  ],
+  "strictGeometryGatePassed": false,
+  "standardRenderingDeclaredBroken": false,
+  "visibleArtworkDifferenceMeasured": false,
+  "performanceAdvantageMeasured": false,
+  "whiteScreenFixed": false
+}
