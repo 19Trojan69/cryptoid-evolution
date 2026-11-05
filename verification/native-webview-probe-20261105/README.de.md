@@ -288,3 +288,29 @@ Simulator-RSS-Helfer wäre vorher auf wirkliche PID-Zuordnung zu prüfen. Ein
 langer Ressourcenlauf wurde hier nicht gestartet. Kein weiterer unveränderter
 Besitzer-Handytest wird verlangt. Die physische Ursache und ein dauerhaft
 wirksamer White-Screen-Fix bleiben offen.
+
+## Nächste Stufe: externer kurzer Speicherzugriff
+
+Der neue Modus `--mode memory` lässt App-Quellen, XCTest-Bedienablauf und alle
+bestehenden Pilotbedingungen unverändert. Nach der App-Kompilierung wird nur die
+App installiert, damit der externe Collector den richtigen Datencontainer kennt.
+Ein begrenzter launchctl-/ps-Zugriff erfasst dann die ausgewählten Dienste genau
+dieses Simulators vor dem App-Start. Nur ohne bereits vorhandenen WebContent-
+Renderer kann die kalte Zuordnung dieses Versuchs bestehen.
+
+Während des kurzen originalen UI-Ablaufs liest ein getrennter Python-Prozess
+nur die ohnehin geschriebenen nativen Beobachtungsdateien und ausgewählte
+Simulator-Dienste. Er ruft kein JavaScript auf und schreibt keinen Spielzustand.
+Für mindestens zwei verschiedene, fortgeschrittene aktive Beobachtungspunkte
+muss exakt ein neuer WebContent-Renderer mit positiver RSS, demselben PID und
+Prozessstart-Fingerabdruck sichtbar sein. Lauf, Quelle und Dokumentkennung müssen
+vor/nach den CLI-Aufrufen passen. Die externe Verankerung darf höchstens 10 s
+alt sein und ist ausdrücklich kein zeitgleicher Frame. Der vollständige native
+UI-/Dokument-/Uhr-/Berichtspilot muss zusätzlich unverändert bestehen.
+
+Die Ausgabe enthält Host-RSS ausgewählter Prozesse; sie ist kein eindeutiger
+PSS-Gesamtwert, keine GPU-/VRAM- oder physische Telefonmessung. Nicht zuordenbare,
+fehlende oder veraltete Daten bleiben Fehler. Die normalen 2.500-ms-Grenzen der
+Spieluhr werden nicht verändert. Vier neue lokale Prüfungen zu Parsern und
+Zuordnung bestehen zusätzlich zu den 14 vorhandenen Prüfungen. Ein langer
+Ressourcenlauf oder eine White-Screen-Behebung wird daraus noch nicht abgeleitet.

@@ -1,4 +1,4 @@
-name: Direct native short guest game pilot
+name: Native memory access qualification
 on:
   push:
     branches: [codex/native-webview-control-20261105]
@@ -43,11 +43,11 @@ jobs:
           path: verification/native-webview-probe-20261105/guest-package/
       - name: Select the installed Xcode matching the iOS 18.5 SDK
         run: sudo xcode-select --switch /Applications/Xcode_16.4.app/Contents/Developer
-      - name: Require unchanged native guest flow and normal report
-        run: python3 verification/native-webview-probe-20261105/run.py --mode pilot
+      - name: Require native memory data and unchanged guest flow
+        run: python3 verification/native-webview-probe-20261105/run.py --mode memory
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: ${{ !cancelled() }}
         with:
-          name: native-webview-pilot
+          name: native-memory-preflight
           path: verification/native-webview-probe-20261105/results/
           retention-days: 7

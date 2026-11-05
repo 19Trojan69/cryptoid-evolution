@@ -52,8 +52,10 @@ def package_manifest(site):
 
 def main() -> int:
     mode = argparse.ArgumentParser()
-    mode.add_argument("--mode", choices=("control", "pilot"), default="control")
-    pilot = mode.parse_args().mode == "pilot"
+    mode.add_argument("--mode", choices=("control", "pilot", "memory"), default="control")
+    selected_mode = mode.parse_args().mode
+    pilot = selected_mode != "control"
+    memory = selected_mode == "memory"
     out = FOLDER / "results"
     out.mkdir(exist_ok=True)
     status = {"complete": False, "gameLoaded": False, "physicalDeviceTest": False,
@@ -61,8 +63,10 @@ def main() -> int:
               "startedAt": time.time(), "base": BASE, "stage": "scope"}
     simulator = None
     server = None
+    memory_process = None
+    memory_log = None
     collector = Collector(out, status, ROOT)
-    status["mode"] = "pilot" if pilot else "control"
+    status["mode"] = selected_mode
     collector.checkpoint()
     run = collector.run
     try:
@@ -160,6 +164,22 @@ def main() -> int:
             status["restoredPackageMatchesLinuxBuild"] = before == manifest["files"]
             assert status["restoredPackageMatchesLinuxBuild"] is True
             status["gameLoaded"] = None
+        if memory:
+            collector.checkpoint("memory-preflight-setup")
+            # Installation provides the exact app data path without launching
+            # any game. The original XCTest still supplies all UI actions.
+            app = temp / "derived/Build/Products/Debug-iphonesimulator/NativeProbe.app"
+            run(["xcrun", "simctl", "install", simulator, str(app)], timeout=60, log="memory-install.log")
+            container = run(["xcrun", "simctl", "get_app_container", simulator, "org.cryptoid.nativeprobe", "data"], timeout=20, log="memory-container.log").strip()
+            memory_dir = out / "memory"
+            memory_arguments = [sys.executable, str(FOLDER / "memory_probe.py"), "--simulator", simulator,
+                                "--source", status["source"], "--native-file", str(Path(container) / "Documents/probe-result.json"),
+                                "--out", str(memory_dir)]
+            run(memory_arguments[:2] + ["baseline"] + memory_arguments[2:], timeout=40, log="memory-baseline.log")
+            memory_log = (out / "memory-sampler.log").open("wb")
+            memory_process = subprocess.Popen(memory_arguments[:2] + ["observe"] + memory_arguments[2:],
+                                              cwd=ROOT, stdout=memory_log, stderr=subprocess.STDOUT)
+            status["memorySamplerStarted"] = True
         collector.checkpoint("native-pilot" if pilot else "native-control")
         test_class = "GamePilotTests" if pilot else "ProbeTests"
         run(arguments + ["test-without-building", "-only-testing:NativeProbeUITests/"+test_class,
@@ -171,6 +191,16 @@ def main() -> int:
     except Exception as error:
         status["error"] = {"kind": type(error).__name__, "detail": str(error)[:1000], "traceback": __import__("traceback").format_exc()[-3000:]}
     finally:
+        if memory_process:
+            (memory_dir / "stop").write_text("outer native test ended\n")
+            try:
+                status["memorySamplerExit"] = memory_process.wait(timeout=40)
+            except subprocess.TimeoutExpired:
+                memory_process.terminate()
+                try: memory_process.wait(timeout=5)
+                except subprocess.TimeoutExpired: memory_process.kill(); memory_process.wait(timeout=5)
+                status["memorySamplerStoppedByDeadline"] = True
+            memory_log.close()
         if simulator:
             if "error" in status:
                 try:
@@ -193,7 +223,16 @@ def main() -> int:
                     status["nativeTerminationCallbackObserved"] = receipt.get("nativeTerminationCallbackObserved")
                     validate_pilot(receipt, report, status["source"])
                     assert before == package_manifest(site), "Served bytes changed during native test"
+                    status["nativePilotVerified"] = True
                     status.update(gameLoaded=True, normalReportVerified=True)
+                    if memory:
+                        from memory_probe import validate_memory
+                        measured = json.loads((memory_dir / "result.json").read_text())
+                        assert measured["complete"] is True and measured["source"] == status["source"]
+                        assert status.get("memorySamplerExit") == 0
+                        validate_memory(measured)
+                        status["memoryAccessVerified"] = True
+                        status["qualifiedMemoryPoints"] = sum(row.get("qualified") is True for row in measured["samples"])
                 else:
                     receipt = json.loads((out / "control.json").read_text())
                     validate_control(receipt)
