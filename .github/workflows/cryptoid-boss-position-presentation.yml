@@ -1,0 +1,36 @@
+name: Boss position presentation feasibility
+on:
+  push:
+    branches: [codex/native-webview-control-20261105]
+    paths:
+      - '.github/workflows/cryptoid-boss-position-presentation.yml'
+      - 'verification/boss-position-presentation-20261105/*.mjs'
+permissions:
+  contents: read
+jobs:
+  geometry:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix: {engine: [chromium, webkit]}
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with: {persist-credentials: false}
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with: {node-version: '24'}
+      - name: Require exact reversible boss position transform
+        run: node --test verification/boss-position-presentation-20261105/transform.test.mjs
+      - name: Install existing pinned browser package
+        run: |
+          npm install --prefix verification/boss2-forensics-20261028 --ignore-scripts --no-audit --no-fund
+          cd verification/boss2-forensics-20261028
+          npx playwright install --with-deps ${{ matrix.engine }}
+      - name: Compare exact native geometry before any game or memory test
+        run: node verification/boss-position-presentation-20261105/probe.mjs ${{ matrix.engine }}
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: ${{ !cancelled() }}
+        with:
+          name: boss-position-geometry-${{ matrix.engine }}
+          path: verification/boss-position-presentation-20261105/results/
+          retention-days: 7
