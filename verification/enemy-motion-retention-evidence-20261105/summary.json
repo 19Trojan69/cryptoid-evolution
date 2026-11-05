@@ -1,0 +1,114 @@
+{
+  "version": 1,
+  "source": "06940b15cd719d3874365fdda1fa590825e89c59",
+  "runId": 42081140204,
+  "jobId": 127434171702,
+  "bothCompleted": true,
+  "captures": {
+    "control": {
+      "meanMiB": 448.42822265625,
+      "minMiB": 445.6796875,
+      "maxMiB": 453.57421875,
+      "highestSampledMiB": 453.57421875,
+      "lateSamples": 12,
+      "points": 120,
+      "activeMs": 600000.0999999999,
+      "compiledController": "00e3796f3eb0bbaec3f2ae16bb5ac46a2d88c8abc6647fee0e1a5b634249a18d",
+      "criticalSummary": {
+        "latestMode": "ended",
+        "previousMode": "ended",
+        "latestKinds": [
+          "popstate"
+        ],
+        "previousKinds": [
+          "popstate"
+        ],
+        "matchedByIdAndSource": true,
+        "clockIsNotPeriodic": true,
+        "noNormalFlowErrors": true
+      },
+      "cycles": [
+        {
+          "activeMs": 600000.0999999999,
+          "wallMs": 601726,
+          "volleysAdvanced": 214,
+          "normalExitVerified": true,
+          "pauseFreezeVerified": true,
+          "weaponRoundtripVerified": true
+        },
+        {
+          "activeMs": 10000,
+          "wallMs": 10079,
+          "volleysAdvanced": 2,
+          "normalExitVerified": true,
+          "pauseFreezeVerified": true,
+          "weaponRoundtripVerified": true
+        },
+        {
+          "activeMs": 11000.29999999993,
+          "wallMs": 11104,
+          "volleysAdvanced": 3,
+          "normalExitVerified": true,
+          "pauseFreezeVerified": true,
+          "weaponRoundtripVerified": true
+        }
+      ]
+    },
+    "candidate": {
+      "meanMiB": 448.4557291666667,
+      "minMiB": 445.5341796875,
+      "maxMiB": 451.4560546875,
+      "highestSampledMiB": 452.9833984375,
+      "lateSamples": 12,
+      "points": 120,
+      "activeMs": 601000.0000000001,
+      "compiledController": "b3bde618c8e810f65fddae84b0429437f3dc95403dfb58411a1014769169186d",
+      "criticalSummary": {
+        "latestMode": "ended",
+        "previousMode": "ended",
+        "latestKinds": [
+          "popstate"
+        ],
+        "previousKinds": [
+          "popstate"
+        ],
+        "matchedByIdAndSource": true,
+        "clockIsNotPeriodic": true,
+        "noNormalFlowErrors": true
+      },
+      "cycles": [
+        {
+          "activeMs": 601000.0000000001,
+          "wallMs": 602741,
+          "volleysAdvanced": 214,
+          "normalExitVerified": true,
+          "pauseFreezeVerified": true,
+          "weaponRoundtripVerified": true
+        },
+        {
+          "activeMs": 10000,
+          "wallMs": 10085,
+          "volleysAdvanced": 2,
+          "normalExitVerified": true,
+          "pauseFreezeVerified": true,
+          "weaponRoundtripVerified": true
+        },
+        {
+          "activeMs": 10000.100000000093,
+          "wallMs": 11103,
+          "volleysAdvanced": 3,
+          "normalExitVerified": true,
+          "pauseFreezeVerified": true,
+          "weaponRoundtripVerified": true
+        }
+      ]
+    }
+  },
+  "meanDifferenceCandidateMinusControlMiB": 0.027506510416685614,
+  "rangesOverlap": true,
+  "interpretation": "No memory benefit demonstrated in this single matched-collector Chromium pair; this does not exclude a different effect in WebKit or on phones.",
+  "firstMinuteMembershipDiffersInOriginalReceipt": true,
+  "physicalDevice": false,
+  "whiteScreenFixed": false,
+  "duplicateArchiveCopiesVerifiedByteIdentical": true
+}

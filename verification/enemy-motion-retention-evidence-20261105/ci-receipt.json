@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "commit": "06940b15cd719d3874365fdda1fa590825e89c59",
+  "tree": "3bbe7745c249d0c0ea700d8616068b6d58b966bd",
+  "runId": 42081140204,
+  "jobId": 127434171702,
+  "conclusion": "success",
+  "artifactId": 13442945572,
+  "artifactBytes": 76621,
+  "artifactSha256": "03770fd6e5f3ba4a1a9778e999ae2a8473e8606cddc30c7ba1ebe22078b03032",
+  "rawZipGitBlob": "627369cc40fccc84135f997e2170686a070f33de",
+  "resourceBenefitEstablished": false,
+  "newDeviceDeployment": false,
+  "physicalDeviceAccepted": false,
+  "whiteScreenFixed": false,
+  "viewportWebKitJob": {
+    "id": 127427940884,
+    "conclusion": "cancelled",
+    "phase": "dependency installation",
+    "lastObservedPackage": "libflite1",
+    "gameStarted": false,
+    "noRetryPerformed": true
+  }
+}

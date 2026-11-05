@@ -1,0 +1,72 @@
+{
+  "version": 1,
+  "complete": true,
+  "order": [
+    "control",
+    "candidate"
+  ],
+  "activeSecondsPerMainRun": 600,
+  "captures": {
+    "control": {
+      "sourceCommit": "06940b15cd719d3874365fdda1fa590825e89c59",
+      "sourceTree": "3bbe7745c249d0c0ea700d8616068b6d58b966bd",
+      "engineVersion": "151.0.7922.34",
+      "activeMs": 600000.0999999999,
+      "samples": 120,
+      "firstMinutePssKiB": {
+        "samples": 12,
+        "min": 372797,
+        "max": 417441,
+        "mean": 406730.4166666667
+      },
+      "lastMinutePssKiB": {
+        "samples": 12,
+        "min": 456376,
+        "max": 464460,
+        "mean": 459190.5
+      },
+      "highestSampledPssKiB": 464460,
+      "originalMemoryEligibilityFlag": false,
+      "normalReportVerified": true,
+      "criticalReportVerified": true
+    },
+    "candidate": {
+      "sourceCommit": "06940b15cd719d3874365fdda1fa590825e89c59",
+      "sourceTree": "3bbe7745c249d0c0ea700d8616068b6d58b966bd",
+      "engineVersion": "151.0.7922.34",
+      "activeMs": 601000.0000000001,
+      "samples": 120,
+      "firstMinutePssKiB": {
+        "samples": 13,
+        "min": 368261,
+        "max": 409479,
+        "mean": 398780.46153846156
+      },
+      "lastMinutePssKiB": {
+        "samples": 12,
+        "min": 456227,
+        "max": 462291,
+        "mean": 459218.6666666667
+      },
+      "highestSampledPssKiB": 463855,
+      "originalMemoryEligibilityFlag": false,
+      "normalReportVerified": true,
+      "criticalReportVerified": true
+    }
+  },
+  "candidateLateMeanLower": false,
+  "lateRangesOverlap": true,
+  "singlePair": true,
+  "independentUnseededScenes": true,
+  "wholeLinuxBrowserDescendantPss": true,
+  "traceOrForcedGcDuringComparison": false,
+  "physicalDevice": false,
+  "nativeTerminationCauseMeasured": false,
+  "whiteScreenFixed": false,
+  "limits": [
+    "Ten minutes per arm after the earlier three-minute observations; not a new phone test.",
+    "A single pair is descriptive, not a replicated causal memory improvement or native pressure qualification.",
+    "The original eligibility flags and historical failed gates remain unchanged. No universal memory threshold.",
+    "Process PSS is not pure renderer, GPU or phone memory; sampled maxima are not instantaneous peaks."
+  ]
+}

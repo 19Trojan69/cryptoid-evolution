@@ -1,0 +1,136 @@
+{
+  "version": 1,
+  "archiveSha256": "f8ffadcf6a0ebfc5a6c10c5d38066a614afba22a0698400b9801dd6c741407f7",
+  "archiveAllMembersVerified": 66,
+  "originalSourceCommit": "ac98e95166b0e2013186257904da46323840dab5",
+  "testCommit": "8c1c6b2cbf4232e75e3da1422646c3238031b722",
+  "testRun": 41584352581,
+  "records": [
+    {
+      "path": "reactor-line-chromium/lab/verification/reactor-line-load-20261103/results/chromium/field-contacts/soak/verification.json",
+      "sourceCommit": "ac98e95166b0e2013186257904da46323840dab5",
+      "engine": "chromium",
+      "engineVersion": "151.0.7922.34",
+      "pointCount": 358,
+      "pssPoints": 358,
+      "activeMs": 1800001.4999999998,
+      "complete": true,
+      "highestSampledMiB": 521.5224609375,
+      "bins": [
+        {
+          "fromActiveMs": 0,
+          "toExclusiveActiveMs": 300000,
+          "samples": 60,
+          "meanMiB": 466.7003580729167,
+          "minMiB": 376.2861328125,
+          "maxMiB": 488.6669921875
+        },
+        {
+          "fromActiveMs": 300000,
+          "toExclusiveActiveMs": 600000,
+          "samples": 60,
+          "meanMiB": 493.33229166666666,
+          "minMiB": 483.0146484375,
+          "maxMiB": 500.8701171875
+        },
+        {
+          "fromActiveMs": 600000,
+          "toExclusiveActiveMs": 900000,
+          "samples": 59,
+          "meanMiB": 499.70128773834745,
+          "minMiB": 492.2685546875,
+          "maxMiB": 505.2216796875
+        },
+        {
+          "fromActiveMs": 900000,
+          "toExclusiveActiveMs": 1200000,
+          "samples": 60,
+          "meanMiB": 504.1516927083333,
+          "minMiB": 498.2255859375,
+          "maxMiB": 509.3388671875
+        },
+        {
+          "fromActiveMs": 1200000,
+          "toExclusiveActiveMs": 1500000,
+          "samples": 59,
+          "meanMiB": 509.8139069120763,
+          "minMiB": 503.5068359375,
+          "maxMiB": 516.0693359375
+        },
+        {
+          "fromActiveMs": 1500000,
+          "toExclusiveActiveMs": 1800000,
+          "samples": 60,
+          "meanMiB": 516.40703125,
+          "minMiB": 510.1396484375,
+          "maxMiB": 521.5224609375
+        }
+      ]
+    },
+    {
+      "path": "reactor-line-webkit/lab/verification/reactor-line-load-20261103/results/webkit/field-contacts/soak/verification.json",
+      "sourceCommit": "ac98e95166b0e2013186257904da46323840dab5",
+      "engine": "webkit",
+      "engineVersion": "26.5",
+      "pointCount": 324,
+      "pssPoints": 324,
+      "activeMs": 1800598,
+      "complete": true,
+      "highestSampledMiB": 1121.611328125,
+      "bins": [
+        {
+          "fromActiveMs": 0,
+          "toExclusiveActiveMs": 300000,
+          "samples": 55,
+          "meanMiB": 1063.1951526988637,
+          "minMiB": 1013.5732421875,
+          "maxMiB": 1102.1083984375
+        },
+        {
+          "fromActiveMs": 300000,
+          "toExclusiveActiveMs": 600000,
+          "samples": 54,
+          "meanMiB": 1081.778030960648,
+          "minMiB": 1027.978515625,
+          "maxMiB": 1102.892578125
+        },
+        {
+          "fromActiveMs": 600000,
+          "toExclusiveActiveMs": 900000,
+          "samples": 53,
+          "meanMiB": 1091.2606500589623,
+          "minMiB": 1042.072265625,
+          "maxMiB": 1111.091796875
+        },
+        {
+          "fromActiveMs": 900000,
+          "toExclusiveActiveMs": 1200000,
+          "samples": 54,
+          "meanMiB": 1083.3726128472222,
+          "minMiB": 999.005859375,
+          "maxMiB": 1109.501953125
+        },
+        {
+          "fromActiveMs": 1200000,
+          "toExclusiveActiveMs": 1500000,
+          "samples": 54,
+          "meanMiB": 1096.3478009259259,
+          "minMiB": 1022.677734375,
+          "maxMiB": 1120.642578125
+        },
+        {
+          "fromActiveMs": 1500000,
+          "toExclusiveActiveMs": 1800000,
+          "samples": 54,
+          "meanMiB": 1088.632523148148,
+          "minMiB": 1041.896484375,
+          "maxMiB": 1121.611328125
+        }
+      ]
+    }
+  ],
+  "newGameRun": false,
+  "sameAsCurrentDeviceSource": false,
+  "physicalDevice": false,
+  "whiteScreenFixed": false
+}
