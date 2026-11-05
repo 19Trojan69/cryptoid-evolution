@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "sourceCommit": "dace335f944d25734464fb68890dc07f8fa50838",
+  "sourceTree": "f50e24d0eb4c004dc5ef4d642aab4353f42066f7",
+  "run": 42110696282,
+  "job": 127537151741,
+  "conclusion": "success",
+  "artifactId": 13455310697,
+  "artifactBytes": 49045,
+  "artifactSha256": "97c336ffa3f03ed7c44149347bb5aac4eba2a61beb9745a4051d493f40d4dbe8",
+  "activeCaptureStartsMatched": false,
+  "physicalDevice": false,
+  "pixelEquivalenceClaimed": false,
+  "whiteScreenFixed": false
+}

@@ -1,0 +1,1399 @@
+{
+  "version": 1,
+  "originalZip": {
+    "bytes": 49045,
+    "sha256": "97c336ffa3f03ed7c44149347bb5aac4eba2a61beb9745a4051d493f40d4dbe8"
+  },
+  "members": {
+    "control/build-info.json": {
+      "bytes": 10732,
+      "sha256": "33200e219a7c159e179f4980330759b59fdc901af8c18fb7fd1895096c7ba0c8"
+    },
+    "control/synthetic-report.json": {
+      "bytes": 9247,
+      "sha256": "951e22d8d8d18200fe584436f80ca3c4e1fb792f1934c5749dde53055e56fdb3"
+    },
+    "control/observation.json": {
+      "bytes": 295398,
+      "sha256": "8516044b6d30dffec94d475dfde5eaf43f084f6398caeb4521fcc308de2e3305"
+    },
+    "milky-hidden/build-info.json": {
+      "bytes": 10732,
+      "sha256": "33200e219a7c159e179f4980330759b59fdc901af8c18fb7fd1895096c7ba0c8"
+    },
+    "milky-hidden/observation.json": {
+      "bytes": 294322,
+      "sha256": "70c78c6e07f3770c890d588fd75c7f52c548c3d4aad31b620f59558e9a94a868"
+    },
+    "milky-hidden/synthetic-report.json": {
+      "bytes": 9247,
+      "sha256": "a82bc840f20b4feb6e1320f41c2f18708bc9eac1f5f553a9cceb699e88f8b351"
+    }
+  },
+  "sourceCommit": "dace335f944d25734464fb68890dc07f8fa50838",
+  "oneUnseededInstrumentedPair": true,
+  "pixelEquivalenceClaimed": false,
+  "physicalDevice": false,
+  "whiteScreenFixed": false,
+  "activeCaptureStartNotMatched": true,
+  "coreVolleyWorkloadNotMatched": true,
+  "phaseComparison": [
+    {
+      "stage": "fresh-blank-document",
+      "control": {
+        "pssMiB": {
+          "samples": 5,
+          "min": 311.4990234375,
+          "max": 369.9873046875,
+          "mean": 358.2443359375
+        },
+        "native": {
+          "javascript": {
+            "samples": 11,
+            "meanMiB": 1.419997822154652,
+            "minMiB": 1.251429557800293,
+            "maxMiB": 1.611781120300293,
+            "firstMiB": 1.46484375,
+            "lastMiB": 1.251429557800293
+          },
+          "images": {
+            "samples": 11,
+            "meanMiB": 0.0,
+            "minMiB": 0.0,
+            "maxMiB": 0.0,
+            "firstMiB": 0.0,
+            "lastMiB": 0.0
+          },
+          "layers": {
+            "samples": 11,
+            "meanMiB": 0.0,
+            "minMiB": 0.0,
+            "maxMiB": 0.0,
+            "firstMiB": 0.0,
+            "lastMiB": 0.0
+          },
+          "page": {
+            "samples": 11,
+            "meanMiB": 0.0,
+            "minMiB": 0.0,
+            "maxMiB": 0.0,
+            "firstMiB": 0.0,
+            "lastMiB": 0.0
+          },
+          "other": {
+            "samples": 11,
+            "meanMiB": 107.06437717784534,
+            "minMiB": 72.6640625,
+            "maxMiB": 110.828125,
+            "firstMiB": 72.6640625,
+            "lastMiB": 110.5102891921997
+          },
+          "jit": {
+            "samples": 11,
+            "meanMiB": 0.0,
+            "minMiB": 0.0,
+            "maxMiB": 0.0,
+            "firstMiB": 0.0,
+            "lastMiB": 0.0
+          }
+        },
+        "contentPids": [
+          1037
+        ],
+        "layerEstimateBytes": 7369600,
+        "singleBackgroundProbe": [],
+        "clockWindow": {
+          "before": null,
+          "after": null
+        },
+        "volleyWindow": {
+          "before": null,
+          "after": null
+        }
+      },
+      "milkyHidden": {
+        "pssMiB": {
+          "samples": 5,
+          "min": 305.5927734375,
+          "max": 356.4404296875,
+          "mean": 346.1841796875
+        },
+        "native": {
+          "javascript": {
+            "samples": 11,
+            "meanMiB": 1.409377011385831,
+            "minMiB": 1.2849664688110352,
+            "maxMiB": 1.48046875,
+            "firstMiB": 1.48046875,
+            "lastMiB": 1.2849664688110352
+          },
+          "images": {
+            "samples": 11,
+            "meanMiB": 0.0,
+            "minMiB": 0.0,
+            "maxMiB": 0.0,
+            "firstMiB": 0.0,
+            "lastMiB": 0.0
+          },
+          "layers": {
+            "samples": 11,
+            "meanMiB": 0.0,
+            "minMiB": 0.0,
+            "maxMiB": 0.0,
+            "firstMiB": 0.0,
+            "lastMiB": 0.0
+          },
+          "page": {
+            "samples": 11,
+            "meanMiB": 0.0,
+            "minMiB": 0.0,
+            "maxMiB": 0.0,
+            "firstMiB": 0.0,
+            "lastMiB": 0.0
+          },
+          "other": {
+            "samples": 11,
+            "meanMiB": 103.74545253406872,
+            "minMiB": 73.24609375,
+            "maxMiB": 107.171875,
+            "firstMiB": 73.24609375,
+            "lastMiB": 106.82831478118896
+          },
+          "jit": {
+            "samples": 11,
+            "meanMiB": 0.0,
+            "minMiB": 0.0,
+            "maxMiB": 0.0,
+            "firstMiB": 0.0,
+            "lastMiB": 0.0
+          }
+        },
+        "contentPids": [
+          1241
+        ],
+        "layerEstimateBytes": 7369600,
+        "singleBackgroundProbe": [],
+        "clockWindow": {
+          "before": null,
+          "after": null
+        },
+        "volleyWindow": {
+          "before": null,
+          "after": null
+        }
+      },
+      "candidateMinusControlPssMeanMiB": -12.060156250000034
+    },
+    {
+      "stage": "menu-before-preparation",
+      "control": {
+        "pssMiB": {
+          "samples": 5,
+          "min": 453.3896484375,
+          "max": 470.1513671875,
+          "mean": 466.5966796875
+        },
+        "native": {
+          "javascript": {
+            "samples": 10,
+            "meanMiB": 5.7722594261169435,
+            "minMiB": 5.630378723144531,
+            "maxMiB": 5.941402435302734,
+            "firstMiB": 5.80020809173584,
+            "lastMiB": 5.633308410644531
+          },
+          "images": {
+            "samples": 10,
+            "meanMiB": 0.0,
+            "minMiB": 0.0,
+            "maxMiB": 0.0,
+            "firstMiB": 0.0,
+            "lastMiB": 0.0
+          },
+          "layers": {
+            "samples": 10,
+            "meanMiB": 0.0,
+            "minMiB": 0.0,
+            "maxMiB": 0.0,
+            "firstMiB": 0.0,
+            "lastMiB": 0.0
+          },
+          "page": {
+            "samples": 10,
+            "meanMiB": 0.0,
+            "minMiB": 0.0,
+            "maxMiB": 0.0,
+            "firstMiB": 0.0,
+            "lastMiB": 0.0
+          },
+          "other": {
+            "samples": 10,
+            "meanMiB": 165.01797494888305,
+            "minMiB": 160.57088565826416,
+            "maxMiB": 165.76805877685547,
+            "firstMiB": 160.57088565826416,
+            "lastMiB": 165.43700408935547
+          },
+          "jit": {
+            "samples": 10,
+            "meanMiB": 0.0,
+            "minMiB": 0.0,
+            "maxMiB": 0.0,
+            "firstMiB": 0.0,
+            "lastMiB": 0.0
+          }
+        },
+        "contentPids": [
+          1037
+        ],
+        "layerEstimateBytes": 2727920,
+        "singleBackgroundProbe": [],
+        "clockWindow": {
+          "before": null,
+          "after": null
+        },
+        "volleyWindow": {
+          "before": null,
+          "after": null
+        }
+      },
+      "milkyHidden": {
+        "pssMiB": {
+          "samples": 5,
+          "min": 441.6787109375,
+          "max": 455.1923828125,
+          "mean": 452.3138671875
+        },
+        "native": {
+          "javascript": {
+            "samples": 10,
+            "meanMiB": 5.820348930358887,
+            "minMiB": 5.631685256958008,
+            "maxMiB": 5.961551666259766,
+            "firstMiB": 5.958621978759766,
+            "lastMiB": 5.632661819458008
+          },
+          "images": {
+            "samples": 10,
+            "meanMiB": 0.0,
+            "minMiB": 0.0,
+            "maxMiB": 0.0,
+            "firstMiB": 0.0,
+            "lastMiB": 0.0
+          },
+          "layers": {
+            "samples": 10,
+            "meanMiB": 0.0,
+            "minMiB": 0.0,
+            "maxMiB": 0.0,
+            "firstMiB": 0.0,
+            "lastMiB": 0.0
+          },
+          "page": {
+            "samples": 10,
+            "meanMiB": 0.0,
+            "minMiB": 0.0,
+            "maxMiB": 0.0,
+            "firstMiB": 0.0,
+            "lastMiB": 0.0
+          },
+          "other": {
+            "samples": 10,
+            "meanMiB": 161.41011981964112,
+            "minMiB": 160.723783493042,
+            "maxMiB": 166.12340927124023,
+            "firstMiB": 166.12340927124023,
+            "lastMiB": 160.726713180542
+          },
+          "jit": {
+            "samples": 10,
+            "meanMiB": 0.0,
+            "minMiB": 0.0,
+            "maxMiB": 0.0,
+            "firstMiB": 0.0,
+            "lastMiB": 0.0
+          }
+        },
+        "contentPids": [
+          1241
+        ],
+        "layerEstimateBytes": 2727920,
+        "singleBackgroundProbe": [],
+        "clockWindow": {
+          "before": null,
+          "after": null
+        },
+        "volleyWindow": {
+          "before": null,
+          "after": null
+        }
+      },
+      "candidateMinusControlPssMeanMiB": -14.282812499999977
+    },
+    {
+      "stage": "menu-after-asset-preparation",
+      "control": {
+        "pssMiB": {
+          "samples": 5,
+          "min": 517.83203125,
+          "max": 543.8359375,
+          "mean": 525.63125
+        },
+        "native": {
+          "javascript": {
+            "samples": 10,
+            "meanMiB": 19.289820671081543,
+            "minMiB": 15.69926643371582,
+            "maxMiB": 21.68466281890869,
+            "firstMiB": 15.69926643371582,
+            "lastMiB": 21.68466281890869
+          },
+          "images": {
+            "samples": 10,
+            "meanMiB": 3.7967193603515623,
+            "minMiB": 3.5540313720703125,
+            "maxMiB": 4.1607513427734375,
+            "firstMiB": 4.1607513427734375,
+            "lastMiB": 3.5540313720703125
+          },
+          "layers": {
+            "samples": 10,
+            "meanMiB": 0.0,
+            "minMiB": 0.0,
+            "maxMiB": 0.0,
+            "firstMiB": 0.0,
+            "lastMiB": 0.0
+          },
+          "page": {
+            "samples": 10,
+            "meanMiB": 0.0,
+            "minMiB": 0.0,
+            "maxMiB": 0.0,
+            "firstMiB": 0.0,
+            "lastMiB": 0.0
+          },
+          "other": {
+            "samples": 10,
+            "meanMiB": 193.7400224685669,
+            "minMiB": 187.247633934021,
+            "maxMiB": 208.60482597351074,
+            "firstMiB": 208.60482597351074,
+            "lastMiB": 187.249587059021
+          },
+          "jit": {
+            "samples": 10,
+            "meanMiB": 0.0,
+            "minMiB": 0.0,
+            "maxMiB": 0.0,
+            "firstMiB": 0.0,
+            "lastMiB": 0.0
+          }
+        },
+        "contentPids": [
+          1037
+        ],
+        "layerEstimateBytes": 2727920,
+        "singleBackgroundProbe": [],
+        "clockWindow": {
+          "before": null,
+          "after": null
+        },
+        "volleyWindow": {
+          "before": null,
+          "after": null
+        }
+      },
+      "milkyHidden": {
+        "pssMiB": {
+          "samples": 5,
+          "min": 504.021484375,
+          "max": 527.337890625,
+          "mean": 509.868359375
+        },
+        "native": {
+          "javascript": {
+            "samples": 10,
+            "meanMiB": 21.117668914794923,
+            "minMiB": 15.099834442138672,
+            "maxMiB": 22.621883392333984,
+            "firstMiB": 22.621883392333984,
+            "lastMiB": 15.101787567138672
+          },
+          "images": {
+            "samples": 10,
+            "meanMiB": 3.5540313720703125,
+            "minMiB": 3.5540313720703125,
+            "maxMiB": 3.5540313720703125,
+            "firstMiB": 3.5540313720703125,
+            "lastMiB": 3.5540313720703125
+          },
+          "layers": {
+            "samples": 10,
+            "meanMiB": 0.0,
+            "minMiB": 0.0,
+            "maxMiB": 0.0,
+            "firstMiB": 0.0,
+            "lastMiB": 0.0
+          },
+          "page": {
+            "samples": 10,
+            "meanMiB": 0.0,
+            "minMiB": 0.0,
+            "maxMiB": 0.0,
+            "firstMiB": 0.0,
+            "lastMiB": 0.0
+          },
+          "other": {
+            "samples": 10,
+            "meanMiB": 185.58298721313477,
+            "minMiB": 182.5233039855957,
+            "maxMiB": 195.2147102355957,
+            "firstMiB": 195.2147102355957,
+            "lastMiB": 189.06293106079102
+          },
+          "jit": {
+            "samples": 10,
+            "meanMiB": 0.0,
+            "minMiB": 0.0,
+            "maxMiB": 0.0,
+            "firstMiB": 0.0,
+            "lastMiB": 0.0
+          }
+        },
+        "contentPids": [
+          1241
+        ],
+        "layerEstimateBytes": 2727920,
+        "singleBackgroundProbe": [],
+        "clockWindow": {
+          "before": null,
+          "after": null
+        },
+        "volleyWindow": {
+          "before": null,
+          "after": null
+        }
+      },
+      "candidateMinusControlPssMeanMiB": -15.762890625000011
+    },
+    {
+      "stage": "mounted-boss-paused-before-start",
+      "control": {
+        "pssMiB": {
+          "samples": 5,
+          "min": 715.7392578125,
+          "max": 938.2041015625,
+          "mean": 883.5931640625
+        },
+        "native": {
+          "javascript": {
+            "samples": 12,
+            "meanMiB": 40.50155830383301,
+            "minMiB": 25.556315422058105,
+            "maxMiB": 51.899168968200684,
+            "firstMiB": 49.378451347351074,
+            "lastMiB": 25.559245109558105
+          },
+          "images": {
+            "samples": 12,
+            "meanMiB": 3.25067138671875,
+            "minMiB": 3.25067138671875,
+            "maxMiB": 3.25067138671875,
+            "firstMiB": 3.25067138671875,
+            "lastMiB": 3.25067138671875
+          },
+          "layers": {
+            "samples": 12,
+            "meanMiB": 0.0,
+            "minMiB": 0.0,
+            "maxMiB": 0.0,
+            "firstMiB": 0.0,
+            "lastMiB": 0.0
+          },
+          "page": {
+            "samples": 12,
+            "meanMiB": 0.0,
+            "minMiB": 0.0,
+            "maxMiB": 0.0,
+            "firstMiB": 0.0,
+            "lastMiB": 0.0
+          },
+          "other": {
+            "samples": 12,
+            "meanMiB": 521.1914552052816,
+            "minMiB": 298.0622835159302,
+            "maxMiB": 597.2252397537231,
+            "firstMiB": 298.0622835159302,
+            "lastMiB": 597.2252397537231
+          },
+          "jit": {
+            "samples": 12,
+            "meanMiB": 0.0,
+            "minMiB": 0.0,
+            "maxMiB": 0.0,
+            "firstMiB": 0.0,
+            "lastMiB": 0.0
+          }
+        },
+        "contentPids": [
+          1037
+        ],
+        "layerEstimateBytes": 15243557,
+        "singleBackgroundProbe": [
+          {
+            "display": "block",
+            "filter": "blur(11px)",
+            "opacity": "0.88",
+            "width": 1513.943603515625,
+            "height": 1771.80224609375
+          }
+        ],
+        "clockWindow": {
+          "before": null,
+          "after": null
+        },
+        "volleyWindow": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "milkyHidden": {
+        "pssMiB": {
+          "samples": 5,
+          "min": 653.625,
+          "max": 895.6826171875,
+          "mean": 838.1359375
+        },
+        "native": {
+          "javascript": {
+            "samples": 11,
+            "meanMiB": 31.808442202481356,
+            "minMiB": 25.77907085418701,
+            "maxMiB": 43.44503402709961,
+            "firstMiB": 43.44503402709961,
+            "lastMiB": 25.79860210418701
+          },
+          "images": {
+            "samples": 11,
+            "meanMiB": 10.614307750355113,
+            "minMiB": 3.25067138671875,
+            "maxMiB": 12.25067138671875,
+            "firstMiB": 3.25067138671875,
+            "lastMiB": 12.25067138671875
+          },
+          "layers": {
+            "samples": 11,
+            "meanMiB": 0.0,
+            "minMiB": 0.0,
+            "maxMiB": 0.0,
+            "firstMiB": 0.0,
+            "lastMiB": 0.0
+          },
+          "page": {
+            "samples": 11,
+            "meanMiB": 0.0,
+            "minMiB": 0.0,
+            "maxMiB": 0.0,
+            "firstMiB": 0.0,
+            "lastMiB": 0.0
+          },
+          "other": {
+            "samples": 11,
+            "meanMiB": 525.5655312971635,
+            "minMiB": 408.33554458618164,
+            "maxMiB": 553.6577577590942,
+            "firstMiB": 408.33554458618164,
+            "lastMiB": 553.1811952590942
+          },
+          "jit": {
+            "samples": 11,
+            "meanMiB": 0.0,
+            "minMiB": 0.0,
+            "maxMiB": 0.0,
+            "firstMiB": 0.0,
+            "lastMiB": 0.0
+          }
+        },
+        "contentPids": [
+          1241
+        ],
+        "layerEstimateBytes": 13834742,
+        "singleBackgroundProbe": [
+          {
+            "display": "none",
+            "filter": "blur(11px)",
+            "opacity": "0.88",
+            "width": 0,
+            "height": 0
+          }
+        ],
+        "clockWindow": {
+          "before": null,
+          "after": null
+        },
+        "volleyWindow": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "candidateMinusControlPssMeanMiB": -45.45722656250007
+    },
+    {
+      "stage": "playing-original-boss",
+      "control": {
+        "pssMiB": {
+          "samples": 15,
+          "min": 1035.1357421875,
+          "max": 1224.5732421875,
+          "mean": 1162.1070963541667
+        },
+        "native": {
+          "javascript": {
+            "samples": 31,
+            "meanMiB": 27.317869647856682,
+            "minMiB": 23.964375495910645,
+            "maxMiB": 29.882556915283203,
+            "firstMiB": 23.964375495910645,
+            "lastMiB": 28.364978790283203
+          },
+          "images": {
+            "samples": 31,
+            "meanMiB": 14.990607477003529,
+            "minMiB": 14.491531372070312,
+            "maxMiB": 15.401611328125,
+            "firstMiB": 14.491531372070312,
+            "lastMiB": 15.401611328125
+          },
+          "layers": {
+            "samples": 31,
+            "meanMiB": 0.0,
+            "minMiB": 0.0,
+            "maxMiB": 0.0,
+            "firstMiB": 0.0,
+            "lastMiB": 0.0
+          },
+          "page": {
+            "samples": 31,
+            "meanMiB": 0.0,
+            "minMiB": 0.0,
+            "maxMiB": 0.0,
+            "firstMiB": 0.0,
+            "lastMiB": 0.0
+          },
+          "other": {
+            "samples": 31,
+            "meanMiB": 782.724284971914,
+            "minMiB": 581.456714630127,
+            "maxMiB": 840.8206357955933,
+            "firstMiB": 790.337061882019,
+            "lastMiB": 702.6240348815918
+          },
+          "jit": {
+            "samples": 31,
+            "meanMiB": 0.0,
+            "minMiB": 0.0,
+            "maxMiB": 0.0,
+            "firstMiB": 0.0,
+            "lastMiB": 0.0
+          }
+        },
+        "contentPids": [
+          1037
+        ],
+        "layerEstimateBytes": 13576928,
+        "singleBackgroundProbe": [
+          {
+            "display": "block",
+            "filter": "blur(11px)",
+            "opacity": "0.88",
+            "width": 1513.943603515625,
+            "height": 1771.80224609375
+          }
+        ],
+        "clockWindow": {
+          "before": 15536,
+          "after": 30832
+        },
+        "volleyWindow": {
+          "before": 1,
+          "after": 3
+        }
+      },
+      "milkyHidden": {
+        "pssMiB": {
+          "samples": 15,
+          "min": 960.6865234375,
+          "max": 1037.2841796875,
+          "mean": 994.3393880208333
+        },
+        "native": {
+          "javascript": {
+            "samples": 31,
+            "meanMiB": 36.467565013516335,
+            "minMiB": 25.603014945983887,
+            "maxMiB": 43.85368537902832,
+            "firstMiB": 35.4779691696167,
+            "lastMiB": 26.364733695983887
+          },
+          "images": {
+            "samples": 31,
+            "meanMiB": 15.117822954731603,
+            "minMiB": 14.491531372070312,
+            "maxMiB": 15.401611328125,
+            "firstMiB": 14.491531372070312,
+            "lastMiB": 15.098251342773438
+          },
+          "layers": {
+            "samples": 31,
+            "meanMiB": 0.0,
+            "minMiB": 0.0,
+            "maxMiB": 0.0,
+            "firstMiB": 0.0,
+            "lastMiB": 0.0
+          },
+          "page": {
+            "samples": 31,
+            "meanMiB": 0.0,
+            "minMiB": 0.0,
+            "maxMiB": 0.0,
+            "firstMiB": 0.0,
+            "lastMiB": 0.0
+          },
+          "other": {
+            "samples": 31,
+            "meanMiB": 630.6357561849778,
+            "minMiB": 597.471905708313,
+            "maxMiB": 657.1483430862427,
+            "firstMiB": 597.471905708313,
+            "lastMiB": 635.0838899612427
+          },
+          "jit": {
+            "samples": 31,
+            "meanMiB": 0.0,
+            "minMiB": 0.0,
+            "maxMiB": 0.0,
+            "firstMiB": 0.0,
+            "lastMiB": 0.0
+          }
+        },
+        "contentPids": [
+          1241
+        ],
+        "layerEstimateBytes": 13579588,
+        "singleBackgroundProbe": [
+          {
+            "display": "none",
+            "filter": "blur(11px)",
+            "opacity": "0.88",
+            "width": 0,
+            "height": 0
+          }
+        ],
+        "clockWindow": {
+          "before": 8129,
+          "after": 24204
+        },
+        "volleyWindow": {
+          "before": 1,
+          "after": 5
+        }
+      },
+      "candidateMinusControlPssMeanMiB": -167.76770833333342
+    },
+    {
+      "stage": "home-with-existing-qa-bridge",
+      "control": {
+        "pssMiB": {
+          "samples": 5,
+          "min": 1129.3037109375,
+          "max": 1135.0068359375,
+          "mean": 1130.4740234375
+        },
+        "native": {
+          "javascript": {
+            "samples": 10,
+            "meanMiB": 26.890385818481445,
+            "minMiB": 26.889604568481445,
+            "maxMiB": 26.890581130981445,
+            "firstMiB": 26.889604568481445,
+            "lastMiB": 26.890581130981445
+          },
+          "images": {
+            "samples": 10,
+            "meanMiB": 3.757659912109375,
+            "minMiB": 3.757659912109375,
+            "maxMiB": 3.757659912109375,
+            "firstMiB": 3.757659912109375,
+            "lastMiB": 3.757659912109375
+          },
+          "layers": {
+            "samples": 10,
+            "meanMiB": 0.0,
+            "minMiB": 0.0,
+            "maxMiB": 0.0,
+            "firstMiB": 0.0,
+            "lastMiB": 0.0
+          },
+          "page": {
+            "samples": 10,
+            "meanMiB": 0.0,
+            "minMiB": 0.0,
+            "maxMiB": 0.0,
+            "firstMiB": 0.0,
+            "lastMiB": 0.0
+          },
+          "other": {
+            "samples": 10,
+            "meanMiB": 778.1125011444092,
+            "minMiB": 777.5822277069092,
+            "maxMiB": 781.2628917694092,
+            "firstMiB": 781.2628917694092,
+            "lastMiB": 777.5822277069092
+          },
+          "jit": {
+            "samples": 10,
+            "meanMiB": 0.0,
+            "minMiB": 0.0,
+            "maxMiB": 0.0,
+            "firstMiB": 0.0,
+            "lastMiB": 0.0
+          }
+        },
+        "contentPids": [
+          1037
+        ],
+        "layerEstimateBytes": 2801880,
+        "singleBackgroundProbe": [],
+        "clockWindow": {
+          "before": 32365,
+          "after": 32365
+        },
+        "volleyWindow": {
+          "before": 3,
+          "after": 3
+        }
+      },
+      "milkyHidden": {
+        "pssMiB": {
+          "samples": 5,
+          "min": 1069.8388671875,
+          "max": 1076.2919921875,
+          "mean": 1071.1685546875
+        },
+        "native": {
+          "javascript": {
+            "samples": 11,
+            "meanMiB": 27.895808219909668,
+            "minMiB": 27.895808219909668,
+            "maxMiB": 27.895808219909668,
+            "firstMiB": 27.895808219909668,
+            "lastMiB": 27.895808219909668
+          },
+          "images": {
+            "samples": 11,
+            "meanMiB": 3.757659912109375,
+            "minMiB": 3.757659912109375,
+            "maxMiB": 3.757659912109375,
+            "firstMiB": 3.757659912109375,
+            "lastMiB": 3.757659912109375
+          },
+          "layers": {
+            "samples": 11,
+            "meanMiB": 0.0,
+            "minMiB": 0.0,
+            "maxMiB": 0.0,
+            "firstMiB": 0.0,
+            "lastMiB": 0.0
+          },
+          "page": {
+            "samples": 11,
+            "meanMiB": 0.0,
+            "minMiB": 0.0,
+            "maxMiB": 0.0,
+            "firstMiB": 0.0,
+            "lastMiB": 0.0
+          },
+          "other": {
+            "samples": 11,
+            "meanMiB": 723.9999409588901,
+            "minMiB": 722.639500617981,
+            "maxMiB": 730.584813117981,
+            "firstMiB": 730.584813117981,
+            "lastMiB": 722.639500617981
+          },
+          "jit": {
+            "samples": 11,
+            "meanMiB": 0.0,
+            "minMiB": 0.0,
+            "maxMiB": 0.0,
+            "firstMiB": 0.0,
+            "lastMiB": 0.0
+          }
+        },
+        "contentPids": [
+          1241
+        ],
+        "layerEstimateBytes": 2801880,
+        "singleBackgroundProbe": [],
+        "clockWindow": {
+          "before": 24947,
+          "after": 24947
+        },
+        "volleyWindow": {
+          "before": 5,
+          "after": 5
+        }
+      },
+      "candidateMinusControlPssMeanMiB": -59.30546874999982
+    },
+    {
+      "stage": "home-after-qa-bridge-release",
+      "control": {
+        "pssMiB": {
+          "samples": 15,
+          "min": 1120.7294921875,
+          "max": 1129.6474609375,
+          "mean": 1123.8195963541666
+        },
+        "native": {
+          "javascript": {
+            "samples": 31,
+            "meanMiB": 26.921831130981445,
+            "minMiB": 26.921831130981445,
+            "maxMiB": 26.921831130981445,
+            "firstMiB": 26.921831130981445,
+            "lastMiB": 26.921831130981445
+          },
+          "images": {
+            "samples": 31,
+            "meanMiB": 3.757659912109375,
+            "minMiB": 3.757659912109375,
+            "maxMiB": 3.757659912109375,
+            "firstMiB": 3.757659912109375,
+            "lastMiB": 3.757659912109375
+          },
+          "layers": {
+            "samples": 31,
+            "meanMiB": 0.0,
+            "minMiB": 0.0,
+            "maxMiB": 0.0,
+            "firstMiB": 0.0,
+            "lastMiB": 0.0
+          },
+          "page": {
+            "samples": 31,
+            "meanMiB": 0.0,
+            "minMiB": 0.0,
+            "maxMiB": 0.0,
+            "firstMiB": 0.0,
+            "lastMiB": 0.0
+          },
+          "other": {
+            "samples": 31,
+            "meanMiB": 771.7363355698124,
+            "minMiB": 769.0041027069092,
+            "maxMiB": 777.6212902069092,
+            "firstMiB": 777.6212902069092,
+            "lastMiB": 769.0275402069092
+          },
+          "jit": {
+            "samples": 31,
+            "meanMiB": 0.0,
+            "minMiB": 0.0,
+            "maxMiB": 0.0,
+            "firstMiB": 0.0,
+            "lastMiB": 0.0
+          }
+        },
+        "contentPids": [
+          1037
+        ],
+        "layerEstimateBytes": 2801880,
+        "singleBackgroundProbe": [],
+        "clockWindow": {
+          "before": 32365,
+          "after": 32365
+        },
+        "volleyWindow": {
+          "before": null,
+          "after": null
+        }
+      },
+      "milkyHidden": {
+        "pssMiB": {
+          "samples": 15,
+          "min": 1060.9599609375,
+          "max": 1069.9052734375,
+          "mean": 1065.2310546875
+        },
+        "native": {
+          "javascript": {
+            "samples": 30,
+            "meanMiB": 27.942748324076334,
+            "minMiB": 27.942683219909668,
+            "maxMiB": 27.943659782409668,
+            "firstMiB": 27.942683219909668,
+            "lastMiB": 27.943659782409668
+          },
+          "images": {
+            "samples": 30,
+            "meanMiB": 3.757659912109375,
+            "minMiB": 3.757659912109375,
+            "maxMiB": 3.757659912109375,
+            "firstMiB": 3.757659912109375,
+            "lastMiB": 3.757659912109375
+          },
+          "layers": {
+            "samples": 30,
+            "meanMiB": 0.0,
+            "minMiB": 0.0,
+            "maxMiB": 0.0,
+            "firstMiB": 0.0,
+            "lastMiB": 0.0
+          },
+          "page": {
+            "samples": 30,
+            "meanMiB": 0.0,
+            "minMiB": 0.0,
+            "maxMiB": 0.0,
+            "firstMiB": 0.0,
+            "lastMiB": 0.0
+          },
+          "other": {
+            "samples": 30,
+            "meanMiB": 718.1050605138142,
+            "minMiB": 714.373875617981,
+            "maxMiB": 722.733250617981,
+            "firstMiB": 722.733250617981,
+            "lastMiB": 714.384617805481
+          },
+          "jit": {
+            "samples": 30,
+            "meanMiB": 0.0,
+            "minMiB": 0.0,
+            "maxMiB": 0.0,
+            "firstMiB": 0.0,
+            "lastMiB": 0.0
+          }
+        },
+        "contentPids": [
+          1241
+        ],
+        "layerEstimateBytes": 2801880,
+        "singleBackgroundProbe": [],
+        "clockWindow": {
+          "before": 24947,
+          "after": 24947
+        },
+        "volleyWindow": {
+          "before": null,
+          "after": null
+        }
+      },
+      "candidateMinusControlPssMeanMiB": -58.588541666666515
+    },
+    {
+      "stage": "blank-after-navigation",
+      "control": {
+        "pssMiB": {
+          "samples": 10,
+          "min": 1102.7646484375,
+          "max": 1123.2255859375,
+          "mean": 1104.9986328125
+        },
+        "native": {
+          "javascript": {
+            "samples": 21,
+            "meanMiB": 26.04781922839937,
+            "minMiB": 15.19966983795166,
+            "maxMiB": 27.189729690551758,
+            "firstMiB": 27.189729690551758,
+            "lastMiB": 15.19966983795166
+          },
+          "images": {
+            "samples": 21,
+            "meanMiB": 3.757659912109375,
+            "minMiB": 3.757659912109375,
+            "maxMiB": 3.757659912109375,
+            "firstMiB": 3.757659912109375,
+            "lastMiB": 3.757659912109375
+          },
+          "layers": {
+            "samples": 21,
+            "meanMiB": 0.0,
+            "minMiB": 0.0,
+            "maxMiB": 0.0,
+            "firstMiB": 0.0,
+            "lastMiB": 0.0
+          },
+          "page": {
+            "samples": 21,
+            "meanMiB": 0.0,
+            "minMiB": 0.0,
+            "maxMiB": 0.0,
+            "firstMiB": 0.0,
+            "lastMiB": 0.0
+          },
+          "other": {
+            "samples": 21,
+            "meanMiB": 752.2155402047293,
+            "minMiB": 750.7440166473389,
+            "maxMiB": 770.3065166473389,
+            "firstMiB": 770.3065166473389,
+            "lastMiB": 752.484076499939
+          },
+          "jit": {
+            "samples": 21,
+            "meanMiB": 0.0,
+            "minMiB": 0.0,
+            "maxMiB": 0.0,
+            "firstMiB": 0.0,
+            "lastMiB": 0.0
+          }
+        },
+        "contentPids": [
+          1037
+        ],
+        "layerEstimateBytes": 7369600,
+        "singleBackgroundProbe": [],
+        "clockWindow": {
+          "before": null,
+          "after": null
+        },
+        "volleyWindow": {
+          "before": null,
+          "after": null
+        }
+      },
+      "milkyHidden": {
+        "pssMiB": {
+          "samples": 10,
+          "min": 1044.09765625,
+          "max": 1067.3828125,
+          "mean": 1047.744140625
+        },
+        "native": {
+          "javascript": {
+            "samples": 20,
+            "meanMiB": 28.14072151184082,
+            "minMiB": 27.501537322998047,
+            "maxMiB": 29.394115447998047,
+            "firstMiB": 28.86292552947998,
+            "lastMiB": 27.501537322998047
+          },
+          "images": {
+            "samples": 20,
+            "meanMiB": 3.757659912109375,
+            "minMiB": 3.757659912109375,
+            "maxMiB": 3.757659912109375,
+            "firstMiB": 3.757659912109375,
+            "lastMiB": 3.757659912109375
+          },
+          "layers": {
+            "samples": 20,
+            "meanMiB": 0.0,
+            "minMiB": 0.0,
+            "maxMiB": 0.0,
+            "firstMiB": 0.0,
+            "lastMiB": 0.0
+          },
+          "page": {
+            "samples": 20,
+            "meanMiB": 0.0,
+            "minMiB": 0.0,
+            "maxMiB": 0.0,
+            "firstMiB": 0.0,
+            "lastMiB": 0.0
+          },
+          "other": {
+            "samples": 20,
+            "meanMiB": 698.6797435760498,
+            "minMiB": 697.8306465148926,
+            "maxMiB": 700.1372270584106,
+            "firstMiB": 700.1372270584106,
+            "lastMiB": 697.8306465148926
+          },
+          "jit": {
+            "samples": 20,
+            "meanMiB": 0.0,
+            "minMiB": 0.0,
+            "maxMiB": 0.0,
+            "firstMiB": 0.0,
+            "lastMiB": 0.0
+          }
+        },
+        "contentPids": [
+          1241
+        ],
+        "layerEstimateBytes": 7369600,
+        "singleBackgroundProbe": [],
+        "clockWindow": {
+          "before": null,
+          "after": null
+        },
+        "volleyWindow": {
+          "before": null,
+          "after": null
+        }
+      },
+      "candidateMinusControlPssMeanMiB": -57.25449218750009
+    },
+    {
+      "stage": "fresh-context-after-old-context-close",
+      "control": {
+        "pssMiB": {
+          "samples": 10,
+          "min": 318.837890625,
+          "max": 378.740234375,
+          "mean": 372.670703125
+        },
+        "native": {
+          "javascript": {
+            "samples": 21,
+            "meanMiB": 1.3501338958740234,
+            "minMiB": 1.2849664688110352,
+            "maxMiB": 1.48046875,
+            "firstMiB": 1.48046875,
+            "lastMiB": 1.2849664688110352
+          },
+          "images": {
+            "samples": 21,
+            "meanMiB": 0.0,
+            "minMiB": 0.0,
+            "maxMiB": 0.0,
+            "firstMiB": 0.0,
+            "lastMiB": 0.0
+          },
+          "layers": {
+            "samples": 21,
+            "meanMiB": 0.0,
+            "minMiB": 0.0,
+            "maxMiB": 0.0,
+            "firstMiB": 0.0,
+            "lastMiB": 0.0
+          },
+          "page": {
+            "samples": 21,
+            "meanMiB": 0.0,
+            "minMiB": 0.0,
+            "maxMiB": 0.0,
+            "firstMiB": 0.0,
+            "lastMiB": 0.0
+          },
+          "other": {
+            "samples": 21,
+            "meanMiB": 105.10224705650693,
+            "minMiB": 71.94140625,
+            "maxMiB": 107.12890625,
+            "firstMiB": 71.94140625,
+            "lastMiB": 106.78143978118896
+          },
+          "jit": {
+            "samples": 21,
+            "meanMiB": 0.0,
+            "minMiB": 0.0,
+            "maxMiB": 0.0,
+            "firstMiB": 0.0,
+            "lastMiB": 0.0
+          }
+        },
+        "contentPids": [
+          1162
+        ],
+        "layerEstimateBytes": 7369600,
+        "singleBackgroundProbe": [],
+        "clockWindow": {
+          "before": null,
+          "after": null
+        },
+        "volleyWindow": {
+          "before": null,
+          "after": null
+        }
+      },
+      "milkyHidden": {
+        "pssMiB": {
+          "samples": 10,
+          "min": 324.875,
+          "max": 379.3671875,
+          "mean": 373.519140625
+        },
+        "native": {
+          "javascript": {
+            "samples": 21,
+            "meanMiB": 1.3501338958740234,
+            "minMiB": 1.2849664688110352,
+            "maxMiB": 1.48046875,
+            "firstMiB": 1.48046875,
+            "lastMiB": 1.2849664688110352
+          },
+          "images": {
+            "samples": 21,
+            "meanMiB": 0.0,
+            "minMiB": 0.0,
+            "maxMiB": 0.0,
+            "firstMiB": 0.0,
+            "lastMiB": 0.0
+          },
+          "layers": {
+            "samples": 21,
+            "meanMiB": 0.0,
+            "minMiB": 0.0,
+            "maxMiB": 0.0,
+            "firstMiB": 0.0,
+            "lastMiB": 0.0
+          },
+          "page": {
+            "samples": 21,
+            "meanMiB": 0.0,
+            "minMiB": 0.0,
+            "maxMiB": 0.0,
+            "firstMiB": 0.0,
+            "lastMiB": 0.0
+          },
+          "other": {
+            "samples": 21,
+            "meanMiB": 105.36787205650693,
+            "minMiB": 73.375,
+            "maxMiB": 107.28515625,
+            "firstMiB": 73.375,
+            "lastMiB": 106.91425228118896
+          },
+          "jit": {
+            "samples": 21,
+            "meanMiB": 0.0,
+            "minMiB": 0.0,
+            "maxMiB": 0.0,
+            "firstMiB": 0.0,
+            "lastMiB": 0.0
+          }
+        },
+        "contentPids": [
+          1357
+        ],
+        "layerEstimateBytes": 7369600,
+        "singleBackgroundProbe": [],
+        "clockWindow": {
+          "before": null,
+          "after": null
+        },
+        "volleyWindow": {
+          "before": null,
+          "after": null
+        }
+      },
+      "candidateMinusControlPssMeanMiB": 0.8484374999999886
+    }
+  ],
+  "nativePressureEvents": {
+    "control": [
+      {
+        "hostAt": 1793913369962,
+        "timestamp": 60.13675900000004,
+        "severity": "non-critical"
+      }
+    ],
+    "milky-hidden": []
+  },
+  "sourceAndNormalReportConditionsVerified": true
+}
