@@ -85,10 +85,18 @@ def main() -> int:
         run([str(binary), "generate", "--spec", str(FOLDER / "project.yml")], cwd=FOLDER)
         schemes = list(FOLDER.rglob("NativeProbe.xcscheme"))
         assert len(schemes) == 1
+        shutil.copyfile(schemes[0], out / "NativeProbe.xcscheme")
         import xml.etree.ElementTree as ET
         test_action = ET.parse(schemes[0]).getroot().find("TestAction")
-        assert test_action is not None and test_action.get("disableAutomaticScreenCapture") == "YES"
-        status["automaticScreenCaptureDisabled"] = True
+        # XcodeGen 2.44.1 maps captureScreenshotsAutomatically:false to the
+        # documented systemAttachmentLifetime=keepNever, not an invented
+        # disableAutomaticScreenCapture field. Retention is not a proof that
+        # XCTest internally never captures a screen. This control loads no game.
+        assert test_action is not None
+        assert test_action.get("systemAttachmentLifetime") == "keepNever"
+        assert test_action.get("preferredScreenCaptureFormat") == "screenshots"
+        status["automaticScreenAttachmentsRetained"] = False
+        status["screenRecordingRequested"] = False
         status["stage"] = "simulator"
         catalogue = json.loads(run(["xcrun", "simctl", "list", "--json"], timeout=150))
         runtime = next(r for r in catalogue["runtimes"] if r.get("isAvailable") and r["version"] == "18.5")

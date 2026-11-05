@@ -1,0 +1,44 @@
+{
+  "complete": false,
+  "gameLoaded": false,
+  "physicalDeviceTest": false,
+  "nativeTerminationCallbackObserved": false,
+  "whiteScreenFixed": false,
+  "startedAt": 1793851163.0444758,
+  "base": "b092f6462a623c3ad2c12e634963028d462c5fcf",
+  "stage": "tools",
+  "source": "a6f296a869c647f802e26b3aa5292608cfe654cb",
+  "commands": [
+    {
+      "command": [
+        "xcodebuild",
+        "-version"
+      ],
+      "exitCode": 0,
+      "elapsedMs": 6944
+    },
+    {
+      "command": [
+        "/Users/runner/work/_temp/cryptoid-native-probe/xcodegen/xcodegen/bin/xcodegen",
+        "version"
+      ],
+      "exitCode": 0,
+      "elapsedMs": 60
+    },
+    {
+      "command": [
+        "/Users/runner/work/_temp/cryptoid-native-probe/xcodegen/xcodegen/bin/xcodegen",
+        "generate"
+      ],
+      "exitCode": 0,
+      "elapsedMs": 132
+    }
+  ],
+  "xcode": "Xcode 26.2\nBuild version 17C52\n",
+  "xcodegen": "Version: 2.44.1\n",
+  "error": {
+    "kind": "AssertionError",
+    "detail": ""
+  },
+  "endedAt": 1793851171.2767081
+}
