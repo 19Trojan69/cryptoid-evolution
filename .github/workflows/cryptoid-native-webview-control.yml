@@ -8,14 +8,39 @@ on:
 permissions:
   contents: read
 jobs:
-  native-control:
-    runs-on: macos-15-intel
-    timeout-minutes: 24
+  guest-package:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
         with: {persist-credentials: false, fetch-depth: 0}
-      - name: Check the acceptance boundaries without an iPhone
+      - name: Check acceptance and partial failure evidence
         run: python3 -m unittest discover -s verification/native-webview-probe-20261105 -p 'test_*.py' -v
+      - name: Build original isolated guest on a case-sensitive filesystem
+        run: python3 verification/native-webview-probe-20261105/prepare_guest.py
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: native-guest-package
+          path: verification/native-webview-probe-20261105/guest-package/
+          retention-days: 2
+          compression-level: 0
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: ${{ !cancelled() }}
+        with:
+          name: native-guest-build-evidence
+          path: verification/native-webview-probe-20261105/results/
+          retention-days: 7
+  native-control:
+    needs: guest-package
+    runs-on: macos-15-intel
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with: {persist-credentials: false, fetch-depth: 0}
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: native-guest-package
+          path: verification/native-webview-probe-20261105/guest-package/
       - name: Select the installed Xcode matching the iOS 18.5 SDK
         run: sudo xcode-select --switch /Applications/Xcode_16.4.app/Contents/Developer
       - name: Require unchanged native guest flow and normal report

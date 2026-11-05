@@ -119,17 +119,15 @@ def main() -> int:
         collector.checkpoint("build")
         run(arguments + ["build-for-testing"], timeout=300, log="build.log")
         if pilot:
-            collector.checkpoint("guest-build")
-            env = os.environ.copy()
-            # Only these two child build commands receive this fixed flag.
-            os.environ["VERCEL_ENV"] = "preview"
-            try:
-                run(["node", "verification/direct-boss-style-device-20261102/installDevicePreview.mjs", "--ignore-scripts"], timeout=240, log="guest-install.log")
-                run(["node", "verification/critical-failure-journal-20261104/build.mjs"], timeout=180, log="guest-build.log")
-            finally:
-                if "VERCEL_ENV" in env: os.environ["VERCEL_ENV"] = env["VERCEL_ENV"]
-                else: os.environ.pop("VERCEL_ENV", None)
+            collector.checkpoint("guest-package")
+            package = FOLDER / "guest-package"
+            manifest = json.loads((package / "manifest.json").read_text())
+            assert manifest["source"] == status["source"] and manifest["base"] == BASE
+            assert manifest["buildOS"] == "Linux"
+            assert manifest["files"] == package_manifest(package / "site")
             site = ROOT / "verification/boss2-forensics-20261028/results/device-preview/site"
+            assert not site.exists(), "Do not overwrite any pre-existing guest build"
+            shutil.copytree(package / "site", site)
             info = json.loads((site / "device-preview-info.json").read_text())
             assert info["sourceCommit"] == status["source"] and info["criticalFailureJournal"]
             assert info["guestOnly"] is True
@@ -150,6 +148,9 @@ def main() -> int:
                 time.sleep(.1)
             assert origin_file.read_text().strip() == "http://127.0.0.1:4173"
             status["guestBuildVerified"] = True
+            status["guestBuildOS"] = "Linux"
+            status["restoredPackageMatchesLinuxBuild"] = before == manifest["files"]
+            assert status["restoredPackageMatchesLinuxBuild"] is True
             status["gameLoaded"] = None
         collector.checkpoint("native-pilot" if pilot else "native-control")
         test_class = "GamePilotTests" if pilot else "ProbeTests"
