@@ -112,6 +112,12 @@ def main() -> int:
         simulator = run(["xcrun", "simctl", "create", "Cryptoid native control", device, runtime["identifier"]]).strip()
         run(["xcrun", "simctl", "boot", simulator])
         run(["xcrun", "simctl", "bootstatus", simulator, "-b"], timeout=180, log="boot.log")
+        # A booted headless device did not always initialize XCTest AX. Open
+        # its real Simulator surface before compiling; do not retry the test.
+        collector.checkpoint("simulator-display")
+        run(["open", "-a", "Simulator", "--args", "-CurrentDeviceUDID", simulator], timeout=30, log="simulator-display.log")
+        run(["xcrun", "simctl", "spawn", simulator, "launchctl", "list"], timeout=30, log="boot-services.log")
+        status["simulatorDisplayExplicitlyOpened"] = True
         arguments = ["xcodebuild", "-project", str(FOLDER / "CryptoidNativeProbe.xcodeproj"),
                      "-scheme", "NativeProbe", "-destination", "id="+simulator,
                      "-derivedDataPath", str(temp / "derived"), "-parallel-testing-enabled", "NO",
@@ -164,6 +170,13 @@ def main() -> int:
         status["error"] = {"kind": type(error).__name__, "detail": str(error)[:1000], "traceback": __import__("traceback").format_exc()[-3000:]}
     finally:
         if simulator:
+            if "error" in status:
+                try:
+                    run(["xcrun", "simctl", "spawn", simulator, "log", "show", "--last", "3m", "--style", "compact", "--predicate",
+                         'process == "NativeProbe" OR process CONTAINS[c] "WebKit" OR process CONTAINS[c] "AX" OR eventMessage CONTAINS[c] "accessibility"'],
+                        timeout=20, log="native-failure.log")
+                except Exception as error:
+                    status["nativeFailureLogUnavailable"] = {"kind": type(error).__name__, "detail": str(error)[:500]}
             collector.collect_native(
                 lambda: run(["xcrun", "simctl", "get_app_container", simulator, "org.cryptoid.nativeprobe", "data"], timeout=20, log="container.log"),
                 [("probe-result.json", "pilot.json" if pilot else "control.json")] +
