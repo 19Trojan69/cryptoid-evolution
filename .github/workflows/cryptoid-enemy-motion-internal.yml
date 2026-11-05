@@ -1,0 +1,73 @@
+name: Verify direct enemy consumers before any device preview
+on:
+  push:
+    branches: [codex/enemy-motion-internal-20261105]
+    paths:
+      - '.github/workflows/cryptoid-enemy-motion-internal.yml'
+      - 'verification/enemy-motion-direct-20261105/**'
+permissions:
+  contents: read
+jobs:
+  native-presentation:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix: {engine: [chromium, webkit]}
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with: {persist-credentials: false}
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with: {node-version: '24'}
+      - name: Require exact source and unchanged scope
+        run: |
+          node --test verification/enemy-motion-direct-20261105/transform.test.mjs
+          node verification/direct-boss-style-device-20261102/verifyScope.mjs
+      - name: Install existing frozen application and native engine
+        env: {VERCEL_ENV: preview}
+        run: |
+          node verification/direct-boss-style-device-20261102/installDevicePreview.mjs --ignore-scripts
+          npm install --prefix verification/boss2-forensics-20261028 --ignore-scripts --no-audit --no-fund
+          cd verification/boss2-forensics-20261028
+          npx playwright install --with-deps ${{ matrix.engine }}
+      - name: Check new types and build assigned renderer
+        env: {VERCEL_ENV: preview}
+        run: |
+          node verification/enemy-motion-direct-20261105/preflight.mjs
+          node verification/enemy-motion-direct-20261105/build.mjs candidate
+      - name: Native presentation and complete existing journal flow
+        run: node verification/enemy-motion-direct-20261105/run.mjs flow ${{ matrix.engine }} candidate 1
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: ${{ !cancelled() }}
+        with:
+          name: enemy-motion-flow-${{ matrix.engine }}
+          path: verification/enemy-motion-direct-20261105/results/
+          retention-days: 7
+  paired-observation:
+    needs: native-presentation
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix: {replica: [1, 2]}
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with: {persist-credentials: false}
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with: {node-version: '24'}
+      - name: Install identical existing application and Chromium
+        env: {VERCEL_ENV: preview}
+        run: |
+          node verification/direct-boss-style-device-20261102/installDevicePreview.mjs --ignore-scripts
+          npm install --prefix verification/boss2-forensics-20261028 --ignore-scripts --no-audit --no-fund
+          cd verification/boss2-forensics-20261028
+          npx playwright install --with-deps chromium
+      - name: Compare two fresh three-minute runs in alternate orders
+        env: {VERCEL_ENV: preview}
+        run: node verification/enemy-motion-direct-20261105/compare.mjs ${{ matrix.replica }}
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: ${{ !cancelled() }}
+        with:
+          name: enemy-motion-paired-${{ matrix.replica }}
+          path: verification/enemy-motion-direct-20261105/results/
+          retention-days: 7
