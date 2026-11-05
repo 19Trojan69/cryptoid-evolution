@@ -24,6 +24,7 @@ jobs:
         with: {node-version: '24'}
       - name: Validate new driver and original protected source
         run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
           node --check verification/webkit-memory-lifecycle-20261105/run.mjs
           node verification/direct-boss-style-device-20261102/verifyScope.mjs
       - name: Install original application and use preinstalled matching WebKit
