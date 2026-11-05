@@ -1,0 +1,43 @@
+{
+  "version": 1,
+  "source": "b092f6462a623c3ad2c12e634963028d462c5fcf",
+  "files": [
+    {
+      "path": "frontend/src/pages/GamePage.tsx",
+      "gitBlob": "d73579b3f9abe575adacfa978259aec9bdb0e7fd",
+      "sha256": "6b500123cb1443bbcb52809f0dbd06520ea0aee02a550ec346ab5ce1f186f277",
+      "bytes": 218260
+    },
+    {
+      "path": "frontend/src/pages/gameAudio.ts",
+      "gitBlob": "857ec045e694a8fc3c3a4d632b98857df37bfe36",
+      "sha256": "3aeb4ca63260573b38d2b753bda61461eb2d4191beae2aac072ce722657077a8",
+      "bytes": 24602
+    },
+    {
+      "path": "frontend/src/pages/paintedShip.ts",
+      "gitBlob": "3ec258eb5eb70d02254a492a4b11354f598955a1",
+      "sha256": "d05431e5655b3b1a46d989da7bf19599163be93f00d54401354f7952cac61682",
+      "bytes": 13255
+    },
+    {
+      "path": "frontend/src/pages/CanvasEffects.tsx",
+      "gitBlob": "73e6239d7d6be8a886279bcd38d6cd230e9834af",
+      "sha256": "a3175a169a00e6269c02a16393f09d93fd77834efac816763f2cdb50e7255eeb",
+      "bytes": 17630
+    },
+    {
+      "path": "frontend/src/lib/cssFramePacing.ts",
+      "gitBlob": "5d9cc3e5b40792277d9813b2953196affbc0eaf3",
+      "sha256": "4155660b00d827922168660c313f9d625ee120222e008d02f795c34418f35846",
+      "bytes": 3861
+    }
+  ],
+  "scope": "Focused ownership/source review; not every allocation or all frontend code",
+  "newConcreteUnboundedOwnerProven": false,
+  "runtimePatchMade": false,
+  "runtimeTestsRepeated": false,
+  "physicalPhoneCauseMeasured": false,
+  "finding": "Existing owners have bounded caches or lifecycle cleanup. Source inspection cannot assign native browser allocations to the physical phone abort.",
+  "nextTool": "Direct native WKWebView and XCTest calibration, control page only; no game loaded."
+}

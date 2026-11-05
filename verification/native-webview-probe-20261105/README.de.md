@@ -80,3 +80,50 @@ App-Quellen und alle Berührungs-/DOM-Abnahmekriterien bleiben gleich. Ein Erfol
 dieses anderen Werkzeugsatzes würde nicht beweisen, dass Xcode 26.2 allein die
 vorige Blockade verursacht hat. Falls auch dessen Katalog blockiert, kein weiterer
 gleicher Startversuch und kein nachfolgender Spieltest aus dieser Kalibrierung.
+
+## Dritter Versuch: native Kalibrierung vollständig bestanden
+
+Quelle fcce1647bbb9d06c6babb8051866ee814936b845, Baum
+7b08527615076c5facfaf5755f7cb723baa4a26d, CI 41965934543 und Job 127042814031
+enden mit success. Tatsächlich verwendet: Xcode 16.4 / 16F6, XcodeGen 2.44.1,
+iOS 18.5 / 22F77 auf einem neu erzeugten iPhone-16-Pro-Max-Simulator.
+
+- Der Simulatorkatalog antwortet nach 9.416 ms. Bootstatus besteht nach 112.863 ms.
+- Der eigene native App-/UI-Test-Bau besteht nach 146.075 ms.
+- Der Testaufruf besteht nach 48.298 ms; das einzelne tatsächliche XCTest besteht
+  nach 19,710 Sekunden mit null Fehlern.
+- Genau eine native Kontrollberührung wird auf der Seite empfangen, isTrusted:true.
+  Der vorzeitige Abschluss wurde vorher tatsächlich abgewiesen.
+- Der spätere DOM-Lesezugriff liefert dieselbe Überschrift, count:1, visible,
+  readyState:complete, einen passenden iPhone/iOS-18.5-User-Agent sowie 440×652
+  CSS-Pixel und DPR 3. Kein Remote-Debugger/WebDriver-Ersatz wurde verwendet.
+- controlComplete:true, navigationErrors:0, nativeContentTerminations:0.
+  gameLoaded:false und physicalDeviceTest:false bleiben ausdrücklich gesetzt.
+
+Der Erfolg mit Xcode 16.4 ist ein konkreter neuer funktionierender Aufbau, kein
+Beweis, dass die vorige Katalogblockade ausschließlich an Xcode 26.2 lag.
+Die früheren beiden Fehlversuche bleiben unverändert erhalten. Alle drei
+Original-Artefakt-ZIPs sind über GitHubs SHA256 geprüft und bytegenau im Git
+archiviert; alle gelieferten Dateien sind mit ihren eigenen Digests erfasst.
+`python3 verification/native-webview-probe-20261105/verify_evidence.py` prüft die
+Archive und das tatsächliche native Ergebnis erneut offline.
+
+Ein Prozessabbruch wurde weder natürlich beobachtet noch absichtlich erzeugt;
+die tatsächliche Zustellung des nativen Termination-Callbacks ist damit noch
+nicht abgenommen. Ebenso wurden kein Spiel, kein vollständiger Gastzyklus,
+kein nativer Ressourcenverlauf und kein physisches Smartphone geprüft. Die
+erfolgreiche Kontrollseite ist keine White-Screen-Behebung.
+
+## Nächster begrenzter Schritt vor dem Spieltest
+
+Vor einem Gast-Spielpiloten muss der äußere Collector App-Teilberichte auch bei
+einem fehlgeschlagenen XCTest übernehmen. Der jetzige Kalibrator kopiert den
+App-Datensatz nach einem erfolgreichen Test; der native Delegate allein garantiert
+noch keine CI-Sicherung nach einem Testabbruch. Ebenso müssen Zwischenstufen und
+teilweise Prozessausgaben an den Zeitgrenzen erhalten werden. Diese Erweiterung
+ist hier ausdrücklich noch nicht implementiert oder als bestanden behauptet.
+
+Danach folgt ein kurzer unveränderter Gastablauf mit ursprünglicher Stoppuhr,
+echten manuellen Start/Pause/Waffenmenü/Home-Aktionen und normalem Bericht.
+Erst bei vollständig bestandenem Piloten ist eine native Ressourcenbeobachtung
+sinnvoll. Kein neuer Besitzer-Dauertest wird aus der Kontrollseite abgeleitet.

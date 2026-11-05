@@ -1,0 +1,46 @@
+{
+  "complete": false,
+  "gameLoaded": false,
+  "physicalDeviceTest": false,
+  "nativeTerminationCallbackObserved": false,
+  "whiteScreenFixed": false,
+  "startedAt": 1793851367.7921002,
+  "base": "b092f6462a623c3ad2c12e634963028d462c5fcf",
+  "stage": "simulator",
+  "source": "f9713840b09f612c5db7922e88de85b37fff3244",
+  "commands": [
+    {
+      "command": [
+        "xcodebuild",
+        "-version"
+      ],
+      "exitCode": 0,
+      "elapsedMs": 10340
+    },
+    {
+      "command": [
+        "/Users/runner/work/_temp/cryptoid-native-probe/xcodegen/xcodegen/bin/xcodegen",
+        "version"
+      ],
+      "exitCode": 0,
+      "elapsedMs": 17
+    },
+    {
+      "command": [
+        "/Users/runner/work/_temp/cryptoid-native-probe/xcodegen/xcodegen/bin/xcodegen",
+        "generate"
+      ],
+      "exitCode": 0,
+      "elapsedMs": 60
+    }
+  ],
+  "xcode": "Xcode 26.2\nBuild version 17C52\n",
+  "xcodegen": "Version: 2.44.1\n",
+  "automaticScreenAttachmentsRetained": false,
+  "screenRecordingRequested": false,
+  "error": {
+    "kind": "TimeoutExpired",
+    "detail": "Command '['xcrun', 'simctl', 'list', '--json']' timed out after 150 seconds"
+  },
+  "endedAt": 1793851529.299386
+}

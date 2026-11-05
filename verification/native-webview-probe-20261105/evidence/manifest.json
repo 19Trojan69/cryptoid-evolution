@@ -1,0 +1,90 @@
+{
+  "version": 1,
+  "attempts": [
+    {
+      "runId": 41964912601,
+      "gitSha": "7bf42b52fc22b6adcb4898115dd86b68264ded65",
+      "sha256": "5f219f176a2d6dc9573634859fca460dcfc49349c5959df68b6fc5b829664a8b",
+      "bytes": 577,
+      "archive": "evidence/attempt-41964912601/original.zip",
+      "source": "a6f296a869c647f802e26b3aa5292608cfe654cb",
+      "stage": "tools",
+      "complete": false,
+      "files": [
+        {
+          "name": "result.json",
+          "bytes": 1030,
+          "sha256": "82ca5d0af00f6c6ed5febf80776a6c8ead7e188cbc8c3046373d709c8cb09c97"
+        }
+      ]
+    },
+    {
+      "runId": 41965265740,
+      "gitSha": "dabebbbfbc66baf9a8b9fbe20f3e88ebcf2a3495",
+      "sha256": "6aeeafacdba94b4abdfdcdea052285131fecb5e1d644545863893d564430dde5",
+      "bytes": 1707,
+      "archive": "evidence/attempt-41965265740/original.zip",
+      "source": "f9713840b09f612c5db7922e88de85b37fff3244",
+      "stage": "simulator",
+      "complete": false,
+      "files": [
+        {
+          "name": "NativeProbe.xcscheme",
+          "bytes": 4617,
+          "sha256": "1741fceac37910655a7fd2ceccfbf1f2d1feea63020b693f7520a4eea1e496f9"
+        },
+        {
+          "name": "result.json",
+          "bytes": 1192,
+          "sha256": "f6fd70735704733ae359e53b6c497afa83b3225448691bc1855942823c56ef7f"
+        }
+      ]
+    },
+    {
+      "runId": 41965934543,
+      "gitSha": "d3b001bf669194fefdcc022b36b21042cd8f9499",
+      "sha256": "71d225d535acf142e4d832d872a475325b0f9884a3087588bb3ee1bfd7f611a3",
+      "bytes": 11238,
+      "archive": "evidence/attempt-41965934543/original.zip",
+      "source": "fcce1647bbb9d06c6babb8051866ee814936b845",
+      "stage": "complete",
+      "complete": true,
+      "files": [
+        {
+          "name": "NativeProbe.xcscheme",
+          "bytes": 4617,
+          "sha256": "1741fceac37910655a7fd2ceccfbf1f2d1feea63020b693f7520a4eea1e496f9"
+        },
+        {
+          "name": "boot.log",
+          "bytes": 20134,
+          "sha256": "03a74dfb01f2df38ae7321b600a1471279f9c243acb3c7ab528cadc4dbe47176"
+        },
+        {
+          "name": "build.log",
+          "bytes": 105082,
+          "sha256": "b884b1c3524677e76cbeb3ee462133e2ea89537974d994ef85bc24c9021fcdf6"
+        },
+        {
+          "name": "control.json",
+          "bytes": 666,
+          "sha256": "2434d643186296221d0a1ff1db39168bc9b2563c65d934b221fb009a954b1140"
+        },
+        {
+          "name": "control.log",
+          "bytes": 5241,
+          "sha256": "83af794b6403238ea652ccd4260c249d739077629ce8346849bccb7fbeb5e80c"
+        },
+        {
+          "name": "result.json",
+          "bytes": 2894,
+          "sha256": "c7d9864cd14c6fed33c512a884620b219d23a71d9bc3b03ea20d00b73e0d846f"
+        }
+      ]
+    }
+  ],
+  "gameLoaded": false,
+  "physicalDeviceTest": false,
+  "nativeTerminationCallbackObserved": false,
+  "whiteScreenFixed": false
+}

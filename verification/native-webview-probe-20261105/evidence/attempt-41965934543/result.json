@@ -1,0 +1,131 @@
+{
+  "complete": true,
+  "gameLoaded": false,
+  "physicalDeviceTest": false,
+  "nativeTerminationCallbackObserved": false,
+  "whiteScreenFixed": false,
+  "startedAt": 1793851733.745683,
+  "base": "b092f6462a623c3ad2c12e634963028d462c5fcf",
+  "stage": "complete",
+  "source": "fcce1647bbb9d06c6babb8051866ee814936b845",
+  "commands": [
+    {
+      "command": [
+        "xcodebuild",
+        "-version"
+      ],
+      "exitCode": 0,
+      "elapsedMs": 252
+    },
+    {
+      "command": [
+        "/Users/runner/work/_temp/cryptoid-native-probe/xcodegen/xcodegen/bin/xcodegen",
+        "version"
+      ],
+      "exitCode": 0,
+      "elapsedMs": 14
+    },
+    {
+      "command": [
+        "/Users/runner/work/_temp/cryptoid-native-probe/xcodegen/xcodegen/bin/xcodegen",
+        "generate"
+      ],
+      "exitCode": 0,
+      "elapsedMs": 86
+    },
+    {
+      "command": [
+        "xcrun",
+        "simctl"
+      ],
+      "exitCode": 0,
+      "elapsedMs": 9416
+    },
+    {
+      "command": [
+        "xcrun",
+        "simctl"
+      ],
+      "exitCode": 0,
+      "elapsedMs": 1054
+    },
+    {
+      "command": [
+        "xcrun",
+        "simctl"
+      ],
+      "exitCode": 0,
+      "elapsedMs": 4440
+    },
+    {
+      "command": [
+        "xcrun",
+        "simctl"
+      ],
+      "exitCode": 0,
+      "elapsedMs": 112863
+    },
+    {
+      "command": [
+        "xcodebuild",
+        "-project"
+      ],
+      "exitCode": 0,
+      "elapsedMs": 146075
+    },
+    {
+      "command": [
+        "xcodebuild",
+        "-project"
+      ],
+      "exitCode": 0,
+      "elapsedMs": 48298
+    },
+    {
+      "command": [
+        "xcrun",
+        "simctl"
+      ],
+      "exitCode": 0,
+      "elapsedMs": 5225
+    }
+  ],
+  "xcode": "Xcode 16.4\nBuild version 16F6\n",
+  "xcodegen": "Version: 2.44.1\n",
+  "automaticScreenAttachmentsRetained": false,
+  "screenRecordingRequested": false,
+  "runtime": {
+    "version": "18.5",
+    "identifier": "com.apple.CoreSimulator.SimRuntime.iOS-18-5",
+    "buildversion": "22F77"
+  },
+  "control": {
+    "automaticReload": false,
+    "clickCount": 1,
+    "completionRejectedBeforeClick": true,
+    "controlComplete": true,
+    "gameLoaded": false,
+    "loaded": true,
+    "nativeContentTerminations": 0,
+    "nativeTerminationCallbackObserved": false,
+    "navigationErrors": 0,
+    "physicalDeviceTest": false,
+    "readback": {
+      "count": 1,
+      "devicePixelRatio": 3,
+      "height": 652,
+      "readyState": "complete",
+      "timeOrigin": 1793852043924,
+      "title": "Native WebView-Kontrolle",
+      "userAgent": "Mozilla/5.0 (iPhone; CPU iPhone OS 18_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148",
+      "visibilityState": "visible",
+      "width": 440
+    },
+    "savedAt": 1793852054739.682,
+    "systemName": "iOS",
+    "systemVersion": "18.5",
+    "trustedClick": true,
+    "version": 1
+  },
+  "endedAt": 1793852063.110442
+}
