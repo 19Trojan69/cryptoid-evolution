@@ -1,0 +1,404 @@
+[
+  {
+    "engine": "chromium",
+    "engineVersion": "151.0.7922.34",
+    "complete": true,
+    "sourceCommit": "4ecdde51c0ab77a3e90c96dfd0cddf0bdfa4bb40",
+    "sourceTree": "6be297245426b78e1ad12c3e121ad2fe5f215101",
+    "normalCycles": 3,
+    "fidelity": {
+      "rows": [
+        {
+          "setting": "ordinary",
+          "cases": [
+            {
+              "bank": 0,
+              "flame": "5%",
+              "light": 0,
+              "computedStylesAndGeometryExactlyEqual": true
+            },
+            {
+              "bank": -17.25,
+              "flame": "19.125%",
+              "light": 0.125,
+              "computedStylesAndGeometryExactlyEqual": true
+            },
+            {
+              "bank": 23.8125,
+              "flame": "13%",
+              "light": 0.85,
+              "computedStylesAndGeometryExactlyEqual": true
+            },
+            {
+              "bank": 0,
+              "flame": "33.333333333333336%",
+              "light": 0.5,
+              "computedStylesAndGeometryExactlyEqual": true
+            },
+            {
+              "bank": 9.125,
+              "flame": "0%",
+              "light": 0,
+              "computedStylesAndGeometryExactlyEqual": true
+            },
+            {
+              "bank": -0.001,
+              "flame": "9.01%",
+              "light": 0.375,
+              "computedStylesAndGeometryExactlyEqual": true
+            },
+            {
+              "bank": 0,
+              "flame": "5%",
+              "light": 0,
+              "computedStylesAndGeometryExactlyEqual": true
+            },
+            {
+              "bank": 18,
+              "flame": "17.125%",
+              "light": 0.01,
+              "computedStylesAndGeometryExactlyEqual": true
+            }
+          ],
+          "nodesCompared": 6,
+          "existingAnimationsRetainedWithinMotionMode": true
+        },
+        {
+          "setting": "html-reduced",
+          "cases": [
+            {
+              "bank": 0,
+              "flame": "5%",
+              "light": 0,
+              "computedStylesAndGeometryExactlyEqual": true
+            },
+            {
+              "bank": -17.25,
+              "flame": "19.125%",
+              "light": 0.125,
+              "computedStylesAndGeometryExactlyEqual": true
+            },
+            {
+              "bank": 23.8125,
+              "flame": "13%",
+              "light": 0.85,
+              "computedStylesAndGeometryExactlyEqual": true
+            },
+            {
+              "bank": 0,
+              "flame": "33.333333333333336%",
+              "light": 0.5,
+              "computedStylesAndGeometryExactlyEqual": true
+            },
+            {
+              "bank": 9.125,
+              "flame": "0%",
+              "light": 0,
+              "computedStylesAndGeometryExactlyEqual": true
+            },
+            {
+              "bank": -0.001,
+              "flame": "9.01%",
+              "light": 0.375,
+              "computedStylesAndGeometryExactlyEqual": true
+            },
+            {
+              "bank": 0,
+              "flame": "5%",
+              "light": 0,
+              "computedStylesAndGeometryExactlyEqual": true
+            },
+            {
+              "bank": 18,
+              "flame": "17.125%",
+              "light": 0.01,
+              "computedStylesAndGeometryExactlyEqual": true
+            }
+          ],
+          "nodesCompared": 6,
+          "existingAnimationsRetainedWithinMotionMode": true
+        },
+        {
+          "setting": "media-reduced",
+          "cases": [
+            {
+              "bank": 0,
+              "flame": "5%",
+              "light": 0,
+              "computedStylesAndGeometryExactlyEqual": true
+            },
+            {
+              "bank": -17.25,
+              "flame": "19.125%",
+              "light": 0.125,
+              "computedStylesAndGeometryExactlyEqual": true
+            },
+            {
+              "bank": 23.8125,
+              "flame": "13%",
+              "light": 0.85,
+              "computedStylesAndGeometryExactlyEqual": true
+            },
+            {
+              "bank": 0,
+              "flame": "33.333333333333336%",
+              "light": 0.5,
+              "computedStylesAndGeometryExactlyEqual": true
+            },
+            {
+              "bank": 9.125,
+              "flame": "0%",
+              "light": 0,
+              "computedStylesAndGeometryExactlyEqual": true
+            },
+            {
+              "bank": -0.001,
+              "flame": "9.01%",
+              "light": 0.375,
+              "computedStylesAndGeometryExactlyEqual": true
+            },
+            {
+              "bank": 0,
+              "flame": "5%",
+              "light": 0,
+              "computedStylesAndGeometryExactlyEqual": true
+            },
+            {
+              "bank": 18,
+              "flame": "17.125%",
+              "light": 0.01,
+              "computedStylesAndGeometryExactlyEqual": true
+            }
+          ],
+          "nodesCompared": 6,
+          "existingAnimationsRetainedWithinMotionMode": true
+        }
+      ],
+      "actualAlreadyPreparedArtworkPrototype": true,
+      "consumerConstructorIsShippingSource": true,
+      "rootLiveCustomPropertiesRemoved": true,
+      "fullPixelIdentityMeasured": false,
+      "nativeCacheEntriesMeasured": false,
+      "nativeMemoryBenefitMeasured": false,
+      "performedOnlyDuringRegularPause": true
+    },
+    "criticalReportSummary": {
+      "latestMode": "ended",
+      "previousMode": "ended",
+      "latestKinds": [
+        "popstate"
+      ],
+      "previousKinds": [
+        "popstate"
+      ],
+      "matchedByIdAndSource": true,
+      "clockIsNotPeriodic": true,
+      "noNormalFlowErrors": true
+    },
+    "resourceCheckpointVerified": true,
+    "compiledControllerSha256": "b3bde618c8e810f65fddae84b0429437f3dc95403dfb58411a1014769169186d",
+    "physicalDevice": false,
+    "whiteScreenFixed": false
+  },
+  {
+    "engine": "webkit",
+    "engineVersion": "26.5",
+    "complete": true,
+    "sourceCommit": "4ecdde51c0ab77a3e90c96dfd0cddf0bdfa4bb40",
+    "sourceTree": "6be297245426b78e1ad12c3e121ad2fe5f215101",
+    "normalCycles": 3,
+    "fidelity": {
+      "rows": [
+        {
+          "setting": "ordinary",
+          "cases": [
+            {
+              "bank": 0,
+              "flame": "5%",
+              "light": 0,
+              "computedStylesAndGeometryExactlyEqual": true
+            },
+            {
+              "bank": -17.25,
+              "flame": "19.125%",
+              "light": 0.125,
+              "computedStylesAndGeometryExactlyEqual": true
+            },
+            {
+              "bank": 23.8125,
+              "flame": "13%",
+              "light": 0.85,
+              "computedStylesAndGeometryExactlyEqual": true
+            },
+            {
+              "bank": 0,
+              "flame": "33.333333333333336%",
+              "light": 0.5,
+              "computedStylesAndGeometryExactlyEqual": true
+            },
+            {
+              "bank": 9.125,
+              "flame": "0%",
+              "light": 0,
+              "computedStylesAndGeometryExactlyEqual": true
+            },
+            {
+              "bank": -0.001,
+              "flame": "9.01%",
+              "light": 0.375,
+              "computedStylesAndGeometryExactlyEqual": true
+            },
+            {
+              "bank": 0,
+              "flame": "5%",
+              "light": 0,
+              "computedStylesAndGeometryExactlyEqual": true
+            },
+            {
+              "bank": 18,
+              "flame": "17.125%",
+              "light": 0.01,
+              "computedStylesAndGeometryExactlyEqual": true
+            }
+          ],
+          "nodesCompared": 6,
+          "existingAnimationsRetainedWithinMotionMode": true
+        },
+        {
+          "setting": "html-reduced",
+          "cases": [
+            {
+              "bank": 0,
+              "flame": "5%",
+              "light": 0,
+              "computedStylesAndGeometryExactlyEqual": true
+            },
+            {
+              "bank": -17.25,
+              "flame": "19.125%",
+              "light": 0.125,
+              "computedStylesAndGeometryExactlyEqual": true
+            },
+            {
+              "bank": 23.8125,
+              "flame": "13%",
+              "light": 0.85,
+              "computedStylesAndGeometryExactlyEqual": true
+            },
+            {
+              "bank": 0,
+              "flame": "33.333333333333336%",
+              "light": 0.5,
+              "computedStylesAndGeometryExactlyEqual": true
+            },
+            {
+              "bank": 9.125,
+              "flame": "0%",
+              "light": 0,
+              "computedStylesAndGeometryExactlyEqual": true
+            },
+            {
+              "bank": -0.001,
+              "flame": "9.01%",
+              "light": 0.375,
+              "computedStylesAndGeometryExactlyEqual": true
+            },
+            {
+              "bank": 0,
+              "flame": "5%",
+              "light": 0,
+              "computedStylesAndGeometryExactlyEqual": true
+            },
+            {
+              "bank": 18,
+              "flame": "17.125%",
+              "light": 0.01,
+              "computedStylesAndGeometryExactlyEqual": true
+            }
+          ],
+          "nodesCompared": 6,
+          "existingAnimationsRetainedWithinMotionMode": true
+        },
+        {
+          "setting": "media-reduced",
+          "cases": [
+            {
+              "bank": 0,
+              "flame": "5%",
+              "light": 0,
+              "computedStylesAndGeometryExactlyEqual": true
+            },
+            {
+              "bank": -17.25,
+              "flame": "19.125%",
+              "light": 0.125,
+              "computedStylesAndGeometryExactlyEqual": true
+            },
+            {
+              "bank": 23.8125,
+              "flame": "13%",
+              "light": 0.85,
+              "computedStylesAndGeometryExactlyEqual": true
+            },
+            {
+              "bank": 0,
+              "flame": "33.333333333333336%",
+              "light": 0.5,
+              "computedStylesAndGeometryExactlyEqual": true
+            },
+            {
+              "bank": 9.125,
+              "flame": "0%",
+              "light": 0,
+              "computedStylesAndGeometryExactlyEqual": true
+            },
+            {
+              "bank": -0.001,
+              "flame": "9.01%",
+              "light": 0.375,
+              "computedStylesAndGeometryExactlyEqual": true
+            },
+            {
+              "bank": 0,
+              "flame": "5%",
+              "light": 0,
+              "computedStylesAndGeometryExactlyEqual": true
+            },
+            {
+              "bank": 18,
+              "flame": "17.125%",
+              "light": 0.01,
+              "computedStylesAndGeometryExactlyEqual": true
+            }
+          ],
+          "nodesCompared": 6,
+          "existingAnimationsRetainedWithinMotionMode": true
+        }
+      ],
+      "actualAlreadyPreparedArtworkPrototype": true,
+      "consumerConstructorIsShippingSource": true,
+      "rootLiveCustomPropertiesRemoved": true,
+      "fullPixelIdentityMeasured": false,
+      "nativeCacheEntriesMeasured": false,
+      "nativeMemoryBenefitMeasured": false,
+      "performedOnlyDuringRegularPause": true
+    },
+    "criticalReportSummary": {
+      "latestMode": "ended",
+      "previousMode": "ended",
+      "latestKinds": [
+        "popstate"
+      ],
+      "previousKinds": [
+        "popstate"
+      ],
+      "matchedByIdAndSource": true,
+      "clockIsNotPeriodic": true,
+      "noNormalFlowErrors": true
+    },
+    "resourceCheckpointVerified": true,
+    "compiledControllerSha256": "b3bde618c8e810f65fddae84b0429437f3dc95403dfb58411a1014769169186d",
+    "physicalDevice": false,
+    "whiteScreenFixed": false
+  }
+]

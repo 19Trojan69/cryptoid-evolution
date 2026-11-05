@@ -1,0 +1,86 @@
+{
+  "files": [
+    {
+      "path": "README.de.md",
+      "bytes": 7022,
+      "sha256": "bb408cc49b674d3591b1b93497015c11d7d4aa72ab6c3fb4625ab584b57b0593"
+    },
+    {
+      "path": "source-scope.json",
+      "bytes": 601,
+      "sha256": "daef31d38970c8f08d632007e18b59cff2177631773cb9ee80f14ee5b32671a2"
+    },
+    {
+      "path": "native-source-review.json",
+      "bytes": 2201,
+      "sha256": "9a8a08d4d40a5b7f36f69a1bf74c5374e96da4043935fa8bda2b13b6f24309c5"
+    },
+    {
+      "path": "native-summary.json",
+      "bytes": 11844,
+      "sha256": "a762c425bc72262d3b423e448e234ab1d585fe05969e32d95edf142dd7d959b0"
+    },
+    {
+      "path": "comparison-r1.json",
+      "bytes": 1968,
+      "sha256": "1fa1d2225766009712b817c196b5725f65f162615b36c9cd0b5d65765843df42"
+    },
+    {
+      "path": "comparison-r2.json",
+      "bytes": 1955,
+      "sha256": "b14bb9de0083667cbff9d31c78001ac1622a2c2725ec37e42a18ad5173a5f3ff"
+    },
+    {
+      "path": "comparison-summary.json",
+      "bytes": 2766,
+      "sha256": "26c4bdc8ddcbf3b17aa56ce434d27e41561fcbb17108923345212fcc51473c4c"
+    },
+    {
+      "path": "ci-receipt.json",
+      "bytes": 2243,
+      "sha256": "eb972cb7b01325e8b63c60a4785d0ff72c2c3029f5b42ce4be1881fa2b653ec4"
+    },
+    {
+      "path": "first-driver-failure.json",
+      "bytes": 1220,
+      "sha256": "bbc7497648fc7f5cb7f071d3cc2254460fa1f00c0b47cd5bcb4902d4432af7d5"
+    },
+    {
+      "path": "preservation-proof.json",
+      "bytes": 1602,
+      "sha256": "3c29a2e7abcf40d6d6321d75ec11a8e2f68ff682679f3804b482a5b0fe936ad3"
+    },
+    {
+      "path": "artifacts/13423699567.zip",
+      "bytes": 11411,
+      "sha256": "96c564630827d8e8020e3df3366b35fbe9417b9f1bf431245747e499662b78c2"
+    },
+    {
+      "path": "artifacts/13425671288.zip",
+      "bytes": 10980,
+      "sha256": "f70e07b15b3ac31000ecfae1d299de144041fcfa26a955cb9f0302ba653baf04"
+    },
+    {
+      "path": "artifacts/13425573474.zip",
+      "bytes": 25958,
+      "sha256": "3757f7c13b2f112288f5be2bd94f85da2c8bac623ae66d43e6818168213205c1"
+    },
+    {
+      "path": "artifacts/13425408747.zip",
+      "bytes": 26041,
+      "sha256": "f2cdc4ed4e7a3ab0f04f74966edfafea38dbe4549b66c7ff295b9568f537a902"
+    },
+    {
+      "path": "first-webkit-install-cancelled.log.gz",
+      "bytes": 9671,
+      "sha256": "2599f51769e7c65dd591797768ecc4d88ff3f1c3b493844c191a90070f71c9bc"
+    },
+    {
+      "path": "first-chromium-failure.log.gz",
+      "bytes": 13805,
+      "sha256": "41829a9257250ff66b0247b90195f234fe93a6efa7e5a8f3d8b3adf36e6e0b27"
+    }
+  ],
+  "privateDeviceRawDataIncluded": false,
+  "accessParametersIncluded": false
+}

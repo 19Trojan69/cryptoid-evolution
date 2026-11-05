@@ -1,0 +1,60 @@
+{
+  "version": 1,
+  "replica": 2,
+  "order": [
+    "candidate",
+    "control"
+  ],
+  "captures": {
+    "candidate": {
+      "sourceCommit": "4ecdde51c0ab77a3e90c96dfd0cddf0bdfa4bb40",
+      "sourceTree": "6be297245426b78e1ad12c3e121ad2fe5f215101",
+      "engineVersion": "151.0.7922.34",
+      "activeMs": 180001.7,
+      "samples": 36,
+      "lateSamples": 12,
+      "latePssKiB": {
+        "min": 427625,
+        "max": 437265,
+        "mean": 432519
+      },
+      "peakPssKiB": 437265,
+      "originalCollectorMemoryEligibilityFlag": false,
+      "normalReportVerified": true,
+      "criticalReportVerified": true
+    },
+    "control": {
+      "sourceCommit": "4ecdde51c0ab77a3e90c96dfd0cddf0bdfa4bb40",
+      "sourceTree": "6be297245426b78e1ad12c3e121ad2fe5f215101",
+      "engineVersion": "151.0.7922.34",
+      "activeMs": 180000.09999999998,
+      "samples": 36,
+      "lateSamples": 12,
+      "latePssKiB": {
+        "min": 426782,
+        "max": 440510,
+        "mean": 434641.6666666667
+      },
+      "peakPssKiB": 440510,
+      "originalCollectorMemoryEligibilityFlag": false,
+      "normalReportVerified": true,
+      "criticalReportVerified": true
+    }
+  },
+  "complete": true,
+  "candidateLateMeanLower": true,
+  "candidateLateRangeEntirelyBelowControl": false,
+  "matchedCollectorSetup": true,
+  "independentUnseededGameRuns": true,
+  "historicalFailedMemoryGatesReclassified": false,
+  "universalThresholdInvented": false,
+  "nativeCacheEntryCountMeasured": false,
+  "physicalDevice": false,
+  "whiteScreenFixed": false,
+  "limits": [
+    "New short matched-collector observations only; historical memoryComparisonEligible:false is retained.",
+    "Whole Linux browser-descendant PSS includes more than a renderer and is not phone or GPU memory.",
+    "No native high-pressure qualification, long-run leak proof or physical-device acceptance.",
+    "A single lower mean or overlap does not justify a new phone endurance request."
+  ]
+}

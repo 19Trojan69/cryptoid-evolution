@@ -1,0 +1,31 @@
+{
+  "sourceCommit": "12847df2211bceb754bfbdef17f8b09c6fb16bb8",
+  "sourceTree": "a7e67a1626296417ac74c7f9b7e5bd5b470d7a19",
+  "runId": 42045250069,
+  "chromiumJobId": 127306330825,
+  "conclusion": "failure",
+  "failureStage": "Engine argument validation before game or browser launch",
+  "buildPassed": true,
+  "helperTypesAndTsxSyntaxPassed": true,
+  "gameStarted": false,
+  "nativePresentationPassed": false,
+  "memoryMeasurementsMade": false,
+  "fixChangesOnlyDriverEngineBinding": true,
+  "originalLogBytes": 56944,
+  "originalLogSha256": "6b9925ace318831a9289c64139ae1c76e9c93e40922e9f6f4d640c985d829b76",
+  "gzipBytes": 13805,
+  "gzipSha256": "41829a9257250ff66b0247b90195f234fe93a6efa7e5a8f3d8b3adf36e6e0b27",
+  "notReclassifiedAsSuccess": true,
+  "firstWebkitJob": {
+    "id": 127306330606,
+    "conclusion": "cancelled",
+    "stage": "Install existing frozen application and native engine",
+    "gameStarted": false,
+    "presentationPassed": false,
+    "logBytes": 42092,
+    "logSha256": "174ec68bc0d894eef81039792fcdc9d5e586cf759427e28b51d709e744c2c0e8",
+    "gzipBytes": 9671,
+    "gzipSha256": "2599f51769e7c65dd591797768ecc4d88ff3f1c3b493844c191a90070f71c9bc"
+  },
+  "pairedObservationJobSkipped": true
+}

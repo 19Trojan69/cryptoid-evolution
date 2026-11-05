@@ -1,0 +1,79 @@
+{
+  "version": 1,
+  "sourceCommit": "4ecdde51c0ab77a3e90c96dfd0cddf0bdfa4bb40",
+  "sourceTree": "6be297245426b78e1ad12c3e121ad2fe5f215101",
+  "runs": [
+    {
+      "id": 42046493626,
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "4ecdde51c0ab77a3e90c96dfd0cddf0bdfa4bb40",
+      "html_url": "https://github.com/19Trojan69/cryptoid-evolution/actions/runs/42046493626"
+    },
+    {
+      "id": 42045250069,
+      "status": "completed",
+      "conclusion": "failure",
+      "head_sha": "12847df2211bceb754bfbdef17f8b09c6fb16bb8",
+      "html_url": "https://github.com/19Trojan69/cryptoid-evolution/actions/runs/42045250069"
+    }
+  ],
+  "correctedJobs": [
+    {
+      "id": 127310730884,
+      "name": "native-presentation (chromium)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 127310731176,
+      "name": "native-presentation (webkit)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 127313576586,
+      "name": "paired-observation (1)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 127313576705,
+      "name": "paired-observation (2)",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": 13425671288,
+      "name": "enemy-motion-flow-webkit",
+      "size": 10980,
+      "digest": "sha256:f70e07b15b3ac31000ecfae1d299de144041fcfa26a955cb9f0302ba653baf04"
+    },
+    {
+      "id": 13425573474,
+      "name": "enemy-motion-paired-1",
+      "size": 25958,
+      "digest": "sha256:3757f7c13b2f112288f5be2bd94f85da2c8bac623ae66d43e6818168213205c1"
+    },
+    {
+      "id": 13425408747,
+      "name": "enemy-motion-paired-2",
+      "size": 26041,
+      "digest": "sha256:f2cdc4ed4e7a3ab0f04f74966edfafea38dbe4549b66c7ff295b9568f537a902"
+    },
+    {
+      "id": 13423699567,
+      "name": "enemy-motion-flow-chromium",
+      "size": 11411,
+      "digest": "sha256:96c564630827d8e8020e3df3366b35fbe9417b9f1bf431245747e499662b78c2"
+    }
+  ],
+  "sourceTests": 5,
+  "nativeCasesPerEngine": 24,
+  "sourceAndMethodChecksPassed": true,
+  "candidateAcceptedAsFix": false,
+  "newPhysicalDeviceTestRequested": false,
+  "oldFailedGatesReclassified": false
+}

@@ -1,0 +1,14 @@
+{
+  "baseDeviceCommit": "9f3bf451c01d6976ea1a50342cdec1470e2e080b",
+  "internalSourceCommit": "4ecdde51c0ab77a3e90c96dfd0cddf0bdfa4bb40",
+  "sourceTree": "6be297245426b78e1ad12c3e121ad2fe5f215101",
+  "frontendGitTree": "890df8a38e13ef1fe315a5c0eb109c1d72b80aab",
+  "sourceFilesAvailable": 485,
+  "sourceBytes": 4613161,
+  "cssFiles": 39,
+  "all485MatchedTheirFrozenGitBlobs": true,
+  "censusSha256": "d3aa630bbe85bd3830784dbb98eda3a81eb1e883f0c788f381ab0dffc25ec941",
+  "fullSemanticAcceptanceClaimed": false,
+  "trackedRuntimeSourceEdited": false,
+  "noNativeCacheCountOrPhoneMemoryMeasured": true
+}

@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "sources": [
+    {
+      "path": "Source/WebCore/css/MutableStyleProperties.cpp",
+      "commit": "b56845f9fe0bd77577734c768ceb35b14af44231",
+      "url": "https://github.com/WebKit/WebKit/blob/b56845f9fe0bd77577734c768ceb35b14af44231/Source/WebCore/css/MutableStyleProperties.cpp",
+      "bytes": 13738,
+      "gitBlobSha": "c441284a63df9ca96ee57b88169c3869687a2a51",
+      "sha256": "2675f364d5b2a26efe10d6fd56dee1aa64fb487be380a2be483d8cabfb7409a3"
+    },
+    {
+      "path": "Source/WebCore/css/CSSCustomPropertyValue.cpp",
+      "commit": "b56845f9fe0bd77577734c768ceb35b14af44231",
+      "url": "https://github.com/WebKit/WebKit/blob/b56845f9fe0bd77577734c768ceb35b14af44231/Source/WebCore/css/CSSCustomPropertyValue.cpp",
+      "bytes": 6665,
+      "gitBlobSha": "d6bb1dc5507f87bfa2ae2532064966c16da04143",
+      "sha256": "004f6871812b5b7e9f5ea55954ce7a54aacafb2428eb22ee225b10cdcc24a384"
+    },
+    {
+      "path": "Source/WebCore/css/CSSVariableData.cpp",
+      "commit": "b56845f9fe0bd77577734c768ceb35b14af44231",
+      "url": "https://github.com/WebKit/WebKit/blob/b56845f9fe0bd77577734c768ceb35b14af44231/Source/WebCore/css/CSSVariableData.cpp",
+      "bytes": 3391,
+      "gitBlobSha": "6c01a33540ddf7288b70b2bb4c5010de63d8ff53",
+      "sha256": "6a52d288b16d65a85ce5c43264d413345f5e03a5385f4a4cf1636be3ed4c2e29"
+    },
+    {
+      "path": "Source/WebCore/style/MatchedDeclarationsCache.cpp",
+      "commit": "b56845f9fe0bd77577734c768ceb35b14af44231",
+      "url": "https://github.com/WebKit/WebKit/blob/b56845f9fe0bd77577734c768ceb35b14af44231/Source/WebCore/style/MatchedDeclarationsCache.cpp",
+      "bytes": 9040,
+      "gitBlobSha": "89bc70ad9bb9ed51b8a7a02feb6ed58405dbe126",
+      "sha256": "4c8465ab303c74859ec1d9369c275810afe16db442e3c037d6843d43ebcd267f"
+    }
+  ],
+  "equalPropertyContentComparisonPresent": true,
+  "sameValueDoesNotProveZeroParsingCost": true,
+  "repeatedEqualWritesNotEstablishedAsStyleCacheLeak": true,
+  "cacheHashesInheritedCustomDataIdentity": true,
+  "copiesParentStyles": true,
+  "exactInstalledAppleBinaryInspected": false,
+  "nativeCauseProved": false,
+  "noDeviceUpdateRequirement": true,
+  "styleScopeComparisonOnly": true
+}

@@ -1,0 +1,114 @@
+{
+  "rows": [
+    {
+      "replica": 1,
+      "condition": "control",
+      "order": [
+        "control",
+        "candidate"
+      ],
+      "lateMeanMiB": 431.1380208333333,
+      "lateMinMiB": 421.16796875,
+      "lateMaxMiB": 440.1171875,
+      "observedActiveMs": 180000.00000000003,
+      "observedWallMs": 181659,
+      "volleysAdvanced": 64,
+      "shotsMinMax": [
+        0,
+        2
+      ],
+      "effectsMinMax": [
+        0,
+        1
+      ],
+      "originalMemoryEligibilityFlag": false,
+      "highestSampledPssMiB": 440.1171875
+    },
+    {
+      "replica": 1,
+      "condition": "candidate",
+      "order": [
+        "control",
+        "candidate"
+      ],
+      "lateMeanMiB": 422.085205078125,
+      "lateMinMiB": 413.19921875,
+      "lateMaxMiB": 429.990234375,
+      "observedActiveMs": 180000.09999999998,
+      "observedWallMs": 181679,
+      "volleysAdvanced": 64,
+      "shotsMinMax": [
+        0,
+        2
+      ],
+      "effectsMinMax": [
+        0,
+        1
+      ],
+      "originalMemoryEligibilityFlag": false,
+      "highestSampledPssMiB": 429.990234375
+    },
+    {
+      "replica": 2,
+      "condition": "control",
+      "order": [
+        "candidate",
+        "control"
+      ],
+      "lateMeanMiB": 424.4547526041667,
+      "lateMinMiB": 416.779296875,
+      "lateMaxMiB": 430.185546875,
+      "observedActiveMs": 180000.09999999998,
+      "observedWallMs": 181460,
+      "volleysAdvanced": 64,
+      "shotsMinMax": [
+        0,
+        2
+      ],
+      "effectsMinMax": [
+        0,
+        1
+      ],
+      "originalMemoryEligibilityFlag": false,
+      "highestSampledPssMiB": 430.185546875
+    },
+    {
+      "replica": 2,
+      "condition": "candidate",
+      "order": [
+        "candidate",
+        "control"
+      ],
+      "lateMeanMiB": 422.3818359375,
+      "lateMinMiB": 417.6025390625,
+      "lateMaxMiB": 427.0166015625,
+      "observedActiveMs": 180001.7,
+      "observedWallMs": 181443,
+      "volleysAdvanced": 64,
+      "shotsMinMax": [
+        0,
+        2
+      ],
+      "effectsMinMax": [
+        0,
+        1
+      ],
+      "originalMemoryEligibilityFlag": false,
+      "highestSampledPssMiB": 427.0166015625
+    }
+  ],
+  "bothCandidateMeansLower": true,
+  "lateRangesOverlapInBothPairs": true,
+  "reliableNativeMemoryGainEstablished": false,
+  "newPhoneEnduranceJustified": false,
+  "deploymentRecommendedFromTheseData": false,
+  "whiteScreenFixed": false,
+  "classification": "Native rendering and flow checks passed; short PSS observations are small and overlapping. Renderer candidate stays internal.",
+  "lateMeanDifferencesMiB": [
+    9.052815755208314,
+    2.0729166666666856
+  ],
+  "timeBetweenPssSamplesMs": 5000,
+  "instantaneousPeakNotMeasured": true,
+  "oldFailedMemoryGatesReclassified": false
+}

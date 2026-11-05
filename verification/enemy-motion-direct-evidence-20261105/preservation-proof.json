@@ -1,0 +1,55 @@
+{
+  "sourceRootsAndVercelConfig": [
+    {
+      "path": "api",
+      "sha": "ccac7cd576a079771d7d7fe4f0085492ebbe6813"
+    },
+    {
+      "path": "assets",
+      "sha": "a9860b12db58a96dafde818d9a58a6ea0e03c5e5"
+    },
+    {
+      "path": "backend",
+      "sha": "6e93bfbac9e6cc70a1edfb8bd55d737f612ba261"
+    },
+    {
+      "path": "frontend",
+      "sha": "890df8a38e13ef1fe315a5c0eb109c1d72b80aab"
+    },
+    {
+      "path": "private-preview",
+      "sha": "b733d4dc70b4ac407391720eab131dbaf1d60e37"
+    },
+    {
+      "path": "vercel.json",
+      "sha": "49956b406c1e97441e71e1f652f7c0d164d1ed16"
+    }
+  ],
+  "unchangedFromBase9f3": true,
+  "aliases": [
+    {
+      "alias": "cryptoid-evolution.vercel.app",
+      "deploymentId": "dpl_6N3FdS9XGXasCWrpMksngxCPNPRk",
+      "projectId": "prj_BAIJH4BzLLwun36kWVEnTdx69j0q"
+    },
+    {
+      "alias": "cryptoid-evolution-testnet.vercel.app",
+      "deploymentId": "dpl_239zEifRV84KCpbyHumnuHmSGm9T",
+      "projectId": "prj_JpvzU9ZS8bFkn9jZgE51Gct8TZpF"
+    },
+    {
+      "alias": "cryptoid-evolution-testnet-git-codex-critica-4ace66-19-trojan69.vercel.app",
+      "deploymentId": "dpl_8BuRwRJvtW7eHNR155K78fJgKeVk",
+      "projectId": "prj_JpvzU9ZS8bFkn9jZgE51Gct8TZpF"
+    }
+  ],
+  "publicDeploymentAliasesUnchanged": true,
+  "candidateBranch": "codex/enemy-motion-internal-20261105",
+  "candidateBranchFrozenAtTestedSource": true,
+  "previewDeploymentCreated": false,
+  "productionPromotion": false,
+  "mergeToMain": false,
+  "accessProtectionChanged": false,
+  "privateOwnerRawReportPublished": false,
+  "secretShareParametersArchived": false
+}
