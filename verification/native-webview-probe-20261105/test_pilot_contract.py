@@ -11,7 +11,7 @@ class PilotAcceptance(unittest.TestCase):
                      ownerDiagnostics=False, buildFlags=dict(development=False, production=True), frameAt=10)
         points = []
         for i in range(11):
-            point = dict(sequence=i+1, timeOrigin=1, hidden=False, secureContext=True, origin="http://127.0.0.1:4173",
+            point = dict(sequence=i+1, timeOrigin=1, documentToken="00000000-0000-4000-8000-000000000001", mainDocumentStarts=1, mainDocumentCommits=1, mainDocumentFinishes=1, hidden=False, secureContext=True, origin="http://127.0.0.1:4173",
                          userAgent="iPhone", width=440, height=652, devicePixelRatio=3, toggles=[False, True],
                          mounted=i < 9, scene=copy.deepcopy(scene), clock={"latest": copy.deepcopy(clock)})
             point["clock"]["latest"]["mode"] = "paused" if i in (1,4,5,7) else "running" if i in (2,3,6,8) else "ended"
@@ -19,7 +19,7 @@ class PilotAcceptance(unittest.TestCase):
             points.append(point)
         points[2]["clock"]["latest"]["elapsedMs"] = 1000
         points[3]["scene"]["frameAt"] = 20
-        native = dict(mode="pilot", pilotComplete=True, gameLoaded=True, reportExportObserved=True,
+        native = dict(mainDocumentStarts=1, mainDocumentCommits=1, mainDocumentFinishes=1, mode="pilot", pilotComplete=True, gameLoaded=True, reportExportObserved=True,
                       physicalDeviceTest=False, automaticReload=False, nativeTerminationCallbackObserved=False,
                       nativeContentTerminations=0, navigationErrors=0, systemName="iOS", systemVersion="18.5", observations=points)
         report = dict(fullSession=None, isolatedGuest=True, automaticTransmission=False, nativeTerminationCauseMeasured=False,
@@ -35,13 +35,23 @@ class PilotAcceptance(unittest.TestCase):
     def test_rejects_termination_hidden_replaced_document_and_gaps(self):
         mutations = [lambda n,r:n.update(nativeContentTerminations=1),
                      lambda n,r:n["observations"][3].update(hidden=True),
-                     lambda n,r:n["observations"][3].update(timeOrigin=2),
+                     lambda n,r:n["observations"][3].update(documentToken="00000000-0000-4000-8000-000000000002"),
                      lambda n,r:n["observations"][3]["clock"]["latest"].update(unobservedGaps=1),
                      lambda n,r:n["observations"][3]["clock"]["latest"].update(mode="paused")]
         for mutation in mutations:
             native, report, source = self.fixture()
             mutation(native, report)
             with self.assertRaises(AssertionError): validate_pilot(native, report, source)
+
+    def test_native_document_replacement_is_rejected_even_with_same_time_origin(self):
+        native, report, source = self.fixture()
+        native["observations"][3]["mainDocumentCommits"] = 2
+        with self.assertRaises(AssertionError): validate_pilot(native, report, source)
+
+    def test_time_origin_drift_does_not_replace_independent_document_identity(self):
+        native, report, source = self.fixture()
+        for i, point in enumerate(native["observations"]): point["timeOrigin"] += i * 5.5
+        validate_pilot(native, report, source)
 
     def test_rejects_stale_or_failed_normal_report(self):
         mutations = [lambda n,r:r["criticalDiagnostics"]["latest"]["clock"].update(elapsedMs=0),

@@ -8,16 +8,21 @@ def validate_pilot(native, report, source):
     assert native["nativeTerminationCallbackObserved"] is False
     assert native["nativeContentTerminations"] == native["navigationErrors"] == 0
     assert native["systemName"] == "iOS" and native["systemVersion"] == "18.5"
-    for key in ("readbackFailed", "reportWriteFailed", "observationLimitReached"):
+    for key in ("readbackFailed", "reportWriteFailed", "observationLimitReached", "documentProbeFailed"):
         assert key not in native, key
     points = native["observations"]
     assert len(points) == 11, "Every original pilot phase must be observed"
     assert points[0]["toggles"] == [False, True]
     assert points[1]["scene"]["status"] == "paused"
-    origin = points[0]["timeOrigin"]
+    token = points[0]["documentToken"]
+    import uuid
+    uuid.UUID(token)
     run = points[2]["clock"]["latest"]["id"]
     for i, point in enumerate(points):
-        assert point["sequence"] == i+1 and point["timeOrigin"] == origin > 0
+        assert point["sequence"] == i+1 and point["timeOrigin"] > 0
+        assert point["documentToken"] == token, "Isolated-world document changed"
+        for key in ("mainDocumentStarts", "mainDocumentCommits", "mainDocumentFinishes"):
+            assert point[key] == native[key] == 1, key
         assert point["hidden"] is False and point["secureContext"] is True
         assert point["origin"] == "http://127.0.0.1:4173" and "iPhone" in point["userAgent"]
         assert point["width"] > 0 and point["height"] > 0 and point["devicePixelRatio"] > 0

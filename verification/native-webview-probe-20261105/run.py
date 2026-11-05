@@ -161,7 +161,7 @@ def main() -> int:
         status["nativeTestSucceeded"] = True
 
     except Exception as error:
-        status["error"] = {"kind": type(error).__name__, "detail": str(error)[:1000]}
+        status["error"] = {"kind": type(error).__name__, "detail": str(error)[:1000], "traceback": __import__("traceback").format_exc()[-3000:]}
     finally:
         if simulator:
             collector.collect_native(
@@ -174,6 +174,8 @@ def main() -> int:
                     from pilot_contract import validate_pilot
                     receipt = json.loads((out / "pilot.json").read_text())
                     report = json.loads((out / "normal-report.json").read_text())
+                    status["gameLoaded"] = receipt.get("gameLoaded")
+                    status["nativeTerminationCallbackObserved"] = receipt.get("nativeTerminationCallbackObserved")
                     validate_pilot(receipt, report, status["source"])
                     assert before == package_manifest(site), "Served bytes changed during native test"
                     status.update(gameLoaded=True, normalReportVerified=True)
@@ -184,7 +186,7 @@ def main() -> int:
                 scope()
                 status.update(complete=True, stage="complete")
             except Exception as error:
-                status["error"] = {"kind": type(error).__name__, "detail": str(error)[:1000]}
+                status["error"] = {"kind": type(error).__name__, "detail": str(error)[:1000], "traceback": __import__("traceback").format_exc()[-3000:]}
         elif pilot and (out / "pilot.json").exists():
             try:
                 status["gameLoaded"] = json.loads((out / "pilot.json").read_text()).get("gameLoaded")

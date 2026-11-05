@@ -21,9 +21,11 @@ final class ProbeController: UIViewController, WKNavigationDelegate, WKScriptMes
     private let output = UITextView()
     private let gameMode = ProcessInfo.processInfo.arguments.contains("--game-pilot")
     private var observations: [[String: Any]] = []
+    private let documentWorld = WKContentWorld.world(name: "cryptoid.native.document-probe")
     private var record: [String: Any] = [
         "version": 1, "gameLoaded": false, "controlComplete": false,
         "nativeContentTerminations": 0, "navigationErrors": 0,
+        "mainDocumentStarts": 0, "mainDocumentCommits": 0, "mainDocumentFinishes": 0,
         "completionRejectedBeforeClick": false, "loaded": false,
         "clickCount": 0, "trustedClick": false, "readback": [:],
         "nativeTerminationCallbackObserved": false,
@@ -37,6 +39,13 @@ final class ProbeController: UIViewController, WKNavigationDelegate, WKScriptMes
         record["systemName"] = UIDevice.current.systemName
         let configuration = WKWebViewConfiguration()
         configuration.websiteDataStore = .nonPersistent()
+        if gameMode {
+            // Private measurement world, separate from every game global.
+            // A fresh document gets a fresh token. No timer or page listener.
+            configuration.userContentController.addUserScript(WKUserScript(
+                source: "globalThis.cryptoidDocumentToken = crypto.randomUUID();",
+                injectionTime: .atDocumentStart, forMainFrameOnly: true, in: documentWorld))
+        }
         configuration.userContentController.add(self, name: "control")
         webView = WKWebView(frame: .zero, configuration: configuration)
         webView.navigationDelegate = self
@@ -157,6 +166,21 @@ final class ProbeController: UIViewController, WKNavigationDelegate, WKScriptMes
     }
 
     private func readGame() {
+        webView.evaluateJavaScript("globalThis.cryptoidDocumentToken", in: nil, in: documentWorld) { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .success(let value):
+                guard let token = value as? String, UUID(uuidString: token) != nil else {
+                    self.record["documentProbeFailed"] = true; self.persist(); return
+                }
+                self.readGameSnapshot(documentToken: token)
+            case .failure:
+                self.record["documentProbeFailed"] = true; self.persist()
+            }
+        }
+    }
+
+    private func readGameSnapshot(documentToken: String) {
         // Existing QA bridge/storage and ordinary report UI only. No mutation,
         // synthesized input, new game timer, frame loop or automatic resume.
         let script = """
@@ -187,6 +211,10 @@ final class ProbeController: UIViewController, WKNavigationDelegate, WKScriptMes
                         self.record["reportExportObserved"] = true
                     } catch { self.record["reportWriteFailed"] = true }
                 }
+                point["documentToken"] = documentToken
+                for key in ["mainDocumentStarts", "mainDocumentCommits", "mainDocumentFinishes"] {
+                    point[key] = self.record[key]
+                }
                 point["sequence"] = self.observations.count + 1
                 point["observedAt"] = Date().timeIntervalSince1970 * 1000
                 self.record["readback"] = point
@@ -204,7 +232,16 @@ final class ProbeController: UIViewController, WKNavigationDelegate, WKScriptMes
         decisionHandler((!gameMode || local) ? .allow : .cancel)
     }
 
+    func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+        record["mainDocumentStarts"] = (record["mainDocumentStarts"] as? Int ?? 0) + 1
+        persist()
+    }
+    func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
+        record["mainDocumentCommits"] = (record["mainDocumentCommits"] as? Int ?? 0) + 1
+        persist()
+    }
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        record["mainDocumentFinishes"] = (record["mainDocumentFinishes"] as? Int ?? 0) + 1
         record["loaded"] = true
         persist()
     }
