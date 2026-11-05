@@ -1,0 +1,43 @@
+name: Observe the existing enemy renderer for ten minutes per arm
+on:
+  push:
+    branches: [codex/enemy-retention-pair-20261105]
+    paths:
+      - '.github/workflows/cryptoid-enemy-retention.yml'
+      - 'verification/enemy-motion-retention-20261105/**'
+permissions:
+  contents: read
+concurrency:
+  group: enemy-retention-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  later-memory:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with: {persist-credentials: false}
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with: {node-version: '24'}
+      - name: Preserve the exact verified renderer and collector gates
+        run: |
+          node --test verification/enemy-motion-retention-20261105/transform.test.mjs
+          node verification/direct-boss-style-device-20261102/verifyScope.mjs
+      - name: Install existing application and Chromium
+        env: {VERCEL_ENV: preview}
+        run: |
+          node verification/direct-boss-style-device-20261102/installDevicePreview.mjs --ignore-scripts
+          npm install --prefix verification/boss2-forensics-20261028 --ignore-scripts --no-audit --no-fund
+          cd verification/boss2-forensics-20261028
+          npx playwright install --with-deps chromium
+      - name: Run both fresh ten-minute conditions
+        env: {VERCEL_ENV: preview}
+        run: node verification/enemy-motion-retention-20261105/compare.mjs
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: ${{ !cancelled() }}
+        with:
+          name: enemy-retention-pair
+          path: |
+            verification/enemy-motion-retention-20261105/results/
+            verification/enemy-motion-direct-20261105/results/
+          retention-days: 7
