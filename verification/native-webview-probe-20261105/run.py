@@ -89,7 +89,7 @@ def main() -> int:
         status["xcodegen"] = run([str(binary), "version"])
         assert "2.44.1" in status["xcodegen"]
         run([str(binary), "generate", "--spec", str(FOLDER / "project.yml")], cwd=FOLDER)
-        schemes = list(FOLDER.rglob("NativeProbe.xcscheme"))
+        schemes = list((FOLDER / "CryptoidNativeProbe.xcodeproj/xcshareddata/xcschemes").glob("NativeProbe.xcscheme"))
         assert len(schemes) == 1
         shutil.copyfile(schemes[0], out / "NativeProbe.xcscheme")
         import xml.etree.ElementTree as ET
