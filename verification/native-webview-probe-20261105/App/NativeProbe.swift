@@ -1,6 +1,18 @@
 import UIKit
 import WebKit
 
+private enum LaunchStage {
+    static func write(_ stage: String) {
+        let path = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            .appendingPathComponent("launch-stage.json")
+        let value: [String: Any] = ["version": 1, "stage": stage,
+            "at": Date().timeIntervalSince1970 * 1000, "physicalDeviceTest": false]
+        if let data = try? JSONSerialization.data(withJSONObject: value, options: [.sortedKeys]) {
+            try? data.write(to: path, options: .atomic)
+        }
+    }
+}
+
 // The separate pilot loads only the unchanged local isolated guest build.
 // WebContent termination is recorded by the native delegate, never auto-reloaded.
 @main
@@ -8,10 +20,14 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions options: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        LaunchStage.write("delegate-entry")
         let window = UIWindow(frame: UIScreen.main.bounds)
+        LaunchStage.write("window-created")
         window.rootViewController = ProbeController()
+        LaunchStage.write("controller-created")
         self.window = window
         window.makeKeyAndVisible()
+        LaunchStage.write("window-visible")
         return true
     }
 }
@@ -21,7 +37,6 @@ final class ProbeController: UIViewController, WKNavigationDelegate, WKScriptMes
     private let output = UITextView()
     private let gameMode = ProcessInfo.processInfo.arguments.contains("--game-pilot")
     private var observations: [[String: Any]] = []
-    private let documentWorld = WKContentWorld.world(name: "cryptoid.native.document-probe")
     private var record: [String: Any] = [
         "version": 1, "gameLoaded": false, "controlComplete": false,
         "nativeContentTerminations": 0, "navigationErrors": 0,
@@ -34,20 +49,23 @@ final class ProbeController: UIViewController, WKNavigationDelegate, WKScriptMes
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        LaunchStage.write("view-loaded")
         view.backgroundColor = .systemBackground
         record["systemVersion"] = UIDevice.current.systemVersion
         record["systemName"] = UIDevice.current.systemName
+        LaunchStage.write("before-webview-configuration")
         let configuration = WKWebViewConfiguration()
         configuration.websiteDataStore = .nonPersistent()
         if gameMode {
-            // Private measurement world, separate from every game global.
-            // A fresh document gets a fresh token. No timer or page listener.
+            // One immutable host diagnostic property per document. No
+            // controller state, timer, page listener or synthesized input.
             configuration.userContentController.addUserScript(WKUserScript(
-                source: "globalThis.cryptoidDocumentToken = crypto.randomUUID();",
-                injectionTime: .atDocumentStart, forMainFrameOnly: true, in: documentWorld))
+                source: "Object.defineProperty(globalThis, '__cryptoidNativeDocumentToken', {value:crypto.randomUUID(),writable:false,configurable:false});",
+                injectionTime: .atDocumentStart, forMainFrameOnly: true))
         }
-        configuration.userContentController.add(self, name: "control")
+        LaunchStage.write("configuration-created")
         webView = WKWebView(frame: .zero, configuration: configuration)
+        LaunchStage.write("webview-created")
         webView.navigationDelegate = self
         webView.accessibilityIdentifier = "native-control-webview"
         output.accessibilityIdentifier = "native-observation"
@@ -82,9 +100,11 @@ final class ProbeController: UIViewController, WKNavigationDelegate, WKScriptMes
             output.heightAnchor.constraint(equalToConstant: 160)
         ])
         persist()
+        LaunchStage.write("initial-observation-written")
         if gameMode {
             record["mode"] = "pilot"
             record["pilotComplete"] = false
+            LaunchStage.write("local-guest-load-requested")
             webView.load(URLRequest(url: URL(string: "http://127.0.0.1:4173/")!))
             return
         }
@@ -166,25 +186,10 @@ final class ProbeController: UIViewController, WKNavigationDelegate, WKScriptMes
     }
 
     private func readGame() {
-        webView.evaluateJavaScript("globalThis.cryptoidDocumentToken", in: nil, in: documentWorld) { [weak self] result in
-            guard let self = self else { return }
-            switch result {
-            case .success(let value):
-                guard let token = value as? String, UUID(uuidString: token) != nil else {
-                    self.record["documentProbeFailed"] = true; self.persist(); return
-                }
-                self.readGameSnapshot(documentToken: token)
-            case .failure:
-                self.record["documentProbeFailed"] = true; self.persist()
-            }
-        }
-    }
-
-    private func readGameSnapshot(documentToken: String) {
         // Existing QA bridge/storage and ordinary report UI only. No mutation,
         // synthesized input, new game timer, frame loop or automatic resume.
         let script = """
-        (()=>({timeOrigin:performance.timeOrigin,hidden:document.hidden,
+        (()=>({documentToken:globalThis.__cryptoidNativeDocumentToken,timeOrigin:performance.timeOrigin,hidden:document.hidden,
           origin:location.origin,readyState:document.readyState,secureContext:isSecureContext,
           userAgent:navigator.userAgent,width:innerWidth,height:innerHeight,devicePixelRatio,
           scene:window.__crossDeviceTest?.inspect()??null,
@@ -211,7 +216,6 @@ final class ProbeController: UIViewController, WKNavigationDelegate, WKScriptMes
                         self.record["reportExportObserved"] = true
                     } catch { self.record["reportWriteFailed"] = true }
                 }
-                point["documentToken"] = documentToken
                 for key in ["mainDocumentStarts", "mainDocumentCommits", "mainDocumentFinishes"] {
                     point[key] = self.record[key]
                 }
@@ -243,6 +247,7 @@ final class ProbeController: UIViewController, WKNavigationDelegate, WKScriptMes
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         record["mainDocumentFinishes"] = (record["mainDocumentFinishes"] as? Int ?? 0) + 1
         record["loaded"] = true
+        LaunchStage.write("main-document-finished")
         persist()
     }
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {

@@ -178,7 +178,7 @@ def main() -> int:
                     status["nativeFailureLogUnavailable"] = {"kind": type(error).__name__, "detail": str(error)[:500]}
             collector.collect_native(
                 lambda: run(["xcrun", "simctl", "get_app_container", simulator, "org.cryptoid.nativeprobe", "data"], timeout=20, log="container.log"),
-                [("probe-result.json", "pilot.json" if pilot else "control.json")] +
+                [("probe-result.json", "pilot.json" if pilot else "control.json"), ("launch-stage.json", "launch-stage.json")] +
                 ([("normal-report.json", "normal-report.json")] if pilot else []))
         if "error" not in status:
             try:
