@@ -21,7 +21,8 @@ Keine Spielquelle, Uhr, Grafik, Eingabe, Audio-, Konto- oder Backendregel änder
 sich. Die fünf geschützten Runtime-Bäume und vercel.json bleiben exakt auf b092f646.
 Automatische Vercel-Deployments bleiben abgeschaltet; kein neues Geräte-Preview.
 
-Werkzeuge: vorinstalliertes Xcode 26.2, iOS-18.5-Simulator und offizielles XcodeGen
+Werkzeuge im neuen Kontrollversuch: vorinstalliertes Xcode 16.4 mit passendem
+iOS-18.5-SDK, iOS-18.5-Simulator und offizielles XcodeGen
 2.44.1 mit geprüftem Release-SHA256. Keine Appium-/WDA-/Remote-Debugger-Sitzung,
 kein Gerät/USB, keine automatische Wiederholungs-/Resume-Schleife.
 Kein Bildschirmvideo wird angefordert; automatische Bildschirm-Anhänge werden
@@ -62,3 +63,20 @@ Primärquellen des korrigierten Schemapfads:
 Originalresultat des fehlgeschlagenen Versuchs und Prüfsumme seines unveränderten
 577-Byte-Artefakt-ZIP sind in evidence/attempt-41964912601 erhalten. Kein Spiel
 war geladen; dies ist kein Spielabsturz und kein bestandener nativer Kontrolllauf.
+
+## Zweiter Versuch: Apple-Simulatorkatalog blockiert
+
+Quelle f9713840b09f612c5db7922e88de85b37fff3244, CI 41965265740 besteht die
+konkrete Generator-/XML-Prüfung einschließlich keepNever und screenshots. Dann
+endet `xcrun simctl list --json` in seiner unverändert begrenzten 150-Sekunden-Frist.
+Keine Simulator-ID, kein App-Build, keine App-Öffnung, kein Spiel und keine
+vertrauenswürdige Kontrollberührung werden diesem Versuch zugeschrieben.
+Das 1.707-Byte-Artefakt enthält den Schlussdatensatz und die erzeugte Scheme-XML;
+GitHub-SHA256 6aeeafacdba94b4abdfdcdea052285131fecb5e1d644545863893d564430dde5.
+
+Der nächste einzelne kontrollierte Vergleich wählt das ebenfalls vorinstallierte
+Xcode 16.4 mit nativ passendem iOS-18.5-SDK. Die 150-Sekunden-Katalogfrist,
+App-Quellen und alle Berührungs-/DOM-Abnahmekriterien bleiben gleich. Ein Erfolg
+dieses anderen Werkzeugsatzes würde nicht beweisen, dass Xcode 26.2 allein die
+vorige Blockade verursacht hat. Falls auch dessen Katalog blockiert, kein weiterer
+gleicher Startversuch und kein nachfolgender Spieltest aus dieser Kalibrierung.

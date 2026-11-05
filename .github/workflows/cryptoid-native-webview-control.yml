@@ -16,8 +16,8 @@ jobs:
         with: {persist-credentials: false, fetch-depth: 0}
       - name: Check the acceptance boundaries without an iPhone
         run: python3 -m unittest discover -s verification/native-webview-probe-20261105 -p 'test_*.py' -v
-      - name: Select installed Xcode
-        run: sudo xcode-select --switch /Applications/Xcode_26.2.app/Contents/Developer
+      - name: Select the installed Xcode matching the iOS 18.5 SDK
+        run: sudo xcode-select --switch /Applications/Xcode_16.4.app/Contents/Developer
       - name: Require native app, trusted touch and DOM readback
         run: python3 verification/native-webview-probe-20261105/run.py
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
