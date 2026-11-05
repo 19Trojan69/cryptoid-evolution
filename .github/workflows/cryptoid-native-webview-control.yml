@@ -1,0 +1,28 @@
+name: Direct native WebView control without game loading
+on:
+  push:
+    branches: [codex/native-webview-control-20261105]
+    paths:
+      - '.github/workflows/cryptoid-native-webview-control.yml'
+      - 'verification/native-webview-probe-20261105/**'
+permissions:
+  contents: read
+jobs:
+  native-control:
+    runs-on: macos-15-intel
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with: {persist-credentials: false, fetch-depth: 0}
+      - name: Check the acceptance boundaries without an iPhone
+        run: python3 -m unittest discover -s verification/native-webview-probe-20261105 -p 'test_*.py' -v
+      - name: Select installed Xcode
+        run: sudo xcode-select --switch /Applications/Xcode_26.2.app/Contents/Developer
+      - name: Require native app, trusted touch and DOM readback
+        run: python3 verification/native-webview-probe-20261105/run.py
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: ${{ !cancelled() }}
+        with:
+          name: native-webview-control
+          path: verification/native-webview-probe-20261105/results/
+          retention-days: 7

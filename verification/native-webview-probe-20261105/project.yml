@@ -1,0 +1,44 @@
+name: CryptoidNativeProbe
+options:
+  minimumXcodeGenVersion: 2.44.1
+  deploymentTarget:
+    iOS: '18.0'
+settings:
+  base:
+    SWIFT_VERSION: '5.0'
+    CODE_SIGNING_ALLOWED: NO
+    TARGETED_DEVICE_FAMILY: '1,2'
+targets:
+  NativeProbe:
+    type: application
+    platform: iOS
+    sources: [App]
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: org.cryptoid.nativeprobe
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents: YES
+    dependencies:
+      - sdk: WebKit.framework
+  NativeProbeUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources: [Tests]
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: org.cryptoid.nativeprobe.tests
+        GENERATE_INFOPLIST_FILE: YES
+    dependencies:
+      - target: NativeProbe
+schemes:
+  NativeProbe:
+    build:
+      targets:
+        NativeProbe: all
+        NativeProbeUITests: [test]
+    test:
+      targets: [NativeProbeUITests]
+      gatherCoverageData: false
+      captureScreenshotsAutomatically: false
+      preferredScreenCaptureFormat: screenshots
