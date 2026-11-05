@@ -58,7 +58,7 @@ Primärquellen:
 
 ## Vorab festgelegte interne Prüfung
 
-Vier reine Quell-Gegenbeispiele verlangen exakte Umkehrbarkeit und lehnen
+Fünf reine Quell-/Treiber-Gegenbeispiele verlangen exakte Umkehrbarkeit und lehnen
 fehlende/doppelte/unpassende Quellfragmente ab. Der neue Style-Helper wird streng
 typgeprüft. Die vollständigen virtuellen TSX-Dateien werden syntaktisch geprüft;
 dies wird nicht als neue vollständige Projekt-Typprüfung bezeichnet.
@@ -92,3 +92,20 @@ GPU- oder reiner Rendererwert. Die unabhängigen Spielszenen sind unseeded.
 Ein einzelner niedrigerer Mittelwert oder überlappende Streuung begründet keinen
 neuen Handy-Dauertest. Auch ein konsistenter Vorteil wäre noch kein dauerhafter
 White-Screen-Fix. Ergebnisse werden erst nach tatsächlicher Ausführung ergänzt.
+
+## Erster interner Treiberfehler bleibt ein Fehlschlag
+
+Quelle `12847df2211bceb754bfbdef17f8b09c6fb16bb8`, CI
+https://github.com/19Trojan69/cryptoid-evolution/actions/runs/42045250069:
+Quellenschutz, Helper-Typprüfung, virtuelle TSX-Syntax und ursprünglicher
+Gast-Build bestehen. Im ersten Chromium-Job 127306330825 scheitert anschließend
+die Engine-Validierung vor dem Browser-/Spielstart. Der ältere importierte
+Treiber las argv[2] und erhielt das neue Argument `flow` statt `chromium`.
+Kein nativer Darstellungs-, Spiel- oder Speicher-Pass aus diesem Lauf.
+
+Die Korrektur bindet die bereits validierte Engine ausdrücklich an den
+importierten Treiber. Die neue fünfte lokale Prüfung generiert beide Treiber-
+Ebenen aus echten CLI-Aufrufen, prüft ihre Syntax und die exakte Rückgewinnung
+aller ursprünglichen Collectorbedingungen vor jedem Browserstart. Sie prüft
+keine Hardware. Kein bestehendes Quellen-, Zeit-, Fehler- oder Darstellungs-
+Kriterium wird dafür gelockert. Die eigentliche Renderer-Änderung bleibt gleich.

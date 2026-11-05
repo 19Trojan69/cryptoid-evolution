@@ -39,3 +39,10 @@ test('all generated Node builder stages are syntactically valid in both assigned
   sources.forEach((s,i)=>{const p=resolve(dir,condition+i+'.mjs');writeFileSync(p,s);execFileSync(process.execPath,['--check',p]);});
  }}finally{rmSync(dir,{recursive:true,force:true});}
 });
+test('actual CLI layouts bind the engine and validate both generated driver layers before any game startup',()=>{
+ for(const args of [['flow','chromium','candidate','1'],['flow','webkit','candidate','1'],['memory','chromium','control','2']]){
+  const out=execFileSync(process.execPath,[root+'/verification/enemy-motion-direct-20261105/run.mjs',...args,'--check-generated'],{encoding:'utf8'});
+  const row=JSON.parse(out.trim());assert.equal(row.engine,args[1]);assert.equal(row.kind,args[0]);
+  assert.equal(row.nestedSyntaxPassed,true);assert.equal(row.allOriginalCollectorAssertionsRetained,true);assert.equal(row.gameOrBrowserStarted,false);
+ }
+});

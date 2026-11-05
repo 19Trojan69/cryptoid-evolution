@@ -7,6 +7,9 @@ on:
       - 'verification/enemy-motion-direct-20261105/**'
 permissions:
   contents: read
+concurrency:
+  group: enemy-motion-internal-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   native-presentation:
     runs-on: ubuntu-24.04
