@@ -1,0 +1,19 @@
+{
+  "sourceCommit": "fa6239bedb24b4e417d28ec8a94a7195acd168d6",
+  "sourceTree": "bffd905a711f57ad3fa8f92fdd5218e0a2e92973",
+  "run": 42095718896,
+  "job": 127485093224,
+  "conclusion": "success",
+  "url": "https://github.com/19Trojan69/cryptoid-evolution/actions/runs/42095718896",
+  "artifactId": 13447572510,
+  "artifactBytes": 24322,
+  "artifactSha256": "3ee581995988039bf84bd95c9c88a38f5827d8413f1a7486198643cb9b38f80c",
+  "priorFailure": {
+    "source": "d4265d4916420f849243e2cf0031bac1065b421c",
+    "run": 42095393806,
+    "job": 127483941935,
+    "reason": "Wrong internal Playwright property _delegate; failed before game. Two exact references corrected to delegate."
+  },
+  "physicalDevice": false,
+  "whiteScreenFixed": false
+}

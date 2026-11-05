@@ -1,0 +1,948 @@
+{
+  "version": 1,
+  "offlineOnly": true,
+  "originalZipBytes": 24322,
+  "originalZipSha256": "3ee581995988039bf84bd95c9c88a38f5827d8413f1a7486198643cb9b38f80c",
+  "members": {
+    "build-info.json": {
+      "bytes": 10732,
+      "sha256": "de3d77e6859d0258ee36d021107c06fcd4f86cabf0a741b24aec52f465a84e1f"
+    },
+    "observation.json": {
+      "bytes": 294012,
+      "sha256": "767d74324909a3957b81b7cfb60b2ca63ad084c3304a51be73f82f59f953cad3"
+    },
+    "synthetic-report.json": {
+      "bytes": 9247,
+      "sha256": "e9d82df273b61b28b3674ac9b624e122b92a7fbd27226597d3d07ae761973e0e"
+    }
+  },
+  "sourceCommit": "fa6239bedb24b4e417d28ec8a94a7195acd168d6",
+  "sourceTree": "bffd905a711f57ad3fa8f92fdd5218e0a2e92973",
+  "compiledControllerSha256": "00e3796f3eb0bbaec3f2ae16bb5ac46a2d88c8abc6647fee0e1a5b634249a18d",
+  "stages": [
+    {
+      "label": "fresh-blank-document",
+      "pssMiB": {
+        "samples": 5,
+        "min": 304.90234375,
+        "max": 363.71484375,
+        "mean": 351.625
+      },
+      "processes": [
+        {
+          "pid": 991,
+          "role": "browser-other",
+          "meanPssMiB": 97.159765625
+        },
+        {
+          "pid": 1007,
+          "role": "webkit-network",
+          "meanPssMiB": 35.67421875
+        },
+        {
+          "pid": 1009,
+          "role": "webkit-content",
+          "meanPssMiB": 218.791015625
+        }
+      ],
+      "nativeMiB": {
+        "javascript": {
+          "samples": 11,
+          "first": 1.46484375,
+          "last": 1.249232292175293,
+          "min": 1.249232292175293,
+          "max": 1.46484375,
+          "mean": 1.3864395835182883
+        },
+        "jit": {
+          "samples": 11,
+          "first": 0.0,
+          "last": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "mean": 0.0
+        },
+        "images": {
+          "samples": 11,
+          "first": 0.0,
+          "last": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "mean": 0.0
+        },
+        "layers": {
+          "samples": 11,
+          "first": 0.0,
+          "last": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "mean": 0.0
+        },
+        "page": {
+          "samples": 11,
+          "first": 0.0,
+          "last": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "mean": 0.0
+        },
+        "other": {
+          "samples": 11,
+          "first": 72.8125,
+          "last": 110.1101427078247,
+          "min": 72.8125,
+          "max": 110.5078125,
+          "mean": 106.78685587102717
+        }
+      },
+      "layerCount": 1,
+      "layerBackingEstimateBytes": 7369600,
+      "largestLayerEstimates": [
+        {
+          "node": {
+            "nodeId": 1,
+            "nodeName": "#document"
+          },
+          "memory": 7369600,
+          "reasons": {
+            "root": true
+          }
+        }
+      ]
+    },
+    {
+      "label": "menu-before-preparation",
+      "pssMiB": {
+        "samples": 5,
+        "min": 446.9345703125,
+        "max": 464.1455078125,
+        "mean": 460.3275390625
+      },
+      "processes": [
+        {
+          "pid": 991,
+          "role": "browser-other",
+          "meanPssMiB": 111.43515625
+        },
+        {
+          "pid": 1007,
+          "role": "webkit-network",
+          "meanPssMiB": 47.139453125
+        },
+        {
+          "pid": 1009,
+          "role": "webkit-content",
+          "meanPssMiB": 301.7529296875
+        }
+      ],
+      "nativeMiB": {
+        "javascript": {
+          "samples": 10,
+          "first": 5.96022891998291,
+          "last": 5.737839698791504,
+          "min": 5.734910011291504,
+          "max": 5.96218204498291,
+          "mean": 5.844373512268066
+        },
+        "jit": {
+          "samples": 10,
+          "first": 0.0,
+          "last": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "mean": 0.0
+        },
+        "images": {
+          "samples": 10,
+          "first": 0.0,
+          "last": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "mean": 0.0
+        },
+        "layers": {
+          "samples": 10,
+          "first": 0.0,
+          "last": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "mean": 0.0
+        },
+        "page": {
+          "samples": 10,
+          "first": 0.0,
+          "last": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "mean": 0.0
+        },
+        "other": {
+          "samples": 10,
+          "first": 164.1725835800171,
+          "last": 165.1840353012085,
+          "min": 164.1725835800171,
+          "max": 165.3639898300171,
+          "mean": 165.12750148773193
+        }
+      },
+      "layerCount": 1,
+      "layerBackingEstimateBytes": 2727920,
+      "largestLayerEstimates": [
+        {
+          "node": {
+            "nodeId": 5,
+            "nodeName": "#document"
+          },
+          "memory": 2727920,
+          "reasons": {
+            "root": true
+          }
+        }
+      ]
+    },
+    {
+      "label": "menu-after-asset-preparation",
+      "pssMiB": {
+        "samples": 5,
+        "min": 513.89453125,
+        "max": 535.4453125,
+        "mean": 518.25234375
+      },
+      "processes": [
+        {
+          "pid": 991,
+          "role": "browser-other",
+          "meanPssMiB": 114.7287109375
+        },
+        {
+          "pid": 1007,
+          "role": "webkit-network",
+          "meanPssMiB": 49.9205078125
+        },
+        {
+          "pid": 1009,
+          "role": "webkit-content",
+          "meanPssMiB": 353.603125
+        }
+      ],
+      "nativeMiB": {
+        "javascript": {
+          "samples": 10,
+          "first": 22.388081550598145,
+          "last": 22.389058113098145,
+          "min": 22.388081550598145,
+          "max": 22.389058113098145,
+          "mean": 22.388960456848146
+        },
+        "jit": {
+          "samples": 10,
+          "first": 0.0,
+          "last": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "mean": 0.0
+        },
+        "images": {
+          "samples": 10,
+          "first": 3.5540313720703125,
+          "last": 3.5540313720703125,
+          "min": 3.5540313720703125,
+          "max": 3.5540313720703125,
+          "mean": 3.5540313720703125
+        },
+        "layers": {
+          "samples": 10,
+          "first": 0.0,
+          "last": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "mean": 0.0
+        },
+        "page": {
+          "samples": 10,
+          "first": 0.0,
+          "last": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "mean": 0.0
+        },
+        "other": {
+          "samples": 10,
+          "first": 193.19069957733154,
+          "last": 188.13112926483154,
+          "min": 188.12331676483154,
+          "max": 193.19069957733154,
+          "mean": 188.63630504608153
+        }
+      },
+      "layerCount": 1,
+      "layerBackingEstimateBytes": 2727920,
+      "largestLayerEstimates": [
+        {
+          "node": {
+            "nodeId": 140,
+            "nodeName": "#document"
+          },
+          "memory": 2727920,
+          "reasons": {
+            "root": true
+          }
+        }
+      ]
+    },
+    {
+      "label": "mounted-boss-paused-before-start",
+      "pssMiB": {
+        "samples": 5,
+        "min": 705.1337890625,
+        "max": 955.8369140625,
+        "mean": 884.2970703125
+      },
+      "processes": [
+        {
+          "pid": 991,
+          "role": "browser-other",
+          "meanPssMiB": 113.7693359375
+        },
+        {
+          "pid": 1007,
+          "role": "webkit-network",
+          "meanPssMiB": 49.821875
+        },
+        {
+          "pid": 1009,
+          "role": "webkit-content",
+          "meanPssMiB": 720.705859375
+        }
+      ],
+      "nativeMiB": {
+        "javascript": {
+          "samples": 12,
+          "first": 37.769039154052734,
+          "last": 25.23147678375244,
+          "min": 25.18948459625244,
+          "max": 37.784664154052734,
+          "mean": 27.30902624130249
+        },
+        "jit": {
+          "samples": 12,
+          "first": 0.0,
+          "last": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "mean": 0.0
+        },
+        "images": {
+          "samples": 12,
+          "first": 3.25067138671875,
+          "last": 12.25067138671875,
+          "min": 3.25067138671875,
+          "max": 12.25067138671875,
+          "mean": 4.00067138671875
+        },
+        "layers": {
+          "samples": 12,
+          "first": 0.0,
+          "last": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "mean": 0.0
+        },
+        "page": {
+          "samples": 12,
+          "first": 0.0,
+          "last": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "mean": 0.0
+        },
+        "other": {
+          "samples": 12,
+          "first": 244.95685195922852,
+          "last": 596.6819143295288,
+          "min": 244.95685195922852,
+          "max": 620.5168752670288,
+          "mean": 536.8211617469788
+        }
+      },
+      "layerCount": 23,
+      "layerBackingEstimateBytes": 13834742,
+      "largestLayerEstimates": [
+        {
+          "node": {
+            "nodeId": 282,
+            "nodeName": "svg",
+            "class": "starfield-stars starfield-distant"
+          },
+          "memory": 3747296,
+          "reasons": {
+            "transform3D": true,
+            "animation": true
+          }
+        },
+        {
+          "node": {
+            "nodeId": 433,
+            "nodeName": "svg",
+            "class": "starfield-stars starfield-nearby"
+          },
+          "memory": 3652796,
+          "reasons": {
+            "transform3D": true,
+            "animation": true,
+            "stacking": true
+          }
+        },
+        {
+          "node": {
+            "nodeId": 241,
+            "nodeName": "#document"
+          },
+          "memory": 1419000,
+          "reasons": {
+            "root": true
+          }
+        },
+        {
+          "node": {
+            "nodeId": 276,
+            "nodeName": "DIV",
+            "class": "game-route"
+          },
+          "memory": 1419000,
+          "reasons": {
+            "positionFixed": true
+          }
+        },
+        {
+          "node": {
+            "nodeId": 585,
+            "nodeName": "DIV",
+            "class": "space-scene space-scene-2 space-scene-paused"
+          },
+          "memory": 1419000,
+          "reasons": {
+            "overlap": true
+          }
+        }
+      ]
+    },
+    {
+      "label": "playing-original-boss",
+      "pssMiB": {
+        "samples": 15,
+        "min": 1141.4345703125,
+        "max": 1182.9931640625,
+        "mean": 1159.1624348958333
+      },
+      "processes": [
+        {
+          "pid": 991,
+          "role": "browser-other",
+          "meanPssMiB": 113.25709635416666
+        },
+        {
+          "pid": 1007,
+          "role": "webkit-network",
+          "meanPssMiB": 47.82838541666667
+        },
+        {
+          "pid": 1009,
+          "role": "webkit-content",
+          "meanPssMiB": 998.076953125
+        }
+      ],
+      "nativeMiB": {
+        "javascript": {
+          "samples": 31,
+          "first": 30.64853858947754,
+          "last": 24.506532669067383,
+          "min": 24.466493606567383,
+          "max": 33.225836753845215,
+          "mean": 31.350297374110067
+        },
+        "jit": {
+          "samples": 31,
+          "first": 0.0,
+          "last": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "mean": 0.0
+        },
+        "images": {
+          "samples": 31,
+          "first": 14.491531372070312,
+          "last": 15.098251342773438,
+          "min": 14.491531372070312,
+          "max": 15.401611328125,
+          "mean": 14.990607477003529
+        },
+        "layers": {
+          "samples": 31,
+          "first": 0.0,
+          "last": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "mean": 0.0
+        },
+        "page": {
+          "samples": 31,
+          "first": 0.0,
+          "last": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "mean": 0.0
+        },
+        "other": {
+          "samples": 31,
+          "first": 781.2818050384521,
+          "last": 825.6061534881592,
+          "min": 780.6118831634521,
+          "max": 843.6753597259521,
+          "mean": 806.4472755924348
+        }
+      },
+      "layerCount": 44,
+      "layerBackingEstimateBytes": 13591670,
+      "largestLayerEstimates": [
+        {
+          "node": {
+            "nodeId": 1390,
+            "nodeName": "svg",
+            "class": "starfield-stars starfield-distant"
+          },
+          "memory": 3747296,
+          "reasons": {
+            "transform3D": true,
+            "animation": true
+          }
+        },
+        {
+          "node": {
+            "nodeId": 1541,
+            "nodeName": "svg",
+            "class": "starfield-stars starfield-nearby"
+          },
+          "memory": 3652796,
+          "reasons": {
+            "transform3D": true,
+            "animation": true,
+            "stacking": true
+          }
+        },
+        {
+          "node": {
+            "nodeId": 1344,
+            "nodeName": "#document"
+          },
+          "memory": 1419000,
+          "reasons": {
+            "root": true
+          }
+        },
+        {
+          "node": {
+            "nodeId": 1379,
+            "nodeName": "DIV",
+            "class": "game-route"
+          },
+          "memory": 1419000,
+          "reasons": {
+            "positionFixed": true
+          }
+        },
+        {
+          "node": {
+            "nodeId": 1693,
+            "nodeName": "DIV",
+            "class": "space-scene space-scene-2"
+          },
+          "memory": 1419000,
+          "reasons": {
+            "overlap": true
+          }
+        }
+      ]
+    },
+    {
+      "label": "home-with-existing-qa-bridge",
+      "pssMiB": {
+        "samples": 5,
+        "min": 863.0400390625,
+        "max": 1171.1416015625,
+        "mean": 925.4509765625
+      },
+      "processes": [
+        {
+          "pid": 991,
+          "role": "browser-other",
+          "meanPssMiB": 113.3857421875
+        },
+        {
+          "pid": 1007,
+          "role": "webkit-network",
+          "meanPssMiB": 47.878125
+        },
+        {
+          "pid": 1009,
+          "role": "webkit-content",
+          "meanPssMiB": 764.187109375
+        }
+      ],
+      "nativeMiB": {
+        "javascript": {
+          "samples": 11,
+          "first": 25.445810317993164,
+          "last": 28.378073692321777,
+          "min": 25.445810317993164,
+          "max": 28.378073692321777,
+          "mean": 26.512087908658113
+        },
+        "jit": {
+          "samples": 11,
+          "first": 0.0,
+          "last": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "mean": 0.0
+        },
+        "images": {
+          "samples": 11,
+          "first": 3.757659912109375,
+          "last": 3.757659912109375,
+          "min": 3.757659912109375,
+          "max": 3.757659912109375,
+          "mean": 3.757659912109375
+        },
+        "layers": {
+          "samples": 11,
+          "first": 0.0,
+          "last": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "mean": 0.0
+        },
+        "page": {
+          "samples": 11,
+          "first": 0.0,
+          "last": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "mean": 0.0
+        },
+        "other": {
+          "samples": 11,
+          "first": 824.3980922698975,
+          "last": 515.0752038955688,
+          "min": 515.0752038955688,
+          "max": 824.3980922698975,
+          "mean": 572.6208771792325
+        }
+      },
+      "layerCount": 1,
+      "layerBackingEstimateBytes": 2801880,
+      "largestLayerEstimates": [
+        {
+          "node": {
+            "nodeId": 1940,
+            "nodeName": "#document"
+          },
+          "memory": 2801880,
+          "reasons": {
+            "root": true
+          }
+        }
+      ]
+    },
+    {
+      "label": "home-after-qa-bridge-release",
+      "pssMiB": {
+        "samples": 15,
+        "min": 844.0986328125,
+        "max": 863.4931640625,
+        "mean": 857.2811848958333
+      },
+      "processes": [
+        {
+          "pid": 991,
+          "role": "browser-other",
+          "meanPssMiB": 113.1029296875
+        },
+        {
+          "pid": 1007,
+          "role": "webkit-network",
+          "meanPssMiB": 47.8515625
+        },
+        {
+          "pid": 1009,
+          "role": "webkit-content",
+          "meanPssMiB": 696.3266927083333
+        }
+      ],
+      "nativeMiB": {
+        "javascript": {
+          "samples": 30,
+          "first": 28.409323692321777,
+          "last": 15.188236236572266,
+          "min": 15.186283111572266,
+          "max": 28.410300254821777,
+          "mean": 27.087768332163492
+        },
+        "jit": {
+          "samples": 30,
+          "first": 0.0,
+          "last": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "mean": 0.0
+        },
+        "images": {
+          "samples": 30,
+          "first": 3.757659912109375,
+          "last": 3.757659912109375,
+          "min": 3.757659912109375,
+          "max": 3.757659912109375,
+          "mean": 3.757659912109375
+        },
+        "layers": {
+          "samples": 30,
+          "first": 0.0,
+          "last": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "mean": 0.0
+        },
+        "page": {
+          "samples": 30,
+          "first": 0.0,
+          "last": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "mean": 0.0
+        },
+        "other": {
+          "samples": 30,
+          "first": 515.1064538955688,
+          "last": 509.51504135131836,
+          "min": 506.51563358306885,
+          "max": 518.8138694763184,
+          "mean": 510.44181133906045
+        }
+      },
+      "layerCount": 1,
+      "layerBackingEstimateBytes": 2801880,
+      "largestLayerEstimates": [
+        {
+          "node": {
+            "nodeId": 2036,
+            "nodeName": "#document"
+          },
+          "memory": 2801880,
+          "reasons": {
+            "root": true
+          }
+        }
+      ]
+    },
+    {
+      "label": "blank-after-navigation",
+      "pssMiB": {
+        "samples": 10,
+        "min": 854.388671875,
+        "max": 864.798828125,
+        "mean": 855.74765625
+      },
+      "processes": [
+        {
+          "pid": 991,
+          "role": "browser-other",
+          "meanPssMiB": 113.2005859375
+        },
+        {
+          "pid": 1007,
+          "role": "webkit-network",
+          "meanPssMiB": 47.9486328125
+        },
+        {
+          "pid": 1009,
+          "role": "webkit-content",
+          "meanPssMiB": 694.5984375
+        }
+      ],
+      "nativeMiB": {
+        "javascript": {
+          "samples": 20,
+          "first": 16.79826068878174,
+          "last": 16.053540229797363,
+          "min": 16.053540229797363,
+          "max": 16.79826068878174,
+          "mean": 16.322200202941893
+        },
+        "jit": {
+          "samples": 20,
+          "first": 0.0,
+          "last": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "mean": 0.0
+        },
+        "images": {
+          "samples": 20,
+          "first": 3.757659912109375,
+          "last": 3.757659912109375,
+          "min": 3.757659912109375,
+          "max": 3.757659912109375,
+          "mean": 3.757659912109375
+        },
+        "layers": {
+          "samples": 20,
+          "first": 0.0,
+          "last": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "mean": 0.0
+        },
+        "page": {
+          "samples": 20,
+          "first": 0.0,
+          "last": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "mean": 0.0
+        },
+        "other": {
+          "samples": 20,
+          "first": 519.1862668991089,
+          "last": 518.7317686080933,
+          "min": 518.7097043991089,
+          "max": 519.5989561080933,
+          "mean": 518.8426008224487
+        }
+      },
+      "layerCount": 1,
+      "layerBackingEstimateBytes": 7369600,
+      "largestLayerEstimates": [
+        {
+          "node": {
+            "nodeId": 2137,
+            "nodeName": "#document"
+          },
+          "memory": 7369600,
+          "reasons": {
+            "root": true
+          }
+        }
+      ]
+    },
+    {
+      "label": "fresh-context-after-old-context-close",
+      "pssMiB": {
+        "samples": 10,
+        "min": 323.072265625,
+        "max": 380.212890625,
+        "mean": 374.129296875
+      },
+      "processes": [
+        {
+          "pid": 991,
+          "role": "browser-other",
+          "meanPssMiB": 102.594921875
+        },
+        {
+          "pid": 1125,
+          "role": "webkit-network",
+          "meanPssMiB": 54.2931640625
+        },
+        {
+          "pid": 1127,
+          "role": "webkit-content",
+          "meanPssMiB": 217.2412109375
+        }
+      ],
+      "nativeMiB": {
+        "javascript": {
+          "samples": 21,
+          "first": 1.46484375,
+          "last": 1.249232292175293,
+          "min": 1.249232292175293,
+          "max": 1.46484375,
+          "mean": 1.321102778116862
+        },
+        "jit": {
+          "samples": 21,
+          "first": 0.0,
+          "last": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "mean": 0.0
+        },
+        "images": {
+          "samples": 21,
+          "first": 0.0,
+          "last": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "mean": 0.0
+        },
+        "layers": {
+          "samples": 21,
+          "first": 0.0,
+          "last": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "mean": 0.0
+        },
+        "page": {
+          "samples": 21,
+          "first": 0.0,
+          "last": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "mean": 0.0
+        },
+        "other": {
+          "samples": 21,
+          "first": 73.34375,
+          "last": 106.7117052078247,
+          "min": 73.34375,
+          "max": 107.16015625,
+          "mean": 105.21386745997837
+        }
+      },
+      "layerCount": 1,
+      "layerBackingEstimateBytes": 7369600,
+      "largestLayerEstimates": [
+        {
+          "node": {
+            "nodeId": 1,
+            "nodeName": "#document"
+          },
+          "memory": 7369600,
+          "reasons": {
+            "root": true
+          }
+        }
+      ]
+    }
+  ],
+  "nativePressureEvents": [
+    {
+      "hostAt": 1793907626836,
+      "timestamp": 59.93288700000001,
+      "severity": "non-critical"
+    }
+  ],
+  "oldContentPids": [
+    1009
+  ],
+  "freshContentPids": [
+    1127
+  ],
+  "contentProcessReplacedAfterContextClose": true,
+  "categoryPssAndLayerEstimatesNotAdditive": true,
+  "otherCategoryIsNotAllocationOwnership": true,
+  "nullCategoryIsNotProofOfNoMemory": true,
+  "whiteScreenFixed": false,
+  "physicalDevice": false
+}

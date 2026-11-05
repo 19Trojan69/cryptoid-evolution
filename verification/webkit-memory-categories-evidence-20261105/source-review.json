@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "upstreamSourceReview": true,
+  "shippedBinaryIdentityNotEstablished": true,
+  "sources": [
+    {
+      "repository": "microsoft/playwright",
+      "ref": "v1.62.1",
+      "path": "browser_patches/webkit/UPSTREAM_CONFIG.sh",
+      "blobSha": "949eaeae6398ad5daaec26271f606f178cc0225a",
+      "url": "https://github.com/microsoft/playwright/blob/v1.62.1/browser_patches/webkit/UPSTREAM_CONFIG.sh"
+    },
+    {
+      "repository": "WebKit/WebKit",
+      "ref": "343e13bf22dca9d0ec227801419aab0f9001a32f",
+      "path": "Source/WebCore/page/linux/ResourceUsageThreadLinux.cpp",
+      "blobSha": "6982ece5f96579fbe632e5ccf37acacf7711eb32",
+      "url": "https://github.com/WebKit/WebKit/blob/343e13bf22dca9d0ec227801419aab0f9001a32f/Source/WebCore/page/linux/ResourceUsageThreadLinux.cpp"
+    },
+    {
+      "repository": "WebKit/WebKit",
+      "ref": "343e13bf22dca9d0ec227801419aab0f9001a32f",
+      "path": "Source/WebCore/inspector/agents/InspectorLayerTreeAgent.cpp",
+      "blobSha": "73bef7b97bb31e579683ae87ea9183eb3680eab6",
+      "url": "https://github.com/WebKit/WebKit/blob/343e13bf22dca9d0ec227801419aab0f9001a32f/Source/WebCore/inspector/agents/InspectorLayerTreeAgent.cpp"
+    }
+  ],
+  "interpretation": {
+    "linuxOther": "Residual after selected categories are subtracted from resident-minus-shared memory. It does not assign allocation owners and is not total process PSS.",
+    "zeroCategories": "Linux conditional and limited accounting cannot prove absence of graphics, DOM or allocator memory.",
+    "layerTreeMemory": "Separate backing-store estimate; not an allocation census and not additive to native categories or PSS.",
+    "contextClose": "Old context is actually closed; raw PIDs show a different WebKit content process. The fall is not in-process garbage collection."
+  },
+  "singleNativePressureEvent": "non-critical; not evidence of physical phone pressure or crash cause"
+}
