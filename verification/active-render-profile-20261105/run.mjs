@@ -72,7 +72,7 @@ try{
  result.active={...active.result,frameId};
  result.after=await observe();running(result.after);assert.equal(result.after.timeOrigin,result.before.timeOrigin);
  assert.equal(result.after.clock.latest.id,result.before.clock.latest.id);assert.ok(result.after.clock.latest.elapsedMs>result.before.clock.latest.elapsedMs);
- assert.ok(result.after.scene.elapsedMs>result.before.scene.elapsedMs);assert.ok(result.after.scene.coreVolley>result.before.scene.coreVolley);
+ assert.ok(result.after.scene.frameAt>result.before.scene.frameAt);assert.ok(result.after.scene.coreVolley>result.before.scene.coreVolley);
  assert.equal(active.result.complete,true,active.result.failure);
  // Node labels are read only after native tracing ends and an actual manual pause is visible.
  await tap(page.locator('.home-control'));await page.locator('#leave-mission-title').waitFor();
