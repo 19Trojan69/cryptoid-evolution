@@ -1,0 +1,46 @@
+{
+  "html": {
+    "status": 200,
+    "bytes": 6325,
+    "sha256": "ed15c50557dda6946fb5cb23989ed1c5ea6bf349979a92726a48db8d6e51da1d",
+    "matchesBuildMetadata": true,
+    "feedbackToolbarInjected": false
+  },
+  "metadataStatus": 200,
+  "clockFiles": [
+    {
+      "path": "diagnostic-stopwatch.js",
+      "status": 200,
+      "bytes": 6206,
+      "sha256": "e2eb41aef45d9c65bbe7d27350a914f4f702ffb7fbc1d5e518ad639e14d2f489"
+    },
+    {
+      "path": "diagnostic-stopwatch.css",
+      "status": 200,
+      "bytes": 1471,
+      "sha256": "c6269b2566f58207dc9c58907e0a980c9e49a11477a4bcd5002a3f407d94b601"
+    },
+    {
+      "path": "diagnostic-stopwatch-state.js",
+      "status": 200,
+      "bytes": 5241,
+      "sha256": "5e5845d5e5beef85ca5dadac597b8d751e81f931374b942b22fdedc7d83bbb5c"
+    }
+  ],
+  "ciJournalModuleHashesMatch": true,
+  "ciCompiledControllerMatches": true,
+  "allBuildMetadataEqual": false,
+  "pathDependentBuilderDigestDifferences": {
+    "criticalFailureJournal.adaptedBuilderSha256": {
+      "ci": "30f5e055f4287a8585b47e4e3dd91c2ba43aa81070b0fac97ca04f3249e84cbc",
+      "hosted": "b9f63d04fa30444c69952f592c924b62cb61f32fbeb9eee4142194b6b2ce8e52"
+    },
+    "playerMuzzleLocalCandidate.builderSources.base-builder": {
+      "ci": "53c3c61dd4b4009113c08e8a7846dc4a3a277fdebff5869b8393ab393fca5f51",
+      "hosted": "bd0653b1336c84b02bb314d7c0b1e70fbca3b1171c891952774d9d63e70b263f"
+    }
+  },
+  "explanation": "Generated builder text embeds absolute checkout paths; original source digests and compiled journal/controller digests match. No full metadata identity claimed.",
+  "physicalDevice": false,
+  "whiteScreenFixed": false
+}

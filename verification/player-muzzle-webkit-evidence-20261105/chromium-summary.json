@@ -1,0 +1,86 @@
+{
+  "engine": "chromium",
+  "engineVersion": "151.0.7922.34",
+  "cycles": 3,
+  "complete": true,
+  "sourceCommit": "9f3bf451c01d6976ea1a50342cdec1470e2e080b",
+  "sourceTree": "a02d45e0f93946f866f36c6aae9c9e6451962aa0",
+  "normalReportVerified": true,
+  "criticalReportVerified": true,
+  "criticalReportSummary": {
+    "latestMode": "ended",
+    "previousMode": "ended",
+    "latestKinds": [
+      "popstate"
+    ],
+    "previousKinds": [
+      "popstate"
+    ],
+    "matchedByIdAndSource": true,
+    "clockIsNotPeriodic": true,
+    "noNormalFlowErrors": true
+  },
+  "diagnosticResourceCheckpointVerified": true,
+  "fidelity": {
+    "actualCompiledPath": {
+      "root": "",
+      "leaf": "0",
+      "consumers": 1
+    },
+    "existingFidelity": {
+      "cases": [
+        {
+          "value": "0",
+          "computedConsumersAndGeometryEqual": true
+        },
+        {
+          "value": ".01",
+          "computedConsumersAndGeometryEqual": true
+        },
+        {
+          "value": ".1",
+          "computedConsumersAndGeometryEqual": true
+        },
+        {
+          "value": ".375",
+          "computedConsumersAndGeometryEqual": true
+        },
+        {
+          "value": ".75",
+          "computedConsumersAndGeometryEqual": true
+        },
+        {
+          "value": "1",
+          "computedConsumersAndGeometryEqual": true
+        },
+        {
+          "value": ".5",
+          "computedConsumersAndGeometryEqual": true
+        },
+        {
+          "value": "0",
+          "computedConsumersAndGeometryEqual": true
+        }
+      ],
+      "testedExistingNodes": 7,
+      "mountedNodesRetained": true,
+      "missingConsumerFallback": true,
+      "fallbackRemovedOnConsumerMount": true,
+      "replacedLeafAndNewHostVerified": true,
+      "nativeAnimationIdentityAndTimingRetained": true,
+      "originalComputedPresentationRestored": true,
+      "fullPixelIdentityMeasured": false
+    },
+    "computedVariableReach": {
+      "nodes": 7,
+      "rootReach": 7,
+      "leafReach": 1,
+      "nativeStyleRecalculationsMeasured": false,
+      "nativeCacheEntriesMeasured": false,
+      "memorySavingsMeasured": false
+    },
+    "performedOnlyDuringRegularPause": true
+  },
+  "physicalDevice": false,
+  "whiteScreenFixed": false
+}

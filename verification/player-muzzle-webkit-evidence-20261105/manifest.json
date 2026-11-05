@@ -1,0 +1,81 @@
+{
+  "version": 1,
+  "files": [
+    {
+      "path": "README.de.md",
+      "bytes": 5901,
+      "sha256": "cd31f9013b030ce6d9a9e1ceaa721ed4200220a0bf887e2bf6654eaa246e3432"
+    },
+    {
+      "path": "ci-receipt.json",
+      "bytes": 1192,
+      "sha256": "cd3d5889845d301d8839776b0ee743651790b3bab8ac0c1e77295f087ab18cb0"
+    },
+    {
+      "path": "chromium-summary.json",
+      "bytes": 2248,
+      "sha256": "823e18efdbcff0ecf47546244a886a6cb8d2c2e20d5043789b16ee6d04bb3cea"
+    },
+    {
+      "path": "webkit-summary.json",
+      "bytes": 2254,
+      "sha256": "e90dc52c34376bc6bf39b8fba1bc422deb2bd97d2891323feb9c3748b73538eb"
+    },
+    {
+      "path": "hosted/delivery-proof.json",
+      "bytes": 1656,
+      "sha256": "93b5608dd4412b0ed80caad18124ac29b8f45e34f9c947e51275739bbe8550b0"
+    },
+    {
+      "path": "hosted/device-preview-info.json",
+      "bytes": 10732,
+      "sha256": "47f9aef20f1d6599a1223e2e4fabeaddefc4d3ca2c9553cd8785eacbb0fac3dd"
+    },
+    {
+      "path": "hosted/diagnostic-stopwatch-state.js",
+      "bytes": 5241,
+      "sha256": "5e5845d5e5beef85ca5dadac597b8d751e81f931374b942b22fdedc7d83bbb5c"
+    },
+    {
+      "path": "hosted/diagnostic-stopwatch.css",
+      "bytes": 1471,
+      "sha256": "c6269b2566f58207dc9c58907e0a980c9e49a11477a4bcd5002a3f407d94b601"
+    },
+    {
+      "path": "hosted/diagnostic-stopwatch.js",
+      "bytes": 6206,
+      "sha256": "e2eb41aef45d9c65bbe7d27350a914f4f702ffb7fbc1d5e518ad639e14d2f489"
+    },
+    {
+      "path": "hosted/index.html",
+      "bytes": 6325,
+      "sha256": "ed15c50557dda6946fb5cb23989ed1c5ea6bf349979a92726a48db8d6e51da1d"
+    },
+    {
+      "path": "hosted/normal-report.json",
+      "bytes": 8002,
+      "sha256": "7ef0ebe04f3c1480cfafaa83edc442c56aeb8f5b75740c20099cc949b35218ad"
+    },
+    {
+      "path": "hosted/report-ready.jpg",
+      "bytes": 101435,
+      "sha256": "86f8ac872b6899fa8e1431632bc5cd8c591fa2c93c719a1d135b776d173857e5"
+    },
+    {
+      "path": "hosted/verification.json",
+      "bytes": 3317,
+      "sha256": "9ff887703b29a07d702684e1dbed77825dbf82687c8a54ea93e41fb6f8865f39"
+    },
+    {
+      "path": "artifacts/13408877575.zip",
+      "bytes": 10576,
+      "sha256": "1fafe23f481eea90b136f08537ccef5389e2f9778cfef8e5b86a9e597898477d"
+    },
+    {
+      "path": "artifacts/13409841058.zip",
+      "bytes": 10286,
+      "sha256": "5cf4c8b5136e8657655aefdee34bf750472f5d2da37d822c0b5da5276ed93118"
+    }
+  ],
+  "accessParametersArchived": false
+}

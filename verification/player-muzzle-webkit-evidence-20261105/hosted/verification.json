@@ -1,0 +1,103 @@
+{
+  "version": 1,
+  "deploymentId": "dpl_GqYVUaFSrSwUinbqrZGk8uDP7qQR",
+  "host": "cryptoid-evolution-testnet-dh40j3ucm-19-trojan69.vercel.app",
+  "readyState": "READY",
+  "target": null,
+  "projectId": "prj_JpvzU9ZS8bFkn9jZgE51Gct8TZpF",
+  "teamId": "team_KzJmtl0QyoYZAOu5RQKsAR2i",
+  "sourceCommit": "9f3bf451c01d6976ea1a50342cdec1470e2e080b",
+  "sourceTree": "a02d45e0f93946f866f36c6aae9c9e6451962aa0",
+  "normalExportBytes": 8002,
+  "normalExportSha256": "7ef0ebe04f3c1480cfafaa83edc442c56aeb8f5b75740c20099cc949b35218ad",
+  "clock": {
+    "id": "9f3bf451-1793877157644-1",
+    "source": "9f3bf451c01d6976ea1a50342cdec1470e2e080b",
+    "startedAt": 1793877176481,
+    "updatedAt": 1793877300813,
+    "elapsedMs": 82226.19999998808,
+    "unobservedGaps": 0,
+    "mode": "ended"
+  },
+  "criticalMatchesLatestStopwatch": true,
+  "journalClockExactlyEqualsStopwatch": true,
+  "briefClockExactlyEqualsStopwatch": true,
+  "journalEventKinds": [
+    "popstate"
+  ],
+  "journalEventCounts": {
+    "popstate": 2
+  },
+  "noRecordedErrorsOrUnhandledRejections": true,
+  "resourceCheckpoint": {
+    "version": 1,
+    "clockId": "9f3bf451-1793877157644-1",
+    "at": 1793877300481,
+    "elapsedMs": 82226.19999998808,
+    "frameAt": 166336.2,
+    "visible": true,
+    "audioState": "running",
+    "audioClockMs": 143392,
+    "audioClockStalls": 0,
+    "audioRecoveries": 3,
+    "audioBlockedSounds": 0,
+    "audioVoices": 0,
+    "audioBufferBytes": 6925568,
+    "canvasRegisteredEffects": 0,
+    "canvasCacheBytes": 0,
+    "canvasSurfaceBytes": 4,
+    "canvasFailureCount": 0
+  },
+  "resourcePointBelongsToRun": true,
+  "uiObserved": {
+    "initialPausedAt": "00:00",
+    "manualPauseAt": "00:39",
+    "manualPauseHeld": true,
+    "manualResumeAdvancedTo": "00:55",
+    "weaponMenuPausedAt": "00:59",
+    "countdownObserved": true,
+    "weaponReturnAdvancedTo": "01:17",
+    "normalHomeConfirmationObserved": true,
+    "endedAt": "01:22",
+    "normalDownloadCompleted": true
+  },
+  "fullRecording": false,
+  "testProtection": true,
+  "nativeTerminationCauseMeasured": false,
+  "physicalDevice": false,
+  "whiteScreenFixed": false,
+  "shareLinkVerifiedByOpening": true,
+  "accessParameterArchived": false,
+  "shareLinkExpiryReturned": "11/6/2026, 10:11:32 AM",
+  "interpretation": "Temporary link created 2026-11-05T11:11:32Z, 23 hours, therefore expiry 2026-11-06T10:11:32Z / 11:11:32 CET.",
+  "ssoProtection": {
+    "enabled": true,
+    "deploymentType": "all_except_custom_domains"
+  },
+  "branchScopedFeedbackConfig": {
+    "key": "VERCEL_PREVIEW_FEEDBACK_ENABLED",
+    "value": "0",
+    "target": [
+      "preview"
+    ],
+    "gitBranch": "codex/muzzle-scope-device-20261105"
+  },
+  "existingAliasesAfter": [
+    {
+      "alias": "cryptoid-evolution.vercel.app",
+      "deploymentId": "dpl_6N3FdS9XGXasCWrpMksngxCPNPRk",
+      "projectId": "prj_BAIJH4BzLLwun36kWVEnTdx69j0q"
+    },
+    {
+      "alias": "cryptoid-evolution-testnet.vercel.app",
+      "deploymentId": "dpl_239zEifRV84KCpbyHumnuHmSGm9T",
+      "projectId": "prj_JpvzU9ZS8bFkn9jZgE51Gct8TZpF"
+    },
+    {
+      "alias": "cryptoid-evolution-testnet-git-codex-critica-4ace66-19-trojan69.vercel.app",
+      "deploymentId": "dpl_8BuRwRJvtW7eHNR155K78fJgKeVk",
+      "projectId": "prj_JpvzU9ZS8bFkn9jZgE51Gct8TZpF"
+    }
+  ],
+  "existingAliasesUnchanged": true
+}

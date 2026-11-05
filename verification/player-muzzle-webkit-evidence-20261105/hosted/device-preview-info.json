@@ -1,0 +1,256 @@
+{
+  "type": "protected-isolated-boss2-device-preview",
+  "sourceCommit": "9f3bf451c01d6976ea1a50342cdec1470e2e080b",
+  "sourceTree": "a02d45e0f93946f866f36c6aae9c9e6451962aa0",
+  "workingTreeDirty": true,
+  "diagnosticCanvasEffects": "original-canvas-renderer",
+  "diagnosticScene": "original-artwork",
+  "controllerSha256": "6b500123cb1443bbcb52809f0dbd06520ea0aee02a550ec346ab5ce1f186f277",
+  "normalizedControllerSha256": "625fecc2cb959e4ed4ba690f7867d0a07b247b9a136a8ce308afecaf6dcd94fa",
+  "actualPiAuthentication": false,
+  "liveBackend": false,
+  "realAccounts": false,
+  "payments": false,
+  "automaticUpload": false,
+  "guestOnly": true,
+  "syntheticDiagnosticCapability": true,
+  "collisionProtectionOptional": true,
+  "bossHealthFloorOptional": 0.4,
+  "singleFingerControls": true,
+  "controlsRequireFreshTap": true,
+  "contactDiagnostics": true,
+  "contactCaptureBeforeReact": true,
+  "contactObservationLimits": {
+    "pointerIdsHeldOnlyInMemory": 10,
+    "ordinaryPerSecond": 16,
+    "criticalPerSecond": 8,
+    "rawContactFieldsExported": false
+  },
+  "nativeGameClocks": true,
+  "automaticResume": false,
+  "reloadOpensMenu": true,
+  "explicitMenuPreparation": true,
+  "initialSetupPause": true,
+  "coldDirectWebkitStartup": "Unresolved loop-stall before first frame; retained separately. Prepared start is a different condition.",
+  "sourceGameEditedByBuilder": false,
+  "buildOnlyTransforms": [
+    "isolated menu/auth/transport",
+    "direct boss seed",
+    "optional protection/health floor",
+    "bounded pause observation",
+    "Exact verified direct boss thrust/charge style distribution; original formulas, artwork, context consumers and clocks retained"
+  ],
+  "nativeDeviceAccepted": false,
+  "whiteScreenFixed": false,
+  "qaLifetimeAttribution": {
+    "version": 1,
+    "originalArtworkRetained": true,
+    "moduleOnlyScalarGetters": [
+      "cssFramePacingStats",
+      "paintedShipResourceStats",
+      "canvasEffectResources"
+    ],
+    "capturesGameInstance": false,
+    "newAppTimersOrFrames": false,
+    "activeNativeAnimationScan": false,
+    "cleanupPolicyChanged": false,
+    "shippedRuntimeSourceEdited": false,
+    "physicalDevice": false,
+    "whiteScreenFixed": false
+  },
+  "qaLocalBossStyle": {
+    "version": 1,
+    "condition": "leaves",
+    "originalBlobs": {
+      "BossHullView": "68dd74e598caa060ae8825d3c56b199ba0d08449",
+      "BossReactorView": "0d92e39aba2eb68aa25ba6239932cd4437f4ebf7"
+    },
+    "transformedBlobs": {
+      "BossHullView": "570a0db4dec6abb59f90b39f515156916043517a",
+      "BossReactorView": "33cc560e042963b548c6757384b0d9f21aa221b8"
+    },
+    "originalFormulasAndFiringOverrideRetained": true,
+    "originalMemoizedArtworkRetained": true,
+    "onlyExistingConsumersReceiveDirectProperties": true,
+    "newDomNodes": false,
+    "newTimersOrFrames": false,
+    "newEffectsOrGlobalListeners": false,
+    "gameOrAnimationClocksChanged": false,
+    "runtimeSourceFilesEdited": false,
+    "physicalDevice": false,
+    "whiteScreenFixed": false
+  },
+  "diagnosticStopwatch": {
+    "version": 1,
+    "checkpointMs": 1000,
+    "savedRuns": 2,
+    "stateSha256": "5e5845d5e5beef85ca5dadac597b8d751e81f931374b942b22fdedc7d83bbb5c",
+    "browserSha256": "e2eb41aef45d9c65bbe7d27350a914f4f702ffb7fbc1d5e518ad639e14d2f489",
+    "cssSha256": "c6269b2566f58207dc9c58907e0a980c9e49a11477a4bcd5002a3f407d94b601",
+    "existingClockReused": true,
+    "simulationClocksChanged": false,
+    "hardCrashTimeIsExact": false,
+    "sourceGameChanged": false,
+    "fullRecordingRequired": false,
+    "diagnosticClockAddedOnlyForQa": true
+  },
+  "directStyleDeviceCandidate": {
+    "version": 1,
+    "label": "STABILITÄTSTEST · Originalgrafik",
+    "condition": "leaves",
+    "inheritedProjectBuildControlsExcluded": true,
+    "basisNativeFlowSource": "a8e407a649431c719dfee64e0ec3cf63d73de3e0",
+    "basisNativeFlowRun": 41445407351,
+    "candidateArtifactMustPassBothLongEngineGatesBeforeDeviceUse": true,
+    "originalArtworkAudioGameplayRetained": true,
+    "virtualStyleChangeOnly": true,
+    "freshAdvancingFrameRequiredForDiagnosticClockStart": true,
+    "diagnosticClockStateSha256": "5e5845d5e5beef85ca5dadac597b8d751e81f931374b942b22fdedc7d83bbb5c",
+    "activeFrameProbeIncluded": false,
+    "activeClockTraceIncluded": false,
+    "sourceGameFilesEdited": false,
+    "productionCandidate": false,
+    "physicalDeviceAccepted": false,
+    "whiteScreenFixed": false
+  },
+  "diagnosticResourceCheckpoint": {
+    "version": 1,
+    "maxPointsPerRun": 1,
+    "maxSavedCharacters": 16384,
+    "baselineSourceCommit": "b042c8e50ad3f05a70418ae5ee6bb4412809035b",
+    "existingInspectorResultReused": true,
+    "additionalGameInspectorReads": false,
+    "newGameTimers": false,
+    "newAnimationFrames": false,
+    "newGlobalListeners": false,
+    "extraStorageWritesScheduled": false,
+    "gameClocksWritten": false,
+    "additionalSerializedData": true,
+    "resourceCheckpointGuaranteed": false,
+    "recordingStateMeasured": false,
+    "nativeMemoryMeasured": false,
+    "reportDocumentOriginAtExport": true,
+    "sourceGameFilesEdited": false,
+    "whiteScreenFixed": false
+  },
+  "mobileHudBackdropCandidate": {
+    "version": 1,
+    "id": "mobile-hud-20261103",
+    "ownerAuthorized": true,
+    "baselineSourceCommit": "ac98e95166b0e2013186257904da46323840dab5",
+    "originalSourceCssSha256": "cf48ca4553ac7fa425f37e84a334acc3fec2f2163b72d31bfe9b35f7d33c27b5",
+    "onlyProperty": "backdrop-filter",
+    "maxWidthCssPixels": 700,
+    "value": "none",
+    "rule": "@media (max-width:700px){.game-hud{backdrop-filter:none;}}",
+    "sourceGameFilesEdited": false,
+    "gameJavaScriptEdited": false,
+    "externalCssFilesEdited": false,
+    "diagnosticClockStateEdited": false,
+    "newGameTimers": false,
+    "newGameCollectors": false,
+    "automaticResume": false,
+    "physicalDeviceAccepted": false,
+    "whiteScreenFixed": false,
+    "baselineHtmlSha256": "19e603aaa5ece50604a9f7c2f2084ec57ec88a95b2760183a2735c10b29c1b00",
+    "candidateHtmlSha256": "ed15c50557dda6946fb5cb23989ed1c5ea6bf349979a92726a48db8d6e51da1d",
+    "equivalentCssPatch": "verification/mobile-hud-cascade-20261103/mobile-hud-cascade.patch",
+    "browserFunctionalEvidenceRun": 41626481637,
+    "cssCascadeEvidenceRun": 41624042675
+  },
+  "playerMuzzleLocalCandidate": {
+    "version": 1,
+    "condition": "leaf",
+    "originalControllerSha256": "6b500123cb1443bbcb52809f0dbd06520ea0aee02a550ec346ab5ce1f186f277",
+    "incomingVirtualControllerSha256": "3e4811063406c0b2c998363f74f795230df0eb60979cc466821e28464dbfc380",
+    "compiledVirtualControllerSha256": "00e3796f3eb0bbaec3f2ae16bb5ac46a2d88c8abc6647fee0e1a5b634249a18d",
+    "nativeVariableNameAndFormulaRetained": true,
+    "onlyExistingMuzzleConsumerTargeted": true,
+    "weakOwnerCache": true,
+    "missingConsumerRetainsOriginalRootFallback": true,
+    "newTimers": false,
+    "newAnimationFrames": false,
+    "newGlobalListeners": false,
+    "gameOrAnimationClocksChanged": false,
+    "sourceGameFilesEdited": false,
+    "physicalDeviceAccepted": false,
+    "whiteScreenFixed": false,
+    "builderSources": [
+      {
+        "path": "base-builder",
+        "sha256": "bd0653b1336c84b02bb314d7c0b1e70fbca3b1171c891952774d9d63e70b263f"
+      },
+      {
+        "path": "clock-package-builder",
+        "sha256": "eeb8c5ffabe9c0f3f6966bd054ed94fb6ebe3be6037549eaa0c23eb6f9140a48"
+      },
+      {
+        "path": "phone-package-builder",
+        "sha256": "3f73026bf27517e70c974acbf2ed72621ed88ddc77e7f0c2b982d57f29efffb9"
+      }
+    ],
+    "onlyDeclaredConsumersFound": [
+      "frontend/src/index.css",
+      "frontend/src/pages/GamePage.tsx"
+    ],
+    "originalCssSha256": "cf48ca4553ac7fa425f37e84a334acc3fec2f2163b72d31bfe9b35f7d33c27b5",
+    "baselineDirectBossStyleAndHudRetained": true,
+    "commonHudHelperSha256": "0ba7b8a06eca209986a7dd0533751debf1d513ee315917edd74718365bd489f8"
+  },
+  "criticalFailureJournal": {
+    "version": 1,
+    "originalBrowserSha256": "fdc9e7267232143a4ecad916da42b159e8daa7492ce52db7853d993d1b9a8ecd",
+    "transformedBrowserSha256": "e49397178be0e5ae0a89d55ef5affe988ef6db4a2a95ef8f0eaa51fb1d96375e",
+    "originalAppSha256": "342f11632178026d56525580a9fcfed45993763039a82a74b16bfe019a0e2bad",
+    "transformedAppSha256": "9fd44cd77ab4135146ca5da650ffb0e5613e04285124085556b15ecf6a1b29b6",
+    "exactReversalVerified": true,
+    "additionalEventListeners": 0,
+    "additionalTimers": 0,
+    "inputInterceptionAdded": false,
+    "sourceGameFilesEdited": false,
+    "physicalDevice": false,
+    "whiteScreenFixed": false,
+    "criticalStateSha256": "4f9972ea1b947b3e2a4206a158f56e1db4cb3810ce6db93d1cc0c29cc93118ab",
+    "baseBuilderSha256": "9c0544ccb5a214b0341c92eb744be67169dad7f2fe40804e7e7d9f1075f76bf7",
+    "adaptedBuilderSha256": "b9f63d04fa30444c69952f592c924b62cb61f32fbeb9eee4142194b6b2ce8e52",
+    "legacyBriefFormatRetained": true,
+    "normalReportIncludesJournal": true,
+    "originalGameControllerAndClockRetained": false,
+    "originalClockRetained": true,
+    "onlyMuzzleWriterTargetChanged": true,
+    "commonDirectBossStylesAndHudRetained": true
+  },
+  "muzzleWebKitScopeCandidate": {
+    "version": 1,
+    "baseDeviceCommit": "b092f6462a623c3ad2c12e634963028d462c5fcf",
+    "label": "Lokaler Mündungslichtwert – gezielte Stabilitätsprüfung",
+    "originalJournalBuilderSha256": "090a0b47aaca8ed23baad26581170d943a604a719f3d03aa3f628c3820259475",
+    "adaptedJournalBuilderSha256": "2a2e3941f066ebb879e50b58f1368cdbe8f589a0d71f68060c31aa1600667555",
+    "controllerSha256": "6b500123cb1443bbcb52809f0dbd06520ea0aee02a550ec346ab5ce1f186f277",
+    "compiledControllerSha256": "00e3796f3eb0bbaec3f2ae16bb5ac46a2d88c8abc6647fee0e1a5b634249a18d",
+    "reusedPreviouslyVerifiedLeafHelper": true,
+    "unchangedJournalSources": [
+      {
+        "path": "/verification/boss2-brief-report-20261030/briefBrowser.mjs",
+        "sha256": "fdc9e7267232143a4ecad916da42b159e8daa7492ce52db7853d993d1b9a8ecd"
+      },
+      {
+        "path": "/verification/boss2-forensics-20261028/devicePreviewApp.jsx",
+        "sha256": "342f11632178026d56525580a9fcfed45993763039a82a74b16bfe019a0e2bad"
+      },
+      {
+        "path": "/verification/critical-failure-journal-20261104/criticalState.mjs",
+        "sha256": "4f9972ea1b947b3e2a4206a158f56e1db4cb3810ce6db93d1cc0c29cc93118ab"
+      },
+      {
+        "path": "/verification/critical-failure-journal-20261104/transform.mjs",
+        "sha256": "c997b16bc9ec7aafeeac6c28efcca41151bea49cf277a3929e69182f81e91566"
+      }
+    ],
+    "nativeStyleCacheEntriesMeasured": false,
+    "nativeMemoryBenefitMeasured": false,
+    "earlierChromiumResourceDecisionStillFailed": true,
+    "physicalDeviceAccepted": false,
+    "whiteScreenFixed": false
+  }
+}

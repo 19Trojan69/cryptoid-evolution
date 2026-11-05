@@ -1,0 +1,40 @@
+{
+  "runId": 42014925446,
+  "url": "https://github.com/19Trojan69/cryptoid-evolution/actions/runs/42014925446",
+  "sourceCommit": "9f3bf451c01d6976ea1a50342cdec1470e2e080b",
+  "sourceTree": "a02d45e0f93946f866f36c6aae9c9e6451962aa0",
+  "jobs": [
+    {
+      "id": 127202953989,
+      "name": "scope-and-journal-flow (webkit)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 127202954485,
+      "name": "scope-and-journal-flow (chromium)",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": 13409841058,
+      "name": "muzzle-webkit-journal-webkit",
+      "size_in_bytes": 10286,
+      "digest": "sha256:5cf4c8b5136e8657655aefdee34bf750472f5d2da37d822c0b5da5276ed93118"
+    },
+    {
+      "id": 13408877575,
+      "name": "muzzle-webkit-journal-chromium",
+      "size_in_bytes": 10576,
+      "digest": "sha256:1fafe23f481eea90b136f08537ccef5389e2f9778cfef8e5b86a9e597898477d"
+    }
+  ],
+  "bothEnginesPassed": true,
+  "bothBuildMetadataIdentical": true,
+  "allOriginalFailureGatesRetained": true,
+  "oldChromiumMemoryDecisionStillFailed": true,
+  "physicalDevice": false,
+  "whiteScreenFixed": false
+}
