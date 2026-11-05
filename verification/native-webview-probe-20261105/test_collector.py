@@ -3,6 +3,7 @@ from pathlib import Path
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 from collector import Collector, CommandFailed
 
 
@@ -47,3 +48,23 @@ class FailureEvidence(unittest.TestCase):
             collector.checkpoint("native-pilot")
             collector.run([sys.executable, "-c", "import json; v=json.load(open('result.json')); assert v['stage']=='native-pilot' and v['commands'][0]['finished'] is False"], log="check.log")
             self.assertTrue(json.loads((folder / "result.json").read_text())["commands"][0]["finished"])
+
+
+class ProtectedProcessGroup(unittest.TestCase):
+    def test_permission_denial_keeps_original_timeout_and_log_digest(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            folder = Path(temporary)
+            state = {"complete": False}
+            collector = Collector(folder, state, folder)
+            with patch("collector.os.killpg", side_effect=PermissionError(1, "Operation not permitted")):
+                with self.assertRaisesRegex(CommandFailed, "timeout=True"):
+                    collector.run([sys.executable, "-c", "import time;print('partial before timeout',flush=True);time.sleep(20)"], timeout=.2, log="protected.log")
+            row = state["commands"][0]
+            self.assertTrue(row["timedOut"])
+            self.assertTrue(row["directChildExited"])
+            self.assertFalse(row["processGroupStopConfirmed"])
+            self.assertEqual(len(row["signalErrors"]), 2)
+            self.assertIn("partial before timeout", (folder / "protected.log").read_text())
+            self.assertEqual(row["logBytes"], len((folder / "protected.log").read_bytes()))
+            self.assertEqual(len(row["logSha256"]), 64)
+            self.assertFalse(list(folder.glob("*.live")))

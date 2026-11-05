@@ -116,7 +116,6 @@ def main() -> int:
         # its real Simulator surface before compiling; do not retry the test.
         collector.checkpoint("simulator-display")
         run(["open", "-a", "Simulator", "--args", "-CurrentDeviceUDID", simulator], timeout=30, log="simulator-display.log")
-        run(["xcrun", "simctl", "spawn", simulator, "launchctl", "list"], timeout=30, log="boot-services.log")
         status["simulatorDisplayExplicitlyOpened"] = True
         arguments = ["xcodebuild", "-project", str(FOLDER / "CryptoidNativeProbe.xcodeproj"),
                      "-scheme", "NativeProbe", "-destination", "id="+simulator,
