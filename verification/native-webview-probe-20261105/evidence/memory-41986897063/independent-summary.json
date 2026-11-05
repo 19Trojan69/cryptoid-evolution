@@ -1,0 +1,30 @@
+{
+  "runId": 41986897063,
+  "source": "5a347b87df85bb980e665b554122543e1afc9f3c",
+  "complete": false,
+  "stage": "memory-preflight-setup",
+  "failure": {
+    "kind": "CommandFailed",
+    "detail": "xcrun failed: timeout=True, exit=-15; log=memory-install.log",
+    "traceback": "Traceback (most recent call last):\n  File \"/Users/runner/work/cryptoid-evolution/cryptoid-evolution/verification/native-webview-probe-20261105/run.py\", line 172, in main\n    run([\"xcrun\", \"simctl\", \"install\", simulator, str(app)], timeout=60, log=\"memory-install.log\")\n    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/runner/work/cryptoid-evolution/cryptoid-evolution/verification/native-webview-probe-20261105/collector.py\", line 87, in run\n    raise CommandFailed(f\"{args[0]} failed: timeout={row['timedOut']}, exit={row['exitCode']}; log={row['log']}\")\ncollector.CommandFailed: xcrun failed: timeout=True, exit=-15; log=memory-install.log\n"
+  },
+  "nativeTestStarted": false,
+  "gameLoadedReported": null,
+  "nativeCollection": {
+    "attempted": true,
+    "copied": [],
+    "errors": [
+      {
+        "kind": "CommandFailed",
+        "detail": "xcrun failed: timeout=True, exit=-15; log=container.log"
+      }
+    ]
+  },
+  "baselineStarted": false,
+  "samplerStarted": false,
+  "rssPoints": 0,
+  "memoryAccessQualified": false,
+  "physicalDeviceTest": false,
+  "whiteScreenFixed": false,
+  "note": "60-second simulator app-install timeout before XCTest. No additional retry scheduled."
+}

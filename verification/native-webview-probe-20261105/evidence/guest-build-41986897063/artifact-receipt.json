@@ -1,0 +1,26 @@
+{
+  "runId": 41986897063,
+  "artifactId": 13396705656,
+  "source": "5a347b87df85bb980e665b554122543e1afc9f3c",
+  "archiveBytes": 4433,
+  "archiveSha256": "faad231728d37df31abe1e07376490aac22234f27428c60c02b6e783b594b375",
+  "archiveGitBlob": "c873924d3b17e6783ea88d89c049e50e0626634e",
+  "members": [
+    {
+      "path": "guest-build.log",
+      "bytes": 7485,
+      "sha256": "cb39fec24c48cf1de464f8f0e054f716e457cb8a6347d8e9143cd492a660bfbd"
+    },
+    {
+      "path": "guest-install.log",
+      "bytes": 538,
+      "sha256": "74717341c0c2d3dff1ba27129ff77011c23b35cdeee02516e5c89c567b1fa9b4"
+    },
+    {
+      "path": "result.json",
+      "bytes": 1293,
+      "sha256": "3812e47ea77c475cc104d9148cb523362a28b0ac0a333eb9901ddd0f1c2431f4"
+    }
+  ],
+  "complete": true
+}

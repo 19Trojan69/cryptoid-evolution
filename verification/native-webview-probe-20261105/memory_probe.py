@@ -111,12 +111,12 @@ def main():
     def sample():
         index = len(status.get("commands", []))
         began = time.time() * 1000
-        text = collector.run(["xcrun", "simctl", "spawn", args.simulator, "launchctl", "list"], timeout=15, log=f"services-{index}.log")
+        text = collector.run(["xcrun", "simctl", "spawn", args.simulator, "launchctl", "list"], timeout=15, log=f"{args.phase}-services-{index}.log")
         selected = services(text)
         rows = []
         if selected:
             output = collector.run(["ps", "-p", ",".join(str(row["pid"]) for row in selected),
-                                    "-o", "pid=,ppid=,rss=,lstart=,comm="], timeout=5, log=f"rss-{index}.log")
+                                    "-o", "pid=,ppid=,rss=,lstart=,comm="], timeout=5, log=f"{args.phase}-rss-{index}.log")
             rows = rss(output, selected)
         return {"startedAtMs": began, "endedAtMs": time.time()*1000, "services": selected, "rows": rows}
     try:

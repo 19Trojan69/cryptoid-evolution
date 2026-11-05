@@ -1,0 +1,110 @@
+{
+  "runId": 41986897063,
+  "source": "5a347b87df85bb980e665b554122543e1afc9f3c",
+  "sourceTree": "073f5842648566d445134d1960b2138e832c0b25",
+  "artifactId": 13396029008,
+  "archiveBytes": 133215,
+  "archiveSha256": "2010a4bf5d35ba1079771cf05e8bf9abef8fc2991ed16cfcb3fa673f456c8534",
+  "archiveGitBlob": "f99b9c9fec4422db7e7e6ff632e8995cf5abb3b1",
+  "members": [
+    {
+      "path": "NativeProbe.xcscheme",
+      "bytes": 4617,
+      "sha256": "1741fceac37910655a7fd2ceccfbf1f2d1feea63020b693f7520a4eea1e496f9"
+    },
+    {
+      "path": "boot.log",
+      "bytes": 5429,
+      "sha256": "be6ed23e275560e15a923ab425bd1f3560c766ba19f0261ff437a44e85e7ca62"
+    },
+    {
+      "path": "build-info.json",
+      "bytes": 9027,
+      "sha256": "372cce275c5e059c1f237ad2a507e89c3ad0eb42e78bcd0b3bdbdb565b11790f"
+    },
+    {
+      "path": "build.log",
+      "bytes": 105126,
+      "sha256": "d491a63a45b7186b684881393c6b0c6527d17e5fa0040fd84f1560d03c699b85"
+    },
+    {
+      "path": "command-1.log",
+      "bytes": 30,
+      "sha256": "a8be4f9af0a29137fe7e59b9928056d4a0df297bb46ba40f80eaa6b0ae982f12"
+    },
+    {
+      "path": "command-2.log",
+      "bytes": 16,
+      "sha256": "3c4ffcfb28a616a2eb2421c091b359d31ff598d0f2b05867a37102832a27ef72"
+    },
+    {
+      "path": "command-3.log",
+      "bytes": 235,
+      "sha256": "747bfddc383b421b9c4a5bf6670826837778feb2020b0de5e0f11545d229aad3"
+    },
+    {
+      "path": "command-4.log",
+      "bytes": 265506,
+      "sha256": "95126a69a8d108cc8649fb55a50d41f53fa9b0b1d55d4d7c5eacb379460afa31"
+    },
+    {
+      "path": "command-5.log",
+      "bytes": 37,
+      "sha256": "cb89e5252f020b642bd51cd66f4d41bae27964d9fc61cec41d008d0881d27637"
+    },
+    {
+      "path": "command-6.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "container.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "guest-origin.txt",
+      "bytes": 22,
+      "sha256": "e9d101fb19c4b2563b3573eee66779ffe9e8b5b9ecb89a8effef2616405efaa4"
+    },
+    {
+      "path": "guest-server.log",
+      "bytes": 37,
+      "sha256": "e0e29772e67108bdc3cdc1c79582dc246eb934c21e94573f307d050bf7ead731"
+    },
+    {
+      "path": "host-memory.log",
+      "bytes": 11,
+      "sha256": "ae0cc22f5ea218082f5dec9c827424ea217b458c0891472d43332507e3435b13"
+    },
+    {
+      "path": "memory-install.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native-failure.log",
+      "bytes": 14307,
+      "sha256": "216bf7f1952d55d84eecafafcd7a95b723406645d2ba955acadf85f8cfb474e6"
+    },
+    {
+      "path": "result.json",
+      "bytes": 7711,
+      "sha256": "47f514396ec8707a1de2650926906248c09b2daaee41f0db1439848180ac7744"
+    },
+    {
+      "path": "served-manifest.json",
+      "bytes": 400802,
+      "sha256": "6a0d88829f4ae4679d7e1c2e8d5c3f1d55e15fe50736a9ba8fb43f75f9527695"
+    },
+    {
+      "path": "simulator-display.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "complete": false,
+  "nativeTestStarted": false,
+  "physicalDeviceTest": false,
+  "whiteScreenFixed": false
+}

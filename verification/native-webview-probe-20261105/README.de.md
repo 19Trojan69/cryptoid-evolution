@@ -339,3 +339,37 @@ Ein einzelner gezielt korrigierter kurzer Versuch ist damit begründet. Es ist k
 unveränderter Wiederholungslauf und kein Langlauf. Selbst bei Erfolg nur selektiver
 Host-RSS im iOS-Simulator; kein gesamter Browser-/GPU-/Telefon-RAM und kein
 White-Screen-Fix. Das tatsächliche Ergebnis muss vor weiteren Schritten gelesen werden.
+
+
+## Ergebnis des einmalig korrigierten nativen Versuchs
+
+Quelle `5a347b87df85bb980e665b554122543e1afc9f3c`, Baum
+`073f5842648566d445134d1960b2138e832c0b25`,
+[CI 41986897063](https://github.com/19Trojan69/cryptoid-evolution/actions/runs/41986897063).
+Linux-Job `127109649203` besteht 20 Auswertungsprüfungen und den Original-Gast-Build.
+Nativer Job `127110063483` endet mit failure bereits in memory-preflight-setup:
+Die Simulator-App-Installation überschreitet 60 Sekunden. Der begrenzte nachfolgende
+Containerabruf überschreitet 20 Sekunden. Native Kompilierung war erfolgreich;
+XCTest/Spielstart, Baseline und Sampler werden nicht mehr gestartet. Kein neuer
+Spiel-/Uhr-/Export-Pass und keine RSS-Daten. Keine weitere Wiederholung dieser Serie.
+
+Original natives Artefakt `13396029008`: 133215 Bytes; SHA256
+`2010a4bf5d35ba1079771cf05e8bf9abef8fc2991ed16cfcb3fa673f456c8534`,
+Git-Blob `f99b9c9fec4422db7e7e6ff632e8995cf5abb3b1`.
+Alle Originalmitglieder und 13 Befehlsausgaben stimmen mit ihren Hashes überein.
+Linux-Baubeleg `13396705656`: 4433 Bytes, SHA256
+`faad231728d37df31abe1e07376490aac22234f27428c60c02b6e783b594b375`.
+Die Original-ZIPs und Rohfehler bleiben erhalten, ohne nachträgliche Umwertung.
+
+Eine zusätzlich beim Quellenlesen erkannte mögliche Lognamenskollision zwischen
+Baseline und Beobachtung wurde für künftige Aufrufe durch getrennte Phasenpräfixe
+behoben. Diese Änderung ist nicht Bestandteil der nativ ausgeführten Quelle 5a347b87.
+Im tatsächlichen Lauf wurde keine Baseline erreicht und nichts dadurch überschrieben.
+Die 20 lokalen Auswertungsprüfungen bestehen auch danach. Kein weiterer nativer
+Lauf nur für diese Lognamenkorrektur und kein automatischer CI-Lauf zur Archivierung.
+
+Die tatsächliche iOS-Version des Besitzergeräts ist weiterhin nicht dokumentiert.
+Der verwendete Simulator iOS 18.5 wird nicht als passende Versionsreproduktion
+behauptet. Aktuelle iOS-26/27-Berichte zu Blur-/Compositor-Verhalten und Canvas-
+Textcaches bleiben nur versions-/API-spezifische Hinweise, keine Diagnose des Spiels.
+Die vorhandenen Quellen und Daten begründen weiterhin keinen White-Screen-Fix.
