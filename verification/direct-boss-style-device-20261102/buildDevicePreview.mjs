@@ -5,7 +5,7 @@ import { createHash } from 'node:crypto';
 import { localStyleProof } from '../local-boss-style-20261102/transform.mjs';
 const journalDeviceDirectEntry = process.argv[1] && resolve(process.argv[1]) === resolve(new URL(import.meta.url).pathname);
 if (journalDeviceDirectEntry) {
-  await import('../critical-failure-journal-20261104/build.mjs');
+  await import('../player-muzzle-webkit-device-20261105/build.mjs');
 } else {
 assert.equal(process.env.VERCEL_ENV, 'preview', 'Isolated guest Preview only');
 assert.equal(process.argv.includes('--clock-probe'), false, 'Active scalar trace is excluded from the owner Preview');
