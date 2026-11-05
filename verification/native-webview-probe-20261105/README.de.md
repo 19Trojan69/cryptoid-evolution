@@ -127,3 +127,50 @@ Danach folgt ein kurzer unveränderter Gastablauf mit ursprünglicher Stoppuhr,
 echten manuellen Start/Pause/Waffenmenü/Home-Aktionen und normalem Bericht.
 Erst bei vollständig bestandenem Piloten ist eine native Ressourcenbeobachtung
 sinnvoll. Kein neuer Besitzer-Dauertest wird aus der Kontrollseite abgeleitet.
+
+## Umsetzung: Abbruchdaten und kurzer nativer Spielpilot
+
+Die historische Einschränkung oben wurde jetzt gezielt bearbeitet. `collector.py`
+sichert vor und nach jedem Prozess einen atomaren Zwischenstand und schreibt die
+Ausgabe direkt in eine Datei. Bei einer Zeitüberschreitung wird die eigene
+Prozessgruppe beendet; die bis dahin geschriebene Ausgabe bleibt erhalten. Der
+native Teilbericht wird in `finally` vor dem Löschen des eigenen Simulators aus
+dem App-Container übernommen, unabhängig vom XCTest-Ergebnis. Fehlende/ungültige
+App-Daten werden separat vermerkt und verdecken den ursprünglichen Fehler nicht.
+Drei neue Collector-Prüfungen umfassen echte fehlgeschlagene Unterprozesse,
+eine Zeitgrenze, eine während des Prozesses lesbare Zwischenstufe und fehlende
+App-Daten. Das sind keine absichtlich ausgelösten nativen WebContent-Abstürze.
+
+Der neue Modus `--mode pilot` baut mit dem vorhandenen Journal-Build-Einstieg den
+isolierten Gaststand und lädt ausschließlich diesen über Loopback in den eigenen
+WKWebView. Keine Vercel-Anmeldung oder neue Bereitstellung. Alle ausgelieferten
+Dateien werden vorher und nachher gehasht. Derselbe Runtime-Baum b092f646, dieselbe
+Uhr und bestehende Gast-Testschutzregel werden verlangt. Die Build-Quellkennung
+gehört zum neuen Prüfcommit; Identität mit remote ausgelieferten HTML-Bytes wird
+nicht behauptet. Das ist kein sauberer Produktions-Spieldurchlauf ohne Testschutz.
+
+Ein einziges neues XCTest soll die Originaloberfläche durchlaufen: vorbereiten,
+angehalten öffnen, Fortsetzen, echte aktive Zeit, Pause/Stillstand, Fortsetzen,
+Waffenmenü/Zurück, Home/Verlassen und den normalen Berichtstext anzeigen. Die
+Bedienung erfolgt durch native XCTest-Berührungen. Elf gezielt ausgelöste,
+lesende Beobachtungen prüfen Dokument, Uhr und vorhandene QA-Daten. Keine neue
+Schleife im Spiel, Zustandsschreiboperation, automatische Wiederaufnahme,
+Zeitbeschleunigung oder explizite Screenshot-/Videoanforderung. Die native
+Bedienleiste bleibt Teil des Messaufbaus und verkleinert den WebView; dessen
+wirkliche Geometrie wird protokolliert. Ein interner XCTest-Bildzugriff ist aus
+der Aufbewahrungseinstellung weiterhin nicht ausgeschlossen. Dieser Pilot ist
+keine Speichermessung und ersetzt keinen physischen Pi-Browser.
+
+Der normale Bericht wird über die vorhandenen Menüaktionen als Text angezeigt
+und unverändert im App-Container als `normal-report.json` gesichert. Eine native
+Download-/Teilen-Dialogprüfung wird daraus nicht behauptet. Die unabhängige
+Python-Abnahme verlangt denselben Lauf und dieselbe Quelle, ended, identische
+Schlussuhren in Journal/Kurzbericht/Stoppuhr, den passenden Ressourcenpunkt sowie
+keine gespeicherten error-/unhandledrejection-Ereignisse. Zusätzliche negative
+Prüfungen verwerfen alte Ressourcenpunkte, abweichende Journaluhren, Fehler,
+Dokumentwechsel, versteckte Seiten, unerwartete Pause und unbeobachtete Lücken.
+
+Vor dem CI-Start: elf lokale Python-Prüfungen und Syntaxprüfungen bestanden.
+Ein erfolgreiches natives Spielergebnis wird erst mit dem tatsächlichen
+CI-Schlussdatensatz dokumentiert. Der bisherige native Kontrolltest wird nicht
+noch einmal ausgeführt; der Pilot verwendet `-only-testing:.../GamePilotTests`.

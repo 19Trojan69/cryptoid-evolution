@@ -1,7 +1,7 @@
 import UIKit
 import WebKit
 
-// This first calibration deliberately loads no game, account, deployment or URL.
+// The separate pilot loads only the unchanged local isolated guest build.
 // WebContent termination is recorded by the native delegate, never auto-reloaded.
 @main
 final class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -19,6 +19,8 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
 final class ProbeController: UIViewController, WKNavigationDelegate, WKScriptMessageHandler {
     private var webView: WKWebView!
     private let output = UITextView()
+    private let gameMode = ProcessInfo.processInfo.arguments.contains("--game-pilot")
+    private var observations: [[String: Any]] = []
     private var record: [String: Any] = [
         "version": 1, "gameLoaded": false, "controlComplete": false,
         "nativeContentTerminations": 0, "navigationErrors": 0,
@@ -71,6 +73,12 @@ final class ProbeController: UIViewController, WKNavigationDelegate, WKScriptMes
             output.heightAnchor.constraint(equalToConstant: 160)
         ])
         persist()
+        if gameMode {
+            record["mode"] = "pilot"
+            record["pilotComplete"] = false
+            webView.load(URLRequest(url: URL(string: "http://127.0.0.1:4173/")!))
+            return
+        }
         guard ProcessInfo.processInfo.arguments.contains("--control-only") else {
             record["launchRejected"] = true
             persist()
@@ -81,9 +89,13 @@ final class ProbeController: UIViewController, WKNavigationDelegate, WKScriptMes
 
     private func persist() {
         record["savedAt"] = Date().timeIntervalSince1970 * 1000
+        record["observations"] = observations
         guard let data = try? JSONSerialization.data(withJSONObject: record, options: [.sortedKeys]),
-              data.count <= 12_288 else { return }
-        output.text = String(data: data, encoding: .utf8)
+              data.count <= 262_144 else { return }
+        var visible = record
+        visible.removeValue(forKey: "observations")
+        let display = try? JSONSerialization.data(withJSONObject: visible, options: [.sortedKeys])
+        output.text = display.flatMap { String(data: $0, encoding: .utf8) }
         let path = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
             .appendingPathComponent("probe-result.json")
         try? data.write(to: path, options: .atomic)
@@ -101,6 +113,7 @@ final class ProbeController: UIViewController, WKNavigationDelegate, WKScriptMes
     }
 
     @objc private func readControl() {
+        if gameMode { readGame(); return }
         // Fixed read-only DOM/native-page metadata. No game globals or state writes.
         let script = """
         (() => ({count:Number(document.querySelector('#control-count')?.textContent),
@@ -118,6 +131,18 @@ final class ProbeController: UIViewController, WKNavigationDelegate, WKScriptMes
     }
 
     @objc private func finishControl() {
+        if gameMode {
+            let point = record["readback"] as? [String: Any] ?? [:]
+            let clock = point["clock"] as? [String: Any] ?? [:]
+            let latest = clock["latest"] as? [String: Any] ?? [:]
+            record["pilotComplete"] = record["gameLoaded"] as? Bool == true
+                && point["mounted"] as? Bool == false && latest["mode"] as? String == "ended"
+                && record["reportExportObserved"] as? Bool == true
+                && record["nativeContentTerminations"] as? Int == 0
+                && record["navigationErrors"] as? Int == 0 && record["readbackFailed"] == nil
+            persist()
+            return
+        }
         let readback = record["readback"] as? [String: Any] ?? [:]
         let complete = record["loaded"] as? Bool == true
             && record["clickCount"] as? Int == 1 && record["trustedClick"] as? Bool == true
@@ -129,6 +154,54 @@ final class ProbeController: UIViewController, WKNavigationDelegate, WKScriptMes
         record["controlComplete"] = complete
         if !complete && record["clickCount"] as? Int == 0 { record["completionRejectedBeforeClick"] = true }
         persist()
+    }
+
+    private func readGame() {
+        // Existing QA bridge/storage and ordinary report UI only. No mutation,
+        // synthesized input, new game timer, frame loop or automatic resume.
+        let script = """
+        (()=>({timeOrigin:performance.timeOrigin,hidden:document.hidden,
+          origin:location.origin,readyState:document.readyState,secureContext:isSecureContext,
+          userAgent:navigator.userAgent,width:innerWidth,height:innerHeight,devicePixelRatio,
+          scene:window.__crossDeviceTest?.inspect()??null,
+          clock:JSON.parse(localStorage.getItem('cryptoid_private_stopwatch_v1')||'null'),
+          brief:JSON.parse(localStorage.getItem('cryptoid_private_brief_v1')||'null'),
+          mounted:!!document.querySelector('.game-shell'),
+          toggles:[...document.querySelectorAll('input[type=checkbox]')].map(x=>x.checked),
+          reportText:document.querySelector('textarea[aria-label="Diagnosebericht"]')?.value||null}))()
+        """
+        webView.evaluateJavaScript(script) { [weak self] value, error in
+            guard let self = self else { return }
+            if var point = value as? [String: Any], error == nil {
+                if point["mounted"] as? Bool == true { self.record["gameLoaded"] = true }
+                if let text = point.removeValue(forKey: "reportText") as? String,
+                   let envelopeData = text.data(using: .utf8),
+                   let envelope = (try? JSONSerialization.jsonObject(with: envelopeData)) as? [String: Any],
+                   envelope["total"] as? Int == 1, let report = envelope["data"] as? String,
+                   let reportData = report.data(using: .utf8), reportData.count <= 131_072,
+                   (try? JSONSerialization.jsonObject(with: reportData)) != nil {
+                    let file = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+                        .appendingPathComponent("normal-report.json")
+                    do {
+                        try reportData.write(to: file, options: .atomic)
+                        self.record["reportExportObserved"] = true
+                    } catch { self.record["reportWriteFailed"] = true }
+                }
+                point["sequence"] = self.observations.count + 1
+                point["observedAt"] = Date().timeIntervalSince1970 * 1000
+                self.record["readback"] = point
+                if self.observations.count < 32 { self.observations.append(point) }
+                else { self.record["observationLimitReached"] = true }
+            } else { self.record["readbackFailed"] = true }
+            self.persist()
+        }
+    }
+
+    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction,
+                 decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        let url = navigationAction.request.url
+        let local = url?.scheme == "http" && url?.host == "127.0.0.1" && url?.port == 4173
+        decisionHandler((!gameMode || local) ? .allow : .cancel)
     }
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
@@ -151,6 +224,7 @@ final class ProbeController: UIViewController, WKNavigationDelegate, WKScriptMes
         record["nativeContentTerminations"] = (record["nativeContentTerminations"] as? Int ?? 0) + 1
         record["nativeTerminationCallbackObserved"] = true
         record["controlComplete"] = false
+        record["pilotComplete"] = false
         persist()
     }
 

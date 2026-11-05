@@ -1,5 +1,6 @@
-"""Bounded direct XCTest calibration, without Appium, Safari or game loading."""
+"""Bounded direct XCTest control or unchanged local guest pilot; never a phone test."""
 from __future__ import annotations
+import argparse
 import hashlib
 import json
 import os
@@ -10,6 +11,7 @@ import sys
 import time
 import urllib.request
 import zipfile
+from collector import Collector, atomic_json
 
 BASE = "b092f6462a623c3ad2c12e634963028d462c5fcf"
 FOLDER = Path(__file__).resolve().parent
@@ -42,27 +44,31 @@ def scope():
     subprocess.run(["git", "diff", "--exit-code", "--", "frontend", "backend", "api", "assets", "private-preview", "vercel.json"], cwd=ROOT, check=True)
 
 
+def package_manifest(site):
+    return [{"path": str(p.relative_to(site)), "bytes": p.stat().st_size,
+             "sha256": hashlib.sha256(p.read_bytes()).hexdigest()}
+            for p in sorted(site.rglob("*")) if p.is_file()]
+
+
 def main() -> int:
+    mode = argparse.ArgumentParser()
+    mode.add_argument("--mode", choices=("control", "pilot"), default="control")
+    pilot = mode.parse_args().mode == "pilot"
     out = FOLDER / "results"
     out.mkdir(exist_ok=True)
     status = {"complete": False, "gameLoaded": False, "physicalDeviceTest": False,
               "nativeTerminationCallbackObserved": False, "whiteScreenFixed": False,
               "startedAt": time.time(), "base": BASE, "stage": "scope"}
     simulator = None
-    def run(args, *, timeout=120, log=None, cwd=ROOT):
-        started = time.monotonic()
-        result = subprocess.run(args, cwd=cwd, capture_output=True, text=True, timeout=timeout)
-        if log:
-            (out / log).write_text(result.stdout + result.stderr)
-        status.setdefault("commands", []).append({"command": args[0:2], "exitCode": result.returncode,
-                                                  "elapsedMs": round((time.monotonic()-started)*1000)})
-        if result.returncode:
-            raise RuntimeError(f"{args[0]} failed ({result.returncode}); log={log}")
-        return result.stdout
+    server = None
+    collector = Collector(out, status, ROOT)
+    status["mode"] = "pilot" if pilot else "control"
+    collector.checkpoint()
+    run = collector.run
     try:
         scope()
         status["source"] = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
-        status["stage"] = "tools"
+        collector.checkpoint("tools")
         status["xcode"] = run(["xcodebuild", "-version"])
         temp = Path(os.environ["RUNNER_TEMP"]) / "cryptoid-native-probe"
         temp.mkdir(exist_ok=True)
@@ -91,13 +97,13 @@ def main() -> int:
         # XcodeGen 2.44.1 maps captureScreenshotsAutomatically:false to the
         # documented systemAttachmentLifetime=keepNever, not an invented
         # disableAutomaticScreenCapture field. Retention is not a proof that
-        # XCTest internally never captures a screen. This control loads no game.
+        # XCTest internally never captures a screen. No explicit screenshot is requested.
         assert test_action is not None
         assert test_action.get("systemAttachmentLifetime") == "keepNever"
         assert test_action.get("preferredScreenCaptureFormat") == "screenshots"
         status["automaticScreenAttachmentsRetained"] = False
         status["screenRecordingRequested"] = False
-        status["stage"] = "simulator"
+        collector.checkpoint("simulator")
         catalogue = json.loads(run(["xcrun", "simctl", "list", "--json"], timeout=150))
         runtime = next(r for r in catalogue["runtimes"] if r.get("isAvailable") and r["version"] == "18.5")
         status["runtime"] = {k: runtime[k] for k in ("version", "identifier", "buildversion")}
@@ -110,25 +116,87 @@ def main() -> int:
                      "-scheme", "NativeProbe", "-destination", "id="+simulator,
                      "-derivedDataPath", str(temp / "derived"), "-parallel-testing-enabled", "NO",
                      "CODE_SIGNING_ALLOWED=NO"]
-        status["stage"] = "build"
+        collector.checkpoint("build")
         run(arguments + ["build-for-testing"], timeout=300, log="build.log")
-        status["stage"] = "native-control"
-        run(arguments + ["test-without-building", "-resultBundlePath", str(temp / "control.xcresult")],
-            timeout=240, log="control.log")
-        container = run(["xcrun", "simctl", "get_app_container", simulator, "org.cryptoid.nativeprobe", "data"]).strip()
-        raw = (Path(container) / "Documents/probe-result.json").read_bytes()
-        assert 0 < len(raw) <= 12_288
-        (out / "control.json").write_bytes(raw)
-        control = json.loads(raw)
-        validate_control(control)
-        scope()
-        status.update(complete=True, stage="complete", control=control)
+        if pilot:
+            collector.checkpoint("guest-build")
+            env = os.environ.copy()
+            # Only these two child build commands receive this fixed flag.
+            os.environ["VERCEL_ENV"] = "preview"
+            try:
+                run(["node", "verification/direct-boss-style-device-20261102/installDevicePreview.mjs", "--ignore-scripts"], timeout=240, log="guest-install.log")
+                run(["node", "verification/critical-failure-journal-20261104/build.mjs"], timeout=180, log="guest-build.log")
+            finally:
+                if "VERCEL_ENV" in env: os.environ["VERCEL_ENV"] = env["VERCEL_ENV"]
+                else: os.environ.pop("VERCEL_ENV", None)
+            site = ROOT / "verification/boss2-forensics-20261028/results/device-preview/site"
+            info = json.loads((site / "device-preview-info.json").read_text())
+            assert info["sourceCommit"] == status["source"] and info["criticalFailureJournal"]
+            assert info["guestOnly"] is True
+            for key in ("liveBackend", "actualPiAuthentication", "payments", "automaticResume", "automaticUpload"):
+                assert info[key] is False, key
+            shutil.copyfile(site / "device-preview-info.json", out / "build-info.json")
+            before = package_manifest(site)
+            atomic_json(out / "served-manifest.json", before)
+            # Authored guest-only server; no access to any hosted deployment.
+            server_log = (out / "guest-server.log").open("wb")
+            server = subprocess.Popen(["node", "--experimental-strip-types", str(FOLDER / "serve.mjs")],
+                                      cwd=ROOT, stdout=server_log, stderr=subprocess.STDOUT,
+                                      start_new_session=True)
+            origin_file = out / "guest-origin.txt"
+            for _ in range(100):
+                if origin_file.exists(): break
+                assert server.poll() is None, "local guest server exited"
+                time.sleep(.1)
+            assert origin_file.read_text().strip() == "http://127.0.0.1:4173"
+            status["guestBuildVerified"] = True
+            status["gameLoaded"] = None
+        collector.checkpoint("native-pilot" if pilot else "native-control")
+        test_class = "GamePilotTests" if pilot else "ProbeTests"
+        run(arguments + ["test-without-building", "-only-testing:NativeProbeUITests/"+test_class,
+                         "-resultBundlePath", str(temp / "test.xcresult")],
+            timeout=360 if pilot else 240, log="pilot.log" if pilot else "control.log")
+        # Collection runs in finally even if XCTest fails or its deadline expires.
+        status["nativeTestSucceeded"] = True
+
     except Exception as error:
         status["error"] = {"kind": type(error).__name__, "detail": str(error)[:1000]}
     finally:
+        if simulator:
+            collector.collect_native(
+                lambda: run(["xcrun", "simctl", "get_app_container", simulator, "org.cryptoid.nativeprobe", "data"], timeout=20, log="container.log"),
+                [("probe-result.json", "pilot.json" if pilot else "control.json")] +
+                ([("normal-report.json", "normal-report.json")] if pilot else []))
+        if "error" not in status:
+            try:
+                if pilot:
+                    from pilot_contract import validate_pilot
+                    receipt = json.loads((out / "pilot.json").read_text())
+                    report = json.loads((out / "normal-report.json").read_text())
+                    validate_pilot(receipt, report, status["source"])
+                    assert before == package_manifest(site), "Served bytes changed during native test"
+                    status.update(gameLoaded=True, normalReportVerified=True)
+                else:
+                    receipt = json.loads((out / "control.json").read_text())
+                    validate_control(receipt)
+                    status["control"] = receipt
+                scope()
+                status.update(complete=True, stage="complete")
+            except Exception as error:
+                status["error"] = {"kind": type(error).__name__, "detail": str(error)[:1000]}
+        elif pilot and (out / "pilot.json").exists():
+            try:
+                status["gameLoaded"] = json.loads((out / "pilot.json").read_text()).get("gameLoaded")
+            except Exception:
+                pass
+        if server:
+            server.terminate()
+            try: server.wait(timeout=5)
+            except subprocess.TimeoutExpired: server.kill(); server.wait(timeout=5)
+            server_log.close()
         status["endedAt"] = time.time()
-        (out / "result.json").write_text(json.dumps(status, indent=2)+"\n")
-        print("CRYPTOID_NATIVE_WEBVIEW_CONTROL "+json.dumps(status), flush=True)
+        collector.checkpoint()
+        print("CRYPTOID_NATIVE_WEBVIEW_RESULT "+json.dumps(status), flush=True)
         if simulator:
             for operation in ("shutdown", "delete"):
                 try:

@@ -13,6 +13,12 @@ targets:
     type: application
     platform: iOS
     sources: [App]
+    info:
+      path: App/Info.plist
+      properties:
+        UILaunchScreen: {}
+        NSAppTransportSecurity:
+          NSAllowsLocalNetworking: true
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: org.cryptoid.nativeprobe

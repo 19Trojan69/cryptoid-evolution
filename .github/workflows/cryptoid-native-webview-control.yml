@@ -1,4 +1,4 @@
-name: Direct native WebView control without game loading
+name: Direct native short guest game pilot
 on:
   push:
     branches: [codex/native-webview-control-20261105]
@@ -10,7 +10,7 @@ permissions:
 jobs:
   native-control:
     runs-on: macos-15-intel
-    timeout-minutes: 18
+    timeout-minutes: 24
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
         with: {persist-credentials: false, fetch-depth: 0}
@@ -18,11 +18,11 @@ jobs:
         run: python3 -m unittest discover -s verification/native-webview-probe-20261105 -p 'test_*.py' -v
       - name: Select the installed Xcode matching the iOS 18.5 SDK
         run: sudo xcode-select --switch /Applications/Xcode_16.4.app/Contents/Developer
-      - name: Require native app, trusted touch and DOM readback
-        run: python3 verification/native-webview-probe-20261105/run.py
+      - name: Require unchanged native guest flow and normal report
+        run: python3 verification/native-webview-probe-20261105/run.py --mode pilot
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: ${{ !cancelled() }}
         with:
-          name: native-webview-control
+          name: native-webview-pilot
           path: verification/native-webview-probe-20261105/results/
           retention-days: 7
