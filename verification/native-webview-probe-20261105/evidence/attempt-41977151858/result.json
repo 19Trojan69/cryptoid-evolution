@@ -1,0 +1,194 @@
+{
+  "complete": false,
+  "gameLoaded": false,
+  "physicalDeviceTest": false,
+  "nativeTerminationCallbackObserved": false,
+  "whiteScreenFixed": false,
+  "startedAt": 1793858305.299284,
+  "base": "b092f6462a623c3ad2c12e634963028d462c5fcf",
+  "stage": "simulator",
+  "mode": "pilot",
+  "checkpointAt": 1793858633.657241,
+  "source": "1fc1ce3080004dc6cab59b0f56de5e21219fc56a",
+  "commands": [
+    {
+      "command": [
+        "xcodebuild",
+        "-version"
+      ],
+      "startedAt": 1793858305.8198102,
+      "finished": true,
+      "timedOut": false,
+      "log": "command-0.log",
+      "exitCode": 0,
+      "elapsedMs": 340,
+      "directChildExited": true,
+      "processGroupStopConfirmed": null,
+      "logBytes": 30,
+      "logSha256": "a8be4f9af0a29137fe7e59b9928056d4a0df297bb46ba40f80eaa6b0ae982f12"
+    },
+    {
+      "command": [
+        "/Users/runner/work/_temp/cryptoid-native-probe/xcodegen/xcodegen/bin/xcodegen",
+        "version"
+      ],
+      "startedAt": 1793858306.6746502,
+      "finished": true,
+      "timedOut": false,
+      "log": "command-1.log",
+      "exitCode": 0,
+      "elapsedMs": 45,
+      "directChildExited": true,
+      "processGroupStopConfirmed": null,
+      "logBytes": 16,
+      "logSha256": "3c4ffcfb28a616a2eb2421c091b359d31ff598d0f2b05867a37102832a27ef72"
+    },
+    {
+      "command": [
+        "/Users/runner/work/_temp/cryptoid-native-probe/xcodegen/xcodegen/bin/xcodegen",
+        "generate"
+      ],
+      "startedAt": 1793858306.722545,
+      "finished": true,
+      "timedOut": false,
+      "log": "command-2.log",
+      "exitCode": 0,
+      "elapsedMs": 98,
+      "directChildExited": true,
+      "processGroupStopConfirmed": null,
+      "logBytes": 235,
+      "logSha256": "747bfddc383b421b9c4a5bf6670826837778feb2020b0de5e0f11545d229aad3"
+    },
+    {
+      "command": [
+        "xcrun",
+        "simctl"
+      ],
+      "startedAt": 1793858306.847818,
+      "finished": true,
+      "timedOut": false,
+      "log": "command-3.log",
+      "exitCode": 0,
+      "elapsedMs": 67573,
+      "directChildExited": true,
+      "processGroupStopConfirmed": null,
+      "logBytes": 256038,
+      "logSha256": "2f27ec7c81e68354322273b3fa638fcdefc016d453695af5a082fef54d3c6659"
+    },
+    {
+      "command": [
+        "xcrun",
+        "simctl"
+      ],
+      "startedAt": 1793858374.464139,
+      "finished": true,
+      "timedOut": false,
+      "log": "command-4.log",
+      "exitCode": 0,
+      "elapsedMs": 1682,
+      "directChildExited": true,
+      "processGroupStopConfirmed": null,
+      "logBytes": 37,
+      "logSha256": "76b5e03f7d1c13431144f2c33307ff2a698a4e726aee9df87dd7c7cf1a34b2b3"
+    },
+    {
+      "command": [
+        "xcrun",
+        "simctl"
+      ],
+      "startedAt": 1793858376.150849,
+      "finished": true,
+      "timedOut": false,
+      "log": "command-5.log",
+      "exitCode": 0,
+      "elapsedMs": 5622,
+      "directChildExited": true,
+      "processGroupStopConfirmed": null,
+      "logBytes": 0,
+      "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "xcrun",
+        "simctl"
+      ],
+      "startedAt": 1793858381.785033,
+      "finished": true,
+      "timedOut": true,
+      "log": "boot.log",
+      "exitCode": -15,
+      "elapsedMs": 184813,
+      "directChildExited": true,
+      "processGroupStopConfirmed": true,
+      "logBytes": 29918,
+      "logSha256": "c4a1434d7a4ca9b85911e82f657c0ce26f2aa5fb7d6274f1914a32266e9ef737"
+    },
+    {
+      "command": [
+        "xcrun",
+        "simctl"
+      ],
+      "startedAt": 1793858592.0864608,
+      "finished": true,
+      "timedOut": true,
+      "log": "native-failure.log",
+      "signalErrors": [
+        {
+          "scope": "own-process-group",
+          "errno": 1
+        }
+      ],
+      "exitCode": -15,
+      "elapsedMs": 20193,
+      "directChildExited": true,
+      "processGroupStopConfirmed": false,
+      "logBytes": 0,
+      "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "xcrun",
+        "simctl"
+      ],
+      "startedAt": 1793858612.299692,
+      "finished": true,
+      "timedOut": true,
+      "log": "container.log",
+      "exitCode": -15,
+      "elapsedMs": 21250,
+      "directChildExited": true,
+      "processGroupStopConfirmed": true,
+      "logBytes": 0,
+      "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "xcode": "Xcode 16.4\nBuild version 16F6\n",
+  "xcodegen": "Version: 2.44.1\n",
+  "automaticScreenAttachmentsRetained": false,
+  "screenRecordingRequested": false,
+  "runtime": {
+    "version": "18.5",
+    "identifier": "com.apple.CoreSimulator.SimRuntime.iOS-18-5",
+    "buildversion": "22F77"
+  },
+  "error": {
+    "kind": "CommandFailed",
+    "detail": "xcrun failed: timeout=True, exit=-15; log=boot.log",
+    "traceback": "Traceback (most recent call last):\n  File \"/Users/runner/work/cryptoid-evolution/cryptoid-evolution/verification/native-webview-probe-20261105/run.py\", line 114, in main\n    run([\"xcrun\", \"simctl\", \"bootstatus\", simulator, \"-b\"], timeout=180, log=\"boot.log\")\n    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/runner/work/cryptoid-evolution/cryptoid-evolution/verification/native-webview-probe-20261105/collector.py\", line 87, in run\n    raise CommandFailed(f\"{args[0]} failed: timeout={row['timedOut']}, exit={row['exitCode']}; log={row['log']}\")\ncollector.CommandFailed: xcrun failed: timeout=True, exit=-15; log=boot.log\n"
+  },
+  "nativeFailureLogUnavailable": {
+    "kind": "CommandFailed",
+    "detail": "xcrun failed: timeout=True, exit=-15; log=native-failure.log"
+  },
+  "nativeCollection": {
+    "attempted": true,
+    "copied": [],
+    "errors": [
+      {
+        "kind": "CommandFailed",
+        "detail": "xcrun failed: timeout=True, exit=-15; log=container.log"
+      }
+    ]
+  },
+  "endedAt": 1793858633.657235
+}

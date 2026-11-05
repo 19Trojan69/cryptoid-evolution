@@ -1,0 +1,46 @@
+{
+  "complete": true,
+  "gameLoaded": false,
+  "physicalDeviceTest": false,
+  "whiteScreenFixed": false,
+  "stage": "complete",
+  "startedAt": 1793858630.8181448,
+  "source": "1fe2e2b01a640d4b696ad07336d0195a0b2e181f",
+  "commands": [
+    {
+      "command": [
+        "node",
+        "verification/direct-boss-style-device-20261102/installDevicePreview.mjs"
+      ],
+      "startedAt": 1793858631.5582347,
+      "finished": true,
+      "timedOut": false,
+      "log": "guest-install.log",
+      "exitCode": 0,
+      "elapsedMs": 26160,
+      "directChildExited": true,
+      "processGroupStopConfirmed": null,
+      "logBytes": 538,
+      "logSha256": "bd0d984c82b897b98939c1cba53ab3cd6d583694efa24bec0dc935900f82158c"
+    },
+    {
+      "command": [
+        "node",
+        "verification/critical-failure-journal-20261104/build.mjs"
+      ],
+      "startedAt": 1793858657.720682,
+      "finished": true,
+      "timedOut": false,
+      "log": "guest-build.log",
+      "exitCode": 0,
+      "elapsedMs": 19674,
+      "directChildExited": true,
+      "processGroupStopConfirmed": null,
+      "logBytes": 7485,
+      "logSha256": "284ae9400f4645989d183c8ee27ec066ad64147af10c24af040ce449078aab7a"
+    }
+  ],
+  "checkpointAt": 1793858677.9988973,
+  "files": 2217,
+  "endedAt": 1793858677.9988952
+}

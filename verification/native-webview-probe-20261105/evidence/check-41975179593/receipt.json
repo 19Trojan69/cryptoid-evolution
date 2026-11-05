@@ -1,0 +1,20 @@
+{
+  "runId": 41975179593,
+  "jobId": 127072235760,
+  "source": "6018fab120e4a0f15cf145437f53967ded111dc5",
+  "tree": "42398aa74ded0251f0772bd4da3e5d10aba79ae8",
+  "conclusion": "failure",
+  "nativeJobSkipped": true,
+  "gameLoaded": false,
+  "physicalDeviceTest": false,
+  "reason": "Collector snapshot replacement also changed the separate native-file reader and introduced a SyntaxError. Local test failure was not gated before the premature test-only commit. Corrected in 451816d18fbb9a636875a288a9ce5e81e6d73afc; 14 local checks then pass.",
+  "fullJobLogBytes": 84240,
+  "fullJobLogSha256": "80244dea0c90be1622a220bbbb20d60cf642b1488a042aafc458fa37fd63445e",
+  "retainedExcerptLines": [
+    606,
+    659
+  ],
+  "excerptBytes": 5091,
+  "excerptSha256": "57b1feff8ba95f7a02b437ee00648de0f1928c8a15f0b107b7c263b218795151",
+  "fullJobLogStored": false
+}

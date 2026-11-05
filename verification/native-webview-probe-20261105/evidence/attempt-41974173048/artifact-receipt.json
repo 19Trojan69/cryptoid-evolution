@@ -1,0 +1,85 @@
+{
+  "runId": 41974173048,
+  "jobId": 127069444120,
+  "artifactId": 13391700580,
+  "source": "a79d03f56c1c9483efdd9ba18f5618563b8b4384",
+  "tree": "dd73bb56bb424691f1038482ef19543745ec9f8a",
+  "complete": false,
+  "stage": "simulator-display",
+  "gameLoaded": false,
+  "physicalDeviceTest": false,
+  "archiveBytes": 21019,
+  "archiveSha256": "87b976820478c2c1a93a36f52b358a86bdca0b71297673400127773397b12a4e",
+  "archiveGitBlob": "11e9703a9535ecc1d30f9b1584c3eed2d21e2e83",
+  "logMetadataMissing": [
+    "boot-services.log"
+  ],
+  "reason": "Simulator display open succeeds. Added launchctl service list times out; macOS refuses process-group signal and old collector masks timeout with PermissionError. No native build, test case, app or game loaded. Original missing per-command metadata retained, entire ZIP hash intact. Diagnostic native log also times out. Source correction preserves EPERM as signal metadata and snapshots output without escalation; unnecessary service-list gate removed.",
+  "members": [
+    {
+      "path": "NativeProbe.xcscheme",
+      "bytes": 4617,
+      "sha256": "1741fceac37910655a7fd2ceccfbf1f2d1feea63020b693f7520a4eea1e496f9"
+    },
+    {
+      "path": "boot-services.log",
+      "bytes": 11751,
+      "sha256": "f759a0b4908a2a3a053ec0d35b709cf568dbd9b10100ff287c2cef2d3af66c92"
+    },
+    {
+      "path": "boot.log",
+      "bytes": 19009,
+      "sha256": "912bcab61118c42eb0778e7578b07c1bb61bb03db16bf1258f54e68a3f63685b"
+    },
+    {
+      "path": "command-0.log",
+      "bytes": 30,
+      "sha256": "a8be4f9af0a29137fe7e59b9928056d4a0df297bb46ba40f80eaa6b0ae982f12"
+    },
+    {
+      "path": "command-1.log",
+      "bytes": 16,
+      "sha256": "3c4ffcfb28a616a2eb2421c091b359d31ff598d0f2b05867a37102832a27ef72"
+    },
+    {
+      "path": "command-2.log",
+      "bytes": 235,
+      "sha256": "747bfddc383b421b9c4a5bf6670826837778feb2020b0de5e0f11545d229aad3"
+    },
+    {
+      "path": "command-3.log",
+      "bytes": 256038,
+      "sha256": "2f27ec7c81e68354322273b3fa638fcdefc016d453695af5a082fef54d3c6659"
+    },
+    {
+      "path": "command-4.log",
+      "bytes": 37,
+      "sha256": "96e51435b43e188650a59ebfbd240711cf9d12b16105c070e97f4879ed35b212"
+    },
+    {
+      "path": "command-5.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "container.log",
+      "bytes": 176,
+      "sha256": "eff64c578677a922269a71122a28c8c3b6bd9bdfa33f2ee67bf4aef68a42d1db"
+    },
+    {
+      "path": "native-failure.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "result.json",
+      "bytes": 6631,
+      "sha256": "728b49a9c4e0336e14c6036b7bc0c27d4a910cfd50260114d66e8bc62290651c"
+    },
+    {
+      "path": "simulator-display.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ]
+}

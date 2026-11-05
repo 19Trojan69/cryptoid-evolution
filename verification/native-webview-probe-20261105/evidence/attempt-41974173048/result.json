@@ -1,0 +1,196 @@
+{
+  "complete": false,
+  "gameLoaded": false,
+  "physicalDeviceTest": false,
+  "nativeTerminationCallbackObserved": false,
+  "whiteScreenFixed": false,
+  "startedAt": 1793856574.78085,
+  "base": "b092f6462a623c3ad2c12e634963028d462c5fcf",
+  "stage": "simulator-display",
+  "mode": "pilot",
+  "checkpointAt": 1793856849.620907,
+  "source": "a79d03f56c1c9483efdd9ba18f5618563b8b4384",
+  "commands": [
+    {
+      "command": [
+        "xcodebuild",
+        "-version"
+      ],
+      "startedAt": 1793856575.15185,
+      "finished": true,
+      "timedOut": false,
+      "log": "command-0.log",
+      "exitCode": 0,
+      "elapsedMs": 252,
+      "logBytes": 30,
+      "logSha256": "a8be4f9af0a29137fe7e59b9928056d4a0df297bb46ba40f80eaa6b0ae982f12"
+    },
+    {
+      "command": [
+        "/Users/runner/work/_temp/cryptoid-native-probe/xcodegen/xcodegen/bin/xcodegen",
+        "version"
+      ],
+      "startedAt": 1793856575.964549,
+      "finished": true,
+      "timedOut": false,
+      "log": "command-1.log",
+      "exitCode": 0,
+      "elapsedMs": 40,
+      "logBytes": 16,
+      "logSha256": "3c4ffcfb28a616a2eb2421c091b359d31ff598d0f2b05867a37102832a27ef72"
+    },
+    {
+      "command": [
+        "/Users/runner/work/_temp/cryptoid-native-probe/xcodegen/xcodegen/bin/xcodegen",
+        "generate"
+      ],
+      "startedAt": 1793856576.0071838,
+      "finished": true,
+      "timedOut": false,
+      "log": "command-2.log",
+      "exitCode": 0,
+      "elapsedMs": 164,
+      "logBytes": 235,
+      "logSha256": "747bfddc383b421b9c4a5bf6670826837778feb2020b0de5e0f11545d229aad3"
+    },
+    {
+      "command": [
+        "xcrun",
+        "simctl"
+      ],
+      "startedAt": 1793856576.189762,
+      "finished": true,
+      "timedOut": false,
+      "log": "command-3.log",
+      "exitCode": 0,
+      "elapsedMs": 24543,
+      "logBytes": 256038,
+      "logSha256": "2f27ec7c81e68354322273b3fa638fcdefc016d453695af5a082fef54d3c6659"
+    },
+    {
+      "command": [
+        "xcrun",
+        "simctl"
+      ],
+      "startedAt": 1793856600.748446,
+      "finished": true,
+      "timedOut": false,
+      "log": "command-4.log",
+      "exitCode": 0,
+      "elapsedMs": 1334,
+      "logBytes": 37,
+      "logSha256": "96e51435b43e188650a59ebfbd240711cf9d12b16105c070e97f4879ed35b212"
+    },
+    {
+      "command": [
+        "xcrun",
+        "simctl"
+      ],
+      "startedAt": 1793856602.0856571,
+      "finished": true,
+      "timedOut": false,
+      "log": "command-5.log",
+      "exitCode": 0,
+      "elapsedMs": 5259,
+      "logBytes": 0,
+      "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "xcrun",
+        "simctl"
+      ],
+      "startedAt": 1793856607.3488882,
+      "finished": true,
+      "timedOut": false,
+      "log": "boot.log",
+      "exitCode": 0,
+      "elapsedMs": 135093,
+      "logBytes": 19009,
+      "logSha256": "912bcab61118c42eb0778e7578b07c1bb61bb03db16bf1258f54e68a3f63685b"
+    },
+    {
+      "command": [
+        "open",
+        "-a"
+      ],
+      "startedAt": 1793856750.5681431,
+      "finished": true,
+      "timedOut": false,
+      "log": "simulator-display.log",
+      "exitCode": 0,
+      "elapsedMs": 27346,
+      "logBytes": 0,
+      "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "xcrun",
+        "simctl"
+      ],
+      "startedAt": 1793856784.7507992,
+      "finished": true,
+      "timedOut": true,
+      "log": "boot-services.log",
+      "exitCode": null,
+      "elapsedMs": 32065
+    },
+    {
+      "command": [
+        "xcrun",
+        "simctl"
+      ],
+      "startedAt": 1793856818.386016,
+      "finished": true,
+      "timedOut": true,
+      "log": "native-failure.log",
+      "exitCode": -15,
+      "elapsedMs": 21145,
+      "logBytes": 0,
+      "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "xcrun",
+        "simctl"
+      ],
+      "startedAt": 1793856840.0503628,
+      "finished": true,
+      "timedOut": false,
+      "log": "container.log",
+      "exitCode": 2,
+      "elapsedMs": 9038,
+      "logBytes": 176,
+      "logSha256": "eff64c578677a922269a71122a28c8c3b6bd9bdfa33f2ee67bf4aef68a42d1db"
+    }
+  ],
+  "xcode": "Xcode 16.4\nBuild version 16F6\n",
+  "xcodegen": "Version: 2.44.1\n",
+  "automaticScreenAttachmentsRetained": false,
+  "screenRecordingRequested": false,
+  "runtime": {
+    "version": "18.5",
+    "identifier": "com.apple.CoreSimulator.SimRuntime.iOS-18-5",
+    "buildversion": "22F77"
+  },
+  "error": {
+    "kind": "PermissionError",
+    "detail": "[Errno 1] Operation not permitted",
+    "traceback": "Traceback (most recent call last):\n  File \"/Users/runner/work/cryptoid-evolution/cryptoid-evolution/verification/native-webview-probe-20261105/collector.py\", line 49, in run\n    child.wait(timeout=timeout)\n    ~~~~~~~~~~^^^^^^^^^^^^^^^^^\n  File \"/usr/local/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/subprocess.py\", line 1279, in wait\n    return self._wait(timeout=timeout)\n           ~~~~~~~~~~^^^^^^^^^^^^^^^^^\n  File \"/usr/local/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/subprocess.py\", line 2076, in _wait\n    raise TimeoutExpired(self.args, timeout)\nsubprocess.TimeoutExpired: Command '['xcrun', 'simctl', 'spawn', '950C0A46-E1D3-4A1A-B483-5AE534BCA578', 'launchctl', 'list']' timed out after 30 seconds\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"/Users/runner/work/cryptoid-evolution/cryptoid-evolution/verification/native-webview-probe-20261105/run.py\", line 119, in main\n    run([\"xcrun\", \"simctl\", \"spawn\", simulator, \"launchctl\", \"list\"], timeout=30, log=\"boot-services.log\")\n    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/runner/work/cryptoid-evolution/cryptoid-evolution/verification/native-webview-probe-20261105/collector.py\", line 54, in run\n    os.killpg(child.pid, sig)\n    ~~~~~~~~~^^^^^^^^^^^^^^^^\nPermissionError: [Errno 1] Operation not permitted\n"
+  },
+  "nativeFailureLogUnavailable": {
+    "kind": "CommandFailed",
+    "detail": "xcrun failed: timeout=True, exit=-15; log=native-failure.log"
+  },
+  "nativeCollection": {
+    "attempted": true,
+    "copied": [],
+    "errors": [
+      {
+        "kind": "CommandFailed",
+        "detail": "xcrun failed: timeout=False, exit=2; log=container.log"
+      }
+    ]
+  },
+  "endedAt": 1793856849.620903
+}

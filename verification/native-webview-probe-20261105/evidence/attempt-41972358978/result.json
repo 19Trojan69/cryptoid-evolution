@@ -1,0 +1,183 @@
+{
+  "complete": false,
+  "gameLoaded": null,
+  "physicalDeviceTest": false,
+  "nativeTerminationCallbackObserved": false,
+  "whiteScreenFixed": false,
+  "startedAt": 1793855569.7639391,
+  "base": "b092f6462a623c3ad2c12e634963028d462c5fcf",
+  "stage": "native-pilot",
+  "mode": "pilot",
+  "checkpointAt": 1793856359.775578,
+  "source": "222797423ccef69edd15e8aaf087a9b946184b40",
+  "commands": [
+    {
+      "command": [
+        "xcodebuild",
+        "-version"
+      ],
+      "startedAt": 1793855570.254409,
+      "finished": true,
+      "timedOut": false,
+      "log": "command-0.log",
+      "exitCode": 0,
+      "elapsedMs": 520,
+      "logBytes": 30,
+      "logSha256": "a8be4f9af0a29137fe7e59b9928056d4a0df297bb46ba40f80eaa6b0ae982f12"
+    },
+    {
+      "command": [
+        "/Users/runner/work/_temp/cryptoid-native-probe/xcodegen/xcodegen/bin/xcodegen",
+        "version"
+      ],
+      "startedAt": 1793855571.214429,
+      "finished": true,
+      "timedOut": false,
+      "log": "command-1.log",
+      "exitCode": 0,
+      "elapsedMs": 29,
+      "logBytes": 16,
+      "logSha256": "3c4ffcfb28a616a2eb2421c091b359d31ff598d0f2b05867a37102832a27ef72"
+    },
+    {
+      "command": [
+        "/Users/runner/work/_temp/cryptoid-native-probe/xcodegen/xcodegen/bin/xcodegen",
+        "generate"
+      ],
+      "startedAt": 1793855571.247031,
+      "finished": true,
+      "timedOut": false,
+      "log": "command-2.log",
+      "exitCode": 0,
+      "elapsedMs": 169,
+      "logBytes": 235,
+      "logSha256": "747bfddc383b421b9c4a5bf6670826837778feb2020b0de5e0f11545d229aad3"
+    },
+    {
+      "command": [
+        "xcrun",
+        "simctl"
+      ],
+      "startedAt": 1793855571.451693,
+      "finished": true,
+      "timedOut": false,
+      "log": "command-3.log",
+      "exitCode": 0,
+      "elapsedMs": 113887,
+      "logBytes": 256038,
+      "logSha256": "2f27ec7c81e68354322273b3fa638fcdefc016d453695af5a082fef54d3c6659"
+    },
+    {
+      "command": [
+        "xcrun",
+        "simctl"
+      ],
+      "startedAt": 1793855685.4033961,
+      "finished": true,
+      "timedOut": false,
+      "log": "command-4.log",
+      "exitCode": 0,
+      "elapsedMs": 1811,
+      "logBytes": 37,
+      "logSha256": "a0a8a70fe7f749aac526223f5272c85b37081f1aab4180450d883e754896ef72"
+    },
+    {
+      "command": [
+        "xcrun",
+        "simctl"
+      ],
+      "startedAt": 1793855687.2181811,
+      "finished": true,
+      "timedOut": false,
+      "log": "command-5.log",
+      "exitCode": 0,
+      "elapsedMs": 8504,
+      "logBytes": 0,
+      "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "xcrun",
+        "simctl"
+      ],
+      "startedAt": 1793855696.384316,
+      "finished": true,
+      "timedOut": false,
+      "log": "boot.log",
+      "exitCode": 0,
+      "elapsedMs": 171569,
+      "logBytes": 24331,
+      "logSha256": "9906902f7effb2583349fa2ecb0c760a7a5cabf6a85f41429b077ad8f337af6a"
+    },
+    {
+      "command": [
+        "xcodebuild",
+        "-project"
+      ],
+      "startedAt": 1793855876.7542012,
+      "finished": true,
+      "timedOut": false,
+      "log": "build.log",
+      "exitCode": 0,
+      "elapsedMs": 208682,
+      "logBytes": 104980,
+      "logSha256": "9550711abe724db8f2100e6d8250db622e18014ac010cff2321fc11a639cecab"
+    },
+    {
+      "command": [
+        "xcodebuild",
+        "-project"
+      ],
+      "startedAt": 1793856105.3379562,
+      "finished": true,
+      "timedOut": false,
+      "log": "pilot.log",
+      "exitCode": 65,
+      "elapsedMs": 249582,
+      "logBytes": 1987,
+      "logSha256": "8ff16cd5dff8fb1ff82f188e2041c026e84696d8ea9585213d50e35599096b4b"
+    },
+    {
+      "command": [
+        "xcrun",
+        "simctl"
+      ],
+      "startedAt": 1793856355.23458,
+      "finished": true,
+      "timedOut": false,
+      "log": "container.log",
+      "exitCode": 2,
+      "elapsedMs": 4467,
+      "logBytes": 176,
+      "logSha256": "eff64c578677a922269a71122a28c8c3b6bd9bdfa33f2ee67bf4aef68a42d1db"
+    }
+  ],
+  "xcode": "Xcode 16.4\nBuild version 16F6\n",
+  "xcodegen": "Version: 2.44.1\n",
+  "automaticScreenAttachmentsRetained": false,
+  "screenRecordingRequested": false,
+  "runtime": {
+    "version": "18.5",
+    "identifier": "com.apple.CoreSimulator.SimRuntime.iOS-18-5",
+    "buildversion": "22F77"
+  },
+  "guestBuildVerified": true,
+  "guestBuildOS": "Linux",
+  "restoredPackageMatchesLinuxBuild": true,
+  "error": {
+    "kind": "CommandFailed",
+    "detail": "xcodebuild failed: timeout=False, exit=65; log=pilot.log",
+    "traceback": "Traceback (most recent call last):\n  File \"/Users/runner/work/cryptoid-evolution/cryptoid-evolution/verification/native-webview-probe-20261105/run.py\", line 157, in main\n    run(arguments + [\"test-without-building\", \"-only-testing:NativeProbeUITests/\"+test_class,\n    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n                     \"-resultBundlePath\", str(temp / \"test.xcresult\")],\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n        timeout=360 if pilot else 240, log=\"pilot.log\" if pilot else \"control.log\")\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/runner/work/cryptoid-evolution/cryptoid-evolution/verification/native-webview-probe-20261105/collector.py\", line 72, in run\n    raise CommandFailed(f\"{args[0]} failed: timeout={row['timedOut']}, exit={row['exitCode']}; log={row['log']}\")\ncollector.CommandFailed: xcodebuild failed: timeout=False, exit=65; log=pilot.log\n"
+  },
+  "nativeCollection": {
+    "attempted": true,
+    "copied": [],
+    "errors": [
+      {
+        "kind": "CommandFailed",
+        "detail": "xcrun failed: timeout=False, exit=2; log=container.log"
+      }
+    ]
+  },
+  "endedAt": 1793856359.7755651
+}

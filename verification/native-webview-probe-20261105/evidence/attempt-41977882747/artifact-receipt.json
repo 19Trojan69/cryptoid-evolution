@@ -1,0 +1,147 @@
+{
+  "runId": 41977882747,
+  "jobId": 127081334820,
+  "artifactId": 13392937393,
+  "source": "1fe2e2b01a640d4b696ad07336d0195a0b2e181f",
+  "tree": "9a32595120bfca370383c2a1a1c8245a70ebcf6d",
+  "complete": true,
+  "stage": "complete",
+  "gameLoaded": true,
+  "physicalDeviceTest": false,
+  "archiveBytes": 138714,
+  "archiveSha256": "f8d4b804327d90ded0ddfcc1930e36d793e4ff76175d866a169f32139d2ab608",
+  "archiveGitBlob": "592d31db87a0b03dd5e35a539237dfb4ccc92d68",
+  "nativeXCTestSeconds": 128.813,
+  "nativeXCTestCount": 1,
+  "nativeXCTestFailures": 0,
+  "hostArchitecture": "arm64",
+  "hostMemoryBytes": 7516192768,
+  "systemVersion": "18.5",
+  "clock": {
+    "id": "1fe2e2b0-1793859120351-1",
+    "source": "1fe2e2b01a640d4b696ad07336d0195a0b2e181f",
+    "startedAt": 1793859133494,
+    "updatedAt": 1793859212713,
+    "elapsedMs": 50435.000000000015,
+    "unobservedGaps": 0,
+    "mode": "ended"
+  },
+  "criticalMatchesLatestStopwatch": true,
+  "nativeDocumentTokenCount": 1,
+  "nativeMainDocumentNavigationCounts": {
+    "mainDocumentStarts": 1,
+    "mainDocumentCommits": 1,
+    "mainDocumentFinishes": 1
+  },
+  "nativeTerminationCallbackExercised": false,
+  "nativeResourceSeriesCollected": false,
+  "whiteScreenFixed": false,
+  "reason": "Both CI jobs succeed. Original UI cycle, immutable document nonce plus native navigation counters, unchanged package hashes and normal report independently pass. Working Apple Silicon simulator configuration; not proof that CPU architecture alone caused earlier Intel failures. No physical phone, Pi Browser, process termination or native memory series tested.",
+  "members": [
+    {
+      "path": "NativeProbe.xcscheme",
+      "bytes": 4617,
+      "sha256": "1741fceac37910655a7fd2ceccfbf1f2d1feea63020b693f7520a4eea1e496f9"
+    },
+    {
+      "path": "boot.log",
+      "bytes": 130,
+      "sha256": "61e3674a8429c7dd8d721032422ee0f16ccd4ea55be918d461e022cc14b63183"
+    },
+    {
+      "path": "build-info.json",
+      "bytes": 9027,
+      "sha256": "06561b21e9a7bda6b89076ffada5d23acf719bfb2d5abdd6b69cd05e867673fd"
+    },
+    {
+      "path": "build.log",
+      "bytes": 105125,
+      "sha256": "a8e58783185a3ecaff6fa1dbc1d68eebfffa0a79864e683a6334bcac42aa3e38"
+    },
+    {
+      "path": "command-1.log",
+      "bytes": 30,
+      "sha256": "a8be4f9af0a29137fe7e59b9928056d4a0df297bb46ba40f80eaa6b0ae982f12"
+    },
+    {
+      "path": "command-2.log",
+      "bytes": 16,
+      "sha256": "3c4ffcfb28a616a2eb2421c091b359d31ff598d0f2b05867a37102832a27ef72"
+    },
+    {
+      "path": "command-3.log",
+      "bytes": 235,
+      "sha256": "747bfddc383b421b9c4a5bf6670826837778feb2020b0de5e0f11545d229aad3"
+    },
+    {
+      "path": "command-4.log",
+      "bytes": 265506,
+      "sha256": "95126a69a8d108cc8649fb55a50d41f53fa9b0b1d55d4d7c5eacb379460afa31"
+    },
+    {
+      "path": "command-5.log",
+      "bytes": 37,
+      "sha256": "b6576551bfff328622ef62978d03d86e7e2c168b8bec505cd41486687b9ff2b4"
+    },
+    {
+      "path": "command-6.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "container.log",
+      "bytes": 161,
+      "sha256": "56e2f7841abbf1daeaa3132090c280654b7b796010868c6e3e02b21fa8b3e02e"
+    },
+    {
+      "path": "guest-origin.txt",
+      "bytes": 22,
+      "sha256": "e9d101fb19c4b2563b3573eee66779ffe9e8b5b9ecb89a8effef2616405efaa4"
+    },
+    {
+      "path": "guest-server.log",
+      "bytes": 37,
+      "sha256": "e0e29772e67108bdc3cdc1c79582dc246eb934c21e94573f307d050bf7ead731"
+    },
+    {
+      "path": "host-memory.log",
+      "bytes": 11,
+      "sha256": "ae0cc22f5ea218082f5dec9c827424ea217b458c0891472d43332507e3435b13"
+    },
+    {
+      "path": "launch-stage.json",
+      "bytes": 96,
+      "sha256": "e2a49583ea38a3ec9cb4b67c6e4728c841a4ce209ac0eaa250afc800daa41d0d"
+    },
+    {
+      "path": "normal-report.json",
+      "bytes": 9481,
+      "sha256": "1eb3714594b7c1c7afdc73b693356c49dc2a5dc5d120d49de555e8940d22778c"
+    },
+    {
+      "path": "pilot.json",
+      "bytes": 54026,
+      "sha256": "103a02f45a16f36f3359e3029669633fa1e90f675d7518ded599439eb12f4b5c"
+    },
+    {
+      "path": "pilot.log",
+      "bytes": 17987,
+      "sha256": "0a24c03765133a526743813c1f968c2b9d4de6379eaa66d051ceb283fc571947"
+    },
+    {
+      "path": "result.json",
+      "bytes": 6808,
+      "sha256": "7c483ec408730291d36012e5781695ae0042bfa75a7117e303d9a481089bd2d3"
+    },
+    {
+      "path": "served-manifest.json",
+      "bytes": 400802,
+      "sha256": "55913076ae6b66517cca2c61312614183934b3e66537b7f7109b26967693e0c5"
+    },
+    {
+      "path": "simulator-display.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ]
+}

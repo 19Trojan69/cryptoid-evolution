@@ -1,0 +1,37 @@
+{
+  "runId": 41969672141,
+  "jobId": 127054725915,
+  "artifactId": 13388604146,
+  "source": "08b54f5cee740fdde770082238e8cb165b601d7d",
+  "tree": "e461cb18245f814b299b9dc51fad8f4adac73003",
+  "complete": false,
+  "stage": "tools",
+  "gameLoaded": false,
+  "physicalDeviceTest": false,
+  "archiveBytes": 1372,
+  "archiveSha256": "c91b90c6b0e47d767566132538d521b6821a7ba697c89fa648d578d439624677",
+  "archiveGitBlob": "643390812c3ed27aa852d5ec6b1a38e71534e177",
+  "reason": "Generated-scheme search also matched preserved historical evidence; fixed to the exact generated project directory. No simulator or game started.",
+  "members": [
+    {
+      "path": "command-0.log",
+      "bytes": 30,
+      "sha256": "a8be4f9af0a29137fe7e59b9928056d4a0df297bb46ba40f80eaa6b0ae982f12"
+    },
+    {
+      "path": "command-1.log",
+      "bytes": 16,
+      "sha256": "3c4ffcfb28a616a2eb2421c091b359d31ff598d0f2b05867a37102832a27ef72"
+    },
+    {
+      "path": "command-2.log",
+      "bytes": 235,
+      "sha256": "747bfddc383b421b9c4a5bf6670826837778feb2020b0de5e0f11545d229aad3"
+    },
+    {
+      "path": "result.json",
+      "bytes": 1762,
+      "sha256": "c7393ad1cb354f744c2b724b3350c08c6717ade9c07970c16f88572b2e8a88bd"
+    }
+  ]
+}

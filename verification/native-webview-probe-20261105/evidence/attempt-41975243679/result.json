@@ -1,0 +1,246 @@
+{
+  "complete": false,
+  "gameLoaded": null,
+  "physicalDeviceTest": false,
+  "nativeTerminationCallbackObserved": false,
+  "whiteScreenFixed": false,
+  "startedAt": 1793857164.6021912,
+  "base": "b092f6462a623c3ad2c12e634963028d462c5fcf",
+  "stage": "native-pilot",
+  "mode": "pilot",
+  "checkpointAt": 1793857879.0844522,
+  "source": "451816d18fbb9a636875a288a9ce5e81e6d73afc",
+  "commands": [
+    {
+      "command": [
+        "xcodebuild",
+        "-version"
+      ],
+      "startedAt": 1793857164.8233202,
+      "finished": true,
+      "timedOut": false,
+      "log": "command-0.log",
+      "exitCode": 0,
+      "elapsedMs": 238,
+      "directChildExited": true,
+      "processGroupStopConfirmed": null,
+      "logBytes": 30,
+      "logSha256": "a8be4f9af0a29137fe7e59b9928056d4a0df297bb46ba40f80eaa6b0ae982f12"
+    },
+    {
+      "command": [
+        "/Users/runner/work/_temp/cryptoid-native-probe/xcodegen/xcodegen/bin/xcodegen",
+        "version"
+      ],
+      "startedAt": 1793857165.520857,
+      "finished": true,
+      "timedOut": false,
+      "log": "command-1.log",
+      "exitCode": 0,
+      "elapsedMs": 24,
+      "directChildExited": true,
+      "processGroupStopConfirmed": null,
+      "logBytes": 16,
+      "logSha256": "3c4ffcfb28a616a2eb2421c091b359d31ff598d0f2b05867a37102832a27ef72"
+    },
+    {
+      "command": [
+        "/Users/runner/work/_temp/cryptoid-native-probe/xcodegen/xcodegen/bin/xcodegen",
+        "generate"
+      ],
+      "startedAt": 1793857165.546649,
+      "finished": true,
+      "timedOut": false,
+      "log": "command-2.log",
+      "exitCode": 0,
+      "elapsedMs": 143,
+      "directChildExited": true,
+      "processGroupStopConfirmed": null,
+      "logBytes": 235,
+      "logSha256": "747bfddc383b421b9c4a5bf6670826837778feb2020b0de5e0f11545d229aad3"
+    },
+    {
+      "command": [
+        "xcrun",
+        "simctl"
+      ],
+      "startedAt": 1793857165.718221,
+      "finished": true,
+      "timedOut": false,
+      "log": "command-3.log",
+      "exitCode": 0,
+      "elapsedMs": 46119,
+      "directChildExited": true,
+      "processGroupStopConfirmed": null,
+      "logBytes": 256038,
+      "logSha256": "2f27ec7c81e68354322273b3fa638fcdefc016d453695af5a082fef54d3c6659"
+    },
+    {
+      "command": [
+        "xcrun",
+        "simctl"
+      ],
+      "startedAt": 1793857211.872604,
+      "finished": true,
+      "timedOut": false,
+      "log": "command-4.log",
+      "exitCode": 0,
+      "elapsedMs": 1359,
+      "directChildExited": true,
+      "processGroupStopConfirmed": null,
+      "logBytes": 37,
+      "logSha256": "06092f1e80ecc61dadfaecdb0d8e64a963fe799162da3f042a4e4e4c4adf91f6"
+    },
+    {
+      "command": [
+        "xcrun",
+        "simctl"
+      ],
+      "startedAt": 1793857213.2357209,
+      "finished": true,
+      "timedOut": false,
+      "log": "command-5.log",
+      "exitCode": 0,
+      "elapsedMs": 5964,
+      "directChildExited": true,
+      "processGroupStopConfirmed": null,
+      "logBytes": 0,
+      "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "xcrun",
+        "simctl"
+      ],
+      "startedAt": 1793857219.2461262,
+      "finished": true,
+      "timedOut": false,
+      "log": "boot.log",
+      "exitCode": 0,
+      "elapsedMs": 118448,
+      "directChildExited": true,
+      "processGroupStopConfirmed": null,
+      "logBytes": 15254,
+      "logSha256": "8f0277903ee0b9a2977759203add2328db2197108711b61eaedf81f6cba82529"
+    },
+    {
+      "command": [
+        "open",
+        "-a"
+      ],
+      "startedAt": 1793857344.7565,
+      "finished": true,
+      "timedOut": false,
+      "log": "simulator-display.log",
+      "exitCode": 0,
+      "elapsedMs": 20325,
+      "directChildExited": true,
+      "processGroupStopConfirmed": null,
+      "logBytes": 0,
+      "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "xcodebuild",
+        "-project"
+      ],
+      "startedAt": 1793857368.4869702,
+      "finished": true,
+      "timedOut": false,
+      "log": "build.log",
+      "exitCode": 0,
+      "elapsedMs": 103534,
+      "directChildExited": true,
+      "processGroupStopConfirmed": null,
+      "logBytes": 104979,
+      "logSha256": "ae8b50f17de1b28c3acf63234e2bcb3183a6753478e4d10e3093bac997b25b84"
+    },
+    {
+      "command": [
+        "xcodebuild",
+        "-project"
+      ],
+      "startedAt": 1793857492.8434129,
+      "finished": true,
+      "timedOut": true,
+      "log": "pilot.log",
+      "exitCode": -15,
+      "elapsedMs": 360624,
+      "directChildExited": true,
+      "processGroupStopConfirmed": true,
+      "logBytes": 1416,
+      "logSha256": "23fba76bb7f7ec2cbc1d5dd8a0f974fdfe9082068caaf3bf6392c854603270cc"
+    },
+    {
+      "command": [
+        "xcrun",
+        "simctl"
+      ],
+      "startedAt": 1793857854.032022,
+      "finished": true,
+      "timedOut": true,
+      "log": "native-failure.log",
+      "exitCode": 143,
+      "elapsedMs": 20281,
+      "directChildExited": true,
+      "processGroupStopConfirmed": true,
+      "logBytes": 162394,
+      "logSha256": "e223a75dd9614fd0359d323aaafec105ff4810b708a3751ffe949e3eaa95bb2e"
+    },
+    {
+      "command": [
+        "xcrun",
+        "simctl"
+      ],
+      "startedAt": 1793857874.3822021,
+      "finished": true,
+      "timedOut": false,
+      "log": "container.log",
+      "exitCode": 0,
+      "elapsedMs": 4606,
+      "directChildExited": true,
+      "processGroupStopConfirmed": null,
+      "logBytes": 161,
+      "logSha256": "5aabc7db18c2e55b70092c043374381d88a287ddbdb2c3068b79721cd10ccbc7"
+    }
+  ],
+  "xcode": "Xcode 16.4\nBuild version 16F6\n",
+  "xcodegen": "Version: 2.44.1\n",
+  "automaticScreenAttachmentsRetained": false,
+  "screenRecordingRequested": false,
+  "runtime": {
+    "version": "18.5",
+    "identifier": "com.apple.CoreSimulator.SimRuntime.iOS-18-5",
+    "buildversion": "22F77"
+  },
+  "simulatorDisplayExplicitlyOpened": true,
+  "guestBuildVerified": true,
+  "guestBuildOS": "Linux",
+  "restoredPackageMatchesLinuxBuild": true,
+  "error": {
+    "kind": "CommandFailed",
+    "detail": "xcodebuild failed: timeout=True, exit=-15; log=pilot.log",
+    "traceback": "Traceback (most recent call last):\n  File \"/Users/runner/work/cryptoid-evolution/cryptoid-evolution/verification/native-webview-probe-20261105/run.py\", line 162, in main\n    run(arguments + [\"test-without-building\", \"-only-testing:NativeProbeUITests/\"+test_class,\n    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n                     \"-resultBundlePath\", str(temp / \"test.xcresult\")],\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n        timeout=360 if pilot else 240, log=\"pilot.log\" if pilot else \"control.log\")\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/runner/work/cryptoid-evolution/cryptoid-evolution/verification/native-webview-probe-20261105/collector.py\", line 87, in run\n    raise CommandFailed(f\"{args[0]} failed: timeout={row['timedOut']}, exit={row['exitCode']}; log={row['log']}\")\ncollector.CommandFailed: xcodebuild failed: timeout=True, exit=-15; log=pilot.log\n"
+  },
+  "nativeFailureLogUnavailable": {
+    "kind": "CommandFailed",
+    "detail": "xcrun failed: timeout=True, exit=143; log=native-failure.log"
+  },
+  "nativeCollection": {
+    "attempted": true,
+    "copied": [],
+    "errors": [
+      {
+        "file": "pilot.json",
+        "kind": "FileNotFoundError",
+        "detail": "[Errno 2] No such file or directory: '/Users/runner/Library/Developer/CoreSimulator/Devices/1D979A0D-D1CC-4A53-A64B-CBA5C75062D2/data/Containers/Data/Application/06BCB704-4641-415B-B63D-308489DDAF09/Documents/probe-result.json'"
+      },
+      {
+        "file": "normal-report.json",
+        "kind": "FileNotFoundError",
+        "detail": "[Errno 2] No such file or directory: '/Users/runner/Library/Developer/CoreSimulator/Devices/1D979A0D-D1CC-4A53-A64B-CBA5C75062D2/data/Containers/Data/Application/06BCB704-4641-415B-B63D-308489DDAF09/Documents/normal-report.json'"
+      }
+    ]
+  },
+  "endedAt": 1793857879.0844429
+}

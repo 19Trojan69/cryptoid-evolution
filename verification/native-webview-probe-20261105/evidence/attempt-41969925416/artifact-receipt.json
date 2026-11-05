@@ -1,0 +1,82 @@
+{
+  "runId": 41969925416,
+  "jobId": 127055519269,
+  "artifactId": 13390015067,
+  "source": "7f86f3cfbb8a35f430276a75d3267364587bef52",
+  "tree": "46c0969b9ab0db6c4a73bdca41f91a1d75780474",
+  "complete": false,
+  "stage": "guest-build",
+  "gameLoaded": false,
+  "physicalDeviceTest": false,
+  "archiveBytes": 25311,
+  "archiveSha256": "5dea5fedb79b813bf3fc6d72ff3c036ed01b5716365c5b2e48cf05eff56c727a",
+  "archiveGitBlob": "47369b28efe817e6db3c4e7d5c705f9f33cd900a",
+  "reason": "Native app and UI tests compile; guest game build fails resolving extensionless PaintedShip to paintedShip.ts on macOS. No app launch or game. Collector retains complete command logs and reports container unavailable separately without overwriting guest-build failure.",
+  "members": [
+    {
+      "path": "NativeProbe.xcscheme",
+      "bytes": 4617,
+      "sha256": "1741fceac37910655a7fd2ceccfbf1f2d1feea63020b693f7520a4eea1e496f9"
+    },
+    {
+      "path": "boot.log",
+      "bytes": 16105,
+      "sha256": "73b5d6b1c7b45a60b128757f52e09f96ccb1eb895a9aea8c88192cf164f0d658"
+    },
+    {
+      "path": "build.log",
+      "bytes": 104981,
+      "sha256": "d2b93bc06687b8d98d1b6d7595c93cb268543c52e17957317f06f0d73783737f"
+    },
+    {
+      "path": "command-0.log",
+      "bytes": 30,
+      "sha256": "a8be4f9af0a29137fe7e59b9928056d4a0df297bb46ba40f80eaa6b0ae982f12"
+    },
+    {
+      "path": "command-1.log",
+      "bytes": 16,
+      "sha256": "3c4ffcfb28a616a2eb2421c091b359d31ff598d0f2b05867a37102832a27ef72"
+    },
+    {
+      "path": "command-2.log",
+      "bytes": 235,
+      "sha256": "747bfddc383b421b9c4a5bf6670826837778feb2020b0de5e0f11545d229aad3"
+    },
+    {
+      "path": "command-3.log",
+      "bytes": 256038,
+      "sha256": "2f27ec7c81e68354322273b3fa638fcdefc016d453695af5a082fef54d3c6659"
+    },
+    {
+      "path": "command-4.log",
+      "bytes": 37,
+      "sha256": "e1ced7374f053604c88563068ba0cb367ea78b72ee548cd3a7c3546b73217397"
+    },
+    {
+      "path": "command-5.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "container.log",
+      "bytes": 176,
+      "sha256": "eff64c578677a922269a71122a28c8c3b6bd9bdfa33f2ee67bf4aef68a42d1db"
+    },
+    {
+      "path": "guest-build.log",
+      "bytes": 14503,
+      "sha256": "f15918fe054434cf6bf6531b4677817224de238b4cf3dbc52f554a611696279d"
+    },
+    {
+      "path": "guest-install.log",
+      "bytes": 537,
+      "sha256": "570f0215ed9fa8c6147d795d5839160eec4d8a3d70ec6eddae90f8fffba6973e"
+    },
+    {
+      "path": "result.json",
+      "bytes": 5165,
+      "sha256": "0d194f53c2d7da1633a3232cf8b4cbcb79e3ddaba42ad4035b24de6abbfa3f63"
+    }
+  ]
+}

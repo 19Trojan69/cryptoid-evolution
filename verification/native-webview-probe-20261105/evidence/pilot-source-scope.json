@@ -1,0 +1,118 @@
+{
+  "base": "b092f6462a623c3ad2c12e634963028d462c5fcf",
+  "baseTree": "c8e1befee2bf1fdfa283d5684c33ded759147118",
+  "source": "f3972e68775a38c179ea2b0129a1c61a25dbb955",
+  "sourceTree": "e8807626c6e95a6a464ff93bf8fe5a9fd7c28079",
+  "unchangedRoots": [
+    {
+      "path": ".env.example",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3c1315d71abc4f1018e44689a4393ac957589a10"
+    },
+    {
+      "path": ".gitignore",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cd7e92f139003c1255300c3f5a1da1a02ef024f6"
+    },
+    {
+      "path": "FLOWS.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ebe02798639fc4d6cbdd94dfe10fe948e772d3f9"
+    },
+    {
+      "path": "LICENSE.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2f70d2c40a85bda3292aaaf3f60847e4844d05bb"
+    },
+    {
+      "path": "PRIVACY_POLICY.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "649a78815bed427fe6091da18a7a5088bfa2089a"
+    },
+    {
+      "path": "README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8b7b66a136ac65f953fcb66ca2a5ae06a2b76e9c"
+    },
+    {
+      "path": "TERMS_OF_SERVICE.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f9b95e723ec55dd126d91252de155308297c4aec"
+    },
+    {
+      "path": "TODO.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b88f8f247ea59606a7d9dcb178ca89e34bec8006"
+    },
+    {
+      "path": "api",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "ccac7cd576a079771d7d7fe4f0085492ebbe6813"
+    },
+    {
+      "path": "assets",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "a9860b12db58a96dafde818d9a58a6ea0e03c5e5"
+    },
+    {
+      "path": "backend",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "6e93bfbac9e6cc70a1edfb8bd55d737f612ba261"
+    },
+    {
+      "path": "doc",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "705194c92b583559f115470ce53a0dafd0b3151b"
+    },
+    {
+      "path": "docker-compose.yml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d949f25514b178aab5f160d613e807e4166647b8"
+    },
+    {
+      "path": "docs",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "352c5d5e9678a6864b50f7d3ab8aca30200c24f1"
+    },
+    {
+      "path": "frontend",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "890df8a38e13ef1fe315a5c0eb109c1d72b80aab"
+    },
+    {
+      "path": "private-preview",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "b733d4dc70b4ac407391720eab131dbaf1d60e37"
+    },
+    {
+      "path": "reverse-proxy",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "3fca5f417f85fdbb0a6f7ec7ade623e02cf1d023"
+    },
+    {
+      "path": "vercel.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "49956b406c1e97441e71e1f652f7c0d164d1ed16"
+    }
+  ],
+  "passed": true,
+  "scope": "All original root entries outside .github and verification"
+}

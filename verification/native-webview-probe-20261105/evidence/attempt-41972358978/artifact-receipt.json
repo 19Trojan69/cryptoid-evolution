@@ -1,0 +1,97 @@
+{
+  "runId": 41972358978,
+  "jobId": 127063653834,
+  "artifactId": 13390717816,
+  "source": "222797423ccef69edd15e8aaf087a9b946184b40",
+  "tree": "204784bdc304d433afb6579df44dd84a12dbd832",
+  "complete": false,
+  "stage": "native-pilot",
+  "gameLoaded": null,
+  "physicalDeviceTest": false,
+  "archiveBytes": 131331,
+  "archiveSha256": "0f36f00024f445ce7fc32540f57ca9f8561e754f2334e881673a84ca62aa7d6d",
+  "archiveGitBlob": "d65af03d7092c60884d6618ec3d954d4825db6d9",
+  "reason": "Linux package, 13 checks, simulator boot and native build pass. XCTest runner fails to initialize with XCTDaemonErrorDomain Code 18, Timed out waiting for AX loaded notification. No test-case start, no app data container or game observation. UUID/document gate remains untested.",
+  "members": [
+    {
+      "path": "NativeProbe.xcscheme",
+      "bytes": 4617,
+      "sha256": "1741fceac37910655a7fd2ceccfbf1f2d1feea63020b693f7520a4eea1e496f9"
+    },
+    {
+      "path": "boot.log",
+      "bytes": 24331,
+      "sha256": "9906902f7effb2583349fa2ecb0c760a7a5cabf6a85f41429b077ad8f337af6a"
+    },
+    {
+      "path": "build-info.json",
+      "bytes": 9027,
+      "sha256": "b1b5785e8e1b21101874f3816cc1484fe3f41ddffc3f21bfaa4fa4b49ac440ac"
+    },
+    {
+      "path": "build.log",
+      "bytes": 104980,
+      "sha256": "9550711abe724db8f2100e6d8250db622e18014ac010cff2321fc11a639cecab"
+    },
+    {
+      "path": "command-0.log",
+      "bytes": 30,
+      "sha256": "a8be4f9af0a29137fe7e59b9928056d4a0df297bb46ba40f80eaa6b0ae982f12"
+    },
+    {
+      "path": "command-1.log",
+      "bytes": 16,
+      "sha256": "3c4ffcfb28a616a2eb2421c091b359d31ff598d0f2b05867a37102832a27ef72"
+    },
+    {
+      "path": "command-2.log",
+      "bytes": 235,
+      "sha256": "747bfddc383b421b9c4a5bf6670826837778feb2020b0de5e0f11545d229aad3"
+    },
+    {
+      "path": "command-3.log",
+      "bytes": 256038,
+      "sha256": "2f27ec7c81e68354322273b3fa638fcdefc016d453695af5a082fef54d3c6659"
+    },
+    {
+      "path": "command-4.log",
+      "bytes": 37,
+      "sha256": "a0a8a70fe7f749aac526223f5272c85b37081f1aab4180450d883e754896ef72"
+    },
+    {
+      "path": "command-5.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "container.log",
+      "bytes": 176,
+      "sha256": "eff64c578677a922269a71122a28c8c3b6bd9bdfa33f2ee67bf4aef68a42d1db"
+    },
+    {
+      "path": "guest-origin.txt",
+      "bytes": 22,
+      "sha256": "e9d101fb19c4b2563b3573eee66779ffe9e8b5b9ecb89a8effef2616405efaa4"
+    },
+    {
+      "path": "guest-server.log",
+      "bytes": 37,
+      "sha256": "e0e29772e67108bdc3cdc1c79582dc246eb934c21e94573f307d050bf7ead731"
+    },
+    {
+      "path": "pilot.log",
+      "bytes": 1987,
+      "sha256": "8ff16cd5dff8fb1ff82f188e2041c026e84696d8ea9585213d50e35599096b4b"
+    },
+    {
+      "path": "result.json",
+      "bytes": 5864,
+      "sha256": "1e771f943a865b4785d353a20120b40460d2c6ef77b94da9f660351d7584af72"
+    },
+    {
+      "path": "served-manifest.json",
+      "bytes": 400802,
+      "sha256": "fc02da65bdb447708917295c47a0d6ee4f55a1cd4cf2774f033729f90a0680df"
+    }
+  ]
+}

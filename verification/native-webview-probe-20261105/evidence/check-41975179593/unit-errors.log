@@ -1,0 +1,54 @@
+2026-11-05T05:37:40.2432366Z ##[group]Run python3 -m unittest discover -s verification/native-webview-probe-20261105 -p 'test_*.py' -v
+2026-11-05T05:37:40.2434635Z [36;1mpython3 -m unittest discover -s verification/native-webview-probe-20261105 -p 'test_*.py' -v[0m
+2026-11-05T05:37:40.2468334Z shell: /usr/bin/bash -e {0}
+2026-11-05T05:37:40.2469131Z ##[endgroup]
+2026-11-05T05:37:40.4015685Z test_collector (unittest.loader._FailedTest.test_collector) ... ERROR
+2026-11-05T05:37:40.4016784Z test_contracts (unittest.loader._FailedTest.test_contracts) ... ERROR
+2026-11-05T05:37:40.4027216Z test_complete_synthetic_flow_can_pass_without_claiming_physical_test (test_pilot_contract.PilotAcceptance.test_complete_synthetic_flow_can_pass_without_claiming_physical_test) ... ok
+2026-11-05T05:37:40.4029554Z test_native_document_replacement_is_rejected_even_with_same_time_origin (test_pilot_contract.PilotAcceptance.test_native_document_replacement_is_rejected_even_with_same_time_origin) ... ok
+2026-11-05T05:37:40.4034999Z test_rejects_stale_or_failed_normal_report (test_pilot_contract.PilotAcceptance.test_rejects_stale_or_failed_normal_report) ... ok
+2026-11-05T05:37:40.4040253Z test_rejects_termination_hidden_replaced_document_and_gaps (test_pilot_contract.PilotAcceptance.test_rejects_termination_hidden_replaced_document_and_gaps) ... ok
+2026-11-05T05:37:40.4042230Z test_time_origin_drift_does_not_replace_independent_document_identity (test_pilot_contract.PilotAcceptance.test_time_origin_drift_does_not_replace_independent_document_identity) ... ok
+2026-11-05T05:37:40.4043467Z 
+2026-11-05T05:37:40.4043800Z ======================================================================
+2026-11-05T05:37:40.4044555Z ERROR: test_collector (unittest.loader._FailedTest.test_collector)
+2026-11-05T05:37:40.4045325Z ----------------------------------------------------------------------
+2026-11-05T05:37:40.4047019Z ImportError: Failed to import test module: test_collector
+2026-11-05T05:37:40.4047748Z Traceback (most recent call last):
+2026-11-05T05:37:40.4048533Z   File "/usr/lib/python3.14/unittest/loader.py", line 426, in _find_test_path
+2026-11-05T05:37:40.4049319Z     module = self._get_module_from_name(name)
+2026-11-05T05:37:40.4050091Z   File "/usr/lib/python3.14/unittest/loader.py", line 367, in _get_module_from_name
+2026-11-05T05:37:40.4050820Z     __import__(name)
+2026-11-05T05:37:40.4051291Z     ~~~~~~~~~~^^^^^^
+2026-11-05T05:37:40.4052341Z   File "/home/runner/work/cryptoid-evolution/cryptoid-evolution/verification/native-webview-probe-20261105/test_collector.py", line 7, in <module>
+2026-11-05T05:37:40.4053651Z     from collector import Collector, CommandFailed
+2026-11-05T05:37:40.4054724Z   File "/home/runner/work/cryptoid-evolution/cryptoid-evolution/verification/native-webview-probe-20261105/collector.py", line 106
+2026-11-05T05:37:40.4055737Z     path.write_bytes(raw)
+2026-11-05T05:37:40.4056316Z SyntaxError: expected 'except' or 'finally' block
+2026-11-05T05:37:40.4056709Z 
+2026-11-05T05:37:40.4056717Z 
+2026-11-05T05:37:40.4056999Z ======================================================================
+2026-11-05T05:37:40.4057724Z ERROR: test_contracts (unittest.loader._FailedTest.test_contracts)
+2026-11-05T05:37:40.4058467Z ----------------------------------------------------------------------
+2026-11-05T05:37:40.4059193Z ImportError: Failed to import test module: test_contracts
+2026-11-05T05:37:40.4059837Z Traceback (most recent call last):
+2026-11-05T05:37:40.4060529Z   File "/usr/lib/python3.14/unittest/loader.py", line 426, in _find_test_path
+2026-11-05T05:37:40.4061251Z     module = self._get_module_from_name(name)
+2026-11-05T05:37:40.4062010Z   File "/usr/lib/python3.14/unittest/loader.py", line 367, in _get_module_from_name
+2026-11-05T05:37:40.4062888Z     __import__(name)
+2026-11-05T05:37:40.4063334Z     ~~~~~~~~~~^^^^^^
+2026-11-05T05:37:40.4064384Z   File "/home/runner/work/cryptoid-evolution/cryptoid-evolution/verification/native-webview-probe-20261105/test_contracts.py", line 8, in <module>
+2026-11-05T05:37:40.4065944Z     spec.loader.exec_module(module)
+2026-11-05T05:37:40.4066482Z     ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+2026-11-05T05:37:40.4067525Z   File "/home/runner/work/cryptoid-evolution/cryptoid-evolution/verification/native-webview-probe-20261105/run.py", line 14, in <module>
+2026-11-05T05:37:40.4068558Z     from collector import Collector, atomic_json
+2026-11-05T05:37:40.4069609Z   File "/home/runner/work/cryptoid-evolution/cryptoid-evolution/verification/native-webview-probe-20261105/collector.py", line 106
+2026-11-05T05:37:40.4070551Z     path.write_bytes(raw)
+2026-11-05T05:37:40.4071151Z SyntaxError: expected 'except' or 'finally' block
+2026-11-05T05:37:40.4071549Z 
+2026-11-05T05:37:40.4071558Z 
+2026-11-05T05:37:40.4071891Z ----------------------------------------------------------------------
+2026-11-05T05:37:40.4072497Z Ran 7 tests in 0.003s
+2026-11-05T05:37:40.4072943Z 
+2026-11-05T05:37:40.4073156Z FAILED (errors=2)
+2026-11-05T05:37:40.4269405Z ##[error]Process completed with exit code 1.

@@ -1,0 +1,189 @@
+{
+  "complete": false,
+  "gameLoaded": null,
+  "physicalDeviceTest": false,
+  "nativeTerminationCallbackObserved": false,
+  "whiteScreenFixed": false,
+  "startedAt": 1793854736.7422888,
+  "base": "b092f6462a623c3ad2c12e634963028d462c5fcf",
+  "stage": "native-pilot",
+  "mode": "pilot",
+  "checkpointAt": 1793855267.361894,
+  "source": "f3972e68775a38c179ea2b0129a1c61a25dbb955",
+  "commands": [
+    {
+      "command": [
+        "xcodebuild",
+        "-version"
+      ],
+      "startedAt": 1793854736.959569,
+      "finished": true,
+      "timedOut": false,
+      "log": "command-0.log",
+      "exitCode": 0,
+      "elapsedMs": 382,
+      "logBytes": 30,
+      "logSha256": "a8be4f9af0a29137fe7e59b9928056d4a0df297bb46ba40f80eaa6b0ae982f12"
+    },
+    {
+      "command": [
+        "/Users/runner/work/_temp/cryptoid-native-probe/xcodegen/xcodegen/bin/xcodegen",
+        "version"
+      ],
+      "startedAt": 1793854737.806082,
+      "finished": true,
+      "timedOut": false,
+      "log": "command-1.log",
+      "exitCode": 0,
+      "elapsedMs": 40,
+      "logBytes": 16,
+      "logSha256": "3c4ffcfb28a616a2eb2421c091b359d31ff598d0f2b05867a37102832a27ef72"
+    },
+    {
+      "command": [
+        "/Users/runner/work/_temp/cryptoid-native-probe/xcodegen/xcodegen/bin/xcodegen",
+        "generate"
+      ],
+      "startedAt": 1793854737.8485298,
+      "finished": true,
+      "timedOut": false,
+      "log": "command-2.log",
+      "exitCode": 0,
+      "elapsedMs": 99,
+      "logBytes": 235,
+      "logSha256": "747bfddc383b421b9c4a5bf6670826837778feb2020b0de5e0f11545d229aad3"
+    },
+    {
+      "command": [
+        "xcrun",
+        "simctl"
+      ],
+      "startedAt": 1793854737.980726,
+      "finished": true,
+      "timedOut": false,
+      "log": "command-3.log",
+      "exitCode": 0,
+      "elapsedMs": 73183,
+      "logBytes": 256038,
+      "logSha256": "2f27ec7c81e68354322273b3fa638fcdefc016d453695af5a082fef54d3c6659"
+    },
+    {
+      "command": [
+        "xcrun",
+        "simctl"
+      ],
+      "startedAt": 1793854811.208534,
+      "finished": true,
+      "timedOut": false,
+      "log": "command-4.log",
+      "exitCode": 0,
+      "elapsedMs": 1126,
+      "logBytes": 37,
+      "logSha256": "68755e83001a28d426ab157e564fb969e4aeac68e9569494f18117b3e7b6d552"
+    },
+    {
+      "command": [
+        "xcrun",
+        "simctl"
+      ],
+      "startedAt": 1793854812.3375528,
+      "finished": true,
+      "timedOut": false,
+      "log": "command-5.log",
+      "exitCode": 0,
+      "elapsedMs": 3211,
+      "logBytes": 0,
+      "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "xcrun",
+        "simctl"
+      ],
+      "startedAt": 1793854815.5942779,
+      "finished": true,
+      "timedOut": false,
+      "log": "boot.log",
+      "exitCode": 0,
+      "elapsedMs": 113413,
+      "logBytes": 15792,
+      "logSha256": "5a36bce6704d02f3175a3a8c3ee175e4e869a921dd2c3b7ff319bd68277e5003"
+    },
+    {
+      "command": [
+        "xcodebuild",
+        "-project"
+      ],
+      "startedAt": 1793854934.241289,
+      "finished": true,
+      "timedOut": false,
+      "log": "build.log",
+      "exitCode": 0,
+      "elapsedMs": 155606,
+      "logBytes": 104982,
+      "logSha256": "8b284eb94b5b311157257a37dc81baf82620713b9981aff67279f9f9f291a667"
+    },
+    {
+      "command": [
+        "xcodebuild",
+        "-project"
+      ],
+      "startedAt": 1793855099.8513632,
+      "finished": true,
+      "timedOut": false,
+      "log": "pilot.log",
+      "exitCode": 0,
+      "elapsedMs": 165243,
+      "logBytes": 18126,
+      "logSha256": "bcc19dbc7c9960c9ae27545891de400252c0a55a43c0cabe9b0a04ef0c6e0f62"
+    },
+    {
+      "command": [
+        "xcrun",
+        "simctl"
+      ],
+      "startedAt": 1793855265.18339,
+      "finished": true,
+      "timedOut": false,
+      "log": "container.log",
+      "exitCode": 0,
+      "elapsedMs": 2145,
+      "logBytes": 161,
+      "logSha256": "c6bb28f84759a4073fc47a8d8a653ab9592723e31b0797c922f8eeca7fc5b49a"
+    }
+  ],
+  "xcode": "Xcode 16.4\nBuild version 16F6\n",
+  "xcodegen": "Version: 2.44.1\n",
+  "automaticScreenAttachmentsRetained": false,
+  "screenRecordingRequested": false,
+  "runtime": {
+    "version": "18.5",
+    "identifier": "com.apple.CoreSimulator.SimRuntime.iOS-18-5",
+    "buildversion": "22F77"
+  },
+  "guestBuildVerified": true,
+  "guestBuildOS": "Linux",
+  "restoredPackageMatchesLinuxBuild": true,
+  "nativeTestSucceeded": true,
+  "nativeCollection": {
+    "attempted": true,
+    "copied": [
+      {
+        "file": "pilot.json",
+        "bytes": 52379,
+        "sha256": "61d8cf4b721a04980de27f27bbe6773ce92e6a378a0bbe6bcd87c22aea9c6e27"
+      },
+      {
+        "file": "normal-report.json",
+        "bytes": 9493,
+        "sha256": "c7b30edf953baa4ad263b0b17823e4ac7caef971d3fffe68b01d0e400f8b4ee8"
+      }
+    ],
+    "errors": []
+  },
+  "error": {
+    "kind": "AssertionError",
+    "detail": ""
+  },
+  "endedAt": 1793855267.3618891
+}

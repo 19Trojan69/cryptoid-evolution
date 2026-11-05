@@ -1,0 +1,247 @@
+{
+  "complete": true,
+  "gameLoaded": true,
+  "physicalDeviceTest": false,
+  "nativeTerminationCallbackObserved": false,
+  "whiteScreenFixed": false,
+  "startedAt": 1793858713.00519,
+  "base": "b092f6462a623c3ad2c12e634963028d462c5fcf",
+  "stage": "complete",
+  "mode": "pilot",
+  "checkpointAt": 1793859235.9680798,
+  "source": "1fe2e2b01a640d4b696ad07336d0195a0b2e181f",
+  "hostArchitecture": "arm64",
+  "hostPlatform": "darwin",
+  "commands": [
+    {
+      "command": [
+        "sysctl",
+        "-n"
+      ],
+      "startedAt": 1793858713.1548119,
+      "finished": true,
+      "timedOut": false,
+      "log": "host-memory.log",
+      "exitCode": 0,
+      "elapsedMs": 6,
+      "directChildExited": true,
+      "processGroupStopConfirmed": null,
+      "logBytes": 11,
+      "logSha256": "ae0cc22f5ea218082f5dec9c827424ea217b458c0891472d43332507e3435b13"
+    },
+    {
+      "command": [
+        "xcodebuild",
+        "-version"
+      ],
+      "startedAt": 1793858713.163851,
+      "finished": true,
+      "timedOut": false,
+      "log": "command-1.log",
+      "exitCode": 0,
+      "elapsedMs": 294,
+      "directChildExited": true,
+      "processGroupStopConfirmed": null,
+      "logBytes": 30,
+      "logSha256": "a8be4f9af0a29137fe7e59b9928056d4a0df297bb46ba40f80eaa6b0ae982f12"
+    },
+    {
+      "command": [
+        "/Users/runner/work/_temp/cryptoid-native-probe/xcodegen/xcodegen/bin/xcodegen",
+        "version"
+      ],
+      "startedAt": 1793858713.904858,
+      "finished": true,
+      "timedOut": false,
+      "log": "command-2.log",
+      "exitCode": 0,
+      "elapsedMs": 13,
+      "directChildExited": true,
+      "processGroupStopConfirmed": null,
+      "logBytes": 16,
+      "logSha256": "3c4ffcfb28a616a2eb2421c091b359d31ff598d0f2b05867a37102832a27ef72"
+    },
+    {
+      "command": [
+        "/Users/runner/work/_temp/cryptoid-native-probe/xcodegen/xcodegen/bin/xcodegen",
+        "generate"
+      ],
+      "startedAt": 1793858713.919722,
+      "finished": true,
+      "timedOut": false,
+      "log": "command-3.log",
+      "exitCode": 0,
+      "elapsedMs": 47,
+      "directChildExited": true,
+      "processGroupStopConfirmed": null,
+      "logBytes": 235,
+      "logSha256": "747bfddc383b421b9c4a5bf6670826837778feb2020b0de5e0f11545d229aad3"
+    },
+    {
+      "command": [
+        "xcrun",
+        "simctl"
+      ],
+      "startedAt": 1793858714.015082,
+      "finished": true,
+      "timedOut": false,
+      "log": "command-4.log",
+      "exitCode": 0,
+      "elapsedMs": 39754,
+      "directChildExited": true,
+      "processGroupStopConfirmed": null,
+      "logBytes": 265506,
+      "logSha256": "95126a69a8d108cc8649fb55a50d41f53fa9b0b1d55d4d7c5eacb379460afa31"
+    },
+    {
+      "command": [
+        "xcrun",
+        "simctl"
+      ],
+      "startedAt": 1793858753.7821581,
+      "finished": true,
+      "timedOut": false,
+      "log": "command-5.log",
+      "exitCode": 0,
+      "elapsedMs": 1348,
+      "directChildExited": true,
+      "processGroupStopConfirmed": null,
+      "logBytes": 37,
+      "logSha256": "b6576551bfff328622ef62978d03d86e7e2c168b8bec505cd41486687b9ff2b4"
+    },
+    {
+      "command": [
+        "xcrun",
+        "simctl"
+      ],
+      "startedAt": 1793858755.132738,
+      "finished": true,
+      "timedOut": false,
+      "log": "command-6.log",
+      "exitCode": 0,
+      "elapsedMs": 2586,
+      "directChildExited": true,
+      "processGroupStopConfirmed": null,
+      "logBytes": 0,
+      "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "xcrun",
+        "simctl"
+      ],
+      "startedAt": 1793858757.721479,
+      "finished": true,
+      "timedOut": false,
+      "log": "boot.log",
+      "exitCode": 0,
+      "elapsedMs": 96382,
+      "directChildExited": true,
+      "processGroupStopConfirmed": null,
+      "logBytes": 130,
+      "logSha256": "61e3674a8429c7dd8d721032422ee0f16ccd4ea55be918d461e022cc14b63183"
+    },
+    {
+      "command": [
+        "open",
+        "-a"
+      ],
+      "startedAt": 1793858854.185448,
+      "finished": true,
+      "timedOut": false,
+      "log": "simulator-display.log",
+      "exitCode": 0,
+      "elapsedMs": 10604,
+      "directChildExited": true,
+      "processGroupStopConfirmed": null,
+      "logBytes": 0,
+      "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "xcodebuild",
+        "-project"
+      ],
+      "startedAt": 1793858866.04118,
+      "finished": true,
+      "timedOut": false,
+      "log": "build.log",
+      "exitCode": 0,
+      "elapsedMs": 173257,
+      "directChildExited": true,
+      "processGroupStopConfirmed": null,
+      "logBytes": 105125,
+      "logSha256": "a8e58783185a3ecaff6fa1dbc1d68eebfffa0a79864e683a6334bcac42aa3e38"
+    },
+    {
+      "command": [
+        "xcodebuild",
+        "-project"
+      ],
+      "startedAt": 1793859047.8066292,
+      "finished": true,
+      "timedOut": false,
+      "log": "pilot.log",
+      "exitCode": 0,
+      "elapsedMs": 180317,
+      "directChildExited": true,
+      "processGroupStopConfirmed": null,
+      "logBytes": 17987,
+      "logSha256": "0a24c03765133a526743813c1f968c2b9d4de6379eaa66d051ceb283fc571947"
+    },
+    {
+      "command": [
+        "xcrun",
+        "simctl"
+      ],
+      "startedAt": 1793859228.167551,
+      "finished": true,
+      "timedOut": false,
+      "log": "container.log",
+      "exitCode": 0,
+      "elapsedMs": 4373,
+      "directChildExited": true,
+      "processGroupStopConfirmed": null,
+      "logBytes": 161,
+      "logSha256": "56e2f7841abbf1daeaa3132090c280654b7b796010868c6e3e02b21fa8b3e02e"
+    }
+  ],
+  "hostMemoryBytes": 7516192768,
+  "xcode": "Xcode 16.4\nBuild version 16F6\n",
+  "xcodegen": "Version: 2.44.1\n",
+  "automaticScreenAttachmentsRetained": false,
+  "screenRecordingRequested": false,
+  "runtime": {
+    "version": "18.5",
+    "identifier": "com.apple.CoreSimulator.SimRuntime.iOS-18-5",
+    "buildversion": "22F77"
+  },
+  "simulatorDisplayExplicitlyOpened": true,
+  "guestBuildVerified": true,
+  "guestBuildOS": "Linux",
+  "restoredPackageMatchesLinuxBuild": true,
+  "nativeTestSucceeded": true,
+  "nativeCollection": {
+    "attempted": true,
+    "copied": [
+      {
+        "file": "pilot.json",
+        "bytes": 54026,
+        "sha256": "103a02f45a16f36f3359e3029669633fa1e90f675d7518ded599439eb12f4b5c"
+      },
+      {
+        "file": "launch-stage.json",
+        "bytes": 96,
+        "sha256": "e2a49583ea38a3ec9cb4b67c6e4728c841a4ce209ac0eaa250afc800daa41d0d"
+      },
+      {
+        "file": "normal-report.json",
+        "bytes": 9481,
+        "sha256": "1eb3714594b7c1c7afdc73b693356c49dc2a5dc5d120d49de555e8940d22778c"
+      }
+    ],
+    "errors": []
+  },
+  "normalReportVerified": true,
+  "endedAt": 1793859235.968022
+}

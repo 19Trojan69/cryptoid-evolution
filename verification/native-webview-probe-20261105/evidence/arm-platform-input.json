@@ -1,0 +1,15 @@
+{
+  "readAt": "2026-11-05",
+  "repositoryVisibility": "public",
+  "sources": [
+    {
+      "url": "https://github.com/actions/runner-images/blob/main/README.md",
+      "gitBlob": "cbb0ec6433933cd83d6c749bffbb24a2513388be"
+    },
+    {
+      "url": "https://github.com/actions/runner-images/blob/main/images/macos/macos-15-arm64-Readme.md",
+      "gitBlob": "2e90c226a111f5fb4c1956e7cbedf27e8c577ce0"
+    }
+  ],
+  "observation": "Official runner image inventory lists macos-15 as arm64 and installed Xcode16.4 with iOS18.5. Actual tested environment is independently reported by CI41977882747. No claim that architecture alone caused Intel failures."
+}

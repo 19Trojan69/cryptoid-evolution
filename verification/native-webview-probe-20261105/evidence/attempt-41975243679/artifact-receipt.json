@@ -1,0 +1,107 @@
+{
+  "runId": 41975243679,
+  "jobId": 127072738651,
+  "artifactId": 13392102512,
+  "source": "451816d18fbb9a636875a288a9ce5e81e6d73afc",
+  "tree": "877025f1318f066cffd133cbe40db481fa4c7735",
+  "complete": false,
+  "stage": "native-pilot",
+  "gameLoaded": null,
+  "physicalDeviceTest": false,
+  "archiveBytes": 146324,
+  "archiveSha256": "cbbe440bb94cb06f2e87c44627f8f7c39243085fe71521a7ecc898cc0043c58d",
+  "archiveGitBlob": "98a8ccb8924dde6cfd97d7cdaf712a08788ea4d1",
+  "reason": "Native XCTest case starts but hangs at app.launch; 360-second deadline expires. No initial probe file or normal report in installed app container. Collector retains original deadline, immutable 1416-byte partial test output and 162394-byte partial native failure log with digests. Cause may be driver or new host initialization; no verified game load or document probe. Native AX/TTS errors in system excerpt are not a measured game-crash cause.",
+  "members": [
+    {
+      "path": "NativeProbe.xcscheme",
+      "bytes": 4617,
+      "sha256": "1741fceac37910655a7fd2ceccfbf1f2d1feea63020b693f7520a4eea1e496f9"
+    },
+    {
+      "path": "boot.log",
+      "bytes": 15254,
+      "sha256": "8f0277903ee0b9a2977759203add2328db2197108711b61eaedf81f6cba82529"
+    },
+    {
+      "path": "build-info.json",
+      "bytes": 9027,
+      "sha256": "22c67a2335aaaffae0b0534e74bacca020931827639cd0f9ffd045a8699d3ce8"
+    },
+    {
+      "path": "build.log",
+      "bytes": 104979,
+      "sha256": "ae8b50f17de1b28c3acf63234e2bcb3183a6753478e4d10e3093bac997b25b84"
+    },
+    {
+      "path": "command-0.log",
+      "bytes": 30,
+      "sha256": "a8be4f9af0a29137fe7e59b9928056d4a0df297bb46ba40f80eaa6b0ae982f12"
+    },
+    {
+      "path": "command-1.log",
+      "bytes": 16,
+      "sha256": "3c4ffcfb28a616a2eb2421c091b359d31ff598d0f2b05867a37102832a27ef72"
+    },
+    {
+      "path": "command-2.log",
+      "bytes": 235,
+      "sha256": "747bfddc383b421b9c4a5bf6670826837778feb2020b0de5e0f11545d229aad3"
+    },
+    {
+      "path": "command-3.log",
+      "bytes": 256038,
+      "sha256": "2f27ec7c81e68354322273b3fa638fcdefc016d453695af5a082fef54d3c6659"
+    },
+    {
+      "path": "command-4.log",
+      "bytes": 37,
+      "sha256": "06092f1e80ecc61dadfaecdb0d8e64a963fe799162da3f042a4e4e4c4adf91f6"
+    },
+    {
+      "path": "command-5.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "container.log",
+      "bytes": 161,
+      "sha256": "5aabc7db18c2e55b70092c043374381d88a287ddbdb2c3068b79721cd10ccbc7"
+    },
+    {
+      "path": "guest-origin.txt",
+      "bytes": 22,
+      "sha256": "e9d101fb19c4b2563b3573eee66779ffe9e8b5b9ecb89a8effef2616405efaa4"
+    },
+    {
+      "path": "guest-server.log",
+      "bytes": 37,
+      "sha256": "e0e29772e67108bdc3cdc1c79582dc246eb934c21e94573f307d050bf7ead731"
+    },
+    {
+      "path": "native-failure.log",
+      "bytes": 162394,
+      "sha256": "e223a75dd9614fd0359d323aaafec105ff4810b708a3751ffe949e3eaa95bb2e"
+    },
+    {
+      "path": "pilot.log",
+      "bytes": 1416,
+      "sha256": "23fba76bb7f7ec2cbc1d5dd8a0f974fdfe9082068caaf3bf6392c854603270cc"
+    },
+    {
+      "path": "result.json",
+      "bytes": 8197,
+      "sha256": "b041258d55302a2c1740b595a894181f3bbc5e3336798610e2f648c58591255f"
+    },
+    {
+      "path": "served-manifest.json",
+      "bytes": 400802,
+      "sha256": "a864c69d4115f230157a3f385dc8f507bfc10a32a71b0033905fea4383fb180a"
+    },
+    {
+      "path": "simulator-display.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ]
+}

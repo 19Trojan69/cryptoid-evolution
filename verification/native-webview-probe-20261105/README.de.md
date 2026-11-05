@@ -1,5 +1,16 @@
 # Native WebView-Messumgebung, 5. November 2026
 
+**Aktuell bestanden:** vollständiger nativer Gast-Spielpilot, Quelle
+`1fe2e2b01a640d4b696ad07336d0195a0b2e181f`,
+[CI 41977882747](https://github.com/19Trojan69/cryptoid-evolution/actions/runs/41977882747).
+Vierzehn Auswertungsprüfungen und ein echtes XCTest bestehen. Elf Messpunkte
+behalten dieselbe Dokumentkennung; Pause, Menüs, regulärer Ausstieg und normaler
+Bericht sind abgenommen. Schlussuhr: 50.435 ms, ended, in allen drei Berichten gleich.
+Kein physisches Smartphone, kein Prozess-/Speicherverlauf und kein White-Screen-Fix.
+Die folgenden Abschnitte erhalten den tatsächlichen Untersuchungsverlauf;
+Originalfehlschläge bleiben Fehlschläge. Details des aktuellen Erfolgs stehen unten.
+
+
 Der bestätigte neue Handy-White-Screen bei letztem Stand 23:09,540 enthält auch
 im korrekt zugeordneten kritischen Journal kein gespeichertes Fehlerereignis.
 Das beweist keinen nativen Absturzgrund. Weitere unveränderte Handy-Dauertests
@@ -174,3 +185,106 @@ Vor dem CI-Start: elf lokale Python-Prüfungen und Syntaxprüfungen bestanden.
 Ein erfolgreiches natives Spielergebnis wird erst mit dem tatsächlichen
 CI-Schlussdatensatz dokumentiert. Der bisherige native Kontrolltest wird nicht
 noch einmal ausgeführt; der Pilot verwendet `-only-testing:.../GamePilotTests`.
+
+## Aktueller Stand: vollständiger nativer Pilot bestanden
+
+Geprüfte Quelle `1fe2e2b01a640d4b696ad07336d0195a0b2e181f`, Baum
+`9a32595120bfca370383c2a1a1c8245a70ebcf6d`, CI
+https://github.com/19Trojan69/cryptoid-evolution/actions/runs/41977882747.
+Linux-Job 127080901985 und nativer Job 127081334820 bestehen. Tatsächlich gemessen:
+arm64 / Darwin, 7.516.192.768 Bytes Hostkapazität, Xcode 16.4 / 16F6,
+XcodeGen 2.44.1, iOS 18.5 / 22F77, iPhone-16-Pro-Max-Simulator.
+Die Hostkapazität ist keine Messung des Spiels oder eines physischen Telefons.
+
+Vierzehn Python-Prüfungen bestehen. Das einzelne echte XCTest besteht mit null
+Fehlern nach 128,813 Sekunden; die unabhängige Auswertung besteht ebenfalls:
+
+- Elf Beobachtungen, dieselbe Dokument-UUID, genau ein nativer Navigationsstart,
+  ein Commit und ein Abschluss. Die Rohwerte von timeOrigin bleiben erhalten.
+- Ursprüngliche Startpause, aktiver Bosskampf, Pause und unveränderter Uhrstand
+  36.434 ms, Fortsetzen, Waffenmenü und Rückkehr, Home/Verlassen und normaler
+  Berichtstext aus der vorhandenen Oberfläche.
+- Schlussuhr ended bei 50.435,000000000015 ms, unobservedGaps:0. Stoppuhr,
+  Kurzbericht und kritisches Journal enthalten vollständig identische Schlussuhren.
+  criticalMatchesLatestStopwatch:true, briefMatchesLatestStopwatch:true.
+- Kein gespeicherter error-/unhandledrejection-Eintrag; zwei popstate-Ereignisse
+  gehören zu den geplanten Menüwechseln. Keine Fehlerfreiheit daraus abgeleitet.
+- Passender Ressourcenpunkt: Audio running, clockStalls:0, recoveries:3,
+  blockedSounds:0, PCM:7.660.648 Bytes; Canvascache:422.836 Bytes, Surface:4,
+  registrierte Effekte:0, Fehler:0. Kein Gesamt-RAM-, GPU- oder Prozessverlauf.
+- Gleiche Linux-Paketdateien vor/nach dem Ablauf. Kein automatischer Reload,
+  keine automatische Wiederaufnahme und keine beschleunigte Spieluhr.
+
+Normale Berichtsdatei: 9.481 Bytes, SHA256
+`1eb3714594b7c1c7afdc73b693356c49dc2a5dc5d120d49de555e8940d22778c`.
+App-Beleg: 54.026 Bytes, SHA256
+`103a02f45a16f36f3359e3029669633fa1e90f675d7518ded599439eb12f4b5c`.
+Original natives Artefakt 13392937393: 138.714 ZIP-Bytes, SHA256
+`f8d4b804327d90ded0ddfcc1930e36d793e4ff76175d866a169f32139d2ab608`.
+Die tatsächliche Geometrie ist 440×652 CSS-Pixel, DPR 3. Die native Bedienleiste
+verkleinert den WebView. Das ist kein physischer Pi-Browser oder iOS-26.6-Test,
+kein Test ohne den bestehenden Gast-Testschutz und kein bewiesener White-Screen-Fix.
+Kein nativer Termination-Callback wurde absichtlich ausgelöst. Pixelintegrität
+oder interner Ausschluss sämtlicher XCTest-Bildzugriffe werden nicht behauptet.
+
+### Konkrete Korrekturen und unveränderte Fehlschläge
+
+| CI-Lauf | Tatsächlicher Ausgang |
+| --- | --- |
+| 41969672141 | Werkzeugsuche fand neben dem erzeugten Scheme historische Archivdateien; kein Simulator/Spiel. Suche auf genau das erzeugte Projekt begrenzt. |
+| 41969925416 | Native App kompiliert. macOS-Auflösung von `./PaintedShip` findet `paintedShip.ts` statt `PaintedShip.tsx`. Kein Spielstart. Originale Module bleiben unverändert; Gast-Build nach Linux getrennt. |
+| 41970945070 | XCTest-Bedienzyklus und normaler Bericht bestehen mit 38.515 ms Schlussuhr. Gesamtauswertung scheitert an 55 ms driftendem timeOrigin. Ursprünglicher roter Status bleibt erhalten. |
+| 41972358978 | Nativer Bau besteht; Testtreiber scheitert vor Testbeginn an `AX loaded notification`. Keine Aussage über das Spiel oder die neue Dokumentkennung. |
+| 41974173048 | Simulator-Anzeige geöffnet; unnötiger Dienstabruf läuft in 30 s. Signal-EPERM verdeckt im alten Collector die ursprüngliche Frist; genau eine Befehlsmetadatenzeile fehlt im Original. |
+| 41975179593 | Eigener Syntaxfehler im Collector-Umbau wurde lokal erkannt, aber der Prüfcommit zu früh übernommen. CI bestätigt SyntaxError; Spiel-/Native-Jobs übersprungen. In der nächsten Quelle korrigiert, danach 14 lokale Prüfungen grün. |
+| 41975243679 | XCTest startet, bleibt aber bei app.launch stehen. 360-s-Frist bleibt als ursprünglicher Fehler erhalten; 1.416 Testlog-Bytes und 162.394 Teil-Bytes des nativen Systemlogs gesichert. Kein belegter Spielstart. |
+| 41977151858 | Intel-Bootstatus überschreitet 180 s, vor App-Bau. Reale spätere Signal-EPERM separat gespeichert, ursprünglicher Bootfehler und sämtliche vorhandenen Ausgabedigests bleiben erhalten. |
+| 41977882747 | Vollständiger nativer Pilot auf Apple Silicon grün; keine alten Fehlschläge nachträglich aufgewertet. |
+
+Die Ausgaben werden direkt geschrieben und nach Prozessende/Frist in unabhängige
+Belegdateien kopiert. Gruppen-Signalfehler werden getrennt vermerkt; es wird nur
+der eigene direkte Unterprozess zusätzlich signalisiert. Keine Rechteerhöhung.
+Ein unbestätigter Gruppenstopp bleibt unbestätigt. Der neue Unit-Fall simuliert
+EPERM; Lauf 41977151858 beobachtet diesen Fehler auch tatsächlich ohne erneutes
+Verdecken des ursprünglichen Timeouts. Fehlende App-Dateien sind ausdrücklich
+nicht dasselbe wie ein bestandener oder fehlerfreier Spielstart.
+
+Der letzte Host speichert zusätzlich eine frühe, begrenzte `launch-stage.json`.
+Der nicht abgenommene Zwischenaufbau verwendete WKContentWorld für die Dokument-
+UUID. Der getestete letzte Aufbau verwendet stattdessen eine unveränderliche,
+nicht aufzählbare Diagnoseeigenschaft `__cryptoidNativeDocumentToken` im
+Seitenkontext, erzeugt einmal bei Dokumentstart. Kein Spielzustand, Timer,
+Ereignislistener oder Eingabecode wird verändert. Die unabhängige
+Python-Abnahme verlangt weiterhin dieselbe UUID und Navigationsgrenzen.
+Der Erfolg des anderen Runner-Aufbaus beweist nicht, dass CPU-Architektur allein
+oder die entfernte WKContentWorld die früheren Blockaden verursacht haben.
+AX-/TTS-Fehler im Simulator sind kein nachgewiesener Handy-Abbruchgrund.
+
+### Belege unabhängig prüfen
+
+`python3 verification/native-webview-probe-20261105/verify_pilot_evidence.py`
+verifiziert sämtliche neuen Original-ZIPs, Git-Blob-IDs, enthaltene Dateilängen
+und SHA256, Befehlsausgaben und den vollständigen grünen Schlussbericht offline.
+Die exakt bekannte Metadatenlücke des alten EPERM-Versuchs wird nur dort als
+Lücke behandelt; der ganze unveränderte ZIP-Hash bleibt geprüft. Der separate
+Syntaxfehler besitzt einen klar abgegrenzten Original-Unit-Logauszug und den
+Digest des vollständigen CI-Joblogs; er wird nicht als Original-ZIP ausgegeben.
+Die früheren drei Kontrollarchive bleiben über `verify_evidence.py` erhalten.
+Original-Geräteberichte und geheime Freigabeparameter werden nicht in Git kopiert.
+Die großen Gast-Paket-ZIPs bleiben zeitlich begrenzte CI-Artefakte. Ihre IDs und
+Digests sowie alle ausgelieferten Dateihashes liegen in den archivierten Belegen;
+die Spielquellen und Generatoren bleiben vollständig reproduzierbar in Git.
+
+Alle 18 ursprünglichen Wurzeleinträge außerhalb `.github`/`verification` sind
+mit b092f646 identisch, einschließlich der fünf geschützten Runtime-Bäume und
+vercel.json. Keine Produktions-/Vercel-Umstellung, kein Merge, keine Anmeldung.
+Die Belegergänzung startet wegen `[skip ci]` keinen unveränderten nativen Lauf.
+Die tatsächlich geprüfte Implementierung bleibt über ihre volle Quelle oben
+benannt; ein neuer Belegcommit ist keine neue gemessene Runtime.
+
+Die nächste Untersuchung ist ein zuerst kurz qualifizierter nativer Prozess-
+und Speicherzugriff, danach ein begrenzter Verlauf. Der vorhandene selektive
+Simulator-RSS-Helfer wäre vorher auf wirkliche PID-Zuordnung zu prüfen. Ein
+langer Ressourcenlauf wurde hier nicht gestartet. Kein weiterer unveränderter
+Besitzer-Handytest wird verlangt. Die physische Ursache und ein dauerhaft
+wirksamer White-Screen-Fix bleiben offen.

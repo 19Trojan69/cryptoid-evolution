@@ -1,0 +1,107 @@
+{
+  "runId": 41970945070,
+  "jobId": 127059119050,
+  "artifactId": 13389807700,
+  "source": "f3972e68775a38c179ea2b0129a1c61a25dbb955",
+  "tree": "e8807626c6e95a6a464ff93bf8fe5a9fd7c28079",
+  "complete": false,
+  "stage": "native-pilot",
+  "gameLoaded": null,
+  "physicalDeviceTest": false,
+  "archiveBytes": 138245,
+  "archiveSha256": "bd948d058dff540e678bcb160aeccc91ffd5a5f1dddf8d489d7e9735f3886bd8",
+  "archiveGitBlob": "f9ba90ade4982211fb686af92c8d67387169ab0b",
+  "reason": "Native XCTest passes 138.725 seconds, full original UI cycle and normal report collected. Overall result stays failed because raw performance.timeOrigin drifts 55 ms across 11 observations. Original null gameLoaded in outer receipt is preserved; native app receipt explicitly reports true. No retrospective promotion to a fully verified pilot.",
+  "members": [
+    {
+      "path": "NativeProbe.xcscheme",
+      "bytes": 4617,
+      "sha256": "1741fceac37910655a7fd2ceccfbf1f2d1feea63020b693f7520a4eea1e496f9"
+    },
+    {
+      "path": "boot.log",
+      "bytes": 15792,
+      "sha256": "5a36bce6704d02f3175a3a8c3ee175e4e869a921dd2c3b7ff319bd68277e5003"
+    },
+    {
+      "path": "build-info.json",
+      "bytes": 9027,
+      "sha256": "b0ad2aa7e3a8d12d35945245be5690ce1662b8f653ab315e90d8ef6b405a00a5"
+    },
+    {
+      "path": "build.log",
+      "bytes": 104982,
+      "sha256": "8b284eb94b5b311157257a37dc81baf82620713b9981aff67279f9f9f291a667"
+    },
+    {
+      "path": "command-0.log",
+      "bytes": 30,
+      "sha256": "a8be4f9af0a29137fe7e59b9928056d4a0df297bb46ba40f80eaa6b0ae982f12"
+    },
+    {
+      "path": "command-1.log",
+      "bytes": 16,
+      "sha256": "3c4ffcfb28a616a2eb2421c091b359d31ff598d0f2b05867a37102832a27ef72"
+    },
+    {
+      "path": "command-2.log",
+      "bytes": 235,
+      "sha256": "747bfddc383b421b9c4a5bf6670826837778feb2020b0de5e0f11545d229aad3"
+    },
+    {
+      "path": "command-3.log",
+      "bytes": 256038,
+      "sha256": "2f27ec7c81e68354322273b3fa638fcdefc016d453695af5a082fef54d3c6659"
+    },
+    {
+      "path": "command-4.log",
+      "bytes": 37,
+      "sha256": "68755e83001a28d426ab157e564fb969e4aeac68e9569494f18117b3e7b6d552"
+    },
+    {
+      "path": "command-5.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "container.log",
+      "bytes": 161,
+      "sha256": "c6bb28f84759a4073fc47a8d8a653ab9592723e31b0797c922f8eeca7fc5b49a"
+    },
+    {
+      "path": "guest-origin.txt",
+      "bytes": 22,
+      "sha256": "e9d101fb19c4b2563b3573eee66779ffe9e8b5b9ecb89a8effef2616405efaa4"
+    },
+    {
+      "path": "guest-server.log",
+      "bytes": 37,
+      "sha256": "e0e29772e67108bdc3cdc1c79582dc246eb934c21e94573f307d050bf7ead731"
+    },
+    {
+      "path": "normal-report.json",
+      "bytes": 9493,
+      "sha256": "c7b30edf953baa4ad263b0b17823e4ac7caef971d3fffe68b01d0e400f8b4ee8"
+    },
+    {
+      "path": "pilot.json",
+      "bytes": 52379,
+      "sha256": "61d8cf4b721a04980de27f27bbe6773ce92e6a378a0bbe6bcd87c22aea9c6e27"
+    },
+    {
+      "path": "pilot.log",
+      "bytes": 18126,
+      "sha256": "bcc19dbc7c9960c9ae27545891de400252c0a55a43c0cabe9b0a04ef0c6e0f62"
+    },
+    {
+      "path": "result.json",
+      "bytes": 4977,
+      "sha256": "4f614a2b2927edd275ce5ea13cfb7819eb5d0ede852f18a25f75544e544a8e6d"
+    },
+    {
+      "path": "served-manifest.json",
+      "bytes": 400802,
+      "sha256": "248b1c8bc4c72c5ac02d8da168c93cf47e3a94f30dd86a7b015be34addbbdb60"
+    }
+  ]
+}

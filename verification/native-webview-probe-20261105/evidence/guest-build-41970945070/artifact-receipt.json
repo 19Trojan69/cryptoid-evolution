@@ -1,0 +1,31 @@
+{
+  "runId": 41970945070,
+  "artifactId": 13389289254,
+  "source": "f3972e68775a38c179ea2b0129a1c61a25dbb955",
+  "complete": true,
+  "gameLoaded": false,
+  "archiveBytes": 4399,
+  "archiveSha256": "bb290f20946e14a29bdb141d920141e05baab1e741fa733cd60e1c2fd1f1f9d2",
+  "archiveGitBlob": "495a145b25db8157bc1023b820a5e1ba0e2829e3",
+  "packageArtifactId": 13389209397,
+  "packageBytes": 222787879,
+  "packageSha256": "8abf7a99b9a100914023b1801f382f2cc379041f1761f2a961b9ae1c9d652b62",
+  "packageArchiveStoredInGit": false,
+  "members": [
+    {
+      "path": "guest-build.log",
+      "bytes": 7485,
+      "sha256": "3cfc34acc3f57f91d85d70dae8e2131bc8d5c8ae240cec4f4e54a81b10e9b7d0"
+    },
+    {
+      "path": "guest-install.log",
+      "bytes": 538,
+      "sha256": "f6c20d99efeec84d926a6079a7a9f110e469f5c3f5b28b0f5f24ef31b02ed178"
+    },
+    {
+      "path": "result.json",
+      "bytes": 1146,
+      "sha256": "1c58afdb9340d8ac3a2ff260283360118b929bffdbd7eb238016e93a61bbb74f"
+    }
+  ]
+}

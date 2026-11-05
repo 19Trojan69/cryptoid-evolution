@@ -1,0 +1,72 @@
+{
+  "runId": 41977151858,
+  "jobId": 127078872785,
+  "artifactId": 13392178420,
+  "source": "1fc1ce3080004dc6cab59b0f56de5e21219fc56a",
+  "tree": "21d22293521a364d630cff70024586ada9a1bc9f",
+  "complete": false,
+  "stage": "simulator",
+  "gameLoaded": false,
+  "physicalDeviceTest": false,
+  "archiveBytes": 17095,
+  "archiveSha256": "ccc3aa122aa9a85c8cfb1faa30d3a1c06ce882b9b85d628930a10e0b572849f6",
+  "archiveGitBlob": "b08a30a3418cbfd36d2ea3bb59a2a4d2fe7e61ee",
+  "reason": "Intel simulator bootstatus exceeds 180 seconds before native app build. New collector retains 29918 boot-output bytes and the original timeout. A later native-log timeout includes an actual macOS group-signal EPERM; metadata retains that error separately, direct child exits, group stop remains unconfirmed, empty log digest preserved. No app/game or new document nonce observed. Early native startup markers are not exercised because device boot fails.",
+  "members": [
+    {
+      "path": "NativeProbe.xcscheme",
+      "bytes": 4617,
+      "sha256": "1741fceac37910655a7fd2ceccfbf1f2d1feea63020b693f7520a4eea1e496f9"
+    },
+    {
+      "path": "boot.log",
+      "bytes": 29918,
+      "sha256": "c4a1434d7a4ca9b85911e82f657c0ce26f2aa5fb7d6274f1914a32266e9ef737"
+    },
+    {
+      "path": "command-0.log",
+      "bytes": 30,
+      "sha256": "a8be4f9af0a29137fe7e59b9928056d4a0df297bb46ba40f80eaa6b0ae982f12"
+    },
+    {
+      "path": "command-1.log",
+      "bytes": 16,
+      "sha256": "3c4ffcfb28a616a2eb2421c091b359d31ff598d0f2b05867a37102832a27ef72"
+    },
+    {
+      "path": "command-2.log",
+      "bytes": 235,
+      "sha256": "747bfddc383b421b9c4a5bf6670826837778feb2020b0de5e0f11545d229aad3"
+    },
+    {
+      "path": "command-3.log",
+      "bytes": 256038,
+      "sha256": "2f27ec7c81e68354322273b3fa638fcdefc016d453695af5a082fef54d3c6659"
+    },
+    {
+      "path": "command-4.log",
+      "bytes": 37,
+      "sha256": "76b5e03f7d1c13431144f2c33307ff2a698a4e726aee9df87dd7c7cf1a34b2b3"
+    },
+    {
+      "path": "command-5.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "container.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native-failure.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "result.json",
+      "bytes": 5989,
+      "sha256": "d7f118be61a04cc6c29dc808717128fd2bb76085f271959561c03b47e8ebbbfd"
+    }
+  ]
+}
