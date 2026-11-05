@@ -112,3 +112,38 @@ Vorbereitung lädt das exakt gepinnte DevTools-Paket mit Digestprüfung; sie fü
 kein Installationsskript aus. Die sechs Originalinputs und die vorhandenen
 Rohresultate bleiben getrennt. Kein neuer Handytest, kein Deployment und kein
 Wiederanlauf des Simulators folgen aus dieser Offline-Auswertung.
+
+## Ergänzung: Besitzergerät mit iOS 26.6
+
+Der Besitzer nennt iOS 26.6. Apple dokumentiert Safari 26.6 mit WebKit
+20624.4.5; der eingefrorene öffentliche Branchstand
+`b56845f9fe0bd77577734c768ceb35b14af44231` weist im Versionsfile
+624.4.5 aus. `ios-26.6-source-match.json` sichert die genauen Blob-IDs.
+
+Die Korrektur des reservierten Style-Hashwerts (Bug 305864) ist dort enthalten.
+Diesen bereits korrigierten Fehler als unmittelbaren nächsten Fix zu verfolgen,
+ist daher nicht begründet. Das schließt andere native CSS-/SVG-Abstürze nicht aus.
+
+Die spätere globale 16k-Begrenzung des MatchedDeclarationsCache aus Main
+(Bug 312236) fehlt dagegen in diesem passenden Quellstand. Dessen Grenze von
+vier Einträgen je Hashbucket begrenzt nicht die Gesamtzahl unterschiedlicher
+Hashschlüssel. Der allgemeine Hash-/Besitzpfad berücksichtigt geerbte
+Custom-Property-Daten und hält Kopien der Eltern-Styles. Damit ist die
+Vererbungsreichweite der häufig geänderten Spielvariablen ein konkreter
+WebKit-Prüfpfad; der registrierte CSS-Reproduktionsfall und tatsächliches
+Wachstum auf dem iPhone bleiben unbewiesen.
+
+Die frühere negative Chromium-Ressourcenentscheidung zum lokalen Mündungslicht
+bleibt vollständig erhalten. Sie beantwortet keinen direkten Speichervergleich
+des gerade identifizierten Apple-Quellstands. Eine neue Geräteversion oder
+Reparatur folgt daraus noch nicht. Keine neue Messung, kein Simulatorstart,
+kein Runtime-Patch oder Deployment. Pi-Browser-Version weiterhin offen.
+
+Der zusätzliche Vergleich des öffentlichen 625.1.29.10.29-Quellstands
+`862f17dcae0aace47ea0ec16e209d960abfd553c` (passend zur Safari27-Core-Version)
+bestätigt dort die globale Begrenzung. Der niedrigere WPE-Sonderwert wird nicht
+iOS zugeschrieben. Apple führt iOS27.2 als regulär veröffentlichten Stand und
+das iPhone15 Pro Max als unterstützt. Ein reguläres angebotenes iOS-Update
+ist deshalb ein gezielter nächster iPhone-Schritt mit konkretem Engine-Unterschied.
+Dies ist eine Empfehlung, kein durchgeführtes Update und kein White-Screen-Pass.
+Eine Android-Reparatur oder ein neuer Spiel-Patch wird daraus nicht abgeleitet.

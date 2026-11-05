@@ -1,0 +1,85 @@
+{
+  "version": 1,
+  "reviewedAt": "2026-11-05",
+  "userDevice": {
+    "model": "iPhone 15 Pro Max",
+    "iosVersion": "26.6",
+    "source": "Direkte Nutzerangabe in diesem Gespräch",
+    "piBrowserVersion": null,
+    "installedBinaryInspected": false
+  },
+  "release": {
+    "url": "https://developer.apple.com/documentation/safari-release-notes/safari-26_6-release-notes",
+    "safariVersion": "26.6",
+    "releaseWebKitVersion": "20624.4.5"
+  },
+  "nativeSource": {
+    "repository": "WebKit/WebKit",
+    "branch": "safari-7624.4.5-branch",
+    "frozenCommit": "b56845f9fe0bd77577734c768ceb35b14af44231",
+    "versionFile": {
+      "path": "Configurations/Version.xcconfig",
+      "blobSha": "655dfd03d1b99b80f0d9944ea64a54a8b6ec9fc5",
+      "coreVersion": "624.4.5"
+    },
+    "cacheFile": {
+      "path": "Source/WebCore/style/MatchedDeclarationsCache.cpp",
+      "blobSha": "89bc70ad9bb9ed51b8a7a02feb6ed58405dbe126"
+    }
+  },
+  "comparison": {
+    "hashCrash305864": {
+      "fixPresentInMatchingSource": true,
+      "matchingFixedBlob": "89bc70ad9bb9ed51b8a7a02feb6ed58405dbe126",
+      "priority": "Zurückgestellt als direkte Ursache des unveränderten Hashfehlers; kein pauschaler Ausschluss aller CSS-/SVG-Abstürze."
+    },
+    "cacheGrowth312236": {
+      "mainFixCommit": "ebcf88c1bc303388b4d1ed89f3bd812631b719e2",
+      "mainFixBlob": "dcfbbaf01aa7485ce58ab539a06db6bd763a0e3f",
+      "mainMaximumSizeGuardPresent": true,
+      "matchingReleaseSourceHasThatGuard": false,
+      "maximumEntriesPerHash": 4,
+      "globalNumberOfHashKeysNotLimitedByPerHashLimit": true,
+      "matchingSourceHashesInheritedCustomPropertyData": true,
+      "matchingSourceCopiesParentStyle": true,
+      "interpretation": "Der allgemeine Cachepfad kann auch bei geänderten geerbten Variablendaten relevant sein. Das Fehlen der späteren 16k-Begrenzung beweist weder Wachstum im Besitzergerät noch OOM noch die White-Screen-Ursache. Der registrierte CSS-Reproduktionsfall ist weiterhin nicht im Spiel nachgewiesen."
+    }
+  },
+  "historicalComparison": {
+    "chromiumPlayerMuzzleResourceDecisionStillFailed": true,
+    "newFindingDoesNotReclassifyOldRuns": true,
+    "webKitSpecificVariableScopeReviewJustified": true,
+    "webKitResourceBenefitMeasured": false
+  },
+  "noNewBrowserRun": true,
+  "noNewPhoneTest": true,
+  "noSimulatorRestart": true,
+  "noRuntimePatch": true,
+  "noDeployment": true,
+  "whiteScreenFixed": false,
+  "scopeLimit": "Öffentlicher versionierter Quellstand passend zur dokumentierten Core-Version; keine symbolgenaue Prüfung des installierten iPhone-Binaries. Die iPhone-Angabe erklärt keine Android-Abbrüche.",
+  "newerVersionComparison": {
+    "repository": "WebKit/WebKit",
+    "branch": "safari-7625.1.29.10-branch",
+    "frozenCommit": "862f17dcae0aace47ea0ec16e209d960abfd553c",
+    "releaseCoreVersion": "625.1.29",
+    "fullSourceVersion": "625.1.29.10.29",
+    "versionBlobSha": "5bc4a38e0bfb1064e05a440debba23649619b8d3",
+    "cacheBlobSha": "95ef0a05965d1e02241bb6508cdc7ec3b6fbe7b6",
+    "hashFixPresent": true,
+    "globalCacheSizeGuardPresent": true,
+    "applePlatformGuardEntries": 16384,
+    "otherPlatformException": "WPE verwendet in diesem Quellstand 1024 Einträge; dieser WPE-Wert wird nicht iOS zugeschrieben.",
+    "sourceURL": "https://github.com/WebKit/WebKit/blob/862f17dcae0aace47ea0ec16e209d960abfd553c/Source/WebCore/style/MatchedDeclarationsCache.cpp",
+    "interpretation": "Der zusätzliche Schutz ist in diesem zu Safari27 passenden öffentlichen Quellstand vorhanden. Das begründet die Empfehlung eines regulären angebotenen iOS-Updates als gezielten iPhone-Schritt; keine beweisende Smartphone-Reparatur oder Android-Erklärung."
+  },
+  "updateRecommendation": {
+    "officialStableListed": "27.2",
+    "officialReleaseDate": "2026-10-26",
+    "officialSource": "https://support.apple.com/de-at/100100",
+    "compatibleIphone15ProMaxSource": "https://support.apple.com/de-de/128058",
+    "betaRecommended": false,
+    "deviceUpdatePerformed": false,
+    "whiteScreenRetestPerformed": false
+  }
+}
