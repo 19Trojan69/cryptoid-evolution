@@ -86,3 +86,28 @@ und Browserflächen sind mit den bisherigen Cachezählern nicht ausreichend
 beurteilt. Der fehlende Spielmodus, geringe JS-Zähler oder der bestandene kurze
 UI-Ablauf erlauben keine Behauptung, die historische Ursache sei gefunden oder
 behoben.
+
+
+## Fortsetzung nach „weiter bitte“
+
+Die zusätzliche kleine Animations-Entfernungsprobe wurde lokal vorbereitet,
+startete aber weder Chromium noch WebKit: Die zu diesem lokalen Playwright-Paket
+gehörenden Browserprogramme sind nicht installiert. Der unveränderte Fehlerstand
+liegt unter results/animation-retention.json. Kein Testfall lief; kein Pass und
+keine Speicherbeobachtung werden daraus behauptet. Keine neue Browserinstallation
+oder CI-Serie für diesen Pfad. Die stärkere bereits vorhandene Lebensdauer-Serie
+vom 01.11.2026 hält nach Home null aktive Animationen und Registrierungen fest;
+sie bleibt als älterer Linux-Befund eingeordnet.
+
+Beim Nachprüfen der leeren nativen RSS-Reihe wurde der konkrete Datencontainer-
+Wechsel nachgewiesen. Deshalb wird ausschließlich dieser externe Dateizugriff
+korrigiert und einmal kurz qualifiziert. Frische Quelle/Laufkennung/Dokument,
+maximales Ankeralter, eindeutiger Prozess und zwei fortschreitende Anker bleiben
+harte Bedingungen. Zwei Dateisystem-Gegenbeispiele ergänzen die 18 vorhandenen
+Auswertungsprüfungen. Der native UI-Test hält nur einen bestehenden aktiven
+Beobachtungspunkt acht Sekunden länger. Kein Spielpatch und kein Handytest.
+
+Auch für ein über den Home-Bildschirm installiertes Webspiel wurde keine
+belastbare dokumentierte Apple-Freigabe des Spielmodus über das Webmanifest
+gefunden. Die dokumentierte native Info.plist-Freigabe wird nicht als
+versteckter HTML-Schalter ausgegeben.

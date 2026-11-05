@@ -1,6 +1,9 @@
 import copy
+import json
+from pathlib import Path
+from tempfile import TemporaryDirectory
 import unittest
-from memory_probe import services, rss, renderers, active_anchor, validate_memory
+from memory_probe import services, rss, renderers, active_anchor, read_active_native, validate_memory
 
 
 class ProcessQualification(unittest.TestCase):
@@ -28,6 +31,40 @@ class ProcessQualification(unittest.TestCase):
     def test_accepts_two_new_renderer_observations_without_claiming_total_memory(self):
         _, state = self.fixture()
         validate_memory(state)
+
+    def test_xctest_reinstallation_moves_readback_to_a_new_container(self):
+        native, _ = self.fixture()
+        with TemporaryDirectory() as folder:
+            root = Path(folder)
+            original = root / 'old-install' / 'Documents' / 'probe-result.json'
+            original.parent.mkdir(parents=True)
+            replacement = root / 'xctest-install' / 'Documents' / 'probe-result.json'
+            replacement.parent.mkdir(parents=True)
+            replacement.write_text(json.dumps(native))
+            selected, anchor = read_active_native(original, 'a'*40, 11000)
+            self.assertEqual(selected, replacement)
+            self.assertEqual(anchor['runId'], 'run')
+            # A stale original or foreign source must never win by directory order.
+            stale = copy.deepcopy(native); stale['readback']['observedAt'] = 0
+            original.write_text(json.dumps(stale))
+            self.assertEqual(read_active_native(original, 'a'*40, 11000)[0], replacement)
+            original.write_text(json.dumps(native))
+            with self.assertRaisesRegex(AssertionError, 'exactly one'):
+                read_active_native(original, 'a'*40, 11000)
+
+    def test_container_discovery_keeps_source_freshness_and_size_gates(self):
+        native, _ = self.fixture()
+        with TemporaryDirectory() as folder:
+            original = Path(folder) / 'original' / 'Documents' / 'probe-result.json'
+            original.parent.mkdir(parents=True)
+            cases = [json.dumps(native).replace('a'*40, 'b'*40), '{invalid', ' '*262145]
+            for content in cases:
+                original.write_text(content)
+                with self.assertRaisesRegex(AssertionError, 'exactly one'):
+                    read_active_native(original, 'a'*40, 11000)
+            original.write_text(json.dumps(native))
+            with self.assertRaisesRegex(AssertionError, 'exactly one'):
+                read_active_native(original, 'a'*40, 21000)
 
     def test_rejects_stale_paused_or_wrong_source_anchors(self):
         native, _ = self.fixture()

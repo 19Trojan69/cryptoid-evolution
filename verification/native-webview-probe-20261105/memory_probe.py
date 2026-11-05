@@ -52,6 +52,26 @@ def active_anchor(native, source, now_ms):
             "anchorAgeMs": now_ms - point["observedAt"]}
 
 
+def read_active_native(native_file, source, now_ms):
+    # XCTest can reinstall the already built app into a different data UUID.
+    # Read only this probe's bounded file in sibling simulator app containers;
+    # source, freshness and active-document gates still select exactly one.
+    assert native_file.name == "probe-result.json" and native_file.parent.name == "Documents"
+    candidates = set(native_file.parents[2].glob("*/Documents/probe-result.json")) | {native_file}
+    assert len(candidates) <= 32, "Too many native probe records"
+    active = []
+    for path in candidates:
+        try:
+            if path.stat().st_size > 262_144:
+                continue
+            native = json.loads(path.read_bytes())
+            active.append((path, active_anchor(native, source, now_ms)))
+        except (OSError, ValueError, KeyError, TypeError, AssertionError):
+            continue
+    assert len(active) == 1, "Require exactly one fresh active native probe record"
+    return active[0]
+
+
 def validate_memory(state):
     assert state["baselineWebContentPids"] == [], "A pre-existing renderer prevents cold attribution"
     points = [row for row in state["samples"] if row.get("qualified") is True]
@@ -115,8 +135,7 @@ def main():
             deadline = time.monotonic() + MAX_SECONDS
             while time.monotonic() < deadline and not (args.out / "stop").exists():
                 try:
-                    native = json.loads(args.native_file.read_bytes())
-                    before = active_anchor(native, args.source, time.time()*1000)
+                    before_file, before = read_active_native(args.native_file, args.source, time.time()*1000)
                 except (OSError, ValueError, KeyError, TypeError, AssertionError):
                     time.sleep(.5)
                     continue
@@ -124,12 +143,14 @@ def main():
                     time.sleep(.5)
                     continue
                 seen.add(before["sequence"])
-                row = {"before": before, "qualified": False}
+                row = {"before": before, "qualified": False,
+                       "nativeContainerRelocated": before_file != args.native_file}
                 status["samples"].append(row)
                 collector.checkpoint()
                 try:
                     row["measurement"] = sample()
-                    after = active_anchor(json.loads(args.native_file.read_bytes()), args.source, time.time()*1000)
+                    after_file, after = read_active_native(args.native_file, args.source, time.time()*1000)
+                    assert before_file == after_file, "Native readback container changed during CLI measurement"
                     row["after"] = after
                     actual = renderers(row["measurement"]["rows"])
                     assert len(actual) == 1, "Require exactly one selected WebContent renderer"

@@ -61,6 +61,9 @@ final class GamePilotTests: XCTestCase {
                              try XCTUnwrap(clock(active)["elapsedMs"] as? Double) + 8000)
         XCTAssertGreaterThan(try XCTUnwrap(scene(advanced)["frameAt"] as? Double),
                              try XCTUnwrap(scene(active)["frameAt"] as? Double))
+        // Second bounded active window for the external PID/RSS sampler.
+        // Same native snapshot/clock and UI actions; no extra JS or time injection.
+        Thread.sleep(forTimeInterval: 8)
         tap("Pause")
         let paused = try observe()
         XCTAssertEqual(clock(paused)["mode"] as? String, "paused")

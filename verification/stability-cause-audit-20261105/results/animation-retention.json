@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "base": "b092f6462a623c3ad2c12e634963028d462c5fcf",
+  "hypothesis": "Removed CSS and Web Animations remain strongly held by pacing Map",
+  "actualGameLoaded": false,
+  "physicalDeviceTest": false,
+  "nativeProcessMemoryMeasured": false,
+  "whiteScreenFixed": false,
+  "sources": [
+    {
+      "path": "frontend/src/lib/nativeFrameEasing.ts",
+      "gitBlob": "cb0b45871da02de5bf0bb02800dda10fb8193488"
+    },
+    {
+      "path": "frontend/src/lib/cssFramePacing.ts",
+      "gitBlob": "5d9cc3e5b40792277d9813b2953196affbc0eaf3"
+    }
+  ],
+  "engines": [
+    {
+      "name": "chromium",
+      "complete": false,
+      "error": {
+        "kind": "Error",
+        "detail": "browserType.launch: Executable doesn't exist at /root/.cache/ms-playwright/chromium_headless_shell-1234/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝"
+      }
+    },
+    {
+      "name": "webkit",
+      "complete": false,
+      "error": {
+        "kind": "Error",
+        "detail": "browserType.launch: Executable doesn't exist at /root/.cache/ms-playwright/webkit-2336/pw_run.sh\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝"
+      }
+    }
+  ],
+  "complete": false,
+  "finishedAt": "2026-11-05T07:14:25.103Z"
+}

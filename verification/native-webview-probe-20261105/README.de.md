@@ -314,3 +314,28 @@ fehlende oder veraltete Daten bleiben Fehler. Die normalen 2.500-ms-Grenzen der
 Spieluhr werden nicht verändert. Vier neue lokale Prüfungen zu Parsern und
 Zuordnung bestehen zusätzlich zu den 14 vorhandenen Prüfungen. Ein langer
 Ressourcenlauf oder eine White-Screen-Behebung wird daraus noch nicht abgeleitet.
+
+
+## Konkrete Korrektur nach leerer RSS-Reihe
+
+CI 41982882604 blieb insgesamt rot: Der normale native Pilot bestand, die
+RSS-Qualifizierung lieferte null Punkte. Vorinstallation und XCTest-Installation
+benutzten laut Original-Containerlogs unterschiedliche Daten-UUIDs. Der alte
+Sampler las ausschließlich den ersten Pfad. Der Folgeversuch behebt genau diesen
+nachgewiesenen Fehler: Unter demselben Simulator-Datenwurzelverzeichnis wird nur
+die eigene begrenzte probe-result.json gesucht; genau ein frischer aktiver Datensatz
+mit passender Quelle, Lauf- und Dokumentkennung ist erlaubt. Stale, fremde,
+überlange und mehrdeutige Datensätze werden weiterhin verworfen. Vor/nach einem
+CLI-Messpunkt muss auch der gewählte Datencontainer gleich bleiben.
+
+Zwei zusätzliche echte Dateisystem-Gegenbeispiele bestehen; insgesamt 20 lokale
+Auswertungsprüfungen. Der native Test hält nach seinem zweiten bestehenden aktiven
+Schnappschuss acht Sekunden länger, damit beide verschiedenen aktiven Anker ein
+Messfenster besitzen. Es bleiben elf Original-Beobachtungspunkte und derselbe
+reguläre Ausstieg/Export. Kein neuer Spieltimer, kein veränderter Frame-/Stoppuhrwert,
+kein automatisch fortgesetzter Abbruch und kein Eingriff in Spielquellen.
+
+Ein einzelner gezielt korrigierter kurzer Versuch ist damit begründet. Es ist kein
+unveränderter Wiederholungslauf und kein Langlauf. Selbst bei Erfolg nur selektiver
+Host-RSS im iOS-Simulator; kein gesamter Browser-/GPU-/Telefon-RAM und kein
+White-Screen-Fix. Das tatsächliche Ergebnis muss vor weiteren Schritten gelesen werden.
