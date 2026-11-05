@@ -100,13 +100,7 @@ class Collector:
                     size = path.stat().st_size
                     if not 0 < size <= 262_144:
                         raise ValueError(f"native record size outside bound: {size}")
-                    raw = live.read_bytes()
-        # Snapshot bytes are immutable even if a protected descendant retains
-        # the live stdout descriptor. Such a process is never called stopped.
-        path.write_bytes(raw)
-        live.unlink(missing_ok=True)
-        row["directChildExited"] = child.poll() is not None
-        row["processGroupStopConfirmed"] = not row.get("signalErrors") if row["timedOut"] else None
+                    raw = path.read_bytes()
                     if len(raw) != size:
                         raise ValueError("native record changed during collection")
                     json.loads(raw)
