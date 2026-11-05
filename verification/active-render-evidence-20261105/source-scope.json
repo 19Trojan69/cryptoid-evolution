@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "originalRuntimeTrees": {
+    "frontend": "890df8a38e13ef1fe315a5c0eb109c1d72b80aab",
+    "backend": "6e93bfbac9e6cc70a1edfb8bd55d737f612ba261",
+    "api": "ccac7cd576a079771d7d7fe4f0085492ebbe6813",
+    "assets": "a9860b12db58a96dafde818d9a58a6ea0e03c5e5",
+    "private-preview": "b733d4dc70b4ac407391720eab131dbaf1d60e37"
+  },
+  "vercelJson": "49956b406c1e97441e71e1f652f7c0d164d1ed16",
+  "compiledProfileControllerSha256": "00e3796f3eb0bbaec3f2ae16bb5ac46a2d88c8abc6647fee0e1a5b634249a18d",
+  "clockStateSha256": "5e5845d5e5beef85ca5dadac597b8d751e81f931374b942b22fdedc7d83bbb5c",
+  "scopePassedBeforeAfterAcceptedProfile": true,
+  "automaticDeployment": false,
+  "ownerRawFilesPublished": false
+}

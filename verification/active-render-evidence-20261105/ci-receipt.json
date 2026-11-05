@@ -1,0 +1,57 @@
+{
+  "version": 1,
+  "profileInitialSetup": {
+    "commit": "7b8f766f0232984d3fed4a0c76950d67d5d1c6bf",
+    "runId": 42077053835,
+    "jobId": 127419945045,
+    "conclusion": "cancelled",
+    "phase": "dependency installation; no game started",
+    "reason": "new source uses the actual existing frameAt getter instead of a nonexistent scene.elapsedMs"
+  },
+  "profileOverflow": {
+    "commit": "0ce9c76093aad190b283c5cd92ab3ff7ba94b1e9",
+    "runId": 42077179200,
+    "jobId": 127420816772,
+    "conclusion": "failure",
+    "calibrationPassed": true,
+    "cause": "six-second capture exceeded fixed byte budget; partial trace is not accepted"
+  },
+  "profileAccepted": {
+    "commit": "0d34817617cb909d4acdd0ab35e9ed352765367d",
+    "tree": "9ad34cec7d3e00e874ad7c47d1b6440c5224151e",
+    "runId": 42077957255,
+    "jobId": 127423100247,
+    "conclusion": "success",
+    "captureWaitMs": 2000,
+    "preCaptureWaitMs": 4000,
+    "captureBudgetsUnchanged": true
+  },
+  "viewportCandidate": {
+    "commit": "e2ffb46de0ca463764750d85239d41cbdb757361",
+    "runId": 42079339383,
+    "chromiumJobId": 127427941292,
+    "chromiumConclusion": "failure",
+    "chromiumComputedStyleCasesPassed": 16,
+    "nativeControlStyleWork": 8,
+    "nativeCandidateStyleWork": 8,
+    "nativeRootHasControlEvents": 0,
+    "newWorkGainNotEstablished": true,
+    "webkitStatusAtCheckpoint": "dependency installation; not yet accepted"
+  },
+  "retentionComparison": {
+    "commit": "06940b15cd719d3874365fdda1fa590825e89c59",
+    "tree": "3bbe7745c249d0c0ea700d8616068b6d58b966bd",
+    "runId": 42081140204,
+    "jobId": 127434171702,
+    "statusAtCheckpoint": "running",
+    "secondsPerMainRun": 600,
+    "order": [
+      "control",
+      "candidate"
+    ],
+    "resultNotYetAvailable": true
+  },
+  "newDeviceTest": false,
+  "newDeployment": false,
+  "whiteScreenFixed": false
+}
