@@ -32,7 +32,7 @@ jobs:
           retention-days: 7
   native-control:
     needs: guest-package
-    runs-on: macos-15-intel
+    runs-on: macos-15
     timeout-minutes: 18
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803

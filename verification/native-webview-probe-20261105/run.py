@@ -68,6 +68,9 @@ def main() -> int:
     try:
         scope()
         status["source"] = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
+        status["hostArchitecture"] = os.uname().machine
+        status["hostPlatform"] = sys.platform
+        status["hostMemoryBytes"] = int(run(["sysctl", "-n", "hw.memsize"], timeout=10, log="host-memory.log").strip())
         collector.checkpoint("tools")
         status["xcode"] = run(["xcodebuild", "-version"])
         temp = Path(os.environ["RUNNER_TEMP"]) / "cryptoid-native-probe"
