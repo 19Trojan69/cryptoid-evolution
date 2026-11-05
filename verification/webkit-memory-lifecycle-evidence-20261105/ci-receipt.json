@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "sourceCommit": "b1645d12658c5f5fcfe23536865073626f265a03",
+  "sourceTree": "5c9eb0bbae8e481cb1a874eef773239252ed77d1",
+  "run": 42093383421,
+  "job": 127476987555,
+  "conclusion": "success",
+  "url": "https://github.com/19Trojan69/cryptoid-evolution/actions/runs/42093383421",
+  "artifactId": 13446156738,
+  "artifactName": "webkit-memory-lifecycle",
+  "files": {
+    "build-info.json": {
+      "bytes": 10732,
+      "sha256": "2adf520ee5d2ffd7daf2972a60fbe75ea026fcc79799c0ed1f9768a23ad36d24"
+    },
+    "process-summary.json": {
+      "bytes": 4083,
+      "sha256": "6bdb4f5c431ea932abfff91e932199f6adcfa546fc46120d0ee456600333db34"
+    },
+    "observation.json": {
+      "bytes": 119442,
+      "sha256": "3059fcbf7345c3eae7dccd701b97a298589bd1ecb835d5346ab2adbee8db0538"
+    },
+    "synthetic-report.json": {
+      "bytes": 9247,
+      "sha256": "7ca1d9dc1f879338deedd6f4d92e7d3bdc77045e6fd869d99a263d957bcdd47f"
+    },
+    "original.zip": {
+      "bytes": 12851,
+      "sha256": "a7000d744914a08a7c143cce8efc85ebc986bcf4540c5101f95599e212ff728b"
+    }
+  },
+  "earlierSetupFailure": {
+    "source": "8e2fdc2ebdebbf0f78aeba6d30e9e28f1c004583",
+    "run": 42092985694,
+    "job": 127475606701,
+    "stage": "before dependency install, game or browser",
+    "reason": "git dubious ownership in ephemeral official container",
+    "correction": "Only trust the exact GITHUB_WORKSPACE path before unchanged source checks"
+  },
+  "rawLabelCorrection": {
+    "original": "blank-after-document-destruction",
+    "correctInterpretation": "Only navigation to about:blank with a new document timeOrigin was established; old-document destruction or absence from a page cache was not established."
+  },
+  "physicalDevice": false,
+  "whiteScreenFixed": false
+}

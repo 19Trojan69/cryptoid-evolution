@@ -1,0 +1,181 @@
+{
+  "sourceArtifactUnmodified": true,
+  "stages": [
+    {
+      "stage": "fresh-blank-document",
+      "interpretation": null,
+      "meanMiB": 357.8724609375,
+      "byProcess": [
+        {
+          "pid": 1007,
+          "role": "webkit-network",
+          "meanMiB": 36.5013671875
+        },
+        {
+          "pid": 1009,
+          "role": "webkit-content",
+          "meanMiB": 218.56328125
+        },
+        {
+          "pid": 991,
+          "role": "browser-other",
+          "meanMiB": 102.8078125
+        }
+      ]
+    },
+    {
+      "stage": "menu-before-preparation",
+      "interpretation": null,
+      "meanMiB": 466.7361328125,
+      "byProcess": [
+        {
+          "pid": 1007,
+          "role": "webkit-network",
+          "meanMiB": 48.4484375
+        },
+        {
+          "pid": 1009,
+          "role": "webkit-content",
+          "meanMiB": 300.8693359375
+        },
+        {
+          "pid": 991,
+          "role": "browser-other",
+          "meanMiB": 117.418359375
+        }
+      ]
+    },
+    {
+      "stage": "menu-after-asset-preparation",
+      "interpretation": null,
+      "meanMiB": 529.8748046875,
+      "byProcess": [
+        {
+          "pid": 1007,
+          "role": "webkit-network",
+          "meanMiB": 50.4001953125
+        },
+        {
+          "pid": 1009,
+          "role": "webkit-content",
+          "meanMiB": 359.2849609375
+        },
+        {
+          "pid": 991,
+          "role": "browser-other",
+          "meanMiB": 120.1896484375
+        }
+      ]
+    },
+    {
+      "stage": "mounted-boss-paused-before-start",
+      "interpretation": null,
+      "meanMiB": 887.9990234375,
+      "byProcess": [
+        {
+          "pid": 1007,
+          "role": "webkit-network",
+          "meanMiB": 50.2837890625
+        },
+        {
+          "pid": 1009,
+          "role": "webkit-content",
+          "meanMiB": 718.166796875
+        },
+        {
+          "pid": 991,
+          "role": "browser-other",
+          "meanMiB": 119.5484375
+        }
+      ]
+    },
+    {
+      "stage": "playing-original-boss",
+      "interpretation": null,
+      "meanMiB": 1089.6419921875,
+      "byProcess": [
+        {
+          "pid": 1007,
+          "role": "webkit-network",
+          "meanMiB": 48.195377604166666
+        },
+        {
+          "pid": 1009,
+          "role": "webkit-content",
+          "meanMiB": 922.5025390625
+        },
+        {
+          "pid": 991,
+          "role": "browser-other",
+          "meanMiB": 118.94407552083334
+        }
+      ]
+    },
+    {
+      "stage": "home-with-existing-qa-bridge",
+      "interpretation": null,
+      "meanMiB": 877.0958984375,
+      "byProcess": [
+        {
+          "pid": 1007,
+          "role": "webkit-network",
+          "meanMiB": 48.3263671875
+        },
+        {
+          "pid": 1009,
+          "role": "webkit-content",
+          "meanMiB": 709.9697265625
+        },
+        {
+          "pid": 991,
+          "role": "browser-other",
+          "meanMiB": 118.7998046875
+        }
+      ]
+    },
+    {
+      "stage": "home-after-qa-bridge-release",
+      "interpretation": null,
+      "meanMiB": 811.4323567708333,
+      "byProcess": [
+        {
+          "pid": 1007,
+          "role": "webkit-network",
+          "meanMiB": 48.2982421875
+        },
+        {
+          "pid": 1009,
+          "role": "webkit-content",
+          "meanMiB": 644.4124348958334
+        },
+        {
+          "pid": 991,
+          "role": "browser-other",
+          "meanMiB": 118.7216796875
+        }
+      ]
+    },
+    {
+      "stage": "blank-after-document-destruction",
+      "interpretation": "navigation only; old-document destruction is not established",
+      "meanMiB": 805.9425130208333,
+      "byProcess": [
+        {
+          "pid": 1007,
+          "role": "webkit-network",
+          "meanMiB": 48.366861979166664
+        },
+        {
+          "pid": 1009,
+          "role": "webkit-content",
+          "meanMiB": 638.6139322916666
+        },
+        {
+          "pid": 991,
+          "role": "browser-other",
+          "meanMiB": 118.96171875
+        }
+      ]
+    }
+  ]
+}
