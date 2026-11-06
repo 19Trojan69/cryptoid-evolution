@@ -1,0 +1,55 @@
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+export const BASE_RUNTIME='d9e0897a9396dd8f1f0a9c4a9a0536aa1fb7208d';
+export const EXPECTED_CONTROLLER='4867dfeb5a00944736abbc3d5667b1d83850593e';
+export const LAB_PROJECT='prj_0uk2EWyJzzKfIHoLUMrDZMaJZY4W';
+export const hook=`
+  const labCounters = useRef({activeMs:0,unobservedGapMs:0,frames:0});
+  const labSeeded = useRef(false);
+  useLayoutEffect(() => {
+    if(labSeeded.current)return;
+    labSeeded.current=true;
+    const options=(window as any).__cryptoidLabOptions;
+    if (options?.scene && options.scene !== 'normal') {
+      const s=stateRef.current;
+      s.sector=20;s.section=20;s.chainBlocks=9;s.phase='SECTOR_INTRO';s.encounter='boss-intro';s.status='paused';
+      s.boss=createSectorBoss(20,fieldRef.current?.clientWidth||390,visibleTopRef.current,fieldRef.current?.clientHeight||760);
+      if(options.scene==='reactor'){s.boss.turrets.forEach(g=>g.health=0);s.boss.health=s.boss.maxHealth*.55;}
+      setGame({...s});
+    }
+    if(options?.protection)impactCooldownRef.current=1e9;
+  }, []);
+  useEffect(() => {
+    const read=()=>{
+      const s=stateRef.current,p=paintedShipResourceStats(),c=canvasEffectResources(),a=soundRef.current?.diagnosticResourceStats;
+      const pacing=cssFramePacingStats(),boss=s.boss;
+      const heap=(performance as any).memory?.usedJSHeapSize;
+      const canvases=Array.from(document.getElementsByTagName('canvas'));
+      return {...labCounters.current,status:s.status,phase:s.phase,encounter:s.encounter,stage:s.sector,level:campaignLevel(s.sector),
+        bossId:boss?.config.id??null,reactorPercent:boss?boss.health/boss.maxHealth*100:null,liveTurrets:boss?boss.turrets.filter(g=>g.health>0).length:null,
+        frameMs:lastMeasuredFrameRef.current,enemies:s.asteroids.length,playerShots:s.shots.length,enemyShots:s.enemyShots.length,effects:s.effects.length,
+        domNodes:document.getElementsByTagName('*').length,canvasNodes:canvases.length,domCanvasLogicalBytes:canvases.reduce((n,c)=>n+c.width*c.height*4,0),
+        paintedBytes:p.estimatedBytes,paintedEntries:p.painted,canvasCacheBytes:c.cacheBytes,canvasSurfaceBytes:c.surfaceBytes,
+        audioBufferBytes:a?.audioBufferBytes??null,audioVoices:a?.audioVoices??null,pacedActive:pacing.active,pacedConfigured:pacing.configured,
+        heapBytes:typeof heap==='number'&&Number.isFinite(heap)?heap:null};
+    };
+    (window as any).__cryptoidLabRead=read;
+    return ()=>{if((window as any).__cryptoidLabRead===read)delete (window as any).__cryptoidLabRead;};
+  }, []);
+`;
+export const frameAnchor="      frameGap = frame.wallMs; simulatedMs = 0; forceScene = false; requestScene = false;";
+export const frameHook=`
+      labCounters.current.frames++;
+      if(wasPlaying){
+        if(lastMeasuredFrameRef.current<=1000)labCounters.current.activeMs+=lastMeasuredFrameRef.current;
+        else labCounters.current.unobservedGapMs+=lastMeasuredFrameRef.current;
+      }`;
+export function controller(source) {
+  const bytes=Buffer.from(source);
+  assert.equal(createHash('sha1').update(Buffer.concat([Buffer.from('blob '+bytes.length+'\0'),bytes])).digest('hex'),EXPECTED_CONTROLLER);
+  const anchor='  const levelLabel =';
+  assert.equal(source.split(anchor).length,2);assert.equal(source.split(frameAnchor).length,2);
+  const result=source.replace(anchor,hook+'\n'+anchor).replace(frameAnchor,frameAnchor+frameHook);
+  assert.equal(result.replace(hook+'\n','').replace(frameHook,''),source);
+  return result;
+}

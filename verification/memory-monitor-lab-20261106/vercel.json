@@ -1,0 +1,13 @@
+{
+  "$schema":"https://openapi.vercel.sh/vercel.json",
+  "framework":null,
+  "installCommand":"npm install --prefix ../../frontend --include=optional --ignore-scripts --no-audit --no-fund",
+  "buildCommand":"node build.mjs",
+  "outputDirectory":"site",
+  "git":{"deploymentEnabled":false},
+  "rewrites":[{"source":"/api/:path*","destination":"/lab-denied.json"},{"source":"/(.*)","destination":"/index.html"}],
+  "headers":[{"source":"/(.*)","headers":[
+    {"key":"X-Robots-Tag","value":"noindex, nofollow"},
+    {"key":"Content-Security-Policy","value":"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'"}
+  ]}]
+}

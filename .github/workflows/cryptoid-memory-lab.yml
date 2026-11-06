@@ -1,0 +1,35 @@
+name: Verify separate memory monitor lab
+on:
+  push:
+    branches: [codex/memory-monitor-lab-20261106]
+    paths: ['verification/memory-monitor-lab-20261106/**', '.github/workflows/cryptoid-memory-lab.yml']
+permissions:
+  contents: read
+jobs:
+  monitor:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    strategy:
+      fail-fast: false
+      matrix:
+        engine: [chromium, webkit]
+    container:
+      image: mcr.microsoft.com/playwright@sha256:dcc5531e97840b9b5e794f2814476b21571c5124a3fca2267d73041f56e7580e
+      options: --init --ipc=host
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with: {persist-credentials: false}
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with: {node-version: '24'}
+      - run: npm install --prefix frontend --include=optional --ignore-scripts --no-audit --no-fund
+      - run: npm install --prefix verification/transition-motion-20261106 --ignore-scripts --no-audit --no-fund
+      - run: node --test verification/memory-monitor-lab-20261106/model.test.mjs
+      - run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+      - run: node verification/memory-monitor-lab-20261106/build.mjs
+      - run: node verification/memory-monitor-lab-20261106/verify.mjs ${{ matrix.engine }}
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: memory-lab-${{ matrix.engine }}
+          path: verification/memory-monitor-lab-20261106/results
+          retention-days: 30
