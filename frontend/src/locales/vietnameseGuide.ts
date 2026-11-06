@@ -1,5 +1,6 @@
 /** Direct Vietnamese guide and card copy; wider coverage remains in progress. */
 export const vietnameseGuideTranslations: Record<string, string> = {
+  "Reactor exposed": "Lò phản ứng đã lộ ra",
   "Combat restored.": "Đã khôi phục trận chiến.",
   "Ship {number} · {stage}": "Tàu {number} · {stage}",
   "ADVANCED": "Nâng cao",

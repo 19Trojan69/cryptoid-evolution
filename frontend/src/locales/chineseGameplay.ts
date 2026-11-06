@@ -1,5 +1,6 @@
 /** Directly translated simplified Chinese gameplay and interface copy. */
 export const chineseGameplayTranslations: Record<string, string> = {
+  "Reactor exposed": "反应堆已暴露",
   "Combat restored.": "战斗已恢复。",
   "Ship {number} · {stage}": "飞船 {number} · {stage}",
   "ADVANCED": "进阶",
