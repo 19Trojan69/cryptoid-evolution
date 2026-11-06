@@ -1,0 +1,26 @@
+{
+  "chromium": {
+    "cases": 700,
+    "catalogueBeforeBytes": 31719256,
+    "catalogueAfterBytes": 16152520,
+    "catalogueReductionPercent": 49.07661138079658,
+    "candidateSha256": "d69a597407f07c7c8f9f0e93e1b5993efb8222e91642a609dc04e318e201d28e",
+    "originalSha256": "fe9a3004aa0125f04f1f442e73e4cd087ab3edaf9312a6fc2e7c8c5ff03be579"
+  },
+  "@napi-rs/canvas 0.1.100": {
+    "cases": 700,
+    "catalogueBeforeBytes": 31719256,
+    "catalogueAfterBytes": 16152520,
+    "catalogueReductionPercent": 49.07661138079658,
+    "candidateSha256": "d69a597407f07c7c8f9f0e93e1b5993efb8222e91642a609dc04e318e201d28e",
+    "originalSha256": "fe9a3004aa0125f04f1f442e73e4cd087ab3edaf9312a6fc2e7c8c5ff03be579"
+  },
+  "webkit": {
+    "cases": 700,
+    "catalogueBeforeBytes": 31719256,
+    "catalogueAfterBytes": 31719256,
+    "catalogueReductionPercent": 0.0,
+    "candidateSha256": "d69a597407f07c7c8f9f0e93e1b5993efb8222e91642a609dc04e318e201d28e",
+    "originalSha256": "fe9a3004aa0125f04f1f442e73e4cd087ab3edaf9312a6fc2e7c8c5ff03be579"
+  }
+}
