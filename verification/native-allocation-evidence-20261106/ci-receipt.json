@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "sourceCommit": "87f5dc28d1cb5054c0e40420848068eb0a156e56",
+  "sourceTree": "e1f5b13689129d6f19eb0ebc957cdf0ff62ea5a9",
+  "run": 42162206740,
+  "job": 127710277915,
+  "conclusion": "success",
+  "scope": "passive original kernel mapping classes before gameplay",
+  "priorAttempts": [
+    {
+      "run": 42160694419,
+      "source": "b8e5fe0f4f37f25a83b6f603df566d742ba4af92",
+      "conclusion": "cancelled"
+    },
+    {
+      "run": 42160855021,
+      "source": "7f2627e2077cfe31084918940b61b7fdf0f07ecb",
+      "conclusion": "failure",
+      "reason": "Developer prefix did not instrument actual content worker; constant-page control rejected."
+    },
+    {
+      "run": 42161615860,
+      "source": "ffd0aa6517c4d7dc9b52be6acd7ccaf4398c179d",
+      "conclusion": "failure",
+      "reason": "Instrumented content process crashed when navigating to menu; original binary restored; no scene profile."
+    }
+  ],
+  "physicalDevice": false,
+  "whiteScreenFixed": false
+}
