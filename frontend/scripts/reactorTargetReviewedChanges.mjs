@@ -1,6 +1,8 @@
-// Only these three reviewed reactor hunks differ from d005c99b.
+// Only these four reviewed reactor hunks differ from d005c99b.
 // Existing historical whole-source guards still see every unrelated byte.
 export const reactorTargetChanges = [
+  { before: '            if (fired.events.length) bossMuzzleRef.current = time;\n',
+    after: '            // Gun muzzle flashes stay on the existing individual weapon canvas.\n' },
   { before: 'import { bossHitTarget } from "./bossHitTarget";\n',
     after: 'import { bossHitTarget } from "./bossHitTarget";\nimport { recordBossHullImpact } from \'./bossReactorTarget\';\n' },
   { before: '          const enemy = state.asteroids.find(item => shotHitsEnemy(shot, item));\n',

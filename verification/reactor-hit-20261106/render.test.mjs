@@ -45,7 +45,7 @@ test('real controller reactor firing keeps sound but never writes the whole-ship
   Function('pulses','soundRef','bossMuzzleRef','time',line)(Array(count).fill({}),soundRef,bossMuzzleRef,3000);
   assert.equal(bossMuzzleRef.current,17);assert.deepEqual(calls,count?[['pulse',8,count,0]]:[]);
  }
- assert.ok(source.includes('if (fired.events.length) bossMuzzleRef.current = time;'),'Other gun lighting retained');
+ assert.ok(!source.includes('if (fired.events.length) bossMuzzleRef.current = time;'),'Gun flashes stay local too');
  const css=readFileSync(root+'frontend/src/index.css','utf8');assert.match(css,/\.boss-special-weapon-firing \.boss-special-muzzle \{ fill:var\(--weapon-energy\); opacity:1; \}/);
 });
 test('source guard restores only the three exact authorised controller changes',()=>{

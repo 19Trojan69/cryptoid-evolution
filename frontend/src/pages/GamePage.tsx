@@ -1967,7 +1967,7 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
           if (state.empMs === 0) {
             const fired = advanceBossTurrets(state.boss, state.player, width, height, delta, enemyShotLimit(width, elapsedRef.current, state.sector) - state.enemyShots.length, nextIdRef.current);
             nextIdRef.current += fired.shots.length;state.enemyShots.push(...fired.shots);
-            if (fired.events.length) bossMuzzleRef.current = time;
+            // Gun muzzle flashes stay on the existing individual weapon canvas.
             for(const event of fired.events)soundRef.current?.playBossWeapon(event.kind,event.radius,event.barrels,event.pan);
             const coreCapacity = enemyShotLimit(width, elapsedRef.current, state.sector) - state.enemyShots.length;
             bossBoundaryRef.current?.beforeCore(state.boss, state.sector, delta, coreCapacity);
