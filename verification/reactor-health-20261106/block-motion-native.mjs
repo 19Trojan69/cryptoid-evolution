@@ -65,8 +65,9 @@ try{
   await page.setViewportSize({width,height});
   for(const media of ['no-preference','reduce'])for(const setting of ['full','reduced'])for(let block=1;block<=9;block++){
    await page.emulateMedia({reducedMotion:media});await page.evaluate(({block,setting})=>{document.documentElement.dataset.motion=setting;window.showBlock(block);},{block,setting});
-   const a=await page.evaluate(read);await page.waitForTimeout(180);const b=await page.evaluate(read);
-   assert.equal(a.nodes,b.nodes);assert.equal(a.cubes.length,9);assert.ok(b.cubes.every((c,i)=>c.name==='blockchain-cube-turn'&&c.state==='running'&&c.clock>a.cubes[i].clock));
+   await page.waitForFunction(()=>[...document.querySelectorAll('.blockchain-cube-rotor'),document.querySelector('.blockchain-binary-track')].every(e=>{const a=e.getAnimations()[0];return a&&a.playState==='running'&&Number(a.currentTime)>0;}),{},{timeout:2000});
+   const a=await page.evaluate(read);await page.waitForTimeout(220);const b=await page.evaluate(read);
+   assert.equal(a.nodes,b.nodes);assert.equal(a.cubes.length,9);assert.ok(b.cubes.every((c,i)=>c.name==='blockchain-cube-turn'&&c.state==='running'&&c.clock>a.cubes[i].clock),JSON.stringify({width,height,media,setting,block,a,b}));
    for(let i=0;i<9;i++){const delta=Math.atan2(Math.sin(b.cubes[i].angle-a.cubes[i].angle),Math.cos(b.cubes[i].angle-a.cubes[i].angle));assert.ok(delta<-.01,'every cube turns left on its real running native clock');}
    assert.equal(b.binary.name,'blockchain-binary-flow');assert.ok(b.binary.x>a.binary.x,'the single binary row moves right');
    assert.equal(b.title,'none');assert.equal(b.halo,'none');cases++;
