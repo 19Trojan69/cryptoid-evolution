@@ -32,7 +32,16 @@ export const drawBossWeapons=(canvas:HTMLCanvasElement,boss:SectorBoss,image:Can
    cached.layer.width = cached.layer.height = 0;
    for (const hot of cached.heated.values()) hot.width = hot.height = 0;
   }
-  const layer=make(canvas.width,canvas.height);let retained=false;
+  // Only fixed sockets are stored here. Retire the unused right/bottom tails,
+  // keeping the original (0,0) raster origin and transform exactly: rebasing a
+  // fractional draw onto a tight rectangle can change antialias rounding.
+  let right=0,bottom=0;
+  for(const g of guns){
+   const x=size.padX+g.sourceX/boss.config.sourceWidth*boss.width,y=size.padY+g.sourceY/boss.config.sourceHeight*boss.height;
+   right=Math.max(right,(x+g.socket.width*scale/4)*sx);bottom=Math.max(bottom,(y+g.socket.height*scale/4)*sy);
+  }
+  right=Math.min(canvas.width,Math.ceil(right)+2);bottom=Math.min(canvas.height,Math.ceil(bottom)+2);
+  const layer=make(Math.max(1,right),Math.max(1,bottom));let retained=false;
   try{
    const base=layer.getContext('2d');if(!base)return false;
    base.setTransform(sx,0,0,sy,0,0);
