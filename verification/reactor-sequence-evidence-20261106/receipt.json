@@ -1,0 +1,64 @@
+{
+  "project": "Cryptoid Evolution",
+  "sourceCommit": "2e560d77b35679d301083adc4c27702b69b0cbfc",
+  "sourceTree": "95b4f1dfde230f7f79e7ff3c14d43ff3e2c290d9",
+  "branch": "codex/reactor-health-20261106",
+  "ciRun": 42198350864,
+  "jobs": [
+    {
+      "id": 127827162779,
+      "name": "native-motion (webkit)",
+      "conclusion": "success"
+    },
+    {
+      "id": 127827162971,
+      "name": "reactor",
+      "conclusion": "success"
+    },
+    {
+      "id": 127827162973,
+      "name": "native-motion (chromium)",
+      "conclusion": "success"
+    }
+  ],
+  "tests": 508,
+  "failures": 0,
+  "deployment": "dpl_BV99zfYJHZJBWy1GZXQHe2xwboFq",
+  "url": "https://cryptoid-evolution-testnet.vercel.app/",
+  "state": "READY",
+  "previousTestnet": "dpl_7GPUCjpJA9gNEmiLk8biHvPCeSva",
+  "productionUnchanged": "dpl_6N3FdS9XGXasCWrpMksngxCPNPRk",
+  "mainUnchanged": "ce073547cf573375d141bf846f70e294138dbd73",
+  "tracking": {
+    "steps": 90000,
+    "viewports": 2,
+    "shots": 3476,
+    "exactStateAndShotEquality": true,
+    "logicalPositionObjectsAvoided": 526848,
+    "totalRamSavingMeasured": false
+  },
+  "resources": {
+    "reactorAdditionalCanvas": 0,
+    "turretHeatPeakLogicalRgbaBytes": 2945984,
+    "heatTextureStagesAccumulate": false,
+    "disposedSurfacesReleased": true,
+    "healthAreaReduction": 0.7555495342218301,
+    "totalGameRamMeasured": false,
+    "physicalPhoneTested": false,
+    "whiteScreenFixed": false
+  },
+  "entrySpeedChanged": false,
+  "gameplayShotsOrTrackingChanged": false,
+  "artifacts": [
+    {
+      "id": 13493920369,
+      "name": "reactor-ui-webkit",
+      "digest": "sha256:8b9e9b4c0c4aca70d3017118bdd8c5e81b5a800292ef00358db9b172c50bf217"
+    },
+    {
+      "id": 13492309665,
+      "name": "reactor-ui-chromium",
+      "digest": "sha256:8e6bc9e740f89de3a9ca04852bc88f6974c3bb83963a4862b1d90179aedc91fa"
+    }
+  ]
+}

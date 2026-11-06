@@ -1,0 +1,22 @@
+{
+  "engine": "webkit",
+  "actualComponents": true,
+  "visibleCubePixelsChange": true,
+  "motionCases": 4,
+  "cubes": 9,
+  "sequenceBosses": 50,
+  "reactorBurstRemoved": true,
+  "pauseResume": true,
+  "reactorHeatExtraCanvas": 0,
+  "heat": {
+    "cases": 50,
+    "peakHeatBytes": 2945984,
+    "totalHeatBytes": 70107936,
+    "unit": "logical RGBA bytes; not process RAM",
+    "heatStagesAccumulate": false,
+    "disposedSurfacesReleased": true
+  },
+  "physicalDevice": false,
+  "totalProcessRamMeasured": false,
+  "whiteScreenFixed": false
+}

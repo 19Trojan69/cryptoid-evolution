@@ -1,0 +1,38 @@
+{
+  "origin": "https://cryptoid-evolution-testnet.vercel.app",
+  "public200": true,
+  "commit": "2e560d77b35679d301083adc4c27702b69b0cbfc",
+  "tree": "95b4f1dfde230f7f79e7ff3c14d43ff3e2c290d9",
+  "index": "/assets/index-JxsvGUti.js",
+  "game": "/assets/GamePage-CxCADX4M.js",
+  "css": "/assets/index-q-Ze66t1.css",
+  "checks": {
+    "sourceCommit": true,
+    "sourceTree": true,
+    "reactorHealth": true,
+    "reactorColour": true,
+    "reactorBlast": true,
+    "reactorLocalShot": true,
+    "singleBinaryReverse": true,
+    "cubeReverse": true,
+    "cubeNotDisabled": true,
+    "squareHealth": true
+  },
+  "api": {
+    "/api": 200,
+    "/api/admin/status": 401
+  },
+  "assetSha256": {
+    "/assets/index-JxsvGUti.js": "898a84ceaa09611771b3a1b7cf5807e27908ca75134fc91c48bb906e8740e7c6",
+    "/assets/GamePage-CxCADX4M.js": "8b406d0b5564e22408f4a39f74ed304b1bda00872c3c662c81ed2897aa621512",
+    "/assets/displaySettings-C_7mEr-M.js": "0e7c26f8a44c24c6a9215bc031b4bfd4b8468718dafbc58baa72d205601fa989",
+    "/assets/cardSound-t2Hnzaap.js": "3a6f81a81c149ac226c391d008e0e44e040c1986960d4fa6129063507e5d5d81",
+    "/assets/shipEvolution-CdkCKagX.js": "6d787fa842924143a2c9f28674ef0e8d2b6df81216f6b49c56154868e953a31c",
+    "/assets/reloadDiagnostics-DCFQUgHN.js": "87cc43ba2ecbca6de95b406c77eaae88bfb37fa8d06466060899c878fd7054c5",
+    "/assets/powerUps-CfeCGF8u.js": "e886d4978a915d06dff8062ce160506f0a31d74616140c7b40713bcc29dfab9a"
+  },
+  "fullGamePlayTested": false,
+  "physicalDevice": false,
+  "totalGameRamMeasured": false,
+  "whiteScreenFixed": false
+}
