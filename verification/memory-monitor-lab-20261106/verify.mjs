@@ -43,6 +43,10 @@ try{
    await page.locator('.pause-resume-button').click();
    await page.waitForFunction(()=>window.__cryptoidLabRead?.().status==='playing');
    await page.waitForFunction(()=>{const points=window.__cryptoidLabRun?.samples,last=points?.at(-1);return points?.length>=2&&last?.status==='playing'&&last.activeMs>1000&&last.frames>5;});
+   if(scene!=='normal'){
+     await page.waitForFunction(()=>{const s=window.__cryptoidLabRead?.(),canvas=document.querySelector('.sector-boss .boss-weapons-canvas');return s?.encounter==='boss-fight'&&s.status==='playing'&&canvas?.width>0&&!canvas.hidden&&!!document.querySelector('.sector-boss .boss-special-weapon');});
+     await page.waitForFunction(()=>{const s=window.__cryptoidLabRun?.samples.at(-1);return s?.encounter==='boss-fight'&&s.domCanvasLogicalBytes>0;});
+   }
    const samples=await page.evaluate(()=>window.__cryptoidLabRun.samples);
    assert.ok(samples.at(-1).activeMs>0);assert.equal(await page.locator('[data-lab-monitor] .lab-total').innerText(),'Browser-Gesamt-RAM: nicht verfügbar');
    if(engine==='webkit')assert.equal(samples.at(-1).heapBytes,null);
@@ -71,7 +75,7 @@ try{
    const waiting=page.waitForEvent('download');await page.getByRole('button',{name:'Bericht herunterladen',exact:true}).click();const download=await waiting;
    const chunks=[];for await(const chunk of await download.createReadStream())chunks.push(chunk);const exported=JSON.parse(Buffer.concat(chunks).toString());
    assert.equal(exported.startedAt,persisted.startedAt);assert.ok(exported.samples.length>=persisted.samples.length);assert.equal(exported.limits.totalNativeRamAvailable,false);
-   result.scenes.push({scene,pauseResume:true,recoveredWithoutAutoRestart:true,downloadValid:true,samples:exported.samples.length,activeBeforePause:before,heapSupported:exported.samples.at(-1).heapBytes!==null});
+   result.scenes.push({scene,pauseResume:true,recoveredWithoutAutoRestart:true,downloadValid:true,samples:exported.samples.length,activeBeforePause:before,heapSupported:exported.samples.at(-1).heapBytes!==null,bossFightCanvasAndReactorVerified:scene!=='normal'});
  }
  assert.deepEqual(unexpected,[]);assert.deepEqual(pageErrors,[]);assert.deepEqual(assetErrors,[]);
  result.complete=true;result.noLiveBackendRequests=true;result.noBrowserErrors=true;
