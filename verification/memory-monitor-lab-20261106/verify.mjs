@@ -49,6 +49,7 @@ try{
    assert.equal(await page.evaluate(()=>window.__cryptoidLabRun.state),'running','StrictMode setup must undo its temporary cleanup marker');
    const elapsed=samples.at(-1).wallMs-samples.at(-2).wallMs;assert.ok(elapsed>=4000,'One sampler only, not duplicated by StrictMode');
    assert.ok(await page.locator('.lab-graph path[d]').count()>1);
+   const panelBox=await page.locator('.lab-monitor').boundingBox();assert.ok(panelBox.x+panelBox.width<=390/2-12,'Monitor must leave the central reactor corridor visible');
    const before=await page.evaluate(()=>window.__cryptoidLabRead().activeMs);
    await page.getByRole('button',{name:'Pause',exact:true}).click();
    await page.waitForFunction(()=>window.__cryptoidLabRead().status==='paused');
@@ -57,6 +58,7 @@ try{
    await page.locator('.pause-resume-button').click();
    await page.waitForFunction(()=>window.__cryptoidLabRead().status==='playing');
    await page.getByRole('button',{name:'Monitor verkleinern',exact:true}).click();assert.equal(await page.locator('.lab-graph').count(),0);
+   assert.match(await page.locator('.lab-mini').innerText(),/Canvas-Flächen/);
    assert.equal(await page.evaluate(()=>window.__cryptoidLabRead().status),'playing');
    await page.getByRole('button',{name:'Monitor vergrößern',exact:true}).click();assert.equal(await page.locator('.lab-graph').count(),1);
    if(scene==='reactor'){await page.screenshot({path:out+'/'+engine+'-reactor-monitor.png'});}
