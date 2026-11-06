@@ -105,6 +105,7 @@ import { missionShardBase, missionShardTotal, uncreditedGuestShards, BONUS_TARGE
 import { addPersistentHullFire, hullFireAtImpact, hullFireLimit, spriteFireSites, type HullFire } from "./hullFires";
 import { bossExplosionSize, bossFallTargetY, bossFireSite } from "./bossCombat";
 import { bossHitTarget } from "./bossHitTarget";
+import { recordBossHullImpact } from './bossReactorTarget';
 import BossWeaponsView from './BossWeaponsView';
 import { preloadBossWeapons } from './bossWeaponTextures';
 import { observeBossResources } from './bossResourceDiagnostics';
@@ -1974,7 +1975,7 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
             nextIdRef.current += pulses.length;
             state.enemyShots.push(...pulses);
             const firstCoreShot = bossBoundaryRef.current?.afterCore(pulses.length) ?? false;
-            if (pulses.length) { bossMuzzleRef.current = time; soundRef.current?.playBossWeapon("pulse", 8, pulses.length, 0); }
+            if (pulses.length) { soundRef.current?.playBossWeapon("pulse", 8, pulses.length, 0); }
             bossBoundaryRef.current?.afterAudio(firstCoreShot);
           }
         }
@@ -2111,6 +2112,9 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
               soundRef.current?.play("enemyHit");
             }
             continue;
+          }
+          if (state.encounter === "boss-fight" && state.boss && bossVulnerable(state.boss)) {
+            recordBossHullImpact(state.boss, previous, shot);
           }
           const enemy = state.asteroids.find(item => shotHitsEnemy(shot, item));
           if (!enemy) {

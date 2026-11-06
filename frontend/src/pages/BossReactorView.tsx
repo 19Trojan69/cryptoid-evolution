@@ -1,7 +1,7 @@
 import { useId, useMemo, type CSSProperties } from 'react';
 import type { SectorBoss } from './sectorBoss';
 import { coreActive, coreInterval } from './bossCore';
-import { specialWeaponMount, specialWeaponBox, specialWeaponBarrels } from './bossSpecialWeapon';
+import { specialWeaponMount, specialWeaponBox, specialWeaponBarrels, reactorDoorOpen } from './bossSpecialWeapon';
 
 /** A recessed, hull-textured weapons bay; no floating reactor disc. */
 export default function BossReactorView({ boss }: { boss: SectorBoss }) {
@@ -11,7 +11,7 @@ export default function BossReactorView({ boss }: { boss: SectorBoss }) {
   const energy = boss.core?.lastShotColor ?? mount.energy;
   const exposed = coreActive(boss);
   const elapsed = boss.core?.elapsed ?? 0;
-  const open = exposed ? Math.min(1, (boss.core?.volley ?? 0) > 0 ? 1 : elapsed / 900) : 0;
+  const open = reactorDoorOpen(exposed, elapsed, boss.core?.volley ?? 0);
   const charge = exposed ? Math.min(1, elapsed / coreInterval(boss)) : 0;
   const firing = exposed && (boss.core?.volley ?? 0) > 0 && elapsed < 180;
   const recoil = firing ? (1 - elapsed / 180) * 7 : 0;
@@ -110,7 +110,10 @@ export default function BossReactorView({ boss }: { boss: SectorBoss }) {
       {artwork.assembly}
     </g>
     {doors}
-    {firing && barrels.map(x=><path key={x} d={`M${x-5} 148L${x-10} 157L${x-3} 155L${x} 177L${x+3} 155L${x+10} 157L${x+5} 148Z`} fill={mount.energy} opacity={muzzleOpacity}/>)}
+    {firing && <>
+      <path className="boss-reactor-shot-flash" d="M22 9H78L93 28V125L73 151H27L7 125V28Z" fill={energy} opacity={muzzleOpacity*.32}/>
+      {barrels.map(x=><path key={x} d={`M${x-5} 148L${x-10} 157L${x-3} 155L${x} 177L${x+3} 155L${x+10} 157L${x+5} 148Z`} fill={energy} opacity={muzzleOpacity}/>)}
+    </>}
   </svg>;
   }, [mount, left, top, boxWidth, boxHeight, energy, exposed, open, charge, firing, recoil, muzzleOpacity, artwork, doors]);
 }

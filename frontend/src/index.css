@@ -2668,7 +2668,7 @@ html[data-motion="reduced"] .blockchain-node .blockchain-cube-rotor { animation:
 .boss-special-weapon { position:absolute; z-index:6; overflow:visible; pointer-events:none; }
 .boss-special-conductor { stroke:var(--weapon-energy); stroke-width:2.2; opacity:calc(.25 + var(--weapon-charge) * .75); }
 .boss-special-muzzle { fill:var(--weapon-energy); opacity:calc(.25 + var(--weapon-charge) * .75); }
-.boss-special-weapon-firing .boss-special-muzzle { fill:#fff6dd; opacity:1; }
+.boss-special-weapon-firing .boss-special-muzzle { fill:var(--weapon-energy); opacity:1; }
 .boss-phase-guide-picker { display:flex; align-items:center; justify-content:center; gap:12px; padding:10px 12px 0; color:#c8dce8; font-size:13px; }
 .boss-phase-guide-picker select { max-width:160px; color:#f1f6fb; background:#102638; border:1px solid #527989; border-radius:6px; padding:6px 12px; }
 

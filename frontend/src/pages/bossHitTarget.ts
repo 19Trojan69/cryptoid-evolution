@@ -1,6 +1,6 @@
 import { bossWeapons } from './bossWeapons.ts';
 import { gunPosition } from './bossTurrets.ts';
-import { bossHullContains } from './bossCombat.ts';
+import { bossReactorContact } from './bossReactorTarget.ts';
 import type { SectorBoss } from './sectorBoss.ts';
 import { bossHullExposed } from './sectorBoss.ts';
 
@@ -41,10 +41,8 @@ export function bossHitTarget(boss:SectorBoss,from:{x:number;y:number},to:{x:num
   if(hitIndex>=0)return {kind:'turret' as const,index:hitIndex,x:from.x+dx*earliest,y:from.y+dy*earliest};
   return null;
  }
- const steps=Math.max(1,Math.ceil(Math.hypot(dx,dy)/2));
- for(let step=0;step<=steps;step++){
-  const x=from.x+dx*step/steps,y=from.y+dy*step/steps;
-  if(bossHullContains(boss,x,y))return {kind:'hull' as const,x,y};
- }
- return null;
+ // Keep the legacy target tag for the existing damage/reward path. Only the
+ // complete reactor assembly and its moving doors can now produce this tag.
+ const reactor=bossReactorContact(boss,from,to);
+ return reactor?{kind:'hull' as const,...reactor}:null;
 }

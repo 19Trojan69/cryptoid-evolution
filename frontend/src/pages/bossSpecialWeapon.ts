@@ -37,6 +37,9 @@ export const bossSpecialWeapons: readonly SpecialWeaponMount[] = placements.map(
   return {id:i+1,y,height,aspect,shape,metal,trim,energy};
 });
 export const specialWeaponMount = (boss: SectorBoss) => bossSpecialWeapons[boss.config.id - 1];
+// Shared by visible doors and their hit geometry; no separate collision clock.
+export const reactorDoorOpen = (exposed: boolean, elapsed: number, volley: number) =>
+  exposed ? Math.min(1, volley > 0 ? 1 : elapsed / 900) : 0;
 export const specialWeaponBox = (boss: SectorBoss) => {
   const mount = specialWeaponMount(boss);
   const height = boss.height * mount.height;

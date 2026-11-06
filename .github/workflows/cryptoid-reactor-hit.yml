@@ -1,0 +1,39 @@
+name: Verify reactor-only boss damage and local firing flash
+on:
+  push:
+    branches: [codex/reactor-hit-20261106]
+    paths:
+      - '.github/workflows/cryptoid-reactor-hit.yml'
+      - 'frontend/**'
+      - 'verification/reactor-hit-20261106/**'
+permissions:
+  contents: read
+jobs:
+  reactor:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with: {fetch-depth: 1, persist-credentials: false}
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with: {node-version: '24'}
+      - name: Install frontend while preserving tracked lock
+        run: |
+          git fetch --no-tags --depth=1 origin d005c99b03dfdfe9433e300ac1add26a38a74eb9
+          node --input-type=module - <<'JS'
+          import {readFileSync,writeFileSync} from 'node:fs';
+          import {spawnSync} from 'node:child_process';
+          const p='frontend/yarn.lock',bytes=readFileSync(p);
+          let r;try{r=spawnSync('npm',['install','--prefix','frontend','--include=optional','--ignore-scripts','--no-audit','--no-fund'],{stdio:'inherit'});}
+          finally{writeFileSync(p,bytes);}
+          if(r.status!==0)process.exit(r.status||1);
+          JS
+          git diff --exit-code -- frontend backend api vercel.json
+      - name: Check all reactor/door/gun paths and original non-firing artwork
+        run: |
+          node --test frontend/src/pages/bossReactorTarget.test.mjs verification/reactor-hit-20261106/render.test.mjs frontend/src/pages/bossCore.test.mjs frontend/src/pages/bossSpecialWeapon.test.mjs frontend/src/pages/bossContact.test.mjs frontend/src/pages/specialPowers.test.mjs
+      - name: Run all existing release checks, TypeScript and Vite
+        env: {VERCEL_ENV: production, VITE_CRYPTOID_DIAGNOSTICS: "0"}
+        run: |
+          npm --prefix frontend run build
+          git diff --exit-code -- frontend backend api vercel.json
