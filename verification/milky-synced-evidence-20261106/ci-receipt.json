@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "sourceCommit": "e1e2b0aa29a49711f98890b6a8147ab1e0f43a7c",
+  "sourceTree": "52cd5b85b77b5c212d9d3937772779ec4a689056",
+  "run": 42157352398,
+  "conclusion": "success",
+  "jobs": [
+    {
+      "id": 127694550497,
+      "order": "control-first",
+      "conclusion": "success"
+    },
+    {
+      "id": 127694550095,
+      "order": "hidden-first",
+      "conclusion": "success"
+    }
+  ],
+  "comparisonResult": "No consistently lower PSS across the two declared orders; not accepted as a memory fix.",
+  "physicalDevice": false,
+  "whiteScreenFixed": false,
+  "unchangedRenderingSourceController": "00e3796f3eb0bbaec3f2ae16bb5ac46a2d88c8abc6647fee0e1a5b634249a18d"
+}

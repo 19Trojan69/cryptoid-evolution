@@ -1,0 +1,1409 @@
+{
+  "version": 1,
+  "sourceCommit": "e1e2b0aa29a49711f98890b6a8147ab1e0f43a7c",
+  "activeWindowMs": [
+    60000,
+    90000
+  ],
+  "binWidthMs": 5000,
+  "physicalDevice": false,
+  "pixelEquivalenceClaimed": false,
+  "whiteScreenFixed": false,
+  "workloadEqualityClaimed": false,
+  "rawNativeCategoriesAreNotPssOrAllocationOwnership": true,
+  "artifacts": {
+    "control-first": {
+      "bytes": 60144,
+      "sha256": "dd7414a167e6e5f49ce4da0e053321215a99f7f17d7602b30d4017717ad1570d",
+      "members": {
+        "control-first/control/build-info.json": {
+          "bytes": 10732,
+          "sha256": "3055e5cecac3270b342f61926352314549f18d8ec9bd4b8bd7b5c3af679e5640"
+        },
+        "control-first/control/observation.json": {
+          "bytes": 379722,
+          "sha256": "22fbebe3ca793fe5566ab7e12b78c6dcf413324e42861ff868870bf644942a43"
+        },
+        "control-first/control/synthetic-report.json": {
+          "bytes": 9255,
+          "sha256": "b7ac8684f6d343e9dfb4ae83c5752f9802be6382099260c3b3bcfca55891cb7b"
+        },
+        "control-first/milky-hidden/build-info.json": {
+          "bytes": 10732,
+          "sha256": "3055e5cecac3270b342f61926352314549f18d8ec9bd4b8bd7b5c3af679e5640"
+        },
+        "control-first/milky-hidden/observation.json": {
+          "bytes": 393288,
+          "sha256": "2512737dc98c8de1c7688ccd7f420ce473694eb05bf3313401929c65fe9a96f4"
+        },
+        "control-first/milky-hidden/synthetic-report.json": {
+          "bytes": 9255,
+          "sha256": "616a67d4a41e517d5b6ff4de995d6aa254bc7f2e08975b8ac59b211d249e6624"
+        }
+      }
+    },
+    "hidden-first": {
+      "bytes": 60134,
+      "sha256": "506301caa5f5125e617456eeaeeea08345d69683e12641f1e30dd098355081ca",
+      "members": {
+        "hidden-first/control/build-info.json": {
+          "bytes": 10732,
+          "sha256": "3055e5cecac3270b342f61926352314549f18d8ec9bd4b8bd7b5c3af679e5640"
+        },
+        "hidden-first/control/observation.json": {
+          "bytes": 385801,
+          "sha256": "7529d37052695107d91bb0a8c66425afc6f8364c5086fb2b0114cc182baa405e"
+        },
+        "hidden-first/control/synthetic-report.json": {
+          "bytes": 9255,
+          "sha256": "e78b0cad4421472c5f9c4c2dda55f637dc9c46c61fce2ae4f64221408f6f6399"
+        },
+        "hidden-first/milky-hidden/build-info.json": {
+          "bytes": 10732,
+          "sha256": "3055e5cecac3270b342f61926352314549f18d8ec9bd4b8bd7b5c3af679e5640"
+        },
+        "hidden-first/milky-hidden/observation.json": {
+          "bytes": 388990,
+          "sha256": "6a19f737931c974dd0034f3df2e3f4769d347e6bee22f617e77b74bd1a91f572"
+        },
+        "hidden-first/milky-hidden/synthetic-report.json": {
+          "bytes": 9255,
+          "sha256": "f391915a7fdfd9c40954a8722e8ac1228c86c85717e7da0184a85dfdbf982d9c"
+        }
+      }
+    }
+  },
+  "pairs": [
+    {
+      "order": "control-first",
+      "runs": {
+        "control": {
+          "engine": "26.5",
+          "stages": [
+            {
+              "label": "fresh-blank-document",
+              "pssMiB": {
+                "samples": 5,
+                "min": 304.9111328125,
+                "max": 364.3876953125,
+                "mean": 352.4509765625
+              },
+              "contentPids": [
+                1063
+              ]
+            },
+            {
+              "label": "menu-before-preparation",
+              "pssMiB": {
+                "samples": 5,
+                "min": 446.55859375,
+                "max": 464.8125,
+                "mean": 460.82265625
+              },
+              "contentPids": [
+                1063
+              ]
+            },
+            {
+              "label": "menu-after-asset-preparation",
+              "pssMiB": {
+                "samples": 5,
+                "min": 512.376953125,
+                "max": 536.595703125,
+                "mean": 519.255078125
+              },
+              "contentPids": [
+                1063
+              ]
+            },
+            {
+              "label": "mounted-boss-paused-before-start",
+              "pssMiB": {
+                "samples": 5,
+                "min": 713.833984375,
+                "max": 926.5888671875,
+                "mean": 870.831640625
+              },
+              "contentPids": [
+                1063
+              ]
+            },
+            {
+              "label": "playing-original-boss",
+              "pssMiB": {
+                "samples": 30,
+                "min": 1090.025390625,
+                "max": 1145.908203125,
+                "mean": 1120.746484375
+              },
+              "contentPids": [
+                1063
+              ]
+            },
+            {
+              "label": "home-with-existing-qa-bridge",
+              "pssMiB": {
+                "samples": 5,
+                "min": 1098.443359375,
+                "max": 1105.142578125,
+                "mean": 1099.801953125
+              },
+              "contentPids": [
+                1063
+              ]
+            },
+            {
+              "label": "home-after-qa-bridge-release",
+              "pssMiB": {
+                "samples": 15,
+                "min": 1089.033203125,
+                "max": 1098.966796875,
+                "mean": 1091.9602864583333
+              },
+              "contentPids": [
+                1063
+              ]
+            },
+            {
+              "label": "blank-after-navigation",
+              "pssMiB": {
+                "samples": 10,
+                "min": 1066.7822265625,
+                "max": 1096.6533203125,
+                "mean": 1069.8216796875
+              },
+              "contentPids": [
+                1063
+              ]
+            },
+            {
+              "label": "fresh-context-after-old-context-close",
+              "pssMiB": {
+                "samples": 10,
+                "min": 314.14453125,
+                "max": 379.42578125,
+                "mean": 372.433984375
+              },
+              "contentPids": [
+                1199
+              ]
+            }
+          ],
+          "bins": [
+            {
+              "from": 60000,
+              "to": 65000,
+              "samples": 4,
+              "meanPssMiB": 1126.2509765625,
+              "meanContentPssMiB": 964.779296875,
+              "checkpointRange": [
+                61581,
+                64772
+              ],
+              "volleyRange": [
+                6,
+                7
+              ],
+              "enemyRange": [
+                1,
+                1
+              ],
+              "pssRangeMiB": [
+                1098.232421875,
+                1141.583984375
+              ]
+            },
+            {
+              "from": 65000,
+              "to": 70000,
+              "samples": 4,
+              "meanPssMiB": 1135.1103515625,
+              "meanContentPssMiB": 973.7724609375,
+              "checkpointRange": [
+                65821,
+                68832
+              ],
+              "volleyRange": [
+                7,
+                7
+              ],
+              "enemyRange": [
+                1,
+                1
+              ],
+              "pssRangeMiB": [
+                1110.505859375,
+                1145.560546875
+              ]
+            },
+            {
+              "from": 70000,
+              "to": 75000,
+              "samples": 5,
+              "meanPssMiB": 1108.404296875,
+              "meanContentPssMiB": 947.051953125,
+              "checkpointRange": [
+                70069,
+                74444
+              ],
+              "volleyRange": [
+                8,
+                8
+              ],
+              "enemyRange": [
+                1,
+                1
+              ],
+              "pssRangeMiB": [
+                1103.654296875,
+                1114.333984375
+              ]
+            },
+            {
+              "from": 75000,
+              "to": 80000,
+              "samples": 5,
+              "meanPssMiB": 1118.707421875,
+              "meanContentPssMiB": 957.366796875,
+              "checkpointRange": [
+                75448,
+                79747
+              ],
+              "volleyRange": [
+                8,
+                9
+              ],
+              "enemyRange": [
+                1,
+                1
+              ],
+              "pssRangeMiB": [
+                1104.642578125,
+                1140.056640625
+              ]
+            },
+            {
+              "from": 80000,
+              "to": 85000,
+              "samples": 4,
+              "meanPssMiB": 1115.99609375,
+              "meanContentPssMiB": 954.6484375,
+              "checkpointRange": [
+                80748,
+                83984
+              ],
+              "volleyRange": [
+                9,
+                9
+              ],
+              "enemyRange": [
+                1,
+                1
+              ],
+              "pssRangeMiB": [
+                1104.826171875,
+                1143.283203125
+              ]
+            },
+            {
+              "from": 85000,
+              "to": 90000,
+              "samples": 4,
+              "meanPssMiB": 1133.7001953125,
+              "meanContentPssMiB": 972.38671875,
+              "checkpointRange": [
+                86168,
+                89234
+              ],
+              "volleyRange": [
+                10,
+                10
+              ],
+              "enemyRange": [
+                0,
+                1
+              ],
+              "pssRangeMiB": [
+                1100.462890625,
+                1145.908203125
+              ]
+            }
+          ],
+          "equalBinMeanPssMiB": 1123.02822265625,
+          "equalBinMeanContentPssMiB": 961.6676106770833,
+          "capturedPssMs": [
+            61581,
+            93412
+          ],
+          "volleyWindow": [
+            6,
+            11
+          ],
+          "nativeFullActiveStageMiB": {
+            "javascript": {
+              "samples": 65,
+              "meanMiB": 28.915937086252065,
+              "rangeMiB": [
+                25.162662506103516,
+                31.36966896057129
+              ]
+            },
+            "images": {
+              "samples": 65,
+              "meanMiB": 15.130920879657452,
+              "rangeMiB": [
+                15.098251342773438,
+                15.401611328125
+              ]
+            },
+            "other": {
+              "samples": 65,
+              "meanMiB": 757.6972526110136,
+              "rangeMiB": [
+                595.8170518875122,
+                811.97021484375
+              ]
+            },
+            "layers": {
+              "samples": 65,
+              "meanMiB": 0.0,
+              "rangeMiB": [
+                0.0,
+                0.0
+              ]
+            },
+            "page": {
+              "samples": 65,
+              "meanMiB": 0.0,
+              "rangeMiB": [
+                0.0,
+                0.0
+              ]
+            },
+            "jit": {
+              "samples": 65,
+              "meanMiB": 0.0,
+              "rangeMiB": [
+                0.0,
+                0.0
+              ]
+            }
+          },
+          "pressureEvents": [
+            {
+              "hostAt": 1793936206334,
+              "timestamp": 59.91237099999995,
+              "severity": "non-critical"
+            },
+            {
+              "hostAt": 1793936236334,
+              "timestamp": 89.91183899999999,
+              "severity": "non-critical"
+            },
+            {
+              "hostAt": 1793936266334,
+              "timestamp": 119.91231699999997,
+              "severity": "non-critical"
+            }
+          ],
+          "firstStageAt": "2026-11-06T03:35:46.447Z",
+          "finishedAt": "2026-11-06T03:38:35.984Z"
+        },
+        "milky-hidden": {
+          "engine": "26.5",
+          "stages": [
+            {
+              "label": "fresh-blank-document",
+              "pssMiB": {
+                "samples": 5,
+                "min": 303.51953125,
+                "max": 356.4375,
+                "mean": 345.51171875
+              },
+              "contentPids": [
+                1278
+              ]
+            },
+            {
+              "label": "menu-before-preparation",
+              "pssMiB": {
+                "samples": 5,
+                "min": 441.6318359375,
+                "max": 454.1865234375,
+                "mean": 451.5341796875
+              },
+              "contentPids": [
+                1278
+              ]
+            },
+            {
+              "label": "menu-after-asset-preparation",
+              "pssMiB": {
+                "samples": 5,
+                "min": 512.0419921875,
+                "max": 526.3466796875,
+                "mean": 514.9068359375
+              },
+              "contentPids": [
+                1278
+              ]
+            },
+            {
+              "label": "mounted-boss-paused-before-start",
+              "pssMiB": {
+                "samples": 5,
+                "min": 633.4326171875,
+                "max": 895.1669921875,
+                "mean": 828.2591796875
+              },
+              "contentPids": [
+                1278
+              ]
+            },
+            {
+              "label": "playing-original-boss",
+              "pssMiB": {
+                "samples": 30,
+                "min": 1054.5078125,
+                "max": 1094.6552734375,
+                "mean": 1072.1472005208334
+              },
+              "contentPids": [
+                1278
+              ]
+            },
+            {
+              "label": "home-with-existing-qa-bridge",
+              "pssMiB": {
+                "samples": 5,
+                "min": 815.8466796875,
+                "max": 1115.3271484375,
+                "mean": 907.3857421875
+              },
+              "contentPids": [
+                1278
+              ]
+            },
+            {
+              "label": "home-after-qa-bridge-release",
+              "pssMiB": {
+                "samples": 15,
+                "min": 806.7763671875,
+                "max": 816.3662109375,
+                "mean": 811.2164713541666
+              },
+              "contentPids": [
+                1278
+              ]
+            },
+            {
+              "label": "blank-after-navigation",
+              "pssMiB": {
+                "samples": 10,
+                "min": 762.7099609375,
+                "max": 799.3896484375,
+                "mean": 767.5833984375
+              },
+              "contentPids": [
+                1278
+              ]
+            },
+            {
+              "label": "fresh-context-after-old-context-close",
+              "pssMiB": {
+                "samples": 10,
+                "min": 319.0322265625,
+                "max": 378.6806640625,
+                "mean": 372.3724609375
+              },
+              "contentPids": [
+                1402
+              ]
+            }
+          ],
+          "bins": [
+            {
+              "from": 60000,
+              "to": 65000,
+              "samples": 5,
+              "meanPssMiB": 1067.5859375,
+              "meanContentPssMiB": 907.095703125,
+              "checkpointRange": [
+                60628,
+                64644
+              ],
+              "volleyRange": [
+                15,
+                17
+              ],
+              "enemyRange": [
+                1,
+                1
+              ],
+              "pssRangeMiB": [
+                1055.0703125,
+                1077.0078125
+              ]
+            },
+            {
+              "from": 65000,
+              "to": 70000,
+              "samples": 5,
+              "meanPssMiB": 1075.79140625,
+              "meanContentPssMiB": 915.315234375,
+              "checkpointRange": [
+                65648,
+                69664
+              ],
+              "volleyRange": [
+                17,
+                18
+              ],
+              "enemyRange": [
+                1,
+                1
+              ],
+              "pssRangeMiB": [
+                1060.19140625,
+                1093.6875
+              ]
+            },
+            {
+              "from": 70000,
+              "to": 75000,
+              "samples": 5,
+              "meanPssMiB": 1068.5375,
+              "meanContentPssMiB": 908.133203125,
+              "checkpointRange": [
+                70668,
+                74684
+              ],
+              "volleyRange": [
+                19,
+                20
+              ],
+              "enemyRange": [
+                0,
+                1
+              ],
+              "pssRangeMiB": [
+                1057.5,
+                1075.98046875
+              ]
+            },
+            {
+              "from": 75000,
+              "to": 80000,
+              "samples": 4,
+              "meanPssMiB": 1063.18359375,
+              "meanContentPssMiB": 902.3974609375,
+              "checkpointRange": [
+                75688,
+                79724
+              ],
+              "volleyRange": [
+                20,
+                21
+              ],
+              "enemyRange": [
+                0,
+                2
+              ],
+              "pssRangeMiB": [
+                1054.5078125,
+                1079.62109375
+              ]
+            },
+            {
+              "from": 80000,
+              "to": 85000,
+              "samples": 5,
+              "meanPssMiB": 1073.47265625,
+              "meanContentPssMiB": 912.823828125,
+              "checkpointRange": [
+                80728,
+                84746
+              ],
+              "volleyRange": [
+                21,
+                23
+              ],
+              "enemyRange": [
+                2,
+                2
+              ],
+              "pssRangeMiB": [
+                1059.5576171875,
+                1083.3701171875
+              ]
+            },
+            {
+              "from": 85000,
+              "to": 90000,
+              "samples": 5,
+              "meanPssMiB": 1082.1560546875,
+              "meanContentPssMiB": 921.5109375,
+              "checkpointRange": [
+                85748,
+                89774
+              ],
+              "volleyRange": [
+                23,
+                24
+              ],
+              "enemyRange": [
+                2,
+                2
+              ],
+              "pssRangeMiB": [
+                1062.4248046875,
+                1094.6552734375
+              ]
+            }
+          ],
+          "equalBinMeanPssMiB": 1071.7878580729166,
+          "equalBinMeanContentPssMiB": 911.2127278645834,
+          "capturedPssMs": [
+            60628,
+            91784
+          ],
+          "volleyWindow": [
+            15,
+            25
+          ],
+          "nativeFullActiveStageMiB": {
+            "javascript": {
+              "samples": 62,
+              "meanMiB": 31.987988179729832,
+              "rangeMiB": [
+                30.094011306762695,
+                35.13659477233887
+              ]
+            },
+            "images": {
+              "samples": 62,
+              "meanMiB": 16.257869351294733,
+              "rangeMiB": [
+                15.704971313476562,
+                16.61505126953125
+              ]
+            },
+            "other": {
+              "samples": 62,
+              "meanMiB": 708.06090910204,
+              "rangeMiB": [
+                689.0656261444092,
+                729.7129564285278
+              ]
+            },
+            "layers": {
+              "samples": 62,
+              "meanMiB": 0.0,
+              "rangeMiB": [
+                0.0,
+                0.0
+              ]
+            },
+            "page": {
+              "samples": 62,
+              "meanMiB": 0.0,
+              "rangeMiB": [
+                0.0,
+                0.0
+              ]
+            },
+            "jit": {
+              "samples": 62,
+              "meanMiB": 0.0,
+              "rangeMiB": [
+                0.0,
+                0.0
+              ]
+            }
+          },
+          "pressureEvents": [
+            {
+              "hostAt": 1793936436686,
+              "timestamp": 119.93105799999995,
+              "severity": "non-critical"
+            }
+          ],
+          "firstStageAt": "2026-11-06T03:38:36.786Z",
+          "finishedAt": "2026-11-06T03:41:16.947Z"
+        }
+      },
+      "hiddenMinusControlEqualBinMeanPssMiB": -51.2403645833333,
+      "binDeltasMiB": [
+        -58.6650390625,
+        -59.31894531250009,
+        -39.86679687500009,
+        -55.52382812499991,
+        -42.5234375,
+        -51.544140624999955
+      ]
+    },
+    {
+      "order": "hidden-first",
+      "runs": {
+        "control": {
+          "engine": "26.5",
+          "stages": [
+            {
+              "label": "fresh-blank-document",
+              "pssMiB": {
+                "samples": 5,
+                "min": 296.9326171875,
+                "max": 350.0263671875,
+                "mean": 339.0443359375
+              },
+              "contentPids": [
+                1265
+              ]
+            },
+            {
+              "label": "menu-before-preparation",
+              "pssMiB": {
+                "samples": 5,
+                "min": 433.294921875,
+                "max": 448.783203125,
+                "mean": 445.395703125
+              },
+              "contentPids": [
+                1265
+              ]
+            },
+            {
+              "label": "menu-after-asset-preparation",
+              "pssMiB": {
+                "samples": 5,
+                "min": 498.064453125,
+                "max": 523.056640625,
+                "mean": 506.638671875
+              },
+              "contentPids": [
+                1265
+              ]
+            },
+            {
+              "label": "mounted-boss-paused-before-start",
+              "pssMiB": {
+                "samples": 5,
+                "min": 683.1962890625,
+                "max": 974.0703125,
+                "mean": 890.1650390625
+              },
+              "contentPids": [
+                1265
+              ]
+            },
+            {
+              "label": "playing-original-boss",
+              "pssMiB": {
+                "samples": 30,
+                "min": 1037.23828125,
+                "max": 1119.390625,
+                "mean": 1062.848828125
+              },
+              "contentPids": [
+                1265
+              ]
+            },
+            {
+              "label": "home-with-existing-qa-bridge",
+              "pssMiB": {
+                "samples": 5,
+                "min": 1079.390625,
+                "max": 1085.14453125,
+                "mean": 1080.57890625
+              },
+              "contentPids": [
+                1265
+              ]
+            },
+            {
+              "label": "home-after-qa-bridge-release",
+              "pssMiB": {
+                "samples": 15,
+                "min": 1044.1875,
+                "max": 1079.9609375,
+                "mean": 1065.28203125
+              },
+              "contentPids": [
+                1265
+              ]
+            },
+            {
+              "label": "blank-after-navigation",
+              "pssMiB": {
+                "samples": 10,
+                "min": 994.92578125,
+                "max": 1017.859375,
+                "mean": 997.656640625
+              },
+              "contentPids": [
+                1265
+              ]
+            },
+            {
+              "label": "fresh-context-after-old-context-close",
+              "pssMiB": {
+                "samples": 10,
+                "min": 310.80078125,
+                "max": 377.7783203125,
+                "mean": 371.04619140625
+              },
+              "contentPids": [
+                1389
+              ]
+            }
+          ],
+          "bins": [
+            {
+              "from": 60000,
+              "to": 65000,
+              "samples": 5,
+              "meanPssMiB": 1039.7453125,
+              "meanContentPssMiB": 884.833984375,
+              "checkpointRange": [
+                60048,
+                64473
+              ],
+              "volleyRange": [
+                7,
+                8
+              ],
+              "enemyRange": [
+                1,
+                1
+              ],
+              "pssRangeMiB": [
+                1037.23828125,
+                1042.8359375
+              ]
+            },
+            {
+              "from": 65000,
+              "to": 70000,
+              "samples": 5,
+              "meanPssMiB": 1060.03828125,
+              "meanContentPssMiB": 905.161328125,
+              "checkpointRange": [
+                65565,
+                69868
+              ],
+              "volleyRange": [
+                8,
+                9
+              ],
+              "enemyRange": [
+                1,
+                1
+              ],
+              "pssRangeMiB": [
+                1044.9765625,
+                1079.46875
+              ]
+            },
+            {
+              "from": 70000,
+              "to": 75000,
+              "samples": 4,
+              "meanPssMiB": 1059.779296875,
+              "meanContentPssMiB": 904.90625,
+              "checkpointRange": [
+                70869,
+                74330
+              ],
+              "volleyRange": [
+                9,
+                10
+              ],
+              "enemyRange": [
+                1,
+                1
+              ],
+              "pssRangeMiB": [
+                1050.7578125,
+                1085.3515625
+              ]
+            },
+            {
+              "from": 75000,
+              "to": 80000,
+              "samples": 5,
+              "meanPssMiB": 1072.4890625,
+              "meanContentPssMiB": 917.898828125,
+              "checkpointRange": [
+                75333,
+                79974
+              ],
+              "volleyRange": [
+                10,
+                10
+              ],
+              "enemyRange": [
+                0,
+                1
+              ],
+              "pssRangeMiB": [
+                1051.9375,
+                1119.390625
+              ]
+            },
+            {
+              "from": 80000,
+              "to": 85000,
+              "samples": 4,
+              "meanPssMiB": 1061.462890625,
+              "meanContentPssMiB": 906.7822265625,
+              "checkpointRange": [
+                81163,
+                84694
+              ],
+              "volleyRange": [
+                11,
+                11
+              ],
+              "enemyRange": [
+                0,
+                1
+              ],
+              "pssRangeMiB": [
+                1052.15234375,
+                1087.49609375
+              ]
+            },
+            {
+              "from": 85000,
+              "to": 90000,
+              "samples": 5,
+              "meanPssMiB": 1076.79140625,
+              "meanContentPssMiB": 922.166015625,
+              "checkpointRange": [
+                85697,
+                89861
+              ],
+              "volleyRange": [
+                11,
+                12
+              ],
+              "enemyRange": [
+                2,
+                2
+              ],
+              "pssRangeMiB": [
+                1054.609375,
+                1091.56640625
+              ]
+            }
+          ],
+          "equalBinMeanPssMiB": 1061.7177083333333,
+          "equalBinMeanContentPssMiB": 906.95810546875,
+          "capturedPssMs": [
+            60048,
+            93158
+          ],
+          "volleyWindow": [
+            7,
+            12
+          ],
+          "nativeFullActiveStageMiB": {
+            "javascript": {
+              "samples": 67,
+              "meanMiB": 40.32265230435044,
+              "rangeMiB": [
+                34.45735454559326,
+                43.5171480178833
+              ]
+            },
+            "images": {
+              "samples": 67,
+              "meanMiB": 15.274834020813898,
+              "rangeMiB": [
+                15.098251342773438,
+                15.704971313476562
+              ]
+            },
+            "other": {
+              "samples": 67,
+              "meanMiB": 709.2805453912536,
+              "rangeMiB": [
+                678.0654878616333,
+                756.7974119186401
+              ]
+            },
+            "layers": {
+              "samples": 67,
+              "meanMiB": 0.0,
+              "rangeMiB": [
+                0.0,
+                0.0
+              ]
+            },
+            "page": {
+              "samples": 67,
+              "meanMiB": 0.0,
+              "rangeMiB": [
+                0.0,
+                0.0
+              ]
+            },
+            "jit": {
+              "samples": 67,
+              "meanMiB": 0.0,
+              "rangeMiB": [
+                0.0,
+                0.0
+              ]
+            }
+          },
+          "pressureEvents": [
+            {
+              "hostAt": 1793936367151,
+              "timestamp": 60.016305999999986,
+              "severity": "non-critical"
+            }
+          ],
+          "firstStageAt": "2026-11-06T03:38:27.156Z",
+          "finishedAt": "2026-11-06T03:41:09.788Z"
+        },
+        "milky-hidden": {
+          "engine": "26.5",
+          "stages": [
+            {
+              "label": "fresh-blank-document",
+              "pssMiB": {
+                "samples": 5,
+                "min": 310.48828125,
+                "max": 369.04296875,
+                "mean": 357.2390625
+              },
+              "contentPids": [
+                1064
+              ]
+            },
+            {
+              "label": "menu-before-preparation",
+              "pssMiB": {
+                "samples": 5,
+                "min": 451.7685546875,
+                "max": 469.4521484375,
+                "mean": 465.6177734375
+              },
+              "contentPids": [
+                1064
+              ]
+            },
+            {
+              "label": "menu-after-asset-preparation",
+              "pssMiB": {
+                "samples": 5,
+                "min": 518.49609375,
+                "max": 543.40234375,
+                "mean": 523.528125
+              },
+              "contentPids": [
+                1064
+              ]
+            },
+            {
+              "label": "mounted-boss-paused-before-start",
+              "pssMiB": {
+                "samples": 5,
+                "min": 648.7314453125,
+                "max": 855.912109375,
+                "mean": 792.7048828125
+              },
+              "contentPids": [
+                1064
+              ]
+            },
+            {
+              "label": "playing-original-boss",
+              "pssMiB": {
+                "samples": 30,
+                "min": 1064.212890625,
+                "max": 1108.876953125,
+                "mean": 1083.0859375
+              },
+              "contentPids": [
+                1064
+              ]
+            },
+            {
+              "label": "home-with-existing-qa-bridge",
+              "pssMiB": {
+                "samples": 5,
+                "min": 888.810546875,
+                "max": 1139.466796875,
+                "mean": 938.999609375
+              },
+              "contentPids": [
+                1064
+              ]
+            },
+            {
+              "label": "home-after-qa-bridge-release",
+              "pssMiB": {
+                "samples": 15,
+                "min": 868.279296875,
+                "max": 889.025390625,
+                "mean": 871.714453125
+              },
+              "contentPids": [
+                1064
+              ]
+            },
+            {
+              "label": "blank-after-navigation",
+              "pssMiB": {
+                "samples": 10,
+                "min": 871.373046875,
+                "max": 884.974609375,
+                "mean": 873.33515625
+              },
+              "contentPids": [
+                1064
+              ]
+            },
+            {
+              "label": "fresh-context-after-old-context-close",
+              "pssMiB": {
+                "samples": 10,
+                "min": 303.2109375,
+                "max": 367.33984375,
+                "mean": 360.605078125
+              },
+              "contentPids": [
+                1187
+              ]
+            }
+          ],
+          "bins": [
+            {
+              "from": 60000,
+              "to": 65000,
+              "samples": 4,
+              "meanPssMiB": 1082.6748046875,
+              "meanContentPssMiB": 916.6533203125,
+              "checkpointRange": [
+                60506,
+                64555
+              ],
+              "volleyRange": [
+                18,
+                19
+              ],
+              "enemyRange": [
+                1,
+                1
+              ],
+              "pssRangeMiB": [
+                1079.330078125,
+                1086.373046875
+              ]
+            },
+            {
+              "from": 65000,
+              "to": 70000,
+              "samples": 5,
+              "meanPssMiB": 1081.659765625,
+              "meanContentPssMiB": 915.5931640625,
+              "checkpointRange": [
+                65578,
+                69594
+              ],
+              "volleyRange": [
+                19,
+                21
+              ],
+              "enemyRange": [
+                0,
+                2
+              ],
+              "pssRangeMiB": [
+                1080.126953125,
+                1084.513671875
+              ]
+            },
+            {
+              "from": 70000,
+              "to": 75000,
+              "samples": 5,
+              "meanPssMiB": 1085.237890625,
+              "meanContentPssMiB": 919.1806640625,
+              "checkpointRange": [
+                70599,
+                74648
+              ],
+              "volleyRange": [
+                21,
+                22
+              ],
+              "enemyRange": [
+                2,
+                2
+              ],
+              "pssRangeMiB": [
+                1084.208984375,
+                1087.798828125
+              ]
+            },
+            {
+              "from": 75000,
+              "to": 80000,
+              "samples": 5,
+              "meanPssMiB": 1079.100390625,
+              "meanContentPssMiB": 913.0384765625,
+              "checkpointRange": [
+                75651,
+                79666
+              ],
+              "volleyRange": [
+                23,
+                24
+              ],
+              "enemyRange": [
+                2,
+                2
+              ],
+              "pssRangeMiB": [
+                1078.169921875,
+                1080.443359375
+              ]
+            },
+            {
+              "from": 80000,
+              "to": 85000,
+              "samples": 5,
+              "meanPssMiB": 1082.227734375,
+              "meanContentPssMiB": 916.0736328125,
+              "checkpointRange": [
+                80677,
+                84706
+              ],
+              "volleyRange": [
+                25,
+                26
+              ],
+              "enemyRange": [
+                1,
+                2
+              ],
+              "pssRangeMiB": [
+                1078.939453125,
+                1083.396484375
+              ]
+            },
+            {
+              "from": 85000,
+              "to": 90000,
+              "samples": 5,
+              "meanPssMiB": 1082.374609375,
+              "meanContentPssMiB": 916.2111328125,
+              "checkpointRange": [
+                85737,
+                89782
+              ],
+              "volleyRange": [
+                26,
+                28
+              ],
+              "enemyRange": [
+                1,
+                1
+              ],
+              "pssRangeMiB": [
+                1064.212890625,
+                1087.466796875
+              ]
+            }
+          ],
+          "equalBinMeanPssMiB": 1082.2125325520833,
+          "equalBinMeanContentPssMiB": 916.1250651041667,
+          "capturedPssMs": [
+            60506,
+            91786
+          ],
+          "volleyWindow": [
+            18,
+            28
+          ],
+          "nativeFullActiveStageMiB": {
+            "javascript": {
+              "samples": 61,
+              "meanMiB": 31.76264902021064,
+              "rangeMiB": [
+                13.662068367004395,
+                35.30463886260986
+              ]
+            },
+            "images": {
+              "samples": 61,
+              "meanMiB": 15.933734581118724,
+              "rangeMiB": [
+                15.704971313476562,
+                16.61505126953125
+              ]
+            },
+            "other": {
+              "samples": 61,
+              "meanMiB": 714.5129529765395,
+              "rangeMiB": [
+                694.9296503067017,
+                746.8420391082764
+              ]
+            },
+            "layers": {
+              "samples": 61,
+              "meanMiB": 0.0,
+              "rangeMiB": [
+                0.0,
+                0.0
+              ]
+            },
+            "page": {
+              "samples": 61,
+              "meanMiB": 0.0,
+              "rangeMiB": [
+                0.0,
+                0.0
+              ]
+            },
+            "jit": {
+              "samples": 61,
+              "meanMiB": 0.0,
+              "rangeMiB": [
+                0.0,
+                0.0
+              ]
+            }
+          },
+          "pressureEvents": [
+            {
+              "hostAt": 1793936206395,
+              "timestamp": 59.914052,
+              "severity": "non-critical"
+            },
+            {
+              "hostAt": 1793936266394,
+              "timestamp": 119.913805,
+              "severity": "non-critical"
+            }
+          ],
+          "firstStageAt": "2026-11-06T03:35:46.506Z",
+          "finishedAt": "2026-11-06T03:38:26.557Z"
+        }
+      },
+      "hiddenMinusControlEqualBinMeanPssMiB": 20.494824218749955,
+      "binDeltasMiB": [
+        42.929492187500045,
+        21.621484375000136,
+        25.45859375000009,
+        6.611328125,
+        20.764843749999955,
+        5.583203125000182
+      ]
+    }
+  ]
+}
