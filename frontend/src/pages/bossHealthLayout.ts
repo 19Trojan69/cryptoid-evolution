@@ -1,5 +1,12 @@
 import { bossWeapons } from './bossWeapons.ts';
 import type { SectorBoss } from './sectorBoss.ts';
+import { specialWeaponBox } from './bossSpecialWeapon.ts';
+
+export function reactorHealthPosition(boss: SectorBoss) {
+  const box = specialWeaponBox(boss);
+  return { left: box.left + box.width / 2, top: box.top - 22,
+    width: Math.min(76, Math.max(52, boss.width * .25)) };
+}
 
 export type TurretBarPosition = { index: number; x: number; y: number; gunX: number; gunY: number; width: number; height: number };
 

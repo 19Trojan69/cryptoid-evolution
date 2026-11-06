@@ -2840,3 +2840,9 @@ html[data-motion="reduced"] .game-field .sector-banner.boss-intro-banner.sector-
    geometry and the existing thrust response change its size/direction. */
 .game-field .ship-thruster { border-radius: 0; background: linear-gradient(180deg, #f8ffff 0%, #8fefff 27%, #527cff 65%, transparent 100%); filter: drop-shadow(0 2px 2px #52a4ffad); clip-path: polygon(12% 0, 88% 0, 82% 18%, 100% 34%, 72% 69%, 55% 100%, 48% 78%, 34% 94%, 27% 64%, 0 34%, 18% 18%); }
 .game-field .sector-boss .boss-engine-flame.ship-thruster { transform: translate(-50%, -100%) rotate(180deg); transform-origin: center; animation: none; }
+
+/* Compact, square reactor-only health indicator, anchored above its bay. */
+.boss-reactor-health { position:absolute; z-index:8; height:14px; transform:translateX(-50%); box-sizing:border-box; border:1px solid #9af3f0; border-radius:0; background:#06141e; pointer-events:none; overflow:hidden; }
+.boss-reactor-health > b { display:block; height:100%; border-radius:0; background:linear-gradient(90deg,#168c79,#c8d974); }
+.boss-reactor-health[data-critical="true"] > b { background:#c43d54; }
+.boss-reactor-health > small { position:absolute; inset:0; display:grid; place-items:center; color:#fff9db; font:700 10px/12px 'DM Mono',monospace; text-shadow:0 1px 2px #000; white-space:nowrap; }
