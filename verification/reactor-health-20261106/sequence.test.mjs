@@ -11,9 +11,9 @@ test('reactor burst precedes the complete original descent and all final timers 
  assert.match(source,/clearTimerRef.current >= BOSS_FALL_DURATION_MS/);
  assert.match(source,/BOSS_VICTORY_START_MS = BOSS_FALL_DURATION_MS \+ 650/);
 });
-test('core heat changes only below half health and progresses towards brighter yellow',()=>{
- for(const h of [100,75,50,0,-1,NaN])assert.equal(reactorHeatColor(h,100),undefined);
+test('core heat changes from half health and progresses towards brighter yellow',()=>{
+ for(const h of [100,75,0,-1,NaN])assert.equal(reactorHeatColor(h,100),undefined);
  assert.equal(reactorHeatColor(5,0),undefined);
- const colors=[49,40,25,10,1].map(h=>reactorHeatColor(h,100));assert.equal(new Set(colors).size,5);
+ const colors=[50,40,25,10,1].map(h=>reactorHeatColor(h,100));assert.equal(new Set(colors).size,5);
  let previous=0;for(const color of colors){const [r,g,b]=color.match(/\d+/g).map(Number);assert.equal(r,255);assert.ok(g>previous);assert.ok(b>=15&&b<=120);previous=g;}
 });
