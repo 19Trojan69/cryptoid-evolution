@@ -1,0 +1,52 @@
+name: Compare one background in matched WebKit active windows
+on:
+  push:
+    branches: [codex/milky-synced-20261106]
+    paths:
+      - '.github/workflows/cryptoid-milky-synced.yml'
+      - 'verification/milky-synced-20261106/**'
+permissions:
+  contents: read
+concurrency:
+  group: milky-synced-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  comparison:
+    strategy:
+      fail-fast: false
+      matrix:
+        order: [control-first, hidden-first]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    container:
+      image: mcr.microsoft.com/playwright@sha256:dcc5531e97840b9b5e794f2814476b21571c5124a3fca2267d73041f56e7580e
+      options: --init --ipc=host
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with: {persist-credentials: false}
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with: {node-version: '24'}
+      - name: Validate aligned windows and complete original collector
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          node --test verification/milky-synced-20261106/alignment.test.mjs
+          node verification/milky-synced-20261106/makeDriver.mjs --check
+          node --check verification/milky-synced-20261106/run.mjs
+          node verification/direct-boss-style-device-20261102/verifyScope.mjs
+      - name: Build unchanged guest game
+        env: {VERCEL_ENV: preview}
+        run: |
+          npm install --prefix verification/boss2-forensics-20261028 --ignore-scripts --no-audit --no-fund
+          node -e "const p=require('./verification/boss2-forensics-20261028/node_modules/playwright');if(!require('fs').existsSync(p.webkit.executablePath()))process.exit(1)"
+          node verification/direct-boss-style-device-20261102/installDevicePreview.mjs --ignore-scripts
+          node verification/player-muzzle-webkit-device-20261105/build.mjs
+      - name: Record the declared active interval in both fresh browsers
+        run: |
+          node verification/milky-synced-20261106/run.mjs ${{ matrix.order }}
+          node verification/direct-boss-style-device-20261102/verifyScope.mjs
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: ${{ !cancelled() }}
+        with:
+          name: milky-synced-${{ matrix.order }}
+          path: verification/milky-synced-20261106/results/
+          retention-days: 7
