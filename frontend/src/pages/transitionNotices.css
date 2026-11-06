@@ -13,7 +13,7 @@
 .game-shell[data-effects-paused="true"] .reinforcement-notice.readable-reinforcement {
   animation-play-state: paused !important;
 }
-.game-field .sector-banner.readable-transition *,
+.game-field .sector-banner.readable-transition :not(.blockchain-cube-rotor):not(.blockchain-binary-track),
 .game-field .sector-banner.readable-transition::before,
 .game-field .sector-banner.readable-transition::after {
   animation: none;
