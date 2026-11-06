@@ -1,0 +1,45 @@
+{
+  "testCommit": "dfb70ffab0daff5f4f73d612adc2454868d0d8d8",
+  "workflowRun": 42269291666,
+  "jobs": [
+    {
+      "id": 128069348538,
+      "name": "monitor (webkit)",
+      "conclusion": "success"
+    },
+    {
+      "id": 128069349023,
+      "name": "monitor (chromium)",
+      "conclusion": "success"
+    }
+  ],
+  "cases": 12,
+  "trustedTaps": 144,
+  "doubleTaps": 72,
+  "physicalPhone": false,
+  "piBrowser": false,
+  "whiteScreenFixed": false,
+  "publicDeploymentChanged": false,
+  "publicDeployments": {
+    "lab": {
+      "id": "dpl_BGskVWNftZKdnwbbGCcGBbrgNEBz",
+      "sha": "a51bb9fe292a780ed8819d64af820003c01c3519",
+      "state": "READY"
+    },
+    "testnet": {
+      "id": "dpl_3tcnig7RC16aLXm3jdGC9Mfh2DvF",
+      "sha": "d9e0897a9396dd8f1f0a9c4a9a0536aa1fb7208d",
+      "state": "READY"
+    },
+    "production": {
+      "id": "dpl_6N3FdS9XGXasCWrpMksngxCPNPRk",
+      "sha": "ce073547cf573375d141bf846f70e294138dbd73",
+      "state": "READY"
+    }
+  },
+  "knownInitialHarnessFailure": {
+    "run": 42268681954,
+    "reason": "root directory rejected before index HTML resolution",
+    "productCrash": false
+  }
+}

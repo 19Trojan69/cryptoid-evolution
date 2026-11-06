@@ -1,0 +1,88 @@
+{
+  "engine": "webkit",
+  "complete": true,
+  "physicalPhone": false,
+  "piBrowser": false,
+  "whiteScreenFixed": false,
+  "publicDeploymentChanged": false,
+  "cases": [
+    {
+      "scene": "normal",
+      "guard": "current",
+      "trustedTaps": 12,
+      "preventedEvents": 12,
+      "noNavigation": true,
+      "noRestart": true,
+      "noPageErrors": true,
+      "activeTimeAdvanced": true,
+      "scaleBefore": 1,
+      "scaleAfter": 1,
+      "reloadControlDetected": true
+    },
+    {
+      "scene": "normal",
+      "guard": "removed-in-test-only",
+      "trustedTaps": 12,
+      "preventedEvents": 0,
+      "noNavigation": true,
+      "noRestart": true,
+      "noPageErrors": true,
+      "activeTimeAdvanced": true,
+      "scaleBefore": 1,
+      "scaleAfter": 1,
+      "reloadControlDetected": true
+    },
+    {
+      "scene": "turrets",
+      "guard": "current",
+      "trustedTaps": 12,
+      "preventedEvents": 12,
+      "noNavigation": true,
+      "noRestart": true,
+      "noPageErrors": true,
+      "activeTimeAdvanced": true,
+      "scaleBefore": 1,
+      "scaleAfter": 1,
+      "reloadControlDetected": true
+    },
+    {
+      "scene": "turrets",
+      "guard": "removed-in-test-only",
+      "trustedTaps": 12,
+      "preventedEvents": 0,
+      "noNavigation": true,
+      "noRestart": true,
+      "noPageErrors": true,
+      "activeTimeAdvanced": true,
+      "scaleBefore": 1,
+      "scaleAfter": 1,
+      "reloadControlDetected": true
+    },
+    {
+      "scene": "reactor",
+      "guard": "current",
+      "trustedTaps": 12,
+      "preventedEvents": 12,
+      "noNavigation": true,
+      "noRestart": true,
+      "noPageErrors": true,
+      "activeTimeAdvanced": true,
+      "scaleBefore": 1,
+      "scaleAfter": 1,
+      "reloadControlDetected": true
+    },
+    {
+      "scene": "reactor",
+      "guard": "removed-in-test-only",
+      "trustedTaps": 12,
+      "preventedEvents": 0,
+      "noNavigation": true,
+      "noRestart": true,
+      "noPageErrors": true,
+      "activeTimeAdvanced": true,
+      "scaleBefore": 1,
+      "scaleAfter": 1,
+      "reloadControlDetected": true
+    }
+  ]
+}
