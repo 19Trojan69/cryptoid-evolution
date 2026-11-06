@@ -31,7 +31,13 @@ export async function compareSurfaces({before,after,makeCanvas,loadImage,pixels}
      if(a.length!==b.length)throw Error('Output geometry changed');
      let differences=0,maxDelta=0;
      for(let i=0;i<a.length;i++)if(a[i]!==b[i]){differences++;maxDelta=Math.max(maxDelta,Math.abs(a[i]-b[i]));}
-     if(differences)throw Error(JSON.stringify({boss:config.id,width,phase,differences,maxDelta}));
+     if(differences){
+      const samples=[];for(let i=0;i<a.length&&samples.length<8;i++)if(a[i]!==b[i]){const p=i-i%4;samples.push({x:(p/4)%destinations[0].width,y:Math.floor(p/4/destinations[0].width),before:Array.from(a.slice(p,p+4)),after:Array.from(b.slice(p,p+4))});}
+      const src=owned.map(list=>list.find(c=>c.width>0&&c.height>0));
+      const [sa,sb]=src.map(pixels);let sourceDifferences=0;
+      for(let y=0;y<src[1].height;y++)for(let x=0;x<src[1].width;x++)for(let ch=0;ch<4;ch++)if(sa[(y*src[0].width+x)*4+ch]!==sb[(y*src[1].width+x)*4+ch])sourceDifferences++;
+      throw Error(JSON.stringify({boss:config.id,width,phase,differences,maxDelta,samples,sourceDifferences,sourceSizes:src.map(c=>[c.width,c.height])}));
+     }
      if(phase==='original'){
       const bytes=owned.map(list=>list.reduce((sum,c)=>sum+c.width*c.height*4,0));
       if(bytes[1]>=bytes[0])throw Error('Every tested boss must use a smaller socket source');
