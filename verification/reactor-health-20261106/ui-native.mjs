@@ -41,7 +41,15 @@ for(const media of ['no-preference','reduce'])for(const setting of ['full','redu
  assert.equal(result.cubes.length,9);assert.ok(result.cubes.every(c=>c.running&&c.changed&&c.direction==='reverse'));assert.ok(result.binary.running&&result.binary.changed);assert.equal(result.binary.direction,'reverse');
  // Binary keyframes run from X=0 to negative X, reverse must advance right.
  const tx=s=>Number(s.match(/matrix\([^,]+,[^,]+,[^,]+,[^,]+,\s*([^,]+)/)[1]);assert.ok(tx(result.binary.second)>tx(result.binary.first));
- assert.deepEqual(result.rows,['reverse','normal','reverse','normal','reverse']);assert.equal(result.combat,'paused');if(media==='no-preference'&&setting==='full'){await page.waitForTimeout(850);await page.screenshot({path:out+'/'+engine+'-motion.png'});}await page.evaluate(()=>window.qa('empty'));
+ assert.deepEqual(result.rows,['reverse','normal','reverse','normal','reverse']);assert.equal(result.combat,'paused');if(media==='no-preference'&&setting==='full'){
+ await page.waitForTimeout(850);
+ await page.evaluate(()=>{document.getAnimations().forEach(a=>{a.pause();if(a.animationName==='blockchain-node-awaken')a.currentTime=1000;});document.querySelector('.blockchain-node.active .blockchain-cube-rotor').getAnimations()[0].currentTime=100;});
+ const first=await page.locator('.blockchain-node.active').first().screenshot({path:out+'/'+engine+'-cube-first.png'});
+ await page.evaluate(()=>{document.querySelector('.blockchain-node.active .blockchain-cube-rotor').getAnimations()[0].currentTime=1700;});
+ const second=await page.locator('.blockchain-node.active').first().screenshot({path:out+'/'+engine+'-cube-second.png'});
+ assert.notEqual(Buffer.compare(first,second),0,'The cube must visibly rotate, not merely change a computed transform');
+ await page.screenshot({path:out+'/'+engine+'-motion.png'});
+}await page.evaluate(()=>window.qa('empty'));
 }
 await page.emulateMedia({reducedMotion:'no-preference'});await page.evaluate(()=>{document.documentElement.dataset.motion='full';document.querySelector('main').dataset.effectsPaused='false';});
 for(let id=1;id<=50;id++){
@@ -55,5 +63,5 @@ await page.evaluate(()=>{window.qa('empty');window.qa('fall',1,0);document.query
 await page.evaluate(()=>{document.querySelector('main').dataset.effectsPaused='false';});await page.locator('.boss-reactor-destruction').waitFor({state:'detached',timeout:2000});
 let shapes;for(const health of [100,50,49,25,1]){await page.evaluate(h=>window.qa('heat',1,h),health);const state=await page.evaluate(()=>({nodes:document.querySelector('svg').querySelectorAll('*').length,fill:getComputedStyle(document.querySelector('.boss-reactor-pulse')).fill,canvases:document.querySelectorAll('canvas').length,filters:document.querySelectorAll('svg filter').length}));shapes??=state.nodes;assert.equal(state.nodes,shapes);assert.equal(state.canvases,0);assert.equal(state.filters,0);if(health<=50)assert.match(state.fill,/rgb\(255,/);}
 await page.evaluate(()=>window.qa('empty'));const heat=await page.evaluate(()=>window.heatAllocation());assert.equal(heat.cases,50);assert.deepEqual(errors,[]);
-const result={engine,actualComponents:true,motionCases:4,cubes:9,sequenceBosses:50,reactorBurstRemoved:true,pauseResume:true,reactorHeatExtraCanvas:0,heat,physicalDevice:false,totalProcessRamMeasured:false,whiteScreenFixed:false};writeFileSync(out+'/'+engine+'.json',JSON.stringify(result,null,2));console.log(JSON.stringify(result));
+const result={engine,actualComponents:true,visibleCubePixelsChange:true,motionCases:4,cubes:9,sequenceBosses:50,reactorBurstRemoved:true,pauseResume:true,reactorHeatExtraCanvas:0,heat,physicalDevice:false,totalProcessRamMeasured:false,whiteScreenFixed:false};writeFileSync(out+'/'+engine+'.json',JSON.stringify(result,null,2));console.log(JSON.stringify(result));
 }finally{await browser.close();await new Promise(r=>server.close(r));}
