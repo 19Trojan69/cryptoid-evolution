@@ -23,8 +23,8 @@ jobs:
         with: {node-version: '24'}
       - run: npm install --prefix frontend --include=optional --ignore-scripts --no-audit --no-fund
       - run: npm install --prefix verification/transition-motion-20261106 --ignore-scripts --no-audit --no-fund
-      - run: node --test verification/memory-monitor-lab-20261106/model.test.mjs
       - run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+      - run: node --test verification/memory-monitor-lab-20261106/model.test.mjs
       - run: node verification/memory-monitor-lab-20261106/build.mjs
       - run: node verification/memory-monitor-lab-20261106/verify.mjs ${{ matrix.engine }}
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
