@@ -43,9 +43,16 @@
     "typeScriptPassed": true,
     "vitePassed": true,
     "postBuildTrackedDiffEmpty": true,
-    "published": false,
+    "published": true,
     "whiteScreenFixed": false,
     "physicalPhoneAccepted": false,
-    "totalRamBenefitMeasured": false
+    "totalRamBenefitMeasured": false,
+    "deploymentId": "dpl_HXX57EN88Qto9j84RPhmYt4HFLx6",
+    "state": "READY",
+    "publicAlias": "https://cryptoid-evolution-testnet.vercel.app/",
+    "rollbackDeployment": "dpl_BcDkVkATpUrCRDNB5zYcQ8jkEqBR",
+    "rollbackCommit": "d005c99b03dfdfe9433e300ac1add26a38a74eb9",
+    "unauthenticatedPublicSmokePassed": true,
+    "publicationDate": "2026-11-06"
   }
 }

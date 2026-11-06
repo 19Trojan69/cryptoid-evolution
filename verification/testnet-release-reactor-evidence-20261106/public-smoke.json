@@ -1,0 +1,57 @@
+{
+  "unauthenticatedRequests": true,
+  "homeStatus": 200,
+  "apiStatus": 200,
+  "anonymousAdminStatus": 401,
+  "sourceCommit": "199ef5982418db92b3281d4fa6546d4886ec152b",
+  "sourceTree": "b1788d222d52646434ad7d982ef80b72077af5d2",
+  "checks": {
+    "sourceIdentityFound": true,
+    "reactorFlashFound": true,
+    "projectileColourCssFound": true,
+    "chromiumOptimizationAndIosExclusionFound": true,
+    "regularAppWithoutDiagnosticMenu": true,
+    "api200": true,
+    "adminProtected": true,
+    "assets200": true
+  },
+  "index": "/assets/index-91fxrkqZ.js",
+  "assets": {
+    "/assets/GamePage-CRMgJFcG.js": {
+      "bytes": 253390,
+      "sha256": "0c6b6b20190ecb7376b14c60cd04b4cbb47cabda90c91de89d70b80ae4ecaf43"
+    },
+    "/assets/shipEvolution-BVs9hKG4.js": {
+      "bytes": 234305,
+      "sha256": "1211cf95ac1aa9c2c55aebee32d3a7a277b8c6a300e8ad85edde623541fd7f43"
+    },
+    "/assets/index-lKGo818z.css": {
+      "bytes": 371821,
+      "sha256": "14b5de9de5fe014e78d6420558ab107136adde566ab2134feb2ad2834153d9ef"
+    },
+    "/assets/index-91fxrkqZ.js": {
+      "bytes": 1977189,
+      "sha256": "c302d900361979cda1d5314136377a6cadee2de4cc0e6fa4eb067a03ec00a526"
+    },
+    "/assets/displaySettings-C_7mEr-M.js": {
+      "bytes": 3509,
+      "sha256": "0e7c26f8a44c24c6a9215bc031b4bfd4b8468718dafbc58baa72d205601fa989"
+    },
+    "/assets/powerUps-BHSSRcNt.js": {
+      "bytes": 156981,
+      "sha256": "7f1f9d3d19e83d12a899a44e8752b0c1c233edd72c387c5256cd04a55f7b5aa0"
+    },
+    "/assets/cardSound-B3ZxXdh4.js": {
+      "bytes": 61306,
+      "sha256": "ec45e07b007c2878fad46f6494e745b73bd796584f7e6d2361643778c9585102"
+    },
+    "/assets/reloadDiagnostics-D8T--tqZ.js": {
+      "bytes": 47151,
+      "sha256": "e4d3c0929e273a0c45d0f31bac813549e2471a6dc41ec5c1ecbd6d12e67a3d93"
+    }
+  },
+  "servedWorkingTreeDirty": true,
+  "staticImportClosureVerified": true,
+  "flashModule": "/assets/powerUps-BHSSRcNt.js",
+  "verificationNote": "The initial partial probe omitted the powerUps shared module. Full static GamePage import closure includes the delivered reactor flash; no runtime source correction was required."
+}
