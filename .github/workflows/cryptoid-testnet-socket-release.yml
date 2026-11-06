@@ -1,0 +1,66 @@
+name: Verify bounded original boss socket backing surfaces
+on:
+  push:
+    branches: [codex/testnet-socket-release-20261106]
+    paths:
+      - '.github/workflows/cryptoid-testnet-socket-release.yml'
+      - 'frontend/src/pages/bossWeaponRenderer.ts'
+      - 'verification/testnet-socket-release-20261106/**'
+permissions:
+  contents: read
+jobs:
+  pixels:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    container:
+      image: mcr.microsoft.com/playwright@sha256:dcc5531e97840b9b5e794f2814476b21571c5124a3fca2267d73041f56e7580e
+      options: --init --ipc=host
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with: {fetch-depth: 1, persist-credentials: false}
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with: {node-version: '24'}
+      - name: Check exact source scope and renderer syntax
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git fetch --no-tags --depth=1 origin ce073547cf573375d141bf846f70e294138dbd73
+          node --check frontend/src/pages/bossWeaponRenderer.ts
+          node --check verification/testnet-socket-release-20261106/native.mjs
+          node --test verification/testnet-socket-release-20261106/lifetime.test.mjs
+          npm install --prefix verification/testnet-socket-release-20261106 --ignore-scripts --no-audit --no-fund
+      - name: Compare all 50 original weapon atlases on CPU
+        run: node verification/testnet-socket-release-20261106/cpu.mjs
+      - name: Compare exact native Chromium pixels and release
+        run: node verification/testnet-socket-release-20261106/native.mjs chromium
+      - name: Compare exact native WebKit pixels and release
+        run: node verification/testnet-socket-release-20261106/native.mjs webkit
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: ${{ !cancelled() }}
+        with:
+          name: socket-surface-equivalence
+          path: verification/testnet-socket-release-20261106/results/
+          retention-days: 7
+  release-checks:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with: {fetch-depth: 1, persist-credentials: false}
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with: {node-version: '24'}
+      - name: Install frontend without lifecycle scripts and preserve tracked lock
+        run: |
+          node --input-type=module - <<'JS'
+          import {readFileSync,writeFileSync} from 'node:fs';
+          import {spawnSync} from 'node:child_process';
+          const p='frontend/yarn.lock', bytes=readFileSync(p);
+          let r;try {r=spawnSync('npm',['install','--prefix','frontend','--include=optional','--ignore-scripts','--no-audit','--no-fund'],{stdio:'inherit'});}
+          finally {writeFileSync(p,bytes);}
+          if(r.status!==0)process.exit(r.status||1);
+          JS
+          git diff --exit-code -- frontend backend api private-preview vercel.json
+      - name: Run existing frontend release tests, TypeScript and Vite build
+        env: {VERCEL_ENV: production, VITE_CRYPTOID_DIAGNOSTICS: "0"}
+        run: |
+          npm --prefix frontend run build
+          git diff --exit-code -- frontend backend api private-preview vercel.json

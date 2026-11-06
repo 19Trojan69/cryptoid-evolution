@@ -19,6 +19,10 @@ export const disposeBossWeapons = (canvas: HTMLCanvasElement) => {
  canvas.width = canvas.height = 0;
 };
 const factory:CanvasFactory=(w,h)=>{const c=document.createElement('canvas');c.width=w;c.height=h;return c;};
+// Chromium preserves these output pixels with a bounded source. WebKit's
+// source rasterization rounds differently when its backing size changes, so
+// retain its original path. iOS Chrome also uses WebKit and stays excluded.
+const boundedSockets=typeof navigator!=='undefined'&&/(?:Chrome|Chromium)\/\d/.test(navigator.userAgent)&&!/(?:CriOS|FxiOS|EdgiOS)\//.test(navigator.userAgent);
 export const weaponCanvasSize=(boss:SectorBoss)=>({width:boss.width*1.44,height:boss.height*2.4,padX:boss.width*.22,padY:boss.height*.7});
 const tile=(c:CanvasRenderingContext2D,image:CanvasImageSource,r:AtlasRect,x:number,y:number,scale:number)=>c.drawImage(image,r.x,r.y,r.width,r.height,x,y,r.width*scale/2,r.height*scale/2);
 
@@ -32,7 +36,17 @@ export const drawBossWeapons=(canvas:HTMLCanvasElement,boss:SectorBoss,image:Can
    cached.layer.width = cached.layer.height = 0;
    for (const hot of cached.heated.values()) hot.width = hot.height = 0;
   }
-  const layer=make(canvas.width,canvas.height);let retained=false;
+  // Only fixed sockets are stored here. Retire the unused right/bottom tails,
+  // keeping the original (0,0) raster origin and transform exactly: rebasing a
+  // fractional draw onto a tight rectangle can change antialias rounding.
+  let right=canvas.width,bottom=canvas.height;
+  if(boundedSockets){right=bottom=0;for(const g of guns){
+   const x=size.padX+g.sourceX/boss.config.sourceWidth*boss.width,y=size.padY+g.sourceY/boss.config.sourceHeight*boss.height;
+   right=Math.max(right,(x+g.socket.width*scale/4)*sx);bottom=Math.max(bottom,(y+g.socket.height*scale/4)*sy);
+  }
+  right=Math.min(canvas.width,Math.ceil(right)+2);bottom=Math.min(canvas.height,Math.ceil(bottom)+2);
+  }
+  const layer=make(Math.max(1,right),Math.max(1,bottom));let retained=false;
   try{
    const base=layer.getContext('2d');if(!base)return false;
    base.setTransform(sx,0,0,sy,0,0);
