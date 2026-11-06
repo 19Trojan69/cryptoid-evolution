@@ -110,6 +110,7 @@ import BossWeaponsView from './BossWeaponsView';
 import { preloadBossWeapons } from './bossWeaponTextures';
 import { observeBossResources } from './bossResourceDiagnostics';
 import BossHullView from './BossHullView';
+import { BOSS_DEFEAT_MS } from './bossDefeatTiming';
 import FinishedEffect from './FinishedEffect';
 import { advanceBossTurrets, damageBossTurret, gunPosition } from './bossTurrets';
 import { detonateBossBomb, disableEnemyWeapons } from './specialPowers';
@@ -123,7 +124,7 @@ const GAME_OVER_REVEAL_MS = 1_750;
 const ENTRY_HUD_GAP_PX = 8;
 const BOSS_VICTORY_VOLUME_BOOST = 1.6;
 // Let the deep impact lead before its long tail overlaps the victory cue.
-const BOSS_FALL_DURATION_MS = 5_000;
+const BOSS_FALL_DURATION_MS = BOSS_DEFEAT_MS;
 const BOSS_VICTORY_START_MS = BOSS_FALL_DURATION_MS + 650;
 // The complete victory recording is 3.408 seconds, including its release.
 const BOSS_CLEAR_DURATION_MS = BOSS_VICTORY_START_MS + 3_700;

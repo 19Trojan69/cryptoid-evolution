@@ -6,6 +6,9 @@ import BossWeaponsView from "./BossWeaponsView";
 import BossReactorView from "./BossReactorView";
 import BossHealthView from "./BossHealthView";
 import HullDamage from "./HullDamage";
+import FinishedEffect from "./FinishedEffect";
+import { specialWeaponBox } from "./bossSpecialWeapon";
+import { BOSS_REACTOR_BURST_MS } from "./bossDefeatTiming";
 
 export type FallingBossHull = {
   id: number;
@@ -33,6 +36,7 @@ type Props = {
 export default memo(function BossHullView({ boss, fall, ready, light, now, fallDurationMs, title }: Props) {
   const model = fall?.bossModel ?? boss;
   if (!model) return null;
+  const reactorBox = fall ? specialWeaponBox(model) : null;
   const className = fall
     ? "boss-falling-hull"
     : `asteroid sector-boss${model.health <= model.maxHealth / 2 ? " boss-enraged" : ""}${model.health <= model.maxHealth * 0.25 ? " boss-critical" : ""}${now - model.lastDamageAt < 240 ? " boss-hit" : ""}`;
@@ -46,7 +50,9 @@ export default memo(function BossHullView({ boss, fall, ready, light, now, fallD
         "--boss-fall-quarter": `${(fall.fallDistance ?? 200) * 0.25}px`,
         "--boss-fall-half": `${(fall.fallDistance ?? 200) * 0.5}px`,
         "--boss-fall-three-quarters": `${(fall.fallDistance ?? 200) * 0.75}px`,
-        "--boss-fall-duration": `${fallDurationMs}ms`,
+        "--boss-fall-duration": `${fallDurationMs - BOSS_REACTOR_BURST_MS}ms`,
+        "--boss-reactor-burst-duration": `${BOSS_REACTOR_BURST_MS}ms`,
+        animationDelay: `${BOSS_REACTOR_BURST_MS}ms`,
       }
     : {
         left: model.x,
@@ -105,9 +111,10 @@ export default memo(function BossHullView({ boss, fall, ready, light, now, fallD
       )}
       {fall && (
         <>
+          <FinishedEffect key={fall.id} tag="i" className="boss-reactor-destruction" style={{ left: reactorBox!.left, top: reactorBox!.top, width: reactorBox!.width, height: reactorBox!.height }} />
           <div className="boss-fall-bursts">
             {fall.fireSites?.map(([x, y], index) => (
-              <i key={index} style={{ left: `${x}%`, top: `${y}%`, animationDelay: `${index * 0.3}s` }} />
+              <i key={index} style={{ left: `${x}%`, top: `${y}%`, animationDelay: `${BOSS_REACTOR_BURST_MS + index * 300}ms` }} />
             ))}
           </div>
           <div className="boss-shedding">
@@ -122,7 +129,7 @@ export default memo(function BossHullView({ boss, fall, ready, light, now, fallD
                     backgroundPosition: `${x}% ${y}%`,
                     "--shed-x": `${(index % 2 ? 1 : -1) * (18 + index * 5)}px`,
                     "--shed-spin": `${(index % 2 ? -1 : 1) * (70 + index * 19)}deg`,
-                    animationDelay: `${0.35 + index * 0.43}s`,
+                    animationDelay: `${BOSS_REACTOR_BURST_MS + 350 + index * 430}ms`,
                   } as CSSProperties
                 }
               />

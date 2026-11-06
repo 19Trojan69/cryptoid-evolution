@@ -1,4 +1,4 @@
-name: Verify reactor-only boss damage and local firing flash
+name: Verify reactor sequence, transition motion and bounded heat
 on:
   push:
     branches: [codex/reactor-health-20261106]
@@ -32,7 +32,7 @@ jobs:
           git diff --exit-code -- frontend backend api vercel.json
       - name: Check all reactor/door/gun paths and original non-firing artwork
         run: |
-          node --test frontend/src/pages/bossReactorTarget.test.mjs verification/reactor-hit-20261106/render.test.mjs frontend/src/pages/bossCore.test.mjs frontend/src/pages/bossSpecialWeapon.test.mjs frontend/src/pages/bossContact.test.mjs frontend/src/pages/specialPowers.test.mjs
+          node --test verification/reactor-health-20261106/sequence.test.mjs frontend/src/pages/bossReactorTarget.test.mjs verification/reactor-hit-20261106/render.test.mjs frontend/src/pages/bossCore.test.mjs frontend/src/pages/bossSpecialWeapon.test.mjs frontend/src/pages/bossContact.test.mjs frontend/src/pages/specialPowers.test.mjs
       - name: Run all existing release checks, TypeScript and Vite
         env: {VERCEL_ENV: production, VITE_CRYPTOID_DIAGNOSTICS: "0"}
         run: |
@@ -53,4 +53,6 @@ jobs:
       - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
         with: {node-version: '24'}
       - run: npm install --prefix verification/transition-motion-20261106 --ignore-scripts --no-audit --no-fund
+      - run: npm install --prefix frontend --include=optional --ignore-scripts --no-audit --no-fund
       - run: node verification/reactor-health-20261106/native.mjs ${{ matrix.engine }}
+      - run: node verification/reactor-health-20261106/ui-native.mjs ${{ matrix.engine }}

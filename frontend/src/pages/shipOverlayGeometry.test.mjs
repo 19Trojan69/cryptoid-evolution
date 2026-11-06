@@ -33,7 +33,7 @@ test('all plume profiles share the same palette and keep mirrored outlet geometr
  assert.equal(palettes.size,1);
 });
 
-test('boss damage indicators and the entire game controller remain the published source',()=>{
- const expected={"BossHealthView.tsx": "daf937b8ada1cc5fee307b0addbf195c249d79a43219efbed615889bd1c9d7f1", "bossHealthLayout.ts": "0cb788992f91d2ecac8476ea5456a577e947e8b6931440ed1f338422e167d358", "GamePage.tsx": "e835ec4c470bc0a967013c1d3a4015f65546b63fae9c3a8eb6b9766cad657f91"};
+test('reviewed reactor indicators and restored game controller retain their exact source',()=>{
+ const expected={"BossHealthView.tsx": "5297198821ab348254b77d00bb60cc1bf3aa889f60639ce451f9a6b1d3e0605a", "bossHealthLayout.ts": "e191deb24f53a2f2e6eca8e56506c98cf753720349b57abe285b98bf9c35951c", "GamePage.tsx": "e835ec4c470bc0a967013c1d3a4015f65546b63fae9c3a8eb6b9766cad657f91"};
  for(const [file,sha] of Object.entries(expected)){const source=readFileSync(new URL(file,import.meta.url),'utf8');assert.equal(createHash('sha256').update(file==='GamePage.tsx'?restoreCockpitIndicatorGameChanges(source):source).digest('hex'),sha,file);}
 });

@@ -1,6 +1,7 @@
 import { useId, useMemo, type CSSProperties } from 'react';
 import type { SectorBoss } from './sectorBoss';
 import { coreActive, coreInterval } from './bossCore';
+import { reactorHeatColor } from './reactorHeat';
 import { specialWeaponMount, specialWeaponBox, specialWeaponBarrels, reactorDoorOpen } from './bossSpecialWeapon';
 
 /** A recessed, hull-textured weapons bay; no floating reactor disc. */
@@ -10,6 +11,7 @@ export default function BossReactorView({ boss }: { boss: SectorBoss }) {
   const box = specialWeaponBox(boss);
   const energy = boss.core?.lastShotColor ?? mount.energy;
   const exposed = coreActive(boss);
+  const heatColor = exposed ? reactorHeatColor(boss.health, boss.maxHealth) : undefined;
   const elapsed = boss.core?.elapsed ?? 0;
   const open = reactorDoorOpen(exposed, elapsed, boss.core?.volley ?? 0);
   const charge = exposed ? Math.min(1, elapsed / coreInterval(boss)) : 0;
@@ -101,7 +103,7 @@ export default function BossReactorView({ boss }: { boss: SectorBoss }) {
   // then retains its SVG tree while the enclosing hull keeps moving normally.
   return useMemo(() => {
   const barrels = specialWeaponBarrels(mount.shape);
-  return <svg className={`boss-special-weapon${firing ? ' boss-special-weapon-firing' : ''}`} viewBox="0 0 100 160" preserveAspectRatio="none" style={{zIndex:exposed ? 6 : 1,left,top,width:boxWidth,height:boxHeight,'--weapon-energy':energy,'--weapon-charge':charge} as CSSProperties} aria-hidden="true">
+  return <svg className={`boss-special-weapon${firing ? ' boss-special-weapon-firing' : ''}`} data-reactor-heat={heatColor ? "true" : undefined} viewBox="0 0 100 160" preserveAspectRatio="none" style={{zIndex:exposed ? 6 : 1,left,top,width:boxWidth,height:boxHeight,'--weapon-energy':energy,'--weapon-charge':charge,'--reactor-heat-color':heatColor} as CSSProperties} aria-hidden="true">
     {artwork.definitions}
     <g opacity={open}>
       {artwork.bay}
@@ -115,5 +117,5 @@ export default function BossReactorView({ boss }: { boss: SectorBoss }) {
       {barrels.map(x=><path key={x} d={`M${x-5} 148L${x-10} 157L${x-3} 155L${x} 177L${x+3} 155L${x+10} 157L${x+5} 148Z`} fill={energy} opacity={muzzleOpacity}/>)}
     </>}
   </svg>;
-  }, [mount, left, top, boxWidth, boxHeight, energy, exposed, open, charge, firing, recoil, muzzleOpacity, artwork, doors]);
+  }, [mount, left, top, boxWidth, boxHeight, energy, heatColor, exposed, open, charge, firing, recoil, muzzleOpacity, artwork, doors]);
 }
