@@ -1,0 +1,66 @@
+{
+  "url": "https://cryptoid-evolution-memory-lab.vercel.app/",
+  "deploymentId": "dpl_6iSmSPE2Ui8ki21mmxKuoDmmU9Pu",
+  "deploymentCommit": "6e7ffbe5229a3845e5bf256d3c903574aab2d258",
+  "deploymentTree": "eba71a8d45e89ad909f45be48cd7172339b08fbb",
+  "baseRuntime": "d9e0897a9396dd8f1f0a9c4a9a0536aa1fb7208d",
+  "projectId": "prj_0uk2EWyJzzKfIHoLUMrDZMaJZY4W",
+  "teamId": "team_KzJmtl0QyoYZAOu5RQKsAR2i",
+  "noLiveBackend": true,
+  "physicalPhoneTested": false,
+  "whiteScreenFixed": false,
+  "unitTests": 9,
+  "firstCompletedCi": 42229001293,
+  "extendedTestCommit": "bc0daf01d7731061f4bf39056276892a936eb548",
+  "testnetUnchanged": {
+    "deployment": "dpl_3tcnig7RC16aLXm3jdGC9Mfh2DvF",
+    "commit": "d9e0897a9396dd8f1f0a9c4a9a0536aa1fb7208d"
+  },
+  "productionUnchanged": {
+    "deployment": "dpl_6N3FdS9XGXasCWrpMksngxCPNPRk",
+    "commit": "ce073547cf573375d141bf846f70e294138dbd73"
+  },
+  "extendedCiRun": 42229799345,
+  "extendedTestTree": "3fa14c20033a5ec3362c08338b86784354b39901",
+  "checkedOn": "2026-11-06",
+  "testDifferenceFromLive": [
+    "verification/memory-monitor-lab-20261106/verify.mjs"
+  ],
+  "artifactReferences": [
+    {
+      "id": 13508955114,
+      "name": "memory-lab-webkit",
+      "bytes": 1495494,
+      "digest": "sha256:a930629202a149b4c0dfaade7390ab69a9f884be3ea46f6e9439001c4fe2a63f",
+      "expiresAt": "2026-12-06T14:00:48Z"
+    },
+    {
+      "id": 13507372858,
+      "name": "memory-lab-chromium",
+      "bytes": 1798007,
+      "digest": "sha256:7c07803de237443ee1c81f0084a11e1abf6a891b4352ed82be8813136782c01d",
+      "expiresAt": "2026-12-06T14:00:47Z"
+    }
+  ],
+  "complete": true,
+  "conditions": {
+    "nativeEngines": [
+      "chromium",
+      "webkit"
+    ],
+    "viewport": {
+      "width": 390,
+      "height": 760,
+      "deviceScaleFactor": 3
+    },
+    "scenes": [
+      "normal",
+      "turrets",
+      "reactor"
+    ],
+    "totalNativeRamMeasured": false,
+    "physicalPhone": false,
+    "stabilityFixClaimed": false
+  },
+  "wrongProjectBuildsRejected": true
+}

@@ -1,0 +1,40 @@
+{
+  "engine": "chromium",
+  "complete": true,
+  "physicalPhone": false,
+  "whiteScreenFixed": false,
+  "scenes": [
+    {
+      "scene": "normal",
+      "pauseResume": true,
+      "recoveredWithoutAutoRestart": true,
+      "downloadValid": true,
+      "samples": 4,
+      "activeBeforePause": 6249.7,
+      "heapSupported": true,
+      "bossFightCanvasAndReactorVerified": false
+    },
+    {
+      "scene": "turrets",
+      "pauseResume": true,
+      "recoveredWithoutAutoRestart": true,
+      "downloadValid": true,
+      "samples": 4,
+      "activeBeforePause": 6249.7,
+      "heapSupported": true,
+      "bossFightCanvasAndReactorVerified": true
+    },
+    {
+      "scene": "reactor",
+      "pauseResume": true,
+      "recoveredWithoutAutoRestart": true,
+      "downloadValid": true,
+      "samples": 4,
+      "activeBeforePause": 6283.099999999999,
+      "heapSupported": true,
+      "bossFightCanvasAndReactorVerified": true
+    }
+  ],
+  "noLiveBackendRequests": true,
+  "noBrowserErrors": true
+}
