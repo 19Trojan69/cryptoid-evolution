@@ -27,6 +27,7 @@ jobs:
       - run: node --test verification/memory-monitor-lab-20261106/model.test.mjs
       - run: node verification/memory-monitor-lab-20261106/build.mjs
       - run: node verification/memory-monitor-lab-20261106/verify.mjs ${{ matrix.engine }}
+      - run: node verification/memory-monitor-lab-20261106/verify-touch.mjs ${{ matrix.engine }}
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()
         with:
