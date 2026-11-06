@@ -1,0 +1,32 @@
+name: Build bounded socket renderer with existing release checks
+on:
+  push:
+    branches: [codex/socket-surface-20261106]
+    paths: ['.github/workflows/cryptoid-socket-integration.yml']
+permissions:
+  contents: read
+jobs:
+  release-checks:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with: {fetch-depth: 3, persist-credentials: false}
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with: {node-version: '24'}
+      - name: Install frontend without lifecycle scripts and preserve tracked lock
+        run: |
+          node --input-type=module - <<'JS'
+          import {readFileSync,writeFileSync} from 'node:fs';
+          import {spawnSync} from 'node:child_process';
+          const p='frontend/yarn.lock', bytes=readFileSync(p);
+          let r;try {r=spawnSync('npm',['install','--prefix','frontend','--include=optional','--ignore-scripts','--no-audit','--no-fund'],{stdio:'inherit'});}
+          finally {writeFileSync(p,bytes);}
+          if(r.status!==0)process.exit(r.status||1);
+          JS
+          git diff --exit-code -- frontend backend api private-preview vercel.json
+      - name: Run existing frontend release tests, TypeScript and Vite build
+        env: {VERCEL_ENV: preview}
+        run: |
+          npm --prefix frontend run build
+          git diff --exit-code -- frontend backend api private-preview vercel.json
