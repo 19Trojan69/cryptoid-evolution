@@ -1,0 +1,52 @@
+name: Attribute native WebKit allocations before gameplay
+on:
+  push:
+    branches: [codex/native-allocation-20261106]
+    paths:
+      - '.github/workflows/cryptoid-native-allocation.yml'
+      - 'verification/native-allocation-20261106/**'
+permissions:
+  contents: read
+concurrency:
+  group: native-allocation-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  profile:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    container:
+      image: mcr.microsoft.com/playwright@sha256:dcc5531e97840b9b5e794f2814476b21571c5124a3fca2267d73041f56e7580e
+      options: --init --ipc=host
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with: {persist-credentials: false}
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with: {node-version: '24'}
+      - name: Validate kernel parser and unchanged original sources
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          node --test verification/native-allocation-20261106/smaps.test.mjs
+          node --check verification/native-allocation-20261106/run.mjs
+          python3 -m py_compile verification/native-allocation-20261106/prefix.py
+          node verification/direct-boss-style-device-20261102/verifyScope.mjs
+      - name: Install native profiler and unchanged game
+        env: {VERCEL_ENV: preview, DEBIAN_FRONTEND: noninteractive}
+        run: |
+          apt-get update -qq
+          apt-get install -y --no-install-recommends heaptrack g++ zstd
+          dpkg-query -W heaptrack g++ zstd > verification/native-allocation-20261106/tool-versions.txt
+          npm install --prefix verification/boss2-forensics-20261028 --ignore-scripts --no-audit --no-fund
+          node verification/direct-boss-style-device-20261102/installDevicePreview.mjs --ignore-scripts
+          node verification/player-muzzle-webkit-device-20261105/build.mjs
+      - name: Control profiler and record original paused scene allocations
+        run: |
+          node verification/native-allocation-20261106/run.mjs
+          node verification/direct-boss-style-device-20261102/verifyScope.mjs
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: ${{ !cancelled() }}
+        with:
+          name: native-allocation
+          path: |
+            verification/native-allocation-20261106/results/
+            verification/native-allocation-20261106/tool-versions.txt
+          retention-days: 7
