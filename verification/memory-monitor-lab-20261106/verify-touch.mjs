@@ -7,7 +7,7 @@ const directory=new URL('.',import.meta.url).pathname,out=directory+'results';mk
 const require=createRequire(new URL('../transition-motion-20261106/package.json',import.meta.url)),pw=require('playwright');
 const engine=process.argv[2];assert.ok(['chromium','webkit'].includes(engine));
 const site=resolve(directory,'site'),mime={'.html':'text/html','.js':'text/javascript','.css':'text/css','.json':'application/json','.webp':'image/webp','.png':'image/png','.svg':'image/svg+xml','.mp3':'audio/mpeg','.wav':'audio/wav','.woff2':'font/woff2'};
-const server=createServer((req,res)=>{const path=decodeURIComponent(new URL(req.url,'http://localhost').pathname);let file=resolve(site,'.'+path);if(!file.startsWith(site+'/')){res.writeHead(403).end();return;}if(!existsSync(file)||statSync(file).isDirectory())file=site+'/index.html';res.setHeader('Content-Type',mime[extname(file)]||'application/octet-stream');createReadStream(file).pipe(res);});
+const server=createServer((req,res)=>{const path=decodeURIComponent(new URL(req.url,'http://localhost').pathname);let file=resolve(site,'.'+path);if(!file.startsWith(site+'/')&&file!==site){res.writeHead(403).end();return;}if(!existsSync(file)||statSync(file).isDirectory())file=site+'/index.html';res.setHeader('Content-Type',mime[extname(file)]||'application/octet-stream');createReadStream(file).pipe(res);});
 await new Promise(r=>server.listen(0,'127.0.0.1',r));const origin='http://127.0.0.1:'+server.address().port;
 const browser=await pw[engine].launch({headless:true});let page,context;
 const result={engine,complete:false,physicalPhone:false,piBrowser:false,whiteScreenFixed:false,publicDeploymentChanged:false,cases:[]};
