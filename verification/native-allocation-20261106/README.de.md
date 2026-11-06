@@ -13,3 +13,5 @@ Instrumentierung kann Laufzeit und Speicher stark beeinflussen. Der Lauf endet a
 Originalquellen zur Mechanik: WebKit-Upstream343e13bf22dca9d0ec227801419aab0f9001a32f, AuxiliaryProcessProxy.cpp/ProcessLauncherGLib.cpp und Playwrightv1.62.1 bootstrap.diff; KDE/heaptrack Shell-/Preload- und Printquellen, einschließlich Tagv1.4.0. Tatsächliche Binärunterstützung und aufgelöste Symbole müssen erst im Lauf bestehen. Keine still angenommene Vollständigkeit der Symbole.
 
 Keine Bereitstellung, neuer Handytest, Merge, Alias- oder Zugriffsschutzänderung. Vercel-Autodeployment bleibtfalse.
+
+Vor Spielstart wird die tatsächlich installierte Hilfe gelesen. Nur bei ausdrücklich unterstütztem --record-only wird das Flag gesetzt; ältere CLI-Versionen sind ausschließlich ohne vorhandene automatische GUI zulässig. Diese Korrektur ersetzt die zunächst fälschlich versionsübergreifend vorausgesetzte Option. Zwei zusätzliche Fälle prüfen beide CLI-Generationen und die unzulässige alte GUI-Kombination.

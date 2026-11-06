@@ -5,6 +5,7 @@ import {root,configuration} from '../boss2-forensics-20261028/fixture.mjs';
 import {serveDevicePreview} from '../boss2-forensics-20261028/devicePreviewServer.mjs';
 import {sampleBrowserMemory} from '../boss2-forensics-20261028/processMemory.mjs';
 import {summarizeSmaps} from './smaps.mjs';
+import {recordOnlyFlags} from './profilerMode.mjs';
 const req=createRequire(new URL('../boss2-forensics-20261028/package.json',import.meta.url)),pw=req('playwright');
 assert.equal(req('playwright/package.json').version,'1.62.1');assert.ok(existsSync(pw.webkit.executablePath()));
 const dir=root+'/verification/native-allocation-20261106',out=dir+'/results';mkdirSync(out,{recursive:true});
@@ -45,7 +46,8 @@ async function finishProfiles(cohort,row){
 try{
  result.heaptrackVersion=command(['heaptrack','--version']).trim();result.heaptrackPrintVersion=command(['heaptrack_print','--version']).trim();
  command(['g++','-g','-O0','-fno-omit-frame-pointer','-rdynamic',dir+'/control.cpp','-o',out+'/control']);
- const ctrl=command(['heaptrack','--record-only','-o',out+'/control-heap','--',out+'/control']);
+ const heapFlags=recordOnlyFlags(command(['heaptrack','--help']),command(['sh','-c','command -v heaptrack_gui || true']).trim().length>0);result.profilerLaunchMode=heapFlags.length?'record-only-flag':'cli-without-gui';
+ const ctrl=command(['heaptrack',...heapFlags,'-o',out+'/control-heap','--',out+'/control']);
  writeFileSync(out+'/control-run.txt',ctrl);
  const file=readdirSync(out).find(n=>/^control-heap\.(gz|zst)$/.test(n));assert.ok(file);
  const text=command(['heaptrack_print',out+'/'+file,'--print-peaks=1','--print-allocators=0','--print-temporary=0','--peak-limit=10','--print-massif='+out+'/control.massif']);
@@ -54,7 +56,7 @@ try{
  server=await serveDevicePreview();
  for(const cohort of ['control-page','prepared-menu','paused-scene']){
   fatal=null;mkdirSync(out+'/'+cohort,{recursive:true});const row={cohort,complete:false,snapshots:[]};result.cohorts.push(row);save();
-  browser=await pw.webkit.launch({headless:true,env:{...process.env,WEB_PROCESS_CMD_PREFIX:'/usr/bin/python3 '+dir+'/prefix.py',CRYPTOID_ALLOCATION_COHORT:cohort,DEBUGINFOD_URLS:''}});
+  browser=await pw.webkit.launch({headless:true,env:{...process.env,WEB_PROCESS_CMD_PREFIX:'/usr/bin/python3 '+dir+'/prefix.py',CRYPTOID_ALLOCATION_COHORT:cohort,CRYPTOID_HEAPTRACK_RECORD_ONLY:heapFlags.length?'yes':'no',DEBUGINFOD_URLS:''}});
   const context=await browser.newContext({...configuration('iphone',pw.devices).context,viewport:{width:430,height:825},deviceScaleFactor:3});
   const external=[],assets=[];await context.route('**/*',route=>{const u=new URL(route.request().url());if(u.origin===server.origin||['fonts.googleapis.com','fonts.gstatic.com'].includes(u.hostname))return route.continue();external.push(u.hostname);return route.abort();});
   const page=await context.newPage();page.setDefaultTimeout(90000);page.on('crash',()=>fatal??='renderer-crash');page.on('pageerror',()=>fatal??='uncaught-js-error');

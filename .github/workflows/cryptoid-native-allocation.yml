@@ -25,7 +25,7 @@ jobs:
       - name: Validate kernel parser and unchanged original sources
         run: |
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
-          node --test verification/native-allocation-20261106/smaps.test.mjs
+          node --test verification/native-allocation-20261106/*.test.mjs
           node --check verification/native-allocation-20261106/run.mjs
           python3 -m py_compile verification/native-allocation-20261106/prefix.py
           node verification/direct-boss-style-device-20261102/verifyScope.mjs
