@@ -26,6 +26,7 @@ jobs:
           git fetch --no-tags --depth=1 origin 87f5dc28d1cb5054c0e40420848068eb0a156e56
           node --check frontend/src/pages/bossWeaponRenderer.ts
           node --check verification/socket-surface-20261106/native.mjs
+          node --test verification/socket-surface-20261106/lifetime.test.mjs
           npm install --prefix verification/socket-surface-20261106 --ignore-scripts --no-audit --no-fund
       - name: Compare all 50 original weapon atlases on CPU
         run: node verification/socket-surface-20261106/cpu.mjs

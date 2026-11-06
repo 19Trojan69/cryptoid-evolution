@@ -1,6 +1,6 @@
 // Shared by CPU raster and both actual browser engines. No tolerance or saved
 // screenshots: every output channel must match the unchanged renderer exactly.
-export async function compareSurfaces({before,after,makeCanvas,loadImage,pixels}) {
+export async function compareSurfaces({before,after,makeCanvas,loadImage,pixels,expectReduction=true}) {
  const result={complete:false,cases:0,differentChannels:0,rows:[],maxLiveSourceBytes:0};
  for(const config of before.bossManifest){
   const image=await loadImage(config.weaponImage);
@@ -40,7 +40,7 @@ export async function compareSurfaces({before,after,makeCanvas,loadImage,pixels}
      }
      if(phase==='original'){
       const bytes=owned.map(list=>list.reduce((sum,c)=>sum+c.width*c.height*4,0));
-      if(bytes[1]>=bytes[0])throw Error('Every tested boss must use a smaller socket source');
+      if(expectReduction?bytes[1]>=bytes[0]:bytes[1]!==bytes[0])throw Error('Unexpected source size for the verified browser path');
       if(width===390){row.sourceBeforeBytes=bytes[0];row.sourceAfterBytes=bytes[1];}
      }
      result.cases++;row.cases++;

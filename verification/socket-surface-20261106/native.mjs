@@ -23,14 +23,14 @@ try{
  const context=await browser.newContext({viewport:{width:430,height:825},deviceScaleFactor:3});const page=await context.newPage();
  let fault;page.on('crash',()=>fault='crash');page.on('pageerror',e=>fault=e.message);
  await page.goto('http://127.0.0.1:'+server.address().port);
- result.comparison=await page.evaluate(async({a,b,compare})=>{
+ result.comparison=await page.evaluate(async({a,b,compare,expectReduction})=>{
   const before=eval(a),after=eval(b);
   const compareSurfaces=eval('('+compare+')');
-  return await compareSurfaces({before,after,
+  return await compareSurfaces({before,after,expectReduction,
    makeCanvas:(w,h)=>{const c=document.createElement('canvas');c.width=w;c.height=h;return c;},
    loadImage:p=>new Promise((resolve,reject)=>{const image=new Image();image.onload=()=>{image.onload=image.onerror=null;resolve(image);};image.onerror=()=>reject(Error('Original atlas missing'));image.src=p;}),
    pixels:c=>c.getContext('2d').getImageData(0,0,c.width,c.height).data});
- },{a:code(original),b:code(candidate),compare:compareSurfaces.toString()});
+ },{a:code(original),b:code(candidate),compare:compareSurfaces.toString(),expectReduction:engine==='chromium'});
  assert.equal(result.comparison.complete,true);assert.equal(result.comparison.rows.length,50);assert.equal(result.comparison.cases,700);assert.ok(!fault,fault);
  result.cases=result.comparison.cases;result.complete=true;
 }catch(e){result.failure={message:e.message};process.exitCode=1;}

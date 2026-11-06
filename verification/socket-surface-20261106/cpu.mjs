@@ -6,7 +6,8 @@ import {compareSurfaces} from './compare.mjs';
 const req=createRequire(import.meta.url);
 let pkg;try{pkg=req.resolve('@napi-rs/canvas');}catch{pkg=process.env.CODEX_PRIMARY_RUNTIME_NODE_MODULES+'/@napi-rs/canvas';}
 const {createCanvas,loadImage}=req(pkg);
-const before=eval(code(original)),after=eval(code(candidate));
+const host={userAgent:'Mozilla/5.0 Chrome/151.0.7922.34 Safari/537.36'};
+const before=Function('navigator','return '+code(original))(host),after=Function('navigator','return '+code(candidate))(host);
 // This CPU package resets a zero dimension to 350/150, unlike HTMLCanvasElement.
 // Preserve assigned HTML dimensions for the release assertions and keep its
 // retired native allocation at 1px. Actual zero backing release is browser-only.
