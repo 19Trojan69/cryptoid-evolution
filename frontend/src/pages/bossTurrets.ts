@@ -40,9 +40,12 @@ export const advanceBossTurrets = (boss:SectorBoss,player:PlayerPosition,width:n
  const pressure=bossDifficulty(boss.config.id);
  const guns=bossWeapons[boss.config.id-1];
  for(let i=0;i<guns.length;i++){
-  const g=guns[i],state=boss.turrets[i],p=gunPosition(boss,g);
+  const g=guns[i],state=boss.turrets[i];
   if(state.health<=0)continue;
-  const desired=Math.atan2(-(player.x*width-p.x),player.y*height-p.y),diff=angleDifference(desired,state.a);
+  // Tracking needs two numbers, not a fresh position object per gun/frame.
+  const x=boss.x+(g.sourceX/boss.config.sourceWidth-.5)*boss.width;
+  const y=boss.y+(g.sourceY/boss.config.sourceHeight-.5)*boss.height;
+  const desired=Math.atan2(-(player.x*width-x),player.y*height-y),diff=angleDifference(desired,state.a);
   const speed=Math.min(g.turnSpeed*pressure.trackingScale,Math.abs(diff)*6);state.a+=Math.sign(diff)*Math.min(Math.abs(diff),speed*dt/1000);
   const error=Math.abs(angleDifference(desired,state.a));state.lock=error<.035?state.lock+dt:0;
  }

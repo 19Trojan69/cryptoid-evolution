@@ -6,7 +6,7 @@ import BossWeaponsView from "./BossWeaponsView";
 import BossReactorView from "./BossReactorView";
 import BossHealthView from "./BossHealthView";
 import HullDamage from "./HullDamage";
-import FinishedEffect from "./FinishedEffect";
+import BossReactorDestruction from "./BossReactorDestruction";
 import { specialWeaponBox } from "./bossSpecialWeapon";
 import { BOSS_REACTOR_BURST_MS } from "./bossDefeatTiming";
 
@@ -111,7 +111,7 @@ export default memo(function BossHullView({ boss, fall, ready, light, now, fallD
       )}
       {fall && (
         <>
-          <FinishedEffect key={fall.id} tag="i" className="boss-reactor-destruction" style={{ left: reactorBox!.left, top: reactorBox!.top, width: reactorBox!.width, height: reactorBox!.height }} />
+          <BossReactorDestruction key={fall.id} style={{ left: reactorBox!.left, top: reactorBox!.top, width: reactorBox!.width, height: reactorBox!.height }} />
           <div className="boss-fall-bursts">
             {fall.fireSites?.map(([x, y], index) => (
               <i key={index} style={{ left: `${x}%`, top: `${y}%`, animationDelay: `${BOSS_REACTOR_BURST_MS + index * 300}ms` }} />
