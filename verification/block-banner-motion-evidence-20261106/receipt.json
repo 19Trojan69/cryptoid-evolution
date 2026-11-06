@@ -1,0 +1,134 @@
+{
+  "project": "Cryptoid Evolution",
+  "sourceCommit": "d9e0897a9396dd8f1f0a9c4a9a0536aa1fb7208d",
+  "sourceTree": "237af363e03e8fc669d60080842dafd7c8db369d",
+  "branch": "codex/reactor-health-20261106",
+  "ciRun": 42202983302,
+  "jobs": [
+    {
+      "id": 127842601054,
+      "name": "native-motion (webkit)",
+      "conclusion": "success"
+    },
+    {
+      "id": 127842601469,
+      "name": "native-motion (chromium)",
+      "conclusion": "success"
+    },
+    {
+      "id": 127842601612,
+      "name": "reactor",
+      "conclusion": "success"
+    }
+  ],
+  "tests": 508,
+  "failures": 0,
+  "changedFiles": [
+    {
+      "filename": ".github/workflows/cryptoid-reactor-health.yml",
+      "status": "modified",
+      "additions": 2,
+      "deletions": 0
+    },
+    {
+      "filename": "frontend/src/pages/transitionNotices.css",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1
+    },
+    {
+      "filename": "verification/reactor-health-20261106/block-motion-native.mjs",
+      "status": "added",
+      "additions": 91,
+      "deletions": 0
+    }
+  ],
+  "native": [
+    {
+      "engine": "webkit",
+      "actualBlockBanner": true,
+      "completeApplicationCss": true,
+      "nativeFramePacing": true,
+      "releasedFreezeReproduced": true,
+      "cases": 72,
+      "blocks": 9,
+      "viewports": 2,
+      "motionSettings": 4,
+      "cubeLeft": true,
+      "binaryRight": true,
+      "visibleCubePixelsChange": true,
+      "pauseResume": true,
+      "unchangedNodeCount": true,
+      "cssSourceBytesChanged": "one selector",
+      "beforeCssSha256": "50cfc664f12b93bd8d678617bae9bd81df946a1cda7657b60f124e6678c8023e",
+      "afterCssSha256": "594fa7eb76f64dcf5d0b94422211f93d2e6bb7955c483c06c730f09f36accf99",
+      "cssAssets": {
+        "before": [
+          "assets/index-q-Ze66t1.css",
+          "assets/powerUps-DLSJWH8A.css",
+          "assets/GamePage-CyY0jnEz.css"
+        ],
+        "after": [
+          "assets/index-q-Ze66t1.css",
+          "assets/powerUps-DLSJWH8A.css",
+          "assets/GamePage-l3ww3aPu.css"
+        ]
+      },
+      "physicalDevice": false,
+      "whiteScreenFixed": false
+    },
+    {
+      "engine": "chromium",
+      "actualBlockBanner": true,
+      "completeApplicationCss": true,
+      "nativeFramePacing": true,
+      "releasedFreezeReproduced": true,
+      "cases": 72,
+      "blocks": 9,
+      "viewports": 2,
+      "motionSettings": 4,
+      "cubeLeft": true,
+      "binaryRight": true,
+      "visibleCubePixelsChange": true,
+      "pauseResume": true,
+      "unchangedNodeCount": true,
+      "cssSourceBytesChanged": "one selector",
+      "beforeCssSha256": "50cfc664f12b93bd8d678617bae9bd81df946a1cda7657b60f124e6678c8023e",
+      "afterCssSha256": "594fa7eb76f64dcf5d0b94422211f93d2e6bb7955c483c06c730f09f36accf99",
+      "cssAssets": {
+        "before": [
+          "assets/index-q-Ze66t1.css",
+          "assets/powerUps-DLSJWH8A.css",
+          "assets/GamePage-CyY0jnEz.css"
+        ],
+        "after": [
+          "assets/index-q-Ze66t1.css",
+          "assets/powerUps-DLSJWH8A.css",
+          "assets/GamePage-l3ww3aPu.css"
+        ]
+      },
+      "physicalDevice": false,
+      "whiteScreenFixed": false
+    }
+  ],
+  "deployment": "dpl_3tcnig7RC16aLXm3jdGC9Mfh2DvF",
+  "previousTestnet": "dpl_BV99zfYJHZJBWy1GZXQHe2xwboFq",
+  "physicalDevice": false,
+  "totalRamSavingMeasured": false,
+  "whiteScreenFixed": false,
+  "artifacts": [
+    {
+      "id": 13495013326,
+      "name": "reactor-ui-chromium",
+      "digest": "sha256:a9eb2da289fc858a9960b9d309f3aa129fbdaa2b267aa79239cb51df27eddb48"
+    },
+    {
+      "id": 13494419292,
+      "name": "reactor-ui-webkit",
+      "digest": "sha256:54b8ddc2686e1a19e086935a7c6f71e09bb5ea053f5343ea39314d4c3494fa64"
+    }
+  ],
+  "state": "READY",
+  "url": "https://cryptoid-evolution-testnet.vercel.app",
+  "publicCssMatchesNative": true
+}

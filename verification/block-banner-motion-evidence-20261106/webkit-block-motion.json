@@ -1,0 +1,33 @@
+{
+  "engine": "webkit",
+  "actualBlockBanner": true,
+  "completeApplicationCss": true,
+  "nativeFramePacing": true,
+  "releasedFreezeReproduced": true,
+  "cases": 72,
+  "blocks": 9,
+  "viewports": 2,
+  "motionSettings": 4,
+  "cubeLeft": true,
+  "binaryRight": true,
+  "visibleCubePixelsChange": true,
+  "pauseResume": true,
+  "unchangedNodeCount": true,
+  "cssSourceBytesChanged": "one selector",
+  "beforeCssSha256": "50cfc664f12b93bd8d678617bae9bd81df946a1cda7657b60f124e6678c8023e",
+  "afterCssSha256": "594fa7eb76f64dcf5d0b94422211f93d2e6bb7955c483c06c730f09f36accf99",
+  "cssAssets": {
+    "before": [
+      "assets/index-q-Ze66t1.css",
+      "assets/powerUps-DLSJWH8A.css",
+      "assets/GamePage-CyY0jnEz.css"
+    ],
+    "after": [
+      "assets/index-q-Ze66t1.css",
+      "assets/powerUps-DLSJWH8A.css",
+      "assets/GamePage-l3ww3aPu.css"
+    ]
+  },
+  "physicalDevice": false,
+  "whiteScreenFixed": false
+}

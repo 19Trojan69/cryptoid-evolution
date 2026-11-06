@@ -1,0 +1,48 @@
+{
+  "origin": "https://cryptoid-evolution-testnet.vercel.app",
+  "public200": true,
+  "commit": "d9e0897a9396dd8f1f0a9c4a9a0536aa1fb7208d",
+  "tree": "237af363e03e8fc669d60080842dafd7c8db369d",
+  "index": "/assets/index-DBhFovXC.js",
+  "game": "/assets/GamePage-3YBvjlXs.js",
+  "css": "/assets/index-q-Ze66t1.css",
+  "gameCss": "/assets/GamePage-l3ww3aPu.css",
+  "powerUpsCss": "/assets/powerUps-DLSJWH8A.css",
+  "styleSha256": {
+    "/assets/index-q-Ze66t1.css": "00aaaaf8c197a19105eef9243b11e045e1e37f8a47768c42d5a0cb6c895972a0",
+    "/assets/powerUps-DLSJWH8A.css": "674856da8bc7b8e50b250f089157c9b3fea71dc0d72d034811e092b2d274d7f9",
+    "/assets/GamePage-l3ww3aPu.css": "f36a55c404bbc557fc2c21ec278a92c14e3e197059d7fec84a4fed68c6b46f8a"
+  },
+  "checks": {
+    "blockBannerException": true,
+    "sourceCommit": true,
+    "sourceTree": true,
+    "reactorHealth": true,
+    "reactorColour": true,
+    "reactorBlast": true,
+    "reactorLocalShot": true,
+    "singleBinaryReverse": true,
+    "cubeReverse": true,
+    "cubeNotDisabled": true,
+    "squareHealth": true
+  },
+  "api": {
+    "/api": 200,
+    "/api/admin/status": 401
+  },
+  "assetSha256": {
+    "/assets/index-DBhFovXC.js": "2a75c3b887ac1ef0f18251ac59bbc3b2180a33a2f14cafbc93b677e6ca5d3be7",
+    "/assets/GamePage-3YBvjlXs.js": "0ffd0608902049ca226a032515ad875c879e31ce3b60bab4bc655b81d47f0911",
+    "/assets/displaySettings-C_7mEr-M.js": "0e7c26f8a44c24c6a9215bc031b4bfd4b8468718dafbc58baa72d205601fa989",
+    "/assets/cardSound-BkpzO9N1.js": "1fcab64582947d5ebc9c8b04b0bf986c8c9cabe8407e833063e71246bbc3594e",
+    "/assets/shipEvolution-BDpU4NhM.js": "6840b51d89329e678e0b336ed1df7ddf27975bbc72de726fff8c06dc9ca0d7f5",
+    "/assets/reloadDiagnostics-CakJK6wZ.js": "65daa37bc08eec8176aa8770e5ae90782c2b9dd678f0fef11947b5f1bed73e79",
+    "/assets/powerUps-B7hLwYrc.js": "9d71dc4257ec6c2335f16e6363d724de7c7561ca4b732d110b4341b70c44124b"
+  },
+  "fullGamePlayTested": false,
+  "physicalDevice": false,
+  "totalGameRamMeasured": false,
+  "whiteScreenFixed": false,
+  "fullCssMatchesNative": true,
+  "loadedStyleBundleSha256": "594fa7eb76f64dcf5d0b94422211f93d2e6bb7955c483c06c730f09f36accf99"
+}
