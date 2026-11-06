@@ -14,6 +14,7 @@ try{
   const rotor=document.querySelector('.blockchain-cube-rotor');
   const animation=rotor.getAnimations().find(a=>a.animationName==='blockchain-cube-turn');
   if(!animation)throw Error('Cube has no native rotation');
+  if(getComputedStyle(rotor).animationPlayState!=='running')throw Error('Transition cube is incorrectly paused');
   animation.pause();animation.currentTime=100;const first=getComputedStyle(rotor).transform;animation.currentTime=1700;const second=getComputedStyle(rotor).transform;
   return {cubePlayState:style('.blockchain-cube-rotor').animationPlayState,first,second,
    single:style('.blockchain-binary-track').animationDirection,
