@@ -1,0 +1,55 @@
+{
+  "engine": "chromium",
+  "complete": true,
+  "physicalPhone": false,
+  "whiteScreenFixed": false,
+  "scenes": [
+    {
+      "scene": "normal",
+      "currentRules": true,
+      "legacyMarkersAbsent": true,
+      "compactHeight": 121.75,
+      "transparentBackground": "rgba(3, 13, 22, 0.2)",
+      "redAndNormalColourVerified": true,
+      "pauseResume": true,
+      "recoveredWithoutAutoRestart": true,
+      "downloadValid": true,
+      "samples": 4,
+      "activeBeforePause": 7633,
+      "heapSupported": true,
+      "bossFightCanvasAndReactorVerified": false
+    },
+    {
+      "scene": "turrets",
+      "currentRules": true,
+      "legacyMarkersAbsent": true,
+      "compactHeight": 121.75,
+      "transparentBackground": "rgba(3, 13, 22, 0.2)",
+      "redAndNormalColourVerified": true,
+      "pauseResume": true,
+      "recoveredWithoutAutoRestart": true,
+      "downloadValid": true,
+      "samples": 4,
+      "activeBeforePause": 6349.700000000001,
+      "heapSupported": true,
+      "bossFightCanvasAndReactorVerified": true
+    },
+    {
+      "scene": "reactor",
+      "currentRules": true,
+      "legacyMarkersAbsent": true,
+      "compactHeight": 121.75,
+      "transparentBackground": "rgba(3, 13, 22, 0.2)",
+      "redAndNormalColourVerified": true,
+      "pauseResume": true,
+      "recoveredWithoutAutoRestart": true,
+      "downloadValid": true,
+      "samples": 4,
+      "activeBeforePause": 6299.799999999999,
+      "heapSupported": true,
+      "bossFightCanvasAndReactorVerified": true
+    }
+  ],
+  "noLiveBackendRequests": true,
+  "noBrowserErrors": true
+}

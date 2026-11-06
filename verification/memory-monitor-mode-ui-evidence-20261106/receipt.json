@@ -1,0 +1,91 @@
+{
+  "delivered": {
+    "url": "https://cryptoid-evolution-memory-lab.vercel.app/",
+    "deploymentId": "dpl_BGskVWNftZKdnwbbGCcGBbrgNEBz",
+    "projectId": "prj_0uk2EWyJzzKfIHoLUMrDZMaJZY4W",
+    "state": "READY",
+    "sourceCommit": "a51bb9fe292a780ed8819d64af820003c01c3519",
+    "sourceTree": "1290f22bec36b204da069f46e4e58a8f9c6ea683",
+    "baseRuntime": "d9e0897a9396dd8f1f0a9c4a9a0536aa1fb7208d",
+    "isolatedProject": "prj_0uk2EWyJzzKfIHoLUMrDZMaJZY4W",
+    "gameRules": "current-testnet-rules",
+    "guestOnly": true,
+    "liveBackend": false,
+    "actualPiAuthentication": false,
+    "payments": false,
+    "automaticUpload": false,
+    "whiteScreenFixed": false,
+    "sampleMs": 5000,
+    "maxSamples": 360,
+    "totalNativeRamAvailable": false,
+    "resourceByteValuesAreEstimates": true
+  },
+  "verification": {
+    "commit": "04e46ed93ed9c179bc13df9b22624e9666b65151",
+    "workflowRun": 42238296475,
+    "jobs": {
+      "chromium": 127961609098,
+      "webkit": 127961609523
+    },
+    "modelTests": 15,
+    "modelTestsPassed": 15,
+    "browserCases": 6,
+    "browserCasesPassed": 6,
+    "onlyDifferenceFromDelivered": {
+      "status": "ahead",
+      "ahead_by": 1,
+      "files": [
+        {
+          "filename": ".github/workflows/cryptoid-memory-lab.yml",
+          "status": "modified"
+        }
+      ]
+    },
+    "visual": {
+      "engine": "webkit",
+      "normal": true,
+      "reactor": true,
+      "digest": "sha256:07e56c749406e48056ee0e4b440cc43520706aeeeb063d947158864cfe42183a"
+    }
+  },
+  "monitor": {
+    "compactDefault": true,
+    "compactHeightCssPx": 121.75,
+    "compactBackground": "rgba(3, 13, 22, 0.2)",
+    "detailsViaPlus": true,
+    "alertPolicy": {
+      "minActiveMs": 10000,
+      "referenceSamples": 3,
+      "growthRatio": 1.5,
+      "minGrowthBytes": 8388608,
+      "heapMinGrowthBytes": 16777216,
+      "meaning": "relative resource growth, not a native RAM limit"
+    }
+  },
+  "sourceFrontend": {
+    "path": "frontend",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "6e0cdc1bea4b6c84972382f636fa66caf2739010",
+    "url": "https://api.github.com/repos/19Trojan69/cryptoid-evolution/git/trees/6e0cdc1bea4b6c84972382f636fa66caf2739010"
+  },
+  "unchanged": {
+    "testnet": {
+      "id": "dpl_3tcnig7RC16aLXm3jdGC9Mfh2DvF",
+      "state": "READY",
+      "sha": "d9e0897a9396dd8f1f0a9c4a9a0536aa1fb7208d"
+    },
+    "production": {
+      "id": "dpl_6N3FdS9XGXasCWrpMksngxCPNPRk",
+      "state": "READY",
+      "sha": "ce073547cf573375d141bf846f70e294138dbd73"
+    }
+  },
+  "caveats": {
+    "physicalPhoneTest": false,
+    "whiteScreenFixed": false,
+    "totalBrowserRamMeasured": false,
+    "oldLabModeWasLegacy": true,
+    "previousEvidenceMissedModeSelector": true
+  }
+}
