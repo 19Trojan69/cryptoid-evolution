@@ -1,11 +1,13 @@
 import assert from 'node:assert/strict';
-import {createRequire} from 'node:module';import {readFileSync,writeFileSync,mkdirSync,readdirSync,statSync,existsSync} from 'node:fs';
+import {createRequire} from 'node:module';import {readFileSync,writeFileSync,mkdirSync,readdirSync,statSync,existsSync,renameSync,unlinkSync,chmodSync,realpathSync,readlinkSync} from 'node:fs';
+import {dirname} from 'node:path';
 import {execFileSync,spawnSync} from 'node:child_process';import {createHash} from 'node:crypto';
 import {root,configuration} from '../boss2-forensics-20261028/fixture.mjs';
 import {serveDevicePreview} from '../boss2-forensics-20261028/devicePreviewServer.mjs';
 import {sampleBrowserMemory} from '../boss2-forensics-20261028/processMemory.mjs';
 import {summarizeSmaps} from './smaps.mjs';
 import {recordOnlyFlags} from './profilerMode.mjs';
+import {isActualProfiledWorker} from './processIdentity.mjs';
 const req=createRequire(new URL('../boss2-forensics-20261028/package.json',import.meta.url)),pw=req('playwright');
 assert.equal(req('playwright/package.json').version,'1.62.1');assert.ok(existsSync(pw.webkit.executablePath()));
 const dir=root+'/verification/native-allocation-20261106',out=dir+'/results';mkdirSync(out,{recursive:true});
@@ -15,10 +17,24 @@ const result={version:1,complete:false,kind:'native-allocation-before-gameplay',
  gameClockEdited:false,activeGameplayTested:false,normalGameExitOrExportTested:false,cohorts:[]};
 const save=()=>writeFileSync(out+'/result.json',JSON.stringify(result,null,2)+'\n');
 const command=(args,timeout=60000)=>{const r=spawnSync(args[0],args.slice(1),{encoding:'utf8',timeout,maxBuffer:8*1024*1024});assert.equal(r.status,0,(r.error?.message??'')+r.stderr);return r.stdout+r.stderr;};
-let server,browser,fatal;
+let server,browser,fatal,workerPatch;
+const shellQuote=s=>"'"+s.replaceAll("'","'\\''")+"'";
+function installWorkerWrapper(){
+ const base=realpathSync(dirname(pw.webkit.executablePath()));
+ const paths=execFileSync('find',[base,'-type','f','-name','WPEWebProcess'],{encoding:'utf8'}).trim().split('\n').filter(Boolean);assert.equal(paths.length,1,'One actual bundled WPE worker is required');
+ const worker=realpathSync(paths[0]);assert.ok(worker.startsWith(base+'/'));const bytes=readFileSync(worker);assert.deepEqual([...bytes.subarray(0,4)],[127,69,76,70],'Wrap the actual ELF, not a guessed launcher');
+ const backup=worker+'.heaptrack-original';assert.equal(existsSync(backup),false);const mode=statSync(worker).mode&0o777;
+ const patch={worker,backup,mode,sha256:createHash('sha256').update(bytes).digest('hex')};renameSync(worker,backup);workerPatch=patch;result.testBrowserWrapper={originalElfSha256:patch.sha256,originalElfBytesUnchanged:true,workerBasename:'WPEWebProcess',temporaryContainerOnly:true};
+ writeFileSync(worker,'#!/bin/sh\nexec /usr/bin/python3 '+shellQuote(dir+'/prefix.py')+' '+shellQuote(backup)+' "$@"\n');chmodSync(worker,mode);
+ assert.equal(createHash('sha256').update(readFileSync(backup)).digest('hex'),workerPatch.sha256);
+ result.testBrowserWrapper={originalElfSha256:workerPatch.sha256,originalElfBytesUnchanged:true,workerBasename:'WPEWebProcess',temporaryContainerOnly:true};
+}
+function restoreWorker(){if(!workerPatch)return;assert.equal(createHash('sha256').update(readFileSync(workerPatch.backup)).digest('hex'),workerPatch.sha256);unlinkSync(workerPatch.worker);renameSync(workerPatch.backup,workerPatch.worker);result.testBrowserWrapper.restored=true;workerPatch=null;}
+
 async function tap(page,locator){await locator.waitFor({state:'visible',timeout:90000});assert.ok(await locator.isEnabled());await locator.scrollIntoViewIfNeeded();const r=await locator.boundingBox();assert.ok(r);await page.touchscreen.tap(r.x+r.width/2,r.y+r.height/2);}
 function recordProcesses(cohort){
- const memory=sampleBrowserMemory();assert.ok(memory.contentProcessObserved&&Number.isFinite(memory.summedPssKiB));
+ const observed=sampleBrowserMemory(),excluded=[];const processes=observed.processes.filter(p=>{if(p.role!=='webkit-content')return true;const actual=readlinkSync('/proc/'+p.pid+'/exe');if(isActualProfiledWorker(actual))return true;excluded.push({pid:p.pid,reportedRole:p.role,actualExecutable:actual.split('/').at(-1)});return false;});
+ const memory={...observed,processes,rawClassifiedPssKiB:observed.summedPssKiB,excludedProfilerWrappers:excluded,summedPssKiB:processes.reduce((n,p)=>n+p.pssKiB,0),summedRssKiB:processes.reduce((n,p)=>n+p.rssKiB,0),contentProcessObserved:processes.some(p=>p.role==='webkit-content')};assert.ok(memory.contentProcessObserved&&Number.isFinite(memory.summedPssKiB));
  const content=memory.processes.filter(p=>p.role==='webkit-content');assert.ok(content.length);
  const records=content.map(p=>{
   const status=readFileSync('/proc/'+p.pid+'/status','utf8'),parent=Number(status.match(/^PPid:\s+(\d+)/m)?.[1]);assert.ok(parent>0);
@@ -53,10 +69,10 @@ try{
  const text=command(['heaptrack_print',out+'/'+file,'--print-peaks=1','--print-allocators=0','--print-temporary=0','--peak-limit=10','--print-massif='+out+'/control.massif']);
  writeFileSync(out+'/control-profile.txt',text);assert.ok(text.includes('known_heap_owner'),'Known allocation call site must resolve');
  const knownPeaks=[...readFileSync(out+'/control.massif','utf8').matchAll(/^mem_heap_B=(\d+)$/gm)].map(m=>Number(m[1]));assert.ok(knownPeaks.length&&Math.max(...knownPeaks)>=4*1024*1024,'Known four-MiB allocation must be quantitatively observed');result.knownAllocationControlPassed=true;result.knownControlPeakBytes=Math.max(...knownPeaks);save();
- server=await serveDevicePreview();
+ installWorkerWrapper();server=await serveDevicePreview();
  for(const cohort of ['control-page','prepared-menu','paused-scene']){
   fatal=null;mkdirSync(out+'/'+cohort,{recursive:true});const row={cohort,complete:false,snapshots:[]};result.cohorts.push(row);save();
-  browser=await pw.webkit.launch({headless:true,env:{...process.env,WEB_PROCESS_CMD_PREFIX:'/usr/bin/python3 '+dir+'/prefix.py',CRYPTOID_ALLOCATION_COHORT:cohort,CRYPTOID_HEAPTRACK_RECORD_ONLY:heapFlags.length?'yes':'no',DEBUGINFOD_URLS:''}});
+  browser=await pw.webkit.launch({headless:true,env:{...process.env,WEB_PROCESS_CMD_PREFIX:'',CRYPTOID_ALLOCATION_COHORT:cohort,CRYPTOID_HEAPTRACK_RECORD_ONLY:heapFlags.length?'yes':'no',DEBUGINFOD_URLS:''}});
   const context=await browser.newContext({...configuration('iphone',pw.devices).context,viewport:{width:430,height:825},deviceScaleFactor:3});
   const external=[],assets=[];await context.route('**/*',route=>{const u=new URL(route.request().url());if(u.origin===server.origin||['fonts.googleapis.com','fonts.gstatic.com'].includes(u.hostname))return route.continue();external.push(u.hostname);return route.abort();});
   const page=await context.newPage();page.setDefaultTimeout(90000);page.on('crash',()=>fatal??='renderer-crash');page.on('pageerror',()=>fatal??='uncaught-js-error');
@@ -83,4 +99,4 @@ try{
  }
  result.complete=true;
 }catch(e){result.failure={message:e.message};process.exitCode=1;}
-finally{if(browser)await browser.close().catch(()=>{});if(server)await server.close();result.finishedAt=new Date().toISOString();save();console.log('NATIVE_ALLOCATION_RESULT '+JSON.stringify({complete:result.complete,failure:result.failure,cohorts:result.cohorts.map(x=>({cohort:x.cohort,complete:x.complete,profiles:x.profiles}))}));}
+finally{if(browser)await browser.close().catch(()=>{});if(server)await server.close();restoreWorker();result.finishedAt=new Date().toISOString();save();console.log('NATIVE_ALLOCATION_RESULT '+JSON.stringify({complete:result.complete,failure:result.failure,cohorts:result.cohorts.map(x=>({cohort:x.cohort,complete:x.complete,profiles:x.profiles}))}));}

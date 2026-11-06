@@ -3,7 +3,7 @@ import os,sys,json,pathlib,resource,shutil
 cohort=os.environ.get('CRYPTOID_ALLOCATION_COHORT')
 assert cohort in ['control-page','prepared-menu','paused-scene']
 assert len(sys.argv)>=4
-exe=pathlib.Path(sys.argv[1]).name
+exe=pathlib.Path(sys.argv[1]).name.removesuffix('.heaptrack-original')
 assert exe in ['WPEWebProcess','WebKitWebProcess'],exe
 root=pathlib.Path(__file__).resolve().parent/'results'/cohort
 root.mkdir(parents=True,exist_ok=True)
