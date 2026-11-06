@@ -3,6 +3,17 @@ import {createHash} from 'node:crypto';
 export const BASE_RUNTIME='d9e0897a9396dd8f1f0a9c4a9a0536aa1fb7208d';
 export const EXPECTED_CONTROLLER='4867dfeb5a00944736abbc3d5667b1d83850593e';
 export const LAB_PROJECT='prj_0uk2EWyJzzKfIHoLUMrDZMaJZY4W';
+// This hostname has no "testnet" substring. Select the same gameplay branch
+// explicitly before any module reads window.__ENV; transport stays local.
+export function labHtml(html){
+  const sdk='<script src="https://sdk.minepi.com/pi-sdk.js"></script>';
+  assert.equal(html.split(sdk).length,2);
+  assert.equal((html.match(/appNetwork:\s*"[^"]*"/g)||[]).length,1);
+  assert.equal((html.match(/backendURL:\s*"[^"]*"/g)||[]).length,1);
+  const out=html.replace(sdk,'<script src="/lab-sdk.js"></script>').replace(/backendURL:\s*"[^"]*"/,'backendURL: "/api"').replace(/appNetwork:\s*"[^"]*"/,'appNetwork: "testnet"').replace('<title>Cryptoid Evolution</title>','<title>Cryptoid Evolution · Speicherlabor</title>');
+  assert.ok(out.includes('appNetwork: "testnet"'));assert.ok(!out.includes('$$APP_NETWORK$$'));
+  return out;
+}
 export const hook=`
   const labCounters = useRef({activeMs:0,unobservedGapMs:0,frames:0});
   const labSeeded = useRef(false);
@@ -25,7 +36,7 @@ export const hook=`
       const pacing=cssFramePacingStats(),boss=s.boss;
       const heap=(performance as any).memory?.usedJSHeapSize;
       const canvases=Array.from(document.getElementsByTagName('canvas'));
-      return {...labCounters.current,status:s.status,phase:s.phase,encounter:s.encounter,stage:s.sector,level:campaignLevel(s.sector),
+      return {...labCounters.current,rulesMode:combatVarietyEnabled?'current':'legacy',status:s.status,phase:s.phase,encounter:s.encounter,stage:s.sector,level:campaignLevel(s.sector),
         bossId:boss?.config.id??null,reactorPercent:boss?boss.health/boss.maxHealth*100:null,liveTurrets:boss?boss.turrets.filter(g=>g.health>0).length:null,
         frameMs:lastMeasuredFrameRef.current,enemies:s.asteroids.length,playerShots:s.shots.length,enemyShots:s.enemyShots.length,effects:s.effects.length,
         domNodes:document.getElementsByTagName('*').length,canvasNodes:canvases.length,domCanvasLogicalBytes:canvases.reduce((n,c)=>n+c.width*c.height*4,0),

@@ -1,6 +1,6 @@
-import {lazy,Suspense,useEffect,useRef,useState} from 'react';
+import {Fragment,lazy,Suspense,useEffect,useRef,useState} from 'react';
 import {createBrowserRouter,RouterProvider,useNavigate} from 'react-router-dom';
-import {appendSample,chartPath,cleanSample,clock,finite,memoryMiB,MAX_SAMPLES,readReport,saveReport,SAMPLE_MS} from './model.mjs';
+import {ALERT_POLICY,RESOURCE_FIELDS,resourceHigh,appendSample,chartPath,cleanSample,clock,finite,memoryMiB,MAX_SAMPLES,readReport,saveReport,SAMPLE_MS} from './model.mjs';
 import {primeGameAudio} from '../../frontend/src/pages/gameAudio';
 import {watchMenuViewport} from '../../frontend/src/lib/menuViewport';
 import './lab.css';
@@ -39,31 +39,37 @@ function Menu(){
    if(preparation!=='ready')return;
    const options={scene,protection};window.__cryptoidLabOptions=options;
    window.__cryptoidLabWarmHandoff=true;window.__cryptoidLabWarmRelease=()=>{lease.current?.release();lease.current=null;};
-   const report={schema:1,startedAt:Date.now(),state:'running',identity,options,sampleMs:SAMPLE_MS,maxSamples:MAX_SAMPLES,dropped:0,samples:[],
+   const report={schema:1,startedAt:Date.now(),state:'running',identity,options,alertPolicy:ALERT_POLICY,sampleMs:SAMPLE_MS,maxSamples:MAX_SAMPLES,dropped:0,samples:[],
      limits:{totalNativeRamAvailable:false,heapIsOptionalApproximateChromiumOnly:true,resourceBytesAreLogicalEstimates:true,resourceCategoriesMayOverlap:true,lastCheckpointIsNotExactCrashTime:true,diagnosticOverheadPresent:true}};
    window.__cryptoidLabRun=report;remember(report);primeGameAudio();navigate('/game');
  }
  return <main className="lab-menu"><section><p className="lab-eyebrow">CRYPTOID EVOLUTION · SEPARATE DIAGNOSEVERSION</p><h1>Speicherlabor</h1>
    <p>Spielen mit einer kleinen Live-Anzeige und einem Verlauf. Diese eigene Testadresse verwendet keine echten Konten, Käufe oder Online-Spielstände.</p>
    <div className="lab-limit"><strong>Gesamter Browser-RAM ist auf dem iPhone nicht messbar.</strong><p>Die Grafik zeigt geschätzte Bild-, Canvas- und Audiobestände. Sie ist keine Messung des gesamten Arbeitsspeichers. Ein zusätzlicher ungefährer JavaScript-Wert erscheint nur, wenn der Browser ihn bereitstellt.</p></div>
+   <p>Die Anzeige startet klein und transparent. Mit + öffnest du die Details. Rot markiert einen deutlichen Anstieg gegenüber dem Anfang dieses Laufs: mindestens 50 % und 8 MiB mehr, beim JS-Heap 16 MiB mehr. Die Referenz entsteht aus drei aktiven Messpunkten nach 10 Sekunden. Das sind Vergleichsmarken, keine gemessenen RAM-Grenzen.</p>
    <label>Startpunkt<select aria-label="Startpunkt" disabled={preparation==='preparing'} value={scene} onChange={e=>chooseScene(e.target.value)}><option value="normal">Level 1 · normaler Spielstart</option><option value="turrets">Boss 2 · mit Geschützen</option><option value="reactor">Boss 2 · Reaktor bei 55 %</option></select></label>
    <label className="lab-check"><input type="checkbox" checked={protection} onChange={e=>setProtection(e.target.checked)}/>Testschutz gegen Lebensverlust</label>
    <p className="lab-note">Testschutz ist eine künstliche Messhilfe. Er ist anfangs aus und verhindert nicht die Zerstörung des Bosses. Der direkte Bossstart ist eine vorbereitete Testszene; Level 1 verwendet den normalen Ablauf.</p>
    <p>Die Anzeige aktualisiert alle 5 Sekunden. Bis zu 30 Minuten Verlauf bleiben lokal gespeichert, sofern der Browser Speicher erlaubt. Nach einem Abbruch öffnest du dieselbe Adresse erneut. Der letzte gesicherte Punkt ist kein sekundengenauer Absturzzeitpunkt.</p>
-   {point&&<section className="lab-last"><h2>Letzter gesicherter Lauf</h2><p>Spieluhr {clock(point.activeMs)} · Laufzeit {clock(point.wallMs)} · Level {point.level??'–'}{point.bossId?` · Boss ${point.bossId}`:''}</p><p>{last.state==='stopped'?'Regulär zur Testübersicht zurückgekehrt.':'Kein regulärer Abschluss gespeichert; die Ursache ist daraus nicht erkennbar.'}</p><Export report={last}/><label className="lab-check"><input type="checkbox" checked={confirmed} onChange={e=>setConfirmed(e.target.checked)}/>Den letzten lokalen Bericht durch einen neuen Lauf ersetzen</label></section>}
+   {point&&<section className="lab-last"><h2>Letzter gesicherter Lauf</h2>{last.identity?.gameRules!=='current-testnet-rules'&&<p>Dieser Bericht stammt aus der früheren Laborversion mit abweichendem Spielmodus. Er bleibt zum Speichern verfügbar.</p>}<p>Spieluhr {clock(point.activeMs)} · Laufzeit {clock(point.wallMs)} · Level {point.level??'–'}{point.bossId?` · Boss ${point.bossId}`:''}</p><p>{last.state==='stopped'?'Regulär zur Testübersicht zurückgekehrt.':'Kein regulärer Abschluss gespeichert; die Ursache ist daraus nicht erkennbar.'}</p><Export report={last}/><label className="lab-check"><input type="checkbox" checked={confirmed} onChange={e=>setConfirmed(e.target.checked)}/>Den letzten lokalen Bericht durch einen neuen Lauf ersetzen</label></section>}
    {preparation!=='ready'&&<button className="lab-primary" disabled={preparation==='preparing'||(!!point&&!confirmed)} onClick={()=>void prepare()}>{preparation==='preparing'?'Test wird vorbereitet …':preparation==='failed'?'Vorbereitung erneut versuchen':'Test vorbereiten'}</button>}
    {preparation==='ready'&&<button className="lab-primary" disabled={!!point&&!confirmed} onClick={start}>Testspiel starten</button>}
    <p className="lab-note">Die benötigten Bilder werden zuerst geladen. Jede Szene öffnet angehalten; erst dein Antippen von „Fortsetzen“ startet das Spiel.</p>
    <p className="lab-note">Quelle: {identity.baseRuntime.slice(0,8)} · Diagnose {identity.sourceCommit.slice(0,8)}. Der Monitor verändert die Messbedingungen etwas; ein bestandener Lauf beweist noch keinen White-Screen-Fix.</p>
  </section></main>;
 }
-function Graph({samples}){
+function Graph({samples,reference}){
  const series=[['paintedBytes','#66d9ef','Bildcache ~'],['canvasCacheBytes','#b8a1ff','Effektcache ~'],['domCanvasLogicalBytes','#ee9dcf','Canvas-Flächen ~'],['audioBufferBytes','#ffc36b','Audio-PCM ~'],['heapBytes','#f4fafb','JS-Heap ≈']];
  const maximum=Math.max(1048576,...samples.flatMap(s=>series.map(([k])=>finite(s[k])??0)))*1.1;
- return <div className="lab-graph"><div className="lab-scale">Verlauf · 0–{(maximum/1048576).toFixed(0)} MiB</div><svg viewBox="0 0 300 70" role="img" aria-label="Verlauf geschätzter Teilressourcen, kein Gesamt-RAM"><path d="M0 0V70H300" stroke="#476173" fill="none"/>{series.map(([key,color])=><path key={key} d={chartPath(samples,key,300,70,maximum)} stroke={color} strokeWidth="1.5" fill="none"/>)}</svg><div className="lab-legend">{series.filter(([key])=>samples.some(s=>s[key]!==null)).map(([key,color,name])=><span key={key} style={{color}}>{name}</span>)}</div><small>{clock(samples[0]?.wallMs)}–{clock(samples.at(-1)?.wallMs)} reale Laufzeit</small></div>;
+ return <div className="lab-graph"><div className="lab-scale">Verlauf · 0–{(maximum/1048576).toFixed(0)} MiB</div><svg viewBox="0 0 300 70" role="img" aria-label="Verlauf geschätzter Teilressourcen, kein Gesamt-RAM"><path d="M0 0V70H300" stroke="#476173" fill="none"/>{series.map(([key,color])=><path key={key} d={chartPath(samples,key,300,70,maximum)} stroke={resourceHigh(samples.at(-1)?.[key],key,reference)?'#ff596d':color} strokeWidth="1.5" fill="none"/>)}</svg><div className="lab-legend">{series.filter(([key])=>samples.some(s=>s[key]!==null)).map(([key,color,name])=><span key={key} style={{color}}>{name}</span>)}</div><small>{clock(samples[0]?.wallMs)}–{clock(samples.at(-1)?.wallMs)} echte Laufzeit</small></div>;
+}
+const COMPACT_RESOURCES=[['heapBytes','JS'],['paintedBytes','Bilder'],['domCanvasLogicalBytes','Canvas'],['audioBufferBytes','Ton']];
+const DETAIL_RESOURCES=[['heapBytes','JS-Heap ≈'],['paintedBytes','Bildcache ~'],['canvasCacheBytes','Effektcache ~'],['domCanvasLogicalBytes','Canvas-Flächen ~'],['audioBufferBytes','Audio-PCM ~']];
+function ResourceRows({point,reference,compact=false}){
+ return (compact?COMPACT_RESOURCES:DETAIL_RESOURCES).map(([field,label])=>{const high=resourceHigh(point?.[field],field,reference);return <Fragment key={field}><dt>{label}</dt><dd data-resource={field} data-high={high?'true':'false'} className={high?'lab-value-high':undefined} title={high?'Deutlich über der Referenz dieses Laufs; keine RAM-Grenze':undefined}>{compact&&finite(point?.[field])===null?'—':memoryMiB(point?.[field])}</dd></Fragment>;});
 }
 function Panel(){
- const report=useRef(window.__cryptoidLabRun),started=useRef(performance.now()),[point,setPoint]=useState(null),[expanded,setExpanded]=useState(true),[stored,setStored]=useState(true),[fault,setFault]=useState(false);
+ const report=useRef(window.__cryptoidLabRun),started=useRef(performance.now()),[point,setPoint]=useState(null),[expanded,setExpanded]=useState(false),[stored,setStored]=useState(true),[fault,setFault]=useState(false);
  useEffect(()=>{
    let stopped=false;
    report.current.state='running';remember(report.current);
@@ -74,15 +80,17 @@ function Panel(){
    return ()=>{stopped=true;clearInterval(timer);document.removeEventListener('visibilitychange',tick);report.current.state='stopped';remember(report.current);};
  },[]);
  const value=k=>point?.[k]??'–';
- return <aside className={`lab-monitor${expanded?'':' lab-monitor-small'}`} aria-label="Live-Ressourcenmonitor" data-lab-monitor="true">
-   <header><strong>DIAGNOSE · {clock(point?.activeMs)}</strong><button aria-label={expanded?'Monitor verkleinern':'Monitor vergrößern'} onClick={()=>setExpanded(v=>!v)}>{expanded?'−':'+'}</button></header>
-   <div className="lab-monitor-content"><p className="lab-total">Browser-Gesamt-RAM: <b>nicht verfügbar</b></p><p>Laufzeit {clock(point?.wallMs)} · {point?.status??'Szene lädt …'}</p>
-   {!expanded&&<p className="lab-mini">Bildcache ~ {memoryMiB(point?.paintedBytes)}<br/>Canvas-Flächen ~ {memoryMiB(point?.domCanvasLogicalBytes)}<br/>Audio-PCM ~ {memoryMiB(point?.audioBufferBytes)}</p>}
-   {expanded&&<><dl><dt>JS-Heap ≈</dt><dd>{memoryMiB(point?.heapBytes)}</dd><dt>Bildcache ~</dt><dd>{memoryMiB(point?.paintedBytes)}</dd><dt>Effektcache ~</dt><dd>{memoryMiB(point?.canvasCacheBytes)}</dd><dt>Canvas-Flächen ~</dt><dd>{memoryMiB(point?.domCanvasLogicalBytes)}</dd><dt>Audio-PCM ~</dt><dd>{memoryMiB(point?.audioBufferBytes)}</dd><dt>DOM / Animationen</dt><dd>{value('domNodes')} / {value('pacedActive')}</dd><dt>Geschosse / Effekte</dt><dd>{point?(point.playerShots??0)+(point.enemyShots??0):'–'} / {value('effects')}</dd></dl>
-     <p>Level {value('level')}{point?.bossId?` · Boss ${point.bossId} · Kern ${finite(point.reactorPercent)===null?'–':point.reactorPercent.toFixed(0)} % · ${point.liveTurrets} Geschütze`:''}</p><Graph samples={report.current?.samples??[]}/><p className="lab-note">~ logische Ressourcenbytes; ≈ Browser-Schätzung. Bereiche können sich überlappen. Kein RAM-Gesamtwert.</p></>}
-   {point?.unobservedGapMs>0&&<p className="lab-warning">Beobachtungslücke: {clock(point.unobservedGapMs)}</p>}
-   {!stored&&<p className="lab-warning" role="status">Lokales Speichern fehlgeschlagen. Der Verlauf bleibt nur bis zum Schließen verfügbar.</p>}
-   {fault&&<p className="lab-warning" role="status">Messpunkt derzeit nicht verfügbar. Der letzte gültige Punkt bleibt erhalten.</p>}
+ const reference=report.current?.reference,high=RESOURCE_FIELDS.some(field=>resourceHigh(point?.[field],field,reference));
+ return <aside className={`lab-monitor${expanded?'':' lab-monitor-small'}`} aria-label="Live-Ressourcenmonitor" data-lab-monitor="true" data-expanded={expanded?'true':'false'}>
+   <header><strong className={high?'lab-value-high':undefined}>{high?'ANSTIEG':'DIAGNOSE'} · {clock(point?.activeMs)}</strong><button aria-label={expanded?'Monitor verkleinern':'Monitor vergrößern'} onClick={()=>setExpanded(v=>!v)}>{expanded?'−':'+'}</button></header>
+   <div className="lab-monitor-content"><p className="lab-clock">Echt {clock(point?.wallMs)}{expanded?` · ${point?.status??'lädt …'}`:''}</p>
+   {!expanded&&<dl className="lab-mini"><ResourceRows compact point={point} reference={reference}/></dl>}
+   {expanded&&<><dl><ResourceRows point={point} reference={reference}/><dt>DOM / Animationen</dt><dd>{value('domNodes')} / {value('pacedActive')}</dd><dt>Geschosse / Effekte</dt><dd>{point?(point.playerShots??0)+(point.enemyShots??0):'–'} / {value('effects')}</dd></dl>
+     <p>Level {value('level')}{point?.bossId?` · Boss ${point.bossId} · Kern ${finite(point.reactorPercent)===null?'–':point.reactorPercent.toFixed(0)} %`:''}</p><Graph samples={report.current?.samples??[]} reference={reference}/><p className="lab-note">{reference?'Rot = deutlicher Anstieg zur Referenz.':'Referenz wird nach der Startphase erfasst.'} Teilwerte können sich überlappen.</p></>}
+   <p className="lab-total">Gesamt-RAM: nicht messbar</p>
+   {point?.unobservedGapMs>0&&expanded&&<p className="lab-warning">Beobachtungslücke: {clock(point.unobservedGapMs)}</p>}
+   {!stored&&<p className="lab-warning" role="status">Lokales Speichern fehlgeschlagen.</p>}
+   {fault&&<p className="lab-warning" role="status">Messpunkt derzeit nicht verfügbar.</p>}
    </div>
  </aside>;
 }
