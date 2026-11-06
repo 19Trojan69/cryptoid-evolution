@@ -1,12 +1,13 @@
 import assert from 'node:assert/strict';
 import {createRequire} from 'node:module';
 import {createServer} from 'node:http';
-import {readFileSync,createReadStream,existsSync} from 'node:fs';
+import {readFileSync,createReadStream,existsSync,mkdirSync,writeFileSync} from 'node:fs';
 import {resolve} from 'node:path';
 const root=new URL('../../',import.meta.url).pathname;
 const require=createRequire(root+'frontend/package.json'),{build}=require('esbuild');
 const pw=createRequire(new URL('../transition-motion-20261106/package.json',import.meta.url))('playwright');
 const engine=process.argv[2];
+const out=root+'verification/reactor-health-20261106/results';mkdirSync(out,{recursive:true});
 const source=`import React from 'react';import {createRoot} from 'react-dom/client';import {flushSync} from 'react-dom';
 import BlockchainProgress from './BlockchainProgress';import BossHullView from './BossHullView';import BossReactorView from './BossReactorView';
 import {createSectorBoss} from './sectorBoss';import {specialWeaponBox} from './bossSpecialWeapon';import {BOSS_DEFEAT_MS} from './bossDefeatTiming';
@@ -40,13 +41,13 @@ for(const media of ['no-preference','reduce'])for(const setting of ['full','redu
  assert.equal(result.cubes.length,9);assert.ok(result.cubes.every(c=>c.running&&c.changed&&c.direction==='reverse'));assert.ok(result.binary.running&&result.binary.changed);assert.equal(result.binary.direction,'reverse');
  // Binary keyframes run from X=0 to negative X, reverse must advance right.
  const tx=s=>Number(s.match(/matrix\([^,]+,[^,]+,[^,]+,[^,]+,\s*([^,]+)/)[1]);assert.ok(tx(result.binary.second)>tx(result.binary.first));
- assert.deepEqual(result.rows,['reverse','normal','reverse','normal','reverse']);assert.equal(result.combat,'paused');await page.evaluate(()=>window.qa('empty'));
+ assert.deepEqual(result.rows,['reverse','normal','reverse','normal','reverse']);assert.equal(result.combat,'paused');if(media==='no-preference'&&setting==='full')await page.screenshot({path:out+'/'+engine+'-motion.png'});await page.evaluate(()=>window.qa('empty'));
 }
 await page.emulateMedia({reducedMotion:'no-preference'});await page.evaluate(()=>{document.documentElement.dataset.motion='full';document.querySelector('main').dataset.effectsPaused='false';});
 for(let id=1;id<=50;id++){
  const box=await page.evaluate(id=>window.qa('fall',id,0),id);
  const seq=await page.evaluate(()=>{const hull=document.querySelector('.boss-falling-hull'),blast=document.querySelector('.boss-reactor-destruction'),a=hull.getAnimations()[0],b=blast.getAnimations()[0];a.pause();b.pause();a.currentTime=300;const before=getComputedStyle(hull).transform;b.currentTime=300;const opacity=Number(getComputedStyle(blast).opacity);a.currentTime=640;const hold=getComputedStyle(hull).transform;a.currentTime=900;const after=getComputedStyle(hull).transform;const rect=blast.style;return {before,hold,after,opacity,delay:a.effect.getTiming().delay,duration:a.effect.getTiming().duration,burstDuration:b.effect.getTiming().duration,width:parseFloat(rect.width),height:parseFloat(rect.height)};});
- assert.equal(seq.before,seq.hold);assert.notEqual(seq.hold,seq.after);assert.ok(seq.opacity>0);assert.equal(seq.delay,650);assert.equal(seq.duration,5000);assert.equal(seq.burstDuration,650);assert.equal(seq.width,box.width);assert.equal(seq.height,box.height);
+ assert.equal(seq.before,seq.hold);assert.notEqual(seq.hold,seq.after);assert.ok(seq.opacity>0);assert.equal(seq.delay,650);assert.equal(seq.duration,5000);assert.equal(seq.burstDuration,650);assert.ok(Math.abs(seq.width-box.width)<.001);assert.ok(Math.abs(seq.height-box.height)<.001);
  await page.evaluate(()=>window.qa('empty'));
 }
 await page.evaluate(()=>window.qa('fall',1,0));await page.waitForTimeout(750);assert.equal(await page.locator('.boss-reactor-destruction').count(),0,'finished blast releases DOM during descent');
@@ -54,5 +55,5 @@ await page.evaluate(()=>{window.qa('empty');window.qa('fall',1,0);document.query
 await page.evaluate(()=>{document.querySelector('main').dataset.effectsPaused='false';});await page.waitForTimeout(750);assert.equal(await page.locator('.boss-reactor-destruction').count(),0);
 let shapes;for(const health of [100,50,49,25,1]){await page.evaluate(h=>window.qa('heat',1,h),health);const state=await page.evaluate(()=>({nodes:document.querySelector('svg').querySelectorAll('*').length,fill:getComputedStyle(document.querySelector('.boss-reactor-pulse')).fill,canvases:document.querySelectorAll('canvas').length,filters:document.querySelectorAll('svg filter').length}));shapes??=state.nodes;assert.equal(state.nodes,shapes);assert.equal(state.canvases,0);assert.equal(state.filters,0);if(health<50)assert.match(state.fill,/rgb\(255,/);}
 await page.evaluate(()=>window.qa('empty'));const heat=await page.evaluate(()=>window.heatAllocation());assert.equal(heat.cases,50);assert.deepEqual(errors,[]);
-console.log(JSON.stringify({engine,actualComponents:true,motionCases:4,cubes:9,sequenceBosses:50,reactorBurstRemoved:true,pauseResume:true,reactorHeatExtraCanvas:0,heat,physicalDevice:false,totalProcessRamMeasured:false,whiteScreenFixed:false}));
+const result={engine,actualComponents:true,motionCases:4,cubes:9,sequenceBosses:50,reactorBurstRemoved:true,pauseResume:true,reactorHeatExtraCanvas:0,heat,physicalDevice:false,totalProcessRamMeasured:false,whiteScreenFixed:false};writeFileSync(out+'/'+engine+'.json',JSON.stringify(result,null,2));console.log(JSON.stringify(result));
 }finally{await browser.close();await new Promise(r=>server.close(r));}

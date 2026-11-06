@@ -42,6 +42,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 8
     strategy:
+      fail-fast: false
       matrix:
         engine: [chromium, webkit]
     container:
@@ -56,3 +57,9 @@ jobs:
       - run: npm install --prefix frontend --include=optional --ignore-scripts --no-audit --no-fund
       - run: node verification/reactor-health-20261106/native.mjs ${{ matrix.engine }}
       - run: node verification/reactor-health-20261106/ui-native.mjs ${{ matrix.engine }}
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: reactor-ui-${{ matrix.engine }}
+          path: verification/reactor-health-20261106/results
+          retention-days: 30
