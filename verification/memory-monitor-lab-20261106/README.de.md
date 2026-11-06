@@ -16,3 +16,9 @@ Ein reversibler, ganzer-Quellcode-gepinnter Build-Hook gibt ausschließlich tech
 - Nach einem neuen Dokument erscheint zuerst das Menü mit dem letzten Bericht. Kein automatischer Neustart/Fortsetzen. Ein neuer Lauf ersetzt den alten Bericht erst nach ausdrücklicher Auswahl; manueller JSON-Download, Teilen und Berichttext sind vorhanden. Keine automatische Übertragung.
 
 Bau: node verification/memory-monitor-lab-20261106/build.mjs. Deployment ausschließlich im separaten Laborprojekt; der Builder lehnt andere Vercel-Projekt-IDs ab. Native Prüfung und Bereitstellungsergebnis werden separat ergänzt. Kein physischer Handytest und kein White-Screen-Fix werden durch den Bau behauptet.
+
+## Prüfung der Testumgebung
+
+Erster Lauf 42226443090: Beide Menüs laden, die exakte Labelsuche bezieht aber die Optionen des umschließenden Labels mit ein. Das Auswahlfeld erhält eine explizite Beschriftung. Kein Spielablauf bestanden.
+
+Zweiter Lauf 42226924094: Chromium erreicht den laufenden Monitor, hängt dann im Prüfer an den zwei gleichnamigen legitimen Fortsetzen-Tasten. Der Test adressiert nun die vorhandene Taste im Pausendialog. WebKit erreicht beim kalten automatischen Start nicht den aktiven Status; dieser Lauf ist fehlgeschlagen, kein neuer White-Screen-Nachweis. Die Diagnose bietet deshalb explizite Bildvorbereitung und öffnet alle drei Szenen zunächst angehalten. Die Original-Kampfuhren beginnen erst nach dem manuell angetippten Fortsetzen. Das sind andere Startbedingungen als ein kalter automatischer Gaststart und wird nicht als dessen Behebung ausgegeben. Vorbereitungs-Leases werden nach Übernahme der echten Spiel-Pins oder bei Abbruch freigegeben. Der Graph enthält zusätzlich logische Bytes der DOM-Canvas-Flächen; auch diese sind kein nativer RAM-Wert und dürfen mit anderen Bereichen überlappen.

@@ -10,14 +10,14 @@ export const hook=`
     if(labSeeded.current)return;
     labSeeded.current=true;
     const options=(window as any).__cryptoidLabOptions;
+    const s=stateRef.current;s.status='paused';
     if (options?.scene && options.scene !== 'normal') {
-      const s=stateRef.current;
       s.sector=20;s.section=20;s.chainBlocks=9;s.phase='SECTOR_INTRO';s.encounter='boss-intro';s.status='paused';
       s.boss=createSectorBoss(20,fieldRef.current?.clientWidth||390,visibleTopRef.current,fieldRef.current?.clientHeight||760);
       if(options.scene==='reactor'){s.boss.turrets.forEach(g=>g.health=0);s.boss.health=s.boss.maxHealth*.55;}
-      setGame({...s});
     }
     if(options?.protection)impactCooldownRef.current=1e9;
+    setGame({...s});
   }, []);
   useEffect(() => {
     const read=()=>{
@@ -36,6 +36,16 @@ export const hook=`
     (window as any).__cryptoidLabRead=read;
     return ()=>{if((window as any).__cryptoidLabRead===read)delete (window as any).__cryptoidLabRead;};
   }, []);
+  useEffect(()=>{
+    const scene=(window as any).__cryptoidLabOptions?.scene;
+    if(scene!=='normal'&&game.sector!==20)return;
+    const release=(window as any).__cryptoidLabWarmRelease;
+    if(typeof release!=='function')return;
+    void Promise.resolve().then(()=>{
+      if((window as any).__cryptoidLabWarmRelease===release)delete (window as any).__cryptoidLabWarmRelease;
+      (window as any).__cryptoidLabWarmHandoff=false;release();
+    });
+  },[game.sector,game.encounter]);
 `;
 export const frameAnchor="      frameGap = frame.wallMs; simulatedMs = 0; forceScene = false; requestScene = false;";
 export const frameHook=`
