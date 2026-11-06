@@ -21,16 +21,22 @@ const controller=readFileSync(root+'frontend/src/pages/GamePage.tsx','utf8');
 assert.ok(controller.includes('className={`sector-banner readable-transition'));
 assert.ok(controller.includes('game.phase === "SECTOR_CLEAR" && game.encounter === "normal"'));
 assert.ok(controller.includes('<BlockchainProgress blocks={game.chainBlocks} />'));
-const css={};const previousCwd=process.cwd(),previousEnv=process.env.VERCEL_ENV;
+const css={},cssAssets={};const previousCwd=process.cwd(),previousEnv=process.env.VERCEL_ENV;
 process.chdir(root+'frontend');process.env.VERCEL_ENV='production';
 try{
  for(const [name,source] of [['before',released],['after',candidate]]){
   writeFileSync(cssPath,source);
   const result=await build({root:root+'frontend',logLevel:'error',build:{write:false,copyPublicDir:false}});
   const outputs=(Array.isArray(result)?result:[result]).flatMap(r=>r.output);
-  const sheets=outputs.filter(o=>o.type==='asset'&&o.fileName.endsWith('.css'));
-  assert.equal(sheets.length,1,'use the complete actual application stylesheet');
-  css[name]=String(sheets[0].source);
+  const byName=new Map(outputs.map(o=>[o.fileName,o]));
+  const entry=outputs.find(o=>o.type==='chunk'&&o.isEntry);
+  const game=outputs.find(o=>o.type==='chunk'&&o.facadeModuleId?.endsWith('/pages/GamePage.tsx'));
+  assert.ok(entry&&game,'find the actual application entry and lazy GamePage chunk');
+  const visited=new Set(),styles=new Set();
+  const load=chunk=>{if(visited.has(chunk.fileName))return;visited.add(chunk.fileName);for(const dep of chunk.imports)if(byName.get(dep)?.type==='chunk')load(byName.get(dep));for(const f of chunk.viteMetadata?.importedCss??[])styles.add(f);};
+  load(entry);load(game);cssAssets[name]=[...styles];assert.ok(styles.size>=2,'include global CSS and the separately loaded GamePage CSS');
+  css[name]=[...styles].map(f=>{const asset=byName.get(f);assert.equal(asset?.type,'asset');return typeof asset.source==='string'?asset.source:Buffer.from(asset.source).toString();}).join('\n');
+  assert.ok(css[name].includes('blockchain-cube-turn')&&css[name].includes('readable-transition'));
  }
 }finally{writeFileSync(cssPath,candidate);process.chdir(previousCwd);if(previousEnv===undefined)delete process.env.VERCEL_ENV;else process.env.VERCEL_ENV=previousEnv;}
 assert.equal(readFileSync(cssPath,'utf8'),candidate);
@@ -79,6 +85,6 @@ try{
  await page.evaluate(()=>{document.querySelector('main').dataset.effectsPaused='true';});await page.waitForTimeout(80);const paused=await page.evaluate(read);await page.waitForTimeout(180);assert.deepEqual(await page.evaluate(read),paused);
  assert.ok(paused.cubes.every(c=>c.state==='paused'));assert.equal(paused.binary.state,'paused');
  await page.evaluate(()=>{document.querySelector('main').dataset.effectsPaused='false';});await page.waitForTimeout(180);const resumed=await page.evaluate(read);assert.ok(resumed.cubes.every((c,i)=>c.clock>paused.cubes[i].clock));assert.ok(resumed.binary.clock>paused.binary.clock);
- assert.deepEqual(faults,[]);const result={engine,actualBlockBanner:true,completeApplicationCss:true,nativeFramePacing:true,releasedFreezeReproduced:true,cases,blocks:9,viewports:2,motionSettings:4,cubeLeft:true,binaryRight:true,visibleCubePixelsChange:true,pauseResume:true,unchangedNodeCount:true,cssSourceBytesChanged:'one selector',beforeCssSha256:hash(css.before),afterCssSha256:hash(css.after),physicalDevice:false,whiteScreenFixed:false};
+ assert.deepEqual(faults,[]);const result={engine,actualBlockBanner:true,completeApplicationCss:true,nativeFramePacing:true,releasedFreezeReproduced:true,cases,blocks:9,viewports:2,motionSettings:4,cubeLeft:true,binaryRight:true,visibleCubePixelsChange:true,pauseResume:true,unchangedNodeCount:true,cssSourceBytesChanged:'one selector',beforeCssSha256:hash(css.before),afterCssSha256:hash(css.after),cssAssets,physicalDevice:false,whiteScreenFixed:false};
  writeFileSync(out+'/'+engine+'-block-motion.json',JSON.stringify(result,null,2));console.log(JSON.stringify(result));
 }finally{await browser.close();await new Promise(r=>server.close(r));}

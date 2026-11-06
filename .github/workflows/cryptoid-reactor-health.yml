@@ -57,6 +57,7 @@ jobs:
       - run: npm install --prefix frontend --include=optional --ignore-scripts --no-audit --no-fund
       - run: node verification/reactor-health-20261106/native.mjs ${{ matrix.engine }}
       - run: node verification/reactor-health-20261106/ui-native.mjs ${{ matrix.engine }}
+      - run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
       - run: node verification/reactor-health-20261106/block-motion-native.mjs ${{ matrix.engine }}
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()
