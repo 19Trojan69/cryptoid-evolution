@@ -135,14 +135,23 @@ export async function verifyViewport(page, context, origin, engine) {
   await page.locator('.pause-control').tap();
   await page.locator('.pause-weapon-shop-button').tap();
   const drawer = page.locator('.mission-shop-scroll');
+  // Locate the drawer after its entrance animation has moved it onto the screen.
+  await drawer.scrollIntoViewIfNeeded();
   const box = await drawer.boundingBox();
   assert.ok(box && await drawer.evaluate(element => element.scrollHeight > element.clientHeight));
   assert.equal(await drawer.evaluate(element => getComputedStyle(element).touchAction), 'pan-y');
   if (touch) {
-    await expectNoMotion(195, Math.round(box.y + box.height / 2));
+    await expectNoMotion(Math.round(box.x + box.width / 2), Math.round(box.y + box.height / 2));
     assert.equal(await drawer.evaluate(element => element.scrollTop), 0);
+    await drawer.evaluate(element => element.addEventListener('scrollend', () => {
+      element.dataset.testScrollComplete = 'true';
+    }, {once: true}));
     await touch.drag(box.x + box.width / 2, box.y + box.height * .8, 0, -Math.min(160, box.height * .5));
-    await page.waitForFunction(() => document.querySelector('.mission-shop-scroll').scrollTop > 15);
+    // A tap during native momentum stops scrolling before it activates a button.
+    await page.waitForFunction(() => {
+      const body = document.querySelector('.mission-shop-scroll');
+      return body.dataset.testScrollComplete === 'true' && body.scrollTop > 15;
+    });
   } else {
     assert.deepEqual(await webKitEvents(page, '.mission-shop-scroll'), expectedEvents);
     const allowed = await drawer.evaluate(element => {
