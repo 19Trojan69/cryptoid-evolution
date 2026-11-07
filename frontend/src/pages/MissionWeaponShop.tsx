@@ -5,6 +5,7 @@ import { usePayments } from '../hooks/usePayments';
 import { useLocale } from '../i18n';
 import type { ShipStage } from './shipEvolution';
 import WeaponPurchase from './WeaponPurchase';
+import TestPiPurchase from './TestPiPurchase';
 import WeaponPreview from './WeaponPreview';
 import WeaponTutorial from './WeaponTutorial';
 import ReloadConfirmation from './ReloadConfirmation';
@@ -13,23 +14,53 @@ import { weaponSymbols } from './weaponSymbols';
 import './missionWeaponShop.css';
 import { shipSaveNetwork, selectedShip } from './shipFleet';
 import { hangarCatalog } from '../../../backend/src/hangarCatalog';
-import { isTestnetWeaponPurchaseEnabled } from '../../../backend/src/paymentPolicy';
+import { isTestnetWeaponPurchaseEnabled, testPiPurchaseAllowed } from '../../../backend/src/paymentPolicy';
+import { missionPowerOffers, type MissionPowerInventory } from '../../../backend/src/missionPower';
+import { powerUpSymbols } from './powerUps';
 
 type Offer = { id: string; kind: string; name: string; description: string; pricePi: number; level?: number };
-type Props = { reloadLevel?: number; autoReload?: AutoReloadPreferences; onAutoReload?: (level: number, enabled: boolean) => void; authenticated: boolean; admin: boolean; timers: number[]; refreshInventory: (force?: boolean) => Promise<boolean>; onClose: () => void; stock?: Record<string, number>; activeLevel?: number; source?: string; pickupLevel?: number; pickupMs?: number; stage?: ShipStage; selectionBusy?: boolean; pendingLevel?: number; selectionError?: string; onSelect?: (level: number) => void; onPickup?: () => void };
+type Props = { reloadLevel?: number; autoReload?: AutoReloadPreferences; onAutoReload?: (level: number, enabled: boolean) => void; authenticated: boolean; admin: boolean; timers: number[]; refreshInventory: (force?: boolean) => Promise<boolean>; onClose: () => void; stock?: Record<string, number>; activeLevel?: number; source?: string; pickupLevel?: number; pickupMs?: number; stage?: ShipStage; selectionBusy?: boolean; pendingLevel?: number; selectionError?: string; onSelect?: (level: number) => void; onPickup?: () => void;
+  powerInventory?: MissionPowerInventory; refreshPowers: () => Promise<void>; onPaymentBusy: (busy: boolean) => void;
+};
 
-export default function MissionWeaponShop({ reloadLevel, autoReload = {}, onAutoReload, authenticated, admin, timers, refreshInventory, onClose, stock, activeLevel = 1, source = 'standard', pickupLevel = 1, pickupMs = 0, stage = 1, selectionBusy = false, pendingLevel, selectionError, onSelect, onPickup }: Props) {
+export default function MissionWeaponShop({ reloadLevel, autoReload = {}, onAutoReload, authenticated, admin, timers, refreshInventory, onClose, stock, activeLevel = 1, source = 'standard', pickupLevel = 1, pickupMs = 0, stage = 1, selectionBusy = false, pendingLevel, selectionError, onSelect, onPickup, powerInventory, refreshPowers, onPaymentBusy }: Props) {
   const { t, locale } = useLocale();
   const [offers, setOffers] = useState<Offer[]>(() => hangarCatalog.filter(offer => offer.kind === 'weapon'));
   const [ready, setReady] = useState(false);
   const [ownerTestnet, setOwnerTestnet] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [notice, setNotice] = useState('');
+  const [tab, setTab] = useState<'weapons' | 'powers'>('weapons');
+  const [powerRefreshing, setPowerRefreshing] = useState(false);
+  const [powerRefreshFailed, setPowerRefreshFailed] = useState(false);
   const mounted = useRef(true);
   const refreshVersion = useRef(0);
   const titleRef = useRef<HTMLHeadingElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
   const ship = selectedShip();
   const { orderProduct, isLoading, paymentDiagnostic, activeProductId, paymentStatus } = usePayments({ isAuthenticated: authenticated && !admin, onRequireAuth: () => setNotice('Connect your Pi account to see your saved loadout.') });
+  useEffect(() => {
+    onPaymentBusy(isLoading);
+    return () => onPaymentBusy(false);
+  }, [isLoading, onPaymentBusy]);
+  const refreshPowerStock = async () => {
+    if (!authenticated || admin || shipSaveNetwork !== 'testnet') return;
+    setPowerRefreshing(true);
+    try {
+      await refreshPowers();
+      if (mounted.current) setPowerRefreshFailed(false);
+    } catch {
+      if (mounted.current) setPowerRefreshFailed(true);
+    } finally {
+      if (mounted.current) setPowerRefreshing(false);
+    }
+  };
+  const selectTab = (next: typeof tab) => {
+    if (tab === next) return;
+    setTab(next);
+    if (scrollRef.current) scrollRef.current.scrollTop = 0;
+    if (next === 'powers') void refreshPowerStock();
+  };
   const refresh = useCallback(async (force = false) => {
     const version = ++refreshVersion.current;
     setRefreshing(true);
@@ -72,11 +103,16 @@ export default function MissionWeaponShop({ reloadLevel, autoReload = {}, onAuto
   return <section className="mission-weapon-shop" aria-labelledby="mission-weapon-shop-title" aria-busy={busy}>
     <header>
       <small>{t('MISSION PAUSED')}</small>
-      <h2 id="mission-weapon-shop-title" ref={titleRef} tabIndex={-1}>{t('Weapons')}</h2>
-      <p>{t('Owned weapons first · strongest first')}</p>
-      {reloadLevel !== undefined && <ReloadConfirmation level={reloadLevel} />}
+      <h2 id="mission-weapon-shop-title" ref={titleRef} tabIndex={-1}>{t(tab === 'weapons' ? 'Weapons' : 'Power-ups')}</h2>
+      {shipSaveNetwork === 'testnet' && <nav className="mission-shop-tabs" aria-label={t('Available equipment')}>
+        <button type="button" aria-pressed={tab === 'weapons'} disabled={busy} onClick={() => selectTab('weapons')}>{t('Weapons')}</button>
+        <button type="button" aria-pressed={tab === 'powers'} disabled={busy} onClick={() => selectTab('powers')}>{t('Power-ups')}</button>
+      </nav>}
+      {tab === 'weapons' && <p>{t('Owned weapons first · strongest first')}</p>}
+      {tab === 'weapons' && reloadLevel !== undefined && <ReloadConfirmation level={reloadLevel} />}
     </header>
-    <div className="mission-shop-scroll" data-game-scroll>
+    <div ref={scrollRef} className="mission-shop-scroll" data-game-scroll>
+    {tab === 'weapons' ? <>
     <p className="testnet-shop-notice">{ownerTestnet ? t('Admin Testnet: earn Shards for all 20 ships. Paid items use Test-Pi only.') : shipSaveNetwork === 'testnet' ? t('Testnet: Twin Laser and Rapid Twin can be bought with Test-Pi. Triple Laser and Plasma purchases are locked.') : t('Pi purchases are currently locked. Collect weapon upgrades in game.')}</p>
     {admin && <p>{t('Admin test mode: purchases and records are not saved.')}</p>}
     <details className="mission-reload-explanation"><summary>{t('Auto-reload')}</summary><p>{t('When a timed weapon expires, the strongest enabled weapon takes over; otherwise the standard laser. Auto-reload uses owned charges without pausing.')}</p></details>
@@ -107,12 +143,31 @@ export default function MissionWeaponShop({ reloadLevel, autoReload = {}, onAuto
       </article>;
     })}</div>
     <WeaponTutorial />
+    </> : <div className="mission-power-offers">
+      {missionPowerOffers.map(offer => {
+        const count = (powerInventory?.stock[offer.powerUp] ?? 0) + Number(powerInventory?.pending?.power === offer.powerUp);
+        const purchasable = shipSaveNetwork === 'testnet' && !admin && authenticated && testPiPurchaseAllowed(offer, 'Pi Testnet', ownerTestnet);
+        return <article className="mission-power-offer" key={offer.id}>
+          <h3><span className={`edge-action-${offer.powerUp}`} aria-hidden="true">{powerUpSymbols[offer.powerUp]}</span> {t(offer.name)}</h3>
+          <p>{t(offer.description)}</p>
+          <p className="mission-stock">{t('Charges')}: <b>{authenticated && !powerInventory ? '…' : count}</b></p>
+          {purchasable ? <TestPiPurchase price={offer.pricePi} repurchase={count > 0} singleCharge
+            pending={isLoading && activeProductId === offer.id} disabled={!ready || !powerInventory || powerRefreshing || powerRefreshFailed || busy || !!pendingLevel}
+            status={activeProductId === offer.id ? paymentStatus : undefined}
+            diagnostic={activeProductId === offer.id ? paymentDiagnostic : undefined}
+            onBuy={() => {
+              void orderProduct(`Cryptoid ${offer.name} · 1 × · Test-Pi`, offer.pricePi, { productId: offer.id }, refreshPowerStock);
+            }} /> : <p className="mission-duration">{t('Purchases locked')}</p>}
+        </article>;
+      })}
+      {powerRefreshFailed && <p role="status">{t('Not confirmed. Refresh inventory. Confirmed purchases will not be repeated.')}</p>}
+    </div>}
     <p role="status">{notice && t(notice)}</p>
     {selectionError && <p role="alert">{t(selectionError)}</p>}
     {paymentDiagnostic && !activeProductId && <p role="alert">{paymentDiagnostic}</p>}
     </div>
     <footer className="mission-shop-footer">
-      <button type="button" className="mission-refresh" aria-label={t('Retry')} title={t('Retry')} disabled={busy || refreshing} onClick={() => { void refresh(); }}><span aria-hidden="true">↻</span></button>
+      <button type="button" className="mission-refresh" aria-label={t('Retry')} title={t('Retry')} disabled={busy || refreshing || powerRefreshing} onClick={() => { void refresh(); if (tab === 'powers') void refreshPowerStock(); }}><span aria-hidden="true">↻</span></button>
       <button type="button" className="mission-return" disabled={busy || !!pendingLevel} onClick={onClose}>{t('Back to game')} <span aria-hidden="true">▷</span></button>
     </footer>
   </section>;

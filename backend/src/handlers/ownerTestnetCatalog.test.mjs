@@ -15,7 +15,7 @@ const matches = (doc, query) => Object.entries(query).every(([path, expected]) =
   if (expected && typeof expected === 'object' && !(expected instanceof Date)) {
     if ('$exists' in expected) return (actual !== undefined) === expected.$exists;
     if ('$ne' in expected) return Array.isArray(actual) ? !actual.includes(expected.$ne) : actual !== expected.$ne;
-    if ('$in' in expected) return expected.$in.includes(actual);
+    if ('$in' in expected) return expected.$in.includes(actual ?? null);
     if ('$regex' in expected) return typeof actual === 'string' && new RegExp(expected.$regex, expected.$options || '').test(actual);
   }
   return expected === null ? actual == null : actual === expected;
@@ -45,7 +45,7 @@ function harness() {
     require(`../../build/handlers/${name}.js`).default({ use: handler => middleware[name].push(handler), get: (path, handler) => routes[`GET ${name}${path}`] = handler, post: (path, handler) => routes[`POST ${name}${path}`] = handler });
   }
   async function call(name, path, body, options = {}) {
-    const req = { body, session: options.session || session, headers: { 'x-cryptoid-app-network': options.network || 'testnet' }, get: () => options.network || 'testnet', app: { locals } };
+    const req = { body, query: options.query, session: options.session || session, headers: { 'x-cryptoid-app-network': options.network || 'testnet' }, get: () => options.network || 'testnet', app: { locals } };
     let resolve;
     const done = new Promise(r => { resolve = r; });
     const res = { code: 200, setHeader() {}, status(code) { this.code = code; return this; }, json(body) { this.body = body; resolve(this); return this; } };
@@ -88,6 +88,66 @@ async function payment(h, productId, options = {}) {
   return h.call('payments', '/complete', { paymentId: id, txid: `tx-${id}` }, options.request);
 }
 const inventory = h => h.call('hangar', '/inventory', null, { method: 'GET' });
+
+test('mission power claims reserve one paid charge, survive a lost reply, and settle with the saved effect', async () => {
+  const h = harness();
+  await h.call('progress', '/me', null, { method: 'GET' });
+  const started = await h.call('hangar', '/start', { action: 'new', version: h.profile().version, startKey: 'mission-power-start-01', rulesVersion: 2 });
+  const runId = started.body.scoreRunId;
+  const order = (id, product_id, extra = {}) => ({ _id: id, user: 'pilot-a', product_id, paid: true, ...extra });
+  h.orders.push(order('bomb-one', 'start_bomb'), order('bomb-two', 'start_bomb', { payment_network: 'Pi Testnet' }),
+    order('bomb-mainnet', 'start_bomb', { payment_network: 'Pi Network' }),
+    order('shield-one', 'start_shield', { payment_network: 'Pi Testnet' }), order('unpaid', 'start_shield', { paid: false }));
+  let previous = Promise.resolve(), ended = 0;
+  h.locals.databaseClient = { startSession: () => ({
+    withTransaction(operation) {
+      const next = previous.then(async () => {
+        const orders = structuredClone(h.orders), users = structuredClone(h.docs);
+        try { return await operation(); }
+        catch (error) {
+          h.orders.splice(0, h.orders.length, ...orders);
+          h.docs.splice(0, h.docs.length, ...users);
+          throw error;
+        }
+      });
+      previous = next.catch(() => {});
+      return next;
+    },
+    async endSession() { ended++; },
+  }) };
+  const stock = () => h.call('hangar', '/power', null, { method: 'GET', query: { runId } });
+  const claim = (power, requestId, options) => h.call('hangar', '/power/activate', { runId, power, requestId }, options);
+  const id = 'mission-bomb-claim-01';
+  assert.equal((await stock()).body.stock.bomb, 2);
+  assert.equal((await claim('bomb', id, { network: 'mainnet' })).code, 403);
+  const [first, retry, competing] = await Promise.all([
+    claim('bomb', id), claim('bomb', id), claim('shield', 'mission-shield-claim-01'),
+  ]);
+  for (const response of [first, retry, competing]) {
+    assert.equal(response.code, 200);
+    assert.deepEqual(response.body.pending, { id, power: 'bomb' });
+    assert.equal(response.body.stock.bomb, 1);
+    assert.equal(response.body.stock.shield, 1);
+  }
+  assert.equal(h.orders.filter(item => item.consumed_at).length, 1);
+  assert.equal(ended, 3);
+  assert.deepEqual((await stock()).body.pending, { id, power: 'bomb' });
+  const save = firstMissionSnapshot(3);
+  const saved = await h.call('rewards', '/event', { runId, kind: 'block', level: 1, stage: 1, save, powerActivationId: id });
+  assert.equal(saved.code, 200);
+  assert.deepEqual(h.profile().mission.snapshot.usedMissionPowers, ['bomb']);
+  assert.equal((await stock()).body.pending, null);
+  assert.equal((await claim('bomb', id)).body.stock.bomb, 1);
+  assert.equal((await claim('bomb', 'mission-bomb-claim-02')).body.error, 'power_already_used');
+  const write = h.locals.userCollection.updateOne;
+  h.locals.userCollection.updateOne = async (...args) => {
+    if (args[1]?.$set?.['playerByNetwork.testnet.pendingPowerActivation']) throw new Error('Interrupted transaction');
+    return write(...args);
+  };
+  assert.equal((await claim('shield', 'mission-shield-claim-02')).code, 503);
+  assert.equal((await stock()).body.stock.shield, 1);
+  assert.equal((await stock()).body.pending, null);
+});
 
 test('catalog authorization requires the verified Testnet owner outside free preview', async t => {
   owner(t);

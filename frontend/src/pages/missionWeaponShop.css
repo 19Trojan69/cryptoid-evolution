@@ -86,3 +86,21 @@
 .mission-reload-setting button:disabled { opacity: 1; color: #a5b3c0; background: #172430; border-color: #405465; }
 .mission-reload-setting button:disabled .mission-switch-state i { background: #435666; box-shadow: none; }
 .mission-reload-setting button:disabled .mission-switch-state i::after { background: #a5b3c0; }
+
+.mission-shop-tabs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; margin: 6px 0; }
+.mission-shop-tabs button {
+  min-height: 44px;
+  padding: 6px 8px;
+  border: 1px solid #526879;
+  border-radius: 8px;
+  background: #172a3a;
+  color: #d4e2eb;
+  font: 650 13px/1.2 system-ui, sans-serif;
+}
+.mission-shop-tabs button[aria-pressed="true"] { color: #ffe0a0; border-color: #b99555; background: #302b21; }
+.mission-power-offers { display: grid; gap: 8px; }
+.mission-power-offer { padding: 10px 12px; border: 1px solid #455b70; border-radius: 10px; background: #102235; }
+.mission-power-offer h3 { color: #f1d490; font: 700 15px/1.25 system-ui, sans-serif; margin: 0 0 4px; }
+.mission-power-offer p { color: #bfd1df; margin: 4px 0; }
+.mission-power-offer .weapon-purchase { margin: 8px 0 0; }
+.mission-power-offer .weapon-purchase button { min-height: 44px; white-space: normal; }

@@ -131,12 +131,17 @@ export const createApiGateway = (
       const env = environment();
       const testnet = isTestnetDeployment(req, env);
       const localTestnet = localTestnetEnabled(env);
+      const powerRoute = path === "hangar/power" && req.method === "GET"
+        || path === "hangar/power/activate" && req.method === "POST";
+      const authenticatedLocal = localTestnet || /^Bearer\s+\S+$/i.test(req.headers?.authorization || "");
+      if (powerRoute && !testnet) return res.status(404).json({ error: "not_found" });
+      if (powerRoute && !authenticatedLocal) return res.status(401).json({ error: "not_authenticated" });
       const testnetSave = testnet && req.method === "POST"
         && /^(?:rewards\/event|progress\/checkpoint|leaderboard\/score)$/.test(path)
-        && (localTestnet || /^Bearer\s+\S+$/i.test(req.headers?.authorization || ""));
+        && authenticatedLocal;
       // Add only the new, network-scoped features locally. Existing Testnet
       // accounts/payments keep their established proxy; no Mainnet deployment.
-      const localFeature = testnetSave || testnet && (/^progress\/boss-summary\/(?:prepare|continue)$/.test(path)
+      const localFeature = powerRoute || testnetSave || testnet && (/^progress\/boss-summary\/(?:prepare|continue)$/.test(path)
         || /^admin\/players(?:\/|$)/.test(path));
       // The public catalog must match this deployment's Shop, even while
       // account and payment requests use the established Pi service.
@@ -226,7 +231,7 @@ export const createApiGateway = (
         req.headers ??= {};
         req.headers["x-cryptoid-app-network"] = "testnet";
       }
-      if (testnetSave) req.testnetSave = true;
+      if (testnetSave || powerRoute) req.testnetSave = true;
       ready ??= loadBackend().then(async (backend) => {
         await backend.start(false);
         return backend;

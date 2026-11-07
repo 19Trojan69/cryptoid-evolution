@@ -38,6 +38,16 @@ const paymentRows: Record<string, string[]> = {
 };
 for (const [locale, row] of Object.entries(paymentRows)) Object.assign(missionShopTranslations[locale], Object.fromEntries(paymentKeys.map((key, i) => [key, row[i]])));
 
+const repurchaseLabels = {
+  de: 'Nachkaufen', es: 'Comprar otra vez', fr: 'Racheter', pt: 'Comprar novamente',
+  it: 'Acquista ancora', ru: 'Купить ещё', pl: 'Kup ponownie', tr: 'Tekrar satın al',
+  ro: 'Cumpără din nou', hr: 'Kupi ponovno', cs: 'Koupit znovu', sk: 'Kúpiť znova',
+  hu: 'Vásárlás újra', sr: 'Купи поново', uk: 'Купити ще', th: 'ซื้อเพิ่ม',
+};
+for (const [locale, label] of Object.entries(repurchaseLabels)) missionShopTranslations[locale]['Buy again'] = label;
+missionShopTranslations.zh = { ...missionShopTranslations.zh, 'Buy again': '再次购买' };
+missionShopTranslations.vi = { ...missionShopTranslations.vi, 'Buy again': 'Mua thêm' };
+
 const selectionKeys = ["Shop & weapons","Owned weapons first · strongest first","Unlimited","Remaining time","Not in stock","Back to game"];
 const selectionRows: Record<string, string[]> = {
   "de": [

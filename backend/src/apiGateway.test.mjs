@@ -278,6 +278,28 @@ test('verified-session save routes are local only on the Testnet project', async
   assert.equal(calls.at(-1).network, 'mainnet');
 });
 
+test('mission power requests use the verified local Testnet session and never the payment proxy', async t => {
+  const { backend, calls } = backendFixture();
+  const testnet = 'cryptoid-evolution-testnet.vercel.app';
+  const mainnet = 'cryptoid-evolution.vercel.app';
+  const handle = createApiGateway(async () => backend, () => ({ VERCEL_ENV: 'production' }));
+  const forwarded = t.mock.method(globalThis, 'fetch', async () => Response.json({}));
+  for (const [method, path] of [['GET', 'hangar/power'], ['POST', 'hangar/power/activate']]) {
+    for (const [host, authorization, expected] of [[testnet, 'Bearer fixture', 200], [testnet, undefined, 401], [mainnet, 'Bearer fixture', 404]]) {
+      const res = response();
+      const req = { method, url: '/api/index?path=' + path, headers: { host, authorization } };
+      await handle(req, res);
+      assert.equal(res.code, expected);
+      if (expected === 200) {
+        assert.equal(req.testnetSave, true);
+        assert.equal(res.headers['x-cryptoid-backend'], 'testnet-local');
+        assert.equal(calls.at(-1).network, 'testnet');
+      }
+    }
+  }
+  assert.equal(forwarded.mock.callCount(), 0);
+});
+
 test('enabled account deletion blocks previous tokens before proxying and keeps Mainnet outside this guard', async t=>{
  const prior=process.env.CRYPTOID_TESTNET_ACCOUNT_DELETION;process.env.CRYPTOID_TESTNET_ACCOUNT_DELETION='enabled';t.after(()=>{if(prior===undefined)delete process.env.CRYPTOID_TESTNET_ACCOUNT_DELETION;else process.env.CRYPTOID_TESTNET_ACCOUNT_DELETION=prior;});
  let forwarded=0,checked=0;t.mock.method(globalThis,'fetch',async()=>{forwarded++;return Response.json({});});

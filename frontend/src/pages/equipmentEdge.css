@@ -135,3 +135,54 @@
 .game-field .touch-controls .edge-action-purchased small { max-width: 42px; font-size: 9px; }
 .game-field .touch-controls .edge-action-purchased em { font-size: 8px; }
 .game-field .touch-controls .weapon-hull-hits { font-size: 10px; opacity: .64; }
+
+.game-field .mission-power-dock {
+  position: absolute;
+  z-index: 5;
+  bottom: max(8px, env(safe-area-inset-bottom));
+  right: max(8px, env(safe-area-inset-right));
+  display: grid;
+  grid-template: repeat(2, 48px) / repeat(3, 48px);
+  gap: 4px;
+  direction: rtl;
+  pointer-events: none;
+}
+.game-field .mission-power-dock-left {
+  right: auto;
+  left: max(8px, env(safe-area-inset-left));
+  direction: ltr;
+}
+.mission-power-shortcut[data-power="shield"] { grid-area: 2 / 1; }
+.mission-power-shortcut[data-power="overdrive"] { grid-area: 2 / 2; }
+.mission-power-shortcut[data-power="rapid"] { grid-area: 2 / 3; }
+.mission-power-shortcut[data-power="bomb"] { grid-area: 1 / 1; }
+.mission-power-shortcut[data-power="emp"] { grid-area: 1 / 2; }
+.game-field button.mission-power-shortcut {
+  box-sizing: border-box;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  margin: 0;
+  padding: 2px;
+  border: 1px solid color-mix(in srgb, currentColor 48%, transparent);
+  border-radius: 10px;
+  background: #0c2335d9;
+  font: 700 19px/1 system-ui, sans-serif;
+  touch-action: manipulation;
+  pointer-events: auto;
+  direction: ltr;
+}
+.mission-power-shortcut small { font: 700 10px/1.1 system-ui, sans-serif; font-variant-numeric: tabular-nums; }
+.mission-power-shortcut .mission-power-count {
+  position: absolute;
+  top: 3px;
+  right: 4px;
+  color: #ffe5a6;
+}
+.mission-power-shortcut[aria-disabled="true"] { cursor: default; opacity: .56; }
+.mission-power-shortcut[data-active="true"] { opacity: 1; border-color: currentColor; }
+.mission-power-shortcut:focus-visible { outline: 2px solid #ffe5a6; outline-offset: 2px; }

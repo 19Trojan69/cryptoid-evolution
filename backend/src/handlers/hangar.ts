@@ -10,6 +10,7 @@ import { loadPlayerSave } from "./progress";
 import { selectedShipStage } from "../shipLoadout";
 import { cappedMission, publicSave, spriteForShip } from "../playerSave";
 import { syncWeaponStock, WEAPON_CHARGE_MS } from "../weaponStock";
+import mountMissionPowerEndpoints from "./missionPower";
 
 const offersOf = (kind: string) => hangarCatalog.filter(item => item.kind === kind).map(item => item.id);
 const isTestnetRequest = (req: any) => String(req.headers?.["x-cryptoid-app-network"] || "").toLowerCase() === "testnet";
@@ -17,6 +18,7 @@ const weaponEnabledForRequest = (req: any, offer: typeof hangarCatalog[number], 
   offer.kind === "weapon" && (!isTestnetRequest(req) || isTestnetWeaponPurchaseEnabled(offer, ownerTestnet));
 
 export default function mountHangarEndpoints(router: Router) {
+  mountMissionPowerEndpoints(router);
   router.get("/catalog", (_req, res) => res.json({ offers: hangarCatalog }));
 
   router.get("/inventory", async (req, res) => {

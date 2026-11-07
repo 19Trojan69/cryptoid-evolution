@@ -9,8 +9,9 @@ import { validResumedBonusScore, validRunScore } from "../leaderboardRules";
 import { restoreScoreRun } from "../restoreScoreRun";
 import { maxMissionHearts } from "../lifeRules";
 import { bossIntermissionPending } from '../bossIntermission';
+import { saveMissionPower } from "../missionPower";
 
-type RewardEvent = { runId: string; kind: "block" | "chain" | "boss" | "bonus"; level: number; stage: number; hits?: number; save?: unknown; summaryPlacement?: 'level-end' };
+type RewardEvent = { runId: string; kind: "block" | "chain" | "boss" | "bonus"; level: number; stage: number; hits?: number; save?: unknown; summaryPlacement?: 'level-end'; powerActivationId?: string };
 
 export default function mountRewardEndpoints(router: Router) {
   router.get("/me", async (req, res) => {
@@ -83,13 +84,14 @@ export default function mountRewardEndpoints(router: Router) {
         const deltaShards = snapshot ? snapshot.shards - (player.creditedShards ?? previous?.shards ?? 0) : 0;
         const deltaDestroyed = snapshot ? snapshot.destroyed - (player.creditedDestroyed ?? previous?.destroyed ?? 0) : 0;
         if (deltaShards < 0 || deltaDestroyed < 0) return res.status(400).json({ error: "save_regressed" });
+        const appliedPower = snapshot && network === "testnet" ? saveMissionPower(player, snapshot, event.powerActivationId, playerKey) : {};
         const mission = snapshot ? missionAfter(event, snapshot) : null;
         const badgeEvidence = verifiedBlockBadges(player,event,snapshot);
         if (mission) mission.rulesVersion = run.rulesVersion ?? 1;
         const result = await users.updateOne({ uid, [`rewardRunId.${network}`]: run.id, [`rewardEventKeys.${network}`]: { $ne: key },
           [`rewardVersion.${network}`]: version === undefined ? { $exists: false } : version,
           ...(snapshot ? { [`${playerKey}.activeRunId`]: run.id, [`${playerKey}.version`]: player.version } : {}) },
-        { $set: { ...(event.kind === "boss" ? { [`badgeEvidenceByNetwork.${network}.bossDefeats`]: Math.max(user.badgeEvidenceByNetwork?.[network]?.bossDefeats || 0, Object.values(progress.bossWins).reduce((sum,n)=>sum+n,0)) + 1 } : {}), ...Object.fromEntries(Object.keys(badgeEvidence).map(id=>[`badgeEvidenceByNetwork.${network}.${id}`,true])), [`rewardsByNetwork.${network}`]: next, [`rewardVersion.${network}`]: (version ?? 0) + 1,
+        { ...appliedPower, $set: { ...(event.kind === "boss" ? { [`badgeEvidenceByNetwork.${network}.bossDefeats`]: Math.max(user.badgeEvidenceByNetwork?.[network]?.bossDefeats || 0, Object.values(progress.bossWins).reduce((sum,n)=>sum+n,0)) + 1 } : {}), ...Object.fromEntries(Object.keys(badgeEvidence).map(id=>[`badgeEvidenceByNetwork.${network}.${id}`,true])), [`rewardsByNetwork.${network}`]: next, [`rewardVersion.${network}`]: (version ?? 0) + 1,
           ...(snapshot ? { [`${playerKey}.mission`]: mission, [`${playerKey}.creditedShards`]: snapshot.shards, [`${playerKey}.creditedDestroyed`]: snapshot.destroyed, [`${playerKey}.updatedAt`]: new Date().toISOString() } : {}) },
           ...(snapshot ? { $max: { [`${playerKey}.highestSector`]: mission?.sector || event.stage }, $inc: { [`${playerKey}.balance`]: deltaShards, [`${playerKey}.totalShardsEarned`]: deltaShards, [`${playerKey}.totalDestroyed`]: deltaDestroyed, [`${playerKey}.version`]: 1 } } : {}), $addToSet: { [`rewardEventKeys.${network}`]: closesChain ? { $each: [key, `chain:${event.level}`] } : key } });
         if (result.modifiedCount) return res.json({ network, progress: next, awarded: true, rank: rewardRank(next), ...(snapshot ? { save: publicSave({ ...player, balance: player.balance + deltaShards, totalShardsEarned: (player.totalShardsEarned || 0) + deltaShards, totalDestroyed: (player.totalDestroyed || 0) + deltaDestroyed, highestSector: Math.max(player.highestSector || 1, mission?.sector || event.stage), version: player.version + 1, mission }) } : {}) });

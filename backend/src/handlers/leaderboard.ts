@@ -9,6 +9,7 @@ import { rewardNetwork } from "../rewardNetwork";
 import { readSnapshot } from "../playerSave";
 import { restoreScoreRun } from "../restoreScoreRun";
 import { maxMissionHearts } from "../lifeRules";
+import { saveMissionPower } from "../missionPower";
 
 export default function mountLeaderboardEndpoints(router: Router) {
   router.get("/top", async (req, res) => {
@@ -68,6 +69,7 @@ export default function mountLeaderboardEndpoints(router: Router) {
         const nextCareer = careerValue(userBefore, network) + snapshot.score;
         if (!Number.isSafeInteger(nextCareer)) return res.status(400).json({ error: "Career score limit reached" });
         const result = await users.updateOne({ uid, [`${key}.activeRunId`]: run.id, [`${key}.version`]: player.version }, {
+          ...(network === "testnet" ? saveMissionPower(player, snapshot, req.body.powerActivationId, key) : {}),
           $max: { [field]: req.body.score },
           $set: { [`${key}.mission`]: null, [`${key}.activeRunId`]: null, [`${key}.lastFinishedRunId`]: run.id, [`${key}.updatedAt`]: new Date().toISOString(), [`${key}.creditedShards`]: snapshot.shards, [`${key}.creditedDestroyed`]: snapshot.destroyed,
             ...(snapshot.score > previousBest.score || snapshot.score === previousBest.score && previousBest.level === null && snapshot.score > 0 ? { [bestRunField(network)]: { score: snapshot.score, level } } : {}) },

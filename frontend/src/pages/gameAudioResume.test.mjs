@@ -40,7 +40,7 @@ function host(musicEnabled = true) {
   };
   const context = {
     document: { visibilityState: 'visible' },
-    weaponResumeStepMs, weaponMenuOpen:false, technicalPause:false,
+    weaponResumeStepMs, weaponMenuOpen:false, weaponShopPaymentBusy:false, technicalPause:false,
     stateRef:{current:{weaponSource:'standard',paidWeaponMs:0,pickupWeaponMs:0}},
     setWeaponCountdownStep:value=>assert.equal(value,1000),
     bossSummaryRef: { current: null },
@@ -64,6 +64,13 @@ test('paused mission unlocks effects and music within Resume before its delayed 
   const h = host();
   h.tap(evaluate(variables.get('resumeWeaponSelection'), h.context));
   assert.deepEqual(h.events, ['effects', 'music', 'controls', 'countdown:3']);
+});
+
+test('a pending Pi purchase keeps the mission paused', () => {
+  const h = host();
+  h.context.weaponShopPaymentBusy = true;
+  h.tap(evaluate(variables.get('resumeWeaponSelection'), h.context));
+  assert.deepEqual(h.events, []);
 });
 
 test('saved-account Resume unlocks audio before waiting for the account request', () => {

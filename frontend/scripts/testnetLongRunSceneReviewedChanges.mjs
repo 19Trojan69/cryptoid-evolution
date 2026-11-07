@@ -1,3 +1,5 @@
+import { restoreTestnetMissionPowerChanges } from './testnetMissionPowerReviewedChanges.mjs';
+
 // Exact controller edits from the long-run iPhone scene. Restore them before the older release checks.
 const sceneChanges = [
   {
@@ -78,6 +80,7 @@ const finalExplosionReveal = {
 };
 
 export function restoreTestnetLongRunSceneChanges(source) {
+  source = restoreTestnetMissionPowerChanges(source);
   if (source.includes(finalExplosionReveal.after)) {
     if (source.split(finalExplosionReveal.after).length !== 2) throw Error('Expected one exact final explosion reveal change');
     source = source.replace(finalExplosionReveal.after, () => finalExplosionReveal.before);

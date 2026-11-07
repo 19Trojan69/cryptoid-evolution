@@ -1,4 +1,5 @@
 import { hangarCatalog } from "../hangarCatalog";
+import { saveMissionPower } from "../missionPower";
 import { ownedShipStage, selectedShipStage } from "../shipLoadout";
 import { blockFlights } from "../blockFlights";
 import { BOSS_INTERMISSION_MIN_MS, bossIntermissionPending } from '../bossIntermission';
@@ -139,8 +140,10 @@ export default function mountProgressEndpoints(router: Router) {
           || save.mission?.snapshot.comboTotal !== undefined && (snapshot.comboTotal === undefined || snapshot.comboTotal < save.mission.snapshot.comboTotal)
           || snapshot.shards < (save.creditedShards || 0) || snapshot.destroyed < (save.creditedDestroyed || 0)) return res.status(400).json({ error: "save_regressed" });
         const deltaShards = snapshot.shards - (save.creditedShards || 0), deltaDestroyed = snapshot.destroyed - (save.creditedDestroyed || 0);
+        const appliedPower = network === "testnet" ? saveMissionPower(save, snapshot, req.body.powerActivationId, key) : {};
         const mission = { ...(save.mission?.damageAtStart === undefined ? (!save.mission && save.lastStart?.badgeMetrics === 1 ? {damageAtStart:0,destroyedAtStart:0} : {}) : { damageAtStart: save.mission.damageAtStart, destroyedAtStart:save.mission.destroyedAtStart }), sector: combat.stage, phase, rulesVersion: run.rulesVersion ?? 1, snapshot, combat, savedAt: new Date().toISOString() };
         const result = await users.updateOne({ uid, [`${key}.activeRunId`]: run.id, [`${key}.version`]: save.version }, {
+          ...appliedPower,
           $set: { [`${key}.mission`]: mission, [`${key}.combatSequence`]: combat.sequence, [`${key}.creditedShards`]: snapshot.shards, [`${key}.creditedDestroyed`]: snapshot.destroyed, [`${key}.updatedAt`]: mission.savedAt },
           $inc: { [`${key}.version`]: 1, [`${key}.balance`]: deltaShards, [`${key}.totalShardsEarned`]: deltaShards, [`${key}.totalDestroyed`]: deltaDestroyed },
         });

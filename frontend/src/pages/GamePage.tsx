@@ -88,6 +88,9 @@ import { MusicPlayer, takeHandoffGameMusic } from "./musicPlayback";
 import SystemSettings from "./SystemSettings";
 import { applySavedDisplaySettings } from './displaySettings';
 import MissionWeaponShop from './MissionWeaponShop';
+import MissionPowerDock from './MissionPowerDock';
+import { useMissionPowers } from './useMissionPowers';
+import type { MissionPower } from '../../../backend/src/missionPower';
 import useModalNavigation from '../hooks/useModalNavigation';
 import { BEST_SCORE_KEY, HIGHEST_SECTOR_KEY, TOTAL_DESTROYED_KEY } from "../lib/localRecordKeys";
 import './weaponSelection.css';
@@ -120,6 +123,7 @@ import { awardBlock, awardBonusMedal, awardBossSticker, awardChain, emptyRewardP
 const RETURN_DURATION_MS = 3_500;
 const IMPACT_COOLDOWN_MS = 1_500;
 const GAME_OVER_REVEAL_MS = 1_750;
+const testnetMissionPowers = shipSaveNetwork === 'testnet';
 const ENTRY_HUD_GAP_PX = 8;
 const BOSS_VICTORY_VOLUME_BOOST = 1.6;
 // Let the deep impact lead before its long tail overlaps the victory cue.
@@ -633,7 +637,12 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
   const gameOverTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const startRequestRef = useRef(false);
   const [weaponMenuOpen, setWeaponMenuOpen] = useState(false);
+  const [weaponShopPaymentBusy, setWeaponShopPaymentBusy] = useState(false);
   const [weaponStock, setWeaponStock] = useState<Record<string, number>>();
+  const { inventory: powerInventory, attempt: powerAttempt, appliedId: powerActivationId,
+    openRun: openMissionPowerRun, refresh: refreshMissionPowers, claim: claimMissionPower, applyClaim: applyMissionPowerClaim } = useMissionPowers();
+  const usePowerRef = useRef<(power: MissionPower) => void>(() => {});
+  const onUsePower = useCallback((power: MissionPower) => usePowerRef.current(power), []);
   const stockRef = useRef<Record<string, number>>({});
   const inventoryRequestRef = useRef<{ runId: string; promise: Promise<boolean> } | null>(null);
   const [autoReload, setAutoReload] = useState<AutoReloadPreferences>({});
@@ -730,7 +739,7 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
       formationStarted: formationStartedRef.current, slots: sectionSlotsRef.current, escortSlots: bossEscortSlotsRef.current,
     }, (_key, value) => typeof value === "number" && !Number.isFinite(value) ? -1e9 : value));
     if (!readCombatCheckpoint(combat)) throw new Error("Invalid local combat checkpoint");
-    await queue.enqueue({ path: "/progress/checkpoint", body: { runId, combat, save: snapshotOf(state) } });
+    await queue.enqueue({ path: "/progress/checkpoint", body: { runId, combat, save: snapshotOf(state), powerActivationId: powerActivationId.current } });
     lastSavedAtRef.current = Date.now();
     setSaveNotice(queue.durable ? "Game saved." : "Game saved. Offline backup unavailable.");
   };
@@ -986,6 +995,7 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
       if (adminRequested && !data.adminPreview) throw new Error("Admin preview session expired");
       adminRunRef.current = data.adminPreview === true;
       scoreRunRef.current = data.scoreRunId;
+      if (testnetMissionPowers && !adminRunRef.current) openMissionPowerRun(data.scoreRunId);
       rulesVersionRef.current = data.rulesVersion ?? 2;
       combatSequenceRef.current = 0;
       stateRef.current.shardBase = adminRunRef.current ? 0 : missionShardBase(data.profile?.balance ?? profile?.balance ?? 0, data.checkpoint?.shards ?? 0);
@@ -1168,7 +1178,7 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
     if (!runId) return;
     scoreRunRef.current = null;
     setScoreSync("saving");
-    const body = { runId, score: state.score, finished: state.hearts <= 0 || state.sector === 500 && state.encounter === "bonus" && state.phase === "SECTOR_CLEAR", save: snapshotOf(state) };
+    const body = { runId, score: state.score, finished: state.hearts <= 0 || state.sector === 500 && state.encounter === "bonus" && state.phase === "SECTOR_CLEAR", save: snapshotOf(state), powerActivationId: powerActivationId.current };
     pendingScoreRef.current = (saveQueueRef.current ? saveQueueRef.current.enqueue({ path: "/leaderboard/score", body }) : retrySave(() => axiosClient.post("/leaderboard/score", body)))
       .then(() => setScoreSync("saved"))
       .catch(() => setScoreSync("failed"));
@@ -1257,7 +1267,7 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
     if (runId) {
       setSaveNotice("Saving game…");
       if (stateRef.current.comboTotal !== undefined) stateRef.current.comboTotal = stateRef.current.combo.total;
-      const body = { runId, ...event, save: snapshotOf(stateRef.current) };
+      const body = { runId, ...event, save: snapshotOf(stateRef.current), powerActivationId: powerActivationId.current };
       pendingRewardsRef.current = (saveQueueRef.current ? saveQueueRef.current.enqueue({ path: "/rewards/event", body }) : retrySave(() => axiosClient.post("/rewards/event", body)))
         .then(() => { lastSavedAtRef.current = Date.now(); setSaveNotice(saveQueueRef.current?.durable === false ? "Game saved. Offline backup unavailable." : "Game saved."); })
         .catch(() => setSaveNotice("Save not confirmed. Retry or use the last confirmed save."));
@@ -2337,11 +2347,8 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
     };
   }, [showRewardCards, diagnosticContext, beginBossSummary]);
 
-  const activateStartPower = () => {
+  const applyPurchasedPower = (power: MissionPower) => {
     const state = stateRef.current;
-    if (state.status !== "playing" || !state.pendingStartPower) return;
-    const power = state.pendingStartPower;
-    if ((power === "shield" && state.purchasedShieldMs > 0) || (power === "rapid" && state.rapidFireMs > 0) || (power === "overdrive" && state.overdriveMs > 0)) return;
     if (power === "bomb" || power === "emp") {
       const width = fieldRef.current?.clientWidth || 800;
       const height = fieldRef.current?.clientHeight || 600;
@@ -2379,14 +2386,44 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
       if (power === "overdrive") state.overdriveTotalMs = PURCHASED_POWER_UP_DURATION_MS;
       if (power === "rapid") state.rapidFireTotalMs = PURCHASED_POWER_UP_DURATION_MS;
     }
-    state.pendingStartPower = null;
+    if (state.pendingStartPower === power) state.pendingStartPower = null;
     persistGuestShards();
     soundRef.current?.play(power === "bomb" ? "nova" : power === "emp" ? "emp" : power === "overdrive" ? "boost" : "pickup");
     setGame({ ...state });
   };
+  const powerActive = (state: GameState, power: MissionPower) => power === 'shield' ? state.purchasedShieldMs > 0
+    : power === 'overdrive' ? state.overdriveMs > 0 : power === 'rapid' ? state.rapidFireMs > 0 : power === 'emp' && state.empMs > 0;
+  const activateStartPower = () => {
+    const state = stateRef.current, power = state.pendingStartPower;
+    if (state.status === 'playing' && power && !powerActive(state, power)) applyPurchasedPower(power);
+  };
+  const canUseMissionPowers = (state: GameState) => state.status === 'playing' && state.hearts > 0
+    && state.encounter !== 'bonus' && state.encounter !== 'boss-clear' && state.phase !== 'SECTOR_CLEAR'
+    && !rewardCardsRef.current.length && !document.hidden;
+  const hasPowerTargets = (state: GameState) => state.encounter === 'boss-fight' || state.asteroids.length > 0;
+  const canUseBomb = (state: GameState) => state.enemyShots.length > 0 || state.encounter === 'boss-fight'
+    || state.asteroids.some(enemy => enemy.x >= -enemy.radius && enemy.x <= fieldSizeRef.current.width + enemy.radius
+      && enemy.y >= -enemy.radius && enemy.y <= fieldSizeRef.current.height + enemy.radius);
+  usePowerRef.current = power => {
+    const state = stateRef.current;
+    const usable = () => canUseMissionPowers(state) && !powerActive(state, power)
+      && (power !== 'bomb' || canUseBomb(state)) && (power !== 'emp' || hasPowerTargets(state));
+    if (pointerRef.current !== null || !usable()) return;
+    if (state.pendingStartPower === power) {
+      applyPurchasedPower(power);
+      void saveCombatRef.current().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried."));
+      return;
+    }
+    const runId = scoreRunRef.current;
+    void claimMissionPower(power).then(activation => {
+      if (!activation || scoreRunRef.current !== runId || stateRef.current !== state || !usable()) return;
+      if (!applyMissionPowerClaim(activation, () => applyPurchasedPower(power))) return;
+      void saveCombatRef.current().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried."));
+    }).catch(() => {});
+  };
   const weaponNames = ["", t("Standard"), t("Twin"), t("Rapid"), t("Triple"), t("Plasma")];
   const resumeWeaponSelection = () => {
-    if (bossSummaryRef.current && !bossSummaryRef.current.accepted) return;
+    if (weaponShopPaymentBusy || bossSummaryRef.current && !bossSummaryRef.current.accepted) return;
     unlockAudioForResume(); clearControls();
     const state = stateRef.current;
     setWeaponCountdownStep(weaponResumeStepMs(weaponMenuOpen && !technicalPause, state.weaponSource,
@@ -2399,7 +2436,7 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
   };
   const pauseVisible = game.status === "paused" && !bossSummary && !rewardCards.length && !weaponMenuOpen && weaponCountdown === null;
   useModalNavigation(homePrompt ? "leave" : weaponMenuOpen ? "weapons" : pauseVisible ? "pause" : null, () => {
-    if (pauseLeaving || saveRetrying || weaponBusy || activationRef.current) return;
+    if (pauseLeaving || saveRetrying || weaponBusy || weaponShopPaymentBusy || activationRef.current) return;
     if (homePrompt) closeHomePrompt();
     else resumeWeaponSelection();
   });
@@ -2532,6 +2569,7 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
     recordsSavedRef.current = false;
     scoreRunRef.current = null;
     inventoryRequestRef.current = null;
+    openMissionPowerRun(null);
     stockRef.current = {};
     setWeaponStock(undefined);
     activationRef.current = null;
@@ -2655,6 +2693,10 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
   const bossHullReady = useHullSourceReady(game.boss?.config.image ?? fallingBossHull?.bossImage);
   usePreparedGameHulls(game.sector, game.encounter, hullOffset, hullWave, hullBonusGroup, hullRules);
   const levelComplete = game.encounter === "bonus" && game.phase === "SECTOR_CLEAR";
+  const dockOverdrive = testnetMissionPowers && (game.overdriveTotalMs === PURCHASED_POWER_UP_DURATION_MS
+    || !!powerInventory?.stock.overdrive || powerInventory?.pending?.power === 'overdrive' || game.pendingStartPower === 'overdrive');
+  const dockRapid = testnetMissionPowers && (game.rapidFireTotalMs === PURCHASED_POWER_UP_DURATION_MS
+    || !!powerInventory?.stock.rapid || powerInventory?.pending?.power === 'rapid' || game.pendingStartPower === 'rapid');
   const reinforcementIntro = game.encounter === "normal" && game.phase === "SECTOR_INTRO" && flightRef.current > 0;
   const sectorIntro = game.encounter === "normal" && game.phase === "SECTOR_INTRO" && round === 1 && !reinforcementIntro;
   const levelIntro = sectorIntro && sectorLabel === 1;
@@ -2777,9 +2819,9 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
         {game.hearts > 0 && <div ref={playerShipRef} className={`player-ship shielded-ship${game.status === "paused" && weaponCountdown === null ? " player-ship-dialog-hidden" : ""}${shipSelection.color.id === "grey" || shipSelection.color.id === "white" ? ` player-ship-${shipSelection.color.id}` : ""}${game.purchasedShieldMs > 0 || (game.shieldActive && game.shieldCharges > 0 && game.shieldMs > 0) ? " player-ship-shield-active" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "player-crash") ? " player-ship-respawn" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "shield") ? " player-ship-shielded" : ""}`} style={{ left: `${game.player.x * 100}%`, top: `${game.player.y * 100}%`, "--ship-glow": shipSelection.color.glow, "--flame-length": `${engineFlamePercent(game.thrust)}%`, ...shipVisualOffset } as CSSProperties} aria-label={t('Your Cryptoid ship')}><GameShipVisual sprite={shipSelection.skin.sprite} color={shipSelection.color.id} stage={shipStage} variant="player" sites={game.playerHullFires} hit={game.playerHit}/></div>}
         {weaponMenuOpen && <div className={`game-overlay weapon-selection-overlay${readControlHand() === 'right' ? ' weapon-drawer-left' : ' weapon-drawer-right'}`} onPointerDown={event => event.stopPropagation()}>
           <div className="weapon-selection-dialog" role="dialog" aria-modal="true" aria-labelledby="mission-weapon-shop-title">
-            <MissionWeaponShop reloadLevel={confirmedReload ?? undefined} autoReload={autoReload} onAutoReload={changeAutoReload} authenticated={accountRun} admin={adminRunRef.current} timers={game.weaponTimers} stock={weaponStock} activeLevel={game.weaponLevel} source={game.weaponSource} pickupLevel={game.pickupWeaponLevel} pickupMs={game.pickupWeaponMs} stage={shipStage} selectionBusy={weaponBusy} pendingLevel={activationRef.current?.level} selectionError={weaponError} onSelect={level => { void selectWeaponLevel(level); }} onPickup={selectPickupWeapon} onClose={resumeWeaponSelection} refreshInventory={refreshWeaponInventory} />
+            <MissionWeaponShop reloadLevel={confirmedReload ?? undefined} autoReload={autoReload} onAutoReload={changeAutoReload} authenticated={accountRun} admin={adminRunRef.current} timers={game.weaponTimers} stock={weaponStock} activeLevel={game.weaponLevel} source={game.weaponSource} pickupLevel={game.pickupWeaponLevel} pickupMs={game.pickupWeaponMs} stage={shipStage} selectionBusy={weaponBusy} pendingLevel={activationRef.current?.level} selectionError={weaponError} onSelect={level => { void selectWeaponLevel(level); }} onPickup={selectPickupWeapon} onClose={resumeWeaponSelection} refreshInventory={refreshWeaponInventory} powerInventory={powerInventory} refreshPowers={refreshMissionPowers} onPaymentBusy={setWeaponShopPaymentBusy} />
           </div>
-          <button type="button" className="weapon-drawer-tab" onClick={resumeWeaponSelection} disabled={weaponBusy} aria-label={t('Back to game')}>{t('Weapons')} <span aria-hidden="true">{readControlHand() === 'right' ? '‹' : '›'}</span></button>
+          <button type="button" className="weapon-drawer-tab" onClick={resumeWeaponSelection} disabled={weaponBusy || weaponShopPaymentBusy} aria-label={t('Back to game')}>{t('Weapons')} <span aria-hidden="true">{readControlHand() === 'right' ? '‹' : '›'}</span></button>
         </div>}
         <div className={`touch-controls touch-controls-${readControlHand()}`}>
           <div className="edge-actions" role="group" aria-label={t('Available equipment')}>
@@ -2792,7 +2834,7 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
                 </button>
               </div>
             </div>
-            {game.purchasedShieldMs > 0 && <div className="shield-control-wrap" data-active="true">
+            {game.purchasedShieldMs > 0 && !testnetMissionPowers && <div className="shield-control-wrap" data-active="true">
               <TimedRing remainingMs={game.purchasedShieldMs} durationMs={PURCHASED_POWER_UP_DURATION_MS} />
               <div className="edge-action edge-action-shield shield-active-indicator" role="status" aria-label={`${t("BOUGHT SHIELD")} · ${Math.ceil(game.purchasedShieldMs / 1_000)}s`}>
                 <span aria-hidden="true">{powerUpSymbols.shield}</span>
@@ -2801,15 +2843,20 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
             </div>}
             {([
               { type: "shield", remainingMs: game.shieldCharges > 0 ? game.shieldMs : 0, durationMs: POWER_UP_DURATION_MS },
-              { type: "overdrive", remainingMs: game.overdriveMs, durationMs: game.overdriveTotalMs },
-              { type: "rapid", remainingMs: game.rapidFireMs, durationMs: game.rapidFireTotalMs },
+              { type: "overdrive", remainingMs: dockOverdrive ? 0 : game.overdriveMs, durationMs: game.overdriveTotalMs },
+              { type: "rapid", remainingMs: dockRapid ? 0 : game.rapidFireMs, durationMs: game.rapidFireTotalMs },
             ] as const).filter(power => power.remainingMs > 0).map(power => <div key={power.type} className={`power-timer power-timer-${power.type}`} role="status" aria-label={t(powerUpNames[power.type])}>
               <TimedRing remainingMs={power.remainingMs} durationMs={power.durationMs} />
               <div className="power-timer-face"><span aria-hidden="true">{powerUpSymbols[power.type]}</span><small>{t(powerUpNames[power.type])}</small></div>
             </div>)}
-            {game.pendingStartPower && <button type="button" className={`edge-action edge-action-${game.pendingStartPower} edge-action-purchased`} disabled={game.status !== "playing" || (game.pendingStartPower === "shield" && game.purchasedShieldMs > 0) || (game.pendingStartPower === "rapid" && game.rapidFireMs > 0) || (game.pendingStartPower === "overdrive" && game.overdriveMs > 0) || (game.pendingStartPower === "emp" && game.empMs > 0)} aria-label={`${t("Tap to activate")} ${t(powerUpNames[game.pendingStartPower])}`} onClick={activateStartPower}><span aria-hidden="true">{powerUpSymbols[game.pendingStartPower]}</span><small>{t(powerUpNames[game.pendingStartPower])}</small><em>{t("Tap to activate")}</em></button>}
+            {!testnetMissionPowers && game.pendingStartPower && <button type="button" className={`edge-action edge-action-${game.pendingStartPower} edge-action-purchased`} disabled={game.status !== "playing" || (game.pendingStartPower === "shield" && game.purchasedShieldMs > 0) || (game.pendingStartPower === "rapid" && game.rapidFireMs > 0) || (game.pendingStartPower === "overdrive" && game.overdriveMs > 0) || (game.pendingStartPower === "emp" && game.empMs > 0)} aria-label={`${t("Tap to activate")} ${t(powerUpNames[game.pendingStartPower])}`} onClick={activateStartPower}><span aria-hidden="true">{powerUpSymbols[game.pendingStartPower]}</span><small>{t(powerUpNames[game.pendingStartPower])}</small><em>{t("Tap to activate")}</em></button>}
           </div>
         </div>
+        {testnetMissionPowers && game.status === 'playing' && <MissionPowerDock hand={readControlHand()} inventory={powerInventory}
+          queued={game.pendingStartPower} attempt={powerAttempt} enabled={canUseMissionPowers(game)}
+          weaponsUseful={hasPowerTargets(game)} bombUseful={!!(powerInventory?.stock.bomb || powerInventory?.pending?.power === 'bomb' || game.pendingStartPower === 'bomb') && canUseBomb(game)}
+          shield={Math.ceil(game.purchasedShieldMs / 1000)} overdrive={dockOverdrive ? Math.ceil(game.overdriveMs / 1000) : 0}
+          rapid={dockRapid ? Math.ceil(game.rapidFireMs / 1000) : 0} emp={Math.ceil(game.empMs / 1000)} onUse={onUsePower} />}
         {weaponCountdown !== null && <div className="game-overlay weapon-resume-countdown" role="status" aria-live="polite"><strong>{weaponCountdown}</strong></div>}
         {pauseVisible && !homePrompt && <div className="game-overlay pause-settings-overlay" role="dialog" aria-modal="true" aria-labelledby="pause-settings-title"><div className="game-modal pause-settings-modal">
           <p className="eyebrow" id="pause-settings-title">{t('MISSION PAUSED')}</p><h1><span className="desktop-menu-only">{t('Hold the line.')}</span><span className="mobile-menu-only">{t('A short breather.')}</span></h1><p><span className="desktop-menu-only">{t('The asteroids are waiting.')}</span><span className="mobile-menu-only">{t("Level")} {levelLabel} · {game.encounter === "normal" ? `${t("Block")} ${sectorLabel}/9` : game.encounter === "bonus" ? t("Bonus round") : t("Boss")} · {sectorName(game.sector)}</span></p>
