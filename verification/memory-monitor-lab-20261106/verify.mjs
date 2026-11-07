@@ -43,6 +43,54 @@ try{
  await page.goto(origin,{waitUntil:'domcontentloaded'});await page.getByRole('heading',{name:'Speicherlabor',exact:true}).waitFor();
  assert.equal(await page.evaluate(()=>window.__ENV?.appNetwork),'testnet','Current rules must be selected even on an isolated hostname');
  assert.equal(await page.locator('.game-shell').count(),0);
+ // Exercise the initial overview and game entries before the reload cases.
+ const overviewEntry = page.url();
+ const historyEntry = () => page.evaluate(() => ({path:location.pathname, index:history.state?.idx, length:history.length}));
+ const overviewHistory = await historyEntry();
+ await startScene('normal', false);
+ await page.waitForURL(origin + '/game');
+ const gameHistory = await historyEntry();
+ const distance = gameHistory.index - overviewHistory.index;
+ result.history = {overview:overviewHistory, game:gameHistory, distance};
+ assert.ok(Number.isInteger(distance) && distance > 0, 'Starting the game must create a browser history entry');
+ await page.evaluate(distance => history.go(-distance), distance);
+ await page.waitForURL(overviewEntry, {timeout:10000});
+ await page.getByRole('heading', {name:'Speicherlabor', exact:true}).waitFor();
+ const afterBack = await reportText();
+ assert.equal(afterBack.state, 'stopped');
+ assert.equal(afterBack.lifecycle.followingDocumentInSameTab, null);
+ assert.equal(afterBack.documentId, afterBack.lifecycle.openedInDocument.bootId);
+ assert.ok(afterBack.lifecycle.events.some(event => event.kind === 'game-monitor-stop' && event.historyAction === 'POP'));
+ const forward = page.waitForEvent('framenavigated', {
+   predicate: frame => frame === page.mainFrame() && frame.url() === origin + '/game',
+   timeout: 10000,
+ });
+ await page.evaluate(distance => history.go(distance), distance);
+ await forward;
+ await page.waitForURL(origin + '/');
+ await page.getByRole('heading', {name:'Speicherlabor', exact:true}).waitFor();
+ assert.equal(await page.locator('.game-shell').count(), 0);
+
+ await startScene('normal', false);
+ // Fault in the actual monitor render, inside the lab route boundary.
+ await page.evaluate(() => {
+   Object.defineProperty(window.__cryptoidLabRun, 'reference', {
+     configurable: true,
+     enumerable: false,
+     get() { throw new TypeError('Lab test render fault'); },
+   });
+ });
+ await page.getByRole('button', {name:'Monitor vergrößern', exact:true}).click();
+ await page.getByRole('heading', {name:'Spiel unterbrochen', exact:true}).waitFor();
+ await page.waitForFunction(() => JSON.parse(localStorage.getItem('cryptoid_memory_lab_report_v1')).state === 'failed');
+ const afterFault = await reportText();
+ assert.equal(afterFault.state, 'failed');
+ assert.equal(afterFault.documentId, afterFault.lifecycle.openedInDocument.bootId);
+ assert.ok(afterFault.lifecycle.events.some(event => event.kind === 'render-error' && event.surface === 'lab-route' && event.errorName === 'TypeError'));
+ await page.getByRole('button', {name:'Zur Laborübersicht', exact:true}).click();
+ await page.getByRole('heading', {name:'Speicherlabor', exact:true}).waitFor();
+ assert.equal((await reportText()).state, 'failed');
+
  for(const scene of ['normal','turrets','reactor']){
    await startScene(scene, scene !== 'normal');
    let state=await page.evaluate(()=>window.__cryptoidLabRead());
@@ -124,51 +172,9 @@ try{
    }
    result.scenes.push({scene,currentRules:true,legacyMarkersAbsent:true,compactHeight:panelBox.height,transparentBackground:look.background,redAndNormalColourVerified:true,pauseResume:true,recoveredWithoutAutoRestart:true,downloadValid:true,samples:exported.samples.length,activeBeforePause:before,heapSupported:exported.samples.at(-1).heapBytes!==null,bossFightCanvasAndReactorVerified:scene!=='normal'});
  }
- // Start the same-document history control from a fresh overview entry.
- const overviewEntry = origin + '/?history-control';
- await page.goto(overviewEntry, {waitUntil:'domcontentloaded'});
- await startScene('normal', false);
- await page.waitForURL(origin + '/game');
- await page.evaluate(() => history.back());
- await page.waitForURL(overviewEntry, {timeout:10000});
- await page.getByRole('heading', {name:'Speicherlabor', exact:true}).waitFor();
- const afterBack = await reportText();
- assert.equal(afterBack.state, 'stopped');
- assert.equal(afterBack.lifecycle.followingDocumentInSameTab, null);
- assert.equal(afterBack.documentId, afterBack.lifecycle.openedInDocument.bootId);
- assert.ok(afterBack.lifecycle.events.some(event => event.kind === 'game-monitor-stop' && event.historyAction === 'POP'));
- const forward = page.waitForEvent('framenavigated', {
-   predicate: frame => frame === page.mainFrame() && frame.url() === origin + '/game',
-   timeout: 10000,
- });
- await page.evaluate(() => history.forward());
- await forward;
- await page.waitForURL(origin + '/');
- await page.getByRole('heading', {name:'Speicherlabor', exact:true}).waitFor();
- assert.equal(await page.locator('.game-shell').count(), 0);
-
- await startScene('normal', false);
- // Fault in the actual monitor render, inside the lab route boundary.
- await page.evaluate(() => {
-   Object.defineProperty(window.__cryptoidLabRun, 'reference', {
-     configurable: true,
-     enumerable: false,
-     get() { throw new TypeError('Lab test render fault'); },
-   });
- });
- await page.getByRole('button', {name:'Monitor vergrößern', exact:true}).click();
- await page.getByRole('heading', {name:'Spiel unterbrochen', exact:true}).waitFor();
- await page.waitForFunction(() => JSON.parse(localStorage.getItem('cryptoid_memory_lab_report_v1')).state === 'failed');
- const afterFault = await reportText();
- assert.equal(afterFault.state, 'failed');
- assert.equal(afterFault.documentId, afterFault.lifecycle.openedInDocument.bootId);
- assert.ok(afterFault.lifecycle.events.some(event => event.kind === 'render-error' && event.surface === 'lab-route' && event.errorName === 'TypeError'));
- await page.getByRole('button', {name:'Zur Laborübersicht', exact:true}).click();
- await page.getByRole('heading', {name:'Speicherlabor', exact:true}).waitFor();
- assert.equal((await reportText()).state, 'failed');
  result.lifecycle = {reload:true, historyBack:true, historyForwardKeepsReport:true, otherTabExcluded:true,
    javascriptError:true, unhandledRejection:true, renderFallback:true, reportExport:true};
  assert.deepEqual(unexpected,[]);assert.deepEqual(pageErrors,[]);assert.deepEqual(assetErrors,[]);
  result.complete=true;result.noLiveBackendRequests=true;result.noUnexpectedBrowserErrors=true;
-}catch(e){result.failure={message:e.message,stack:e.stack};if(page){result.lastScene=await page.evaluate(()=>window.__cryptoidLabRead?.()??null).catch(()=>null);result.visibleText=await page.locator('body').innerText().catch(()=>null);await page.screenshot({path:out+'/'+engine+'-failed.png'}).catch(()=>{});}process.exitCode=1;}
+}catch(e){result.failure={message:e.message,stack:e.stack};if(page){result.lastScene=await page.evaluate(()=>window.__cryptoidLabRead?.()??null).catch(()=>null);result.visibleText=await page.locator('body').innerText().then(text => text.slice(0, 1500)).catch(()=>null);result.historyAtFailure=await page.evaluate(()=>({path:location.pathname,index:history.state?.idx,length:history.length,documentId:window.__cryptoidBootId,events:window.__cryptoidReloadState?.events?.slice(-8)})).catch(()=>null);await page.screenshot({path:out+'/'+engine+'-failed.png'}).catch(()=>{});}process.exitCode=1;}
 finally{writeFileSync(out+'/'+engine+'.json',JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify(result));await browser.close();await new Promise(r=>server.close(r));}
