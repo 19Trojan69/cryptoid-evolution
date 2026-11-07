@@ -1,6 +1,7 @@
 import {Fragment,lazy,Suspense,useEffect,useRef,useState} from 'react';
-import {createBrowserRouter,RouterProvider,useNavigate} from 'react-router-dom';
+import {createBrowserRouter,Navigate,RouterProvider,useNavigate,useRouteError} from 'react-router-dom';
 import {ALERT_POLICY,RESOURCE_FIELDS,resourceHigh,appendSample,chartPath,cleanSample,clock,finite,memoryMiB,MAX_SAMPLES,readReport,saveReport,SAMPLE_MS} from './model.mjs';
+import {beginRunTrace,followingDocument,noteFault,noteLifecycle,withLifecycle} from './lifecycle.mjs';
 import {primeGameAudio} from '../../frontend/src/pages/gameAudio';
 import {watchMenuViewport} from '../../frontend/src/lib/menuViewport';
 import './lab.css';
@@ -17,11 +18,19 @@ function Export({report}){
  const url=useRef(null);
  useEffect(()=>()=>{if(url.current)URL.revokeObjectURL(url.current);},[]);
  if(!report)return null;
- const content=()=>JSON.stringify(report,null,2);
+ const content=()=>JSON.stringify(withLifecycle(report),null,2);
  const file=()=>new File([content()],'Cryptoid-Evolution-Speicherlabor.json',{type:'application/json'});
  const download=()=>{if(url.current)URL.revokeObjectURL(url.current);url.current=URL.createObjectURL(file());const a=document.createElement('a');a.href=url.current;a.download='Cryptoid-Evolution-Speicherlabor.json';a.click();};
  const share=async()=>{const f=file();try{if(!navigator.canShare?.({files:[f]})){setText(content());return;}await navigator.share({files:[f],title:'Cryptoid Evolution · Speicherlabor'});}catch{setMessage('Teilen wurde nicht abgeschlossen. Der Bericht bleibt erhalten.');}};
  return <div className="lab-export"><button onClick={download}>Bericht herunterladen</button><button onClick={()=>void share()}>Bericht teilen</button><button onClick={()=>setText(text?'':content())}>Berichttext anzeigen</button>{message&&<p role="status">{message}</p>}{text&&<textarea aria-label="Diagnosebericht zum Kopieren" readOnly value={text}/>}</div>;
+}
+function RunStatus({report}) {
+ const following = followingDocument(report);
+ if (report.state === 'failed') return <p>Die Spielansicht wurde durch einen Darstellungsfehler unterbrochen.</p>;
+ if (following?.navigationType === 'reload') return <p>Die Browserseite wurde nach diesem Lauf neu geladen.</p>;
+ if (following) return <p>Nach diesem Lauf wurde im selben Tab eine neue Browserseite gestartet.</p>;
+ if (report.state === 'stopped') return <p>Die Aufzeichnung wurde beim Verlassen der Spielansicht beendet.</p>;
+ return <p>Der letzte Lauf hat keinen protokollierten Abschluss.</p>;
 }
 function Menu(){
  const navigate=useNavigate(),[scene,setScene]=useState('normal'),[protection,setProtection]=useState(false),[confirmed,setConfirmed]=useState(false);
@@ -41,7 +50,11 @@ function Menu(){
    window.__cryptoidLabWarmHandoff=true;window.__cryptoidLabWarmRelease=()=>{lease.current?.release();lease.current=null;};
    const report={schema:1,startedAt:Date.now(),state:'running',identity,options,alertPolicy:ALERT_POLICY,sampleMs:SAMPLE_MS,maxSamples:MAX_SAMPLES,dropped:0,samples:[],
      limits:{totalNativeRamAvailable:false,heapIsOptionalApproximateChromiumOnly:true,resourceBytesAreLogicalEstimates:true,resourceCategoriesMayOverlap:true,lastCheckpointIsNotExactCrashTime:true,diagnosticOverheadPresent:true}};
-   window.__cryptoidLabRun=report;remember(report);primeGameAudio();navigate('/game');
+   beginRunTrace(report);
+   window.__cryptoidLabRun = report;
+   remember(report);
+   primeGameAudio();
+   navigate('/game');
  }
  return <main className="lab-menu"><section><p className="lab-eyebrow">CRYPTOID EVOLUTION · SEPARATE DIAGNOSEVERSION</p><h1>Speicherlabor</h1>
    <p>Spielen mit einer kleinen Live-Anzeige und einem Verlauf. Diese eigene Testadresse verwendet keine echten Konten, Käufe oder Online-Spielstände.</p>
@@ -51,9 +64,19 @@ function Menu(){
    <label className="lab-check"><input type="checkbox" checked={protection} onChange={e=>setProtection(e.target.checked)}/>Testschutz gegen Lebensverlust</label>
    <p className="lab-note">Testschutz ist eine künstliche Messhilfe. Er ist anfangs aus und verhindert nicht die Zerstörung des Bosses. Der direkte Bossstart ist eine vorbereitete Testszene; Level 1 verwendet den normalen Ablauf.</p>
    <p>Die Anzeige aktualisiert alle 5 Sekunden. Bis zu 30 Minuten Verlauf bleiben lokal gespeichert, sofern der Browser Speicher erlaubt. Nach einem Abbruch öffnest du dieselbe Adresse erneut. Der letzte gesicherte Punkt ist kein sekundengenauer Absturzzeitpunkt.</p>
-   {point&&<section className="lab-last"><h2>Letzter gesicherter Lauf</h2>{last.identity?.gameRules!=='current-testnet-rules'&&<p>Dieser Bericht stammt aus der früheren Laborversion mit abweichendem Spielmodus. Er bleibt zum Speichern verfügbar.</p>}<p>Spieluhr {clock(point.activeMs)} · Laufzeit {clock(point.wallMs)} · Level {point.level??'–'}{point.bossId?` · Boss ${point.bossId}`:''}</p><p>{last.state==='stopped'?'Regulär zur Testübersicht zurückgekehrt.':'Kein regulärer Abschluss gespeichert; die Ursache ist daraus nicht erkennbar.'}</p><Export report={last}/><label className="lab-check"><input type="checkbox" checked={confirmed} onChange={e=>setConfirmed(e.target.checked)}/>Den letzten lokalen Bericht durch einen neuen Lauf ersetzen</label></section>}
-   {preparation!=='ready'&&<button className="lab-primary" disabled={preparation==='preparing'||(!!point&&!confirmed)} onClick={()=>void prepare()}>{preparation==='preparing'?'Test wird vorbereitet …':preparation==='failed'?'Vorbereitung erneut versuchen':'Test vorbereiten'}</button>}
-   {preparation==='ready'&&<button className="lab-primary" disabled={!!point&&!confirmed} onClick={start}>Testspiel starten</button>}
+   <p>Der Bericht hält auch Seitenwechsel, sichtbare Programmfehler und Hinweise auf einen Seitenneustart fest.</p>
+   {last && <section className="lab-last">
+     <h2>Letzter gesicherter Lauf</h2>
+     {last.identity?.gameRules !== 'current-testnet-rules' && <p>Dieser Bericht stammt aus der früheren Laborversion mit abweichendem Spielmodus. Er bleibt zum Speichern verfügbar.</p>}
+     {point
+       ? <p>Spieluhr {clock(point.activeMs)} · Laufzeit {clock(point.wallMs)} · Level {point.level ?? '–'}{point.bossId ? ` · Boss ${point.bossId}` : ''}</p>
+       : <p>Der Lauf hat noch keinen Messpunkt.</p>}
+     <RunStatus report={last}/>
+     <Export report={last}/>
+     <label className="lab-check"><input type="checkbox" checked={confirmed} onChange={e => setConfirmed(e.target.checked)}/>Den letzten lokalen Bericht durch einen neuen Lauf ersetzen</label>
+   </section>}
+   {preparation!=='ready'&&<button className="lab-primary" disabled={preparation==='preparing'||(!!last&&!confirmed)} onClick={()=>void prepare()}>{preparation==='preparing'?'Test wird vorbereitet …':preparation==='failed'?'Vorbereitung erneut versuchen':'Test vorbereiten'}</button>}
+   {preparation==='ready'&&<button className="lab-primary" disabled={!!last&&!confirmed} onClick={start}>Testspiel starten</button>}
    <p className="lab-note">Die benötigten Bilder werden zuerst geladen. Jede Szene öffnet angehalten; erst dein Antippen von „Fortsetzen“ startet das Spiel.</p>
    <p className="lab-note">Quelle: {identity.baseRuntime.slice(0,8)} · Diagnose {identity.sourceCommit.slice(0,8)}. Der Monitor verändert die Messbedingungen etwas; ein bestandener Lauf beweist noch keinen White-Screen-Fix.</p>
  </section></main>;
@@ -72,12 +95,11 @@ function Panel(){
  const report=useRef(window.__cryptoidLabRun),started=useRef(performance.now()),[point,setPoint]=useState(null),[expanded,setExpanded]=useState(false),[stored,setStored]=useState(true),[fault,setFault]=useState(false);
  useEffect(()=>{
    let stopped=false;
-   report.current.state='running';remember(report.current);
    const tick=()=>{if(stopped)return;const read=window.__cryptoidLabRead;if(typeof read!=='function')return;
      try{const sample=cleanSample(read(),performance.now()-started.current);appendSample(report.current,sample);setStored(remember(report.current));setPoint(sample);setFault(false);}catch{setFault(true);}
    };
    tick();const timer=setInterval(tick,SAMPLE_MS);document.addEventListener('visibilitychange',tick);
-   return ()=>{stopped=true;clearInterval(timer);document.removeEventListener('visibilitychange',tick);report.current.state='stopped';remember(report.current);};
+   return ()=>{stopped=true;clearInterval(timer);document.removeEventListener('visibilitychange',tick);};
  },[]);
  const value=k=>point?.[k]??'–';
  const reference=report.current?.reference,high=RESOURCE_FIELDS.some(field=>resourceHigh(point?.[field],field,reference));
@@ -94,6 +116,50 @@ function Panel(){
    </div>
  </aside>;
 }
-function LabGame(){useEffect(()=>()=>{window.__cryptoidLabWarmRelease?.();delete window.__cryptoidLabWarmRelease;window.__cryptoidLabWarmHandoff=false;},[]);return <><Suspense fallback={<div className="lab-menu"><p>Spielszene wird geladen …</p></div>}><Game/></Suspense><Panel/></>;}
-const router=createBrowserRouter([{path:'/',element:<Menu/>},{path:'/game',element:<LabGame/>},{path:'*',element:<Menu/>}]);
+function LabGame() {
+ useEffect(() => () => {
+   window.__cryptoidLabWarmRelease?.();
+   delete window.__cryptoidLabWarmRelease;
+   window.__cryptoidLabWarmHandoff = false;
+ }, []);
+ if (window.__cryptoidLabRun?.state !== 'running') return <Navigate to="/" replace/>;
+ return <><Suspense fallback={<div className="lab-menu"><p>Spielszene wird geladen …</p></div>}><Game/></Suspense><Panel/></>;
+}
+function LabRouteError() {
+ const error = useRouteError();
+ const navigate = useNavigate();
+ const activeRun = window.__cryptoidLabRun;
+ useEffect(() => {
+   if (activeRun?.state !== 'running') return;
+   noteFault('render-error', error, {surface: 'lab-route'});
+   activeRun.state = 'failed';
+   remember(activeRun);
+ }, [activeRun, error]);
+ return <main className="lab-menu"><section role="alert">
+   <h1>Spiel unterbrochen</h1>
+   <p>Die Spielansicht konnte nicht weiter angezeigt werden. Du kannst den Bericht hier herunterladen.</p>
+   <Export report={activeRun ?? currentReport()}/>
+   <button className="lab-primary" onClick={() => navigate('/', {replace: true})}>Zur Laborübersicht</button>
+ </section></main>;
+}
+const router = createBrowserRouter([
+ {path: '/', element: <Menu/>, errorElement: <LabRouteError/>},
+ {path: '/game', element: <LabGame/>, errorElement: <LabRouteError/>},
+ {path: '*', element: <Menu/>, errorElement: <LabRouteError/>},
+]);
+let previousPath = router.state.location.pathname;
+router.subscribe(({location, historyAction}) => {
+ const path = location.pathname;
+ if (path === previousPath) return;
+ if (path === '/game') noteLifecycle('game-monitor-start', {route: 'game', historyAction});
+ if (previousPath === '/game') {
+   const report = window.__cryptoidLabRun;
+   if (report?.state === 'running') {
+     noteLifecycle('game-monitor-stop', {route: path === '/' ? 'home' : 'other', historyAction});
+     report.state = 'stopped';
+     remember(report);
+   }
+ }
+ previousPath = path;
+});
 export default function App(){useEffect(watchMenuViewport,[]);return <RouterProvider router={router}/>;}

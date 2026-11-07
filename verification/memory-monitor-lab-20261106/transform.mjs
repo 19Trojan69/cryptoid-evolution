@@ -69,8 +69,14 @@ export function controller(source) {
   const bytes=Buffer.from(source);
   assert.equal(createHash('sha1').update(Buffer.concat([Buffer.from('blob '+bytes.length+'\0'),bytes])).digest('hex'),EXPECTED_CONTROLLER);
   const anchor='  const levelLabel =';
-  assert.equal(source.split(anchor).length,2);assert.equal(source.split(frameAnchor).length,2);
-  const result=source.replace(anchor,hook+'\n'+anchor).replace(frameAnchor,frameAnchor+frameHook);
-  assert.equal(result.replace(hook+'\n','').replace(frameHook,''),source);
+  const faultAnchor = '      if (ownerDiagnostics) recordReloadEvent(reason, error);';
+  const faultHook = '\n      else (window as any).__cryptoidLabFault?.(reason, error);';
+  assert.equal(source.split(anchor).length, 2);
+  assert.equal(source.split(frameAnchor).length, 2);
+  assert.equal(source.split(faultAnchor).length, 2);
+  const result = source.replace(anchor, hook + '\n' + anchor)
+    .replace(frameAnchor, frameAnchor + frameHook)
+    .replace(faultAnchor, faultAnchor + faultHook);
+  assert.equal(result.replace(hook + '\n', '').replace(frameHook, '').replace(faultHook, ''), source);
   return result;
 }
