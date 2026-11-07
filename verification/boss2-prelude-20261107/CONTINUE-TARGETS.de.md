@@ -34,3 +34,25 @@ Der Laborvergleich erfasst die ersten rund 7,2 Sekunden nach dem Klick unter Lin
 Als Nächstes den regulären Übergang zu Block 1 verwenden und den erzwungenen Suspend/Resume-Zyklus des bestehenden Audiokontexts beim Klick separat testen. Beide Varianten erhalten denselben Spielablauf und dieselben Assets. Gemessen werden die tatsächlichen Audio-Aufrufe und der Prozessspeicher. Separate erste Läufe pro Variante vermeiden die beobachtete Vermischung mit der Laufreihenfolge.
 
 [CI-Läufe und Rohdaten](https://github.com/19Trojan69/cryptoid-evolution/actions/runs/42359877954)
+
+## Folgemessung zum Audio-Neustart
+
+Vier CI-Paare und ein lokales Paar liefen unter Linux-WebKit auf der gleichen Spielbasis. Der vorhandene Pilot spielte die verkürzte Boss-1-Strecke und die reguläre Bonusrunde. Beide Varianten führten zu Level 2, Block 1. Die Audio-Freigabe blieb Teil des Klicks. In der Vergleichsvariante wurde nur der erzwungene Suspend/Resume-Zyklus für Effekte und Musik am Levelabschluss ausgelassen.
+
+Jede Zelle enthält die PSS-Änderungen im selben Inhaltsprozess in den drei oben angegebenen Fenstern in MiB.
+
+| Paar | Erste Variante | Mit Audio-Neustarts | Mit weiterlaufenden Audiokontexten |
+| --- | --- | ---: | ---: |
+| CI 1 | Neustart | +36,3 / +31,2 / +32,5 | +2,2 / +24,7 / +22,8 |
+| CI 2 | Neustart | +35,3 / −116,9 / −45,1 | +35,5 / +22,7 / +36,2 |
+| CI 3 | Weiterlauf | +89,3 / +146,4 / +144,4 | +20,2 / +41,1 / +40,7 |
+| CI 4 | Weiterlauf | +34,9 / +16,1 / +33,0 | +17,1 / +32,3 / −47,5 |
+| Lokal | Neustart | +101,8 / +136,2 / +139,6 | +100,8 / +110,1 / +111,4 |
+
+Die native Aufzeichnung bestätigte am Klick zwei Paare aus Suspend und Resume im Kontrolllauf und keine dieser Operationen im Vergleich. Beide Audiokontexte liefen vor dem Klick und ihre Uhren liefen danach weiter. Auch die Position der Musik rückte nach Fortsetzen vor. Das betrifft die gemessenen Web-Audio- und Medienuhren im Labor.
+
+Der frühe Anstieg trat in allen zehn Läufen auf. Die CI-Mediane lagen bei +35,8 MiB mit Neustarts und +18,6 MiB mit weiterlaufenden Kontexten. Drei CI-Paare zeigten ohne Neustarts einen kleineren frühen Anstieg. Im vierten Paar und lokal waren die frühen Werte nahezu gleich. In späteren Fenstern wechselte die Richtung des Paarunterschieds. Alle frühen CI-Messpunkte lagen in der Einführung ohne Gegner. Dokumentkennung, Zeitursprung, PID und Prozessstartzeit blieben pro Lauf gleich.
+
+Als Nächstes den Wechsel von Planeten- und Sternfeldhintergrund am Levelübergang separat messen. Der Vergleich soll den höchsten absoluten Prozessspeicher vor und nach dem späteren Hintergrundwechsel erfassen. Der physische iPhone-Rücksprung bleibt offen.
+
+[CI-Lauf und Rohdaten der Audio-Messung](https://github.com/19Trojan69/cryptoid-evolution/actions/runs/42377262003)
