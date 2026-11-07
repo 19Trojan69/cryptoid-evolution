@@ -34,7 +34,7 @@ function RunStatus({report}) {
 }
 function Menu(){
  const navigate=useNavigate(),[scene,setScene]=useState('normal'),[protection,setProtection]=useState(false),[confirmed,setConfirmed]=useState(false);
- const lease=useRef(null),mounted=useRef(true),[preparation,setPreparation]=useState('cold');
+ const lease=useRef(null),mounted=useRef(true),starting=useRef(false),[preparation,setPreparation]=useState('cold');
  const [last,setLast]=useState(currentReport),point=last?.samples.at(-1);
  useEffect(()=>setLast(currentReport()),[]);
  useEffect(()=>{mounted.current=true;return()=>{mounted.current=false;if(!window.__cryptoidLabWarmHandoff)lease.current?.release();};},[]);
@@ -45,7 +45,8 @@ function Menu(){
  }
  function chooseScene(value){lease.current?.release();lease.current=null;setPreparation('cold');setScene(value);}
  function start(){
-   if(preparation!=='ready')return;
+   if (preparation !== 'ready' || starting.current) return;
+   starting.current = true;
    const options={scene,protection};window.__cryptoidLabOptions=options;
    window.__cryptoidLabWarmHandoff=true;window.__cryptoidLabWarmRelease=()=>{lease.current?.release();lease.current=null;};
    const report={schema:1,startedAt:Date.now(),state:'running',identity,options,alertPolicy:ALERT_POLICY,sampleMs:SAMPLE_MS,maxSamples:MAX_SAMPLES,dropped:0,samples:[],

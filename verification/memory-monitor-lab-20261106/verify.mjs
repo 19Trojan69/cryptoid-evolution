@@ -33,6 +33,14 @@ async function reportText(target = page) {
 }
 try{
  const context=await browser.newContext({viewport:{width:390,height:760},deviceScaleFactor:3,isMobile:true,hasTouch:true,acceptDownloads:true});
+ await context.addInitScript(() => {
+   const push = history.pushState;
+   window.__labTestHistoryWrites = [];
+   history.pushState = function(state, title, url) {
+     window.__labTestHistoryWrites.push({index:state?.idx, url:String(url), stack:new Error().stack?.split('\n').slice(1, 6)});
+     return push.call(this, state, title, url);
+   };
+ });
  const unexpected=[],pageErrors=[],assetErrors=[];
  await context.route('**/*',route=>{const u=new URL(route.request().url());if(u.origin===origin||['fonts.googleapis.com','fonts.gstatic.com'].includes(u.hostname))return route.continue();unexpected.push(u.origin);return route.abort();});
  page=await context.newPage();page.setDefaultTimeout(60000);
@@ -51,11 +59,12 @@ try{
  await page.waitForURL(origin + '/game');
  const gameHistory = await historyEntry();
  const distance = gameHistory.index - overviewHistory.index;
- result.history = {overview:overviewHistory, game:gameHistory, distance};
- assert.ok(Number.isInteger(distance) && distance > 0, 'Starting the game must create a browser history entry');
+ result.history = {overview:overviewHistory, game:gameHistory, distance,
+   writes:await page.evaluate(() => window.__labTestHistoryWrites)};
+ assert.equal(distance, 1, 'Starting the game must create exactly one browser history entry');
  await page.evaluate(distance => history.go(-distance), distance);
  await page.waitForURL(overviewEntry, {timeout:10000});
- await page.getByRole('heading', {name:'Speicherlabor', exact:true}).waitFor();
+ await page.getByRole('heading', {name:'Speicherlabor', exact:true}).waitFor({timeout:10000});
  const afterBack = await reportText();
  assert.equal(afterBack.state, 'stopped');
  assert.equal(afterBack.lifecycle.followingDocumentInSameTab, null);
