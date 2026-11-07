@@ -2799,7 +2799,7 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
 
 export { BEST_SCORE_KEY, HIGHEST_SECTOR_KEY, TOTAL_DESTROYED_KEY };
 function GameEntry() {
-  const { authReady, isLoading, authError, signIn, canAdmin, isAuthenticated } = useAuth();
+  const { authReady, isLoading, authError, signIn, canAdmin, isAuthenticated } = useAuth({ autoSignIn: false });
   // Decide guest/account ownership only after authentication has settled.
   // Once mounted, the mission retains its original owner until it is left.
   return <GameRoute>{authReady && !isLoading && !authError

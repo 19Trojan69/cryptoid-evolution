@@ -30,7 +30,7 @@ function harness(authenticate, restore, options = {}) {
   const localStorage = storage(), sessionStorage = storage();
   const user = { uid: 'auth-test', username: 'auth-test', roles: [] };
   const axiosClient = {
-    get: async () => restore ?? { data: { user, canAdmin: false, adminMode: false } },
+    get: async url => options.get ? options.get(url) : restore ?? { data: { user, canAdmin: false, adminMode: false } },
     post: async (url, body) => { posts.push({ url, body }); return options.post ? options.post(url, body) : { data: { user, canAdmin: false, adminMode: false } }; },
   };
   const react = {
@@ -62,7 +62,7 @@ function harness(authenticate, restore, options = {}) {
     '../lib/ownerLifecycle': { updateOwnerLifecycleAccess: value => accessUpdates.push(value) },
     axios: { default: { isAxiosError: error => error?.isAxiosError === true } },
   });
-  const render = () => { stateIndex = refIndex = 0; const auth = useAuth(); mounted = true; return auth; };
+  const render = () => { stateIndex = refIndex = 0; const auth = useAuth(options.authOptions); mounted = true; return auth; };
   render();
   let cleanups = [];
   return { render, boot: () => { cleanups = effects.map(fn => fn()); }, unmount: () => { cleanups.forEach(fn => fn?.()); cleanups = []; }, timers, posts, accessUpdates, navigations, localStorage, sessionStorage,
@@ -117,6 +117,42 @@ test('an existing Web App session is restored without replacing it with native a
   assert.equal(h.render().user.username, 'auth-test');
   assert.equal(h.render().authReady, true);
   assert.equal(h.posts.length, 0);
+});
+
+test('game entry can start as a guest without a second native sign-in, and explicit sign-in still works', async () => {
+  let calls = 0;
+  const h = harness(async () => { calls++; return authResult('explicit-token'); }, undefined, { authOptions: { autoSignIn: false } });
+  h.boot(); await flush();
+  assert.equal(h.render().authReady, true);
+  assert.equal(h.render().isAuthenticated, false);
+  assert.equal(h.render().authError, '');
+  assert.equal(calls, 0);
+  await h.render().signIn();
+  assert.equal(calls, 1);
+  assert.equal(h.render().isAuthenticated, true);
+});
+
+test('game entry verifies existing sessions and waits for explicit reauthentication if expired', async () => {
+  let calls = 0;
+  const authenticate = async () => { calls++; return authResult('explicit-token'); };
+  const authOptions = { autoSignIn: false };
+  const valid = harness(authenticate, undefined, { authOptions });
+  valid.sessionStorage.setItem('token', 'valid-token');
+  valid.boot(); await flush();
+  assert.equal(valid.render().isAuthenticated, true);
+  assert.equal(valid.sessionStorage.getItem('token'), 'valid-token');
+  const expired = harness(authenticate, undefined, { authOptions, get: async () => {
+    throw Object.assign(new Error('Expired'), { isAxiosError: true, response: { status: 401 } });
+  } });
+  expired.sessionStorage.setItem('token', 'expired-token');
+  expired.sessionStorage.setItem('admin-mode', '1');
+  expired.boot(); await flush();
+  assert.equal(expired.render().authReady, true);
+  assert.equal(expired.render().isAuthenticated, false);
+  assert.equal(expired.render().authError, 'Pi session expired. Sign in again.');
+  assert.equal(expired.sessionStorage.getItem('token'), null);
+  assert.equal(expired.sessionStorage.getItem('admin-mode'), null);
+  assert.equal(calls, 0);
 });
 
 test('a native sign-in response from an unmounted route cannot replace the current token or session', async () => {

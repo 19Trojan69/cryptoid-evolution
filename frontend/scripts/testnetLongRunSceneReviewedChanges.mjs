@@ -30,7 +30,13 @@ const sceneChanges = [
   }
 ];
 
+const directPlayAuth = '  const { authReady, isLoading, authError, signIn, canAdmin, isAuthenticated } = useAuth({ autoSignIn: false });';
+
 export function restoreTestnetLongRunSceneChanges(source) {
+  if (source.includes(directPlayAuth)) {
+    if (source.split(directPlayAuth).length !== 2) throw Error('Expected one exact Testnet game entry change');
+    source = source.replace(directPlayAuth, directPlayAuth.replace('({ autoSignIn: false })', '()'));
+  }
   if (!source.includes(sceneChanges[0].after)) return source;
   for (const { before, after } of sceneChanges) {
     if (source.split(after).length !== 2) throw Error('Expected one exact Testnet long-run scene change');

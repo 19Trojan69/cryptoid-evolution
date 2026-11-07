@@ -28,7 +28,7 @@ const detectPiBrowser = async () => {
   finally { window.clearTimeout(timer); }
 };
 
-export const useAuth = () => {
+export const useAuth = ({ autoSignIn = true }: { autoSignIn?: boolean } = {}) => {
   const pendingPayments = useRef<PaymentDTO[]>([]);
   const signingIn = useRef(false);
   const autoAttempted = useRef(false);
@@ -186,9 +186,11 @@ export const useAuth = () => {
             }
             localStorage.removeItem("cryptoid_pi_session");
             sessionStorage.removeItem(PI_ACCESS_TOKEN_KEY);
+            if (!autoSignIn) setAuthError("Pi session expired. Sign in again.");
           }
         }
         sessionStorage.removeItem(ADMIN_MODE_KEY);
+        if (!autoSignIn) return;
         const inPiBrowser = await detectPiBrowser();
         if (!active || autoAttempted.current || sessionStorage.getItem("cryptoid_pi_auto_signed_out")) return;
         autoAttempted.current = true;
@@ -199,7 +201,7 @@ export const useAuth = () => {
     };
     void start();
     return () => { active = false; };
-  }, [signIn]);
+  }, [autoSignIn, signIn]);
 
   const signOut = useCallback(async () => {
     updateOwnerLifecycleAccess(false);
