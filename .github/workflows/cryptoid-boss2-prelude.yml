@@ -1,20 +1,20 @@
-name: Compare retired Boss 1 graphics cache retention
+name: Measure memory around level completion
 on:
   push:
     branches: [codex/memory-monitor-lab-20261106]
     paths:
-      - 'verification/boss2-prelude-20261107/**'
+      - 'verification/boss2-prelude-20261107/*.mjs'
       - '.github/workflows/cryptoid-boss2-prelude.yml'
 permissions:
   contents: read
 jobs:
-  paired:
+  transitions:
     runs-on: ubuntu-24.04
     timeout-minutes: 12
     strategy:
       fail-fast: false
       matrix:
-        order: [keep-first, release-first]
+        batch: [a, b]
     container:
       image: mcr.microsoft.com/playwright@sha256:dcc5531e97840b9b5e794f2814476b21571c5124a3fca2267d73041f56e7580e
       options: --init --ipc=host
@@ -32,10 +32,10 @@ jobs:
       - run: npm install --prefix verification/transition-motion-20261106 --ignore-scripts --no-audit --no-fund
       - run: node --test verification/memory-monitor-lab-20261106/model.test.mjs
       - run: node verification/boss2-prelude-20261107/build.mjs
-      - run: node verification/boss2-prelude-20261107/run.mjs ${{ matrix.order }}
+      - run: node verification/boss2-prelude-20261107/run.mjs level-transition 2
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()
         with:
-          name: boss1-atlas-${{ matrix.order }}
+          name: level-transition-${{ matrix.batch }}
           path: verification/boss2-prelude-20261107/results
           retention-days: 14

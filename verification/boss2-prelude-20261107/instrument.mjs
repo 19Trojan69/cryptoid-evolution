@@ -53,9 +53,14 @@ export function instrumentPrelude(source) {
   const initial = "    const s=stateRef.current;s.status='paused';";
   const advance = '            const next = advanceAfterClear(state.section, clearEncounter);';
   const create = '              state.boss = createSectorBoss(state.sector, width, visibleTop, height);';
+  const bonusEnd = '        if (bonus && state.phase === "SECTOR_CLEAR" && previousPhase !== "SECTOR_CLEAR") {';
+  const summaryOpen = "    if (ownerDiagnostics) sessionDiagnostic('boundary', { operation: 'boss-summary-open',";
+  const beforeCleanup = '      if (!releaseIdleCanvasEffects())';
   const afterBonus = '      releaseUnusedPaintedShips();';
+  const continueAccepted = "      if (ownerDiagnostics) sessionDiagnostic('boundary', { operation: 'boss-summary-continue',";
   const reader = '    (window as any).__cryptoidLabRead=read;';
   const cleanup = '    return ()=>{if((window as any).__cryptoidLabRead===read)delete (window as any).__cryptoidLabRead;};';
+  const mark = (stage, name) => `if (${stage} === 10) (window as any).__cryptoidLevelBoundary?.('${name}');`;
   const edits = [
     [trace, ''],
     [preload, '    labBossSteps.current = new Set();\n' + preload],
@@ -65,8 +70,13 @@ export function instrumentPrelude(source) {
               ? { ...following, encounter: 'boss-intro' as const, section: 20, sector: 20 }
               : following;`],
     [create, create + seedBoss2],
+    [bonusEnd, bonusEnd + '\n          ' + mark('state.sector', 'bonus-end')],
+    [summaryOpen, '    ' + mark('state.sector', 'summary-open') + '\n' + summaryOpen],
+    [beforeCleanup, '      ' + mark('pending.summary.stage', 'cleanup-before') + '\n' + beforeCleanup],
     [afterBonus, afterBonus + `
+      ${mark('pending.summary.stage', 'cleanup-after')}
       if (pending.summary.stage === 10) (window as any).__cryptoidAtlasProbe?.afterBonus();`],
+    [continueAccepted, '      ' + mark('pending.summary.stage', 'continue-accepted') + '\n' + continueAccepted],
     [reader, reader + pilot],
     [cleanup, `    return () => {
       if ((window as any).__cryptoidPreludeRead === readPilot) delete (window as any).__cryptoidPreludeRead;
