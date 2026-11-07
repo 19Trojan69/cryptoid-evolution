@@ -8,6 +8,8 @@ const windowMs = [100, 700];
 // Executed by Playwright in the test document. Keep numbers and strings only.
 export function initLevelTrace() {
   const marks = [];
+  const samples = [];
+  let sampleTimer = null;
   const read = () => ({
     at: Date.now(),
     bootId: window.__cryptoidBootId,
@@ -16,7 +18,20 @@ export function initLevelTrace() {
     app: window.__cryptoidLabRead?.(),
     atlas: window.__cryptoidAtlasProbe?.read(),
   });
-  window.__cryptoidLevelTrace = { marks, read };
+  const sample = () => { samples.push(read()); };
+  window.__cryptoidLevelTrace = {
+    marks,
+    setSampling(active) {
+      if (active && sampleTimer === null) {
+        sample();
+        sampleTimer = window.setInterval(sample, 150);
+      } else if (!active && sampleTimer !== null) {
+        window.clearInterval(sampleTimer);
+        sampleTimer = null;
+      }
+    },
+    takeSamples: () => samples.splice(0),
+  };
   window.__cryptoidLevelBoundary = name => { marks.push({ name, ...read() }); };
   window.addEventListener('click', event => {
     if (event.isTrusted && event.target instanceof Element && event.target.closest('.level-completion .button-primary')) {

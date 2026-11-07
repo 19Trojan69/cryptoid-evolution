@@ -134,16 +134,18 @@ async function play(mode, label = `${order}-${mode}`) {
         const trace = window.__cryptoidLevelTrace;
         const cleanupAt = trace?.marks.find(mark => mark.name === 'cleanup-after')?.at;
         const clickAt = trace?.marks.find(mark => mark.name === 'continue-click')?.at;
-        const sample = trace && (state.encounter === 'bonus' || state.stage === 20) && (!clickAt || Date.now() - clickAt < 4000)
-          ? trace.read() : null;
-        return { state, steps, anchorMs, cleanupAt, sample, atlas: window.__cryptoidAtlasProbe?.read() ?? null,
+        const traceSampling = !!trace && (state.encounter === 'bonus' || state.stage === 20)
+          && (!clickAt || Date.now() - clickAt < 4000);
+        trace?.setSampling(traceSampling);
+        return { state, steps, anchorMs, cleanupAt, traceSampling, appSamples: trace?.takeSamples() ?? [],
+          atlas: window.__cryptoidAtlasProbe?.read() ?? null,
           active: window.__cryptoidLabRun?.state === 'running',
           card: !!document.querySelector('.card-reveal-dialog'), completion: !!document.querySelector('.level-completion') };
       }, { boot: bootId, originTime: timeOrigin, kinds: bossKinds, anchor: secondEscort });
       const state = row.state;
       assert.ok(row.active && !['game-over', 'destroying', 'victory'].includes(state.status), 'Unexpected end of the running test');
-      if (row.sample) {
-        trace.appSamples.push(row.sample);
+      trace.appSamples.push(...row.appSamples);
+      if (row.traceSampling) {
         if (!processTimer) {
           sampleTransitionMemory();
           processTimer = setInterval(sampleTransitionMemory, processSampleMs);
@@ -174,7 +176,7 @@ async function play(mode, label = `${order}-${mode}`) {
       }
       const offset = row.anchorMs === null ? null : state.activeMs - row.anchorMs;
       if (Date.now() - lastSample >= 1100 || !sampledPhases.has(key)) {
-        const app = row.sample?.app ?? await page.evaluate(() => window.__cryptoidLabRead());
+        const app = row.appSamples.at(-1)?.app ?? await page.evaluate(() => window.__cryptoidLabRead());
         const data = { at: Date.now(), phase: key, state, app, atlas: row.atlas, offsetMs: offset, ...checkedMemory() };
         record(data);
         lastSample = Date.now();
