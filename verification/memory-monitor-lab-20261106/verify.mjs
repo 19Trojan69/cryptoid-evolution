@@ -31,6 +31,12 @@ async function reportText(target = page) {
  await target.getByRole('button', {name:'Berichttext anzeigen', exact:true}).click();
  return JSON.parse(await target.getByRole('textbox', {name:'Diagnosebericht zum Kopieren'}).inputValue());
 }
+const bossSteps = [
+ 'lab-boss2-last-turret-destroyed', 'lab-boss2-reactor-committed', 'reactor-open-observed',
+ 'reactor-first-shot-before', 'reactor-first-shot-created', 'reactor-first-shot-audio-returned',
+ 'reactor-first-shot-scene-committed', 'lab-boss2-first-reactor-hit',
+ 'lab-boss2-first-escort-spawned', 'lab-boss2-second-escort-spawned',
+];
 try{
  const context=await browser.newContext({viewport:{width:390,height:760},deviceScaleFactor:3,isMobile:true,hasTouch:true,acceptDownloads:true});
  const unexpected=[],pageErrors=[],assetErrors=[];
@@ -80,12 +86,17 @@ try{
  await page.getByRole('heading', {name:'Speicherlabor', exact:true}).waitFor();
  assert.equal((await reportText()).state, 'failed');
 
- for(const scene of ['normal','turrets','reactor']){
+ for(const scene of ['normal','turrets','reactor','last-turret']){
+   if (scene === 'last-turret') await page.setViewportSize({width:430,height:825});
    await startScene(scene, scene !== 'normal');
    let state=await page.evaluate(()=>window.__cryptoidLabRead());
    assert.equal(state.rulesMode,'current');
    if(scene==='normal'){assert.equal(state.level,1);assert.equal(state.bossId,null);}
    else {assert.equal(state.bossId,2);assert.equal(state.status,'paused');if(scene==='reactor'){assert.equal(state.liveTurrets,0);assert.ok(Math.abs(state.reactorPercent-55)<.0001);}else assert.ok(state.liveTurrets>0);
+   }
+   if (scene === 'last-turret') {
+     assert.equal(state.liveTurrets, 1);
+     assert.equal(state.reactorPercent, 100);
    }
    assert.equal(state.status,'paused');
    await page.locator('.pause-resume-button').click();
@@ -97,13 +108,25 @@ try{
      await page.waitForFunction(()=>{const s=window.__cryptoidLabRead?.(),canvas=document.querySelector('.sector-boss .boss-weapons-canvas');return s?.encounter==='boss-fight'&&s.status==='playing'&&canvas?.width>0&&!canvas.hidden&&!!document.querySelector('.sector-boss .boss-special-weapon');});
      await page.waitForFunction(()=>{const s=window.__cryptoidLabRun?.samples.at(-1);return s?.encounter==='boss-fight'&&s.domCanvasLogicalBytes>0;});
    }
+   if (scene === 'last-turret') {
+     // The default auto-fire hits the centerline gun through the normal combat
+     // loop. The test never mutates live game state or advances its clock.
+     await page.waitForFunction(kinds => {
+       const bootId = window.__cryptoidLabRun.documentId;
+       const events = window.__cryptoidReloadState?.events ?? [];
+       return kinds.every(kind => events.some(event => event.kind === kind && event.bootId === bootId));
+     }, bossSteps, {timeout:30000});
+     const reactor = page.locator('.sector-boss .boss-special-weapon');
+     await reactor.waitFor();
+     assert.equal(await reactor.evaluate(node => getComputedStyle(node).zIndex), '6');
+   }
    const samples=await page.evaluate(()=>window.__cryptoidLabRun.samples);
    assert.ok(samples.at(-1).activeMs>0);assert.equal(samples.at(-1).rulesMode,'current');assert.equal(await page.locator('[data-lab-monitor] .lab-total').innerText(),'Gesamt-RAM: nicht messbar');
    if(engine==='webkit')assert.equal(samples.at(-1).heapBytes,null);
    assert.equal(await page.evaluate(()=>window.__cryptoidLabRun.state),'running','StrictMode setup must undo its temporary cleanup marker');
    const elapsed=samples.at(-1).wallMs-samples.at(-2).wallMs;assert.ok(elapsed>=4000,'One sampler only, not duplicated by StrictMode');
    assert.equal(await page.locator('.lab-graph').count(),0,'Compact monitor is the initial view');
-   const panelBox=await page.locator('.lab-monitor').boundingBox();assert.ok(panelBox.x+panelBox.width<=390/2-12,'Monitor must leave the central reactor corridor visible');assert.ok(panelBox.height<=145,'Compact monitor must not cover most of the playfield');
+   const panelBox=await page.locator('.lab-monitor').boundingBox();assert.ok(panelBox.x+panelBox.width<=page.viewportSize().width/2-12,'Monitor must leave the central reactor corridor visible');assert.ok(panelBox.height<=145,'Compact monitor must not cover most of the playfield');
    const look=await page.locator('.lab-monitor').evaluate(e=>({background:getComputedStyle(e).backgroundColor,backdrop:getComputedStyle(e).backdropFilter}));assert.match(look.background,/, 0\.2\)$/);assert.equal(look.backdrop,'none');
    if(scene==='normal')await page.screenshot({path:out+'/'+engine+'-current-normal-compact.png'});
    await page.getByRole('button',{name:'Monitor vergrößern',exact:true}).click();assert.ok(await page.locator('.lab-graph path[d]').count()>1);
@@ -158,6 +181,28 @@ try{
      assert.ok(trace.some(event => event.kind === 'javascript-error' && event.errorName === 'TypeError'));
      assert.ok(trace.some(event => event.kind === 'unhandled-rejection' && event.errorName === 'RangeError'));
      assert.ok(!JSON.stringify(trace).includes('Lab test exception'), 'Raw exception messages stay out of the report');
+   }
+   if (scene === 'last-turret') {
+     assert.equal(exported.identity.lifecycleTraceVersion, 2);
+     const steps = exported.lifecycle.events.filter(event => bossSteps.includes(event.kind));
+     assert.equal(steps.length, bossSteps.length);
+     const byKind = new Map(steps.map(event => [event.kind, event]));
+     assert.equal(byKind.size, bossSteps.length);
+     const destroyed = byKind.get('lab-boss2-last-turret-destroyed');
+     assert.equal(destroyed.context.liveTurrets, 0);
+     assert.equal(destroyed.context.bossHealth, destroyed.context.bossMaxHealth);
+     assert.ok(steps.every(event => event.at >= destroyed.at && event.bootId === exported.documentId &&
+       event.context.bossId === 2 && event.context.status === 'playing' && event.context.encounter === 'boss-fight'));
+     const hit = byKind.get('lab-boss2-first-reactor-hit').context;
+     assert.ok(hit.bossHealth < hit.bossMaxHealth && hit.bossHealth > 0);
+     const pulse = byKind.get('reactor-first-shot-created').context;
+     assert.equal(pulse.coreVolley, 1);
+     const first = byKind.get('lab-boss2-first-escort-spawned');
+     const second = byKind.get('lab-boss2-second-escort-spawned');
+     assert.equal(first.context.bossEscortSpawned, 1);
+     assert.equal(second.context.bossEscortSpawned, 2);
+     assert.ok(first.at <= second.at && second.context.bossElapsedMs > first.context.bossElapsedMs);
+     result.boss2Boundary = steps.map(({kind,at,context}) => ({kind,msAfterFinalTurret:at-destroyed.at,context}));
    }
    result.scenes.push({scene,currentRules:true,legacyMarkersAbsent:true,compactHeight:panelBox.height,transparentBackground:look.background,redAndNormalColourVerified:true,pauseResume:true,recoveredWithoutAutoRestart:true,downloadValid:true,samples:exported.samples.length,activeBeforePause:before,heapSupported:exported.samples.at(-1).heapBytes!==null,bossFightCanvasAndReactorVerified:scene!=='normal'});
  }

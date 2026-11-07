@@ -15,7 +15,6 @@ export function labHtml(html){
   return out;
 }
 export const hook=`
-  const labCounters = useRef({activeMs:0,unobservedGapMs:0,frames:0});
   const labSeeded = useRef(false);
   useLayoutEffect(() => {
     if(labSeeded.current)return;
@@ -26,6 +25,11 @@ export const hook=`
       s.sector=20;s.section=20;s.chainBlocks=9;s.phase='SECTOR_INTRO';s.encounter='boss-intro';s.status='paused';
       s.boss=createSectorBoss(20,fieldRef.current?.clientWidth||390,visibleTopRef.current,fieldRef.current?.clientHeight||760);
       if(options.scene==='reactor'){s.boss.turrets.forEach(g=>g.health=0);s.boss.health=s.boss.maxHealth*.55;}
+      if(options.scene==='last-turret') {
+        // Boss 2 has two wing turrets and the centerline turret at index 2.
+        s.boss.turrets.forEach((gun, index) => { gun.health = index === 2 ? 1 : 0; });
+        labBossSteps.current = new Set();
+      }
     }
     if(options?.protection)impactCooldownRef.current=1e9;
     setGame({...s});
@@ -65,18 +69,66 @@ export const frameHook=`
         if(lastMeasuredFrameRef.current<=1000)labCounters.current.activeMs+=lastMeasuredFrameRef.current;
         else labCounters.current.unobservedGapMs+=lastMeasuredFrameRef.current;
       }`;
+const labBossRefs=`
+  const labCounters = useRef({activeMs:0,unobservedGapMs:0,frames:0});
+  const labBossSteps = useRef<Set<string> | null>(null);
+  const noteLabBossStep = useCallback((kind: string, state: GameState) => {
+    const steps = labBossSteps.current, boss = state.boss;
+    if (!steps || steps.has(kind) || boss?.config.id !== 2 || state.encounter !== 'boss-fight' || state.status !== 'playing') return;
+    steps.add(kind);
+    (window as any).__cryptoidLabBossStep?.(kind, {
+      sector: state.sector, encounter: state.encounter, phase: state.phase, status: state.status,
+      activeMs: Math.round(labCounters.current.activeMs), bossElapsedMs: Math.round(boss.elapsed),
+      bossId: boss.config.id, bossHealth: boss.health, bossMaxHealth: boss.maxHealth,
+      liveTurrets: boss.turrets.filter(gun => gun.health > 0).length, coreVolley: boss.core?.volley ?? 0,
+      bossEscortSpawned: bossEscortSpawnedRef.current, enemies: state.asteroids.length,
+    });
+  }, []);`;
 export function controller(source) {
   const bytes=Buffer.from(source);
   assert.equal(createHash('sha1').update(Buffer.concat([Buffer.from('blob '+bytes.length+'\0'),bytes])).digest('hex'),EXPECTED_CONTROLLER);
   const anchor='  const levelLabel =';
   const faultAnchor = '      if (ownerDiagnostics) recordReloadEvent(reason, error);';
   const faultHook = '\n      else (window as any).__cryptoidLabFault?.(reason, error);';
-  assert.equal(source.split(anchor).length, 2);
-  assert.equal(source.split(frameAnchor).length, 2);
-  assert.equal(source.split(faultAnchor).length, 2);
-  const result = source.replace(anchor, hook + '\n' + anchor)
-    .replace(frameAnchor, frameAnchor + frameHook)
-    .replace(faultAnchor, faultAnchor + faultHook);
-  assert.equal(result.replace(hook + '\n', '').replace(frameHook, '').replace(faultHook, ''), source);
+  const bossRef = '  const bossBoundaryRef = useRef<ReturnType<typeof createBossBoundaryDiagnostics> | null>(null);';
+  const bossObserver = '    const bossBoundary = ownerDiagnostics ? createBossBoundaryDiagnostics(recordOwnerResourceSnapshot) : null;';
+  const bossCommit = '    bossBoundaryRef.current?.sceneCommitted(game.boss, game.sector);\n  }, [game]);';
+  const turretHit = '              const bonus = damageBossTurret(state.boss, bossTarget.index, shot.damage);';
+  const coreHit = '            if (!damageSectorBoss(state.boss, shot.damage, time)) continue;';
+  const escortSpawn = '              state.asteroids.push(spawnBossEscort(nextIdRef.current++, width, bossEscortSpawnedRef.current++, state.sector, escortSlots, bossEscortWaveRef.current));';
+  const edits = [
+    [anchor, hook + '\n' + anchor],
+    [frameAnchor, frameAnchor + frameHook],
+    [faultAnchor, faultAnchor + faultHook],
+    [bossRef, bossRef + labBossRefs],
+    [bossObserver, `    const bossBoundary = ownerDiagnostics ? createBossBoundaryDiagnostics(recordOwnerResourceSnapshot)
+      : labBossSteps.current ? createBossBoundaryDiagnostics(kind => noteLabBossStep(kind, stateRef.current)) : null;`],
+    [bossCommit, `    if (labBossSteps.current && game.boss?.turrets.every(gun => gun.health <= 0)) {
+      noteLabBossStep('lab-boss2-reactor-committed', game);
+    }
+    bossBoundaryRef.current?.sceneCommitted(game.boss, game.sector);
+  }, [game, noteLabBossStep]);`],
+    [turretHit, turretHit + `
+              if (labBossSteps.current && bonus > 0 && state.boss.turrets.every(gun => gun.health <= 0)) {
+                noteLabBossStep('lab-boss2-last-turret-destroyed', state);
+              }`],
+    [coreHit, coreHit + `
+            if (labBossSteps.current) noteLabBossStep('lab-boss2-first-reactor-hit', state);`],
+    [escortSpawn, escortSpawn + `
+              if (labBossSteps.current && bossEscortWaveRef.current === 1) {
+                noteLabBossStep(bossEscortSpawnedRef.current === 1 ? 'lab-boss2-first-escort-spawned' : 'lab-boss2-second-escort-spawned', state);
+              }`],
+    ['[diagnosticContext, ownerDiagnostics, ownerResourceContext, recordOwnerResourceSnapshot]',
+      '[diagnosticContext, ownerDiagnostics, ownerResourceContext, recordOwnerResourceSnapshot, noteLabBossStep]'],
+    ['[showRewardCards, diagnosticContext, beginBossSummary]', '[showRewardCards, diagnosticContext, beginBossSummary, noteLabBossStep]'],
+  ];
+  let result = source;
+  for (const [before, after] of edits) {
+    assert.equal(result.split(before).length, 2, 'Pinned controller anchor must be unique: ' + before);
+    result = result.replace(before, after);
+  }
+  let restored = result;
+  for (const [before, after] of edits.reverse()) restored = restored.replace(after, before);
+  assert.equal(restored, source);
   return result;
 }

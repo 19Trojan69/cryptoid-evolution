@@ -60,7 +60,13 @@ function Menu(){
    <p>Spielen mit einer kleinen Live-Anzeige und einem Verlauf. Diese eigene Testadresse verwendet keine echten Konten, Käufe oder Online-Spielstände.</p>
    <div className="lab-limit"><strong>Gesamter Browser-RAM ist auf dem iPhone nicht messbar.</strong><p>Die Grafik zeigt geschätzte Bild-, Canvas- und Audiobestände. Sie ist keine Messung des gesamten Arbeitsspeichers. Ein zusätzlicher ungefährer JavaScript-Wert erscheint nur, wenn der Browser ihn bereitstellt.</p></div>
    <p>Die Anzeige startet klein und transparent. Mit + öffnest du die Details. Rot markiert einen deutlichen Anstieg gegenüber dem Anfang dieses Laufs: mindestens 50 % und 8 MiB mehr, beim JS-Heap 16 MiB mehr. Die Referenz entsteht aus drei aktiven Messpunkten nach 10 Sekunden. Das sind Vergleichsmarken, keine gemessenen RAM-Grenzen.</p>
-   <label>Startpunkt<select aria-label="Startpunkt" disabled={preparation==='preparing'} value={scene} onChange={e=>chooseScene(e.target.value)}><option value="normal">Level 1 · normaler Spielstart</option><option value="turrets">Boss 2 · mit Geschützen</option><option value="reactor">Boss 2 · Reaktor bei 55 %</option></select></label>
+   <label>Startpunkt<select aria-label="Startpunkt" disabled={preparation==='preparing'} value={scene} onChange={e=>chooseScene(e.target.value)}>
+     <option value="normal">Level 1 · normaler Spielstart</option>
+     <option value="turrets">Boss 2 · mit Geschützen</option>
+     <option value="last-turret">Boss 2 · letztes Geschütz</option>
+     <option value="reactor">Boss 2 · Reaktor bei 55 %</option>
+   </select></label>
+   {scene==='last-turret' && <p className="lab-note">Das mittlere Geschütz hat noch einen Treffer übrig. Der Bericht speichert seinen Abschuss, die Reaktoröffnung, die erste Salve und die ersten Begleitschiffe.</p>}
    <label className="lab-check"><input type="checkbox" checked={protection} onChange={e=>setProtection(e.target.checked)}/>Testschutz gegen Lebensverlust</label>
    <p className="lab-note">Testschutz ist eine künstliche Messhilfe. Er ist anfangs aus und verhindert nicht die Zerstörung des Bosses. Der direkte Bossstart ist eine vorbereitete Testszene; Level 1 verwendet den normalen Ablauf.</p>
    <p>Die Anzeige aktualisiert alle 5 Sekunden. Bis zu 30 Minuten Verlauf bleiben lokal gespeichert, sofern der Browser Speicher erlaubt. Nach einem Abbruch öffnest du dieselbe Adresse erneut. Der letzte gesicherte Punkt ist kein sekundengenauer Absturzzeitpunkt.</p>

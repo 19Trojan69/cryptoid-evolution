@@ -55,12 +55,14 @@ export function withLifecycle(report) {
   }};
 }
 
-export function noteLifecycle(kind, details = {}, error) {
+export function noteLifecycle(kind, details = {}, error, context = null) {
   const report = window.__cryptoidLabRun;
   if (report?.documentId !== documentId || report.state !== 'running') return;
-  try { appendReloadEvent(window, kind, null, details, error); }
+  try { appendReloadEvent(window, kind, context, details, error); }
   catch { /* Recording an interruption must never cause another one. */ }
 }
+
+window.__cryptoidLabBossStep = (kind, context) => noteLifecycle(kind, {route: 'game'}, undefined, context);
 
 const lastFault = new Map();
 export function noteFault(kind, error, details = {}) {
