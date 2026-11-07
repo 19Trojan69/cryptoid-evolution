@@ -3,6 +3,7 @@ import {createServer} from 'node:http';
 import {createRequire} from 'node:module';
 import {createReadStream,existsSync,mkdirSync,statSync,writeFileSync} from 'node:fs';
 import {extname,resolve} from 'node:path';
+import {verifyViewport} from './verify-viewport.mjs';
 const directory=new URL('.',import.meta.url).pathname,out=directory+'results';mkdirSync(out,{recursive:true});
 const require=createRequire(new URL('../transition-motion-20261106/package.json',import.meta.url)),pw=require('playwright');
 const engine=process.argv[2];assert.ok(['chromium','webkit'].includes(engine));
@@ -12,6 +13,11 @@ await new Promise(r=>server.listen(0,'127.0.0.1',r));const origin='http://127.0.
 const browser=await pw[engine].launch({headless:true});let page,context;
 const result={engine,complete:false,physicalPhone:false,piBrowser:false,whiteScreenFixed:false,publicDeploymentChanged:false,cases:[]};
 try{
+ context=await browser.newContext({viewport:{width:390,height:760},deviceScaleFactor:3,isMobile:true,hasTouch:true});
+ page=await context.newPage();page.setDefaultTimeout(30000);
+ result.viewport=await verifyViewport(page,context,origin,engine);
+ console.log('VIEWPORT_GESTURES '+JSON.stringify(result.viewport));
+ await context.close();context=null;page=null;
  for(const scene of ['normal','turrets','reactor'])for(const disableGuard of [false,true]){
   context=await browser.newContext({viewport:{width:390,height:760},deviceScaleFactor:3,isMobile:true,hasTouch:true});
   await context.addInitScript(()=>{

@@ -231,6 +231,7 @@ try{
    }
    if (scene === 'last-turret') {
      assert.equal(exported.identity.lifecycleTraceVersion, 3);
+     assert.equal(exported.identity.gameViewportGestureLock, true);
      const steps = exported.lifecycle.events.filter(event => bossSteps.includes(event.kind));
      assert.equal(steps.length, bossSteps.length);
      const byKind = new Map(steps.map(event => [event.kind, event]));

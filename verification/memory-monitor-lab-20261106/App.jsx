@@ -1,9 +1,12 @@
-import {Fragment,lazy,Suspense,useEffect,useRef,useState} from 'react';
+import {Fragment,lazy,Suspense,useEffect,useLayoutEffect,useRef,useState} from 'react';
 import {createBrowserRouter,Navigate,RouterProvider,useNavigate,useRouteError} from 'react-router-dom';
 import {ALERT_POLICY,RESOURCE_FIELDS,resourceHigh,appendSample,chartPath,cleanSample,clock,finite,memoryMiB,MAX_SAMPLES,readReport,saveReport,SAMPLE_MS} from './model.mjs';
 import {beginRunTrace,followingDocument,noteFault,noteLifecycle,withLifecycle} from './lifecycle.mjs';
 import {primeGameAudio} from '../../frontend/src/pages/gameAudio';
+import {leaveGameFullscreen,requestGameFullscreen} from '../../frontend/src/pages/gameFullscreen';
+import {lockGameViewport} from '../../frontend/src/lib/gameViewport';
 import {watchMenuViewport} from '../../frontend/src/lib/menuViewport';
+import {lockLabGestures} from './viewportGestures.mjs';
 import './lab.css';
 
 const loadGame=()=>import('../../frontend/src/pages/GamePage');
@@ -54,7 +57,15 @@ function Menu(){
    window.__cryptoidLabRun = report;
    remember(report);
    primeGameAudio();
+   const fullscreen = requestGameFullscreen();
    navigate('/game');
+   void fullscreen.then(outcome => {
+     if (location.pathname !== '/game') {
+       if (outcome === 'changed') void leaveGameFullscreen();
+     } else if (window.__cryptoidLabRun === report) {
+       noteLifecycle('lab-fullscreen-start', {route: 'game', outcome});
+     }
+   });
  }
  return <main className="lab-menu"><section><p className="lab-eyebrow">CRYPTOID EVOLUTION · SEPARATE DIAGNOSEVERSION</p><h1>Speicherlabor</h1>
    <p>Spielen mit einer kleinen Live-Anzeige und einem Verlauf. Diese eigene Testadresse verwendet keine echten Konten, Käufe oder Online-Spielstände.</p>
@@ -123,13 +134,25 @@ function Panel(){
  </aside>;
 }
 function LabGame() {
+ const route = useRef(null);
+ useLayoutEffect(() => {
+   if (!route.current) return;
+   const unlockViewport = lockGameViewport(route.current);
+   const unlockGestures = lockLabGestures(route.current.ownerDocument, (trigger, defaultPrevented) => {
+     noteLifecycle('lab-multitouch', {route: 'game', trigger, defaultPrevented});
+   });
+   return () => { unlockGestures(); unlockViewport(); };
+ }, []);
  useEffect(() => () => {
+   void leaveGameFullscreen();
    window.__cryptoidLabWarmRelease?.();
    delete window.__cryptoidLabWarmRelease;
    window.__cryptoidLabWarmHandoff = false;
  }, []);
  if (window.__cryptoidLabRun?.state !== 'running') return <Navigate to="/" replace/>;
- return <><Suspense fallback={<div className="lab-menu"><p>Spielszene wird geladen …</p></div>}><Game/></Suspense><Panel/></>;
+ return <div className="game-route lab-game-route" ref={route}>
+   <Suspense fallback={<div className="lab-menu"><p>Spielszene wird geladen …</p></div>}><Game/></Suspense><Panel/>
+ </div>;
 }
 function LabRouteError() {
  const error = useRouteError();

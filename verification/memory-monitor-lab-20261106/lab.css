@@ -7,3 +7,11 @@
 .lab-graph{margin-top:5px;border-top:1px solid #51758666;padding-top:4px}.lab-graph svg{width:100%;height:auto;display:block}.lab-scale{font-size:9px;margin-bottom:2px}.lab-legend{display:flex;gap:3px 6px;flex-wrap:wrap;font-size:8px;margin-top:3px}.lab-graph small{font-size:8px;color:#c6d9e4}.lab-warning{color:#ffc68b}
 .lab-monitor,.lab-monitor *{animation:none!important;transition:none!important;backdrop-filter:none!important;filter:none!important;box-shadow:none!important}
 @media(min-width:900px){.lab-monitor{left:12px;width:240px;top:90px;font-size:12px}.lab-monitor .lab-note{font-size:10px}.lab-monitor-small{width:190px}.lab-monitor-small .lab-mini{font-size:11px}}
+
+/* Preserve vertical menu scrolling while blocking viewport pinch and horizontal panning. */
+html:has(.lab-game-route), .lab-game-route,
+.game-route.lab-game-route :is(.game-modal, [data-game-scroll]),
+.game-route.lab-game-route .game-shell[data-effects-paused="true"],
+.game-route.lab-game-route .game-shell[data-effects-paused="true"] .game-field {
+  touch-action: pan-y;
+}

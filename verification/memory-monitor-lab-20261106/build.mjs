@@ -12,7 +12,7 @@ assert.equal(git('rev-parse','HEAD:frontend'),'6e0cdc1bea4b6c84972382f636fa66caf
 const original=readFileSync(root+'/frontend/src/pages/GamePage.tsx','utf8');controller(original);
 const identity={sourceCommit:process.env.VERCEL_GIT_COMMIT_SHA||git('rev-parse','HEAD'),sourceTree:git('rev-parse','HEAD^{tree}'),baseRuntime:BASE_RUNTIME,
   isolatedProject:LAB_PROJECT,gameRules:'current-testnet-rules',shootingStars:false,fallingRocks:false,
-  lifecycleTraceVersion:3,guestOnly:true,liveBackend:false,actualPiAuthentication:false,payments:false,automaticUpload:false,whiteScreenFixed:false};
+  lifecycleTraceVersion:3,gameViewportGestureLock:true,guestOnly:true,liveBackend:false,actualPiAuthentication:false,payments:false,automaticUpload:false,whiteScreenFixed:false};
 const require=createRequire(root+'/frontend/package.json'),{build}=require('vite'),react=require('@vitejs/plugin-react').default;
 execFileSync(process.execPath,['--experimental-strip-types','scripts/buildPaintedHulls.mjs'],{cwd:root+'/frontend',stdio:'inherit'});
 for(const key of Object.keys(process.env))if(key.startsWith('VITE_'))delete process.env[key];
