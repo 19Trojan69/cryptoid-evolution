@@ -36,7 +36,9 @@ try{
  const unexpected=[],pageErrors=[],assetErrors=[];
  await context.route('**/*',route=>{const u=new URL(route.request().url());if(u.origin===origin||['fonts.googleapis.com','fonts.gstatic.com'].includes(u.hostname))return route.continue();unexpected.push(u.origin);return route.abort();});
  page=await context.newPage();page.setDefaultTimeout(60000);
- const injectedMessages = new Set(['Lab test exception', 'Lab test rejection', 'Lab test render fault']);
+ const injectedMessages = new Set([
+   'Lab test exception', 'Lab test rejection', 'RangeError: Lab test rejection', 'Lab test render fault',
+ ]);
  page.on('pageerror', e => { if (!injectedMessages.has(e.message)) pageErrors.push(e.message); });
  page.on('crash',()=>pageErrors.push('page-crash'));
  page.on('response',r=>{if(r.url().startsWith(origin)&&r.status()>=400)assetErrors.push({url:r.url().replace(origin,''),status:r.status()});});
