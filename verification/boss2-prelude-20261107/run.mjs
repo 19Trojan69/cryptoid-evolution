@@ -51,10 +51,17 @@ function summarize(rows) {
 async function play(mode) {
   const browser = await webkit.launch({ headless: true });
   const run = { mode, engine: browser.version(), complete: false, events: [], stageMilestones: [], phases: [],
-    measurements: 0, viewport: [430, 825], dpr: 3, physicalPhone: false };
+    measurements: 0, viewport: [430, 825], dpr: 3, physicalPhone: false, regularSectorsSkipped: true };
   const sampleFile = resolve(output, `${order}-${mode}.jsonl`);
+  const phaseRows = new Map();
   writeFileSync(sampleFile, '');
-  const record = row => { appendFileSync(sampleFile, JSON.stringify(row) + '\n'); run.measurements++; };
+  const record = row => {
+    appendFileSync(sampleFile, JSON.stringify(row) + '\n');
+    run.measurements++;
+    const key = row.state ? `${row.state.stage}/${row.state.encounter}` : row.phase;
+    if (!phaseRows.has(key)) phaseRows.set(key, []);
+    phaseRows.get(key).push(row);
+  };
   let fatal = null, page;
   try {
     const context = await browser.newContext({ viewport: { width: 430, height: 825 }, deviceScaleFactor: 3, isMobile: true, hasTouch: true });
@@ -78,10 +85,10 @@ async function play(mode) {
     await page.waitForFunction(() => window.__cryptoidPreludeRead?.().status === 'paused');
     await page.locator('.pause-resume-button').click();
 
-    const started = Date.now(), visited = new Set(), sampledPhases = new Set(), aligned = [];
+    const started = Date.now(), sampledPhases = new Set(), aligned = [];
     let lastSample = 0, lastProgress = 0, pausedAt = 0, lastFrame = -1, lastFrameAt = Date.now();
     let lastPhase = '', baselinePid = null, matched = false;
-    while (Date.now() - started < (mode === 'direct' ? 90000 : 16 * 60000)) {
+    while (Date.now() - started < (mode === 'direct' ? 90000 : 8 * 60000)) {
       if (fatal) throw Error(fatal);
       const row = await page.evaluate(({ boot, kinds, anchor }) => {
         if (window.__cryptoidBootId !== boot || !window.__cryptoidPreludeRead) throw Error('Unexpected document or controller replacement');
@@ -91,7 +98,8 @@ async function play(mode) {
         const field = document.querySelector('.game-field');
         if (state.status === 'playing' && field) {
           const rect = field.getBoundingClientRect();
-          const x = anchorMs === null ? Math.max(.075, Math.min(.925, state.aim.x)) : .075;
+          const park = anchorMs !== null && steps.some(event => event.kind === 'lab-boss2-first-reactor-hit');
+          const x = park ? .075 : Math.max(.075, Math.min(.925, state.aim.x));
           field.dispatchEvent(new PointerEvent(state.steering ? 'pointermove' : 'pointerdown', {
             pointerId: 11, pointerType: 'mouse', isPrimary: true, buttons: 1, bubbles: true, cancelable: true,
             clientX: rect.left + x * rect.width, clientY: rect.top + state.aim.y * rect.height,
@@ -102,7 +110,7 @@ async function play(mode) {
       }, { boot: bootId, kinds: bossKinds, anchor: secondEscort });
       const state = row.state;
       assert.ok(row.active && !['game-over', 'destroying', 'victory'].includes(state.status), 'Unexpected end of the running test');
-      visited.add(state.stage);
+      if (!run.stageMilestones.includes(state.stage)) run.stageMilestones.push(state.stage);
       run.events = row.steps;
       if (state.stage === 20 && state.bossId === 2 && state.liveTurrets === 1 && state.bossHealth === state.bossMaxHealth) matched = true;
       const key = `${state.stage}/${state.encounter}/${state.phase}`;
@@ -145,10 +153,9 @@ async function play(mode) {
     assert.ok(run.finishActiveMs, 'Time budget expired before the matched Boss 2 window');
     assert.ok(matched, 'Both arms must observe the same one-turret Boss 2 start');
     assert.ok(bossKinds.every(kind => run.events.some(event => event.kind === kind)), 'Boss 2 event sequence incomplete');
-    run.stageMilestones = [...visited].sort((a, b) => a - b);
     if (mode === 'prelude') {
-      assert.deepEqual(run.stageMilestones, Array.from({ length: 20 }, (_, i) => i + 1));
-      assert.ok(run.phases.some(phase => phase.key.startsWith('10/boss-clear/')) && run.phases.some(phase => phase.key.startsWith('10/bonus/')));
+      assert.deepEqual(run.stageMilestones, [10, 20]);
+      assert.ok(['boss-fight', 'boss-clear', 'bonus'].every(encounter => phaseRows.has(`10/${encounter}`)), 'The real Boss 1 and bonus phases must be observed');
     }
     run.bins = bins.map(([from, to]) => {
       const rows = aligned.filter(row => row.offsetMs >= from && row.offsetMs < to);
@@ -161,6 +168,7 @@ async function play(mode) {
     run.failure = String(error);
     if (page && !page.isClosed()) run.lastView = await page.locator('body').innerText({ timeout: 3000 }).then(text => text.slice(0, 1500)).catch(() => null);
   } finally {
+    run.phaseMemory = [...phaseRows].map(([phase, rows]) => ({ phase, ...summarize(rows) }));
     writeFileSync(resolve(output, `${order}-${mode}.json`), JSON.stringify(run, null, 2) + '\n');
     await browser.close();
   }
@@ -174,7 +182,8 @@ try {
   writeFileSync(resolve(output, `${order}-pair.json`), JSON.stringify(pair, null, 2) + '\n');
   console.log('PRELUDE_PAIR ' + JSON.stringify({ order, complete: pair.complete,
     runs: modes.map(mode => ({ mode, engine: runs[mode].engine, activeMs: runs[mode].finishActiveMs,
-      samples: runs[mode].measurements, stages: runs[mode].stageMilestones, bins: runs[mode].bins, failure: runs[mode].failure })) }));
+      samples: runs[mode].measurements, stages: runs[mode].stageMilestones, bins: runs[mode].bins,
+      phaseMemory: runs[mode].phaseMemory, failure: runs[mode].failure })) }));
   if (!pair.complete) process.exitCode = 1;
 } finally {
   await new Promise(resolve => server.close(resolve));

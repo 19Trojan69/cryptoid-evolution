@@ -1,8 +1,16 @@
 import assert from 'node:assert/strict';
 
+// Isolate the Boss 1 fight and bonus. Only the entry into Boss 1 and the
+// destination after the bonus are seeded. Fight, bonus and clocks are real.
+const seedBoss1 = `
+    if (options?.scene === 'normal') {
+      s.sector = 10; s.section = 10; s.chainBlocks = 9;
+      s.phase = 'SECTOR_INTRO'; s.encounter = 'boss-intro';
+      s.boss = createSectorBoss(10, fieldRef.current?.clientWidth || 390, visibleTopRef.current, fieldRef.current?.clientHeight || 760);
+    }`;
+
 // Both arms enter Boss 2 with the shipped last-turret fixture. In the prelude
 // arm this is applied at the original creation point, before the first draw.
-// All prior sectors, Boss 1, the bonus, and all clocks run normally.
 const seedBoss2 = `
               if (state.boss?.config.id === 2) {
                 state.boss.turrets.forEach((gun, index) => { gun.health = index === 2 ? 1 : 0; });
@@ -25,15 +33,6 @@ const pilot = `
         const lead = Math.max(0, (y * height - 23 - target.y) / .64) + 145;
         const next = moveSectorBoss(boss, lead, width, height);
         aim = { x: (gun ? gunPosition(next, gun).x : next.x) / width, y };
-      } else if (s.encounter === 'normal') {
-        const enemy = s.asteroids.find(item => item.y > 0 && item.health > 0 && !item.cloaked);
-        if (enemy) {
-          const lead = Math.max(0, (y * height - 23 - enemy.y) / .64) + 145;
-          const next = moveAsteroid(enemy, lead, width, height);
-          aim = { x: (next.x + next.radius * .35 * Math.sin(elapsedRef.current / 420)) / width, y };
-        } else {
-          aim = { x: .5 + .29 * Math.sin(elapsedRef.current * .0008), y };
-        }
       }
       return { aim, steering: pointerRef.current === 11, stage: s.sector, encounter: s.encounter, phase: s.phase, status: s.status,
         activeMs: labCounters.current.activeMs, frames: labCounters.current.frames,
@@ -47,12 +46,19 @@ const pilot = `
 export function instrumentPrelude(source) {
   const trace = '        labBossSteps.current = new Set();\n';
   const preload = '    if(options?.protection)impactCooldownRef.current=1e9;';
+  const initial = "    const s=stateRef.current;s.status='paused';";
+  const advance = '            const next = advanceAfterClear(state.section, clearEncounter);';
   const create = '              state.boss = createSectorBoss(state.sector, width, visibleTop, height);';
   const reader = '    (window as any).__cryptoidLabRead=read;';
   const cleanup = '    return ()=>{if((window as any).__cryptoidLabRead===read)delete (window as any).__cryptoidLabRead;};';
   const edits = [
     [trace, ''],
     [preload, '    labBossSteps.current = new Set();\n' + preload],
+    [initial, initial + seedBoss1],
+    [advance, `            const following = advanceAfterClear(state.section, clearEncounter);
+            const next = clearEncounter === 'bonus' && state.sector === 10
+              ? { ...following, encounter: 'boss-intro' as const, section: 20, sector: 20 }
+              : following;`],
     [create, create + seedBoss2],
     [reader, reader + pilot],
     [cleanup, `    return () => {
