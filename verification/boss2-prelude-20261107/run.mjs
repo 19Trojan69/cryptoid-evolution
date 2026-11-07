@@ -6,15 +6,18 @@ import { extname, resolve } from 'node:path';
 import { setTimeout as delay } from 'node:timers/promises';
 import { sampleBrowserMemory } from '../boss2-forensics-20261028/processMemory.mjs';
 import { completionHoldMs, contentProcessStart, continueDestinations, continueTraceMs, initLevelTrace,
-  processSampleMs, summarizeLevelTransition } from './levelTransition.mjs';
+  processSampleMs, summarizeContinueAudio, summarizeLevelTransition } from './levelTransition.mjs';
 
 const experiment = process.argv[2];
 const compareTargets = experiment === 'continue-targets';
-const order = compareTargets ? process.argv[3] : experiment;
-assert.ok((compareTargets ? ['block-first', 'boss-first'] : ['keep-first', 'release-first', 'level-transition']).includes(order));
-const levelTransition = compareTargets || order === 'level-transition';
+const compareAudio = experiment === 'continue-audio';
+const order = compareTargets || compareAudio ? process.argv[3] : experiment;
+const orders = compareAudio ? ['restart-first', 'keep-clock-first']
+  : compareTargets ? ['block-first', 'boss-first'] : ['keep-first', 'release-first', 'level-transition'];
+assert.ok(orders.includes(order));
+const levelTransition = compareTargets || compareAudio || order === 'level-transition';
 const modes = order === 'keep-first' ? ['keep', 'release'] : ['release', 'keep'];
-const repetitions = compareTargets ? 1 : Number(process.argv[3] ?? 4);
+const repetitions = compareTargets || compareAudio ? 1 : Number(process.argv[3] ?? 4);
 assert.ok(Number.isInteger(repetitions) && repetitions >= 1 && repetitions <= 8);
 const { webkit } = createRequire(new URL('../transition-motion-20261106/package.json', import.meta.url))('playwright');
 const output = new URL('results/', import.meta.url).pathname;
@@ -55,12 +58,12 @@ function summarize(rows) {
   return { count: rows.length, content: stats('contentPssKiB'), browser: stats('browserPssKiB') };
 }
 
-async function play(mode, label = `${order}-${mode}`, target) {
+async function play(mode, label = `${order}-${mode}`, target, audioMode) {
   const browser = await webkit.launch({ headless: true });
   const run = { mode, target, engine: browser.version(), complete: false, events: [], stageMilestones: [], phases: [],
     measurements: 0, viewport: [430, 825], dpr: 3, physicalPhone: false, regularSectorsSkipped: true };
   const sampleFile = resolve(output, `${label}.jsonl`);
-  const trace = { marks: [], processSamples: [], appSamples: [] };
+  const trace = { marks: [], processSamples: [], appSamples: [], audioCalls: [] };
   const phaseRows = new Map();
   writeFileSync(sampleFile, '');
   const record = row => {
@@ -80,7 +83,7 @@ async function play(mode, label = `${order}-${mode}`, target) {
     page.on('pageerror', error => { fatal ??= `${error.name}: ${error.message}`; });
     page.on('crash', () => { fatal ??= 'renderer-crash'; });
     await page.addInitScript(atlasMode => { window.__cryptoidAtlasMode = atlasMode; }, mode);
-    if (levelTransition) await page.addInitScript(initLevelTrace);
+    if (levelTransition) await page.addInitScript(initLevelTrace, audioMode);
     if (target) await page.addInitScript(destination => { window.__cryptoidContinueTarget = destination; }, target);
     await page.goto(origin, { waitUntil: 'domcontentloaded' });
     const { bootId, timeOrigin } = await page.evaluate(() => ({ bootId: window.__cryptoidBootId, timeOrigin: performance.timeOrigin }));
@@ -221,8 +224,12 @@ async function play(mode, label = `${order}-${mode}`, target) {
       });
     }
     if (levelTransition) {
-      trace.marks = await page.evaluate(() => window.__cryptoidLevelTrace.marks);
+      Object.assign(trace, await page.evaluate(() => {
+        const { marks, audioCalls } = window.__cryptoidLevelTrace;
+        return { marks, audioCalls };
+      }));
       run.levelTransition = summarizeLevelTransition(trace, identity, target);
+      if (audioMode) run.audioResume = summarizeContinueAudio(trace, audioMode);
     }
     run.complete = true;
   } catch (error) {
@@ -251,16 +258,21 @@ try {
     assert.ok(build.guestOnly && !build.liveBackend && !build.actualPiAuthentication && !build.payments);
     const targets = compareTargets ? (order === 'block-first' ? ['block1', 'boss2'] : ['boss2', 'block1'])
       : Array(repetitions).fill(undefined);
+    const variants = compareAudio
+      ? (order === 'restart-first' ? ['restart', 'keep-clock'] : ['keep-clock', 'restart'])
+        .map(audioMode => ({ target: 'block1', audioMode }))
+      : targets.map(target => ({ target, audioMode: undefined }));
     const runs = [];
-    for (const target of targets) {
-      const label = target ? `continue-${order}-${target}` : `${order}-${runs.length + 1}`;
-      const run = await play('keep', label, target);
+    for (const { target, audioMode } of variants) {
+      const label = target ? `continue-${order}-${audioMode ?? target}` : `${order}-${runs.length + 1}`;
+      const run = await play('keep', label, target, audioMode);
       runs.push(run);
       console.log('LEVEL_TRANSITION_RUN ' + JSON.stringify({ label, target, complete: run.complete,
-        failure: run.failure, transition: run.levelTransition }));
+        failure: run.failure, transition: run.levelTransition, audio: run.audioResume }));
     }
     const complete = runs.every(run => run.complete);
-    writeFileSync(resolve(output, `${experiment}-summary.json`), JSON.stringify({ build, order, runs, complete }, null, 2) + '\n');
+    const name = compareAudio ? `${experiment}-${order}` : experiment;
+    writeFileSync(resolve(output, `${name}-summary.json`), JSON.stringify({ build, order, runs, complete }, null, 2) + '\n');
     if (!complete) process.exitCode = 1;
   } else {
     const runs = {};

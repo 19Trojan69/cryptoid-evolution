@@ -12,10 +12,27 @@ const laterWindowsMs = [[1800, 2400], [6200, 6800]];
 export const continueTraceMs = 7200;
 
 // Executed by Playwright in the test document. Keep numbers and strings only.
-export function initLevelTrace() {
+export function initLevelTrace(audioMode) {
   const marks = [];
   const samples = [];
+  const audioCalls = [];
   let sampleTimer = null;
+  if (audioMode) {
+    window.__cryptoidContinueAudio = audioMode;
+    const contexts = new WeakMap();
+    let nextContext = 0;
+    for (const operation of ['suspend', 'resume']) {
+      const original = AudioContext.prototype[operation];
+      AudioContext.prototype[operation] = function (...args) {
+        if (marks.at(-1)?.name === 'continue-click') {
+          if (!contexts.has(this)) contexts.set(this, ++nextContext);
+          audioCalls.push({ operation, context: contexts.get(this), at: Date.now(),
+            state: this.state, clockMs: this.currentTime * 1000 });
+        }
+        return Reflect.apply(original, this, args);
+      };
+    }
+  }
   const read = () => ({
     at: Date.now(),
     bootId: window.__cryptoidBootId,
@@ -27,6 +44,7 @@ export function initLevelTrace() {
   const sample = () => { samples.push(read()); };
   window.__cryptoidLevelTrace = {
     marks,
+    audioCalls,
     setSampling(active) {
       if (active && sampleTimer === null) {
         sample();
@@ -61,6 +79,32 @@ const median = values => {
   const mid = Math.floor(sorted.length / 2);
   return sorted.length % 2 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
 };
+
+export function summarizeContinueAudio({ marks, appSamples, audioCalls }, mode) {
+  const click = marks.find(mark => mark.name === 'continue-click');
+  const before = appSamples.filter(row => row.at >= click.at - windowMs[1] && row.at <= click.at - windowMs[0]);
+  assert.ok(before.length >= 2 && before.every(({ app }) => app.audioState === 'running' && app.audioClockMs > 0
+    && app.musicState === 'running' && app.musicClockMs > 0 && app.musicPaused), 'Expected both running contexts before Continue');
+  for (const clock of ['audioClockMs', 'musicClockMs']) {
+    assert.ok(before.at(-1).app[clock] > before[0].app[clock], `${clock} was frozen before Continue`);
+  }
+  const [start, end] = laterWindowsMs.at(-1);
+  const after = appSamples.filter(row => row.at >= click.at + start && row.at <= click.at + end);
+  assert.ok(after.length && after.every(({ app }) => app.audioState === 'running' && app.musicState === 'running'
+    && app.audioClockMs > click.app.audioClockMs + 1000 && app.musicClockMs > click.app.musicClockMs + 1000
+    && !app.musicPaused), 'Effects and music must be running after Continue');
+  const firstMusic = appSamples.find(row => row.at >= click.at + 1800 && row.app.musicPaused === false);
+  assert.ok(firstMusic && after.at(-1).app.musicMediaMs > firstMusic.app.musicMediaMs, 'Music playback did not advance');
+  assert.deepEqual(audioCalls.map(({ operation, context }) => [operation, context]),
+    mode === 'restart' ? [['suspend', 1], ['resume', 1], ['suspend', 2], ['resume', 2]] : [],
+    'The native audio calls must actually differ between variants');
+  const recoveryDelta = after.at(-1).app.audioRecoveries - click.app.audioRecoveries;
+  assert.equal(recoveryDelta, mode === 'restart' ? 1 : 0, 'Unexpected audio recovery outside the intended Continue action');
+  return { mode, audioCalls, recoveryDelta, clockBeforeMs: before.at(-1).app.audioClockMs,
+    clockAtClickMs: click.app.audioClockMs, clockAfterMs: after.at(-1).app.audioClockMs,
+    musicClockAtClickMs: click.app.musicClockMs, musicClockAfterMs: after.at(-1).app.musicClockMs,
+    musicMediaAdvanceMs: after.at(-1).app.musicMediaMs - firstMusic.app.musicMediaMs };
+}
 
 export function summarizeLevelTransition({ marks, processSamples, appSamples }, identity, target) {
   const expectedMarks = ['bonus-end', 'summary-open', 'cleanup-before', 'cleanup-after', 'continue-click', 'continue-accepted'];

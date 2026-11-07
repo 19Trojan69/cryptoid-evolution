@@ -59,6 +59,12 @@ export function instrumentPrelude(source) {
   const beforeCleanup = '      if (!releaseIdleCanvasEffects())';
   const afterBonus = '      releaseUnusedPaintedShips();';
   const continueAccepted = "      if (ownerDiagnostics) sessionDiagnostic('boundary', { operation: 'boss-summary-continue',";
+  const unlockAudio = '  const unlockAudioForResume = () => {';
+  const startEffects = '    void startEffects(true).catch(() => {});';
+  const unlockMusic = '    if (musicEnabled) void musicRef.current?.unlock(true);';
+  const continueAudio = '    unlockAudioForResume(); setBossSummaryContinuing(true);';
+  const audioRead = 'const pacing=cssFramePacingStats(),boss=s.boss;';
+  const audioCounters = 'audioBufferBytes:a?.audioBufferBytes??null,audioVoices:a?.audioVoices??null,';
   const reader = '    (window as any).__cryptoidLabRead=read;';
   const cleanup = '    return ()=>{if((window as any).__cryptoidLabRead===read)delete (window as any).__cryptoidLabRead;};';
   const mark = (stage, name) => `if (${stage} === 10) (window as any).__cryptoidLevelBoundary?.('${name}');`;
@@ -87,6 +93,14 @@ export function instrumentPrelude(source) {
         (window as any).__cryptoidLevelBoundary?.('continue-accepted', { bonusHits: stateRef.current.bonusHits, hearts: stateRef.current.hearts });
       }
 ` + continueAccepted],
+    [unlockAudio, '  const unlockAudioForResume = (restartPausedGraph = true) => {'],
+    [startEffects, '    void startEffects(restartPausedGraph).catch(() => {});'],
+    [unlockMusic, '    if (musicEnabled) void musicRef.current?.unlock(restartPausedGraph);'],
+    [continueAudio, '    unlockAudioForResume((window as any).__cryptoidContinueAudio !== "keep-clock"); setBossSummaryContinuing(true);'],
+    [audioRead, audioRead + 'const m=musicRef.current?.audioAuditSnapshot;'],
+    [audioCounters, audioCounters + `
+        audioState:a?.audioState??null,audioClockMs:a?.audioClockMs??null,audioRecoveries:a?.audioRecoveries??null,
+        musicState:m?.musicState??null,musicClockMs:m?.musicClockMs??null,musicMediaMs:m?.musicMediaMs??null,musicPaused:m?.musicPaused??null,`],
     [reader, reader + pilot],
     [cleanup, `    return () => {
       if ((window as any).__cryptoidPreludeRead === readPilot) delete (window as any).__cryptoidPreludeRead;

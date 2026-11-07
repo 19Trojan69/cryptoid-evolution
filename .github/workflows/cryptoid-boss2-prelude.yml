@@ -1,4 +1,4 @@
-name: Compare memory after continuing to Block 1 or Boss 2
+name: Compare audio restart at level completion
 on:
   push:
     branches: [codex/memory-monitor-lab-20261106]
@@ -14,7 +14,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        order: [block-first, boss-first]
+        order: [restart-first, keep-clock-first]
         pair: [1, 2]
     container:
       image: mcr.microsoft.com/playwright@sha256:dcc5531e97840b9b5e794f2814476b21571c5124a3fca2267d73041f56e7580e
@@ -28,15 +28,15 @@ jobs:
       - name: Verify pinned lab and game trees
         run: |
           test "$(git rev-parse HEAD:frontend)" = 6e0cdc1bea4b6c84972382f636fa66caf2739010
-          test "$(git rev-parse HEAD:verification/memory-monitor-lab-20261106)" = b9d45afe242bd58caa4adf9985e9afce7de34366
+          test "$(git rev-parse HEAD:verification/memory-monitor-lab-20261106)" = 4c58d3868bdce1d8a582e2d54a70e8cf24223b64
       - run: npm install --prefix frontend --include=optional --ignore-scripts --no-audit --no-fund
       - run: npm install --prefix verification/transition-motion-20261106 --ignore-scripts --no-audit --no-fund
-      - run: node --test verification/memory-monitor-lab-20261106/model.test.mjs
+      - run: node --test verification/memory-monitor-lab-20261106/model.test.mjs frontend/src/pages/completionAudioResume.test.mjs
       - run: node verification/boss2-prelude-20261107/build.mjs
-      - run: node verification/boss2-prelude-20261107/run.mjs continue-targets ${{ matrix.order }}
+      - run: node verification/boss2-prelude-20261107/run.mjs continue-audio ${{ matrix.order }}
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()
         with:
-          name: continue-${{ matrix.order }}-${{ matrix.pair }}
+          name: continue-audio-${{ matrix.order }}-${{ matrix.pair }}
           path: verification/boss2-prelude-20261107/results
           retention-days: 14
