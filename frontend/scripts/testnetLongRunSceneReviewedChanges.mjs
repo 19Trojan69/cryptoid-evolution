@@ -30,9 +30,55 @@ const sceneChanges = [
   }
 ];
 
+// Restore the visible-focus and in-mission inventory changes before the older checks.
+const pauseWeaponChanges = [
+  {
+    "before": "  const [weaponMenuOpen, setWeaponMenuOpen] = useState(false);\n  const [weaponStock, setWeaponStock] = useState<Record<string, number>>({});\n  const stockRef = useRef(weaponStock); stockRef.current = weaponStock;\n  const [autoReload, setAutoReload] = useState<AutoReloadPreferences>({});\n",
+    "after": "  const [weaponMenuOpen, setWeaponMenuOpen] = useState(false);\n  const [weaponStock, setWeaponStock] = useState<Record<string, number>>();\n  const stockRef = useRef<Record<string, number>>({});\n  const inventoryRequestRef = useRef<{ runId: string; promise: Promise<boolean> } | null>(null);\n  const [autoReload, setAutoReload] = useState<AutoReloadPreferences>({});\n"
+  },
+  {
+    "before": "  const automaticStartRunRef = useRef<string | null>(null);\n  const weaponMountedRef = useRef(true);\n",
+    "after": "  const automaticStartRunRef = useRef<string | null>(null);\n  const manualWeaponChoiceRef = useRef(0);\n  const weaponMountedRef = useRef(true);\n"
+  },
+  {
+    "before": "  };\n  const receiveWeaponInventory = async (_owned: string[], stock: Record<string, number>) => {\n    if (hangarCatalog.some(offer => offer.kind === 'weapon' && autoReloadRef.current[offer.level] === true\n      && (stock[offer.id] || 0) > (stockRef.current[offer.id] || 0))) automaticStartRunRef.current = null;\n    stockRef.current = stock; setWeaponStock(stock);\n  };\n  const [weaponBusy, setWeaponBusy] = useState(false);\n",
+    "after": "  };\n  const receiveWeaponInventory = useCallback((stock: Record<string, number>, rearmAuto: boolean) => {\n    if (rearmAuto && hangarCatalog.some(offer => offer.kind === 'weapon' && autoReloadRef.current[offer.level] === true\n      && (stock[offer.id] || 0) > (stockRef.current[offer.id] || 0))) automaticStartRunRef.current = null;\n    stockRef.current = stock; setWeaponStock(stock);\n  }, []);\n  const refreshWeaponInventory = useCallback((force = false): Promise<boolean> => {\n    const runId = scoreRunRef.current;\n    if (!runId || adminRunRef.current) return Promise.resolve(false);\n    const inFlight = inventoryRequestRef.current;\n    if (!force && inFlight?.runId === runId) return inFlight.promise;\n    const stockAtRequest = stockRef.current;\n    const choiceAtRequest = manualWeaponChoiceRef.current;\n    const promise = axiosClient.get<{\n      ownedWeapons: string[];\n      weaponStock?: Record<string, number>;\n      testnetCatalogAccess?: boolean;\n    }>('/hangar/inventory', { timeout: 8000 }).then(({ data }) => {\n      if (!weaponMountedRef.current || scoreRunRef.current !== runId || inventoryRequestRef.current?.promise !== promise) return false;\n      if (!Array.isArray(data.ownedWeapons)) throw new Error('Invalid inventory');\n      // A charge confirmation may already have supplied newer stock.\n      if (stockRef.current === stockAtRequest) {\n        receiveWeaponInventory(data.weaponStock ?? {}, manualWeaponChoiceRef.current === choiceAtRequest);\n      }\n      return data.testnetCatalogAccess === true;\n    }).finally(() => {\n      if (inventoryRequestRef.current?.promise === promise) inventoryRequestRef.current = null;\n    });\n    inventoryRequestRef.current = { runId, promise };\n    return promise;\n  }, [receiveWeaponInventory]);\n  const [weaponBusy, setWeaponBusy] = useState(false);\n"
+  },
+  {
+    "before": "      autoReloadRef.current = reloadPreferences; setAutoReload(reloadPreferences);\n      if (!adminRunRef.current && data.scoreRunId && Object.values(reloadPreferences).some(Boolean)) {\n        try {\n          const inventory = await axiosClient.get<{ weaponStock: Record<string, number> }>('/hangar/inventory', { timeout: 8000 });\n          if (weaponMountedRef.current && scoreRunRef.current === data.scoreRunId) { stockRef.current = inventory.data.weaponStock; setWeaponStock(inventory.data.weaponStock); }\n        } catch { /* No unconfirmed stock is consumed; the menu can refresh inventory. */ }\n      }\n",
+    "after": "      autoReloadRef.current = reloadPreferences; setAutoReload(reloadPreferences);\n      if (!adminRunRef.current && data.scoreRunId) {\n        const inventory = refreshWeaponInventory().catch(() => false);\n        if (Object.values(reloadPreferences).some(Boolean)) await inventory;\n      }\n"
+  },
+  {
+    "before": "    const keyUp = (event: KeyboardEvent) => keysRef.current.delete(event.code);\n    const blur = () => {\n      clearControls();\n      if (stateRef.current.status !== 'playing') return;\n      stateRef.current.status = 'paused';\n      soundRef.current?.setPaused(true); musicRef.current?.pause();\n      setGame({ ...stateRef.current });\n      void saveCombatRef.current().catch(() => setSaveNotice('Save not confirmed. Pending data will be retried.'));\n    };\n    const pauseAfterBackground = () => {\n",
+    "after": "    const keyUp = (event: KeyboardEvent) => keysRef.current.delete(event.code);\n    const pauseAfterBackground = () => {\n"
+  },
+  {
+    "before": "    window.addEventListener(\"keyup\", keyUp);\n    window.addEventListener(\"blur\", blur);\n    return () => { window.removeEventListener(\"keydown\", keyDown); window.removeEventListener(\"keyup\", keyUp); window.removeEventListener(\"blur\", blur); document.removeEventListener(\"pointerup\", resumeAudio, true); document.removeEventListener(\"touchend\", resumeAudio, true); document.removeEventListener(\"visibilitychange\", resumeAudio); document.removeEventListener(\"visibilitychange\", pauseAfterBackground); window.removeEventListener(\"pagehide\", markPageHidden); window.removeEventListener(\"pageshow\", resumeAudio); window.removeEventListener(\"pageshow\", pauseAfterBackground); window.removeEventListener(\"focus\", resumeAudio); };\n  }, [clearControls]);\n",
+    "after": "    window.addEventListener(\"keyup\", keyUp);\n    // A visible game can lose window focus when the browser shows its controls.\n    window.addEventListener(\"blur\", clearControls);\n    return () => { window.removeEventListener(\"keydown\", keyDown); window.removeEventListener(\"keyup\", keyUp); window.removeEventListener(\"blur\", clearControls); document.removeEventListener(\"pointerup\", resumeAudio, true); document.removeEventListener(\"touchend\", resumeAudio, true); document.removeEventListener(\"visibilitychange\", resumeAudio); document.removeEventListener(\"visibilitychange\", pauseAfterBackground); window.removeEventListener(\"pagehide\", markPageHidden); window.removeEventListener(\"pageshow\", resumeAudio); window.removeEventListener(\"pageshow\", pauseAfterBackground); window.removeEventListener(\"focus\", resumeAudio); };\n  }, [clearControls]);\n"
+  },
+  {
+    "before": "    setWeaponError('');\n    if (!automatic) automaticStartRunRef.current = runId;\n    // A collected pickup or a manual selection can take over while the server confirms the charge.\n",
+    "after": "    setWeaponError('');\n    if (!automatic) {\n      manualWeaponChoiceRef.current++;\n      automaticStartRunRef.current = runId;\n    }\n    // A collected pickup or a manual selection can take over while the server confirms the charge.\n"
+  },
+  {
+    "before": "    scoreRunRef.current = null;\n    activationRef.current = null;\n",
+    "after": "    scoreRunRef.current = null;\n    inventoryRequestRef.current = null;\n    stockRef.current = {};\n    setWeaponStock(undefined);\n    activationRef.current = null;\n"
+  },
+  {
+    "before": "          <div className=\"weapon-selection-dialog\" role=\"dialog\" aria-modal=\"true\" aria-labelledby=\"mission-weapon-shop-title\">\n            <MissionWeaponShop reloadLevel={confirmedReload ?? undefined} autoReload={autoReload} onAutoReload={changeAutoReload} authenticated={accountRun} admin={adminRunRef.current} timers={game.weaponTimers} initialStock={weaponStock} activeLevel={game.weaponLevel} source={game.weaponSource} pickupLevel={game.pickupWeaponLevel} pickupMs={game.pickupWeaponMs} stage={shipStage} selectionBusy={weaponBusy} pendingLevel={activationRef.current?.level} selectionError={weaponError} onSelect={level => { void selectWeaponLevel(level); }} onPickup={selectPickupWeapon} onClose={resumeWeaponSelection} onInventory={receiveWeaponInventory} />\n          </div>\n",
+    "after": "          <div className=\"weapon-selection-dialog\" role=\"dialog\" aria-modal=\"true\" aria-labelledby=\"mission-weapon-shop-title\">\n            <MissionWeaponShop reloadLevel={confirmedReload ?? undefined} autoReload={autoReload} onAutoReload={changeAutoReload} authenticated={accountRun} admin={adminRunRef.current} timers={game.weaponTimers} stock={weaponStock} activeLevel={game.weaponLevel} source={game.weaponSource} pickupLevel={game.pickupWeaponLevel} pickupMs={game.pickupWeaponMs} stage={shipStage} selectionBusy={weaponBusy} pendingLevel={activationRef.current?.level} selectionError={weaponError} onSelect={level => { void selectWeaponLevel(level); }} onPickup={selectPickupWeapon} onClose={resumeWeaponSelection} refreshInventory={refreshWeaponInventory} />\n          </div>\n"
+  }
+];
+
 const directPlayAuth = '  const { authReady, isLoading, authError, signIn, canAdmin, isAuthenticated } = useAuth({ autoSignIn: false });';
 
 export function restoreTestnetLongRunSceneChanges(source) {
+  if (source.includes(pauseWeaponChanges[0].after)) {
+    for (const { before, after } of pauseWeaponChanges) {
+      if (source.split(after).length !== 2) throw Error('Expected one exact Testnet pause or weapon inventory change');
+      source = source.replace(after, () => before);
+    }
+  }
   if (source.includes(directPlayAuth)) {
     if (source.split(directPlayAuth).length !== 2) throw Error('Expected one exact Testnet game entry change');
     source = source.replace(directPlayAuth, directPlayAuth.replace('({ autoSignIn: false })', '()'));

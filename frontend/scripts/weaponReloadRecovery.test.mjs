@@ -109,7 +109,7 @@ test('successful free or cached manual selections clear the old rejection text',
 
 test('failed inventory loading cannot disable replay of an uncertain activation or inventory refresh', () => {
   const calls = [];
-  const menu = weaponMenu({ pendingLevel: 2, initialStock: {},
+  const menu = weaponMenu({ pendingLevel: 2, stock: {},
     onSelect: level => calls.push(level) }, { ready: false });
   const retry = menu.nodes.find(n => n.props?.className === 'mission-select'
     && n.props.children.includes('Retry'));

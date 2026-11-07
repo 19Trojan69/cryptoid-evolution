@@ -42,16 +42,75 @@ test('the real drawer marks only its scrollable offer body for the existing rout
  assert.equal(footer.props['data-game-scroll'],undefined);
 });
 
-test('only an explicit Auto change or replenished enabled stock re-arms the bounded choice',async()=>{
- const start=source.indexOf('  const changeAutoReload ='),end=source.indexOf('  const [weaponBusy,',start);
- const code=transformSync(source.slice(start,end),{loader:'tsx'}).code;
- const writes=[],env={automaticStartRunRef:{current:'run-a'},autoReloadRef:{current:{5:true}},stockRef:{current:{weapon_plasma:19}},hangarCatalog,shipSaveNetwork:'testnet',cardOwnerRef:{current:'pilot-a'},autoReloadKey:(network,owner)=>network+':'+owner,setAutoReload(){},setWeaponStock(){},localStorage:{setItem:(...args)=>writes.push(args)}};
- const handlers=new Function('env','with(env){'+code+';return {changeAutoReload,receiveWeaponInventory};}')(env);
- await handlers.receiveWeaponInventory([],{weapon_plasma:19});assert.equal(env.automaticStartRunRef.current,'run-a','a refresh cannot repeatedly arm a charge');
- await handlers.receiveWeaponInventory([],{weapon_plasma:18});assert.equal(env.automaticStartRunRef.current,'run-a','consumption cannot re-arm');
- await handlers.receiveWeaponInventory([],{weapon_plasma:23});assert.equal(env.automaticStartRunRef.current,null,'a confirmed repurchase can restore the Auto weapon on explicit return');
- env.automaticStartRunRef.current='run-a';handlers.changeAutoReload(5,false);assert.equal(env.autoReloadRef.current[5],false);assert.equal(writes[0][0],'testnet:pilot-a');assert.equal(env.automaticStartRunRef.current,null);
- env.automaticStartRunRef.current='run-a';await handlers.receiveWeaponInventory([],{weapon_plasma:24});assert.equal(env.automaticStartRunRef.current,'run-a','disabled Auto remains disabled after a purchase');
+function inventoryHost() {
+  const start = source.indexOf('  const changeAutoReload =');
+  const end = source.indexOf('  const [weaponBusy,', start);
+  const code = transformSync(source.slice(start, end), { loader: 'tsx' }).code;
+  const writes = [], requests = [];
+  const env = {
+    automaticStartRunRef: { current: 'run-a' }, autoReloadRef: { current: { 5: true } },
+    stockRef: { current: { weapon_plasma: 19 } }, hangarCatalog, shipSaveNetwork: 'testnet',
+    cardOwnerRef: { current: 'pilot-a' }, autoReloadKey: (network, owner) => network + ':' + owner,
+    setAutoReload() {}, setWeaponStock() {}, localStorage: { setItem: (...args) => writes.push(args) },
+    useCallback: fn => fn, scoreRunRef: { current: 'run-a' }, adminRunRef: { current: false },
+    weaponMountedRef: { current: true }, inventoryRequestRef: { current: null }, manualWeaponChoiceRef: { current: 0 },
+    axiosClient: { get(path) {
+      assert.equal(path, '/hangar/inventory');
+      return new Promise(resolve => requests.push(stock => resolve({
+        data: { ownedWeapons: Object.keys(stock), weaponStock: stock },
+      })));
+    } },
+  };
+  const handlers = new Function('env', 'with(env){' + code + ';return {changeAutoReload,receiveWeaponInventory,refreshWeaponInventory};}')(env);
+  return { env, writes, requests, ...handlers };
+}
+
+test('only an explicit Auto change or replenished enabled stock re-arms the bounded choice',()=>{
+ const { env, writes, receiveWeaponInventory, changeAutoReload } = inventoryHost();
+ receiveWeaponInventory({weapon_plasma:19}, true);assert.equal(env.automaticStartRunRef.current,'run-a','a refresh cannot repeatedly arm a charge');
+ receiveWeaponInventory({weapon_plasma:18}, true);assert.equal(env.automaticStartRunRef.current,'run-a','consumption cannot re-arm');
+ receiveWeaponInventory({weapon_plasma:23}, true);assert.equal(env.automaticStartRunRef.current,null,'a confirmed repurchase can restore the Auto weapon on explicit return');
+ env.automaticStartRunRef.current='run-a';changeAutoReload(5,false);assert.equal(env.autoReloadRef.current[5],false);assert.equal(writes[0][0],'testnet:pilot-a');assert.equal(env.automaticStartRunRef.current,null);
+ env.automaticStartRunRef.current='run-a';receiveWeaponInventory({weapon_plasma:24}, true);assert.equal(env.automaticStartRunRef.current,'run-a','disabled Auto remains disabled after a purchase');
+});
+
+test('the menu keeps confirmed stock and weapon choices usable during an inventory refresh', () => {
+  const menu = weaponMenu({ onSelect() {} }, { ready: false, refreshing: true });
+  assert.ok(menu.nodes.some(n => n.type === 'b' && n.props.children.includes(2)));
+  assert.ok(!menu.nodes.some(n => n.type === 'b' && n.props.children.includes('…')));
+  assert.equal(menu.card(2).props['data-owned'], true);
+  const choices = menu.nodes.filter(n => n.props.className === 'mission-select' && !n.props.disabled);
+  assert.deepEqual(choices.map(n => n.props.children[0]), ['Select', 'Select', 'Active weapon']);
+  assert.equal(menu.nodes.find(n => n.props.className === 'mission-return').props.disabled, false);
+  assert.equal(menu.nodes.find(n => n.type === 'WeaponPurchase').props.disabled, true);
+
+  const unknown = weaponMenu({ stock: undefined, timers: [0, 0, 0, 12000], onSelect() {} }, { ready: false, refreshing: true });
+  assert.deepEqual(unknown.nodes.filter(n => n.props.className === 'mission-select' && !n.props.disabled).map(n => n.props.children[0]), ['Select', 'Active weapon']);
+});
+
+test('a shared inventory request cannot overwrite a newer charge confirmation', async () => {
+  const { env, requests, refreshWeaponInventory } = inventoryHost();
+  const beforeActivation = refreshWeaponInventory();
+  assert.equal(refreshWeaponInventory(), beforeActivation);
+  assert.equal(requests.length, 1);
+  env.stockRef.current = { weapon_plasma: 18 };
+  requests[0]({ weapon_plasma: 19 });
+  await beforeActivation;
+  assert.equal(env.stockRef.current.weapon_plasma, 18);
+  assert.equal(env.inventoryRequestRef.current, null);
+});
+
+test('a post-purchase read supersedes an older refresh and respects a later manual choice', async () => {
+  const { env, requests, refreshWeaponInventory } = inventoryHost();
+  const beforePurchase = refreshWeaponInventory();
+  const afterPurchase = refreshWeaponInventory(true);
+  env.manualWeaponChoiceRef.current++;
+  requests[1]({ weapon_plasma: 22 });
+  await afterPurchase;
+  requests[0]({ weapon_plasma: 19 });
+  await beforePurchase;
+  assert.equal(env.stockRef.current.weapon_plasma, 22);
+  assert.equal(env.automaticStartRunRef.current, 'run-a');
 });
 
 test('7 exact reviewed changes restore the complete public controller, including all payment and pause guards',()=>{

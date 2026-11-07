@@ -16,12 +16,11 @@ import { hangarCatalog } from '../../../backend/src/hangarCatalog';
 import { isTestnetWeaponPurchaseEnabled } from '../../../backend/src/paymentPolicy';
 
 type Offer = { id: string; kind: string; name: string; description: string; pricePi: number; level?: number };
-type Props = { reloadLevel?: number; autoReload?: AutoReloadPreferences; onAutoReload?: (level: number, enabled: boolean) => void; authenticated: boolean; admin: boolean; timers: number[]; onInventory: (owned: string[], stock: Record<string, number>) => Promise<void>; onClose: () => void; initialStock?: Record<string, number>; activeLevel?: number; source?: string; pickupLevel?: number; pickupMs?: number; stage?: ShipStage; selectionBusy?: boolean; pendingLevel?: number; selectionError?: string; onSelect?: (level: number) => void; onPickup?: () => void };
+type Props = { reloadLevel?: number; autoReload?: AutoReloadPreferences; onAutoReload?: (level: number, enabled: boolean) => void; authenticated: boolean; admin: boolean; timers: number[]; refreshInventory: (force?: boolean) => Promise<boolean>; onClose: () => void; stock?: Record<string, number>; activeLevel?: number; source?: string; pickupLevel?: number; pickupMs?: number; stage?: ShipStage; selectionBusy?: boolean; pendingLevel?: number; selectionError?: string; onSelect?: (level: number) => void; onPickup?: () => void };
 
-export default function MissionWeaponShop({ reloadLevel, autoReload = {}, onAutoReload, authenticated, admin, timers, onInventory, onClose, initialStock, activeLevel = 1, source = 'standard', pickupLevel = 1, pickupMs = 0, stage = 1, selectionBusy = false, pendingLevel, selectionError, onSelect, onPickup }: Props) {
+export default function MissionWeaponShop({ reloadLevel, autoReload = {}, onAutoReload, authenticated, admin, timers, refreshInventory, onClose, stock, activeLevel = 1, source = 'standard', pickupLevel = 1, pickupMs = 0, stage = 1, selectionBusy = false, pendingLevel, selectionError, onSelect, onPickup }: Props) {
   const { t, locale } = useLocale();
   const [offers, setOffers] = useState<Offer[]>(() => hangarCatalog.filter(offer => offer.kind === 'weapon'));
-  const [stock, setStock] = useState<Record<string, number>>(initialStock ?? {});
   const [ready, setReady] = useState(false);
   const [ownerTestnet, setOwnerTestnet] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
@@ -29,34 +28,27 @@ export default function MissionWeaponShop({ reloadLevel, autoReload = {}, onAuto
   const mounted = useRef(true);
   const refreshVersion = useRef(0);
   const titleRef = useRef<HTMLHeadingElement>(null);
-  const inventoryCallback = useRef(onInventory);
-  inventoryCallback.current = onInventory;
   const ship = selectedShip();
   const { orderProduct, isLoading, paymentDiagnostic, activeProductId, paymentStatus } = usePayments({ isAuthenticated: authenticated && !admin, onRequireAuth: () => setNotice('Connect your Pi account to see your saved loadout.') });
-  const refresh = useCallback(async () => {
+  const refresh = useCallback(async (force = false) => {
     const version = ++refreshVersion.current;
     setRefreshing(true);
     setReady(false);
     try {
-      const [{ data: catalog }, inventory] = await Promise.all([
+      const [{ data: catalog }, ownerAccess] = await Promise.all([
         axiosClient.get<{ offers: Offer[] }>('/hangar/catalog'),
-        authenticated ? axiosClient.get<{ testnetCatalogAccess?: boolean; ownedWeapons: string[]; weaponStock?: Record<string, number> }>('/hangar/inventory') : Promise.resolve(null),
+        authenticated ? refreshInventory(force) : Promise.resolve(false),
       ]);
-      if (!Array.isArray(catalog.offers) || (inventory && !Array.isArray(inventory.data.ownedWeapons))) throw new Error('Invalid inventory');
+      if (!Array.isArray(catalog.offers)) throw new Error('Invalid catalog');
       if (!mounted.current || version !== refreshVersion.current) return;
-      const weapons = inventory?.data.ownedWeapons ?? [];
       setOffers(catalog.offers.filter(offer => offer.kind === 'weapon'));
-      setStock(inventory?.data.weaponStock ?? {});
-      setOwnerTestnet(shipSaveNetwork === 'testnet' && !admin && inventory?.data.testnetCatalogAccess === true);
+      setOwnerTestnet(shipSaveNetwork === 'testnet' && !admin && ownerAccess);
       setReady(true);
       setNotice(authenticated ? '' : 'Connect your Pi account to see your saved loadout.');
-      if (authenticated && !admin) void inventoryCallback.current(weapons, inventory?.data.weaponStock ?? {}).catch(() => {
-        if (mounted.current && version === refreshVersion.current) setNotice('Not confirmed. Refresh inventory. Confirmed purchases will not be repeated.');
-      });
     } catch {
       if (mounted.current && version === refreshVersion.current) setNotice('Not confirmed. Refresh inventory. Confirmed purchases will not be repeated.');
     } finally { if (mounted.current && version === refreshVersion.current) setRefreshing(false); }
-  }, [authenticated, admin]);
+  }, [authenticated, admin, refreshInventory]);
   useEffect(() => {
     mounted.current = true;
     const modal = titleRef.current?.closest('.pause-settings-modal');
@@ -66,12 +58,12 @@ export default function MissionWeaponShop({ reloadLevel, autoReload = {}, onAuto
     const versionRef = refreshVersion;
     return () => { mounted.current = false; versionRef.current++; };
   }, [refresh]);
-  useEffect(() => { if (initialStock) setStock(initialStock); }, [initialStock]);
-  const busy = refreshing || isLoading || selectionBusy;
+  const busy = isLoading || selectionBusy;
+  const stockUnknown = authenticated && stock === undefined;
   const standard: Offer = { id: 'standard', kind: 'weapon', name: 'Standard', description: '', pricePi: 0, level: 1 };
   const items = [standard, ...offers].map(offer => {
     const level = offer.level ?? 1;
-    const count = stock[offer.id] || 0;
+    const count = stock?.[offer.id] || 0;
     const timer = timers[level] ?? 0;
     const pickup = pickupLevel === level && pickupMs > 0;
     const available = pendingLevel === level || level === 1 || admin || count > 0 || timer > 0 || timer === -1 || pickup;
@@ -97,7 +89,7 @@ export default function MissionWeaponShop({ reloadLevel, autoReload = {}, onAuto
         <WeaponPreview offerId={offer.id} sprite={ship.skin.sprite} color={ship.color.id} stage={stage} />
         <div className="mission-weapon-details">
           <h3><span aria-hidden="true">{weaponSymbols[level]}</span> {t(offer.name)}</h3>
-          <p className="mission-stock">{level === 1 ? t('Unlimited') : <>{t('Charges')}: <b>{authenticated && !ready ? '…' : count}</b></>}</p>
+          <p className="mission-stock">{level === 1 ? t('Unlimited') : <>{t('Charges')}: <b>{stockUnknown ? '…' : count}</b></>}</p>
           <p className="mission-duration">{level > 1 ? t('45 seconds per charge') : t('Base')}</p>
           <div className="mission-timers">{timer > 0 && <p className="mission-time">{t('Remaining time')}: {Math.ceil(timer / 1000)} s</p>}
           {pickup && <p className="mission-time">{t('Weapon pickup')}: {Math.ceil(pickupMs / 1000)} s</p>}
@@ -108,10 +100,10 @@ export default function MissionWeaponShop({ reloadLevel, autoReload = {}, onAuto
             </button>
           </div>}
           {level === 1 && <p className="mission-reload-base">{t('No reload required')}</p>}
-          {onSelect && <button type="button" className="mission-select" aria-pressed={selected} disabled={!available || busy || (!usablePaid && !pickup) || (level > 1 && !ready && !admin && !pickup && timer <= 0 && pendingLevel !== level)} onClick={() => { if (selected && !pendingLevel) return; if (!usablePaid && pickup) onPickup?.(); else onSelect(level); }}>{pendingLevel === level ? t('Retry') : selected ? t('Active weapon') : available ? t('Select') : t('Not in stock')}</button>}
+          {onSelect && <button type="button" className="mission-select" aria-pressed={selected} disabled={!available || busy} onClick={() => { if (selected && !pendingLevel) return; if (!usablePaid && pickup) onPickup?.(); else onSelect(level); }}>{pendingLevel === level ? t('Retry') : selected ? t('Active weapon') : available ? t('Select') : stockUnknown ? '…' : t('Not in stock')}</button>}
           {pickup && usablePaid && onPickup && <button className="mission-pickup-select" type="button" disabled={busy} aria-pressed={source === 'pickup' && activeLevel === level} onClick={onPickup}>{t('Select')} · {t('Weapon pickup')}</button>}
         </div>
-        {level > 1 && (locked ? <details className="mission-locked"><summary>{t('Purchases locked')}</summary><strong>{t('MAINNET READY')}</strong><p>{t('Available only as a weapon pickup.')}</p><p>{t('Planned price')}: <PiPrice amount={offer.pricePi} locale={locale} /></p></details> : <WeaponPurchase showStock={false} id={offer.id} price={offer.pricePi} count={count} pending={isLoading && activeProductId === offer.id} status={activeProductId === offer.id ? paymentStatus : undefined} diagnostic={activeProductId === offer.id ? paymentDiagnostic : undefined} disabledReason={admin ? "Admin test mode: purchases and records are not saved." : !authenticated ? "Connect your Pi account to see your saved loadout." : !ready ? notice || "Loading account save…" : undefined} disabled={!ready || busy || !authenticated || admin || !!pendingLevel} onBuy={(quantity, total) => { void orderProduct(`Cryptoid ${offer.name} · ${quantity} × 45s · Test-Pi`, total, { productId: offer.id, quantity, weaponModel: 2 }, async () => { if (mounted.current) await refresh(); }); }} />)}
+        {level > 1 && (locked ? <details className="mission-locked"><summary>{t('Purchases locked')}</summary><strong>{t('MAINNET READY')}</strong><p>{t('Available only as a weapon pickup.')}</p><p>{t('Planned price')}: <PiPrice amount={offer.pricePi} locale={locale} /></p></details> : <WeaponPurchase showStock={false} id={offer.id} price={offer.pricePi} count={count} pending={isLoading && activeProductId === offer.id} status={activeProductId === offer.id ? paymentStatus : undefined} diagnostic={activeProductId === offer.id ? paymentDiagnostic : undefined} disabledReason={admin ? "Admin test mode: purchases and records are not saved." : !authenticated ? "Connect your Pi account to see your saved loadout." : !ready ? notice || "Loading account save…" : undefined} disabled={!ready || busy || !authenticated || admin || !!pendingLevel} onBuy={(quantity, total) => { void orderProduct(`Cryptoid ${offer.name} · ${quantity} × 45s · Test-Pi`, total, { productId: offer.id, quantity, weaponModel: 2 }, async () => { if (mounted.current) await refresh(true); }); }} />)}
       </article>;
     })}</div>
     <WeaponTutorial />
@@ -120,7 +112,7 @@ export default function MissionWeaponShop({ reloadLevel, autoReload = {}, onAuto
     {paymentDiagnostic && !activeProductId && <p role="alert">{paymentDiagnostic}</p>}
     </div>
     <footer className="mission-shop-footer">
-      <button type="button" className="mission-refresh" aria-label={t('Retry')} title={t('Retry')} disabled={busy} onClick={() => { void refresh(); }}><span aria-hidden="true">↻</span></button>
+      <button type="button" className="mission-refresh" aria-label={t('Retry')} title={t('Retry')} disabled={busy || refreshing} onClick={() => { void refresh(); }}><span aria-hidden="true">↻</span></button>
       <button type="button" className="mission-return" disabled={busy || !!pendingLevel} onClick={onClose}>{t('Back to game')} <span aria-hidden="true">▷</span></button>
     </footer>
   </section>;

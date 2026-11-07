@@ -32,7 +32,7 @@ export function selectionHost() {
     stateRef: ref(state), scoreRunRef: ref('isolated-run'), weaponMountedRef: ref(true),
     weaponBusyRef: ref(false), activationRef: ref(null), adminRunRef: ref(false), bossSummaryRef: ref(null),
     stockRef: ref({ ...balances }), reloadPendingRef: ref(false), reloadRequestRef: ref(null),
-    automaticStartRunRef: ref(null), confirmedReloadRef: ref(null), setConfirmedReload(level) { env.confirmedReload = level; },
+    automaticStartRunRef: ref(null), manualWeaponChoiceRef: ref(0), confirmedReloadRef: ref(null), setConfirmedReload(level) { env.confirmedReload = level; },
     weaponSpentRef: ref(null), reloadNoticeTimerRef: ref(null), soundRef: ref({ play() {} }), musicRef: ref({ pause() {} }),
     accountRun: true, weaponMenuOpen: false, weaponCountdown: null, weaponError: '', weaponBusy: false,
     PURCHASED_WEAPON_DURATION_MS: 60000, autoReloading: null,
@@ -68,13 +68,18 @@ export function selectionHost() {
   };
 }
 
-export function weaponMenu(props, { ready = true } = {}) {
+export function weaponMenu(props, { ready = true, refreshing = false } = {}) {
   const source = sourceOf('src/pages/MissionWeaponShop.tsx');
   const code = transformSync(source.replace(/^import .*;\r?\n/gm, '')
     .replace('export default function', 'function'), { loader: 'tsx', jsxFactory: 'element', jsxFragment: 'fragment' }).code;
   let hook = 0;
+  const readyIndex = process.env.CRYPTOID_WEAPON_BEFORE === '1' ? 2 : 1;
   const env = {
-    useState(initial) { const index = hook++; return [index === 2 ? ready : typeof initial === 'function' ? initial() : initial, () => {}]; },
+    useState(initial) {
+      const index = hook++;
+      const value = index === readyIndex ? ready : index === readyIndex + 2 ? refreshing : typeof initial === 'function' ? initial() : initial;
+      return [value, () => {}];
+    },
     useRef: value => ({ current: value }), useCallback: fn => fn, useEffect() {},
     useLocale: () => ({ t: value => value, locale: 'en' }),
     selectedShip: () => ({ skin: { sprite: 0 }, color: { id: 'grey' } }),
@@ -85,8 +90,9 @@ export function weaponMenu(props, { ready = true } = {}) {
     ReloadConfirmation: 'ReloadConfirmation', weaponSymbols, WeaponPreview: 'WeaponPreview', WeaponPurchase: 'WeaponPurchase', WeaponTutorial: 'WeaponTutorial', PiPrice: 'PiPrice',
   };
   const component = new Function('env', 'with (env) {\n' + code + '\nreturn MissionWeaponShop; }')(env);
+  const stock = props.stock ?? { weapon_twin: 2, weapon_rapid_twin: 2 };
   const tree = component({ authenticated: true, admin: false, timers: [0, 0, 0, 0, 0, 0],
-    onInventory: async () => {}, onClose() {}, initialStock: { weapon_twin: 2, weapon_rapid_twin: 2 }, ...props });
+    refreshInventory: async () => false, onInventory: async () => {}, onClose() {}, initialStock: stock, stock, ...props });
   const nodes = [];
   const visit = node => { if (!node || typeof node !== 'object') return; nodes.push(node); node.props?.children?.forEach(visit); };
   visit(tree);

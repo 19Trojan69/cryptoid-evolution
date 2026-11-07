@@ -10,9 +10,13 @@ import ts from 'typescript';
 const source = fs.readFileSync(new URL('./GamePage.tsx', import.meta.url), 'utf8');
 const file = ts.createSourceFile('GamePage.tsx', source, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
 const variables = new Map();
-let savedResume;
+let savedResume, windowLifecycle;
 function visit(node) {
   if (ts.isVariableDeclaration(node) && ts.isIdentifier(node.name) && node.initializer) variables.set(node.name.text, node.initializer);
+  if (ts.isCallExpression(node) && node.expression.getText(file) === 'useEffect') {
+    const effect = node.arguments[0];
+    if (effect?.getText(file).includes('window.addEventListener("blur"')) windowLifecycle = effect;
+  }
   if (ts.isJsxAttribute(node) && node.name.getText(file) === 'onClick' && node.initializer && ts.isJsxExpression(node.initializer)) {
     const expression = node.initializer.expression;
     if (expression && (expression.getText(file).includes('saveChoiceRef.current = "resume"') || expression.getText(file) === 'resumeSavedMission')) savedResume = expression;
@@ -100,4 +104,34 @@ test('a genuine technical pause keeps full Resume steps even when a timed weapon
  const h=host();Object.assign(h.context,{technicalPause:true,weaponMenuOpen:true,stateRef:{current:{weaponSource:'paid',paidWeaponMs:45000}}});
  h.tap(evaluate(variables.get('resumeWeaponSelection'),h.context));
  assert.deepEqual(h.events,['effects','music','controls','countdown:3']);
+});
+
+test('losing focus only clears controls, while going into the background still pauses and saves', async () => {
+  const h = host();
+  const window = new EventTarget();
+  const document = Object.assign(new EventTarget(), { visibilityState: 'visible' });
+  const state = { status: 'playing', effects: [] };
+  Object.assign(h.context, {
+    window, document, stateRef: { current: state }, backgroundHiddenAtRef: { current: 0 },
+    lastFrameRef: { current: 0 }, slowFramesRef: { current: 0 },
+    soundRef: { current: { setPaused: paused => h.events.push('sound:' + paused) } },
+    musicRef: { current: { pause: () => h.events.push('music paused') } },
+    saveCombatRef: { current: async () => h.events.push('save') },
+    setGame: game => h.events.push(game.status),
+  });
+  const dispose = evaluate(windowLifecycle, h.context)();
+  window.dispatchEvent(new Event('blur'));
+  assert.deepEqual(h.events, ['controls']);
+  assert.equal(state.status, 'playing');
+
+  document.visibilityState = 'hidden';
+  document.dispatchEvent(new Event('visibilitychange'));
+  assert.deepEqual(h.events, ['controls', 'save', 'sound:true', 'music paused', 'paused', 'controls']);
+  document.visibilityState = 'visible';
+  document.dispatchEvent(new Event('visibilitychange'));
+  assert.equal(state.status, 'paused');
+
+  dispose();
+  window.dispatchEvent(new Event('blur'));
+  assert.equal(h.events.length, 6);
 });
