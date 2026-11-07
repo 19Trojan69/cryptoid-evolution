@@ -1,7 +1,7 @@
 import { profileKey } from "../pilotRules";
 import { bestRunField, bestRunValue, careerField, careerValue, runLevel, scoreField, scoreValue } from "../scoreRules";
 import { Router, type Request, type Response } from "express";
-import { TOP_LIMIT, validRunScore } from "../leaderboardRules";
+import { TOP_LIMIT, validResumedBonusScore, validRunScore } from "../leaderboardRules";
 import "../types/session";
 import { isAdminMode } from "../adminAccess";
 import { rankForLevel } from "../rewardRules";
@@ -46,13 +46,16 @@ export default function mountLeaderboardEndpoints(router: Router) {
     try { run = await restoreScoreRun(req); }
     catch { return res.status(503).json({ error: "Could not restore active run" }); }
     if (!uid || !run || req.body?.runId !== run.id) return res.status(403).json({ error: "No active signed-in run" });
-    if (!validRunScore(req.body?.score - (run.scoreBase || 0), run.startedAt, Date.now())) return res.status(400).json({ error: "Invalid score" });
+    const now = Date.now();
+    const scoreWithinTime = validRunScore(req.body?.score - (run.scoreBase || 0), run.startedAt, now);
+    if (!scoreWithinTime && (!req.testnetSave || !final || req.body.finished !== true)) return res.status(400).json({ error: "Invalid score" });
     try {
       const users = req.app.locals.userCollection, network = rewardNetwork(req), field = scoreField(run.rulesVersion ?? 1, network), key = `playerByNetwork.${network}`;
       const userBefore = await users.findOne({ uid });
       if (userBefore?.rewardRunId?.[network] !== run.id) return res.status(409).json({ error: "Run replaced on another device" });
       const player = userBefore.playerByNetwork?.[network];
       if (player?.activeRunId !== run.id) return res.status(409).json({ error: "Run already completed or replaced" });
+      if (!scoreWithinTime && !validResumedBonusScore(req.body.score, run, player, now)) return res.status(400).json({ error: "Invalid score" });
       if (final && req.body.finished === true) {
         const snapshot = readSnapshot(req.body.save);
         const wonCampaign = player.mission === null && userBefore.rewardEventKeys?.[network]?.includes("bonus:50");

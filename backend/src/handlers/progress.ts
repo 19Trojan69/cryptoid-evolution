@@ -3,7 +3,7 @@ import { ownedShipStage, selectedShipStage } from "../shipLoadout";
 import { blockFlights } from "../blockFlights";
 import { BOSS_INTERMISSION_MIN_MS, bossIntermissionPending } from '../bossIntermission';
 import { readCombatCheckpoint } from "../combatCheckpoint";
-import { validRunScore } from "../leaderboardRules";
+import { validResumedBonusScore, validRunScore } from "../leaderboardRules";
 import { restoreScoreRun } from "../restoreScoreRun";
 import { Router } from "express";
 import { rewardNetwork } from "../rewardNetwork";
@@ -108,9 +108,12 @@ export default function mountProgressEndpoints(router: Router) {
       const run = await restoreScoreRun(req);
       if (!run || req.body?.runId !== run.id) return res.status(403).json({ error: "no_active_run" });
       const combat = readCombatCheckpoint(req.body.combat), snapshot = readSnapshot(req.body.save);
-      if (!combat || !snapshot || snapshot.hearts < 1 || !validRunScore(snapshot.score - (run.scoreBase || 0), run.startedAt, Date.now())
-        || snapshot.shards < (run.shardsBase || 0) || snapshot.shards - (run.shardsBase || 0) > 100 + (Date.now() - run.startedAt) / 1000 * 100
+      const now = Date.now();
+      if (!combat || !snapshot || snapshot.hearts < 1
+        || snapshot.shards < (run.shardsBase || 0) || snapshot.shards - (run.shardsBase || 0) > 100 + (now - run.startedAt) / 1000 * 100
         || (run.unlockedWeaponLevels && !run.unlockedWeaponLevels.includes(snapshot.paidWeaponLevel))) return res.status(400).json({ error: "invalid_checkpoint" });
+      const scoreWithinTime = validRunScore(snapshot.score - (run.scoreBase || 0), run.startedAt, now);
+      if (!scoreWithinTime && !req.testnetSave) return res.status(400).json({ error: "invalid_checkpoint", reason: "score_budget" });
       if (combat.encounter === "normal") {
         const plan = blockFlights(combat.stage, run.rulesVersion ?? 1), group = combat.refs.flight;
         if (!Number.isInteger(group) || !plan[group] || !Number.isInteger(combat.refs.formationIndex)
@@ -122,6 +125,7 @@ export default function mountProgressEndpoints(router: Router) {
       for (let attempt = 0; attempt < 5; attempt++) {
         const save = await loadPlayerSave(users, uid, network);
         if (save.activeRunId !== run.id) return res.status(409).json({ error: "run_replaced" });
+        if (!scoreWithinTime && !validResumedBonusScore(snapshot.score, run, save, now)) return res.status(400).json({ error: "invalid_checkpoint", reason: "score_budget" });
         if (bossIntermissionPending(save.mission?.bossIntermission)) return res.status(409).json({ error: 'boss_summary_pending' });
         if (combat.sequence <= ((save as any).combatSequence || 0)) return res.json({ saved: true, stale: true });
         const phase = combat.encounter === "normal" ? "normal" : combat.encounter === "bonus" ? "bonus" : "boss";

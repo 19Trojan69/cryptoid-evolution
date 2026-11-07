@@ -4,6 +4,7 @@ import { createRequire } from 'node:module';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { createServer, request } from 'node:http';
+import { readFileSync } from 'node:fs';
 
 const require = createRequire(import.meta.url);
 const fixture = process.argv.indexOf('--fixture');
@@ -241,6 +242,39 @@ if (fixture >= 0) {
     process.exitCode = 1;
   }
 } else {
+  test('a Testnet save verifies a new Pi token instead of using the previous local account', async () => {
+    const source = readFileSync(new URL('./index.ts', import.meta.url), 'utf8');
+    const start = source.indexOf('app.use(async (req, _res, next) => {', source.indexOf('// If a proxied Pi Browser request'));
+    const end = source.indexOf('app.use(restoreAdminPreview)', start);
+    assert.ok(start > 0 && end > start);
+    let authenticate;
+    const user = { _id: 'pilot-b', uid: 'pilot-b', username: 'Pilot B', accessToken: 'new-token' };
+    const verified = [];
+    new Function('app', 'deletedAccessToken', 'platformAPIClient', source.slice(start, end))(
+      { use(handler) { authenticate = handler; } }, async () => false,
+      { async get(path, config) {
+        verified.push([path, config.headers.Authorization]);
+        return { data: user };
+      } },
+    );
+    const req = {
+      testnetSave: true,
+      get: name => name === 'authorization' ? 'Bearer new-token' : undefined,
+      session: { currentUser: { uid: 'pilot-a', accessToken: 'old-token' }, scoreRun: { id: 'old-run' }, adminMode: true, adminUid: 'pilot-a' },
+      app: { locals: { userCollection: {
+        async findOne(query) { assert.deepEqual(query, { uid: user.uid }); return user; },
+        async updateOne(filter) { assert.deepEqual(filter, { _id: user._id }); },
+      } } },
+    };
+    let next = 0;
+    await authenticate(req, {}, () => next++);
+    await authenticate(req, {}, () => next++);
+    assert.deepEqual(verified, [['/v2/me', 'Bearer new-token']]);
+    assert.equal(req.session.currentUser.uid, 'pilot-b');
+    assert.equal(req.session.scoreRun, null);
+    assert.equal(req.session.adminMode, false);
+    assert.equal(next, 2);
+  });
   for (const [mode, name] of [
     ['proxy', 'actual Vercel import and Testnet proxy requests never start MongoDB'],
     ['native', 'native backend retains Mongo sessions, secure cookies and warm reuse'],

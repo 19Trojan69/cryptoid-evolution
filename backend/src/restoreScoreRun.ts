@@ -5,7 +5,8 @@ import { rewardNetwork } from "./rewardNetwork";
 // Pi's proxy may drop cookies between requests. Only server-stored metadata
 // for this authenticated user's current run can restore a missing session.
 export async function restoreScoreRun(req: Request) {
-  if (req.session.scoreRun) return req.session.scoreRun;
+  // Local Testnet saves and proxied mission starts use separate sessions.
+  if (req.session.scoreRun && !req.testnetSave) return req.session.scoreRun;
   const uid = req.session.currentUser?.uid;
   const runId = req.body?.runId;
   if (!uid || typeof runId !== "string") return null;

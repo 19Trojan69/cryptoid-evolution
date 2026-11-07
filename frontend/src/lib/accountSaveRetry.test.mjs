@@ -10,9 +10,9 @@ const project = new URL('../../', import.meta.url).pathname;
 const source = readFileSync(new URL('./accountSave.ts', import.meta.url), 'utf8');
 const plain = value => JSON.parse(JSON.stringify(value));
 
-function fixture({ transport, automaticTime = true } = {}) {
+function fixture({ transport, automaticTime = true, runAge = 56_000, resumedBonus = false, testnetSave = false } = {}) {
   const startedAt = 1_000_000;
-  let now = startedAt + 56_000;
+  let now = startedAt + runAge;
   const cache = new Map(), timers = [], waits = [], sent = [], stored = new Map(), writes = [];
   let scheduled;
   const timerScheduled = new Promise(resolve => { scheduled = resolve; });
@@ -38,6 +38,7 @@ function fixture({ transport, automaticTime = true } = {}) {
   const backendRoot = resolve(project, '../backend/src');
   const { firstMissionSnapshot, emptyPlayerSave, readSnapshot } = load(resolve(backendRoot, 'playerSave.ts'));
   const { validRunScore } = load(resolve(backendRoot, 'leaderboardRules.ts'));
+  const { COMBAT_REF_KEYS } = load(resolve(backendRoot, 'combatCheckpoint.ts'));
   const shardRules = load(resolve(project, 'src/pages/shardEarnings.ts'));
   const { bonusReward } = compile(readFileSync(resolve(project, 'src/pages/bonusChallenge.ts'), 'utf8'), id => {
     if (id === './shardEarnings.ts') return shardRules;
@@ -57,7 +58,8 @@ function fixture({ transport, automaticTime = true } = {}) {
   const { combo, ...earned } = runState;
   earned.comboTotal = combo.total;
   const run = { id: 'local-retry-run', startedAt, scoreBase: 0, shardsBase: 0, unlockedWeaponLevels: [1], rulesVersion: 2 };
-  const player = { ...emptyPlayerSave(), activeRunId: run.id, lastStart: { armorBonus: 3, runMeta: run },
+  const lastStart = { armorBonus: 3, runMeta: run, ...(resumedBonus ? { startPhase: 'bonus', startSector: 40, checkpoint: snapshot } : {}) };
+  const player = { ...emptyPlayerSave(), activeRunId: run.id, lastStart,
     mission: { sector: 40, phase: 'bonus', snapshot, savedAt: new ClockDate().toISOString() } };
   const user = { uid: 'local-retry-pilot', playerByNetwork: { testnet: player }, rewardRunId: { testnet: run.id }, rewardEventKeys: { testnet: ['boss:4'] } };
   const get = (object, path) => path.split('.').reduce((value, key) => value?.[key], object);
@@ -88,20 +90,24 @@ function fixture({ transport, automaticTime = true } = {}) {
     },
   };
   const routes = {};
-  load(resolve(backendRoot, 'handlers/rewards.ts')).default({ get(path, handler) { routes['GET ' + path] = handler; }, post(path, handler) { routes['POST ' + path] = handler; } });
-  const endpoint = async body => {
-    const req = { session: { currentUser: { uid: user.uid }, scoreRun: run, adminMode: false }, body,
+  for (const prefix of ['rewards', 'progress']) {
+    load(resolve(backendRoot, 'handlers/' + prefix + '.ts')).default({
+      use() {}, get() {}, post(path, handler) { routes['/' + prefix + path] = handler; },
+    });
+  }
+  const endpoint = async (body, path = '/rewards/event') => {
+    const sessionRun = testnetSave && path !== '/progress/recover' ? { ...run, id: 'previous-session-run' } : run;
+    const req = { session: { currentUser: { uid: user.uid }, scoreRun: sessionRun, adminMode: false }, body, testnetSave,
       get: name => name === 'x-cryptoid-app-network' ? 'testnet' : undefined,
       app: { locals: { userCollection: collection } } };
     const res = { statusCode: 200, status(status) { this.statusCode = status; return this; }, json(body) { this.body = body; return this; } };
-    await routes['POST /event'](req, res);
+    await routes[path](req, res);
     return res;
   };
   const axiosClient = { async post(path, body) {
     sent.push({ path, body: plain(body), now });
     if (transport) return transport(path, body, sent.length);
-    assert.equal(path, '/rewards/event');
-    const response = await endpoint(body);
+    const response = await endpoint(body, path);
     if (response.statusCode >= 400) throw { response: { status: response.statusCode, data: response.body } };
     return { data: response.body };
   } };
@@ -120,8 +126,16 @@ function fixture({ transport, automaticTime = true } = {}) {
     } });
   const entry = { path: '/rewards/event', body: { runId: run.id, kind: 'bonus', level: 4, stage: 40, hits: 12, save: earned } };
   const key = 'cryptoid_save_outbox_v1_testnet_local-retry-pilot';
+  const checkpoint = { path: '/progress/checkpoint', body: { runId: run.id,
+    save: { ...snapshot, score: 1_500, shards: 10, destroyed: 10 },
+    combat: { version: 1, clock: 10_000, sequence: 1, stage: 40, encounter: 'bonus', width: 390, height: 760,
+      formationStarted: false, slots: null, escortSlots: null,
+      state: { phase: 'FORMATION', asteroids: [], bonusTargets: [], shots: [], enemyShots: [], powerUps: [],
+        player: { x: .5, y: .8 }, combo: comboRules.createDoubleKillCombo(), projectileGuard: 0, chainBlocks: 9, pendingStartPower: null, bonusHits: 10 },
+      refs: { ...Object.fromEntries(COMBAT_REF_KEYS.map(key => [key, 0])), bonusIndex: 10 } },
+  } };
   return { ...exports, queue: exports.createSaveQueue(user.uid), entry, key, stored, sent, waits, writes, user, player,
-    readSnapshot, validRunScore, run, endpoint, timers, timerScheduled, advance() { const timer = timers.shift(); assert.ok(timer); now += timer.delay; timer.callback(); } };
+    checkpoint, readSnapshot, validRunScore, run, endpoint, timers, timerScheduled, advance() { const timer = timers.shift(); assert.ok(timer); now += timer.delay; timer.callback(); } };
 }
 
 test('real reward validator rejects a valid unchanged bonus just before its score budget becomes eligible', async () => {
@@ -154,15 +168,56 @@ test('real queue retries the same reward and the real backend credits it exactly
   assert.equal(f.writes.length, 1);
 });
 
-test('a permanently invalid reward exhausts bounded retries and retains the exact durable outbox', async () => {
+test('a malformed reward fails immediately and retains the exact durable outbox', async () => {
   const f = fixture();
   f.entry.body.save.weaponTimers = [0];
   const before = JSON.stringify(f.entry);
   await assert.rejects(f.queue.enqueue(f.entry));
-  assert.equal(f.sent.length, 3);
-  assert.deepEqual(f.waits, [5_000, 10_000]);
+  assert.equal(f.sent.length, 1);
+  assert.deepEqual(f.waits, []);
   assert.equal(f.writes.length, 0);
   assert.equal(f.stored.get(f.key), '[' + before + ']');
+});
+
+test('legacy ambiguous invalid_save still has bounded retries and keeps its backup', async () => {
+  const f = fixture({ transport: async () => { throw { response: { status: 400, data: { error: 'invalid_save' } } }; } });
+  await assert.rejects(f.queue.enqueue(f.entry));
+  assert.equal(f.sent.length, 3);
+  assert.deepEqual(f.waits, [5_000, 10_000]);
+  assert.deepEqual(JSON.parse(f.stored.get(f.key)), [plain(f.entry)]);
+});
+
+test('a saved Testnet bonus recovers its queued checkpoint and reward on the first attempt', async () => {
+  const f = fixture({ runAge: 12_000, resumedBonus: true, testnetSave: true });
+  const pending = [f.checkpoint, f.entry];
+  f.stored.set(f.key, JSON.stringify(pending));
+  const queue = f.createSaveQueue(f.user.uid);
+  await queue.recover();
+  assert.deepEqual(f.sent.map(row => row.path), ['/progress/recover', '/progress/checkpoint', '/rewards/event']);
+  assert.deepEqual(f.sent.slice(1).map(row => row.body), pending.map(plain).map(row => row.body));
+  assert.deepEqual(f.waits, []);
+  const save = f.user.playerByNetwork.testnet;
+  assert.equal(save.mission.sector, 41);
+  assert.equal(save.mission.snapshot.score, f.entry.body.save.score);
+  assert.equal(save.balance, f.entry.body.save.shards);
+  assert.equal(f.stored.get(f.key), '[]');
+  const writes = f.writes.length;
+  const repeated = await f.endpoint(f.entry.body);
+  assert.equal(repeated.statusCode, 200);
+  assert.equal(repeated.body.awarded, false);
+  assert.equal(f.writes.length, writes);
+});
+
+test('a bonus allowance requires a server-confirmed resume and remains bounded', async () => {
+  const ordinary = fixture({ runAge: 12_000, testnetSave: true });
+  const resumed = fixture({ runAge: 12_000, resumedBonus: true, testnetSave: true });
+  resumed.entry.body.save.score = 8_000;
+  for (const f of [ordinary, resumed]) {
+    const result = await f.endpoint(f.entry.body);
+    assert.equal(result.statusCode, 400);
+    assert.equal(result.body.reason, 'score_budget');
+    assert.equal(f.writes.length, 0);
+  }
 });
 
 test('authentication, run conflicts and other validation errors fail immediately', async () => {

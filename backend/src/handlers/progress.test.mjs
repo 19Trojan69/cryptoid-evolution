@@ -40,7 +40,7 @@ function harness() {
     require(`../../build/handlers/${name}.js`).default({ use: handler => middleware[name].push(handler), get: (path, handler) => routes[`GET ${name}${path}`] = handler, post: (path, handler) => routes[`POST ${name}${path}`] = handler });
   }
   async function call(name, path, body, options = {}) {
-    const req = { body, session: options.session || session, headers: { 'x-cryptoid-app-network': options.network || 'testnet' }, get: () => options.network || 'testnet', app: { locals } };
+    const req = { body, testnetSave: options.testnetSave, session: options.session || session, headers: { 'x-cryptoid-app-network': options.network || 'testnet' }, get: () => options.network || 'testnet', app: { locals } };
     let resolve;
     const done = new Promise(r => { resolve = r; });
     const res = { code: 200, setHeader() {}, status(code) { this.code = code; return this; }, json(body) { this.body = body; resolve(this); return this; } };
@@ -58,6 +58,31 @@ const start = async (h, action = 'new', startKey = 'start-key-0000000001') => {
   return result;
 };
 const init = h => h.call('progress', '/me', null, { method: 'GET' });
+test('a quick run ending after a resumed bonus can commit its confirmed score and close exactly once', async () => {
+  const h = harness();
+  await init(h);
+  const run = { id: 'resumed-bonus-run', startedAt: Date.now() - 12_000, scoreBase: 24_000, shardsBase: 500, rulesVersion: 2, unlockedWeaponLevels: [1] };
+  const opening = snapshot({ score: run.scoreBase, shards: run.shardsBase, destroyed: 120 });
+  const confirmed = snapshot({ score: 28_800, shards: 530, destroyed: 132 });
+  Object.assign(h.profile(), {
+    activeRunId: run.id, creditedShards: 530, creditedDestroyed: 132, balance: 530,
+    lastStart: { runMeta: run, startPhase: 'bonus', startSector: 40, checkpoint: opening },
+    mission: { sector: 41, phase: 'normal', snapshot: confirmed },
+  });
+  h.docs[0].rewardRunId = { testnet: run.id };
+  h.docs[0].rewardEventKeys = { testnet: ['boss:4', 'bonus:4'] };
+  h.session.scoreRun = run;
+  const body = { runId: run.id, score: confirmed.score, finished: true, save: { ...confirmed, hearts: 0 } };
+  assert.equal((await h.call('leaderboard', '/score', body)).code, 400);
+  const options = { testnetSave: true, session: { currentUser: { uid: 'pilot-a' }, scoreRun: { id: 'older-local-session' } } };
+  assert.equal((await h.call('leaderboard', '/score', body, options)).code, 200);
+  assert.equal(h.profile().lastFinishedRunId, run.id);
+  assert.equal(h.profile().mission, null);
+  assert.equal(h.profile().balance, 530);
+  assert.equal((await h.call('leaderboard', '/score', body, options)).code, 403);
+  assert.equal(h.profile().balance, 530);
+});
+
 test('seen cards persist as a union per player and network without changing inventory or save versions', async () => {
  const h=harness();await init(h);const before=structuredClone(h.profile());
  const body={ids:['grey-scout-1','boss-1']};

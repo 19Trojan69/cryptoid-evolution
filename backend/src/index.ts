@@ -111,6 +111,17 @@ app.use((req, res, next) => {
 // authenticated user from the short-lived Pi access token sent by the client.
 // The token is verified with Pi before any user is attached to the request.
 app.use(async (req, _res, next) => {
+  const authorization = req.get("authorization") || "";
+  const match = authorization.match(/^Bearer\s+(.+)$/i);
+  const accessToken = match?.[1]?.trim();
+  // The proxy can sign in to another account while a local Testnet cookie survives.
+  if (req.testnetSave && accessToken && req.session.currentUser && req.session.currentUser.accessToken !== accessToken) {
+    req.session.currentUser = null;
+    req.session.scoreRun = null;
+    req.session.adminMode = false;
+    req.session.adminUid = null;
+    req.session.adminLoadout = null;
+  }
   if (req.session.currentUser) {
     const user = req.session.currentUser;
     try {
@@ -122,9 +133,6 @@ app.use(async (req, _res, next) => {
     return next();
   }
 
-  const authorization = req.get("authorization") || "";
-  const match = authorization.match(/^Bearer\s+(.+)$/i);
-  const accessToken = match?.[1]?.trim();
   if (!accessToken) return next();
 
   const userCollection = req.app.locals.userCollection;

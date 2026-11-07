@@ -5,7 +5,7 @@ import { isAdminMode } from "../adminAccess";
 import { rewardNetwork } from "../rewardNetwork";
 import "../types/session";
 import { missionAfter, publicSave, readSnapshot } from "../playerSave";
-import { validRunScore } from "../leaderboardRules";
+import { validResumedBonusScore, validRunScore } from "../leaderboardRules";
 import { restoreScoreRun } from "../restoreScoreRun";
 import { maxMissionHearts } from "../lifeRules";
 import { bossIntermissionPending } from '../bossIntermission';
@@ -32,15 +32,19 @@ export default function mountRewardEndpoints(router: Router) {
     catch { return res.status(503).json({ error: "Could not restore active run" }); }
     const network = rewardNetwork(req);
     const event = req.body as RewardEvent;
+    const now = Date.now();
     if (event?.summaryPlacement !== undefined && (event.kind !== 'boss' || event.summaryPlacement !== 'level-end')) return res.status(400).json({ error: 'Invalid reward event' });
-    if (!uid || !run || event?.runId !== run.id || Date.now() - run.startedAt > 8 * 60 * 60 * 1000) return res.status(403).json({ error: "No active signed-in run" });
+    if (!uid || !run || event?.runId !== run.id || now - run.startedAt > 8 * 60 * 60 * 1000) return res.status(403).json({ error: "No active signed-in run" });
     if (!Number.isInteger(event.level) || event.level < 1 || event.level > 50 || !["block", "chain", "boss", "bonus"].includes(event.kind) ||
       (event.kind === "block" ? !Number.isInteger(event.stage) || event.stage < (event.level - 1) * 10 + 1 || event.stage > event.level * 10 - 1 : event.stage !== (event.kind === "chain" ? event.level * 10 - 1 : event.level * 10)) ||
       (event.kind === "bonus" && (!Number.isInteger(event.hits) || event.hits! < 0 || event.hits! > 12))) return res.status(400).json({ error: "Invalid reward event" });
 
     const key = event.kind === "block" ? `block:${event.stage}` : `${event.kind}:${event.level}`;
     const snapshot = event.save === undefined ? null : readSnapshot(event.save);
-    if (event.save !== undefined && (!snapshot || !validRunScore(snapshot.score - (run.scoreBase || 0), run.startedAt, Date.now()) || snapshot.shards < (run.shardsBase || 0) || snapshot.shards - (run.shardsBase || 0) > 100 + (Date.now() - run.startedAt) / 1000 * 100)) return res.status(400).json({ error: "invalid_save" });
+    if (event.save !== undefined && !snapshot) return res.status(400).json({ error: "invalid_save", reason: "schema" });
+    const scoreWithinTime = !snapshot || validRunScore(snapshot.score - (run.scoreBase || 0), run.startedAt, now);
+    if (!scoreWithinTime && !req.testnetSave) return res.status(400).json({ error: "invalid_save", reason: "score_budget" });
+    if (snapshot && (snapshot.shards < (run.shardsBase || 0) || snapshot.shards - (run.shardsBase || 0) > 100 + (now - run.startedAt) / 1000 * 100)) return res.status(400).json({ error: "invalid_save" });
     if (snapshot && run.unlockedWeaponLevels && !run.unlockedWeaponLevels.includes(snapshot.paidWeaponLevel)) return res.status(400).json({ error: "weapon_not_owned" });
     try {
       const users = req.app.locals.userCollection;
@@ -54,6 +58,7 @@ export default function mountRewardEndpoints(router: Router) {
         const completed: string[] = Array.isArray(user.rewardEventKeys?.[network]) ? user.rewardEventKeys[network] : [];
         const player = user.playerByNetwork?.[network];
         if (snapshot && player?.activeRunId !== run.id) return res.status(409).json({ error: "run_replaced" });
+        if (snapshot && !scoreWithinTime && !validResumedBonusScore(snapshot.score, run, player, now)) return res.status(400).json({ error: "invalid_save", reason: "score_budget" });
         if (completed.includes(key)) return res.json({ progress, awarded: false, ...(player ? { save: publicSave(player) } : {}) });
         if (event.kind === 'bonus' && bossIntermissionPending(player?.mission?.bossIntermission)) return res.status(409).json({ error: 'boss_summary_pending' });
         const prerequisite = event.kind === "block" ? event.stage % 10 === 1 ? event.level > 1 ? `bonus:${event.level - 1}` : null : `block:${event.stage - 1}`

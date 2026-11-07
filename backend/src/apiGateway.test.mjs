@@ -230,7 +230,7 @@ test('Mainnet and opted-in local Testnet keep the native translation handler', a
 });
 
 
-test('official Testnet routes only the new summary and owner player tools locally and forces Testnet', async t => {
+test('official Testnet keeps legacy cookie-only progress writes on the existing proxy', async t => {
   const proxied=[];
   t.mock.method(globalThis,'fetch',async url=>{proxied.push(String(url));return Response.json({});});
   const {backend,calls}=backendFixture();
@@ -245,6 +245,37 @@ test('official Testnet routes only the new summary and owner player tools locall
     assert.equal(res.headers['x-cryptoid-backend'],'production-proxy');
   }
   assert.equal(proxied.length,9);
+});
+
+test('verified-session save routes are local only on the Testnet project', async t => {
+  const forwarded = [];
+  t.mock.method(globalThis, 'fetch', async url => { forwarded.push(String(url)); return Response.json({}); });
+  const { backend, calls } = backendFixture();
+  const testnet = 'cryptoid-evolution-testnet.vercel.app';
+  const mainnet = 'cryptoid-evolution.vercel.app';
+  const gateway = host => createApiGateway(async () => backend, () => ({ VERCEL_ENV: 'production', VERCEL_PROJECT_PRODUCTION_URL: host }));
+  const call = async (handle, host, path) => {
+    const req = { method: 'POST', url: '/api/index?path=' + path, body: {},
+      headers: { host, authorization: 'Bearer test-token', 'x-cryptoid-app-network': 'mainnet' } };
+    const res = response();
+    await handle(req, res);
+    return { req, res };
+  };
+  const testnetGateway = gateway(testnet);
+  for (const path of ['rewards/event', 'progress/checkpoint', 'leaderboard/score']) {
+    const { req, res } = await call(testnetGateway, testnet, path);
+    assert.equal(res.headers['x-cryptoid-backend'], 'testnet-local');
+    assert.equal(req.testnetSave, true);
+    assert.equal(calls.at(-1).network, 'testnet');
+  }
+  assert.equal(forwarded.length, 0);
+  const payment = await call(testnetGateway, testnet, 'payments/approve');
+  assert.equal(payment.res.headers['x-cryptoid-backend'], 'production-proxy');
+  assert.equal(payment.req.testnetSave, undefined);
+  const mainnetSave = await call(gateway(mainnet), mainnet, 'rewards/event');
+  assert.equal(mainnetSave.res.headers['x-cryptoid-backend'], 'local');
+  assert.equal(mainnetSave.req.testnetSave, undefined);
+  assert.equal(calls.at(-1).network, 'mainnet');
 });
 
 test('enabled account deletion blocks previous tokens before proxying and keeps Mainnet outside this guard', async t=>{
