@@ -1,12 +1,16 @@
 import assert from 'node:assert/strict';
 
-// Isolate the Boss 1 fight and bonus. Only the entry into Boss 1 and the
-// destination after the bonus are seeded. Fight, bonus and clocks are real.
+// Start both arms with the same weakened Boss 1 to reach the real cleanup
+// boundary quickly. All turrets draw and each one still takes a normal hit.
 const seedBoss1 = `
     if (options?.scene === 'normal') {
       s.sector = 10; s.section = 10; s.chainBlocks = 9;
       s.phase = 'SECTOR_INTRO'; s.encounter = 'boss-intro';
       s.boss = createSectorBoss(10, fieldRef.current?.clientWidth || 390, visibleTopRef.current, fieldRef.current?.clientHeight || 760);
+      if (s.boss) {
+        s.boss.turrets.forEach(gun => { gun.health = 1; });
+        s.boss.health = s.boss.maxHealth * .25;
+      }
     }`;
 
 // Both arms enter Boss 2 with the shipped last-turret fixture. In the prelude
@@ -49,6 +53,7 @@ export function instrumentPrelude(source) {
   const initial = "    const s=stateRef.current;s.status='paused';";
   const advance = '            const next = advanceAfterClear(state.section, clearEncounter);';
   const create = '              state.boss = createSectorBoss(state.sector, width, visibleTop, height);';
+  const afterBonus = '      releaseUnusedPaintedShips();';
   const reader = '    (window as any).__cryptoidLabRead=read;';
   const cleanup = '    return ()=>{if((window as any).__cryptoidLabRead===read)delete (window as any).__cryptoidLabRead;};';
   const edits = [
@@ -60,6 +65,8 @@ export function instrumentPrelude(source) {
               ? { ...following, encounter: 'boss-intro' as const, section: 20, sector: 20 }
               : following;`],
     [create, create + seedBoss2],
+    [afterBonus, afterBonus + `
+      if (pending.summary.stage === 10) (window as any).__cryptoidAtlasProbe?.afterBonus();`],
     [reader, reader + pilot],
     [cleanup, `    return () => {
       if ((window as any).__cryptoidPreludeRead === readPilot) delete (window as any).__cryptoidPreludeRead;
@@ -76,4 +83,28 @@ export function instrumentPrelude(source) {
   for (const [before, after] of edits.slice(1).reverse()) restored = restored.replace(after, before);
   assert.equal(restored.replace(traceAnchor, traceAnchor + trace), source);
   return result;
+}
+
+export function instrumentWeaponAtlas(source) {
+  assert.ok(source.includes('const textures = new Map<string, Promise<HTMLImageElement>>()'));
+  // Return primitive observations only, so the probe cannot keep an image or
+  // Promise alive after removing the original cache entry.
+  return source + `
+const boss1Atlas = '/ships/bosses/evolved/boss-01-guns.webp';
+const boss2Atlas = '/ships/bosses/evolved/boss-02-guns.webp';
+let atlasCleanup: { before: boolean; after: boolean; pending: boolean } | undefined;
+(window as any).__cryptoidAtlasProbe = {
+  afterBonus() {
+    if (atlasCleanup) return;
+    const before = textures.has(boss1Atlas);
+    const loading = pending.has(boss1Atlas);
+    if ((window as any).__cryptoidAtlasMode === 'release') textures.delete(boss1Atlas);
+    atlasCleanup = { before, after: textures.has(boss1Atlas), pending: loading };
+  },
+  read() {
+    return { cleanup: atlasCleanup ?? null, hasBoss1: textures.has(boss1Atlas), hasBoss2: textures.has(boss2Atlas),
+      pendingBoss2: pending.has(boss2Atlas), entries: textures.size };
+  },
+};
+`;
 }

@@ -7,8 +7,8 @@ import { setTimeout as delay } from 'node:timers/promises';
 import { sampleBrowserMemory } from '../boss2-forensics-20261028/processMemory.mjs';
 
 const order = process.argv[2];
-assert.ok(['direct-first', 'prelude-first'].includes(order));
-const modes = order === 'direct-first' ? ['direct', 'prelude'] : ['prelude', 'direct'];
+assert.ok(['keep-first', 'release-first'].includes(order));
+const modes = order === 'keep-first' ? ['keep', 'release'] : ['release', 'keep'];
 const { webkit } = createRequire(new URL('../transition-motion-20261106/package.json', import.meta.url))('playwright');
 const output = new URL('results/', import.meta.url).pathname;
 mkdirSync(output, { recursive: true });
@@ -71,10 +71,11 @@ async function play(mode) {
     page.setDefaultTimeout(45000);
     page.on('pageerror', error => { fatal ??= `${error.name}: ${error.message}`; });
     page.on('crash', () => { fatal ??= 'renderer-crash'; });
+    await page.addInitScript(atlasMode => { window.__cryptoidAtlasMode = atlasMode; }, mode);
     await page.goto(origin, { waitUntil: 'domcontentloaded' });
     const bootId = await page.evaluate(() => window.__cryptoidBootId);
     assert.ok(bootId);
-    await page.getByLabel('Startpunkt', { exact: true }).selectOption(mode === 'direct' ? 'last-turret' : 'normal');
+    await page.getByLabel('Startpunkt', { exact: true }).selectOption('normal');
     await page.getByLabel('Testschutz gegen Lebensverlust', { exact: true }).check();
     record({ phase: 'menu-before-preparation', at: Date.now(), ...memory() });
     await page.getByRole('button', { name: 'Test vorbereiten', exact: true }).click();
@@ -88,7 +89,7 @@ async function play(mode) {
     const started = Date.now(), sampledPhases = new Set(), aligned = [];
     let lastSample = 0, lastProgress = 0, pausedAt = 0, lastFrame = -1, lastFrameAt = Date.now();
     let lastPhase = '', baselinePid = null, matched = false;
-    while (Date.now() - started < (mode === 'direct' ? 90000 : 8 * 60000)) {
+    while (Date.now() - started < 4 * 60000) {
       if (fatal) throw Error(fatal);
       const row = await page.evaluate(({ boot, kinds, anchor }) => {
         if (window.__cryptoidBootId !== boot || !window.__cryptoidPreludeRead) throw Error('Unexpected document or controller replacement');
@@ -105,13 +106,15 @@ async function play(mode) {
             clientX: rect.left + x * rect.width, clientY: rect.top + state.aim.y * rect.height,
           }));
         }
-        return { state, steps, anchorMs, active: window.__cryptoidLabRun?.state === 'running',
+        return { state, steps, anchorMs, atlas: window.__cryptoidAtlasProbe?.read() ?? null,
+          active: window.__cryptoidLabRun?.state === 'running',
           card: !!document.querySelector('.card-reveal-dialog'), completion: !!document.querySelector('.level-completion') };
       }, { boot: bootId, kinds: bossKinds, anchor: secondEscort });
       const state = row.state;
       assert.ok(row.active && !['game-over', 'destroying', 'victory'].includes(state.status), 'Unexpected end of the running test');
       if (!run.stageMilestones.includes(state.stage)) run.stageMilestones.push(state.stage);
       run.events = row.steps;
+      run.atlas = row.atlas;
       if (state.stage === 20 && state.bossId === 2 && state.liveTurrets === 1 && state.bossHealth === state.bossMaxHealth) matched = true;
       const key = `${state.stage}/${state.encounter}/${state.phase}`;
       if (key !== lastPhase) { run.phases.push({ key, activeMs: state.activeMs }); lastPhase = key; }
@@ -131,7 +134,7 @@ async function play(mode) {
       const offset = row.anchorMs === null ? null : state.activeMs - row.anchorMs;
       if (Date.now() - lastSample >= 1100 || !sampledPhases.has(key)) {
         const app = await page.evaluate(() => window.__cryptoidLabRead());
-        const data = { at: Date.now(), phase: key, state, app, offsetMs: offset, ...memory() };
+        const data = { at: Date.now(), phase: key, state, app, atlas: row.atlas, offsetMs: offset, ...memory() };
         baselinePid ??= data.contentPid;
         assert.equal(data.contentPid, baselinePid, 'Content process changed during the game');
         record(data);
@@ -153,13 +156,15 @@ async function play(mode) {
     assert.ok(run.finishActiveMs, 'Time budget expired before the matched Boss 2 window');
     assert.ok(matched, 'Both arms must observe the same one-turret Boss 2 start');
     assert.ok(bossKinds.every(kind => run.events.some(event => event.kind === kind)), 'Boss 2 event sequence incomplete');
-    if (mode === 'prelude') {
-      assert.deepEqual(run.stageMilestones, [10, 20]);
-      assert.ok(['boss-fight', 'boss-clear', 'bonus'].every(encounter => phaseRows.has(`10/${encounter}`)), 'The real Boss 1 and bonus phases must be observed');
-    }
+    assert.deepEqual(run.stageMilestones, [10, 20]);
+    assert.ok(['boss-fight', 'boss-clear', 'bonus'].every(encounter => phaseRows.has(`10/${encounter}`)), 'The real Boss 1 and bonus phases must be observed');
+    const keepsBoss1 = mode === 'keep';
+    assert.deepEqual(run.atlas?.cleanup, { before: true, after: keepsBoss1, pending: false });
     run.bins = bins.map(([from, to]) => {
       const rows = aligned.filter(row => row.offsetMs >= from && row.offsetMs < to);
       assert.ok(rows.length >= 2, `Insufficient samples in active window ${from}–${to}`);
+      assert.ok(rows.every(row => row.atlas?.hasBoss1 === keepsBoss1 && row.atlas.hasBoss2 && !row.atlas.pendingBoss2),
+        'Wrong weapon atlas cache state during the aligned Boss 2 window');
       return { from, to, ...summarize(rows), weapons: [...new Set(rows.map(row => row.state.weapon))],
         reactorHealth: [rows[0].state.bossHealth, rows.at(-1).state.bossHealth] };
     });
@@ -182,7 +187,7 @@ try {
   writeFileSync(resolve(output, `${order}-pair.json`), JSON.stringify(pair, null, 2) + '\n');
   console.log('PRELUDE_PAIR ' + JSON.stringify({ order, complete: pair.complete,
     runs: modes.map(mode => ({ mode, engine: runs[mode].engine, activeMs: runs[mode].finishActiveMs,
-      samples: runs[mode].measurements, stages: runs[mode].stageMilestones, bins: runs[mode].bins,
+      samples: runs[mode].measurements, stages: runs[mode].stageMilestones, atlas: runs[mode].atlas, bins: runs[mode].bins,
       phaseMemory: runs[mode].phaseMemory, failure: runs[mode].failure })) }));
   if (!pair.complete) process.exitCode = 1;
 } finally {
