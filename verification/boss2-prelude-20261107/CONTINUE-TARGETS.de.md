@@ -56,3 +56,25 @@ Der frühe Anstieg trat in allen zehn Läufen auf. Die CI-Mediane lagen bei +35,
 Als Nächstes den Wechsel von Planeten- und Sternfeldhintergrund am Levelübergang separat messen. Der Vergleich soll den höchsten absoluten Prozessspeicher vor und nach dem späteren Hintergrundwechsel erfassen. Der physische iPhone-Rücksprung bleibt offen.
 
 [CI-Lauf und Rohdaten der Audio-Messung](https://github.com/19Trojan69/cryptoid-evolution/actions/runs/42377262003)
+
+## Folgemessung zum Planeten- und Sternfeldwechsel
+
+Sechs CI-Paare und ein lokales Paar verwendeten den Labor-Build ohne Sternschnuppen und Felsasteroiden. Beide Varianten jedes Paars spielten über Boss 1 und die reguläre Bonusrunde zu Level 2, Block 1. Im Versuch hielt der ausgewählte Hintergrund den Stand aus Boss 1 für die ersten 2.000 Millisekunden der Simulation im neuen Block. Der Spielablauf verwendete sofort den neuen Block. Die DOM-Klassen bestätigen, wann die jeweiligen Hintergrundebenen tatsächlich wechselten.
+
+Gemessen wurde das absolute Maximum des anteiligen Speichers im selben WebKit-Inhaltsprozess von 0,7 Sekunden vor bis 6,8 Sekunden nach „Fortsetzen“. Die Differenz in der letzten Spalte zieht die reguläre Spitze von der verzögerten ab.
+
+| Ebene | Erster Lauf | Reguläre Spitze in MiB | Verzögerte Spitze in MiB | Differenz in MiB |
+| --- | --- | ---: | ---: | ---: |
+| Planeten | Regulär | 1.118,0 | 1.061,2 | −56,7 |
+| Planeten | Verzögert | 1.087,0 | 1.125,3 | +38,3 |
+| Sternfeld | Regulär | 1.118,4 | 1.076,2 | −42,1 |
+| Sternfeld | Verzögert | 1.082,2 | 1.156,8 | +74,6 |
+| Beide | Regulär | 1.113,5 | 1.033,4 | −80,2 |
+| Beide | Verzögert | 1.089,5 | 1.109,7 | +20,2 |
+| Beide, lokal | Regulär | 1.058,2 | 1.047,8 | −10,5 |
+
+Die spätere Ebene wechselte in den CI-Läufen 2,9 bis 4,1 Sekunden nach dem Klick. Alle Fenster enthielten mindestens eine weitere Sekunde nach dem letzten Wechsel. Die gemessene Spitze war in jedem CI-Paar im zweiten Lauf niedriger. Der zweite Lauf hatte bereits vor dem Klick 34 bis 185 MiB weniger PSS. Lokal wuchs der PSS gegenüber dem jeweiligen Ausgangswert um 89,6 beziehungsweise 90,8 MiB. Eine reproduzierbare Senkung der absoluten Spitze durch den späteren Wechsel bleibt offen.
+
+Die spielbare, geschützte Vorschau verwendet den regulären Wechsel. Der Vergleich misst die Hintergrundverzögerung unter Linux-WebKit. Die direkte Speicherwirkung der beiden entfernten Elemente und der iPhone-Rücksprung bleiben offen.
+
+[CI-Lauf und Rohdaten der Hintergrundmessung](https://github.com/19Trojan69/cryptoid-evolution/actions/runs/42381499896)
