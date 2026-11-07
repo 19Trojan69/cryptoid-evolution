@@ -96,6 +96,19 @@ export function controller(source) {
   const turretHit = '              const bonus = damageBossTurret(state.boss, bossTarget.index, shot.damage);';
   const coreHit = '            if (!damageSectorBoss(state.boss, shot.damage, time)) continue;';
   const escortSpawn = '              state.asteroids.push(spawnBossEscort(nextIdRef.current++, width, bossEscortSpawnedRef.current++, state.sector, escortSlots, bossEscortWaveRef.current));';
+  const home = '    navigate(adminRunRef.current ? "/admin" : "/");';
+  const savedExit = "      if (ownerDiagnostics) recordReloadEvent('saved-exit-intent');\n      navigate(\"/\");";
+  const backupExit = "    if (ownerDiagnostics) recordReloadEvent('home-intent');\n    navigate(\"/\");";
+  const startBack = 'leaveGameFullscreen(); navigate(sessionStorage.getItem(ADMIN_MODE_KEY) === "1" ? "/admin" : "/");';
+  const blurPause = "    const blur = () => {\n      clearControls();\n      if (stateRef.current.status !== 'playing') return;\n      stateRef.current.status = 'paused';";
+  const hiddenPause = "        if (!backgroundHiddenAtRef.current) backgroundHiddenAtRef.current = Date.now();\n        if (stateRef.current.status === 'playing') {\n          stateRef.current.status = 'paused';";
+  const returnPause = '      if (backgroundHiddenAtRef.current && Date.now() - backgroundHiddenAtRef.current > 1_000 && stateRef.current.status === "playing") {\n        stateRef.current.status = "paused"; clearControls();';
+  const boundary = (kind, trigger) => `(window as any).__cryptoidLabBoundary?.('${kind}', '${trigger}', {
+        status: stateRef.current.status, sector: stateRef.current.sector, phase: stateRef.current.phase,
+        encounter: stateRef.current.encounter, activeMs: Math.round(labCounters.current.activeMs)
+      });`;
+  const navigation = trigger => boundary('lab-navigation-intent', trigger);
+  const paused = trigger => boundary('lab-background-pause', trigger);
   const edits = [
     [anchor, hook + '\n' + anchor],
     [frameAnchor, frameAnchor + frameHook],
@@ -118,6 +131,13 @@ export function controller(source) {
               if (labBossSteps.current && bossEscortWaveRef.current === 1) {
                 noteLabBossStep(bossEscortSpawnedRef.current === 1 ? 'lab-boss2-first-escort-spawned' : 'lab-boss2-second-escort-spawned', state);
               }`],
+    [home, '    ' + navigation('home') + '\n' + home],
+    [savedExit, savedExit.replace('      navigate', '      ' + navigation('saved-exit') + '\n      navigate')],
+    [backupExit, backupExit.replace('    navigate', '    ' + navigation('local-backup') + '\n    navigate')],
+    [startBack, startBack.replace(' navigate', ' ' + navigation('start-back') + ' navigate')],
+    [blurPause, blurPause + '\n      ' + paused('window-blur')],
+    [hiddenPause, hiddenPause + '\n          ' + paused('document-hidden')],
+    [returnPause, returnPause + '\n        ' + paused('return-from-background')],
     ['[diagnosticContext, ownerDiagnostics, ownerResourceContext, recordOwnerResourceSnapshot]',
       '[diagnosticContext, ownerDiagnostics, ownerResourceContext, recordOwnerResourceSnapshot, noteLabBossStep]'],
     ['[showRewardCards, diagnosticContext, beginBossSummary]', '[showRewardCards, diagnosticContext, beginBossSummary, noteLabBossStep]'],

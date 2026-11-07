@@ -27,6 +27,12 @@ Ein reversibler, ganzer-Quellcode-gepinnter Build-Hook gibt ausschließlich tech
 - 360 Punkte mit 5-Sekunden-Abstand: maximal 30 Minuten rollierender Verlauf, höchstens 512000 Zeichen lokal. Speicherfehler bleiben sichtbar und unterbrechen das Spiel nicht. Ein erzwungenes Prozessende kann die letzten bis zu fünf Sekunden oder mehr bei einer Blockade verlieren. Der letzte Punkt ist kein exakter Absturzzeitpunkt.
 - Nach einem neuen Dokument erscheint zuerst das Menü mit dem letzten Bericht. Kein automatischer Neustart/Fortsetzen. Ein neuer Lauf ersetzt den alten Bericht erst nach ausdrücklicher Auswahl; manueller JSON-Download, Teilen und Berichttext sind vorhanden. Keine automatische Übertragung.
 
+## Navigation und Hintergrundpause
+
+Spurversion 3 protokolliert den Aufruf einer Spielnavigation direkt vor dem Wechsel und die tatsächliche Pause bei Fokusverlust, Ausblenden oder Rückkehr aus dem Hintergrund. Die Einträge enthalten einen festen Auslöser, den Spielstatus und die aktive Spielzeit. Ein Wechsel im selben Dokument bleibt über `game-monitor-stop` und dessen `historyAction` erkennbar. Ein neues Dokument im selben Tab behält den vom Browser beobachteten Einstiegspfad und Navigationstyp. Ein abrupter Prozessabbruch kann die letzten Ereignisse verlieren.
+
+Die Browserkontrollen vergleichen einen ausgelösten Sichtbarkeitswechsel mit Fortsetzen, den bestätigten Home-Knopf und einen vollständigen Aufruf der Startseite aus einem aktiven Lauf. Der vollständige Aufruf bildet das beobachtete Dokumentmuster kontrolliert nach. Seine Ursache auf dem iPhone bleibt offen.
+
 Bau: node verification/memory-monitor-lab-20261106/build.mjs. Deployment ausschließlich im separaten Laborprojekt; der Builder lehnt andere Vercel-Projekt-IDs ab. Native Prüfung und Bereitstellungsergebnis werden separat ergänzt. Kein physischer Handytest und kein White-Screen-Fix werden durch den Bau behauptet.
 
 ## Prüfung der Testumgebung

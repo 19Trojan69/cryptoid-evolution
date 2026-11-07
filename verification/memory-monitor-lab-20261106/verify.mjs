@@ -54,6 +54,24 @@ try{
  await startScene('normal', false);
  await page.locator('.pause-resume-button').click();
  await page.waitForFunction(() => window.__cryptoidLabRead?.().status === 'playing');
+ const beforeBackground = await page.evaluate(() => window.__cryptoidBootId);
+ // Exercise the game's visibility handler with an explicit browser-event control.
+ await page.evaluate(() => {
+   Object.defineProperties(document, {
+     hidden: {configurable: true, value: true},
+     visibilityState: {configurable: true, value: 'hidden'},
+   });
+   try { document.dispatchEvent(new Event('visibilitychange')); }
+   finally {
+     Reflect.deleteProperty(document, 'hidden');
+     Reflect.deleteProperty(document, 'visibilityState');
+     document.dispatchEvent(new Event('visibilitychange'));
+   }
+ });
+ await page.waitForFunction(() => window.__cryptoidLabRead?.().status === 'paused');
+ assert.equal(await page.evaluate(() => window.__cryptoidBootId), beforeBackground);
+ await page.locator('.pause-resume-button').click();
+ await page.waitForFunction(() => window.__cryptoidLabRead?.().status === 'playing');
  // Deliver a history signal that stays on the game address, then use the actual Home control.
  await page.evaluate(() => window.dispatchEvent(new PopStateEvent('popstate', {state:history.state})));
  await page.locator('.home-control').click();
@@ -63,8 +81,32 @@ try{
  assert.equal(afterHome.state, 'stopped');
  assert.equal(afterHome.lifecycle.followingDocumentInSameTab, null);
  assert.equal(afterHome.documentId, afterHome.lifecycle.openedInDocument.bootId);
+ assert.equal(afterHome.documentId, beforeBackground);
  assert.ok(afterHome.lifecycle.events.some(event => event.kind === 'lab-history-pop' && event.route === 'game'));
- assert.ok(afterHome.lifecycle.events.some(event => event.kind === 'game-monitor-stop' && event.historyAction === 'PUSH'));
+ const pause = afterHome.lifecycle.events.find(event => event.kind === 'lab-background-pause' && event.trigger === 'document-hidden');
+ assert.equal(pause?.context.status, 'paused');
+ assert.ok(afterHome.lifecycle.events.some(event => event.kind === 'visibility-hidden' && event.at <= pause.at));
+ assert.ok(afterHome.lifecycle.events.some(event => event.kind === 'visibility-visible' && event.at >= pause.at));
+ const exitIntent = afterHome.lifecycle.events.find(event => event.kind === 'lab-navigation-intent' && event.trigger === 'home');
+ const sameDocumentStop = afterHome.lifecycle.events.find(event => event.kind === 'game-monitor-stop');
+ assert.equal(sameDocumentStop?.historyAction, 'PUSH');
+ assert.equal(exitIntent?.bootId, sameDocumentStop.bootId);
+ assert.ok(exitIntent.at <= sameDocumentStop.at);
+
+ await startScene('normal', false);
+ await page.locator('.pause-resume-button').click();
+ await page.waitForFunction(() => window.__cryptoidLabRead?.().status === 'playing');
+ const beforeHardHome = await page.evaluate(() => window.__cryptoidBootId);
+ await page.goto(origin, {waitUntil:'domcontentloaded'});
+ await page.getByRole('heading', {name:'Speicherlabor', exact:true}).waitFor();
+ const afterHardHome = await reportText();
+ assert.equal(afterHardHome.state, 'running');
+ assert.equal(afterHardHome.documentId, beforeHardHome);
+ const hardHomeBoot = afterHardHome.lifecycle.followingDocumentInSameTab;
+ assert.notEqual(hardHomeBoot.bootId, beforeHardHome);
+ assert.equal(hardHomeBoot.navigationType, 'navigate');
+ assert.equal(hardHomeBoot.route, 'home');
+ assert.ok(!afterHardHome.lifecycle.events.some(event => ['lab-navigation-intent', 'game-monitor-stop'].includes(event.kind)));
 
  await startScene('normal', false);
  // Fault in the actual monitor render, inside the lab route boundary.
@@ -183,7 +225,7 @@ try{
      assert.ok(!JSON.stringify(trace).includes('Lab test exception'), 'Raw exception messages stay out of the report');
    }
    if (scene === 'last-turret') {
-     assert.equal(exported.identity.lifecycleTraceVersion, 2);
+     assert.equal(exported.identity.lifecycleTraceVersion, 3);
      const steps = exported.lifecycle.events.filter(event => bossSteps.includes(event.kind));
      assert.equal(steps.length, bossSteps.length);
      const byKind = new Map(steps.map(event => [event.kind, event]));
@@ -206,7 +248,8 @@ try{
    }
    result.scenes.push({scene,currentRules:true,legacyMarkersAbsent:true,compactHeight:panelBox.height,transparentBackground:look.background,redAndNormalColourVerified:true,pauseResume:true,recoveredWithoutAutoRestart:true,downloadValid:true,samples:exported.samples.length,activeBeforePause:before,heapSupported:exported.samples.at(-1).heapBytes!==null,bossFightCanvasAndReactorVerified:scene!=='normal'});
  }
- result.lifecycle = {reload:true, sameAddressHistorySignal:true, homeNavigation:true, otherTabExcluded:true,
+ result.lifecycle = {reload:true, sameAddressHistorySignal:true, homeNavigation:true, appNavigationIntent:true,
+   hardHomeNavigation:true, backgroundPause:true, otherTabExcluded:true,
    javascriptError:true, unhandledRejection:true, renderFallback:true, reportExport:true};
  assert.deepEqual(unexpected,[]);assert.deepEqual(pageErrors,[]);assert.deepEqual(assetErrors,[]);
  result.complete=true;result.noLiveBackendRequests=true;result.noUnexpectedBrowserErrors=true;

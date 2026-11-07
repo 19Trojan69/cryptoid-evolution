@@ -63,6 +63,8 @@ export function noteLifecycle(kind, details = {}, error, context = null) {
 }
 
 window.__cryptoidLabBossStep = (kind, context) => noteLifecycle(kind, {route: 'game'}, undefined, context);
+window.__cryptoidLabBoundary = (kind, trigger, context) =>
+  noteLifecycle(kind, {route: 'game', trigger}, undefined, context);
 
 const lastFault = new Map();
 export function noteFault(kind, error, details = {}) {
