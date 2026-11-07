@@ -33,6 +33,47 @@ test('actual scheduler removes terminal callbacks with finished records; release
   assert.equal(run(gameOverLoopChange.before), 300); assert.equal(run(gameOverLoopChange.after), 0);
 });
 
+test('the game-over reveal follows the player explosion while a stopped audio clock has a deadline', () => {
+  const start = source.indexOf('          if (gameOverTimerRef.current === null) {');
+  const end = source.indexOf('\n        }\n        forceScene', start);
+  assert.ok(start > 0 && end > start);
+  const schedule = new Function('gameOverTimerRef', 'GAME_OVER_REVEAL_MS', 'soundRef', 'performance', 'window', 'stateRef', 'setGame', source.slice(start, end));
+  function fixture(remaining) {
+    let now = 0, pending;
+    const reveals = [];
+    const timer = { current: null };
+    const state = { current: { status: 'destroying', effects: [] } };
+    const sound = { current: { get playerDestructionRemainingMs() { return remaining; } } };
+    const window = { setTimeout(run, delay) { assert.equal(pending, undefined); pending = { run, at: now + delay }; return 1; } };
+    schedule(timer, 1750, sound, { now: () => now }, window, state, game => reveals.push(game.status));
+    return {
+      reveals,
+      get next() { return pending?.at; },
+      finishSound() { remaining = 0; },
+      advance() { assert.ok(pending); const task = pending; now = task.at; pending = undefined; task.run(); },
+    };
+  }
+
+  const playing = fixture(2038);
+  assert.equal(playing.next, 2038);
+  playing.advance();
+  assert.deepEqual(playing.reveals, []);
+  playing.finishSound();
+  playing.advance();
+  assert.deepEqual(playing.reveals, ['game-over']);
+
+  const blocked = fixture(2038);
+  blocked.advance();
+  assert.equal(blocked.next, 3038);
+  blocked.advance();
+  assert.deepEqual(blocked.reveals, ['game-over']);
+
+  const muted = fixture(0);
+  assert.equal(muted.next, 1750);
+  muted.advance();
+  assert.deepEqual(muted.reveals, ['game-over']);
+});
+
 test('sleep cancels only its own client; finite graphics keep the shared clock and explicit restart wakes one game loop', () => {
   let now = 0, serial = 0, watcher, graphics = 0, game = 0;
   const native = new Map(), stateRef = { current: { status: 'destroying', effects: [{}] } };

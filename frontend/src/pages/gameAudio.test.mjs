@@ -97,20 +97,27 @@ test("boss warning uses only the recorded alarm, without the old synthesized ton
 
 test("boss explosion is louder than player destruction while both obey the effects slider", async () => {
   const previous = { AudioContext: globalThis.AudioContext, fetch: globalThis.fetch };
-  const gains = [];
+  const gains = [], sources = [];
+  let context;
   globalThis.fetch = async () => ({ ok: true, arrayBuffer: async () => new ArrayBuffer(0) });
   globalThis.AudioContext = class {
     state = "running";
+    currentTime = 0;
     destination = {};
+    constructor() { context = this; }
     async resume() {}
     async close() {}
-    async decodeAudioData() { return { duration: 1 }; }
+    async decodeAudioData() { return { duration: 2.04 }; }
     createGain() {
       const node = { gain: { value: 1 }, connect: output => output, disconnect() {} };
       gains.push(node);
       return node;
     }
-    createBufferSource() { return { playbackRate: { value: 1 }, connect: output => output, start() {}, disconnect() {} }; }
+    createBufferSource() {
+      const source = { playbackRate: { value: 1 }, connect: output => output, start() {}, disconnect() {} };
+      sources.push(source);
+      return source;
+    }
   };
   const audio = new GameAudio();
   try {
@@ -123,8 +130,19 @@ test("boss explosion is louder than player destruction while both obey the effec
     assert.equal(gains[1].gain.value, .321);
     assert.equal(gains[2].gain.value, .9);
     assert.ok(gains[2].gain.value > gains[1].gain.value);
+    context.currentTime = 1.75;
+    assert.equal(Math.round(audio.playerDestructionRemainingMs), 290);
+    context.currentTime = 2.05;
+    assert.ok(audio.playerDestructionRemainingMs > 0, 'the tracked voice remains active until ended');
+    sources[0].onended();
+    assert.equal(audio.playerDestructionRemainingMs, 0, 'a playing boss sound cannot hold the game-over screen');
+    audio.play('playerDestroy');
+    context.state = 'suspended';
+    assert.equal(audio.playerDestructionRemainingMs, 0);
+    context.state = 'running';
     audio.setEffectsVolume(0);
     assert.equal(gains[0].gain.value, 0);
+    assert.equal(audio.playerDestructionRemainingMs, 0);
   } finally {
     audio.close();
     globalThis.AudioContext = previous.AudioContext;

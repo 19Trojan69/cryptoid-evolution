@@ -72,7 +72,16 @@ const pauseWeaponChanges = [
 
 const directPlayAuth = '  const { authReady, isLoading, authError, signIn, canAdmin, isAuthenticated } = useAuth({ autoSignIn: false });';
 
+const finalExplosionReveal = {
+  "before": "          if (gameOverTimerRef.current === null) gameOverTimerRef.current = window.setTimeout(() => {\n            gameOverTimerRef.current = null;\n            if (stateRef.current.status !== \"destroying\") return;\n            stateRef.current.status = \"game-over\";\n            setGame({ ...stateRef.current, effects: [...stateRef.current.effects] });\n          }, GAME_OVER_REVEAL_MS);\n",
+  "after": "          if (gameOverTimerRef.current === null) {\n            const delay = Math.max(GAME_OVER_REVEAL_MS, soundRef.current?.playerDestructionRemainingMs ?? 0);\n            // An interrupted audio graph cannot leave the destroyed ship on screen indefinitely.\n            const deadline = performance.now() + delay + 1_000;\n            const reveal = () => {\n              gameOverTimerRef.current = null;\n              if (stateRef.current.status !== \"destroying\") return;\n              const remaining = Math.min(deadline - performance.now(), soundRef.current?.playerDestructionRemainingMs ?? 0);\n              if (remaining > 0) {\n                gameOverTimerRef.current = window.setTimeout(reveal, Math.ceil(remaining));\n                return;\n              }\n              stateRef.current.status = \"game-over\";\n              setGame({ ...stateRef.current, effects: [...stateRef.current.effects] });\n            };\n            gameOverTimerRef.current = window.setTimeout(reveal, Math.ceil(delay));\n          }\n"
+};
+
 export function restoreTestnetLongRunSceneChanges(source) {
+  if (source.includes(finalExplosionReveal.after)) {
+    if (source.split(finalExplosionReveal.after).length !== 2) throw Error('Expected one exact final explosion reveal change');
+    source = source.replace(finalExplosionReveal.after, () => finalExplosionReveal.before);
+  }
   if (source.includes(pauseWeaponChanges[0].after)) {
     for (const { before, after } of pauseWeaponChanges) {
       if (source.split(after).length !== 2) throw Error('Expected one exact Testnet pause or weapon inventory change');

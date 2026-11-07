@@ -66,6 +66,7 @@ export class GameAudio {
   private lastShotAt = 0;
   private destroyCount = 0;
   private effectVoices = new Set<EffectVoice>();
+  private playerDestructionVoice: EffectVoice | null = null;
   private loadController: AbortController | null = null;
   private clockHealth = new AudioClockRecovery();
   private reapedVoices = 0;
@@ -264,6 +265,7 @@ export class GameAudio {
 
   private releaseEffectVoice(voice: EffectVoice) {
     if (!this.effectVoices.delete(voice)) return;
+    if (this.playerDestructionVoice === voice) this.playerDestructionVoice = null;
     noteAudioVoiceRelease(voice.source);
     voice.source.onended = null;
     voice.source.disconnect?.(); voice.gain.disconnect?.();
@@ -290,7 +292,7 @@ export class GameAudio {
     const voice = this.trackEffect(source, gain, context.currentTime + bufferDuration(buffer) / rate);
     try { source.start(); } catch { this.releaseEffectVoice(voice); return false; }
     if (audioAuditRecording()) noteAudioVoiceStart(source, context, context.currentTime + buffer.duration / rate, 'effects');
-    return true;
+    return voice;
   }
 
   private tone(frequency: number, end: number, duration: number, gain: number, type: OscillatorType = "sine", delay = 0) {
@@ -308,8 +310,12 @@ export class GameAudio {
     envelope.gain.exponentialRampToValueAtTime(.0001, at + duration);
     oscillator.connect(envelope).connect(this.effectsBus!);
     const voice = this.trackEffect(oscillator, envelope, at + duration + .01);
-    try { oscillator.start(at); oscillator.stop(at + duration + .01); if (audioAuditRecording()) noteAudioVoiceStart(oscillator, context, at + duration + .01, 'effects'); }
-    catch { this.releaseEffectVoice(voice); }
+    try {
+      oscillator.start(at);
+      oscillator.stop(at + duration + .01);
+      if (audioAuditRecording()) noteAudioVoiceStart(oscillator, context, at + duration + .01, 'effects');
+      return voice;
+    } catch { this.releaseEffectVoice(voice); }
   }
 
   playPickup(type: PowerUpType) {
@@ -329,7 +335,11 @@ export class GameAudio {
         collision: "player-collision", playerDestroy: "boss-destroy", shield: "shield", boost: "boost", boss: "boss-warning-siren", bossDestroy: "boss-destroy-v3",
       };
       const chosen = name[sound];
-      if (chosen && this.sample(chosen)) return;
+      const voice = chosen && this.sample(chosen);
+      if (voice) {
+        if (sound === "playerDestroy") this.playerDestructionVoice = voice;
+        return;
+      }
     }
     switch (sound) {
       case "laser": this.tone(920, 330, .085, .025, "sawtooth"); break;
@@ -350,11 +360,19 @@ export class GameAudio {
         break;
       // The boss uses only its dedicated recording; do not replay the old dull tones.
       case "boss": break;
-      case "playerDestroy": this.tone(150, 60, .48, .055, "triangle"); break;
+      case "playerDestroy": this.playerDestructionVoice = this.tone(150, 60, .48, .055, "triangle") ?? null; break;
       case "bossDestroy": this.tone(150, 60, .48, .09, "triangle"); break;
       case "nova": [440, 220, 90].forEach((note, step) => this.tone(note, 55, .56, .09, "sawtooth", step * .05)); break;
       case "emp": [980, 730, 490].forEach((note, step) => this.tone(note, 150, .32, .045, "sine", step * .09)); break;
     }
+  }
+
+  get playerDestructionRemainingMs() {
+    const voice = this.playerDestructionVoice, context = this.context;
+    if (!voice || context?.state !== "running" || this.paused || this.effectsVolume === 0) return 0;
+    const remaining = (voice.endsAt - context.currentTime) * 1000;
+    // Give the native ended event time to release the voice at the final audio block.
+    return Number.isFinite(remaining) ? Math.max(40, remaining) : 0;
   }
 
   setEffectsVolume(percent: number) {

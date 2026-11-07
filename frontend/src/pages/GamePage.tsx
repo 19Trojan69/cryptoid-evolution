@@ -2247,12 +2247,23 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
             recordsSavedRef.current = true;
             submitScore(state);
           }
-          if (gameOverTimerRef.current === null) gameOverTimerRef.current = window.setTimeout(() => {
-            gameOverTimerRef.current = null;
-            if (stateRef.current.status !== "destroying") return;
-            stateRef.current.status = "game-over";
-            setGame({ ...stateRef.current, effects: [...stateRef.current.effects] });
-          }, GAME_OVER_REVEAL_MS);
+          if (gameOverTimerRef.current === null) {
+            const delay = Math.max(GAME_OVER_REVEAL_MS, soundRef.current?.playerDestructionRemainingMs ?? 0);
+            // An interrupted audio graph cannot leave the destroyed ship on screen indefinitely.
+            const deadline = performance.now() + delay + 1_000;
+            const reveal = () => {
+              gameOverTimerRef.current = null;
+              if (stateRef.current.status !== "destroying") return;
+              const remaining = Math.min(deadline - performance.now(), soundRef.current?.playerDestructionRemainingMs ?? 0);
+              if (remaining > 0) {
+                gameOverTimerRef.current = window.setTimeout(reveal, Math.ceil(remaining));
+                return;
+              }
+              stateRef.current.status = "game-over";
+              setGame({ ...stateRef.current, effects: [...stateRef.current.effects] });
+            };
+            gameOverTimerRef.current = window.setTimeout(reveal, Math.ceil(delay));
+          }
         }
         forceScene ||= !!(damageTaken || state.phase !== previousPhase || state.status !== "playing");
         if (present) {
