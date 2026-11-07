@@ -92,3 +92,7 @@ document.addEventListener('visibilitychange', () => {
 });
 window.addEventListener('pagehide', event => noteLifecycle('pagehide', {persisted: event.persisted}));
 window.addEventListener('pageshow', event => noteLifecycle('pageshow', {persisted: event.persisted}));
+window.addEventListener('popstate', () => {
+  const route = location.pathname === '/game' ? 'game' : location.pathname === '/' ? 'home' : 'other';
+  noteLifecycle('lab-history-pop', {route});
+}, true);

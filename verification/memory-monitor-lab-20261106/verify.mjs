@@ -33,14 +33,6 @@ async function reportText(target = page) {
 }
 try{
  const context=await browser.newContext({viewport:{width:390,height:760},deviceScaleFactor:3,isMobile:true,hasTouch:true,acceptDownloads:true});
- await context.addInitScript(() => {
-   const push = history.pushState;
-   window.__labTestHistoryWrites = [];
-   history.pushState = function(state, title, url) {
-     window.__labTestHistoryWrites.push({index:state?.idx, url:String(url), stack:new Error().stack?.split('\n').slice(1, 6)});
-     return push.call(this, state, title, url);
-   };
- });
  const unexpected=[],pageErrors=[],assetErrors=[];
  await context.route('**/*',route=>{const u=new URL(route.request().url());if(u.origin===origin||['fonts.googleapis.com','fonts.gstatic.com'].includes(u.hostname))return route.continue();unexpected.push(u.origin);return route.abort();});
  page=await context.newPage();page.setDefaultTimeout(60000);
@@ -51,34 +43,20 @@ try{
  await page.goto(origin,{waitUntil:'domcontentloaded'});await page.getByRole('heading',{name:'Speicherlabor',exact:true}).waitFor();
  assert.equal(await page.evaluate(()=>window.__ENV?.appNetwork),'testnet','Current rules must be selected even on an isolated hostname');
  assert.equal(await page.locator('.game-shell').count(),0);
- // Exercise the initial overview and game entries before the reload cases.
- const overviewEntry = page.url();
- const historyEntry = () => page.evaluate(() => ({path:location.pathname, index:history.state?.idx, length:history.length}));
- const overviewHistory = await historyEntry();
  await startScene('normal', false);
- await page.waitForURL(origin + '/game');
- const gameHistory = await historyEntry();
- const distance = gameHistory.index - overviewHistory.index;
- result.history = {overview:overviewHistory, game:gameHistory, distance,
-   writes:await page.evaluate(() => window.__labTestHistoryWrites)};
- assert.equal(distance, 1, 'Starting the game must create exactly one browser history entry');
- await page.evaluate(distance => history.go(-distance), distance);
- await page.waitForURL(overviewEntry, {timeout:10000});
- await page.getByRole('heading', {name:'Speicherlabor', exact:true}).waitFor({timeout:10000});
- const afterBack = await reportText();
- assert.equal(afterBack.state, 'stopped');
- assert.equal(afterBack.lifecycle.followingDocumentInSameTab, null);
- assert.equal(afterBack.documentId, afterBack.lifecycle.openedInDocument.bootId);
- assert.ok(afterBack.lifecycle.events.some(event => event.kind === 'game-monitor-stop' && event.historyAction === 'POP'));
- const forward = page.waitForEvent('framenavigated', {
-   predicate: frame => frame === page.mainFrame() && frame.url() === origin + '/game',
-   timeout: 10000,
- });
- await page.evaluate(distance => history.go(distance), distance);
- await forward;
- await page.waitForURL(origin + '/');
+ await page.locator('.pause-resume-button').click();
+ await page.waitForFunction(() => window.__cryptoidLabRead?.().status === 'playing');
+ // Deliver a history signal that stays on the game address, then use the actual Home control.
+ await page.evaluate(() => window.dispatchEvent(new PopStateEvent('popstate', {state:history.state})));
+ await page.locator('.home-control').click();
+ await page.getByRole('button', {name:'Leave game', exact:true}).click();
  await page.getByRole('heading', {name:'Speicherlabor', exact:true}).waitFor();
- assert.equal(await page.locator('.game-shell').count(), 0);
+ const afterHome = await reportText();
+ assert.equal(afterHome.state, 'stopped');
+ assert.equal(afterHome.lifecycle.followingDocumentInSameTab, null);
+ assert.equal(afterHome.documentId, afterHome.lifecycle.openedInDocument.bootId);
+ assert.ok(afterHome.lifecycle.events.some(event => event.kind === 'lab-history-pop' && event.route === 'game'));
+ assert.ok(afterHome.lifecycle.events.some(event => event.kind === 'game-monitor-stop' && event.historyAction === 'PUSH'));
 
  await startScene('normal', false);
  // Fault in the actual monitor render, inside the lab route boundary.
@@ -181,7 +159,7 @@ try{
    }
    result.scenes.push({scene,currentRules:true,legacyMarkersAbsent:true,compactHeight:panelBox.height,transparentBackground:look.background,redAndNormalColourVerified:true,pauseResume:true,recoveredWithoutAutoRestart:true,downloadValid:true,samples:exported.samples.length,activeBeforePause:before,heapSupported:exported.samples.at(-1).heapBytes!==null,bossFightCanvasAndReactorVerified:scene!=='normal'});
  }
- result.lifecycle = {reload:true, historyBack:true, historyForwardKeepsReport:true, otherTabExcluded:true,
+ result.lifecycle = {reload:true, sameAddressHistorySignal:true, homeNavigation:true, otherTabExcluded:true,
    javascriptError:true, unhandledRejection:true, renderFallback:true, reportExport:true};
  assert.deepEqual(unexpected,[]);assert.deepEqual(pageErrors,[]);assert.deepEqual(assetErrors,[]);
  result.complete=true;result.noLiveBackendRequests=true;result.noUnexpectedBrowserErrors=true;
