@@ -13,8 +13,8 @@ const seedBoss1 = `
       }
     }`;
 
-// Both arms enter Boss 2 with the shipped last-turret fixture. In the prelude
-// arm this is applied at the original creation point, before the first draw.
+// The direct Boss 2 destination uses the previous last-turret fixture at
+// the original creation point, before the first draw.
 const seedBoss2 = `
               if (state.boss?.config.id === 2) {
                 state.boss.turrets.forEach((gun, index) => { gun.health = index === 2 ? 1 : 0; });
@@ -53,6 +53,7 @@ export function instrumentPrelude(source) {
   const initial = "    const s=stateRef.current;s.status='paused';";
   const advance = '            const next = advanceAfterClear(state.section, clearEncounter);';
   const create = '              state.boss = createSectorBoss(state.sector, width, visibleTop, height);';
+  const transitionReady = "            if (ownerDiagnostics) sessionDiagnostic('boundary', { operation: 'transition-reset-done',";
   const bonusEnd = '        if (bonus && state.phase === "SECTOR_CLEAR" && previousPhase !== "SECTOR_CLEAR") {';
   const summaryOpen = "    if (ownerDiagnostics) sessionDiagnostic('boundary', { operation: 'boss-summary-open',";
   const beforeCleanup = '      if (!releaseIdleCanvasEffects())';
@@ -66,17 +67,26 @@ export function instrumentPrelude(source) {
     [preload, '    labBossSteps.current = new Set();\n' + preload],
     [initial, initial + seedBoss1],
     [advance, `            const following = advanceAfterClear(state.section, clearEncounter);
-            const next = clearEncounter === 'bonus' && state.sector === 10
+            const labCompletedBoss1 = clearEncounter === 'bonus' && state.sector === 10;
+            const labContinueTarget = (window as any).__cryptoidContinueTarget;
+            const next = labCompletedBoss1 && labContinueTarget !== 'block1'
               ? { ...following, encounter: 'boss-intro' as const, section: 20, sector: 20 }
               : following;`],
     [create, create + seedBoss2],
+    [transitionReady, `            if (labCompletedBoss1 && labContinueTarget) {
+              (window as any).__cryptoidLevelBoundary?.('destination-ready', { section: state.section, block: sectorInChapter(state.sector) });
+            }
+` + transitionReady],
     [bonusEnd, bonusEnd + '\n          ' + mark('state.sector', 'bonus-end')],
     [summaryOpen, '    ' + mark('state.sector', 'summary-open') + '\n' + summaryOpen],
     [beforeCleanup, '      ' + mark('pending.summary.stage', 'cleanup-before') + '\n' + beforeCleanup],
     [afterBonus, afterBonus + `
       ${mark('pending.summary.stage', 'cleanup-after')}
       if (pending.summary.stage === 10) (window as any).__cryptoidAtlasProbe?.afterBonus();`],
-    [continueAccepted, '      ' + mark('pending.summary.stage', 'continue-accepted') + '\n' + continueAccepted],
+    [continueAccepted, `      if (pending.summary.stage === 10) {
+        (window as any).__cryptoidLevelBoundary?.('continue-accepted', { bonusHits: stateRef.current.bonusHits, hearts: stateRef.current.hearts });
+      }
+` + continueAccepted],
     [reader, reader + pilot],
     [cleanup, `    return () => {
       if ((window as any).__cryptoidPreludeRead === readPilot) delete (window as any).__cryptoidPreludeRead;

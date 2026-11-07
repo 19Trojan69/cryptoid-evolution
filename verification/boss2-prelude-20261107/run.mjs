@@ -5,13 +5,16 @@ import { appendFileSync, createReadStream, existsSync, mkdirSync, readFileSync, 
 import { extname, resolve } from 'node:path';
 import { setTimeout as delay } from 'node:timers/promises';
 import { sampleBrowserMemory } from '../boss2-forensics-20261028/processMemory.mjs';
-import { completionHoldMs, contentProcessStart, initLevelTrace, processSampleMs, summarizeLevelTransition } from './levelTransition.mjs';
+import { completionHoldMs, contentProcessStart, continueDestinations, continueTraceMs, initLevelTrace,
+  processSampleMs, summarizeLevelTransition } from './levelTransition.mjs';
 
-const order = process.argv[2];
-assert.ok(['keep-first', 'release-first', 'level-transition'].includes(order));
-const levelTransition = order === 'level-transition';
+const experiment = process.argv[2];
+const compareTargets = experiment === 'continue-targets';
+const order = compareTargets ? process.argv[3] : experiment;
+assert.ok((compareTargets ? ['block-first', 'boss-first'] : ['keep-first', 'release-first', 'level-transition']).includes(order));
+const levelTransition = compareTargets || order === 'level-transition';
 const modes = order === 'keep-first' ? ['keep', 'release'] : ['release', 'keep'];
-const repetitions = Number(process.argv[3] ?? 4);
+const repetitions = compareTargets ? 1 : Number(process.argv[3] ?? 4);
 assert.ok(Number.isInteger(repetitions) && repetitions >= 1 && repetitions <= 8);
 const { webkit } = createRequire(new URL('../transition-motion-20261106/package.json', import.meta.url))('playwright');
 const output = new URL('results/', import.meta.url).pathname;
@@ -52,9 +55,9 @@ function summarize(rows) {
   return { count: rows.length, content: stats('contentPssKiB'), browser: stats('browserPssKiB') };
 }
 
-async function play(mode, label = `${order}-${mode}`) {
+async function play(mode, label = `${order}-${mode}`, target) {
   const browser = await webkit.launch({ headless: true });
-  const run = { mode, engine: browser.version(), complete: false, events: [], stageMilestones: [], phases: [],
+  const run = { mode, target, engine: browser.version(), complete: false, events: [], stageMilestones: [], phases: [],
     measurements: 0, viewport: [430, 825], dpr: 3, physicalPhone: false, regularSectorsSkipped: true };
   const sampleFile = resolve(output, `${label}.jsonl`);
   const trace = { marks: [], processSamples: [], appSamples: [] };
@@ -78,6 +81,7 @@ async function play(mode, label = `${order}-${mode}`) {
     page.on('crash', () => { fatal ??= 'renderer-crash'; });
     await page.addInitScript(atlasMode => { window.__cryptoidAtlasMode = atlasMode; }, mode);
     if (levelTransition) await page.addInitScript(initLevelTrace);
+    if (target) await page.addInitScript(destination => { window.__cryptoidContinueTarget = destination; }, target);
     await page.goto(origin, { waitUntil: 'domcontentloaded' });
     const { bootId, timeOrigin } = await page.evaluate(() => ({ bootId: window.__cryptoidBootId, timeOrigin: performance.timeOrigin }));
     assert.ok(bootId);
@@ -110,11 +114,12 @@ async function play(mode, label = `${order}-${mode}`) {
     await page.locator('.pause-resume-button').click();
 
     const started = Date.now(), sampledPhases = new Set(), aligned = [];
+    const traceMs = target ? continueTraceMs : 4000;
     let lastSample = 0, lastProgress = 0, pausedAt = 0, lastFrame = -1, lastFrameAt = Date.now();
     let lastPhase = '', matched = false;
     while (Date.now() - started < 4 * 60000) {
       if (fatal) throw Error(fatal);
-      const row = await page.evaluate(({ boot, originTime, kinds, anchor }) => {
+      const row = await page.evaluate(({ boot, originTime, kinds, anchor, traceMs }) => {
         if (window.__cryptoidBootId !== boot || performance.timeOrigin !== originTime || !window.__cryptoidPreludeRead) {
           throw Error('Unexpected document or controller replacement');
         }
@@ -134,14 +139,14 @@ async function play(mode, label = `${order}-${mode}`) {
         const trace = window.__cryptoidLevelTrace;
         const cleanupAt = trace?.marks.find(mark => mark.name === 'cleanup-after')?.at;
         const clickAt = trace?.marks.find(mark => mark.name === 'continue-click')?.at;
-        const traceSampling = !!trace && (state.encounter === 'bonus' || state.stage === 20)
-          && (!clickAt || Date.now() - clickAt < 4000);
+        const traceSampling = !!trace && (state.encounter === 'bonus' || clickAt !== undefined)
+          && (!clickAt || Date.now() - clickAt < traceMs);
         trace?.setSampling(traceSampling);
-        return { state, steps, anchorMs, cleanupAt, traceSampling, appSamples: trace?.takeSamples() ?? [],
+        return { state, steps, anchorMs, cleanupAt, clickAt, traceSampling, appSamples: trace?.takeSamples() ?? [],
           atlas: window.__cryptoidAtlasProbe?.read() ?? null,
           active: window.__cryptoidLabRun?.state === 'running',
           card: !!document.querySelector('.card-reveal-dialog'), completion: !!document.querySelector('.level-completion') };
-      }, { boot: bootId, originTime: timeOrigin, kinds: bossKinds, anchor: secondEscort });
+      }, { boot: bootId, originTime: timeOrigin, kinds: bossKinds, anchor: secondEscort, traceMs });
       const state = row.state;
       assert.ok(row.active && !['game-over', 'destroying', 'victory'].includes(state.status), 'Unexpected end of the running test');
       trace.appSamples.push(...row.appSamples);
@@ -187,31 +192,37 @@ async function play(mode, label = `${order}-${mode}`) {
         lastProgress = Date.now();
         console.log('PRELUDE_PROGRESS ' + JSON.stringify({ order, label, mode, stage: state.stage, phase: state.encounter, activeMs: Math.round(state.activeMs) }));
       }
-      if (offset !== null && offset >= 20000) {
+      if (target && row.clickAt && !row.traceSampling) {
+        run.finishActiveMs = Math.round(state.activeMs);
+        break;
+      }
+      if (!target && offset !== null && offset >= 20000) {
         assert.equal(state.encounter, 'boss-fight');
         run.finishActiveMs = Math.round(state.activeMs);
         break;
       }
       await delay(240);
     }
-    assert.ok(run.finishActiveMs, 'Time budget expired before the matched Boss 2 window');
-    assert.ok(matched, 'Both arms must observe the same one-turret Boss 2 start');
-    assert.ok(bossKinds.every(kind => run.events.some(event => event.kind === kind)), 'Boss 2 event sequence incomplete');
-    assert.deepEqual(run.stageMilestones, [10, 20]);
+    assert.ok(run.finishActiveMs, 'Time budget expired before the measurement window ended');
+    assert.deepEqual(run.stageMilestones, [10, continueDestinations[target ?? 'boss2'].stage]);
     assert.ok(['boss-fight', 'boss-clear', 'bonus'].every(encounter => phaseRows.has(`10/${encounter}`)), 'The real Boss 1 and bonus phases must be observed');
     const keepsBoss1 = mode === 'keep';
     assert.deepEqual(run.atlas?.cleanup, { before: true, after: keepsBoss1, pending: false });
-    run.bins = bins.map(([from, to]) => {
-      const rows = aligned.filter(row => row.offsetMs >= from && row.offsetMs < to);
-      assert.ok(rows.length >= 2, `Insufficient samples in active window ${from}–${to}`);
-      assert.ok(rows.every(row => row.atlas?.hasBoss1 === keepsBoss1 && row.atlas.hasBoss2 && !row.atlas.pendingBoss2),
-        'Wrong weapon atlas cache state during the aligned Boss 2 window');
-      return { from, to, ...summarize(rows), weapons: [...new Set(rows.map(row => row.state.weapon))],
-        reactorHealth: [rows[0].state.bossHealth, rows.at(-1).state.bossHealth] };
-    });
+    if (!target) {
+      assert.ok(matched, 'Both arms must observe the same one-turret Boss 2 start');
+      assert.ok(bossKinds.every(kind => run.events.some(event => event.kind === kind)), 'Boss 2 event sequence incomplete');
+      run.bins = bins.map(([from, to]) => {
+        const rows = aligned.filter(row => row.offsetMs >= from && row.offsetMs < to);
+        assert.ok(rows.length >= 2, `Insufficient samples in active window ${from}–${to}`);
+        assert.ok(rows.every(row => row.atlas?.hasBoss1 === keepsBoss1 && row.atlas.hasBoss2 && !row.atlas.pendingBoss2),
+          'Wrong weapon atlas cache state during the aligned Boss 2 window');
+        return { from, to, ...summarize(rows), weapons: [...new Set(rows.map(row => row.state.weapon))],
+          reactorHealth: [rows[0].state.bossHealth, rows.at(-1).state.bossHealth] };
+      });
+    }
     if (levelTransition) {
       trace.marks = await page.evaluate(() => window.__cryptoidLevelTrace.marks);
-      run.levelTransition = summarizeLevelTransition(trace, identity);
+      run.levelTransition = summarizeLevelTransition(trace, identity, target);
     }
     run.complete = true;
   } catch (error) {
@@ -238,16 +249,18 @@ try {
     assert.equal(build.baseRuntime, 'd9e0897a9396dd8f1f0a9c4a9a0536aa1fb7208d');
     assert.equal(build.gameRules, 'current-testnet-rules');
     assert.ok(build.guestOnly && !build.liveBackend && !build.actualPiAuthentication && !build.payments);
+    const targets = compareTargets ? (order === 'block-first' ? ['block1', 'boss2'] : ['boss2', 'block1'])
+      : Array(repetitions).fill(undefined);
     const runs = [];
-    for (let index = 1; index <= repetitions; index++) {
-      const label = `${order}-${index}`;
-      const run = await play('keep', label);
+    for (const target of targets) {
+      const label = target ? `continue-${order}-${target}` : `${order}-${runs.length + 1}`;
+      const run = await play('keep', label, target);
       runs.push(run);
-      console.log('LEVEL_TRANSITION_RUN ' + JSON.stringify({ label, complete: run.complete,
+      console.log('LEVEL_TRANSITION_RUN ' + JSON.stringify({ label, target, complete: run.complete,
         failure: run.failure, transition: run.levelTransition }));
     }
     const complete = runs.every(run => run.complete);
-    writeFileSync(resolve(output, 'level-transition-summary.json'), JSON.stringify({ build, runs, complete }, null, 2) + '\n');
+    writeFileSync(resolve(output, `${experiment}-summary.json`), JSON.stringify({ build, order, runs, complete }, null, 2) + '\n');
     if (!complete) process.exitCode = 1;
   } else {
     const runs = {};

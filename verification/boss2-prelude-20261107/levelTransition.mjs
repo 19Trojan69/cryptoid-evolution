@@ -4,6 +4,12 @@ import { readFileSync } from 'node:fs';
 export const processSampleMs = 100;
 export const completionHoldMs = 5200;
 const windowMs = [100, 700];
+export const continueDestinations = {
+  block1: { stage: 11, block: 1, encounter: 'normal', bossId: null, liveTurrets: null },
+  boss2: { stage: 20, block: 10, encounter: 'boss-intro', bossId: 2, liveTurrets: 1 },
+};
+const laterWindowsMs = [[1800, 2400], [6200, 6800]];
+export const continueTraceMs = 7200;
 
 // Executed by Playwright in the test document. Keep numbers and strings only.
 export function initLevelTrace() {
@@ -32,7 +38,7 @@ export function initLevelTrace() {
     },
     takeSamples: () => samples.splice(0),
   };
-  window.__cryptoidLevelBoundary = name => { marks.push({ name, ...read() }); };
+  window.__cryptoidLevelBoundary = (name, details) => { marks.push({ name, ...read(), details }); };
   window.addEventListener('click', event => {
     if (event.isTrusted && event.target instanceof Element && event.target.closest('.level-completion .button-primary')) {
       window.__cryptoidLevelBoundary('continue-click');
@@ -49,21 +55,33 @@ export function contentProcessStart(pid) {
 }
 
 const resources = ['paintedEntries', 'paintedBytes', 'canvasNodes', 'domCanvasLogicalBytes', 'canvasCacheBytes',
-  'canvasSurfaceBytes', 'audioBufferBytes', 'audioVoices'];
+  'canvasSurfaceBytes', 'audioBufferBytes', 'audioVoices', 'enemies'];
 const median = values => {
   const sorted = [...values].sort((a, b) => a - b);
   const mid = Math.floor(sorted.length / 2);
   return sorted.length % 2 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
 };
 
-export function summarizeLevelTransition({ marks, processSamples, appSamples }, identity) {
-  assert.deepEqual(marks.map(mark => mark.name),
-    ['bonus-end', 'summary-open', 'cleanup-before', 'cleanup-after', 'continue-click', 'continue-accepted']);
-  const [bonus, summary, cleanupBefore, cleanupAfter, click, accepted] = marks;
+export function summarizeLevelTransition({ marks, processSamples, appSamples }, identity, target) {
+  const expectedMarks = ['bonus-end', 'summary-open', 'cleanup-before', 'cleanup-after', 'continue-click', 'continue-accepted'];
+  if (target) expectedMarks.push('destination-ready');
+  assert.deepEqual(marks.map(mark => mark.name), expectedMarks);
+  const [bonus, summary, cleanupBefore, cleanupAfter, click, accepted, ready] = marks;
+  const destination = continueDestinations[target ?? 'boss2'];
   assert.equal(bonus.app.phase, 'SECTOR_CLEAR');
   assert.equal(summary.app.status, 'paused');
   assert.ok([cleanupBefore, cleanupAfter, click].every(mark => mark.app.status === 'paused'));
   assert.equal(accepted.app.status, 'playing');
+  if (target) {
+    assert.deepEqual(ready.details, { section: destination.stage, block: destination.block });
+    assert.equal(ready.app.stage, destination.stage);
+    assert.equal(ready.app.level, 2);
+    assert.equal(ready.app.status, 'playing');
+    assert.equal(ready.app.phase, 'SECTOR_INTRO');
+    assert.equal(ready.app.encounter, destination.encounter);
+    assert.equal(ready.app.bossId, destination.bossId);
+    assert.equal(ready.app.liveTurrets, destination.liveTurrets);
+  }
   assert.ok(bonus.at + windowMs[1] < summary.at, 'Bonus window overlaps the level summary');
   assert.ok(cleanupAfter.at + completionHoldMs <= click.at, 'Continue clicked before the sampling hold');
   assert.ok(marks.every((mark, i) => !i || marks[i - 1].at <= mark.at), 'Nonmonotonic boundary timestamps');
@@ -88,6 +106,7 @@ export function summarizeLevelTransition({ marks, processSamples, appSamples }, 
     return { from, to, nativeSamples: native.length, appSamples: counters.length,
       stages: [...new Set(counters.map(({ app }) => app.stage))],
       statuses: [...new Set(counters.map(({ app }) => app.status))],
+      phases: [...new Set(counters.map(({ app }) => `${app.encounter}/${app.phase}`))],
       contentPssKiB: stats('contentPssKiB'),
       contentRssKiB: stats('contentRssKiB'),
       app: Object.fromEntries(resources.map(key => {
@@ -106,8 +125,20 @@ export function summarizeLevelTransition({ marks, processSamples, appSamples }, 
   const bonusEnd = compare('bonus', bonus, bonus, app => bonusPlaying(app) && app.phase !== 'SECTOR_CLEAR',
     app => bonusPlaying(app) && app.phase === 'SECTOR_CLEAR');
   const cleanup = compare('cleanup', cleanupBefore, cleanupAfter, app => bonusPlaying(app) || bonusPaused(app), bonusPaused);
+  const playingDestination = app => app.stage === destination.stage && app.status === 'playing';
   const resume = compare('continue', click, click, bonusPaused,
-    app => bonusPlaying(app) || (app.stage === 20 && app.encounter === 'boss-intro' && app.status === 'playing'));
+    app => bonusPlaying(app) || (playingDestination(app) && app.encounter === destination.encounter));
+  if (target) {
+    resume.destinationReadyMs = ready.at - click.at;
+    resume.holdMs = click.at - cleanupAfter.at;
+    resume.bonus = accepted.details;
+    resume.later = laterWindowsMs.map(([start, end]) => {
+      const window = readWindow(`continue+${start}–${end}ms`, click.at + start, click.at + end, playingDestination);
+      return { offsetMs: [start, end], ...window,
+        deltaPssKiB: window.contentPssKiB.median - resume.before.contentPssKiB.median,
+        deltaRssKiB: window.contentRssKiB.median - resume.before.contentRssKiB.median };
+    });
+  }
   return { identity, bonusEnd, cleanup, resume,
     deltaWhilePausedPssKiB: resume.before.contentPssKiB.median - cleanup.after.contentPssKiB.median,
     deltaWholeTransitionPssKiB: resume.after.contentPssKiB.median - bonusEnd.before.contentPssKiB.median };
