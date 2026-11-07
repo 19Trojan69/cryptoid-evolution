@@ -133,6 +133,11 @@ try{
    await startScene(scene, scene !== 'normal');
    let state=await page.evaluate(()=>window.__cryptoidLabRead());
    assert.equal(state.rulesMode,'current');
+   assert.equal(state.rocks,0);
+   assert.equal(state.rockEffects,0);
+   assert.equal(await page.locator('.shooting-star, .bonus-rock-layer').count(),0);
+   assert.equal(await page.locator('.starfield svg').count(),2);
+   assert.equal(await page.locator('.space-scene .space-world').count(),4);
    if(scene==='normal'){assert.equal(state.level,1);assert.equal(state.bossId,null);}
    else {assert.equal(state.bossId,2);assert.equal(state.status,'paused');if(scene==='reactor'){assert.equal(state.liveTurrets,0);assert.ok(Math.abs(state.reactorPercent-55)<.0001);}else assert.ok(state.liveTurrets>0);
    }

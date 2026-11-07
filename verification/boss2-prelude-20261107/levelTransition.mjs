@@ -10,12 +10,14 @@ export const continueDestinations = {
 };
 const laterWindowsMs = [[1800, 2400], [6200, 6800]];
 export const continueTraceMs = 7200;
+export const backdropDelayMs = 2000;
 
 // Executed by Playwright in the test document. Keep numbers and strings only.
-export function initLevelTrace(audioMode) {
+export function initLevelTrace({ audioMode, backdropMode } = {}) {
   const marks = [];
   const samples = [];
   const audioCalls = [];
+  const backdropCommits = [];
   let sampleTimer = null;
   if (audioMode) {
     window.__cryptoidContinueAudio = audioMode;
@@ -42,9 +44,18 @@ export function initLevelTrace(audioMode) {
     atlas: window.__cryptoidAtlasProbe?.read(),
   });
   const sample = () => { samples.push(read()); };
+  if (backdropMode) {
+    window.__cryptoidBackdropMode = backdropMode;
+    window.__cryptoidBackdropCommit = (planetSector, starSector, simulatedMs) => {
+      backdropCommits.push({ ...read(), planetSector, starSector, simulatedMs,
+        planetClasses: document.querySelector('.space-scene')?.className,
+        starClasses: document.querySelector('.starfield')?.className });
+    };
+  }
   window.__cryptoidLevelTrace = {
     marks,
     audioCalls,
+    backdropCommits,
     setSampling(active) {
       if (active && sampleTimer === null) {
         sample();
@@ -79,6 +90,37 @@ const median = values => {
   const mid = Math.floor(sorted.length / 2);
   return sorted.length % 2 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
 };
+
+export function summarizeBackdrop({ marks, processSamples, appSamples, backdropCommits }, identity, mode) {
+  const click = marks.find(mark => mark.name === 'continue-click');
+  assert.ok(appSamples.every(({ app }) => app.rocks === 0 && app.rockEffects === 0), 'Run must use the same rock-free game in both variants');
+  const held = [mode === 'planets' || mode === 'both' ? 10 : 11, mode === 'stars' || mode === 'both' ? 10 : 11];
+  const expected = mode === 'regular' ? [[11, 11]] : [held, [11, 11]];
+  assert.deepEqual(backdropCommits.map(row => [row.planetSector, row.starSector]), expected);
+  for (const row of backdropCommits) {
+    assert.equal(row.bootId, identity.bootId);
+    assert.equal(row.timeOrigin, identity.timeOrigin);
+    assert.equal(row.path, '/game');
+    assert.equal(row.app.stage, 11);
+    assert.match(row.planetClasses, new RegExp('\\bspace-scene-' + (row.planetSector === 10 ? 1 : 2) + '\\b'));
+    assert.match(row.starClasses, new RegExp('\\bstarfield-sector-' + (row.starSector === 10 ? 4 : 5) + '\\b'));
+  }
+  const switched = backdropCommits.at(-1);
+  if (mode !== 'regular') {
+    assert.ok(backdropCommits[0].simulatedMs < backdropDelayMs && switched.simulatedMs >= backdropDelayMs,
+      'The background must switch after the intended hold');
+  }
+  const until = click.at + laterWindowsMs.at(-1)[1];
+  assert.ok(switched.at >= click.at && switched.at + 1000 <= until, 'Observe the full background switch and its aftermath');
+  const points = processSamples.filter(row => row.from >= click.at - windowMs[1] && row.to <= until);
+  const before = points.filter(row => row.to <= click.at - windowMs[0]);
+  assert.ok(before.length >= 3 && points.filter(row => row.from >= switched.at).length >= 6);
+  const baselinePssKiB = median(before.map(row => row.contentPssKiB));
+  const peak = points.reduce((max, row) => row.contentPssKiB > max.contentPssKiB ? row : max);
+  return { mode, baselinePssKiB, peakPssKiB: peak.contentPssKiB, peakDeltaPssKiB: peak.contentPssKiB - baselinePssKiB,
+    peakAtMs: peak.from - click.at, switchedAtMs: switched.at - click.at,
+    nativeSamples: points.length, commits: backdropCommits };
+}
 
 export function summarizeContinueAudio({ marks, appSamples, audioCalls }, mode) {
   const click = marks.find(mark => mark.name === 'continue-click');

@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { backdropDelayMs } from './levelTransition.mjs';
 
 // Start both arms with the same weakened Boss 1 to reach the real cleanup
 // boundary quickly. All turrets draw and each one still takes a normal hit.
@@ -65,6 +66,7 @@ export function instrumentPrelude(source) {
   const continueAudio = '    unlockAudioForResume(); setBossSummaryContinuing(true);';
   const audioRead = 'const pacing=cssFramePacingStats(),boss=s.boss;';
   const audioCounters = 'audioBufferBytes:a?.audioBufferBytes??null,audioVoices:a?.audioVoices??null,';
+  const backdropAnchor = '  const hullOffset = formationOffsetRef.current, hullWave = bossEscortWaveRef.current;';
   const reader = '    (window as any).__cryptoidLabRead=read;';
   const cleanup = '    return ()=>{if((window as any).__cryptoidLabRead===read)delete (window as any).__cryptoidLabRead;};';
   const mark = (stage, name) => `if (${stage} === 10) (window as any).__cryptoidLevelBoundary?.('${name}');`;
@@ -101,6 +103,18 @@ export function instrumentPrelude(source) {
     [audioCounters, audioCounters + `
         audioState:a?.audioState??null,audioClockMs:a?.audioClockMs??null,audioRecoveries:a?.audioRecoveries??null,
         musicState:m?.musicState??null,musicClockMs:m?.musicClockMs??null,musicMediaMs:m?.musicMediaMs??null,musicPaused:m?.musicPaused??null,`],
+    [backdropAnchor, `  const labBackdropMode = (window as any).__cryptoidBackdropMode;
+  const labBackdropHold = game.sector === 11 && sectionElapsedRef.current < ${backdropDelayMs};
+  const labPlanetSector = labBackdropHold && (labBackdropMode === 'planets' || labBackdropMode === 'both') ? 10 : game.sector;
+  const labStarSector = labBackdropHold && (labBackdropMode === 'stars' || labBackdropMode === 'both') ? 10 : game.sector;
+  useLayoutEffect(() => {
+    if (labBackdropMode && game.sector === 11) {
+      (window as any).__cryptoidBackdropCommit?.(labPlanetSector, labStarSector, sectionElapsedRef.current);
+    }
+  }, [game.sector, labBackdropMode, labPlanetSector, labStarSector]);
+` + backdropAnchor],
+    ['<Starfield sector={game.sector}', '<Starfield sector={labStarSector}'],
+    ['<SectorBackdrop sector={game.sector}', '<SectorBackdrop sector={labPlanetSector}'],
     [reader, reader + pilot],
     [cleanup, `    return () => {
       if ((window as any).__cryptoidPreludeRead === readPilot) delete (window as any).__cryptoidPreludeRead;

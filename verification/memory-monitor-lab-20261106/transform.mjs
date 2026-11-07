@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
+import {withoutFallingRocks} from './sceneOverrides.mjs';
 export const BASE_RUNTIME='d9e0897a9396dd8f1f0a9c4a9a0536aa1fb7208d';
 export const EXPECTED_CONTROLLER='4867dfeb5a00944736abbc3d5667b1d83850593e';
 export const LAB_PROJECT='prj_0uk2EWyJzzKfIHoLUMrDZMaJZY4W';
@@ -43,6 +44,7 @@ export const hook=`
       return {...labCounters.current,rulesMode:combatVarietyEnabled?'current':'legacy',status:s.status,phase:s.phase,encounter:s.encounter,stage:s.sector,level:campaignLevel(s.sector),
         bossId:boss?.config.id??null,reactorPercent:boss?boss.health/boss.maxHealth*100:null,liveTurrets:boss?boss.turrets.filter(g=>g.health>0).length:null,
         frameMs:lastMeasuredFrameRef.current,enemies:s.asteroids.length,playerShots:s.shots.length,enemyShots:s.enemyShots.length,effects:s.effects.length,
+        rocks:s.rocks.length,rockEffects:s.rockEffects.length,
         domNodes:document.getElementsByTagName('*').length,canvasNodes:canvases.length,domCanvasLogicalBytes:canvases.reduce((n,c)=>n+c.width*c.height*4,0),
         paintedBytes:p.estimatedBytes,paintedEntries:p.painted,canvasCacheBytes:c.cacheBytes,canvasSurfaceBytes:c.surfaceBytes,
         audioBufferBytes:a?.audioBufferBytes??null,audioVoices:a?.audioVoices??null,pacedActive:pacing.active,pacedConfigured:pacing.configured,
@@ -150,5 +152,5 @@ export function controller(source) {
   let restored = result;
   for (const [before, after] of edits.reverse()) restored = restored.replace(after, before);
   assert.equal(restored, source);
-  return result;
+  return withoutFallingRocks(result);
 }

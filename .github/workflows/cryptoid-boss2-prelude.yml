@@ -1,4 +1,4 @@
-name: Compare audio restart at level completion
+name: Compare background changes at level completion
 on:
   push:
     branches: [codex/memory-monitor-lab-20261106]
@@ -14,8 +14,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        order: [restart-first, keep-clock-first]
-        pair: [1, 2]
+        order: [regular-first, held-first]
+        layer: [planets, stars, both]
     container:
       image: mcr.microsoft.com/playwright@sha256:dcc5531e97840b9b5e794f2814476b21571c5124a3fca2267d73041f56e7580e
       options: --init --ipc=host
@@ -28,15 +28,15 @@ jobs:
       - name: Verify pinned lab and game trees
         run: |
           test "$(git rev-parse HEAD:frontend)" = 6e0cdc1bea4b6c84972382f636fa66caf2739010
-          test "$(git rev-parse HEAD:verification/memory-monitor-lab-20261106)" = 4c58d3868bdce1d8a582e2d54a70e8cf24223b64
+          test "$(git rev-parse HEAD:verification/memory-monitor-lab-20261106)" = 6a49f1b4b67922ff1ea16fc388d1f95586c4d13b
       - run: npm install --prefix frontend --include=optional --ignore-scripts --no-audit --no-fund
       - run: npm install --prefix verification/transition-motion-20261106 --ignore-scripts --no-audit --no-fund
       - run: node --test verification/memory-monitor-lab-20261106/model.test.mjs frontend/src/pages/completionAudioResume.test.mjs
       - run: node verification/boss2-prelude-20261107/build.mjs
-      - run: node verification/boss2-prelude-20261107/run.mjs continue-audio ${{ matrix.order }}
+      - run: node verification/boss2-prelude-20261107/run.mjs continue-backdrop ${{ matrix.order }} ${{ matrix.layer }}
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()
         with:
-          name: continue-audio-${{ matrix.order }}-${{ matrix.pair }}
+          name: continue-backdrop-${{ matrix.layer }}-${{ matrix.order }}
           path: verification/boss2-prelude-20261107/results
           retention-days: 14

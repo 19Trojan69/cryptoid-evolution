@@ -20,6 +20,10 @@ Ein reversibler, ganzer-Quellcode-gepinnter Build-Hook gibt ausschließlich tech
 
 ## Aussagegrenzen
 
+Der spielbare Labor-Build entfernt die fliegenden Sternschnuppen und die zufällig einfliegenden Felsasteroiden. Das reguläre Sternfeld samt Aufblitzen, die Planeten, die Gegner und die Bonusziele bleiben im Spiel. Die Felsasteroiden erzeugen weder Trefferpunkte noch ihre früheren Canvas-Texturen, Töne und Effekte. Ein gespeicherter Fels wird beim Wiederherstellen übersprungen. Die Berichtidentität nennt beide Änderungen.
+
+Die automatisierte Übergangsmessung verwendet diesen Labor-Build in allen Varianten. Nur dort kann der Zeitpunkt des Wechsels der Planeten und des Sternfelds verschoben werden. Der spielbare Build verwendet den regulären Wechsel.
+
 - Kein Browser-Gesamt-RAM auf iPhone/WebKit verfügbar. Die Anzeige sagt das ständig und zeigt keinen erfundenen Prozentwert.
 - Der optionale Chromium-JS-Heap ist ein ungenauer, nicht standardisierter Teilwert; fehlend bleibt null, niemals 0 MiB. Die neue experimentelle Memory-API wird nicht periodisch aufgerufen und erzwingt keine Speicherbereinigung.
 - Bildcache, Effektcache und Audio-PCM sind logische appseitige Byte-Schätzungen. DOM-Canvas-Abmessungen, Effektoberfläche und andere Kategorien können sich überlappen. Keine Summe wird als Gesamtverbrauch ausgegeben. Interne GPU-/Prozess-/Compositing-Speicher bleiben ungemessen.

@@ -4,6 +4,7 @@ import {readFileSync} from 'node:fs';
 import {appendSample,cleanSample,clock,chartPath,memoryMiB,MAX_SAMPLES,readReport,saveReport,STORAGE_KEY,MAX_REPORT_CHARS} from './model.mjs';
 import {controller} from './transform.mjs';
 import {labHtml} from './transform.mjs';
+import {withoutShootingStar,withoutShootingStarStyles} from './sceneOverrides.mjs';
 import {resourceHigh,ALERT_POLICY,updateReference} from './model.mjs';
 import {execFileSync} from 'node:child_process';
 const report=()=>({schema:1,startedAt:Date.now(),dropped:0,samples:[]});
@@ -17,6 +18,20 @@ test('Corrupt or oversized report cannot become a previous valid run',()=>{const
 test('Full rolling history fits its storage cap even with large numerical samples',()=>{const r=report();const s=cleanSample({},0);for(const k in s)if(s[k]===null)s[k]=999999999999;for(let i=0;i<MAX_SAMPLES;i++)appendSample(r,{...s,wallMs:i*5000});assert.ok(JSON.stringify(r).length<MAX_REPORT_CHARS);});
 test('Charts use actual wall-time positions and do not draw unavailable memory as zero',()=>{assert.equal(chartPath([{wallMs:0,heapBytes:null},{wallMs:5,heapBytes:null}],'heapBytes'),'');const p=chartPath([{wallMs:0,heapBytes:1},{wallMs:5,heapBytes:null},{wallMs:10,heapBytes:2}],'heapBytes',100,50,2);assert.equal(p,'M0.0,25.0 M100.0,0.0');assert.equal(clock(60001),'1:00');});
 test('The only controller transforms are reversible, pinned and never rewrite simulation delta',()=>{const source=readFileSync(new URL('../../frontend/src/pages/GamePage.tsx',import.meta.url),'utf8'),out=controller(source);assert.ok(out.includes('__cryptoidLabRead'));assert.equal((out.match(/requestGameFrame/g)||[]).length,(source.match(/requestGameFrame/g)||[]).length);assert.throws(()=>controller(source+'\n'));});
+test('The playable lab removes shooting stars and falling rocks while keeping combat and the background', () => {
+  const read = path => readFileSync(new URL('../../frontend/src/' + path, import.meta.url), 'utf8');
+  const stars = withoutShootingStar(read('pages/Starfield.tsx'));
+  const styles = withoutShootingStarStyles(read('index.css'));
+  const game = controller(read('pages/GamePage.tsx'));
+  assert.doesNotMatch(stars + styles, /shooting-star|meteor-cross/);
+  assert.match(stars, /stars\.distant\.map/);
+  assert.match(stars, /stars\.nearby\.map/);
+  assert.match(styles, /starfield-paused \.starfield-stars \{ animation-play-state: paused/);
+  assert.doesNotMatch(game, /BonusRockLayer|spawnBonusRock|rockHitsShot|playRock\(/);
+  assert.match(game, /varietyRef\.current\.rocks = \[\]/);
+  assert.match(game, /state\.asteroids\.push\(spawnBossEscort\(/);
+  assert.match(game, /remainingShots\.push\(shot\); continue;/);
+});
 test('Real index HTML selects current rules on an isolated hostname with a local backend and no Pi SDK',()=>{const html=execFileSync('git',['show','HEAD:frontend/index.html'],{cwd:new URL('../../',import.meta.url),encoding:'utf8'}),out=labHtml(html);assert.match(out,/appNetwork: "testnet"/);assert.match(out,/backendURL: "\/api"/);assert.ok(!out.includes('$$APP_NETWORK$$'));assert.ok(!out.includes('https://sdk.minepi.com/pi-sdk.js'));});
 test('Ambiguous HTML configuration is rejected instead of silently choosing a gameplay fallback',()=>{const html='<script src="https://sdk.minepi.com/pi-sdk.js"></script> backendURL: "x" appNetwork: "" appNetwork: ""';assert.throws(()=>labHtml(html));});
 test('Reference excludes pauses and early startup and freezes the median of three active samples',()=>{const r=report(),M=1048576;for(const [active,status,bytes]of[[1000,'playing',100*M],[30000,'paused',100*M],[10000,'playing',8*M],[15000,'playing',10*M]])appendSample(r,cleanSample({status,activeMs:active,paintedBytes:bytes},active));assert.equal(r.reference,undefined);appendSample(r,cleanSample({status:'playing',activeMs:20000,paintedBytes:9*M},20000));assert.equal(r.reference.values.paintedBytes,9*M);const frozen=JSON.stringify(r.reference);appendSample(r,cleanSample({status:'playing',activeMs:25000,paintedBytes:100*M},25000));updateReference(r);assert.equal(JSON.stringify(r.reference),frozen);});
