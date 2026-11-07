@@ -124,15 +124,26 @@ try{
    }
    result.scenes.push({scene,currentRules:true,legacyMarkersAbsent:true,compactHeight:panelBox.height,transparentBackground:look.background,redAndNormalColourVerified:true,pauseResume:true,recoveredWithoutAutoRestart:true,downloadValid:true,samples:exported.samples.length,activeBeforePause:before,heapSupported:exported.samples.at(-1).heapBytes!==null,bossFightCanvasAndReactorVerified:scene!=='normal'});
  }
+ // Start the same-document history control from a fresh overview entry.
+ const overviewEntry = origin + '/?history-control';
+ await page.goto(overviewEntry, {waitUntil:'domcontentloaded'});
  await startScene('normal', false);
- await page.goBack();
+ await page.waitForURL(origin + '/game');
+ await page.evaluate(() => history.back());
+ await page.waitForURL(overviewEntry, {timeout:10000});
  await page.getByRole('heading', {name:'Speicherlabor', exact:true}).waitFor();
  const afterBack = await reportText();
  assert.equal(afterBack.state, 'stopped');
  assert.equal(afterBack.lifecycle.followingDocumentInSameTab, null);
  assert.equal(afterBack.documentId, afterBack.lifecycle.openedInDocument.bootId);
  assert.ok(afterBack.lifecycle.events.some(event => event.kind === 'game-monitor-stop' && event.historyAction === 'POP'));
- await page.goForward();
+ const forward = page.waitForEvent('framenavigated', {
+   predicate: frame => frame === page.mainFrame() && frame.url() === origin + '/game',
+   timeout: 10000,
+ });
+ await page.evaluate(() => history.forward());
+ await forward;
+ await page.waitForURL(origin + '/');
  await page.getByRole('heading', {name:'Speicherlabor', exact:true}).waitFor();
  assert.equal(await page.locator('.game-shell').count(), 0);
 
