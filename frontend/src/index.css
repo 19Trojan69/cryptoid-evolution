@@ -245,13 +245,8 @@ html[data-motion="reduced"] .distant-star-flare { display: none; }
 .starfield-nearby { animation: star-sway-near 26s ease-in-out infinite alternate; }
 @keyframes star-sway-far { to { transform: translate3d(7px, -5px, 0); } }
 @keyframes star-sway-near { to { transform: translate3d(-11px, 8px, 0); } }
-.shooting-star { position: absolute; top: 16%; left: -110px; width: 95px; height: 5px; opacity: 0; --travel-x: calc(100vw + 220px); --travel-y: 0px; animation: meteor-cross 30s linear infinite; }
-.shooting-star span { position: absolute; inset: 1px 0; border-radius: 50%; background: linear-gradient(90deg, transparent, #bce1ffb8 75%, #fff); transform: rotate(var(--meteor-angle, 0deg)); box-shadow: 0 0 5px #d8edff88; }
-.shooting-star span::after { position: absolute; right: 0; top: -2px; width: 6px; height: 6px; border-radius: 50%; background: #fff; box-shadow: 0 0 8px #bce1ff; content: ''; }
-/* One short pass at the end of each 30-second cycle; otherwise invisible. */
-@keyframes meteor-cross { 0%, 94% { opacity: 0; transform: translate3d(0, 0, 0); } 95% { opacity: .82; } 98% { opacity: .82; } 100% { opacity: 0; transform: translate3d(var(--travel-x), var(--travel-y), 0); } }
-.starfield-paused .starfield-stars, .starfield-paused .shooting-star { animation-play-state: paused; }
-@media (prefers-reduced-motion: reduce) { .starfield-stars { animation: none; } .shooting-star { display: none; } }
+.starfield-paused .starfield-stars { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) { .starfield-stars { animation: none; } }
 
 /* Four fixed planets per sector. Parallax is capped to a few pixels and never blocks gameplay. */
 .space-scene { position: absolute; z-index: 0; inset: 0; overflow: clip; pointer-events: none; --haze: #256a83; --planet-lit: #bb9973; --planet-mid: #556578; --planet-dark: #182b44; --rim: #9db9df; --moon-lit: #cbb8a4; --moon-dark: #35455f; --main-x: 75%; --main-y: 64%; }
@@ -1032,7 +1027,6 @@ html[data-motion="reduced"] .boss-debris-piece:nth-child(n+5) { display: none; }
 html[lang="th"] .language-option b, html[lang="th"] .system-setting b { line-height: 1.55; }
 .earth-globe-image { display: block; width: 100%; height: 100%; object-fit: contain; border-radius: 50%; }
 html[data-motion="reduced"] .satellite-motion, html[data-motion="reduced"] .satellite-body, html[data-motion="reduced"] .home-defense-ship, html[data-motion="reduced"] .home-enemy-ship, html[data-motion="reduced"] .home-defense-laser, html[data-motion="reduced"] .home-thrust, html[data-motion="reduced"] .home-enemy-thrust, html[data-motion="reduced"] .cryptoid .exhaust, html[data-motion="reduced"] .player-engine, html[data-motion="reduced"] .home-defense-ship::after, html[data-motion="reduced"] .player-ship-shield-active::before, html[data-motion="reduced"] .player-ship-shield-active::after, html[data-motion="reduced"] .planet, html[data-motion="reduced"] .starfield-stars, html[data-motion="reduced"] .ship-choice::before, html[data-motion="reduced"] .offer-preview::after, html[data-motion="reduced"] .preview-volley i, html[data-motion="reduced"] .power-preview-orbit, html[data-motion="reduced"] .power-preview-orbit::before, html[data-motion="reduced"] .power-preview-orbit::after, html[data-motion="reduced"] .power-preview-wave, html[data-motion="reduced"] .button::before { animation: none !important; }
-html[data-motion="reduced"] .shooting-star { display: none; }
 @media (max-width: 680px) {
   .system-menu-panel { padding: 22px 14px 18px; }
   .language-actions { grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr); }

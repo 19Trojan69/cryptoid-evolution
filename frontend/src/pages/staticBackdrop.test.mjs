@@ -21,11 +21,10 @@ test('the boss nebula has multiple fixed colors and no drift or player parallax'
   assert.match(css, /\.starfield \{[^}]+transform: none/);
   assert.match(css, /\.space-scene \.space-world\.planet-earth \{ transform: translate3d\(-50%, -50%, 0\);/);
 });
-test('only one meteor passes every 30 seconds, and motion preferences remain respected', () => {
+test('the long-run scene keeps the starfield with no meteor animation or falling-rock layer', () => {
   const stars = source('./Starfield.tsx');
-  assert.equal((stars.match(/<i className="shooting-star /g)||[]).length, 1);
-  assert.match(css, /\.shooting-star \{[^}]+animation: meteor-cross 30s linear infinite/);
-  assert.match(css, /0%, 94% \{ opacity: 0/);
+  assert.match(stars, /starfield-stars/);
+  assert.doesNotMatch(stars + css, /shooting-star|meteor-cross/);
+  assert.doesNotMatch(source('./GamePage.tsx'), /BonusRockLayer|spawnBonusRock|rockHitsShot/);
   assert.match(css, /\.starfield-paused[^}]+animation-play-state: paused/);
-  assert.match(css, /html\[data-motion="reduced"\] \.shooting-star \{ display: none/);
 });

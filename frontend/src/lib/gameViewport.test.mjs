@@ -11,7 +11,7 @@ function fixture() {
     closest(selector) { return selector.includes('game-modal') && this.menu ? this : this.parentElement?.closest(selector) ?? null; }
   }
   const root = new Element(), menu = new Element(root, true), target = new Element(menu);
-  const doc = { documentElement: new Element(), body: new Element() };
+  const doc = Object.assign(new EventTarget(), { documentElement: new Element(), body: new Element() });
   const restored = [];
   const win = { Element, scrollX: 0, scrollY: 83, scrollTo: (...args) => restored.push(args), getComputedStyle: el => ({ overflowY: el.overflow }) };
   doc.defaultView = win; root.ownerDocument = doc;
@@ -44,4 +44,26 @@ test('setup/cleanup/setup preserves pre-existing document ownership and has no l
   assert.equal(f.touch('touchmove', 180), true); stop();
   assert.ok(f.doc.documentElement.classes.has('game-viewport-locked'));
   assert.equal(f.doc.body.classes.size, 0); assert.equal(f.touch('touchmove', 200), false);
+});
+test('multi-touch and WebKit gestures are canceled only while the game owns the viewport', () => {
+  const { doc, root } = fixture(), stop = lockGameViewport(root);
+  const dispatch = (type, contacts) => {
+    const event = new Event(type, { cancelable: true });
+    if (contacts !== undefined) Object.defineProperty(event, 'touches', { value: Array(contacts).fill({ clientY: 200 }) });
+    return !doc.dispatchEvent(event);
+  };
+  assert.equal(dispatch('touchstart', 1), false);
+  assert.equal(dispatch('touchstart', 2), true);
+  assert.equal(dispatch('touchmove', 2), true);
+  assert.equal(dispatch('touchend', 1), true);
+  assert.equal(dispatch('touchmove', 1), true);
+  assert.equal(dispatch('touchend', 0), true);
+  assert.equal(dispatch('touchstart', 1), false);
+  assert.equal(dispatch('touchstart', 2), true);
+  assert.equal(dispatch('touchcancel', 0), true);
+  assert.equal(dispatch('touchmove', 1), false);
+  for (const type of ['gesturestart', 'gesturechange', 'gestureend']) assert.equal(dispatch(type), true);
+  stop();
+  assert.equal(dispatch('touchstart', 2), false);
+  assert.equal(dispatch('gesturestart'), false);
 });

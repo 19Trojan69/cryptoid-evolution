@@ -1,7 +1,6 @@
 import { combatCryptoid, combatTiming, combatEntryStage, combatAttackPattern, createCombatVariety, readCombatVariety, type CombatVarietyRuntime } from './combatVariety';
 import { showCombatNotice } from './combatNotice';
-import { advanceBonusRock, spawnBonusRock, hitBonusRock, rockHitsShot, rockInField, nextRockEventMs, MAX_ROCKS, MAX_ROCK_EFFECTS, type BonusRock, type RockEffect } from './bonusRocks';
-import BonusRockLayer from './BonusRockLayer';
+import type { BonusRock, RockEffect } from './bonusRocks';
 import {CanvasEffectLayer,CanvasImpact,canvasEffectResources,releaseIdleCanvasEffects} from './CanvasEffects';
 import LevelCompletion from './LevelCompletion';
 import { completionSaveFailure } from './completionSaveFailure';
@@ -873,7 +872,8 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
     const sx = width / saved.width, sy = height / saved.height;
     if (combatVarietyEnabled) {
       varietyRef.current = readCombatVariety(saved.state.combo.variety) ?? createCombatVariety(saved.stage > 1 || saved.refs.elapsed > 0);
-      stateRef.current.rocks = varietyRef.current.rocks.map(rock => ({ ...rock, x: rock.x * sx, y: rock.y * sy }));
+      varietyRef.current.rocks = [];
+      stateRef.current.rocks = [];
       stateRef.current.rockEffects = [];
       waveCompleteRef.current = varietyRef.current.waveComplete;
     }
@@ -1565,7 +1565,6 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
         // visual lifetimes advance: the queued reward snapshot stays unchanged.
         if (state.encounter === 'bonus' && state.phase === 'SECTOR_CLEAR' && !bossSummaryRef.current?.accepted) {
           state.effects = advanceGameEffects(state.effects, time);
-          state.rockEffects = state.rockEffects.map(e => ({ ...e, age: e.age + delta })).filter(e => e.age < (e.final ? 750 : 250));
           clearTimerRef.current = advanceCompletionQuiet(clearTimerRef.current, delta, state.effects.length + state.rockEffects.length);
           if (clearTimerRef.current >= LEVEL_COMPLETION_QUIET_MS) {
             beginBossSummary(); forceScene = true;
@@ -1586,8 +1585,6 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
         const intro = varietyRef.current;
         intro.noticeMs = Math.max(0, intro.noticeMs - delta);
         if (variety && state.phase !== "SECTOR_CLEAR" && (state.phase !== "SECTOR_INTRO" || sectionElapsedRef.current < releasedIntroClockMs(state.sector))) intro.clock += delta;
-        if (variety && intro.asteroidStage !== state.sector) { intro.asteroidStage = state.sector; intro.asteroidStageEvents = 0; }
-        state.rockEffects = state.rockEffects.map(e => ({ ...e, age: e.age + delta })).filter(e => e.age < (e.final ? 750 : 250));
         const slots = sectionSlotsRef.current ?? createFormationSlots(state.section, state.sector, width, height, visibleTop, playerDiameterRef.current);
         sectionSlotsRef.current = slots;
         const bonus = state.encounter === "bonus";
@@ -2036,19 +2033,6 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
           else soundRef.current?.play("shield");
         }
         performanceProbeRef.current?.mark('hostile-shots-and-damage');
-        const rockAllowed = variety && normal && state.asteroids.length > 0 && formationStartedRef.current && state.phase !== "SECTOR_INTRO" && state.phase !== "SECTOR_CLEAR";
-        if(!rockAllowed){state.rocks=[];} else {
-          state.rocks=state.rocks.map(r=>advanceBonusRock(r,delta)).filter(r=>rockInField(r,width,height));
-          if(intro.clock>=intro.asteroidDue){
-            intro.asteroidDue=intro.clock+nextRockEventMs(Math.random());
-            const roll=Math.random();
-            if(roll<.72 && intro.asteroidStageEvents < 2 && state.rocks.length<MAX_ROCKS){
-              const rock=spawnBonusRock(nextIdRef.current++,state.sector,width,height,visibleTop,Math.random(),Math.floor(Math.random()*100_000));
-              if(!state.asteroids.some(e=>Math.hypot(e.x-rock.x,e.y-rock.y)<e.radius+rock.radius+30) && !state.powerUps.some(p=>Math.hypot(p.x-rock.x,p.y-rock.y)<70)){state.rocks.push(rock);intro.asteroidEvents++; intro.asteroidStageEvents++;}
-            }
-          }
-          state.rocks=state.rocks.filter(r=>Math.hypot(r.x-state.player.x*width,r.y-state.player.y*height)>r.radius+playerDiameterRef.current*.6 && !state.powerUps.some(p=>Math.hypot(p.x-r.x,p.y-r.y)<r.radius+35));
-        }
         state.powerUps = state.powerUps.filter(pickup => {
           if (Math.hypot(pickup.x - state.player.x * width, pickup.y - state.player.y * height) > powerUpPickupRadius(shipStageRef.current)) return true;
           Object.assign(state, activateCollectedPower(state, pickup.type));
@@ -2119,8 +2103,6 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
           }
           const enemy = state.asteroids.find(item => shotHitsEnemy(shot, item));
           if (!enemy) {
-            const rock = state.rocks.find(r => rockHitsShot(r, previous, shot));
-            if (rock) { const hit=hitBonusRock(rock,shot.damage); Object.assign(rock,hit.rock); state.score+=hit.points; state.rockEffects.push({id:nextIdRef.current++,x:rock.x,y:rock.y,radius:rock.radius,seed:rock.seed,age:0,points:hit.points,final:hit.final}); state.rockEffects=state.rockEffects.slice(-MAX_ROCK_EFFECTS); if(hit.final){state.rocks=state.rocks.filter(r=>r.id!==rock.id);soundRef.current?.playRock(rock.radius>20,true);}else soundRef.current?.playRock(rock.radius>20,false); continue; }
             remainingShots.push(shot); continue; }
           enemy.health = Math.max(0, enemy.health - shot.damage);
           if (enemy.health < 1e-9) enemy.health = 0;
@@ -2694,7 +2676,6 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
       {extraLifeVisible&&<div className={`boss-extra-life${game.bossHeartShards ? " boss-shard-reward" : ""}`} role="status" aria-live="polite"><strong>{t(game.bossHeartShards ? 'FULL HEARTS' : 'HEART RESTORED')}</strong><span>{game.bossHeartShards ? `+${game.bossHeartShards} ◆` : '+1 ♥'}</span></div>}
       <div ref={fieldRef} className="game-field" onContextMenu={event => event.preventDefault()} onDoubleClick={event => event.preventDefault()} onDragStart={event => event.preventDefault()}>
         <GameSceneBoundary onError={error => interruptionRef.current('render-error', error)} fallback={retry => <div className="game-overlay"><div className="game-modal" role="alert"><h1>{t('MISSION PAUSED')}</h1><p>{t("The mission was paused after a technical interruption. Try Resume to continue.")}</p><button type="button" className="button button-primary" onClick={retry}>{t('Try again')}</button></div></div>}>
-        {combatVarietyEnabled && <BonusRockLayer rocks={game.rocks} effects={game.rockEffects} width={fieldSizeRef.current.width} height={fieldSizeRef.current.height} />}
         {combatVarietyEnabled && varietyRef.current.noticeMs > 0 && showCombatNotice(varietyRef.current.notice) && <div className="combat-variety-notice" role="status" style={{ top: visibleTopRef.current + 48 }}>{varietyRef.current.notice === "Heavy attacker incoming" ? t("Heavy attacker incoming") : t(varietyRef.current.notice)}</div>}
         <Starfield sector={game.sector} player={game.player} paused={game.status !== "playing"} showNebula={game.encounter === "boss-fight"} />
         <SectorBackdrop sector={game.sector} player={game.player} paused={game.status !== "playing"} />

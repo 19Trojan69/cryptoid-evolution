@@ -6,6 +6,20 @@ export function lockGameViewport(root: HTMLElement) {
   const owners = [doc.documentElement, doc.body].map(element => ({ element,
     present: element.classList.contains('game-viewport-locked') }));
   owners.forEach(({ element }) => element.classList.add('game-viewport-locked'));
+  const capture = { capture: true, passive: false };
+  const touchEvents = ['touchstart', 'touchmove', 'touchend', 'touchcancel'] as const;
+  const gestureEvents = ['gesturestart', 'gesturechange', 'gestureend'];
+  let multiTouch = false;
+  const blockGesture = (event: Event) => { if (event.cancelable) event.preventDefault(); };
+  const blockMultiTouch = (event: TouchEvent) => {
+    if (event.touches.length > 1) multiTouch = true;
+    if (!multiTouch) return;
+    blockGesture(event);
+    // Keep blocking until every finger in the gesture has lifted.
+    if (event.touches.length === 0) multiTouch = false;
+  };
+  for (const type of touchEvents) doc.addEventListener(type, blockMultiTouch, capture);
+  for (const type of gestureEvents) doc.addEventListener(type, blockGesture, capture);
   let lastY = 0;
   const start = (event: TouchEvent) => { lastY = event.touches[0]?.clientY ?? 0; };
   const move = (event: TouchEvent) => {
@@ -28,6 +42,8 @@ export function lockGameViewport(root: HTMLElement) {
   root.addEventListener('touchstart', start, { passive: true });
   root.addEventListener('touchmove', move, { passive: false });
   return () => {
+    for (const type of touchEvents) doc.removeEventListener(type, blockMultiTouch, capture);
+    for (const type of gestureEvents) doc.removeEventListener(type, blockGesture, capture);
     root.removeEventListener('touchstart', start);
     root.removeEventListener('touchmove', move);
     owners.forEach(({ element, present }) => { if (!present) element.classList.remove('game-viewport-locked'); });

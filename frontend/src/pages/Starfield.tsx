@@ -96,7 +96,6 @@ const Starfield = ({ sector, paused, showNebula = false }: { sector: number; pla
         <circle cx={star.x} cy={star.y} r={star.radius} fill={star.color} />
       </g>)}
     </svg>
-    <i className="shooting-star shooting-star-one"><span /></i>
   </div>;
 };
 

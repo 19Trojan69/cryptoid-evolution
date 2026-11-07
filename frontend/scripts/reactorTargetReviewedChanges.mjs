@@ -1,3 +1,5 @@
+import { restoreTestnetLongRunSceneChanges } from './testnetLongRunSceneReviewedChanges.mjs';
+
 // Only these reviewed reactor hunks differ from d005c99b.
 // Existing historical whole-source guards still see every unrelated byte.
 export const reactorTargetChanges = [
@@ -13,6 +15,7 @@ export const reactorTargetChanges = [
     after: '            if (pulses.length) { soundRef.current?.playBossWeapon("pulse", 8, pulses.length, 0); }\n' },
 ];
 export function restoreReactorTargetChanges(source) {
+  source = restoreTestnetLongRunSceneChanges(source);
   if (!source.includes(reactorTargetChanges[0].after)) return source;
   for (const {before, after} of [...reactorTargetChanges].reverse()) {
     if (source.split(after).length !== 2) throw Error('Expected one exact reactor target change');

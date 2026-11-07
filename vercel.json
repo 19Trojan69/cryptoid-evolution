@@ -135,7 +135,8 @@
       "codex/testnet-socket-release-20261106": false,
       "codex/reactor-hit-20261106": false,
       "codex/transition-motion-20261106": false,
-      "codex/reactor-health-20261106": false
+      "codex/reactor-health-20261106": false,
+      "codex/testnet-viewport-20261107": false
     }
   }
 }
