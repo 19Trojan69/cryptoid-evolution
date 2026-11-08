@@ -1,15 +1,8 @@
 import { hangarCatalog } from './hangarCatalog';
 import { isTestnetWeaponPurchaseEnabled } from './paymentPolicy';
+import { chargeQuantity } from './chargePurchase';
 
 export const WEAPON_CHARGE_MS = 45_000;
-export const MAX_WEAPON_QUANTITY = 99;
-export function weaponQuantity(value: unknown) {
-  return Number.isSafeInteger(value) && Number(value) >= 1 && Number(value) <= MAX_WEAPON_QUANTITY ? Number(value) : null;
-}
-export function weaponPayment(offer: { kind: string; pricePi: number }, metadata: any) {
-  const quantity = metadata?.weaponModel === 2 && offer.kind === 'weapon' ? weaponQuantity(metadata.quantity) : metadata?.quantity === undefined && metadata?.weaponModel === undefined ? 1 : null;
-  return quantity === null ? null : { quantity, amount: Math.round(offer.pricePi * quantity * 10_000_000) / 10_000_000 };
-}
 export type WeaponStock = { revision: number; balances: Record<string, number>; credited: string[]; activations: Record<string, { level: number; runId: string }> };
 export const emptyWeaponStock = (): WeaponStock => ({ revision: 0, balances: {}, credited: [], activations: {} });
 /** Paid orders are imported once. Legacy purchases retain their existing two-charge credit. */
@@ -21,7 +14,7 @@ export function creditWeaponOrders(stock: WeaponStock, orders: any[], network: s
     if (network !== 'testnet' || !isTestnetWeaponPurchaseEnabled(offer, ownerTestnet)) continue;
     if (order.payment_network !== 'Pi Testnet') continue;
     if (next.credited.includes(order.pi_payment_id)) continue;
-    const quantity = order.weapon_model === 2 ? weaponQuantity(order.quantity) : 2;
+    const quantity = order.weapon_model === 2 ? chargeQuantity(order.quantity) : 2;
     if (!quantity) continue;
     next.credited.push(order.pi_payment_id);
     next.balances[offer.id] = (next.balances[offer.id] || 0) + quantity;
