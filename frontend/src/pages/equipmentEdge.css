@@ -1,17 +1,24 @@
 /* A narrow, translucent equipment rail follows the safe edge on either hand. */
-.game-field .touch-controls {
+.game-field {
   --equipment-target: clamp(48px, 5vmin, 56px);
+  --equipment-left: max(4px, env(safe-area-inset-left));
+  --equipment-right: max(4px, env(safe-area-inset-right));
+  --equipment-bottom: max(8px, env(safe-area-inset-bottom));
+  --equipment-padding: 1px;
+}
+
+.game-field .touch-controls {
   --equipment-width: calc(var(--equipment-target) + 8px);
   --equipment-align: flex-end;
-  right: max(4px, env(safe-area-inset-right));
+  right: var(--equipment-right);
   left: auto;
-  bottom: max(8px, env(safe-area-inset-bottom));
+  bottom: var(--equipment-bottom);
 }
 
 .game-field .touch-controls-right {
   --equipment-align: flex-start;
   right: auto;
-  left: max(4px, env(safe-area-inset-left));
+  left: var(--equipment-left);
 }
 
 .game-field .touch-controls .edge-actions {
@@ -19,7 +26,7 @@
   width: var(--equipment-width);
   align-items: var(--equipment-align);
   gap: 4px;
-  padding: 1px;
+  padding: var(--equipment-padding);
   max-height: calc(100dvh - var(--hud-bottom, 96px) - 24px - env(safe-area-inset-bottom));
   overflow-x: hidden;
   overflow-y: auto;
@@ -27,11 +34,25 @@
   scrollbar-color: #bcdde32e transparent;
 }
 
+/* Scrolling the rail must not shift the button into the adjacent dock. */
+.game-field .touch-controls:has(+ .mission-power-dock) .edge-actions {
+  scrollbar-width: none;
+}
+.game-field .touch-controls:has(+ .mission-power-dock) .edge-actions::-webkit-scrollbar {
+  display: none;
+}
+
 .game-field .touch-controls .weapon-control-wrap {
   width: 100%;
   flex-direction: column-reverse;
   align-items: var(--equipment-align);
   gap: 4px;
+}
+
+.game-field .touch-controls:has(+ .mission-power-dock) .weapon-control-wrap {
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
 }
 
 .game-field .touch-controls .weapon-slot-main {
@@ -136,20 +157,20 @@
 .game-field .touch-controls .edge-action-purchased em { font-size: 8px; }
 .game-field .touch-controls .weapon-hull-hits { font-size: 10px; opacity: .64; }
 
+/* Start at the weapon button's inner edge and share its bottom edge. */
 .game-field .mission-power-dock {
   position: absolute;
   z-index: 5;
-  bottom: max(8px, env(safe-area-inset-bottom));
-  right: max(8px, env(safe-area-inset-right));
+  bottom: calc(var(--equipment-bottom) + var(--equipment-padding));
+  left: calc(var(--equipment-left) + var(--equipment-padding) + var(--equipment-target));
   display: flex;
-  flex-direction: row-reverse;
   gap: 0;
   pointer-events: none;
 }
 .game-field .mission-power-dock-left {
-  right: auto;
-  left: max(8px, env(safe-area-inset-left));
-  flex-direction: row;
+  left: auto;
+  right: calc(var(--equipment-right) + var(--equipment-padding) + var(--equipment-target));
+  flex-direction: row-reverse;
 }
 .game-field button.mission-power-shortcut {
   box-sizing: border-box;
