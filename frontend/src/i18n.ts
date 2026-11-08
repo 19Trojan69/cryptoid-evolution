@@ -12,6 +12,7 @@ import { homeScreenTranslations } from "./locales/homeScreen.ts";
 import { seriesTranslations } from "./locales/seriesAE.ts";
 import { formatLives } from "./locales/quantities.ts";
 import { localeAliases, localeCatalog } from "./locales/catalog.ts";
+import { missionUiTranslations } from "./locales/missionUi.ts";
 
 for (const [locale, entries] of Object.entries(ownerTestnetTranslations)) Object.assign(localeCatalog[locale] ??= {}, entries);
 for (const [locale, entries] of Object.entries(completionRecoveryTranslations)) Object.assign(localeCatalog[locale] ??= {}, entries);
@@ -25,6 +26,7 @@ for (const [locale, entries] of Object.entries(smartphoneTranslations)) Object.a
 for (const [locale, entries] of Object.entries(shipAttributeTranslations)) Object.assign(localeCatalog[locale] ??= {}, entries);
 
 for (const [locale, entries] of Object.entries(shipBalanceTranslations)) Object.assign(localeCatalog[locale] ??= {}, entries);
+for (const [locale, entries] of Object.entries(missionUiTranslations)) Object.assign(localeCatalog[locale] ??= {}, entries);
 
 import { languageLabels, supportedLanguages, resolveLocale, documentLanguage, localeDirection, complexScript, type Locale } from './locales/config.ts';
 import { languagePreferences, deviceLanguages, LANGUAGE_STORAGE_KEY } from './locales/preferences.ts';

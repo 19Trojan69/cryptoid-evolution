@@ -4,6 +4,8 @@ import ts from 'typescript';
 import { fileURLToPath } from 'node:url';
 import { languages, hasExplicitTranslation, translate } from '../src/i18n.ts';
 import { completeLanguages } from '../src/locales/config.ts';
+import { powerUpDescriptions, powerUpNames } from '../src/pages/powerUps.ts';
+import { hangarCatalog } from '../../backend/src/hangarCatalog.ts';
 
 // Static copy only: no runtime account, payment, database, configuration or secret values.
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../src');
@@ -22,6 +24,15 @@ const template = node => {
   return null;
 };
 const properNames = new Set(['Cryptoid', 'Evolution', 'CRYPTOID EVOLUTION', 'Cryptoid Evolution – Trojan Wolf Games', 'Trojan Wolf Games', 'Pi', 'Mainnet', 'Testnet', 'Test', '· Testnet-Beta 0.11']);
+const missionFiles = new Set([
+  'GamePage.tsx', 'GameRoute.tsx', 'GameAccessGate.tsx', 'GameHudStats.tsx', 'GameSceneBoundary.tsx',
+  'LevelCompletion.tsx', 'BossIntermission.tsx', 'BossHealthView.tsx', 'BossWeaponsView.tsx',
+  'MissionWeaponShop.tsx', 'MissionPowerDock.tsx', 'WeaponPurchase.tsx', 'WeaponPreview.tsx',
+  'WeaponSpentNotice.tsx', 'WeaponTutorial.tsx', 'PowerPreview.tsx', 'ReloadConfirmation.tsx',
+  'BlockchainProgress.tsx', 'CardReveal.tsx', 'LoadingStripes.tsx',
+  'SystemSettings.tsx', 'LanguagePicker.tsx', 'GameGuide.tsx', 'BossPhaseGuide.tsx', 'RouteRecovery.tsx',
+  'bonusChallenge.ts', 'completionSaveFailure.ts', 'useAuth.ts', 'usePayments.ts',
+]);
 function scan(directory) {
   for (const item of fs.readdirSync(directory, { withFileTypes: true })) {
     const file = path.join(directory, item.name), name = item.name;
@@ -41,10 +52,21 @@ function scan(directory) {
         if (method === 't' && node.arguments[0]) collect(node.arguments[0], name.startsWith('Admin') ? 'de' : 'en');
         if (method === 'translate' && node.arguments[1]) collect(node.arguments[1]);
         if (method === 'say' && node.arguments[1]) collect(node.arguments[1]);
+        if (node.arguments[0] && (
+          (name === 'GamePage.tsx' && method === 'setWeaponError') ||
+          (name === 'SystemSettings.tsx' && method === 'setFullscreenStatus') ||
+          (name === 'MissionWeaponShop.tsx' && method === 'setNotice') ||
+          (name === 'usePayments.ts' && method === 'setPaymentStatus')
+        )) collect(node.arguments[0]);
         if (/^set(?:AuthError|AdminError|AccountError|StartError|SaveNotice|LoadoutMessage|Message|HangarMessage|Error)$/.test(method) && node.arguments[0]) {
           const text = template(node.arguments[0]);
           if (text) record(text, relative, name.startsWith('Admin') ? 'de' : 'en');
         }
+      }
+      if (name === 'completionSaveFailure.ts' && ts.isReturnStatement(node) && node.expression) collect(node.expression);
+      if (name === 'GamePage.tsx' && ts.isVariableDeclaration(node) && node.name.getText(source) === 'pickupEffectLabels'
+        && node.initializer && ts.isObjectLiteralExpression(node.initializer)) {
+        for (const property of node.initializer.properties) if (ts.isPropertyAssignment(property)) collect(property.initializer);
       }
       if (name.startsWith('Admin') && ts.isVariableDeclaration(node) && node.initializer) {
         const variable = node.name.getText(source);
@@ -93,6 +115,13 @@ function scan(directory) {
   }
 }
 for (const key of JSON.parse(fs.readFileSync(path.join(root, 'locales/uiKeys.json'), 'utf8'))) record(key, 'locales/uiKeys.json');
+for (const source of [...Object.values(powerUpNames), ...Object.values(powerUpDescriptions)]) record(source, 'pages/GamePage.tsx');
+for (const { kind, name, description } of hangarCatalog) {
+  if (kind === 'power' || kind === 'weapon') {
+    record(name, 'pages/MissionWeaponShop.tsx');
+    record(description, 'pages/MissionWeaponShop.tsx');
+  }
+}
 scan(root);
 const entries = [...texts.values()].sort((a, b) => a.language.localeCompare(b.language) || a.source.localeCompare(b.source)).map((entry, id) => ({ id, ...entry }));
 const placeholders = text => [...text.matchAll(/\{(\w+)\}/g)].map(match => match[1]).sort().join('|');
@@ -101,12 +130,25 @@ const coverage = Object.fromEntries(Object.keys(languages).map(locale => {
   const invalidPlaceholders = entries.filter(entry => !missing.includes(entry.id) && placeholders(translate(locale, entry.source)) !== placeholders(entry.source)).map(entry => entry.id);
   return [locale, { label: languages[locale], required: entries.length, translated: entries.length - missing.length, missing, invalidPlaceholders, draft: !completeLanguages.includes(locale) }];
 }));
+const missionEntries = new Set(entries.filter(entry => entry.files.some(file => missionFiles.has(path.basename(file)))).map(entry => entry.id));
+const missionMissing = Object.fromEntries(Object.entries(coverage).map(([locale, row]) => [locale, row.missing.filter(id => missionEntries.has(id))]));
 // Missing entries reference IDs above rather than duplicating long stories for every language.
-const report = { schemaVersion: 2, staticCopyOnly: true, entries, unwrapped, coverage, completeLanguages, releaseReady: unwrapped.length === 0 && completeLanguages.every(code => coverage[code]?.missing.length === 0) && Object.values(coverage).every(locale => locale.invalidPlaceholders.length === 0) };
+const report = {
+  schemaVersion: 2, staticCopyOnly: true, entries, unwrapped, coverage, completeLanguages,
+  missionCoverage: { required: missionEntries.size, missing: missionMissing },
+  releaseReady: unwrapped.length === 0
+    && completeLanguages.every(code => coverage[code]?.missing.length === 0)
+    && Object.values(missionMissing).every(missing => missing.length === 0)
+    && Object.values(coverage).every(locale => locale.invalidPlaceholders.length === 0),
+};
 if (process.argv.includes('--json')) process.stdout.write(JSON.stringify(report, null, 2) + '\n');
 else {
   console.log(`Static copy: ${entries.length}; unwrapped UI fragments: ${unwrapped.length}`);
   for (const [code, row] of Object.entries(coverage)) console.log(`${code}: ${row.translated}/${row.required}${row.draft ? ' (draft)' : ''}`);
+  console.log(`Mission interface: ${missionEntries.size} texts checked in ${Object.keys(coverage).length} languages.`);
+  for (const [code, missing] of Object.entries(missionMissing)) {
+    if (missing.length) console.log(`${code} missing mission texts: ${missing.map(id => entries[id].source).join(' | ')}`);
+  }
   console.log(`Complete language gate: ${completeLanguages.join(', ')}; release ready: ${report.releaseReady}`);
 }
 if (process.argv.includes('--check') && !report.releaseReady) process.exitCode = 1;

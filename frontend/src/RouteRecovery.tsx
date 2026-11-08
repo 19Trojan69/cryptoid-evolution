@@ -1,7 +1,7 @@
 import { useAdminLocale } from "./adminLocale";
+import { useLocale } from "./i18n";
 
-export default function RouteRecovery() {
-  const { t } = useAdminLocale();
+function RecoveryPanel({ t }: { t: (source: string) => string }) {
   return (
     <main className="admin-shell">
       <section className="admin-panel" role="alert">
@@ -14,4 +14,14 @@ export default function RouteRecovery() {
       </section>
     </main>
   );
+}
+
+export default function RouteRecovery() {
+  const { t } = useLocale();
+  return <RecoveryPanel t={t} />;
+}
+
+export function AdminRouteRecovery() {
+  const { t } = useAdminLocale();
+  return <RecoveryPanel t={t} />;
 }

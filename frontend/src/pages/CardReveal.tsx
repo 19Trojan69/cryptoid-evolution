@@ -18,6 +18,11 @@ export default function CardReveal({reward,remaining=1,onContinue}:{reward:CardR
  return createPortal(<dialog ref={dialog} className="collection-dialog card-reveal-dialog" aria-labelledby="card-reveal-title" onCancel={event=>{event.preventDefault();event.stopPropagation();}} onPointerDown={event=>event.stopPropagation()}>
   <header className="collection-header"><div><p>{say('SAMMELKARTE ERHALTEN','COLLECTOR CARD RECEIVED')}</p><h2 id="card-reveal-title">{card.name}</h2></div><span aria-hidden="true">✦</span></header>
   <div className="collection-scroll"><div className="card-reveal-arrival" key={reward.key}><CollectionCardView card={card} stars={reward.stars}/></div></div>
-  <footer className="collection-footer">{needsSound&&<button type="button" onClick={enableSound}>{say('Kartenklang aktivieren','Enable card sound')}</button>}<button ref={next} type="button" onClick={onContinue}>{say('Fortsetzen','Continue')}{remaining>1?` · ${remaining-1} ${say('weitere Karte(n)','more card(s)')}`:''} →</button></footer>
+  <footer className="collection-footer">
+   {needsSound && <button type="button" onClick={enableSound}>{say('Kartenklang aktivieren','Enable card sound')}</button>}
+   <button ref={next} type="button" onClick={onContinue}>
+    {say('Fortsetzen','Continue')}{remaining > 1 ? ` · ${t('Cards remaining ({count})', { count: remaining - 1 })}` : ''} →
+   </button>
+  </footer>
  </dialog>,document.body);
 }
