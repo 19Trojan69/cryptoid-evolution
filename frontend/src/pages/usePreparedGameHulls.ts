@@ -1,6 +1,7 @@
-import { useEffect, useRef } from 'react';
-import { hullSourcePlan, preparedHullPlan } from './hullSourcePlan';
-import { preloadHullSources, retainPreparedHulls } from './paintedShip';
+import { useCallback, useEffect, useRef } from 'react';
+import { HULLS_PER_FLIGHT, hullSourcePlan, preparedHullPlan } from './hullSourcePlan';
+import { MAX_DIFFICULTY_LEVEL } from './levelDifficulty';
+import { preloadHullSources, releaseUnusedPaintedShips, retainPreparedHulls } from './paintedShip';
 import { sessionDiagnostic } from '../lib/sessionDiagnosticEvents';
 import { hullPreparationStep } from './hullPreparationDiagnostics';
 
@@ -31,4 +32,17 @@ export function usePreparedGameHulls(sector: number, encounter: string, offset: 
     current.current?.release();
     current.current = null;
   }, []);
+
+  return useCallback((completedSector: number) => {
+    const plan = completedSector < MAX_DIFFICULTY_LEVEL
+      ? preparedHullPlan(completedSector + 1, 'normal', 0, 0, 0, rulesVersion)
+      : [];
+    // Keep the first flight and any ready follow-up images before retiring the bonus plan.
+    const previous = current.current;
+    current.current = plan.length
+      ? retainPreparedHulls(plan.slice(0, HULLS_PER_FLIGHT), plan.slice(HULLS_PER_FLIGHT))
+      : null;
+    previous?.release();
+    releaseUnusedPaintedShips();
+  }, [rulesVersion]);
 }

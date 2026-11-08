@@ -20,16 +20,18 @@ export function hullSourcePlan(sector: number, encounter: string, offset: number
   return [...new Set(urls)];
 }
 
+export const HULLS_PER_FLIGHT = 6;
+
 export function preparedHullPlan(sector: number, encounter: string, offset: number,
   wave: number, bonusGroup: number, rulesVersion: number): PreparedHull[] {
   const result: PreparedHull[] = [];
   const normal = (stage: number, start: number) => {
-    for (let index = 0; index < 6; index++) result.push(enemyAppearance(stage, start + index));
+    for (let index = 0; index < HULLS_PER_FLIGHT; index++) result.push(enemyAppearance(stage, start + index));
   };
   if (encounter === 'normal') {
     normal(sector, offset);
     const total = blockFlights(sector, rulesVersion).reduce((a, b) => a + b, 0);
-    if (offset + 6 < total) normal(sector, offset + 6);
+    if (offset + HULLS_PER_FLIGHT < total) normal(sector, offset + HULLS_PER_FLIGHT);
     else if (sector < 500 && (sector + 1) % 10 !== 0) normal(sector + 1, 0);
     else for (let index = 0; index < 6; index++) result.push(enemyAppearance(Math.min(500, sector + 1), bossEscortRosterIndex(index, 0)));
   } else if (encounter === 'bonus') {

@@ -38,7 +38,7 @@ async function handlers(){
   weaponBusy:false,bossSummary:null,bossSummaryPrepared:false,bossSummarySaving:false,bossSummaryFailed:false,bossSummaryContinuing:false,bossSummaryContinueFailed:false,
   clearControls(){calls.push('controls');},soundRef:ref({setPaused(){calls.push('audio-pause');}}),musicRef:ref({pause(){}}),
   unlockAudioForResume(){calls.push('gesture');},ownerDiagnostics:true,sessionDiagnostic(kind,data){calls.push(data.operation||kind);},ownerResourceContext:()=>({effects:state.effects.length}),
-  releaseIdleCanvasEffects(){calls.push('cleanup');return env.idle!==false;},releaseUnusedPaintedShips(){calls.push('unused');},syncSelectedWeapon(){},setWeaponStock(){},
+  releaseIdleCanvasEffects(){calls.push('cleanup');return env.idle!==false;},releaseCompletedLevelHulls(stage){calls.push(`release-hulls-${stage}`);},syncSelectedWeapon(){},setWeaponStock(){},
   saveQueueRef:ref({async drain(){calls.push('drain');if(env.failSave)throw Error('offline');}}),
   async loadAccountSave(){calls.push('read-save');return(await h.call('progress','/me',null,{method:'GET'})).body.save;},
   axiosClient:{async post(path,body){calls.push(path);if(path==='/hangar/weapon/activate'){if(env.activationReply)return env.activationReply;throw {response:{status:409,data:{error:'save_before_activation'}}};}
@@ -50,17 +50,18 @@ async function handlers(){
  const api=new Function('env','with(env){'+code+';return {beginBossSummary,prepareBossSummary,continueBossSummary};}')(env);
  return{...api,h,env,state,calls};
 }
-test('actual level-completion handlers verify and verify the next checkpoint before releasing unused resources; no auto continuation',async()=>{
+test('level completion confirms the next checkpoint before retiring the previous level',async()=>{
  const f=await handlers();f.beginBossSummary();assert.equal(f.state.status,'paused');assert.equal(f.state.effects.length,0);assert.ok(!f.calls.includes('cleanup'));
  await f.prepareBossSummary();assert.equal(f.env.bossSummaryPrepared,true);assert.equal(f.state.status,'paused');
- assert.ok(f.calls.indexOf('read-save')<f.calls.indexOf('cleanup'));assert.ok(f.calls.indexOf('drain')<f.calls.indexOf('read-save'));
+ assert.deepEqual(f.calls.filter(call=>['drain','read-save','cleanup','release-hulls-10'].includes(call)),['drain','read-save','cleanup','release-hulls-10']);
  assert.equal(f.h.profile().mission.sector,11);assert.ok(!f.calls.includes('/progress/boss-summary/continue'));
  await f.continueBossSummary();assert.equal(f.state.status,'playing');assert.equal(f.env.bossSummary,null);assert.equal(f.env.lastFrameRef.current,0);
 });
 test('failed save or active effect consumer keeps the actual game paused and offers retry',async()=>{
  for(const failure of ['failSave','idle']){
   const f=await handlers();f.beginBossSummary();f.env[failure]=failure==='idle'?false:true;await f.prepareBossSummary();
-  assert.equal(f.env.bossSummaryPrepared,false);assert.equal(f.env.bossSummaryFailed,true);await f.continueBossSummary();assert.equal(f.state.status,'paused');
+  assert.equal(f.env.bossSummaryPrepared,false);assert.equal(f.env.bossSummaryFailed,true);assert.ok(!f.calls.includes('release-hulls-10'));
+  await f.continueBossSummary();assert.equal(f.state.status,'paused');
   f.env[failure]=failure==='idle'?true:false;await f.prepareBossSummary();assert.equal(f.env.bossSummaryPrepared,true);
  }
 });

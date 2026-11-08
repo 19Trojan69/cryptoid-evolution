@@ -193,9 +193,13 @@ const createPaintedSprite = (index: number, colorId: PlayerColorId, stage: ShipS
 };
 
 export type PreparedHull = { sprite: number; color: PlayerColorId; stage?: ShipStage };
-export const retainPreparedHulls = (hulls: readonly PreparedHull[]) => {
+export const retainPreparedHulls = (hulls: readonly PreparedHull[], keepReady: readonly PreparedHull[] = []) => {
   const unique = new Map<string, PreparedHull>();
   for (const hull of hulls) unique.set(`${hull.sprite}:${hull.stage ?? 1}:${hull.color}`, hull);
+  for (const hull of keepReady) {
+    const key = `${hull.sprite}:${hull.stage ?? 1}:${hull.color}`;
+    if (cache.get(key)) unique.set(key, hull);
+  }
   const selected = [...unique.entries()].slice(0, 12);
   const releases = selected.map(([key]) => cache.retain(key));
   // The existing serial readiness queue and cache protect mounted consumers.

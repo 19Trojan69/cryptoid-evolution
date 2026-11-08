@@ -76,7 +76,7 @@ import PaintedShip from "./PaintedShip";
 import GameShipVisual from "./GameShipVisual";
 import GameHudStats from "./GameHudStats";
 import { useInitialRef } from "./useInitialRef";
-import { useShipVisualOffset, paintedShipResourceStats, useHullSourceReady, releaseUnusedPaintedShips } from "./paintedShip";
+import { useShipVisualOffset, paintedShipResourceStats, useHullSourceReady } from "./paintedShip";
 import { usePreparedGameHulls } from './usePreparedGameHulls';
 import { sessionDiagnostic } from '../lib/sessionDiagnosticEvents';
 import { contactWithBoss } from "./bossContact";
@@ -1373,6 +1373,10 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
     return Boolean(pending && runId && !activationRef.current && !weaponBusyRef.current
       && saveQueueRef.current?.hasDurableReward(runId, pending.summary.stage, pending.summary));
   }, []);
+  const releaseCompletedLevelHulls = usePreparedGameHulls(
+    game.sector, game.encounter, formationOffsetRef.current, bossEscortWaveRef.current,
+    Math.floor(bonusIndexRef.current / 6), rulesVersionRef.current,
+  );
   const beginBossSummary = useCallback((restored = false) => {
     if (bossSummaryRef.current) return;
     const state = stateRef.current;
@@ -1444,7 +1448,7 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
       }
       failurePhase = "effects";
       if (!releaseIdleCanvasEffects()) throw Error('Effect cleanup still pending');
-      releaseUnusedPaintedShips();
+      releaseCompletedLevelHulls(pending.summary.stage);
       if (ownerDiagnostics) {
         try { sessionDiagnostic('resource', ownerResourceContext()); } catch { /* Optional counters must not block continuation. */ }
         sessionDiagnostic('boundary', { operation: 'boss-summary-cleanup-after', sector: pending.summary.stage });
@@ -1458,7 +1462,7 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
         if (ownerDiagnostics) sessionDiagnostic('boundary', { operation: 'boss-summary-failed', sector: pending.summary.stage });
       }
     } finally { if (current()) setBossSummarySaving(false); }
-  }, [hasLocalLevelBackup, ownerDiagnostics, ownerResourceContext]);
+  }, [hasLocalLevelBackup, ownerDiagnostics, ownerResourceContext, releaseCompletedLevelHulls]);
   useEffect(() => { if (bossSummary) void prepareBossSummary(); }, [bossSummary, weaponBusy, prepareBossSummary]);
   const continueBossSummary = async (retry = false) => {
     const pending = bossSummaryRef.current, runId = scoreRunRef.current;
@@ -2687,11 +2691,8 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
   const hudBlock = game.encounter === "normal" ? sectorLabel : game.chainBlocks;
   const hudBoss = game.encounter.startsWith("boss-") ? campaignLevel(game.sector) : undefined;
   const round = sectionInSector(game.section);
-  const hullOffset = formationOffsetRef.current, hullWave = bossEscortWaveRef.current;
-  const hullBonusGroup = Math.floor(bonusIndexRef.current / 6), hullRules = rulesVersionRef.current;
   const fallingBossHull = game.effects.find(effect => effect.kind === "boss-fall" && effect.bossModel);
   const bossHullReady = useHullSourceReady(game.boss?.config.image ?? fallingBossHull?.bossImage);
-  usePreparedGameHulls(game.sector, game.encounter, hullOffset, hullWave, hullBonusGroup, hullRules);
   const levelComplete = game.encounter === "bonus" && game.phase === "SECTOR_CLEAR";
   const dockOverdrive = testnetMissionPowers && (game.overdriveTotalMs > POWER_UP_DURATION_MS
     || !!powerInventory?.stock.overdrive || powerInventory?.pending?.power === 'overdrive' || game.pendingStartPower === 'overdrive');

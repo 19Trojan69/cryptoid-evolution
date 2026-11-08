@@ -79,7 +79,36 @@ const finalExplosionReveal = {
   "after": "          if (gameOverTimerRef.current === null) {\n            const delay = Math.max(GAME_OVER_REVEAL_MS, soundRef.current?.playerDestructionRemainingMs ?? 0);\n            // An interrupted audio graph cannot leave the destroyed ship on screen indefinitely.\n            const deadline = performance.now() + delay + 1_000;\n            const reveal = () => {\n              gameOverTimerRef.current = null;\n              if (stateRef.current.status !== \"destroying\") return;\n              const remaining = Math.min(deadline - performance.now(), soundRef.current?.playerDestructionRemainingMs ?? 0);\n              if (remaining > 0) {\n                gameOverTimerRef.current = window.setTimeout(reveal, Math.ceil(remaining));\n                return;\n              }\n              stateRef.current.status = \"game-over\";\n              setGame({ ...stateRef.current, effects: [...stateRef.current.effects] });\n            };\n            gameOverTimerRef.current = window.setTimeout(reveal, Math.ceil(delay));\n          }\n"
 };
 
+const completionHullCleanupChanges = [
+  {
+    before: "import { useShipVisualOffset, paintedShipResourceStats, useHullSourceReady, releaseUnusedPaintedShips } from \"./paintedShip\";\n",
+    after: "import { useShipVisualOffset, paintedShipResourceStats, useHullSourceReady } from \"./paintedShip\";\n",
+  },
+  {
+    before: "  const beginBossSummary = useCallback((restored = false) => {\n",
+    after: "  const releaseCompletedLevelHulls = usePreparedGameHulls(\n    game.sector, game.encounter, formationOffsetRef.current, bossEscortWaveRef.current,\n    Math.floor(bonusIndexRef.current / 6), rulesVersionRef.current,\n  );\n  const beginBossSummary = useCallback((restored = false) => {\n",
+  },
+  {
+    before: "      releaseUnusedPaintedShips();\n",
+    after: "      releaseCompletedLevelHulls(pending.summary.stage);\n",
+  },
+  {
+    before: "  }, [hasLocalLevelBackup, ownerDiagnostics, ownerResourceContext]);\n",
+    after: "  }, [hasLocalLevelBackup, ownerDiagnostics, ownerResourceContext, releaseCompletedLevelHulls]);\n",
+  },
+  {
+    before: "  const hullOffset = formationOffsetRef.current, hullWave = bossEscortWaveRef.current;\n  const hullBonusGroup = Math.floor(bonusIndexRef.current / 6), hullRules = rulesVersionRef.current;\n  const fallingBossHull = game.effects.find(effect => effect.kind === \"boss-fall\" && effect.bossModel);\n  const bossHullReady = useHullSourceReady(game.boss?.config.image ?? fallingBossHull?.bossImage);\n  usePreparedGameHulls(game.sector, game.encounter, hullOffset, hullWave, hullBonusGroup, hullRules);\n",
+    after: "  const fallingBossHull = game.effects.find(effect => effect.kind === \"boss-fall\" && effect.bossModel);\n  const bossHullReady = useHullSourceReady(game.boss?.config.image ?? fallingBossHull?.bossImage);\n",
+  },
+];
+
 export function restoreTestnetLongRunSceneChanges(source) {
+  if (source.includes('const releaseCompletedLevelHulls = usePreparedGameHulls(')) {
+    for (const { before, after } of completionHullCleanupChanges) {
+      if (source.split(after).length !== 2) throw Error('Expected one exact level completion hull cleanup change');
+      source = source.replace(after, () => before);
+    }
+  }
   source = restoreTestnetMissionPowerChanges(source);
   if (source.includes(finalExplosionReveal.after)) {
     if (source.split(finalExplosionReveal.after).length !== 2) throw Error('Expected one exact final explosion reveal change');

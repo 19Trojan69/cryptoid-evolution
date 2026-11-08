@@ -3,7 +3,8 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
 import { createRequire } from 'node:module';
-import { hullSourcePlan, preparedHullPlan } from './hullSourcePlan.ts';
+import { HULLS_PER_FLIGHT, hullSourcePlan, preparedHullPlan } from './hullSourcePlan.ts';
+import { MAX_DIFFICULTY_LEVEL } from './levelDifficulty.ts';
 import { enemyAppearance } from './shipFleet.ts';
 import { shipEvolutionAsset } from './shipEvolution.ts';
 const {build,transformSync}=createRequire(import.meta.url)('esbuild');
@@ -111,18 +112,38 @@ test('one pending color sharing a raw source preserves the bounded fallback load
 });
 
 
+test('retaining ready follow-up hulls leaves cold variants out of the loading queue',async()=>{
+ const f=await fixture();
+ const first={sprite:0,color:'gold'},warm={sprite:1,color:'silver'},cold={sprite:2,color:'gold'};
+ f.api.cache.set('0:1:gold','/first.png');f.api.cache.set('1:1:silver','/warm.png');
+ const retained=f.api.retainPreparedHulls([first],[warm,cold]);
+ f.api.releaseUnusedPaintedShips();
+ assert.equal(f.api.cache.get('0:1:gold'),'/first.png');
+ assert.equal(f.api.cache.get('1:1:silver'),'/warm.png');
+ assert.equal(f.api.cache.retained('2:1:gold'),false);
+ assert.equal(f.api.paintedShipResourceStats().pending,0);
+ assert.deepEqual(Array.from(await retained.settled),[true,true]);assert.equal(f.images.length,0);
+ retained.release();f.api.releaseUnusedPaintedShips();assert.equal(f.api.cache.size,0);
+});
+
 test('the actual preparation hook shares its exact plan and acquires incoming pins before retiring old pins',async()=>{
  const source=fs.readFileSync('src/pages/usePreparedGameHulls.ts','utf8').replace(/^import.*;$/gm,'');
  const code=transformSync(source,{loader:'ts',format:'cjs'}).code;
- const effects=[],ref={current:null},calls=[];let warmed,retained;
- const env={module:{exports:{}},useRef:()=>ref,useEffect:fn=>effects.push(fn),sessionDiagnostic(){},hullPreparationStep(){},preparedHullPlan,hullSourcePlan,
+ const effects=[],ref={current:null},calls=[];let warmed,retained,followUp;
+ const env={module:{exports:{}},useRef:()=>ref,useEffect:fn=>effects.push(fn),useCallback:fn=>fn,sessionDiagnostic(){},hullPreparationStep(){},preparedHullPlan,hullSourcePlan,HULLS_PER_FLIGHT,MAX_DIFFICULTY_LEVEL,
   preloadHullSources(urls,plan){warmed=plan;calls.push('sources');assert.deepEqual(urls,hullSourcePlan(61,'normal',0,0));},
-  retainPreparedHulls(plan){retained=plan;calls.push('acquire');return{settled:Promise.resolve([]),release(){calls.push('release');}};},
+  retainPreparedHulls(plan,ready){retained=plan;followUp=ready;calls.push('acquire');return{settled:Promise.resolve([]),release(){calls.push('release');}};},
+  releaseUnusedPaintedShips(){calls.push('clear');},
  };
  const run=new Function('env','with(env){'+code+';return module.exports.usePreparedGameHulls;}')(env);
- run(61,'normal',0,0,0,2);effects[0]();assert.strictEqual(warmed,retained);assert.deepEqual(retained,preparedHullPlan(61,'normal',0,0,0,2));
+ const releaseCompletedLevelHulls=run(61,'normal',0,0,0,2);effects[0]();assert.strictEqual(warmed,retained);assert.deepEqual(retained,preparedHullPlan(61,'normal',0,0,0,2));
  effects[0]();assert.deepEqual(calls,['sources','acquire','sources','acquire','release']);
- effects[1]()();assert.equal(calls.at(-1),'release');await Promise.resolve();
+ releaseCompletedLevelHulls(60);
+ const next=preparedHullPlan(61,'normal',0,0,0,2);
+ assert.deepEqual(retained,next.slice(0,HULLS_PER_FLIGHT));assert.deepEqual(followUp,next.slice(HULLS_PER_FLIGHT));
+ assert.deepEqual(calls.slice(-3),['acquire','release','clear']);
+ releaseCompletedLevelHulls(MAX_DIFFICULTY_LEVEL);assert.deepEqual(calls.slice(-2),['release','clear']);
+ effects[0]();effects[1]()();assert.equal(calls.at(-1),'release');assert.equal(ref.current,null);await Promise.resolve();
 });
 
 test('known visual center survives raw-source cleanup and avoids a reload on player remount',async()=>{
