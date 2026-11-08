@@ -141,7 +141,8 @@
       "codex/testnet-power-up-quantity-20261108": false,
       "codex/testnet-power-up-dock-20261108": false,
       "codex/testnet-guide-power-timing-20261108": false,
-      "codex/continue-level-cache-20261108": false
+      "codex/continue-level-cache-20261108": false,
+      "codex/quiet-combat-banner-20261108": false
     }
   }
 }

@@ -1,12 +1,10 @@
 import { combatCryptoid, combatTiming, combatEntryStage, combatAttackPattern, createCombatVariety, readCombatVariety, type CombatVarietyRuntime } from './combatVariety';
-import { showCombatNotice } from './combatNotice';
 import type { BonusRock, RockEffect } from './bonusRocks';
 import {CanvasEffectLayer,CanvasImpact,canvasEffectResources,releaseIdleCanvasEffects} from './CanvasEffects';
 import LevelCompletion from './LevelCompletion';
 import { completionSaveFailure } from './completionSaveFailure';
 import { advanceCompletionQuiet, LEVEL_COMPLETION_QUIET_MS } from './levelCompletionEntrance';
 import type { BossSummary } from './bossSummaryTiming';
-import './combatVariety.css';
 import './transitionNotices.css';
 import { reinforcementIntroMs, releasedIntroClockMs, COMBAT_NOTICE_MS } from './transitionTiming';
 import { useAuth } from '../hooks/useAuth';
@@ -235,6 +233,8 @@ const chooseCryptoid = (stage: number, index: number) => combatVarietyEnabled ? 
 type GameState = BossRewardState & { rocks: BonusRock[]; rockEffects: RockEffect[]; damageCount?: number; comboTotal?: number; playerHullFires?: HullFire[]; playerHit?: HullFire; bossHullLight: number; combo: DoubleKillCombo & { variety?: CombatVarietyRuntime }; asteroids: Asteroid[]; bonusTargets: BonusTarget[]; bonusHits: number; bonusResult: string; chainBlocks: number; chainResult: string; rewardNotice: string; boss: SectorBoss | null; encounter: "normal" | "boss-intro" | "boss-fight" | "boss-clear" | "bonus"; shots: PlayerShot[]; enemyShots: EnemyShot[]; player: PlayerPosition; thrust: number; effects: Effect[]; powerUps: PowerUp[]; powerUpTypes: PowerUpType[]; pickupNotice: { id: number; type: PowerUpType; remainingMs: number; level: number } | null; score: number; shardBase: number; shards: number; hearts: number; maxHearts: number; projectileGuard: number; shieldCharges: number; shieldMs: number; purchasedShieldMs: number; shieldActive: boolean; overdriveMs: number; overdriveTotalMs: number; rapidFireMs: number; rapidFireTotalMs: number; empMs: number; pendingStartPower: "shield" | "overdrive" | "rapid" | "bomb" | "emp" | null; weaponLevel: number; weaponSource: WeaponSource; weaponCap: number; paidWeaponLevel: number; paidWeaponMs: number; pickupWeaponLevel: number; pickupWeaponMs: number; unlockedWeapons: number[]; weaponTimers: number[]; destroyed: number; sector: number; section: number; phase: SectorPhase; status: GameStatus };
 
 const advanceGameEffects = (effects: Effect[], time: number) => effects.map(effect => activateBossExplosion(effect, time)).filter(effect => time - effect.startedAt < (effect.kind === "bomb-wave" || effect.kind === "emp-wave" ? 850 : effect.kind === "turret-hit" ? 340 : effect.kind === "turret-burst" ? 720 : effect.kind === "boss-fall" ? BOSS_FALL_DURATION_MS + 100 : effect.kind === "boss-explosion" ? (effect.finalDelayMs ?? 0) + 3_400 : effect.kind === "player-explosion" ? 2_250 : effect.kind === "player-crash" ? 1_350 : effect.kind === "explosion" || effect.kind === "shatter" ? 2_250 : 390));
+const blockExplosionPending = (state: GameState) => state.encounter === "normal" && state.phase === "SECTOR_CLEAR"
+  && state.effects.some(effect => effect.kind === "explosion" || effect.kind === "shatter" || effect.kind === "bomb-wave");
 
 const syncSelectedWeapon = (state: GameState) => {
   if (state.weaponSource === "pickup" && state.pickupWeaponMs <= 0) state.weaponSource = state.paidWeaponMs > 0 ? "paid" : "standard";
@@ -1713,7 +1713,7 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
         state.powerUps = movePowerUps(state.powerUps, delta, height);
         performanceProbeRef.current?.mark('setup-and-boosts');
         if (state.phase === "SECTOR_CLEAR") {
-          clearTimerRef.current += delta;
+          if (!blockExplosionPending(state)) clearTimerRef.current += delta;
           if (state.encounter === "boss-clear") {
             if (!bossDestroyPlayedRef.current && clearTimerRef.current >= BOSS_FALL_DURATION_MS) {
               bossDestroyPlayedRef.current = true;
@@ -2724,6 +2724,7 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
     : game.phase === "SECTOR_CLEAR" ? combatVarietyEnabled && game.encounter === "normal" ? combatTiming(game.sector).clearMs : SECTION_CLEAR_MS
       : SECTION_INTRO_MS;
   const bossDestructionActive = game.encounter === "boss-clear" && clearTimerRef.current < BOSS_FALL_DURATION_MS + 2_500;
+  const blockExplosionActive = blockExplosionPending(game);
   const retryAccountSave = async () => {
     const queue = saveQueueRef.current;
     if (!queue || saveRetrying || pauseLeaveRef.current) return;
@@ -2754,7 +2755,6 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
       {extraLifeVisible&&<div className={`boss-extra-life${game.bossHeartShards ? " boss-shard-reward" : ""}`} role="status" aria-live="polite"><strong>{t(game.bossHeartShards ? 'FULL HEARTS' : 'HEART RESTORED')}</strong><span>{game.bossHeartShards ? `+${game.bossHeartShards} ◆` : '+1 ♥'}</span></div>}
       <div ref={fieldRef} className="game-field" onContextMenu={event => event.preventDefault()} onDoubleClick={event => event.preventDefault()} onDragStart={event => event.preventDefault()}>
         <GameSceneBoundary onError={error => interruptionRef.current('render-error', error)} fallback={retry => <div className="game-overlay"><div className="game-modal" role="alert"><h1>{t('MISSION PAUSED')}</h1><p>{t("The mission was paused after a technical interruption. Try Resume to continue.")}</p><button type="button" className="button button-primary" onClick={retry}>{t('Try again')}</button></div></div>}>
-        {combatVarietyEnabled && varietyRef.current.noticeMs > 0 && showCombatNotice(varietyRef.current.notice) && <div className="combat-variety-notice" role="status" style={{ top: visibleTopRef.current + 48 }}>{varietyRef.current.notice === "Heavy attacker incoming" ? t("Heavy attacker incoming") : t(varietyRef.current.notice)}</div>}
         <Starfield sector={game.sector} player={game.player} paused={game.status !== "playing"} showNebula={game.encounter === "boss-fight"} />
         <SectorBackdrop sector={game.sector} player={game.player} paused={game.status !== "playing"} />
         <header ref={hudRef} className="game-hud">
@@ -2789,7 +2789,7 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
           {startError && <div className="modal-actions"><button className="button button-primary" type="button" onClick={() => { setStartError(""); setRecoveryError(false); void activateLoadout(); }}>{t("Try again")}</button>{recoveryError && <button className="button button-secondary" type="button" onClick={() => { saveQueueRef.current?.archive(); saveQueueReadyRef.current = true; setRecoveryError(false); setStartError(""); setSaveNotice("Pending data set aside. Using the confirmed account save."); void activateLoadout(); }}>{t("Use confirmed save")}</button>}</div>}
           {(startError || resumeOffer) && <button className="button button-secondary mission-back-button" type="button" onClick={() => { leaveGameFullscreen(); navigate(sessionStorage.getItem(ADMIN_MODE_KEY) === "1" ? "/admin" : "/"); }}>{t("Back")}</button>}
         </div></div>}
-        {(game.status === "playing" || game.status === "paused") && !levelComplete && !extraLifeVisible && !bossDestructionActive && !reinforcementIntro && (game.phase === "SECTOR_INTRO" || game.phase === "SECTOR_CLEAR") && <div key={`${game.section}:${game.encounter}:${game.phase}`} data-encounter={game.encounter} style={{ "--transition-duration": `${transitionDurationMs}ms` } as CSSProperties} className={`sector-banner readable-transition${game.phase === "SECTOR_INTRO" ? " sector-transition" : " sector-clear-message"}${game.encounter === "boss-intro" ? " boss-intro-banner" : ""}${levelIntro ? " level-intro-banner" : ""}${levelComplete ? " level-complete-banner" : ""}`} aria-live="polite">
+        {(game.status === "playing" || game.status === "paused") && !levelComplete && !blockExplosionActive && !extraLifeVisible && !bossDestructionActive && !reinforcementIntro && (game.phase === "SECTOR_INTRO" || game.phase === "SECTOR_CLEAR") && <div key={`${game.section}:${game.encounter}:${game.phase}`} data-encounter={game.encounter} style={{ "--transition-duration": `${transitionDurationMs}ms` } as CSSProperties} className={`sector-banner readable-transition${game.phase === "SECTOR_INTRO" ? " sector-transition" : " sector-clear-message"}${game.encounter === "boss-intro" ? " boss-intro-banner" : ""}${levelIntro ? " level-intro-banner" : ""}${levelComplete ? " level-complete-banner" : ""}`} aria-live="polite">
           <span>{levelComplete || levelIntro ? sectorName(game.sector) : game.encounter === "bonus" ? game.phase === "SECTOR_CLEAR" ? t("BONUS COMPLETE") : `${t("LEVEL")} ${levelLabel} · ${sectorName(game.sector)}` : game.encounter !== "normal" ? `${t("LEVEL")} ${levelLabel} · ${sectorName(game.sector)}` : game.phase === "SECTOR_CLEAR" ? t("BLOCK LINKED") : `${t("LEVEL")} ${levelLabel} · ${sectorName(game.sector)}`}</span>
           <strong>{transitionHeadline}</strong>
           {game.encounter === 'boss-intro' && <small className="boss-callsign">{bossName(Math.ceil(game.sector / 10))}</small>}
@@ -2801,7 +2801,7 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
           {game.phase === "SECTOR_CLEAR" && game.rewardNotice && <small className="reward-unlock" role="status">✦ {game.rewardNotice.split(" · ").map(part => t(part)).join(" · ")}</small>}
         </div>}
         {game.status === "playing" && game.encounter === "normal" && !formationStartedRef.current && (game.phase === "SECTOR_INTRO" || game.phase === "ENTRY" || game.phase === "FORMATION") && <div className="formation-data-stream" aria-hidden="true">{FORMATION_DATA_ROWS.map((row, index) => <div className="formation-data-row" key={index}><span>{row.repeat(4)}</span><span>{row.repeat(4)}</span></div>)}</div>}
-        {weaponSpent && canShowWeaponSpentNotice(weaponSpentRef.current, { status: game.status, encounter: game.encounter, phase: game.phase, enemies: game.asteroids.length, enemyShots: stateRef.current.enemyShots.length, clearRemainingMs: (combatVarietyEnabled ? combatTiming(game.sector).clearMs : SECTION_CLEAR_MS) - clearTimerRef.current }) && <WeaponSpentNotice expiredWeaponName={weaponNames[weaponSpent.level]} onShown={markWeaponSpentShown} />}
+        {weaponSpent && !blockExplosionActive && canShowWeaponSpentNotice(weaponSpentRef.current, { status: game.status, encounter: game.encounter, phase: game.phase, enemies: game.asteroids.length, enemyShots: stateRef.current.enemyShots.length, clearRemainingMs: (combatVarietyEnabled ? combatTiming(game.sector).clearMs : SECTION_CLEAR_MS) - clearTimerRef.current }) && <WeaponSpentNotice expiredWeaponName={weaponNames[weaponSpent.level]} onShown={markWeaponSpentShown} />}
         {!combatVarietyEnabled && game.asteroids.filter(asteroid => game.encounter === "normal"
           ? game.phase === "ENTRY" || game.phase === "FORMATION" || game.phase === "REFORM"
           : game.encounter === "boss-fight" && asteroid.escort && asteroid.attackPattern === null
@@ -2813,8 +2813,8 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
           const pickupLabel = `${t(powerUpNames[pickup.type])} · ${t(powerUpDescriptions[pickup.type])}`;
           return <div key={pickup.id} className={`power-up power-up-${pickup.type}`} role="img" aria-label={pickupLabel} title={pickupLabel} style={{ left: pickup.x, top: pickup.y }}><span aria-hidden="true">{powerUpSymbols[pickup.type]}</span></div>;
         })}
-        {game.combo.remainingMs > 0 && game.status === "playing" && <div key={`combo-${game.combo.total}`} className={`combo-notice${game.pickupNotice ? " combo-with-pickup" : ""}`} role="status"><b>{t("DOUBLE KILL")}</b><span>+{DOUBLE_KILL_SCORE} {t("Score")} · +{DOUBLE_KILL_SHARDS} {t("Shards")}</span></div>}
-        {game.pickupNotice && game.pickupNotice.type !== "weapon" && game.status === "playing" && <div key={game.pickupNotice.id} className={`pickup-notice pickup-notice-${game.pickupNotice.type}`} role="status"><b>{powerUpSymbols[game.pickupNotice.type]} {t(powerUpNames[game.pickupNotice.type])}</b><span>{t(pickupEffectLabels[game.pickupNotice.type])}</span></div>}
+        {game.combo.remainingMs > 0 && game.status === "playing" && !blockExplosionActive && <div key={`combo-${game.combo.total}`} className={`combo-notice${game.pickupNotice ? " combo-with-pickup" : ""}`} role="status"><b>{t("DOUBLE KILL")}</b><span>+{DOUBLE_KILL_SCORE} {t("Score")} · +{DOUBLE_KILL_SHARDS} {t("Shards")}</span></div>}
+        {game.pickupNotice && game.pickupNotice.type !== "weapon" && game.status === "playing" && !blockExplosionActive && <div key={game.pickupNotice.id} className={`pickup-notice pickup-notice-${game.pickupNotice.type}`} role="status"><b>{powerUpSymbols[game.pickupNotice.type]} {t(powerUpNames[game.pickupNotice.type])}</b><span>{t(pickupEffectLabels[game.pickupNotice.type])}</span></div>}
         <div ref={mountProjectiles} className="projectile-layer" style={{ display: 'contents' }} aria-hidden="true" />
         <CanvasEffectLayer enabled={combatVarietyEnabled}>{game.effects.filter(bossExplosionReady).filter(effect => effect !== fallingBossHull).map(effect => <ImpactEffectView key={effect.id} effect={effect} />)}</CanvasEffectLayer>
         {game.hearts > 0 && <div ref={playerShipRef} className={`player-ship shielded-ship${game.status === "paused" && weaponCountdown === null ? " player-ship-dialog-hidden" : ""}${shipSelection.color.id === "grey" || shipSelection.color.id === "white" ? ` player-ship-${shipSelection.color.id}` : ""}${game.purchasedShieldMs > 0 || (game.shieldActive && game.shieldCharges > 0 && game.shieldMs > 0) ? " player-ship-shield-active" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "player-crash") ? " player-ship-respawn" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "shield") ? " player-ship-shielded" : ""}`} style={{ left: `${game.player.x * 100}%`, top: `${game.player.y * 100}%`, "--ship-glow": shipSelection.color.glow, "--flame-length": `${engineFlamePercent(game.thrust)}%`, ...shipVisualOffset } as CSSProperties} aria-label={t('Your Cryptoid ship')}><GameShipVisual sprite={shipSelection.skin.sprite} color={shipSelection.color.id} stage={shipStage} variant="player" sites={game.playerHullFires} hit={game.playerHit}/></div>}

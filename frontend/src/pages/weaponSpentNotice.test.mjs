@@ -81,7 +81,7 @@ const noticeEnv=(overrides={})=>{
  const notice=createWeaponSpentNotice('paid',2,16,0);
  return {element,fragment:'fragment',game:{status:'playing',encounter:'normal',phase:'SECTOR_CLEAR',asteroids:[],enemyShots:[],weaponLevel:4},
    stateRef:{current:{enemyShots:[]}},formationStartedRef:{current:false},weaponSpent:notice,weaponSpentRef:{current:notice},clearTimerRef:{current:0},
-   combatVarietyEnabled:true,combatTiming:()=>({clearMs:5200}),SECTION_CLEAR_MS:8500,canShowWeaponSpentNotice,
+   blockExplosionActive:false,combatVarietyEnabled:true,combatTiming:()=>({clearMs:5200}),SECTION_CLEAR_MS:8500,canShowWeaponSpentNotice,
    FORMATION_DATA_ROWS:['01'],WeaponSpentNotice:'WeaponSpentNotice',weaponNames:['','Standard','Twin','Rapid','Triple','Plasma'],markWeaponSpentShown(){},...overrides};
 };
 
@@ -100,6 +100,7 @@ test('the actual JSX keeps binary scenery unchanged and starts paid expiry only 
   const env=noticeEnv();env.clearTimerRef.current=5200-remaining;env.stateRef.current.enemyShots=incoming?[{}]:[];env.game.asteroids=alive?[{}]:[];
   assert.equal(nodes(renderBinary(env)).some(n=>n.type==='WeaponSpentNotice'),remaining>=3000&&!incoming&&!alive);
  }
+ assert.equal(nodes(renderBinary(noticeEnv({blockExplosionActive:true}))).some(n=>n.type==='WeaponSpentNotice'),false);
 });
 
 test('the actual playing step starts at the committed caption, waits through combat and counts exactly three unpaused seconds',()=>{
@@ -142,9 +143,9 @@ test('the real weapon rail has one usable Weapons button and no live shot name, 
 test('the real pickup caption omits weapon upgrades while preserving the other boost captions',()=>{
  const line=source.split('\n').find(line=>line.includes('{game.pickupNotice &&'));
  const render=compileJsx(line.trim());
- for(const type of ['weapon','shield','rapid','overdrive'])for(const status of ['playing','paused']){
-  const tree=nodes(render({element,fragment:'fragment',game:{status,pickupNotice:{id:1,type,level:2}},powerUpNames,powerUpSymbols,pickupEffectLabels,t:key=>key}));
-  assert.equal(tree.some(n=>n.props.role==='status'),type!=='weapon'&&status==='playing');
+ for(const type of ['weapon','shield','rapid','overdrive'])for(const status of ['playing','paused'])for(const blockExplosionActive of [false,true]){
+  const tree=nodes(render({element,fragment:'fragment',blockExplosionActive,game:{status,pickupNotice:{id:1,type,level:2}},powerUpNames,powerUpSymbols,pickupEffectLabels,t:key=>key}));
+  assert.equal(tree.some(n=>n.props.role==='status'),type!=='weapon'&&status==='playing'&&!blockExplosionActive);
  }
 });
 

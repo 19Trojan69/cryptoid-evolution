@@ -77,3 +77,28 @@ test('all comparable formation/goal/pickup notices use the same readable lifetim
   assert.ok(source.includes('reinforcementIntro && (game.status === "playing" || game.status === "paused")'));
   assert.ok(!source.includes('intro.noticeMs = 2000'));assert.ok(!source.includes('intro.noticeMs = 2100'));
 });
+
+test('the normal block clear clock and notices wait for the last explosion', () => {
+  const declaration = source.slice(source.indexOf('const blockExplosionPending ='), source.indexOf('const syncSelectedWeapon ='))
+    .replace('(state: GameState)', '(state)');
+  const clock = source.split('\n').find(line => line.includes('if (!blockExplosionPending(state)) clearTimerRef.current += delta;'));
+  assert.ok(clock);
+  const step = new Function('state', 'clearTimerRef', 'delta', declaration + clock + '\nreturn blockExplosionPending(state);');
+  const elapsed = {current: 0};
+  const state = {encounter: 'normal', phase: 'SECTOR_CLEAR', effects: [{kind: 'explosion'}]};
+  for (const kind of ['explosion', 'shatter', 'bomb-wave']) {
+    state.effects = [{kind}];
+    assert.equal(step(state, elapsed, 16), true);
+    assert.equal(elapsed.current, 0);
+  }
+  state.effects = [{kind: 'shield'}];
+  assert.equal(step(state, elapsed, 16), false);
+  assert.equal(elapsed.current, 16);
+  for (const encounter of ['boss-clear', 'bonus']) {
+    assert.equal(step({...state, encounter, effects: [{kind: 'explosion'}]}, {current: 0}, 16), false);
+  }
+  for (const marker of ['sector-banner readable-transition', '<WeaponSpentNotice expiredWeaponName', 'combo-notice', 'pickup-notice pickup-notice-']) {
+    const line = source.split('\n').find(row => row.includes(marker) && row.includes('!blockExplosionActive &&'));
+    assert.ok(line, marker);
+  }
+});
