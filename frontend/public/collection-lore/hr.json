@@ -9,13 +9,13 @@
     ],
     "2": [
       "Nositeljica maski",
-      "Korvessa je služio diplomatska kurirski voznaša flota i naučio signale prepoznavanja svake granične postaje. Kada su njezini pokrovitelji nestali, zadržao je njihov identitet u skrivenoj arhivi.",
-      "Sada svaki dolazak nosi drugačije pouzdano ime. Krivotvorne poruke privlače brodove daleko od sigurnih ruta i prikrivaju neprijateljske narudžbe kao pomoć. Iza uljudnog poziva čeka ratni brod. Poraz Korvessa podsjeća kolonija da poznati glas nije dokaz poštenog pošiljatelja."
+      "Korvessa je služila u diplomatskoj kurirskoj floti i poznavala signale za identifikaciju svake granične postaje. Kada su njezini nalogodavci nestali, podatke o njihovu identitetu pohranila je u tajni arhiv.",
+      "Pri svakom dolasku Korvessa se koristi drugim imenom kojem se vjeruje. Krivotvorene poruke odvlače opskrbne brodove sa sigurnih ruta i prikazuju neprijateljske zapovijedi kao ponude pomoći. Iza uljudnog pozivnog znaka skriva se ratni brod. Pobjeda nad Korvessom podsjeća kolonije da poznat glas sam po sebi ne potvrđuje poštenje pošiljatelja."
     ],
     "3": [
       "Kradljivac pečata",
-      "Drelvorn je bio putujući trezor za pečate starih zapovjednika flote. Tijekom pobune, sustav čuvara zaključao je zakonite skrbnike i otišao sa svojim vjerodajnicema.",
-      "Sada prodaje ukradene ovlasti sjenovitoj floti. Poruke koje nose uhvaćene pečate otvaraju vrata koja bi trebala ostati zatvorena. Njegov trup štiti izgled autentičnosti, a ne blaga. Branitelji ga moraju zaustaviti prije nego što preostali arhivi izgube svoju sposobnost razlikovanja pouzdanih narudžbi od ukradenih imena."
+      "Drelvorn je služio kao putujući trezor za pečate nekadašnjih zapovjednika flote. Tijekom pobune njegov je sustav zaštite zakonitim čuvarima blokirao pristup i odveo brod s njihovim vjerodajnicama.",
+      "Sada Drelvorn prodaje ukradene ovlasti floti sjena. Poruke s otetim pečatima otvaraju vrata koja bi trebala ostati zatvorena. Oklopljeni trup štiti privid vjerodostojnosti. Branitelji moraju zaustaviti brod dok preostali arhivi još mogu razlikovati pouzdane zapovijedi od poruka potpisanih ukradenim imenima."
     ],
     "4": [
       "Krivotvoritelj kronika",
@@ -261,56 +261,56 @@
       "Elitsko izdanje prati posljednju preživjelu vezu ugroženog sektora. Njegova arhiva simbolički nosi imena svakog nestalog kurira."
     ],
     "nova-wing": [
-      "Nova Wing je dizajniran za prvo putovanje izvan svjetlećeg obruča. Njegovo brodogradilište dijelilo je planove s udaljenom kolonijama kako nitko ne bi bio isključen iz sigurne plovidbe. Piloti još uvijek govore o prvom povratku: oštećenom brodu, netaknutoj arhivi karte i nebu punom novih mogućnosti.",
-      "Zadužena tvrtka za mapiranje prodala je umirovljenu Nova Wings neprijatelju trgovcu. Njegovi sponzori mogli su si priuštiti trupove, ali malo novog oružja, ostavljajući najviše u svojoj izvornoj konfiguraciji.",
+      "Nova Wing projektiran je za prvo putovanje preko sjajnog ruba nove. Brodogradilište je podijelilo nacrte s udaljenim kolonijama kako bi svima bile dostupne sigurne rute. Piloti još pričaju o prvom povratku. Brod je bio oštećen, arhiv zvjezdanih karata netaknut, a nebo je otvaralo nove mogućnosti.",
+      "Zaduženo kartografsko poduzeće prodalo je rashodovane brodove Nova Wing trgovcu koji je služio kao paravan neprijatelju. Njegovi su financijeri mogli platiti trupove i tek ponešto novog oružja. Većina brodova zadržala je izvornu opremu.",
       "Napredni piloti čuvaju kurire koji nose te karte dalje. Njihov znak prikazuje prvu mapiranu zvijezdu.",
       "Elitna ekspedicija lovi izvore krivotvorenih zvjezdanih karata, nasljeđivanje svrhe izvorne istraživačke misije."
     ],
     "solar-lance": [
-      "Solar Lance je došao iz stanice koja je crpila energiju iz umiruće zvijezde. Kada je njegov konačni kolekcionarski prsten evakuiran, ovi brodovi su pratili spasilačke teretnjake kroz krhotke. Njihove duge siluete bile su ugravirane na spomenicima nove matične luke. Dizajn označava održavanje jasnog smjera dok cijeli svijet blijedi iza njega.",
-      "Neprijateljske posade napustile su Solarne Lanceove kada je pala baza za evakuaciju. Njihov proračun za opskrbu uglavnom je financirao rute bijega za zapovjednike, ostavljajući zarobljene brodove s improviziranim popravcima, a ne nadogradnjom.",
+      "Solar Lance potekao je s postaje koja je dobivala energiju od zvijezde na umoru. Pri evakuaciji posljednjeg prstena kolektora ti su brodovi pratili spasilačke teretnjake kroz krhotine. Njihove izdužene siluete urezane su na spomenike u novoj matičnoj luci. Ovaj tip broda podsjeća koliko je važno držati smjer dok cijeli svijet iza krme gasne.",
+      "Kad je pala evakuacijska baza, neprijateljske su posade zauzele napuštene brodove Solar Lance. Većina sredstava za opskrbu potrošena je na rute za bijeg zapovjednika. Zarobljene brodove uglavnom su osposobljavali privremenim popravcima.",
       "Napredni sat zadržava premještene kolone. Svaki brod nosi stari kod evakuacije.",
       "Elitne formacije brane nove solarne trgovine od flote u sjeni, štiteći svjetlo koje su izbjeglice uspjele nositi."
     ],
     "dark-delta": [
-      "Dark Delta nikada nije izgrađena za slavu. Njegova prva misija bila je pretražiti tihe ispostave za preživjele. Rani dnevnici sadrže više koordinata od imena jer su posade štitile privatnost spašenih doseljenika. Tradicija je proizarasla iz tog izbora: uspjeh se mjeri tko se sigurno vraća, a ne tko priča priču.",
-      "Broker pomfrit preusmjerio je pošiljku Dark Delta u flotu u sjeni. Nakon plaćanja izdaje, njegova sredstva su jedva pokrivala rezervne dijelove. Vrlo malo ukradenih trupa dobilo je bolju opremu.",
+      "Dark Delta nastala je za diskretne misije. Prvi je zadatak bio tražiti preživjele u postajama koje su utihnule. U prvim brodskim dnevnicima ima više koordinata nego imena, jer su posade štitile privatnost spašenih doseljenika. Tako se razvila tradicija prema kojoj se uspjeh mjeri time tko se sigurno vratio.",
+      "Podmićeni posrednik preusmjerio je isporuku brodova Dark Delta floti sjena. Nakon što je platila izdaju, flota je jedva imala dovoljno za rezervne dijelove. Tek je nekoliko ukradenih brodova dobilo bolju opremu.",
       "Izvedba Advanced prati ugrožene arhiviste na putovima za bijeg. Izvješća o misiji otvaraju se tek kad sigurno stignu na odredište.",
       "Elitni piloti prevoze svjedoke čiji računi mogu pomiriti cijele kolone. Njihova reputacija počiva na diskrecijskoj rediktnosti, a ne na spektakl."
     ],
     "gold-streak": [
-      "Gold Streak započela je u utrkama između trgovačkih mjeseca. Tijekom krize opskrbe, piloti su koristili svoje znanje o ruti kako bi nosili medicinsku dokumentaciju pored zatvorenih luka. Sportska liga postala je kurirske unije. Zlatne oznake podsjećaju na tanku sunčevu svjetlost između mjeseca koji su vodili svoje prve kurire, a ne bogatstvo.",
-      "Neprijateljske bande zaplijenile su zlatne pruge na napuštenom trkaćem mjesecu. Očekivali su nagradni novac, ali utrke su završile davno prije. Bez tog prihoda, rijetko su modernizirali svoju novu flotu.",
+      "Gold Streak prvi se put pojavio u utrkama između trgovačkih mjeseca. Za vrijeme opskrbne krize piloti su iskoristili poznavanje ruta kako bi prenijeli medicinske zapise zaobilazeći zatvorene luke. Sportska liga postala je udruženje kurira. Zlatne oznake podsjećaju na tanku zraku sunca koja je vodila prve kurire između mjeseca.",
+      "Neprijateljske bande zaplijenile su brodove Gold Streak na napuštenom trkaćem mjesecu. Računale su na nagradni novac, ali utrke su davno završile. Bez tog prihoda rijetko su uspijevale modernizirati zaplijenjenu flotu.",
       "Napredni kuriri nose provjerene obveze pomoći između klinika. Njihovi stari brojevi utrka čuvaju svoje zajedničko podrijetlo.",
       "Elitna liga čuva vitalne konvoje sektora za spašavanje. Njegova najcjenjenija titula je posada koja je donesena kući završena."
     ],
     "iron-guard": [
-      "Iron Guard dizajnirali su radnici na pristanu koji nisu voljni napustiti obranu svog doma vanjskim flotama. Njegov prvi trup koristio je dijelove iz mirovite dizalice. Kobilica nosila imena ljudi koji su radili na njemu nakon svojih smjena. Serija se sjeća da obrana može značiti brigu za mjesto koje su izgradile mnoge ruke.",
-      "Nakon što su okupirali brodogradilište, napadači su prisilili svoje preostale radnike da obnove stare Željezne garde. Nedostajao im je i novac i dobavljači za novo oružje, tako da je većina ukradenih trupova zadržila svoje izvorne specifikacije.",
+      "Iron Guard projektirali su radnici iz dokova koji su željeli vlastitim snagama braniti svoj dom. Prvi trup sastavili su od dijelova rashodovanih teretnih dizalica. Na kobilici su bila imena ljudi koji su na brodu radili nakon smjene. Ova serija podsjeća da obrana doma uključuje i brigu o onome što je izgrađeno zajedničkim radom.",
+      "Nakon zauzimanja brodogradilišta napadači su prisilili preostale radnike da osposobe stare brodove Iron Guard. Nedostajali su im novac i dobavljači novog oružja. Većina ukradenih brodova zadržala je izvornu opremu.",
       "Napredni sat prati mobilne pristaništa za popravak. Njezine posade znaju svako sklonište za hitne slučajeve oko lučkog prstena.",
       "Elitni brodovi brane obnovu uništenih stanica. Njihove počasti priznaju posada brodogradilišta dovedene su na sigurno."
     ],
     "vector": [
-      "Vector nastao iz spora navigatora: vjerujte jednom savršenom tečaju ili usporedite neovisna mjerenja? Druga skupina izgradila je ovaj brod i prešla neistraženi prsten za krhotine. Njihov povratak postao je slučaj suradnje. Njezini preživjeli grafikoni čuvaju proturječna očitanja tako da kasnije piloti mogu razumjeti kako je pronađena zajednička ruta.",
-      "Krivotizirani ugovori o prijevozu prenijeli su brojne Vektore na neprijateljske vlasnike. Kada je prijevara otkrivena, njihovo financiranje je prestalo. Rezerve su držale brodove leteći, ali su platili nekoliko nadogradnji.",
+      "Vector je nastao iz spora među navigatorima. Jedni su se uzdali u savršen kurs, a drugi su željeli usporediti neovisna mjerenja. Druga je skupina izgradila brod i prešla neucrtani prsten krhotina. Njihov povratak pokazao je vrijednost suradnje. Sačuvane karte bilježe različita očitanja kako bi kasniji piloti mogli razumjeti kako je pronađena zajednička ruta.",
+      "Krivotvoreni ugovori o prijevozu tereta omogućili su prijenos nekoliko brodova Vector neprijateljskim vlasnicima. Kad je prijevara razotkrivena, dotok novca je stao. Pričuve su održale brodove u pogonu i omogućile tek nekoliko nadogradnji.",
       "Napredne formacije provjeravaju ponovno otvorene trgovačke rute. Svaki tečaj nosi potpise nekoliko navigatora.",
       "Elitna ekspedicija istražuje sustavno petljanje karata, prikupljajući dokaze gdje drugi vide samo suprotstavljene upute."
     ],
     "verdant": [
-      "Verdant je nosio prvi arhiv sjemena u koloniju bez prirodnog tla. Njegovi planovi putovali su uz kataloge biljaka kako bi druga naselja mogla postati neovisna. Njegovi piloti smatraju se čuvarima budućih žetvi. Netaknuta arhiva može biti važnija od blistavog tereta: može sadržavati cjelokupnu zimsku opskrbu hranom.",
-      "Raiders je zarobio Verdantse u nadi da će prodati vrijedne arhive sjemena. Arhivi su već bili premješteni, ostavljajući samo brodove i razočarane sponzore. Rijetko se slijede nova sredstva za nadogradnje.",
+      "Verdant je prve banke sjemena prevezao u koloniju bez prirodnog tla. Nacrti broda slali su se s biljnim katalozima kako bi i druga naselja mogla postati samostalna. Njegovi se piloti smatraju čuvarima budućih žetvi. Očuvana banka sjemena može vrijediti više od blistavog tereta jer može sadržavati hranu za cijelu zimu.",
+      "Pljačkaši su zarobili brodove Verdant nadajući se prodaji vrijednih banaka sjemena. Banke su već bile premještene. Ostali su brodovi i razočarani financijeri koji su rijetko odvajali novac za nadogradnje.",
       "Napredni brodovi osiguravaju razmjenu između stanica u staklenikima. Njihovi identifikatori čuvaju imena zaboravljenih biljaka.",
       "Elitna garda štiti posljednji potpuni registar sjemena, uključujući koloniju koje tek treba uzgajati svoj prvi vrt."
     ],
     "storm-wing": [
-      "Storm Wing izgrađeno je tijekom sezone nemilosrdnih ionsko oluja. Brodogradilišta su radila između nesvjestici i razmjenjivali napredak kroz kurire. Nijedno mjesto nije držalo kompletan dizajn sve dok prvi brod nije spojio svaki dio. Njezino podrijetlo govori o mreži koja nastavlja raditi unatoč tome što je više puta gubila svoje veze.",
-      "Tijekom neslaganja mreže, neprijatelji su okupirali udaljeni hangar pun Storm Wingsa. Odsječeni opskrbni vodovi učinili su svaku zamjenu skupom. Njihov ograničeni proračun obično je pokrivao rad, a ne napredne remonte.",
+      "Storm Wing izgrađen je u sezoni neprestanih ionskih oluja. Brodogradilišta su radila između nestanaka struje i slala izvješća preko kurira. Cijeli je projekt postao dostupan tek kad je prvi brod objedinio sve dijelove. Priča o nastanku pokazuje kako mreža može nastaviti raditi unatoč ponovljenim prekidima veze.",
+      "Tijekom ispada mreže neprijatelj je zauzeo udaljeni hangar pun brodova Storm Wing. Prekid opskrbnih ruta poskupio je svaki rezervni dio. Ograničeni je proračun obično bio dovoljan samo da brodovi ostanu u službi.",
       "Napredna auzijata prati plutače za održavanje duž olujne granice, zatvarajući praznine između izoliranih stanica.",
       "Elitni piloti štite velike konvoje za popravak nakon prekida rada. Njihov povratak znači da je pomoć ponovno pronašla rutu."
     ],
     "red-comet": [
-      "Red Comet dobio je ime po spasilački let čiji je sjajni trag prešao tri kolonija. Pilot nije donio blago, samo posljednji netaknuti dizajn za pročišćivač vode. Legende su uljepšale putovanje, ali brodogradilište čuva jednostavno izvorno izvješće: ljudi na odredištu mogli bi ponovno piti sljedećeg jutra.",
-      "Neprijateljska iznuđivačka skupina zaplijenila je Crvene komete pod lažnim nalogom za oduzimanje. Kolodije su prestale plaćati. Bez očekivanih prihoda, većina zarobljenih spasilačkih brodova ostala je tehnički nepromijenjena.",
+      "Red Comet ime je dobio po spasilačkom letu čiji je svijetli trag prešao nebom triju kolonija. Pilot je nosio posljednji neoštećeni nacrt pročišćivača vode. Legende su uljepšale let, ali brodogradilište čuva jednostavno izvorno izvješće. Ljudi na odredištu već su sljedećeg jutra opet mogli piti čistu vodu.",
+      "Neprijateljska skupina iznuđivača preuzela je brodove Red Comet s krivotvorenim nalogom za oduzimanje. Kolonije su prestale plaćati. Bez očekivanog prihoda većina zarobljenih spasilačkih brodova zadržala je prijašnju opremu.",
       "Napredni brodovi nose znanje o popravke u zone hitne pomoći. Njihove crvene oznake stoje za hitnu pomoć.",
       "Elite izdanje prati konačne isporuke u opkoljene kolonije. Njezin pozivni znak ostaje aktivan sve dok primatelj ne odgovori."
     ],

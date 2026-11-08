@@ -9,13 +9,13 @@
     ],
     "2": [
       "A maszkviselő",
-      "Korvessa egy diplomáciai futárflottát szolgált ki, és megtanulta az összes határállomás felismerési jelzéseit. Amikor a pártfogói eltűntek, személyazonosságukat egy rejtett archívumban tartották.",
-      "Most minden érkezés más megbízható nevet visel. A hamisított üzenetek elcsábítják a hajókat a biztonságos útvonalaktól, és segítségként álcázzák az ellenséges parancsokat. Az udvarias hívójel mögött egy hadihajó vár. Korvessa legyőzése emlékezteti a gyarmatokat, hogy az ismerős hang nem bizonyítja a becsületes feladót."
+      "A Korvessa egy diplomáciai futárflottában szolgált, és minden határállomás azonosítójelét ismerte. Amikor megbízói eltűntek, személyazonosságuk adatait egy titkos archívumba mentette.",
+      "A Korvessa ma már minden érkezésekor más, megbízhatónak tartott nevet használ. Hamis üzenetei letérítik az ellátóhajókat a biztonságos útvonalakról, és segítségnek álcázzák az ellenség parancsait. Az udvarias hívójel mögött hadihajó rejtőzik. A Korvessa legyőzése arra emlékezteti a kolóniákat, hogy egy ismerős hang önmagában még nem igazolja a feladó becsületességét."
     ],
     "3": [
       "A pecséttolvaj",
-      "Drelvorn a régi flottaparancsnokok pecsétjeinek utazó páncéltere volt. A lázadás során őrzőrendszere kizárta a jogos letétkezelőket, és távozott a hitelesítő adataikkal.",
-      "Most ellopott hatalmat ad el az árnyékflottának. A rögzített tömítésekkel ellátott üzenetek kinyitják az ajtókat, amelyeknek zárva kell maradniuk. Hajóteste inkább a hitelesség, mint a kincs megjelenését védi. A védőknek meg kell állítaniuk, mielőtt a fennmaradó archívumok elveszítik azt a képességüket, hogy megkülönböztessék a megbízható parancsokat a lopott nevektől."
+      "A Drelvorn egy utazó páncélterem volt, amely a régi flottaparancsnokok pecsétjeit őrizte. Egy lázadás idején a biztonsági rendszer kizárta a jogos őrzőket, majd a hozzáférési adataikkal együtt elvitte a hajót.",
+      "A Drelvorn most az árnyékflottának árulja az ellopott jogosultságokat. A zsákmányolt pecsétekkel ellátott üzenetek olyan ajtókat nyitnak meg, amelyeknek zárva kellene maradniuk. A páncélozott hajótest a hitelesség látszatát védi. A védőknek meg kell állítaniuk a hajót, amíg a megmaradt archívumok még meg tudják különböztetni a hiteles parancsokat a lopott névvel aláírt üzenetektől."
     ],
     "4": [
       "A krónikahamisító",
@@ -261,56 +261,56 @@
       "Az Elite kiadás egy veszélyeztetett szektor utolsó fennmaradt kapcsolatát kíséri. Archívuma szimbolikusan tartalmazza minden hiányzó futár nevét."
     ],
     "nova-wing": [
-      "A Nova Winget a világító nova peremén túli első útra tervezték. A hajógyár megosztotta a terveket a távoli gyarmatokkal, így senki sem lesz kizárva a biztonságos navigációból. A pilóták még mindig mesélnek az első visszatérésről: egy sérült hajó, egy ép térkép archívum és egy új lehetőségekkel teli égbolt.",
-      "Egy eladósodott térképgyártó cég eladta a visszavonult Nova Wings-t egy ellenséges frontkereskedőnek. Szponzorai megengedhették maguknak a hajótestet, de kevés új fegyvert, így a legtöbb az eredeti konfigurációjukban maradt.",
+      "A Nova Winget a nóva fénylő peremén túli első útra tervezték. A hajógyár a távoli kolóniákkal is megosztotta a terveket, hogy mindenki biztonságosan közlekedhessen. A pilóták ma is mesélnek az első visszatérésről. A hajó megsérült, a csillagtérképek archívuma sértetlen maradt, és az ég új lehetőségeket nyitott meg.",
+      "Egy eladósodott térképészeti cég kivont Nova Wing hajókat adott el egy kereskedőnek, aki az ellenség fedőembere volt. A mögötte álló támogatók ki tudták fizetni a hajótesteket és néhány új fegyvert. A hajók többsége az eredeti felszerelését használta tovább.",
       "A haladó pilóták őrzik a futárokat, akik ezeket a diagramokat továbbvitték. Jelvényük az első feltérképezett csillagot ábrázolja.",
       "Az Elite expedíció a hamisított csillagtérképek forrásaira vadászik, örökölve az eredeti kutatási küldetés célját."
     ],
     "solar-lance": [
-      "A Solar Lance egy olyan állomásról jött, amely energiát merített egy haldokló csillagból. Amikor az utolsó gyűjtőgyűrűt evakuálták, ezek a hajók a mentőteherhajókat kísérték át a törmeléken. Hosszú sziluettjeiket az új otthoni kikötő emlékműveibe vésték. A design azt jelenti, hogy tiszta irányt tart, miközben egy egész világ elhalványul mögötte.",
-      "Az ellenséges legénység elvitte az elhagyatott Solar Lances-t, amikor egy evakuáló bázis leesett. Ellátási költségvetésük elsősorban a parancsnokok menekülési útvonalait finanszírozta, így az elfogott hajókat rögtönzött javításokkal, nem pedig korszerűsítéssel hagyták.",
+      "A Solar Lance egy olyan állomáson született, amely egy haldokló csillagból nyert energiát. Az utolsó gyűjtőgyűrű kiürítésekor ezek a hajók mentőteherhajókat kísértek át a törmelékmezőn. Hosszú sziluettjüket az új anyakikötő emlékműveibe vésték. A konstrukció azt idézi fel, milyen fontos tartani az irányt, amikor mögöttünk egy egész világ huny ki.",
+      "Az evakuációs bázis eleste után az ellenséges legénységek elfoglalták az otthagyott Solar Lance hajókat. Az ellátási keret nagy részéből a parancsnokok menekülési útvonalait biztosították. A zsákmányolt hajók rendszerint csak ideiglenes javítást kaptak.",
       "Az Advanced óra biztosítja az áthelyezett kolóniákat. Minden hajónak van egy régi evakuálási kódja.",
       "Az elit formációk megvédik az új napelemboltokat az árnyékflotta ellen, megvédve a menekültek által elszállított fényt."
     ],
     "dark-delta": [
-      "Dark Delta soha nem a dicsőségre épült. Első küldetése az volt, hogy csendes előőrsöket keressen a túlélők számára. A korai naplók több koordinátát tartalmaznak, mint a nevek, mert a személyzet védte a megmentett telepesek magánéletét. A hagyomány ebből a választásból nőtt ki: a sikert az méri, hogy ki tér vissza biztonságosan, nem pedig azzal, hogy ki meséli el a történetet.",
-      "Egy megvesztegetett bróker egy Dark Delta szállítmányt egy árnyékflottába irányított. Miután kifizette az árulást, a pénze alig fedezte a pótalkatrészeket. Nagyon kevés lopott hajótest kapott jobb felszerelést.",
+      "A Dark Delta típust csendes küldetésekre tervezték. Első útján a legénység túlélőket keresett az elnémult előőrsökön. A korai naplókban több a koordináta, mint a név, mert a legénység óvta a kimentett telepesek magánéletét. Ebből lett a hagyomány, amely szerint a siker azon mérhető, hogy ki tér haza épségben.",
+      "Egy megvesztegetett közvetítő az árnyékflottához irányított egy Dark Delta szállítmányt. Az árulás megfizetése után alig maradt pénz pótalkatrészekre. Csak néhány lopott hajó kapott jobb felszerelést.",
       "Az Advanced változat veszélyben lévő levéltárosokat kísér a menekülési útvonalakon. A küldetés jelentéseit csak a biztonságos megérkezésük után nyitják fel.",
       "Az elit pilóták olyan tanúkat szereznek, akiknek a beszámolói egész gyarmatokat kibékíthetnek. Hírnevük inkább a diszkréción, mint a látványon múlik."
     ],
     "gold-streak": [
-      "Gold Streak a holdak kereskedelme közötti versenyben kezdődött. Az ellátási válság idején a pilóták az útvonal-ismereteiket arra használták, hogy orvosi feljegyzéseket vigyenek a lezárt kikötők mellett. A sportliga futárszövetség lett. Az arany jelek emlékeztetnek a holdak közötti vékony napfényre, amely az első futárokat vezette, nem pedig a gazdagságot.",
-      "Az ellenséges bandák elkobzták az aranycélákat egy elhagyatott versenyholdon. Pénzdíjat vártak, de a versenyek már jóval korábban véget értek. E bevétel nélkül ritkán modernizálták új flottájukat.",
+      "A Gold Streak a kereskedőholdak közötti futamokon mutatkozott be. Az ellátási válság idején pilótái az ismert útvonalakat használva juttattak célba egészségügyi iratokat a lezárt kikötők megkerülésével. A sportligából futárszövetség lett. Az arany jelzések a holdak között átszűrődő vékony napfénycsíkra emlékeztetnek, amely az első futárokat vezette.",
+      "Ellenséges bandák Gold Streak hajókat foglaltak le egy elhagyott versenyholdon. A versenydíjakra számítottak, de a futamok már régen megszűntek. A várt bevétel nélkül ritkán tudták korszerűsíteni a megszerzett flottát.",
       "A haladó futárok ellenőrzött segélyzálogokat hordoznak a klinikák között. Régi versenyszámuk megőrzi közös eredetüket.",
       "Az Elite League őrzi az ágazat létfontosságú mentőkonvojait. A legértékesebb címe egy teljes hazahozott legénység."
     ],
     "iron-guard": [
-      "Az Iron Guardot olyan dokkmunkások tervezték, akik nem voltak hajlandók otthonuk védelmét külső flottákra hagyni. Első hajóteste a visszavonult rakománydaruk alkatrészeit használta. A gerinc azoknak az embereknek a nevét viselte, akik a műszakjuk után dolgoztak rajta. A sorozat megjegyzi, hogy a védelem azt jelentheti, hogy gondoskodunk egy sok kéz által épített helyről.",
-      "Miután elfoglaltak egy hajógyárat, a támadók arra kényszerítették a megmaradt munkásokat, hogy helyreállítsák a régi vasgárdát. Hiányzott belőlük mind a pénz, mind a beszállítók az új fegyverekért, így a legtöbb lopott hajótest megtartotta eredeti specifikációját.",
+      "Az Iron Guardot olyan dokkmunkások tervezték, akik maguk akarták megvédeni az otthonukat. Az első hajótestet leselejtezett rakodódaruk alkatrészeiből állították össze. A gerincbe azok nevét vésték, akik a műszakjuk után is dolgoztak a hajón. A sorozat emlékeztet rá, hogy a védelem azt is jelenti, hogy vigyázunk arra, amit sokan együtt építettek.",
+      "A támadók elfoglaltak egy hajógyárat, és rákényszerítették az ott maradt munkásokat, hogy hozzák rendbe a régi Iron Guard hajókat. Új fegyverekhez sem pénzük, sem beszállítójuk nem volt. A lopott hajók többsége ezért az eredeti felszerelésével üzemelt.",
       "Az Advanced óra kíséri a mobil javító dokkokat. A legénység minden sürgősségi menedéket ismer a kikötői gyűrű körül.",
       "Az elit hajók megvédik a szétzúzott állomások újjáépítését. Megtiszteltetésük elismeri a hajógyári személyzetet, amelyet biztonságba hoztak."
     ],
     "vector": [
-      "Vector egy navigátorok vitájából eredt: bízzon egy tökéletes tanfolyamban, vagy hasonlítsa össze a független méréseket? A második csoport építette ezt a hajót, és átkelt egy feltérképezetlen törmelékgyűrűn. Visszatérésük az együttműködés ügye lett. Túlélő diagramjai megőrzik az egymásnak ellentmondó értékeket, így a későbbi pilóták megérthetik, hogyan találták meg a közös útvonalat.",
-      "A hamis árufuvarozási szerződések számos vektort szállítottak az ellenséges tulajdonosoknak. Amikor a csalást leleplezték, a finanszírozásuk leállt. A tartalékok megtartották a hajók repülését, de kevés fejlesztést fizettek.",
+      "A Vector a navigátorok vitájából született. Az egyik csoport a tökéletes útvonalban bízott, a másik független méréseket akart összevetni. A második csoport megépítette a hajót, és átkelt egy feltérképezetlen törmelékgyűrűn. A visszatérésük megmutatta az együttműködés erejét. A fennmaradt térképeken a különböző mérési eredmények is szerepelnek, hogy a későbbi pilóták megértsék, hogyan találták meg a közös útvonalat.",
+      "Hamis fuvarozási szerződésekkel több Vector került az ellenség tulajdonába. Amikor kiderült a csalás, megszűnt a finanszírozás. A tartalékokból a hajókat üzemben tudták tartani, de kevés fejlesztésre futotta.",
       "A fejlett formációk ellenőrzik az újranyitott kereskedelmi útvonalakat. Minden tanfolyamon több navigátor aláírása is van.",
       "Az Elite expedíció szisztematikus térképhamisítást vizsgál, és olyan bizonyítékokat gyűjt, ahol mások csak ellentétes irányokat látnak."
     ],
     "verdant": [
-      "A Verdant az első vetőmag-archívumot egy természetes talaj nélküli kolóniába vitte. Tervei a növénykatalógusok mellett haladtak, hogy más települések is függetlenné váljanak. Pilótái a jövőbeli betakarítás őrzőinek tartják magukat. Egy ép archívum többet számít, mint a csillogó rakomány: egy egész téli élelmiszer-ellátást tartalmazhat.",
-      "A Raiders elfogta a Verdants-t abban a reményben, hogy értékes vetőmag archívumokat adhat el. Az archívumot már áthelyezték, csak hajók maradtak, és csalódott szponzorok maradtak. A fejlesztések új finanszírozása ritkán következett be.",
+      "A Verdant vitte az első vetőmagbankokat egy természetes talaj nélküli kolóniára. A hajó terveit a növénykatalógusokkal együtt adták tovább, hogy más települések is önellátóvá válhassanak. Pilótái a jövő termésének őrzőiként tekintenek magukra. Egy ép vetőmagbank többet érhet egy csillogó rakománynál, hiszen egy egész télre biztosíthat élelmet.",
+      "A fosztogatók értékes vetőmagbankok eladásában reménykedve foglaltak el Verdant hajókat. A vetőmagbankokat azonban már elszállították. A hajókon kívül csak csalódott támogatók maradtak, akik ritkán adtak pénzt fejlesztésekre.",
       "A fejlett hajók biztosítják az üvegházi állomások közötti cserét. Az azonosítóik megőrzik az elfeledett növények nevét.",
       "Az Elite őr védi az utolsó teljes vetőmag-nyilvántartást, beleértve azokat a kolóniákat is, amelyek még nem termesztették első kertjüket."
     ],
     "storm-wing": [
-      "A Storm Wing a könyörtelen ionviharok szezonjában épült. A hajógyárak áramszünetek között dolgoztak, és futárokon keresztül váltottak előrelépést. Egyetlen helyszín sem tartotta a teljes tervet, amíg az első hajó össze nem hozta az összes részt. Eredete egy olyan hálózatról szól, amely továbbra is működik, annak ellenére, hogy többször elvesztette kapcsolatait.",
-      "A hálózati kimaradás során az ellenség elfoglalt egy távoli hangárt, amely tele volt Storm Wings-szel. A levágott tápvezetékek minden cserét költségessé tettek. Korlátozott költségvetésük általában a működést fedezte, nem pedig a fejlett felújításokat.",
+      "A Storm Wing a szüntelen ionviharok évszakában épült. A hajógyárak az áramszünetek között dolgoztak, és futárokkal üzentek egymásnak a munka állásáról. Egyetlen telephelyen sem volt meg a teljes terv, amíg az első hajóban össze nem állt minden alkatrész. A történet egy olyan hálózatról szól, amely a kapcsolatok ismételt megszakadása ellenére is működött.",
+      "A hálózat leállásakor az ellenség elfoglalt egy távoli, Storm Wing hajókkal teli hangárt. Az elvágott utánpótlási vonalak miatt minden pótalkatrész sokba került. A szűkös keretből többnyire csak az üzemeltetésre futotta.",
       "Az Advanced század karbantartó bójákat kísér a viharhatár mentén, bezárva az elszigetelt állomások közötti réseket.",
       "Az elit pilóták a nagy javítókonvojokat védik a kimaradások után. Visszatérésük azt jelenti, hogy a segítség újra megtalálta az útvonalat."
     ],
     "red-comet": [
-      "A Red Comet egy mentőrepülésről nevezték el, amelynek izzó nyomvonala három kolónia egén kelt át. A pilóta nem hozott kincset, csak az utolsó ép kialakítást egy víztisztító számára. A legendák díszítették az utazást, de a hajógyár megőrzi az egyszerű eredeti jelentést: a célállomáson lévő emberek másnap reggel újra ihatnak.",
-      "Egy ellenséges zsaroló csoport hamis visszavételi parancs alatt lefoglalta a Red Comets-t. A gyarmatok már nem fizetnek. A várható bevétel nélkül a legtöbb elfogott mentőhajó technikailag változatlan maradt.",
+      "A Red Comet egy mentőrepülésről kapta a nevét, amelynek fénylő nyoma három kolónia egén húzódott át. A pilóta a víztisztító utolsó sértetlen tervrajzát vitte magával. A legendák kiszínezték az utat, de a hajógyár őrzi a rövid eredeti jelentést. A célállomás lakói már másnap reggel ismét tiszta vizet ihattak.",
+      "Egy ellenséges zsarolócsoport hamis lefoglalási paranccsal vett birtokba Red Comet hajókat. A kolóniák nem fizettek többé. Az elmaradt bevétel miatt a legtöbb megszerzett mentőhajó a korábbi felszerelésével üzemelt tovább.",
       "A fejlett hajók javítási ismereteket szállítanak a vészhelyzeti zónákba. A piros jelölések sürgős segítséget jelentenek.",
       "Az Elite kiadás elkíséri a végső szállításokat az ostromlott gyarmatokra. Hívójele aktív marad, amíg a címzett nem válaszol."
     ],

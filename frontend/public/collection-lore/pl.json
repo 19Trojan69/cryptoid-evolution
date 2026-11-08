@@ -9,13 +9,13 @@
     ],
     "2": [
       "Nosicielka masek",
-      "Korvessa obsługiwała dyplomatyczną flotę kurierską i poznawała sygnały rozpoznawcze każdej stacji granicznej. Kiedy jego patroni zniknęli, trzymali swoje tożsamości w ukrytym archiwum.",
-      "Teraz każdy przyjazd ma inną zaufaną nazwę. Skute komunikaty wabią statki zaopatrzeniowe z dala od bezpiecznych tras i przebierają wrogie rozkazy za pomoc. Za uprzejmym znakiem wywoławczym czeka okręt wojenny. Pokonanie KorvessaKorvessy przypomina koloniom, że znajomy głos nie jest dowodem na uczciwego nadawcę."
+      "Korvessa służyła we flocie kurierów dyplomatycznych i znała sygnały rozpoznawcze każdej stacji granicznej. Gdy jej mocodawcy zniknęli, zachowała dane o ich tożsamości w tajnym archiwum.",
+      "Za każdym razem Korvessa przedstawia się pod innym zaufanym nazwiskiem. Fałszywe komunikaty sprowadzają statki zaopatrzeniowe z bezpiecznych tras i podszywają wrogie rozkazy pod oferty pomocy. Za uprzejmym znakiem wywoławczym kryje się okręt wojenny. Pokonanie Korvessy przypomina koloniom, że sam znajomy głos nie potwierdza uczciwości nadawcy."
     ],
     "3": [
       "Złodziej pieczęci",
-      "Drelvorn był skarbcem dla fok starych dowódców floty. Podczas buntu jego system opiekuńczy zablokował prawowitych opiekunów i odszedł z ich referencjami.",
-      "Teraz sprzedaje skradzione władze flocie cieni. Wiadomości z przechwyconymi fokami otwierają drzwi, które powinny pozostać zamknięte. Jego kadłub chroni raczej wygląd autentyczności niż skarbu. Obrońcy muszą to powstrzymać, zanim pozostałe archiwa utracą zdolność do odróżnienia zaufanych zamówień od skradzionych nazwisk."
+      "Drelvorn był ruchomym skarbcem przechowującym pieczęcie dawnych dowódców floty. Podczas buntu system ochrony odciął prawowitych opiekunów od skarbca i zabrał ich dane uwierzytelniające.",
+      "Teraz Drelvorn sprzedaje flocie cieni ukradzione uprawnienia. Wiadomości ze zdobytymi pieczęciami otwierają drzwi, które powinny pozostać zamknięte. Kadłub osłania pozory autentyczności. Obrońcy muszą powstrzymać okręt, zanim pozostałe archiwa utracą zdolność odróżniania prawdziwych rozkazów od wiadomości podpisanych skradzionymi nazwiskami."
     ],
     "4": [
       "Fałszerz kronik",
@@ -261,56 +261,56 @@
       "Edycja Elite eskortuje ostatnie zachowane połączenie zagrożonego sektora. Jego archiwum symbolicznie nosi nazwiska każdego zaginionego kuriera."
     ],
     "nova-wing": [
-      "Nova Wing został zaprojektowany na pierwszą podróż poza świetlistą felgę nova. Jego stocznia podzieliła się planami z odległymi koloniami, więc nikt nie zostanie wykluczony z bezpiecznej żeglugi. Piloci wciąż opowiadają o tym pierwszym powrocie: uszkodzonym statku, nienaruszonym archiwum wykresów i niebo pełne nowych możliwości.",
-      "Zadłużona firma mapująca sprzedała emerytowaną Nova Wings wrogiemu kierownikowi frontowemu. Jego sponsorów było stać na kadłuby, ale niewiele nowych broni, pozostawiając większość w swojej pierwotnej konfiguracji.",
+      "Nova Wing powstał z myślą o pierwszym locie poza świetlistą krawędź nowej. Stocznia przekazała plany odległym koloniom, aby każda mogła bezpiecznie żeglować. Piloci wciąż opowiadają o pierwszym powrocie. Statek był uszkodzony, archiwum map pozostało całe, a niebo otwierało nowe możliwości.",
+      "Zadłużona firma kartograficzna sprzedała wycofane ze służby statki Nova Wing kupcowi działającemu jako podstawiona osoba wroga. Jego finansujących stać było na kadłuby i niewiele nowych dział. Większość statków zachowała wyposażenie fabryczne.",
       "Zaawansowani piloci pilnują kurierów przewożących te wykresy dalej. Ich insygnia przedstawiają pierwszą odwzorowaną gwiazdę.",
       "Ekspedycja Elitarna poluje na źródła sfałszowanych wykresów gwiazd, dziedzicząc cel pierwotnej misji poszukiwawczej."
     ],
     "solar-lance": [
-      "Solar Lance pochodzi ze stacji, która czerpała energię z umierającej gwiazdy. Kiedy jego ostatni pierścień kolekcjonerski został ewakuowany, statki te eskortowały frachtowce ratownicze przez gruz. Ich długie sylwetki zostały wygrawerowane na pomnikach nowego portu. Projekt oznacza, że trzyma wyraźny kurs, podczas gdy cały świat za nim zanika.",
-      "Wrogie załogi porzuciły Solar Lances, gdy spadła baza ewakuacyjna. Ich budżet na dostawy finansował głównie drogi ucieczki dla dowódców, pozostawiając zdobyte statki z prowizorycznymi naprawami, a nie modernizacjami.",
+      "Solar Lance powstał na stacji czerpiącej energię z gasnącej gwiazdy. Podczas ewakuacji ostatniego pierścienia kolektorów te statki eskortowały frachtowce ratunkowe przez pole szczątków. Ich smukłe sylwetki wyryto na pomnikach w nowym porcie macierzystym. Konstrukcja przypomina, jak utrzymać kurs, gdy za rufą gaśnie cały świat.",
+      "Wrogie załogi przejęły porzucone statki Solar Lance po upadku bazy ewakuacyjnej. Większość środków przeznaczono na drogi ucieczki dla dowódców. Zdobytym jednostkom zwykle zapewniano jedynie doraźne naprawy.",
       "Zegarek Advanced utrzymuje dostarczone przeniesione kolonie. Każdy statek ma stary kod ewakuacyjny.",
       "Elitarne formacje bronią nowych zapasów energii słonecznej przed flotą cieni, chroniąc światło, które uchodźcom udało się przewieźć."
     ],
     "dark-delta": [
-      "Dark Delta nigdy nie została stworzona dla chwały. Jego pierwszą misją było przeszukanie cichych placówek dla ocalałych. Wczesne dzienniki zawierają więcej współrzędnych niż nazw, ponieważ załogi chroniły prywatność uratowanych osadników. Tradycja wyrosła z tego wyboru: sukces mierzy się tym, kto wraca bezpiecznie, a nie przez to, kto opowiada historię.",
-      "Przekupny broker przekierował przesyłkę Dark Delta do floty cieni. Po opłaceniu zdrady jej fundusze ledwo pokrywały części zamienne. Bardzo niewiele skradzionych kadłubów otrzymało lepszy sprzęt.",
+      "Dark Delta zaprojektowano do dyskretnych misji. Podczas pierwszej wyprawy załogi szukały ocalałych w milczących placówkach. We wczesnych dziennikach jest więcej współrzędnych niż nazwisk, ponieważ załogi chroniły prywatność uratowanych osadników. Tak powstała tradycja oceniania misji po tym, kto wrócił bezpiecznie do domu.",
+      "Przekupiony pośrednik skierował dostawę statków Dark Delta do floty cieni. Po opłaceniu zdrady pieniędzy ledwo starczyło na części zamienne. Tylko nieliczne skradzione kadłuby dostały lepsze wyposażenie.",
       "Wersja Advanced eskortuje zagrożonych archiwistów na trasach ewakuacyjnych. Raporty z misji otwiera się dopiero po ich bezpiecznym dotarciu do celu.",
       "Elitarni piloci odzyskują świadków, których relacje mogą pogodzić całe kolonie. Ich reputacja opiera się na dyskrecji, a nie na spektaklu."
     ],
     "gold-streak": [
-      "Gold Streak rozpoczął się w wyścigach między księżycami handlowymi. Podczas kryzysu zaopatrzeniowego jego piloci wykorzystali swoją wiedzę o trasie do przenoszenia dokumentacji medycznej obok zamkniętych portów. Liga sportowa stała się związkiem kurierskim. Złote oznaczenia przypominają cienkie światło słoneczne między księżycami, które kierowały jego pierwszymi kurierami, a nie bogactwem.",
-      "Wrogie gangi skonfiskowały Złote Smugi na opuszczonym księżycu wyścigowym. Spodziewali się nagrody pieniężnej, ale wyścigi skończyły się na długo wcześniej. Bez tego dochodu rzadko modernizowali swoją nową flotę.",
+      "Gold Streak zadebiutował w wyścigach między księżycami handlowymi. W czasie kryzysu zaopatrzeniowego piloci wykorzystali znajomość szlaków, by przewozić dokumentację medyczną z ominięciem zamkniętych portów. Liga sportowa przekształciła się w związek kurierów. Złote oznaczenia przywołują wąską smugę słońca, która prowadziła pierwszych kurierów między księżycami.",
+      "Wrogie bandy zarekwirowały statki Gold Streak na opuszczonym księżycu wyścigowym. Liczyły na nagrody pieniężne, lecz wyścigi ustały dawno temu. Bez tych dochodów rzadko modernizowały przejętą flotę.",
       "Zaawansowani kurierzy niosą zweryfikowane obietnice pomocy między klinikami. Ich stare wyścigi zachowują wspólne pochodzenie.",
       "Liga elit pilnuje ważnych konwojów ratowniczych sektora. Jego najbardziej cenionym tytułem jest ekipa przyniesiona do domu."
     ],
     "iron-guard": [
-      "Iron Guard został zaprojektowany przez pracowników doków, którzy nie chcieli zostawić obrony swojego domu zewnętrznym flotom. Jego pierwszy kadłub wykorzystywał części z emerytowanych dźwigów towarowych. Stęczówka nosiła nazwiska osób, które pracowały nad nim po swoich zmianach. Serial pamięta, że obrona może oznaczać troskę o miejsce zbudowane przez wiele rąk.",
-      "Po zajęciu stoczni napastnicy zmusili jej pozostałych pracowników do przywrócenia starych Żelaznych Strażników. Brakowało im zarówno pieniędzy, jak i dostawców na nową broń, więc większość skradzionych kadłubów zachowała swoją pierwotną specyfikację.",
+      "Iron Guard zaprojektowali robotnicy doków, którzy sami chcieli bronić swojego domu. Pierwszy kadłub złożyli z części wycofanych dźwigów towarowych. Na stępce znalazły się nazwiska tych, którzy budowali statek po własnej zmianie. Ta seria przypomina, że obrona to także troska o miejsce stworzone wspólną pracą.",
+      "Po zajęciu stoczni napastnicy zmusili pozostałych robotników do przywrócenia starych statków Iron Guard do służby. Brakowało im pieniędzy i dostawców nowego uzbrojenia. Większość skradzionych statków zachowała pierwotne wyposażenie.",
       "Zegarek Advanced eskortuje mobilne doki naprawcze. Jego załogi znają każde schronisko awaryjne wokół pierścienia portowego.",
       "Elitarne okręty bronią odbudowy rozbitych stacji. Ich honory uznają załogi stoczni sprowadzone w bezpieczne miejsce."
     ],
     "vector": [
-      "Vector powstał z sporu nawigatorów: zaufaj jednemu idealnemu kursowi, czy porównaj niezależne pomiary? Druga grupa zbudowała ten statek i przekroczyła niezbadany pierścień gruzu. Ich powrót stał się argumentem za współpracą. Jego zachowane wykresy zachowują sprzeczne odczyty, dzięki czemu później piloci mogą zrozumieć, w jaki sposób znaleziono wspólną trasę.",
-      "Sfałszowane kontrakty towarowe przeniosły szereg wektorów do właścicieli wroga. Kiedy oszustwo zostało odkryte, ich finansowanie zostało wstrzymane. Rezerwy utrzymywały statki w ruchu, ale płaciły za kilka ulepszeń.",
+      "Vector powstał ze sporu nawigatorów. Jedni ufali doskonałemu kursowi, drudzy woleli porównywać niezależne pomiary. Ci drudzy zbudowali statek i przebyli nieoznaczony na mapach pierścień szczątków. Ich powrót stał się argumentem za współpracą. Ocalałe mapy zachowują rozbieżne odczyty, aby następni piloci wiedzieli, jak znaleziono wspólną trasę.",
+      "Sfałszowane umowy przewozowe pozwoliły przekazać część statków Vector wrogim właścicielom. Gdy oszustwo wyszło na jaw, dopływ środków ustał. Z rezerw opłacono dalsze loty i niewiele ulepszeń.",
       "Zaawansowane formacje weryfikują ponownie otwarte szlaki handlowe. Każdy kurs zawiera kilka podpisów nawigatorów.",
       "Elitarna ekspedycja bada systematyczne manipulowanie mapą, zbieranie dowodów, w których inni widzą tylko sprzeczne kierunki."
     ],
     "verdant": [
-      "Verdant przeniósł pierwsze archiwa nasion do kolonii bez naturalnej gleby. Jego plany podróżowały obok katalogów roślin, aby inne osiedla mogły stać się niezależne. Jej piloci uważają się za strażników przyszłych zbiorów. Nienaruszone archiwum może mieć więcej znaczenia niż błyszczący ładunek: może zawierać cały zimowy zapas żywności.",
-      "Łupieżcy schwytali Verdantsów, którzy mieli nadzieję sprzedać cenne archiwa nasion. Archiwa zostały już przeniesione, pozostawiając tylko statki i rozczarowanych sponsorów. Rzadko następowały nowe fundusze na modernizacje.",
+      "Verdant dostarczył pierwsze banki nasion do kolonii bez naturalnej gleby. Plany statku wysyłano razem z katalogami roślin, aby kolejne osady mogły się usamodzielnić. Piloci uważają się za strażników przyszłych zbiorów. Cały bank nasion może być cenniejszy od lśniącego ładunku, bo kryje zapas żywności na zimę.",
+      "Grabieżcy przejęli statki Verdant, licząc na sprzedaż cennych banków nasion. Archiwa przeniesiono wcześniej. Zostały same statki i rozczarowani sponsorzy, którzy rzadko wykładali pieniądze na ulepszenia.",
       "Zaawansowane statki bezpieczne wymiany między stacjami szklarniowymi. Ich identyfikatory zachowują nazwy zapomnianych roślin.",
       "Strażnik elit chroni ostatni kompletny rejestr nasion, w tym dla kolonii, które jeszcze nie wyhodowały swojego pierwszego ogrodu."
     ],
     "storm-wing": [
-      "Storm Wing został zbudowany w sezonie nieustępliwych burz jonowych. Stocznie pracowały między blackoutami i wymieniały postępy za pośrednictwem kurierów. Żadna pojedyncza strona nie posiadała kompletnego projektu, dopóki pierwszy statek nie połączył każdej części. Jego pochodzenie mówi o sieci kontynuującej pracę pomimo wielokrotnej utraty połączeń.",
-      "Podczas awarii sieci wrogowie zajęli odległy hangar pełen Storm Wings. Odcięte linie zaopatrzeniowe sprawiły, że każda wymiana była kosztowna. Ich ograniczony budżet zwykle pokrywał działanie, a nie zaawansowane remonty.",
+      "Storm Wing zbudowano podczas sezonu nieustannych burz jonowych. Stocznie pracowały między przerwami w zasilaniu i przesyłały wiadomości przez kurierów. Żaden zakład nie miał kompletu planów, dopóki pierwszy statek nie połączył wszystkich części. Jego historia pokazuje, jak sieć może nadal działać mimo powtarzających się zerwań łączności.",
+      "Podczas awarii sieci wróg zajął odległy hangar pełen statków Storm Wing. Odcięte linie zaopatrzenia podniosły cenę każdej części zamiennej. Ograniczony budżet zwykle wystarczał na utrzymanie statków w służbie.",
       "Eskadra Advanced eskortuje boje konserwacyjne wzdłuż granicy burzowej, zamykając szczeliny między odizolowanymi stacjami.",
       "Elitarni piloci chronią główne konwoje naprawcze po przerwach. Ich powrót oznacza, że pomoc znów znalazła trasę."
     ],
     "red-comet": [
-      "Red Comet kometa została nazwana na cześć lotu ratunkowego, którego świecący szlak przemierzył trzy niebo kolonii. Jego pilotaż nie przyniósł żadnego skarbu, tylko ostatni nienaruszony projekt oczyszczacza wody. Legendy upiększyły podróż, ale stocznia zachowuje prosty oryginalny raport: ludzie w jej miejscu docelowym mogli pić ponownie następnego ranka.",
-      "Wroga grupa wymuszeń przejęła Czerwone Komety pod fałszywym nakazem przejęcia. Kolonie przestały płacić. Bez oczekiwanego dochodu większość przechwyconych statków ratowniczych pozostała technicznie niezmienna.",
+      "Red Comet nazwano na cześć lotu ratunkowego, którego świetlisty ślad przeciął niebo nad trzema koloniami. Pilot przewoził ostatni kompletny projekt oczyszczacza wody. Legendy ubarwiły tę wyprawę, ale stocznia zachowała prosty raport z lotu. Następnego ranka mieszkańcy u celu znów mogli pić czystą wodę.",
+      "Wroga grupa wymuszająca haracze przejęła statki Red Comet na podstawie fałszywego nakazu zajęcia. Kolonie przestały płacić. Bez oczekiwanych wpływów większość zdobytych statków ratunkowych zachowała dotychczasowe wyposażenie.",
       "Zaawansowane statki przenoszą wiedzę naprawczą w strefach awaryjnych. Ich czerwone oznaczenia oznaczają pilną pomoc.",
       "Edycja Elite eskortuje ostateczne dostawy do oblężonych kolonii. Jego znak wywoławczy pozostaje aktywny, dopóki odbiorca nie odpowie."
     ],

@@ -255,62 +255,62 @@
   },
   "ships": {
     "grey-scout": [
-      "Il Grey Scout nacque in un’officina che sopravviveva grazie ai ricambi recuperati dopo il guasto dei ripetitori periferici. I primi piloti cercavano boe di comunicazione scomparse anziché battaglie. Ogni archivio recuperato riavvicinava una famiglia alla sua colonia. Quel modesto scafo divenne il simbolo di una rete ricostruita con piccoli gesti tenaci.",
-      "I pirati dei ripetitori catturarono diversi Grey Scout durante un’incursione in un deposito di recupero. Lo scarso bottino bastò per carburante e riparazioni e lasciò ben poco per i potenziamenti. Ora i piloti si ritrovano talvolta ad affrontare navi ostili della stessa famiglia.",
+      "Il Grey Scout nacque in un’officina che sopravviveva grazie a ricambi di recupero dopo il guasto dei ripetitori periferici. I primi piloti andavano alla ricerca di boe di comunicazione scomparse, evitando gli scontri. Ogni registro recuperato riallacciava il legame fra una famiglia e la sua colonia. Quel modesto scafo divenne il simbolo di una rete ricostruita con piccoli gesti tenaci.",
+      "I pirati in agguato presso i ripetitori catturarono diversi Grey Scout durante un’incursione in un deposito di pezzi di recupero. Il magro bottino bastò per carburante e riparazioni, lasciando ben poco per i potenziamenti. Ora i piloti si ritrovano talvolta ad affrontare navi ostili della stessa famiglia.",
       "Lo squadrone Advanced ricevette l’incarico di recuperare messaggi nelle aree contese attorno ai ripetitori. I piloti conservarono gli indicativi delle squadre di ricerca originarie.",
       "La versione Elite scorta l’ultimo collegamento rimasto attivo in un settore minacciato. Il suo archivio conserva simbolicamente i nomi di tutti i corrieri dispersi."
     ],
     "nova-wing": [
-      "Nova Wing è stato progettato per il primo viaggio oltre il bordo luminoso della nova. Il suo cantiere condivideva i piani con colonie lontane, quindi nessuno sarebbe stato escluso dalla navigazione sicura. I piloti raccontano ancora di quel primo ritorno: una nave danneggiata, un archivio grafico intatto e un cielo pieno di nuove possibilità.",
-      "Una società di mappatura indebitata ha venduto Nova Wings in pensione a un trafficante di facciata nemico. I suoi sponsor potevano permettersi gli scafi ma poche nuove armi, lasciando la maggior parte nella loro configurazione originale.",
+      "Il Nova Wing fu progettato per il primo viaggio oltre il bordo luminoso della nova. Il cantiere condivise i progetti con le colonie lontane per permettere a tutti di navigare in sicurezza. I piloti ricordano ancora quel primo ritorno. La nave era danneggiata, l’archivio delle mappe era intatto e il cielo apriva nuove possibilità.",
+      "Una società cartografica indebitata vendette alcuni Nova Wing dismessi a un mercante che faceva da prestanome al nemico. I suoi finanziatori potevano permettersi gli scafi e poche armi nuove. La maggior parte delle navi conservò l’equipaggiamento originale.",
       "Piloti avanzati sorvegliano i corrieri che portano quelle carte in avanti. Le loro insegne raffigurano la prima stella mappata.",
       "La spedizione Elite caccia le fonti di carte stellari falsificate, ereditando lo scopo della missione di esplorazione originale."
     ],
     "solar-lance": [
-      "Solar Lance proveniva da una stazione che attingeva energia da una stella morente. Quando il suo ultimo anello da collezione è stato evacuato, queste navi hanno scortato i mercantili di soccorso attraverso i detriti. Le loro lunghe sagome erano incise sui memoriali del nuovo porto. Il design è sinonimo di tenere un percorso chiaro mentre un intero mondo svanisce dietro di esso.",
-      "Gli equipaggi nemici hanno preso Solar Lances abbandonato quando è caduta una base di evacuazione. Il loro budget di fornitura finanziava principalmente vie di fuga per i comandanti, lasciando le navi catturate con riparazioni di fortuna piuttosto che aggiornamenti.",
+      "Il Solar Lance nacque in una stazione alimentata da una stella morente. Quando l’ultimo anello collettore fu evacuato, queste navi scortarono i cargo di soccorso fra i detriti. Le loro lunghe sagome furono incise sui monumenti del nuovo porto d’origine. Il modello ricorda come si possa tenere la rotta anche mentre un intero mondo si spegne alle proprie spalle.",
+      "Gli equipaggi nemici presero possesso dei Solar Lance abbandonati dopo la caduta di una base di evacuazione. La maggior parte delle risorse fu usata per predisporre vie di fuga per i comandanti. Le navi catturate ricevettero soprattutto riparazioni di fortuna.",
       "L'orologio avanzato mantiene le colonie ricollocate in dotazione. Ogni nave porta un vecchio codice di evacuazione.",
       "Le formazioni d'élite difendono i nuovi depositi solari contro la flotta ombra, proteggendo la luce che i rifugiati sono riusciti a portare via."
     ],
     "dark-delta": [
-      "Dark Delta non è mai stato costruito per la gloria. La sua prima missione fu quella di cercare avamposti silenziosi per i sopravvissuti. I primi registri contengono più coordinate che nomi perché gli equipaggi proteggevano la privacy dei coloni salvati. Da quella scelta cresceva una tradizione: il successo si misura da chi ritorna in sicurezza, non da chi racconta la storia.",
-      "Un broker corrotto ha deviato una spedizione Dark Delta verso una flotta ombra. Dopo aver pagato per il tradimento, i suoi fondi coprivano a malapena i pezzi di ricambio. Pochissimi scafi rubati hanno ricevuto attrezzature migliori.",
+      "Il Dark Delta nacque per missioni discrete. La prima fu una ricerca di superstiti negli avamposti che avevano smesso di rispondere. Nei primi diari di bordo compaiono più coordinate che nomi, perché gli equipaggi tutelavano la riservatezza dei coloni soccorsi. Da quella scelta nacque una tradizione. A contare sono le persone che tornano sane e salve.",
+      "Un intermediario corrotto dirottò una consegna di Dark Delta verso la flotta delle ombre. Pagato il tradimento, alla flotta rimaneva a malapena il denaro per i ricambi. Pochissimi scafi rubati ricevettero equipaggiamento migliore.",
       "La versione Advanced scorta gli archivisti in pericolo lungo le vie di fuga. I rapporti di missione vengono aperti solo dopo il loro arrivo in sicurezza.",
       "I piloti d'élite recuperano testimoni i cui resoconti possono conciliare intere colonie. La loro reputazione si basa sulla discrezione piuttosto che sullo spettacolo."
     ],
     "gold-streak": [
-      "Gold Streak è iniziato nelle gare tra il commercio di lune. Durante una crisi di approvvigionamento i suoi piloti hanno usato le loro conoscenze di percorso per trasportare cartelle cliniche oltre i porti chiusi. Una lega sportiva è diventata un sindacato di corriere. I segni dorati richiamano la sottile luce solare tra le lune che guidavano i suoi primi corrieri, piuttosto che la ricchezza.",
-      "Le bande ostili hanno confiscato Gold Streaks su una luna da corsa deserta. Si aspettavano montepremi, ma le gare erano finite molto prima. Senza quel reddito, raramente hanno modernizzato la loro nuova flotta.",
+      "Il Gold Streak debuttò nelle gare tra le lune commerciali. Durante una crisi dei rifornimenti, i piloti sfruttarono la conoscenza delle rotte per consegnare cartelle cliniche aggirando i porti chiusi. La lega sportiva divenne un sindacato di corrieri. Le insegne dorate ricordano il filo di luce solare che guidava i primi corrieri tra le lune.",
+      "Bande ostili sequestrarono alcuni Gold Streak su una luna da corsa ormai deserta. Contavano sui premi in denaro, ma le gare erano finite da tempo. Senza quei proventi, di rado riuscirono a modernizzare la flotta appena catturata.",
       "I corrieri avanzati portano impegni di aiuto verificati tra le cliniche. I loro vecchi numeri di corse preservano la loro origine condivisa.",
       "La Lega Elite custodisce i convogli di salvataggio vitali del settore. Il suo titolo più prezioso è un equipaggio portato a casa completo."
     ],
     "iron-guard": [
-      "Iron Guard è stato progettato da lavoratori portuali non disposti a lasciare la difesa della loro casa a flotte esterne. Il suo primo scafo utilizzava parti di gru da carico in pensione. La chiglia portava i nomi delle persone che ci lavoravano dopo i loro turni. La serie ricorda che la difesa può significare prendersi cura di un luogo costruito da molte mani.",
-      "Dopo aver occupato un cantiere navale, gli aggressori hanno costretto i suoi lavoratori rimasti a ripristinare le vecchie guardie di ferro. Mancavano sia denaro che fornitori per nuove armi, quindi la maggior parte degli scafi rubati conservava le loro specifiche originali.",
+      "L’Iron Guard fu progettato da operai dei cantieri decisi a difendere con le proprie forze il luogo in cui vivevano. Il primo scafo fu costruito con componenti di gru da carico dismesse. La chiglia portava i nomi di chi aveva lavorato alla nave dopo il proprio turno. Questa serie ricorda che difendere un luogo significa anche custodire ciò che tante mani hanno costruito.",
+      "Dopo aver occupato un cantiere, gli aggressori costrinsero gli operai rimasti a rimettere in servizio vecchi Iron Guard. Mancavano sia il denaro sia i fornitori di armi nuove. La maggior parte delle navi sottratte conservò la dotazione originaria.",
       "L'orologio avanzato scorta i mobili di riparazione. I suoi equipaggi conoscono ogni rifugio di emergenza intorno all'anello del porto.",
       "Le navi d'élite difendono la ricostruzione delle stazioni in frantumi. I loro onori riconoscono che gli equipaggi dei cantieri navali sono stati messi in salvo."
     ],
     "vector": [
-      "Vector è nato da una disputa dei navigatori: fidarsi di un corso perfetto o confrontare misure indipendenti? Il secondo gruppo ha costruito questa nave e ha attraversato un anello di detriti inesplorato. Il loro ritorno è diventato un caso di cooperazione. Le sue carte superstiti preservano le letture contrastanti in modo che i piloti successivi possano capire come è stato trovato il percorso condiviso.",
-      "I contratti di trasporto merci falsificati hanno trasferito un certo numero di vettori ai proprietari nemici. Quando la frode è stata scoperta, i loro finanziamenti si sono interrotti. Le riserve hanno mantenuto le navi in volo, ma hanno pagato pochi aggiornamenti.",
+      "Il Vector nacque da una disputa tra navigatori. Alcuni confidavano in una rotta perfetta, altri preferivano confrontare misure indipendenti. Il secondo gruppo costruì questa nave e attraversò un anello di detriti inesplorato. Il suo ritorno dimostrò il valore della collaborazione. Le mappe rimaste conservano le letture divergenti, così che i piloti delle generazioni successive possano ricostruire come fu trovata la rotta comune.",
+      "Grazie a contratti di trasporto contraffatti, alcuni Vector finirono nelle mani del nemico. Scoperto l’inganno, i finanziamenti si interruppero. Le riserve bastarono per mantenere le navi in volo e pagare pochi aggiornamenti.",
       "Formazioni avanzate verificano rotte commerciali riaperte. Ogni corso porta le firme di diversi navigatori.",
       "La spedizione Elite indaga la manomissione sistematica delle mappe, raccogliendo prove in cui altri vedono solo direzioni contrastanti."
     ],
     "verdant": [
-      "Verdant portò i primi archivi di semi in una colonia senza suolo naturale. I suoi piani viaggiavano accanto a cataloghi di piante in modo che altri insediamenti potessero diventare indipendenti. I suoi piloti si considerano custodi dei raccolti futuri. Un archivio intatto può avere più importanza del carico scintillante: può contenere l’intero approvvigionamento alimentare invernale.",
-      "I predatori hanno catturato i Verdants sperando di vendere preziosi archivi di semi. Gli archivi erano già stati spostati, lasciando solo navi e delusi sponsor. Seguiti raramente nuovi finanziamenti per gli aggiornamenti.",
+      "Il Verdant portò i primi archivi di sementi a una colonia priva di suolo naturale. I suoi progetti viaggiarono insieme ai cataloghi botanici, per consentire anche ad altri insediamenti di diventare autonomi. I piloti si considerano custodi dei raccolti futuri. Un archivio intatto può valere più di un carico scintillante, perché può custodire cibo per un inverno intero.",
+      "I predoni catturarono alcuni Verdant sperando di vendere i preziosi archivi di sementi. Gli archivi erano già stati trasferiti. Ai predoni rimasero le navi e dei finanziatori delusi, che raramente stanziarono fondi per ammodernarle.",
       "Le navi avanzate assicurano gli scambi tra le stazioni di serra. I loro identificatori conservano i nomi delle piante dimenticate.",
       "La guardia Elite protegge l'ultimo registro completo delle sementi, anche per le colonie che devono ancora coltivare il loro primo giardino."
     ],
     "storm-wing": [
-      "Storm Wing è stato costruito durante una stagione di implacabili tempeste di ioni. I cantieri navali hanno lavorato tra blackout e scambiati progressi attraverso i corrieri. Nessun singolo sito ha tenuto il progetto completo fino a quando la prima nave ha riunito ogni parte. La sua origine racconta di una rete che continua a lavorare nonostante abbia ripetutamente perso le sue connessioni.",
-      "Durante un'interruzione della rete, i nemici occuparono un hangar remoto pieno di Storm Wings. Le linee di alimentazione mozzate hanno reso ogni sostituzione costosa. Il loro budget limitato di solito copriva l'operazione, non i refit avanzati.",
+      "Lo Storm Wing fu costruito in una stagione di continue tempeste ioniche. I cantieri lavoravano tra un’interruzione e l’altra e si aggiornavano tramite corrieri. Nessun cantiere possedeva il progetto completo, finché la prima nave non riunì tutti i componenti. La sua storia racconta di una rete che continuò a funzionare nonostante le ripetute interruzioni dei collegamenti.",
+      "Durante un guasto alla rete, il nemico occupò un hangar isolato pieno di Storm Wing. Con le linee di rifornimento interrotte, ogni ricambio divenne costoso. Il bilancio limitato bastava in genere a tenerli in servizio.",
       "Lo squadrone Advanced scorta boe di manutenzione lungo la frontiera della tempesta, colmando i divari tra stazioni isolate.",
       "I piloti d'élite proteggono i principali convogli di riparazione dopo le interruzioni. Il loro ritorno significa che l'aiuto ha trovato di nuovo un percorso."
     ],
     "red-comet": [
-      "Red Comet prende il nome da un volo di salvataggio il cui sentiero incandescente ha attraversato tre cieli delle colonie. Il suo pilota non ha portato alcun tesoro, solo l'ultimo disegno intatto per un purificatore d'acqua. Legends ha abbellito il viaggio, ma il cantiere conserva il semplice rapporto originale: le persone a destinazione potrebbero bere di nuovo la mattina successiva.",
-      "Un gruppo di estorsione nemica ha sequestrato le Comete Rosse sotto un falso ordine di riappropriazione. Le colonie hanno smesso di pagare. Senza il reddito previsto, la maggior parte delle navi di soccorso catturate è rimasta tecnicamente invariata.",
+      "Il Red Comet prese il nome da un volo di soccorso la cui scia luminosa attraversò il cielo di tre colonie. Il pilota portava l’ultimo progetto intatto di un depuratore d’acqua. Le leggende abbellirono il viaggio, ma il cantiere conserva il rapporto originale. La mattina dopo, gli abitanti del luogo di arrivo poterono di nuovo bere acqua potabile.",
+      "Un gruppo di estorsori al servizio del nemico sequestrò alcuni Red Comet presentando un falso ordine di recupero dei mezzi. Le colonie smisero di pagare. Venuto meno l’incasso previsto, la maggior parte delle navi di soccorso catturate rimase con la stessa dotazione.",
       "Le navi avanzate trasportano le conoscenze di riparazione nelle zone di emergenza. I loro segni rossi rappresentano l'assistenza urgente.",
       "L'edizione Elite accompagna le consegne finali alle colonie assediate. Il suo callsign rimane attivo fino a quando il destinatario non risponde."
     ],

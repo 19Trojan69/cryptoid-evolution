@@ -9,13 +9,13 @@
     ],
     "2": [
       "Purtătoarea de măști",
-      "Korvessa a servit o flotă de curierat diplomatică și a aflat semnalele de recunoaștere ale fiecărei stații de frontieră. Când patronii săi au dispărut, le-a păstrat identitatea într-o arhivă ascunsă.",
-      "Acum fiecare sosire are un nume diferit de încredere. Mesajele falsificate atrag navele departe de rutele sigure și ascund ordinele ostile ca asistență. În spatele consemnului de apel curtează o navă de război. Înfrângerea Korvessa amintește coloniilor că o voce familiară nu este o dovadă a unui expeditor onest."
+      "Korvessa a servit într-o flotă de curieri diplomatici și cunoștea semnalele de identificare ale fiecărei stații de frontieră. Când cei care îi dădeau ordine au dispărut, le-a păstrat identitățile într-o arhivă secretă.",
+      "La fiecare sosire, Korvessa folosește un alt nume în care ceilalți au încredere. Mesajele falsificate atrag navele de aprovizionare în afara rutelor sigure și fac ca ordinele ostile să pară oferte de ajutor. În spatele indicativului politicos se ascunde o navă de război. Înfrângerea navei Korvessa amintește coloniilor că o voce familiară nu dovedește singură cinstea expeditorului."
     ],
     "3": [
       "Hoțul de sigilii",
-      "Drelvorn a fost un seif de călătorie pentru focile vechilor comandanți ai flotei. În timpul unei rebeliuni, sistemul său de gardieni i-a blocat pe custozii de drept și a plecat cu acreditările lor.",
-      "Acum vinde autoritatea furată flotei din umbră. Mesajele care poartă sigilii capturate deschid uși care ar trebui să rămână închise. Coaja sa protejează mai degrabă aspectul autenticității decât al comorii. Apărătorii trebuie să-l oprească înainte ca arhivele rămase să-și piardă capacitatea de a distinge ordinele de încredere de numele furate."
+      "Drelvorn era un seif mobil pentru sigiliile foștilor comandanți ai flotei. În timpul unei revolte, sistemul de pază a blocat accesul custozilor de drept și a plecat cu nava și cu datele lor de acces.",
+      "Acum Drelvorn vinde flotei din umbră autoritatea furată. Mesajele care poartă sigiliile capturate deschid uși ce ar trebui să rămână închise. Corpul blindat apără aparența de autenticitate. Apărătorii trebuie să oprească nava cât timp arhivele rămase mai pot deosebi ordinele demne de încredere de mesajele semnate cu nume furate."
     ],
     "4": [
       "Falsificatorul de cronici",
@@ -261,56 +261,56 @@
       "Ediția Elite escortează ultima conexiune care a supraviețuit a unui sector amenințat. Arhiva sa poartă simbolic numele fiecărui curier dispărut."
     ],
     "nova-wing": [
-      "Nova Wing a fost proiectat pentru prima călătorie dincolo de marginea luminoasă nova. Șantierul său naval împărțea planurile cu colonii îndepărtate, astfel încât nimeni să nu fie exclus din navigația sigură. Piloții încă povestesc despre acea primă întoarcere: o navă avariată, o arhivă intactă a diagramei și un cer plin de noi posibilități.",
-      "O companie de cartografiere îndatorată a vândut Nova Wings pensionat unui dealer de front inamic. Sponsorii săi și-ar putea permite învelișurile, dar puține arme noi, lăsându-le cel mai mult în configurația inițială.",
+      "Nova Wing a fost proiectat pentru prima călătorie dincolo de marginea luminoasă a novei. Șantierul naval a transmis planurile coloniilor îndepărtate, ca toate să poată naviga în siguranță. Piloții încă povestesc despre prima întoarcere. Nava era avariată, arhiva de hărți stelare rămăsese intactă, iar cerul deschidea noi posibilități.",
+      "O companie de cartografie îndatorată a vândut nave Nova Wing scoase din uz unui comerciant care servea drept paravan inamicului. Finanțatorii lui își puteau permite corpurile navelor și doar câteva arme noi. Cele mai multe nave au păstrat echiparea inițială.",
       "Piloții avansați îi păzesc pe curierii care transportă aceste diagrame. Însemnele lor înfățișează prima stea cartografiată.",
       "Expediția Elite vânează sursele unor diagrame stelare falsificate, moștenind scopul misiunii originale de explorare."
     ],
     "solar-lance": [
-      "Solar Lance provenea dintr-o stație care desena energie de la o stea muribundă. Când inelul său final de colecție a fost evacuat, aceste nave au escortat cargourile de salvare prin resturi. Siluetele lor lungi au fost gravate pe memorialele noului port de acasă. Designul înseamnă să dețină un curs clar în timp ce o lume întreagă se estompează în spatele ei.",
-      "Echipajele inamice au luat Lances Solar abandonat atunci când o bază de evacuare a căzut. Bugetul lor de aprovizionare a finanțat în principal rute de evacuare pentru comandanți, lăsând navele capturate cu reparații improvizate, mai degrabă decât cu modernizări.",
+      "Solar Lance a apărut pe o stație alimentată de o stea pe cale să se stingă. Când ultimul inel de colectoare a fost evacuat, aceste nave au escortat cargourile de salvare printre resturi. Siluetele lor alungite au fost gravate pe monumentele noului port de origine. Modelul amintește cât de important este să păstrezi direcția când o lume întreagă se stinge în urma ta.",
+      "După căderea unei baze de evacuare, echipajele inamice au capturat navele Solar Lance abandonate. Cei mai mulți bani destinați aprovizionării au fost folosiți pentru a asigura rute de scăpare comandanților. Navele capturate au primit de obicei doar reparații provizorii.",
       "Ceasul Avans menţine aprovizionarea coloniilor relocate. Fiecare navă poartă un cod vechi de evacuare.",
       "Formațiunile de elită apără noile magazine solare împotriva flotei umbrei, protejând lumina pe care refugiații au reușit să o ducă departe."
     ],
     "dark-delta": [
-      "Dark Delta nu a fost niciodată construită pentru glorie. Prima sa misiune a fost să caute avanposturi tăcute pentru supraviețuitori. Buștenii timpurii conțin mai multe coordonate decât nume, deoarece echipajele au protejat intimitatea coloniștilor salvați. O tradiție a crescut de la această alegere: succesul se măsoară prin cine se întoarce în siguranță, nu prin cine spune povestea.",
-      "Un broker mituit a deviat un transport Dark Delta către o flotă din umbră. După ce a plătit trădarea, fondurile sale abia au acoperit piesele de schimb. Foarte puține căni furate au primit echipamente mai bune.",
+      "Dark Delta a fost conceput pentru misiuni discrete. Prima sa misiune a fost căutarea supraviețuitorilor în avanposturi care nu mai răspundeau. În primele jurnale de bord apar mai multe coordonate decât nume, fiindcă echipajele protejau intimitatea coloniștilor salvați. Așa s-a născut o tradiție. Succesul se măsoară prin oamenii care ajung înapoi în siguranță.",
+      "Un intermediar mituit a deturnat un transport de nave Dark Delta spre flota din umbră. După ce a plătit trădarea, flota abia mai avea bani de piese de schimb. Foarte puține dintre navele furate au primit echipament mai bun.",
       "Versiunea Advanced escortează arhiviștii aflați în pericol pe rutele de evacuare. Rapoartele misiunii sunt deschise doar după ce aceștia ajung în siguranță.",
       "Piloții de elită recuperează martori ale căror relatări pot reconcilia colonii întregi. Reputația lor se bazează mai degrabă pe discreție decât pe spectacol."
     ],
     "gold-streak": [
-      "Gold Streak a început în cursele dintre lunile de tranzacționare. În timpul unei crize de aprovizionare, piloții săi și-au folosit cunoștințele de traseu pentru a transporta dosare medicale pe lângă porturile închise. O ligă sportivă a devenit un sindicat de curierat. Marcajele de aur amintesc de lumina subțire a soarelui între lunile care și-au ghidat primii curieri, mai degrabă decât bogăția.",
-      "Bandele ostile au confiscat Gold Streaks pe o lună de curse părăsită. Se așteptau la premii, dar cursele se încheiaseră cu mult timp înainte. Fără aceste venituri, rareori și-au modernizat noua flotă.",
+      "Gold Streak a debutat în cursele dintre sateliții comerciali. În timpul unei crize de aprovizionare, piloții și-au folosit cunoștințele despre rute ca să transporte fișe medicale ocolind porturile închise. Liga sportivă a devenit un sindicat al curierilor. Însemnele aurii amintesc de raza subțire de soare care îi călăuzea pe primii curieri printre sateliți.",
+      "Bande ostile au confiscat nave Gold Streak pe un satelit de curse abandonat. Se așteptau să găsească banii de premii, dar cursele se încheiaseră de mult. Fără acele venituri, flota capturată a fost modernizată arareori.",
       "Curatorii avansați poartă angajamente de ajutor verificate între clinici. Vechile lor numere de curse își păstrează originea comună.",
       "Liga de elită păzește convoaiele vitale de salvare ale sectorului. Cel mai apreciat titlu este un echipaj adus acasă."
     ],
     "iron-guard": [
-      "Iron Guard a fost proiectată de muncitorii de la docuri care nu au dorit să lase apărarea casei lor în afara flotelor. Prima sa cocă a folosit piese din macaralele de marfă retrase. Chila purta numele oamenilor care au lucrat la ea după turele lor. Serialul își amintește că apărarea poate însemna îngrijirea unui loc construit de multe mâini.",
-      "După ce au ocupat un șantier naval, atacatorii i-au forțat pe muncitorii rămași să restabilească vechile Gărzi de Fier. Le-au lipsit atât banii, cât și furnizorii pentru arme noi, astfel încât majoritatea caselor furate și-au păstrat specificațiile inițiale.",
+      "Iron Guard a fost proiectat de muncitori din docuri hotărâți să-și apere singuri casa. Primul corp al navei a fost asamblat din componentele unor macarale de marfă dezafectate. Pe chilă erau gravate numele celor care lucraseră la navă după terminarea schimbului. Seria amintește că a apăra un loc înseamnă și a avea grijă de ceea ce au construit multe mâini.",
+      "După ocuparea unui șantier naval, atacatorii i-au silit pe muncitorii rămași să repună în funcțiune nave Iron Guard vechi. Le lipseau banii și furnizorii de arme noi. Cele mai multe nave furate au păstrat echiparea inițială.",
       "Ceasul avansat escortează docurile mobile de reparaţii. Echipajele sale cunosc fiecare adăpost de urgență din jurul inelului portului.",
       "Navele de elită apără reconstruirea stațiilor spulberate. Onorurile lor recunosc echipajele șantierelor navale aduse în siguranță."
     ],
     "vector": [
-      "Vector a apărut dintr-o dispută a navigatorilor: aveți încredere într-un curs perfect sau comparați măsurătorile independente? Al doilea grup a construit această navă și a traversat un inel de resturi neexplorat. Revenirea lor a devenit un motiv de cooperare. Graficele sale care au supraviețuit păstrează citirile contradictorii, astfel încât piloții de mai târziu să poată înțelege modul în care a fost găsită ruta comună.",
-      "Contractele de transport de marfă falsificate au transferat un număr de vectori proprietarilor inamici. Când frauda a fost descoperită, finanțarea lor s-a oprit. Rezervele au ținut navele în zbor, dar au plătit pentru puține upgrade-uri.",
+      "Vector s-a născut dintr-o dispută între navigatori. Unii se bazau pe o traiectorie perfectă, ceilalți voiau să compare măsurători independente. Al doilea grup a construit nava și a traversat un inel de resturi necartografiat. Întoarcerea lor a arătat valoarea cooperării. Hărțile păstrate cuprind măsurătorile divergente, pentru ca viitorii piloți să înțeleagă cum a fost găsită ruta comună.",
+      "Prin contracte de transport falsificate, mai multe nave Vector au ajuns în mâinile inamicului. Când înșelătoria a ieșit la iveală, finanțarea a încetat. Rezervele au ajuns pentru a menține navele în zbor și pentru câteva îmbunătățiri.",
       "Formațiunile avansate verifică rutele comerciale redeschise. Fiecare curs poartă mai multe semnături ale navigatorilor.",
       "Expediția Elite investighează manipularea sistematică a hărților, adunând dovezi în cazul în care altele văd doar direcții contradictorii."
     ],
     "verdant": [
-      "Verdant a dus primele arhive de semințe într-o colonie fără pământ natural. Planurile sale au călătorit alături de cataloagele de plante, astfel încât alte așezări ar putea deveni independente. Piloții săi se consideră gardieni ai recoltelor viitoare. O arhivă intactă poate conta mai mult decât încărcătura strălucitoare: poate conține o cantitate întreagă de hrană pentru iarnă.",
-      "Raiders l-au capturat pe Verdants sperând să vândă arhive valoroase de semințe. Arhivele fuseseră deja mutate, lăsând doar nave și sponsori dezamăgiți. Noile finanțări pentru modernizări au urmat rar.",
+      "Verdant a dus primele bănci de semințe într-o colonie fără sol natural. Planurile navei au fost trimise împreună cu cataloagele de plante, pentru ca și alte așezări să se poată întreține singure. Piloții se consideră paznicii recoltelor viitoare. O bancă de semințe intactă poate prețui mai mult decât o încărcătură strălucitoare, fiindcă poate adăposti hrana pentru o iarnă întreagă.",
+      "Jefuitorii au capturat nave Verdant sperând să vândă bănci valoroase de semințe. Acestea fuseseră deja mutate. Au rămas doar navele și finanțatorii dezamăgiți, care rareori au mai dat bani pentru modernizări.",
       "Navele avansate asigură schimburi între stațiile cu efect de seră. Identificatorii lor păstrează numele plantelor uitate.",
       "Garda de elită protejează ultimul registru complet al semințelor, inclusiv pentru coloniile care încă nu și-au crescut prima grădină."
     ],
     "storm-wing": [
-      "Storm Wing a fost construită în timpul unui sezon de furtuni neîncetate cu ioni. Șantierele navale au funcționat între pene de curent și au făcut schimb de progrese prin curieri. Nici un singur site nu a deținut designul complet până când prima navă nu a adus fiecare parte împreună. Originea sa spune despre o rețea care continuă să funcționeze, în ciuda faptului că își pierde în mod repetat conexiunile.",
-      "În timpul unei întreruperi de rețea, inamicii au ocupat un hangar îndepărtat plin de Storm Wings. Liniile de aprovizionare tăiate au făcut ca fiecare înlocuitor să fie costisitor. Bugetul lor limitat a acoperit de obicei funcționarea, nu recondiționările avansate.",
+      "Storm Wing a fost construit într-un anotimp cu furtuni ionice neîncetate. Șantierele lucrau între întreruperile de curent și trimiteau prin curieri vești despre stadiul lucrărilor. Niciun șantier nu avea proiectul complet până când toate piesele au fost asamblate în prima navă. Povestea sa arată cum o rețea poate continua să funcționeze în ciuda pierderilor repetate de conexiune.",
+      "În timpul unei întreruperi a rețelei, inamicul a ocupat un hangar îndepărtat plin de nave Storm Wing. După tăierea rutelor de aprovizionare, orice piesă de schimb a devenit costisitoare. Bugetul limitat ajungea, de obicei, doar pentru a ține navele în serviciu.",
       "Escadrila avansată escortează geamandurile de întreținere de-a lungul frontierei de furtună, închizând golurile dintre stațiile izolate.",
       "Piloții de elită protejează convoaiele majore de reparații după întreruperi. Întoarcerea lor înseamnă că ajutorul a găsit din nou un traseu."
     ],
     "red-comet": [
-      "Red Comet a fost numit după un zbor de salvare al cărui traseu strălucitor a traversat cerul a trei colonii. Pilotul său nu a adus nicio comoară, doar ultimul design intact pentru un purificator de apă. Legendele au înfrumusețat călătoria, dar șantierul naval păstrează raportul original simplu: oamenii de la destinație ar putea bea din nou în dimineața următoare.",
-      "Un grup de extorcare inamic a confiscat cometele roșii sub un ordin fals de repunere în posesie. Coloniile au încetat să mai plătească. Fără veniturile așteptate, majoritatea navelor de salvare capturate au rămas neschimbate din punct de vedere tehnic.",
+      "Red Comet poartă numele unui zbor de salvare a cărui dâră luminoasă a străbătut cerul a trei colonii. Pilotul transporta ultimul plan intact al unui purificator de apă. Legendele au înfrumusețat călătoria, însă șantierul păstrează raportul simplu, original. Chiar a doua zi dimineață, locuitorii de la destinație au putut bea din nou apă curată.",
+      "O grupare inamică de șantajiști a capturat nave Red Comet în baza unui ordin de confiscare falsificat. Coloniile au încetat să plătească. Fără veniturile așteptate, majoritatea navelor de salvare capturate și-au păstrat echiparea inițială.",
       "Navele avansate transportă cunoștințe de reparații în zonele de urgență. Marcajele lor roșii reprezintă asistență urgentă.",
       "Ediția de elită escortează livrările finale către colonii asediate. Contorul său rămâne activ până când destinatarul răspunde."
     ],

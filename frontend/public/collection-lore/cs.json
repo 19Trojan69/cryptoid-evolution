@@ -9,13 +9,13 @@
     ],
     "2": [
       "Nositelka masek",
-      "Korvessa sloužila diplomatické kurýrní flotile a naučila se rozpoznávat signály každé pohraniční stanice. Když její patroni zmizeli, držela jejich identity ve skrytém archivu.",
-      "Nyní každý příchod nese jiné důvěryhodné jméno. Kované zprávy lákají zásobovací lodě z bezpečných tras a maskují nepřátelské rozkazy jako pomoc. Za zdvořilým volacím nápisem čeká válečná loď. Porážka Korvessa připomíná koloniím, že známý hlas není důkazem poctivého odesílatele."
+      "Korvessa sloužila v diplomatické kurýrní flotile a znala rozpoznávací signály všech pohraničních stanic. Když její zadavatelé zmizeli, uložila údaje o jejich totožnosti do tajného archivu.",
+      "Při každém příletu se Korvessa vydává za někoho jiného, komu ostatní důvěřují. Padělané zprávy odvádějí zásobovací lodě z bezpečných tras a vydávají nepřátelské rozkazy za nabídky pomoci. Za zdvořilým volacím znakem se skrývá válečná loď. Porážka Korvessy koloniím připomene, že známý hlas sám o sobě není důkazem poctivosti odesílatele."
     ],
     "3": [
       "Zloděj pečetí",
-      "Drelvorn byl putovní trezor pro pečetě starých velitelů flotily. Během povstání jeho strážný systém zamkl právoplatné správce a odešel s jejich pověřením.",
-      "Nyní prodává ukradenou autoritu stínové flotile. Zprávy se zachycenými těsněními otevírají dveře, které by měly zůstat zavřené. Jeho trup chrání spíše vzhled autenticity než pokladu. Obránci ji musí zastavit dříve, než zbývající archivy ztratí schopnost rozlišovat důvěryhodné objednávky od ukradených jmen."
+      "Drelvorn býval pohyblivým trezorem na pečetě bývalých velitelů flotily. Během vzpoury jeho bezpečnostní systém odřízl oprávněné správce od trezoru a odletěl s jejich přístupovými údaji.",
+      "Nyní Drelvorn prodává ukradené pravomoci stínové flotile. Zprávy opatřené ukořistěnými pečetěmi otevírají dveře, které by měly zůstat zavřené. Pancéřovaný trup chrání zdání pravosti. Obránci musí loď zastavit, dokud zbývající archivy ještě dokážou odlišit důvěryhodné rozkazy od zpráv podepsaných cizími jmény."
     ],
     "4": [
       "Padělatel kronik",
@@ -261,56 +261,56 @@
       "Edice Elite doprovází poslední dochované spojení ohroženého sektoru. Jeho archiv symbolicky nese jména každého chybějícího kurýra."
     ],
     "nova-wing": [
-      "Nova Wing byl určen pro první plavbu za zářivým ráfkem nova. Její loděnice sdílela plány se vzdálenými koloniemi, aby nikdo nebyl vyloučen z bezpečné navigace. Piloti stále vyprávějí o tomto prvním návratu: poškozené lodi, neporušené archivy map a obloze plné nových možností.",
-      "Zadlužená mapovací společnost prodala vysloužilé Nova Wings nepřátelskému frontovému dealerovi. Jeho sponzoři si mohli dovolit trupy, ale jen málo nových zbraní, což zanechalo většinu v původní konfiguraci.",
+      "Nova Wing vznikl pro první cestu za zářící okraj novy. Loděnice poskytla plány vzdáleným koloniím, aby mohly všechny bezpečně létat. Piloti dodnes vyprávějí o prvním návratu. Loď byla poškozená, archiv hvězdných map zůstal neporušený a obloha nabízela nové možnosti.",
+      "Zadlužená kartografická společnost prodala vyřazené lodě Nova Wing obchodníkovi, který sloužil jako zástěrka nepřítele. Jeho sponzoři si mohli dovolit trupy a jen pár nových zbraní. Většina lodí si proto ponechala původní výbavu.",
       "Pokročilí piloti hlídají kurýry, kteří tyto mapy nesou dál. Jejich insignie zobrazuje první zmapovanou hvězdu.",
       "Elitní expedice loví zdroje zfalšovaných hvězdných map, zdědí účel původní průzkumné mise."
     ],
     "solar-lance": [
-      "Solar Lance pochází ze stanice čerpající energii z umírající hvězdy. Když byl jeho poslední sběratelský prstenec evakuován, tyto lodě doprovázely záchranné nákladní lodě přes trosky. Jejich dlouhé siluety byly vyryty na památníky nového domovského přístavu. Design znamená držet jasný kurz, zatímco za ním slábne celý svět.",
-      "Nepřátelské posádky obsadily opuštěné Solar Lances, když padla evakuační základna. Jejich rozpočet na dodávky financoval především únikové cesty pro velitele, přičemž zajatá plavidla zanechali spíše provizorní opravy než modernizace.",
+      "Solar Lance vznikl na stanici čerpající energii z umírající hvězdy. Při evakuaci posledního prstence kolektorů tyto lodě doprovodily záchranné nákladní lodě mezi troskami. Jejich protáhlé siluety byly vyryty do památníků v novém domovském přístavu. Tato řada připomíná, jak důležité je držet směr, i když za zádí zhasíná celý svět.",
+      "Když padla evakuační základna, nepřátelské posádky obsadily opuštěné lodě Solar Lance. Většinu prostředků na zásobování použily na únikové trasy pro velitele. Ukořistěným lodím se obvykle dostalo jen provizorních oprav.",
       "Pokročilé hodinky udržují přemístěné kolonie zásobené. Každá loď nese starý evakuační kód.",
       "Elitní útvary brání nové solární obchody proti stínové flotile a chrání světlo, které se uprchlíkům podařilo odnést."
     ],
     "dark-delta": [
-      "Dark Delta nebyla nikdy postavena pro slávu. Jejím prvním úkolem bylo hledat tiché základny pro přeživší. Včasné protokoly obsahují více souřadnic než jmen, protože posádky chránily soukromí zachráněných osadníků. Z této volby vyrostla tradice: úspěch se měří tím, kdo se bezpečně vrátí, ne tím, kdo vypráví příběh.",
-      "Podplacený makléř odklonil zásilku Dark Delta do stínové flotily. Po zaplacení zrady její prostředky sotva pokryly náhradní díly. Jen velmi málo ukradených trupů dostalo lepší vybavení.",
+      "Dark Delta vznikla pro nenápadné úkoly. Při první misi posádky pátraly po přeživších na odmlčených základnách. V prvních denících je víc souřadnic než jmen, protože posádky chránily soukromí zachráněných osadníků. Tak vznikla tradice posuzovat úspěch podle toho, kdo se vrátil v bezpečí.",
+      "Podplacený prostředník odklonil dodávku lodí Dark Delta ke stínové flotile. Po zaplacení zrady jí prostředky sotva stačily na náhradní díly. Lepší výbavu dostalo jen několik ukradených lodí.",
       "Verze Advanced doprovází ohrožené archiváře na únikových trasách. Hlášení z mise se otevírají až po jejich bezpečném příjezdu.",
       "Elitní piloti obnovují svědky, jejichž účty mohou sladit celé kolonie. Jejich pověst spočívá spíše na diskrétnosti než na podívané."
     ],
     "gold-streak": [
-      "Gold Streak začal v závodech mezi obchodními měsíci. Během zásobovací krize její piloti využili své znalosti o trase k přepravě lékařských záznamů kolem uzavřených přístavů. Sportovní liga se stala kurýrním svazem. Zlatá znamení připomínají tenké sluneční světlo mezi měsíci, které vedly jeho první kurýry, spíše než bohatství.",
-      "Nepřátelské gangy zabavily Zlaté pruhy na opuštěném závodním měsíci. Čekali prize money, ale závody skončily dávno předtím. Bez tohoto příjmu zřídka modernizovali svou novou flotilu.",
+      "Gold Streak se poprvé objevil v závodech mezi obchodními měsíci. Při zásobovací krizi piloti využili znalosti tras a doručovali zdravotní záznamy cestami mimo zavřené přístavy. Ze sportovní ligy vznikl svaz kurýrů. Zlaté znaky připomínají proužek slunečního světla, který první kurýry vedl mezi měsíci.",
+      "Nepřátelské bandy zabavily lodě Gold Streak na opuštěném závodním měsíci. Počítaly s odměnami, jenže závody dávno skončily. Bez těchto příjmů se zmocněnou flotilu dařilo modernizovat jen výjimečně.",
       "Pokročilí kurýři nesou ověřené přísliby pomoci mezi klinikami. Jejich stará závodní čísla zachovávají jejich společný původ.",
       "Elitní liga hlídá životně důležité záchranné konvoje sektoru. Jeho nejcennějším titulem je posádka přivedená domů kompletní."
     ],
     "iron-guard": [
-      "Iron Guard byla navržena pracovníky doků, kteří nebyli ochotni opustit obranu svého domova vnější flotily. Jeho první trup použil díly z vysloužilých nákladních jeřábů. Kýl nesl jména lidí, kteří na něm po směnách pracovali. Série si pamatuje, že obrana může znamenat péči o místo postavené mnoha rukama.",
-      "Po obsazení loděnice útočníci přinutili její zbývající pracovníky obnovit staré železné gardy. Chyběly jim peníze i dodavatelé na nové zbraně, takže většina ukradených trupů si zachovala původní specifikaci.",
+      "Iron Guard navrhli dělníci z doků, kteří chtěli svůj domov bránit vlastními silami. První trup sestavili z dílů vyřazených nákladních jeřábů. Kýl nesl jména lidí, kteří na něm pracovali po směně. Tato řada připomíná, že bránit domov znamená i pečovat o to, co společně vybudovali mnozí lidé.",
+      "Po obsazení loděnice přinutili útočníci zbývající dělníky zprovoznit staré lodě Iron Guard. Chyběly jim peníze i dodavatelé nových zbraní. Většina ukradených lodí si ponechala původní výbavu.",
       "Pokročilé hodinky doprovázejí mobilní opravárenské doky. Jeho posádky znají každý nouzový úkryt kolem přístavního kruhu.",
       "Elitní lodě brání přestavbu roztříštěných stanic. Jejich vyznamenání uznává posádky loděnic vynesené do bezpečí."
     ],
     "vector": [
-      "Vector vznikl ze sporu navigátorů: důvěřujte jednomu dokonalému kurzu, nebo porovnejte nezávislá měření? Druhá skupina postavila tuto loď a překročila neprobádaný prstenec trosek. Jejich návrat se stal případem spolupráce. Její dochované grafy zachovávají protichůdné údaje, aby pozdější piloti pochopili, jak byla společná trasa nalezena.",
-      "Kované nákladní smlouvy převedly řadu vektorů na nepřátelské vlastníky. Když byl podvod odhalen, jejich financování přestalo. Rezervy udržovaly lodě v letu, ale zaplatily za málo vylepšení.",
+      "Vector vznikl ze sporu mezi navigátory. Jedni spoléhali na dokonalý kurz, druzí chtěli porovnávat nezávislá měření. Druhá skupina postavila loď a přeletěla nezmapovaný pás trosek. Její návrat ukázal hodnotu spolupráce. Dochované mapy uchovávají rozdílné výsledky měření, aby další piloti pochopili, jak se podařilo najít společnou trasu.",
+      "Padělané přepravní smlouvy umožnily převést několik lodí Vector na nepřátelské vlastníky. Když podvod vyšel najevo, financování skončilo. Z rezerv se podařilo udržet lodě v provozu a zaplatit jen několik vylepšení.",
       "Pokročilé formace ověřují znovuotevřené obchodní cesty. Každý kurz má několik podpisů navigátorů.",
       "Elitní expedice zkoumá systematickou manipulaci s mapami a shromažďuje důkazy tam, kde ostatní vidí jen protichůdné směry."
     ],
     "verdant": [
-      "Verdant přenesl první archivy semen do kolonie bez přirozené půdy. Její plány putovaly vedle katalogů rostlin, aby se ostatní osady mohly stát nezávislými. Její piloti se považují za strážce budoucích sklizní. Neporušený archiv může záležet více než třpytivý náklad: může obsahovat celou zimní zásobu potravin.",
-      "Nájezdníci zajali Verdantsa, jak doufají, že prodají cenné semenné archivy. Archivy už byly přesunuty, zanechaly jen lodě a zklamané sponzory. Nové financování upgradů následovalo jen zřídka.",
+      "Verdant dopravil první banky osiva do kolonie bez přirozené půdy. Plány lodi putovaly s katalogy rostlin, aby se mohly osamostatnit i další osady. Piloti se považují za strážce budoucí úrody. Neporušená banka osiva může mít větší cenu než třpytivý náklad, protože v ní mohou být zásoby na celou zimu.",
+      "Nájezdníci ukořistili lodě Verdant v naději, že prodají cenné banky osiva. Ty však už byly přemístěny. Zbyly jen lodě a zklamaní sponzoři, kteří na modernizaci přispívali jen zřídka.",
       "Pokročilé lodě zajišťují výměny mezi skleníkovými stanicemi. Jejich identifikátory zachovávají jména zapomenutých rostlin.",
       "Strážce Elite chrání poslední kompletní registr osiva, včetně kolonií, které ještě nevypěstovaly svou první zahradu."
     ],
     "storm-wing": [
-      "Storm Wing bylo postaveno během sezóny neúprosných iontových bouří. Loděnice pracovaly mezi výpadky a vyměňovaly si pokrok prostřednictvím kurýrů. Žádná jednotlivá lokalita neměla kompletní design, dokud první loď nespojila každou část dohromady. Její původ vypráví o síti, která pokračuje v práci, přestože opakovaně ztrácí spojení.",
-      "Během výpadku sítě nepřátelé obsadili odlehlý hangár plný Storm Wings. Uříznuté zásobovací linky způsobily, že každá náhrada byla nákladná. Jejich omezený rozpočet obvykle zahrnoval provoz, nikoli pokročilé renovace.",
+      "Storm Wing vznikl v období neustávajících iontových bouří. Loděnice pracovaly mezi výpadky proudu a posílaly si zprávy po kurýrech. Žádný závod neměl úplný plán, dokud první loď nespojila všechny díly. Příběh jejího vzniku ukazuje, jak síť dokáže fungovat i při opakovaných výpadcích spojení.",
+      "Při výpadku sítě nepřítel obsadil vzdálený hangár plný lodí Storm Wing. Přerušené zásobovací trasy zdražily každý náhradní díl. Omezený rozpočet obvykle stačil jen k udržení lodí v provozu.",
       "Pokročilá letka doprovází údržbové bóje podél bouřkové hranice a uzavírá mezery mezi izolovanými stanicemi.",
       "Elitní piloti chrání velké opravné konvoje po výpadcích. Jejich návrat znamená, že pomoc opět našla cestu."
     ],
     "red-comet": [
-      "Red Comet byla pojmenována po záchranném letu, jehož zářící stezka překročila oblohu tří kolonií. Jeho pilot nepřinesl žádný poklad, jen poslední neporušený návrh pro čističku vody. Legendy přikrášlily cestu, ale loděnice uchovává jednoduchou původní zprávu: lidé v místě určení by se mohli druhý den ráno znovu napít.",
-      "Nepřátelská vyděračská skupina zabavila Červené komety pod falešným příkazem k repossinu. Kolonie přestaly platit. Bez očekávaných příjmů zůstala většina zajatých záchranných lodí technicky nezměněna.",
+      "Red Comet dostal jméno podle záchranného letu, jehož zářivá stopa přeťala oblohu tří kolonií. Pilot vezl poslední úplný plán čističky vody. Legendy let přikrášlily, ale loděnice uchovává prostou původní zprávu. Lidé v cíli mohli hned další ráno znovu pít čistou vodu.",
+      "Nepřátelští vyděrači zabavili lodě Red Comet na základě padělaného příkazu k odebrání. Kolonie přestaly platit. Kvůli výpadku očekávaných příjmů zůstala většina ukořistěných záchranných lodí u původní výbavy.",
       "Pokročilé lodě přenášejí znalosti o opravách do nouzových zón. Jejich červené znaky znamenají naléhavou pomoc.",
       "Edice Elite doprovází konečné dodávky do obléhaných kolonií. Jeho volací znak zůstává aktivní, dokud příjemce neodpoví."
     ],
