@@ -10,9 +10,11 @@ import { loadPlayerSave } from "./progress";
 import { selectedShipStage } from "../shipLoadout";
 import { cappedMission, publicSave, spriteForShip } from "../playerSave";
 import { syncWeaponStock, WEAPON_CHARGE_MS } from "../weaponStock";
+import { availablePowerOrder, consumeSelectedStartPower, remainingPowerCharges, testnetPowerOrders } from "../powerStock";
 
 const offersOf = (kind: string) => hangarCatalog.filter(item => item.kind === kind).map(item => item.id);
 const isTestnetRequest = (req: any) => String(req.headers?.["x-cryptoid-app-network"] || "").toLowerCase() === "testnet";
+const powerOrderScope = (req: any) => ({ ...ownerTestnetOrderScope(req), ...(isTestnetRequest(req) ? testnetPowerOrders : {}) });
 const weaponEnabledForRequest = (req: any, offer: typeof hangarCatalog[number], ownerTestnet = false) =>
   offer.kind === "weapon" && (!isTestnetRequest(req) || isTestnetWeaponPurchaseEnabled(offer, ownerTestnet));
 
@@ -33,11 +35,15 @@ export default function mountHangarEndpoints(router: Router) {
       const ownerTestnet = await canUseOwnerTestnetCatalog(req);
       const orders = req.app.locals.orderCollection;
       const users = req.app.locals.userCollection;
-      const paid = await orders.find({ ...ownerTestnetOrderScope(req), user: uid, paid: true }).project({ product_id: 1, consumed_at: 1 }).toArray();
+      const paid = await orders.find({ ...ownerTestnetOrderScope(req), user: uid, paid: true })
+        .project({ product_id: 1, consumed_at: 1, quantity: 1, power_model: 1, consumed_quantity: 1, cancelled: 1, payment_network: 1 }).toArray();
       const ownedWeapons = hangarCatalog.filter(item => weaponEnabledForRequest(req, item, ownerTestnet) && paid.some((order: any) => order.product_id === item.id)).map(item => item.id);
       const ownedArmor = hangarCatalog.filter(item => item.kind === "armor" && paid.some((order: any) => order.product_id === item.id)).map(item => item.id);
       const ownedShipUpgrades = hangarCatalog.filter(item => item.kind === "ship_upgrade" && paid.some((order: any) => order.product_id === item.id)).map(item => item.id);
-       const consumables = hangarCatalog.filter(item => item.kind === "power").map(item => ({ id: item.id, count: paid.filter((order: any) => order.product_id === item.id && !order.consumed_at).length }));
+      const powerOrders = isTestnetRequest(req) ? paid.filter((order: any) => order.payment_network == null || order.payment_network === "Pi Testnet") : paid;
+      const consumables = hangarCatalog.filter(item => item.kind === "power").map(item => ({
+        id: item.id, count: powerOrders.reduce((sum: number, order: any) => sum + (order.product_id === item.id ? remainingPowerCharges(order) : 0), 0),
+      }));
       const user = await users.findOne({ uid });
       const stock = await syncWeaponStock(users, orders, uid, rewardNetwork(req), ownerTestnet);
       return res.json({ testnetCatalogAccess: ownerTestnet, weaponStock: stock.balances, ownedWeapons, ownedArmor, ownedShipUpgrades, consumables, equippedWeapon: ownedWeapons.includes(user?.loadout?.weapon) ? user.loadout.weapon : null, selectedPower: consumables.some(item => item.id === user?.loadout?.power && item.count > 0) ? user.loadout.power : null });
@@ -97,7 +103,7 @@ export default function mountHangarEndpoints(router: Router) {
     try {
       const orders = req.app.locals.orderCollection;
       if (weapon && !await orders.findOne({ ...ownerTestnetOrderScope(req), user: uid, product_id: weapon, paid: true })) return res.status(403).json({ error: "Weapon not owned" });
-      if (power && !await orders.findOne({ ...ownerTestnetOrderScope(req), user: uid, product_id: power, paid: true, consumed_at: { $exists: false } })) return res.status(403).json({ error: "Power-up not in inventory" });
+      if (power && !await availablePowerOrder(orders, { ...powerOrderScope(req), user: uid, product_id: power })) return res.status(403).json({ error: "Power-up not in inventory" });
       await req.app.locals.userCollection.updateOne({ uid }, { $set: { loadout: { weapon, power } } });
       return res.json({ equippedWeapon: weapon, selectedPower: power });
     } catch (error) { return res.status(503).json({ error: "Could not save loadout" }); }
@@ -147,7 +153,7 @@ export default function mountHangarEndpoints(router: Router) {
       if (save.startKey !== startKey) {
         if (save.version !== version) return res.status(409).json({ error: "Save changed on another device" });
         const selectedPower = (await users.findOne({ uid }, { projection: { loadout: 1 } }))?.loadout?.power || null;
-        const powerOrder = !resume && selectedPower ? await orders.findOne({ ...ownerTestnetOrderScope(req), user: uid, product_id: selectedPower, paid: true, consumed_at: { $exists: false } }) : null;
+        const powerOrder = !resume && selectedPower ? await availablePowerOrder(orders, { ...powerOrderScope(req), user: uid, product_id: selectedPower }) : null;
         user = await users.findOneAndUpdate({ uid, [`${key}.version`]: version, ...(resume ? {} : { "loadout.power": selectedPower }) }, { $set: {
           [`${key}.activeRunId`]: scoreRun.id, [`${key}.startKey`]: startKey, [`${key}.lastStart`]: null, [`${key}.combatSequence`]: 0,
           [`${key}.mission`]: mission, [`${key}.legacyImported`]: true,
@@ -171,7 +177,8 @@ export default function mountHangarEndpoints(router: Router) {
       // Reserve one specific order in the atomic start claim. Concurrent retries
       // must never fall through to a different consumable order.
       const consumed = !resume && selected?.kind === "power" && pending.pendingPowerOrderId
-        ? await orders.findOne({ ...ownerTestnetOrderScope(req), user: uid, _id: pending.pendingPowerOrderId, consumed_run_id: scoreRun.id }) || await orders.findOneAndUpdate({ ...ownerTestnetOrderScope(req), user: uid, _id: pending.pendingPowerOrderId, product_id: selected.id, paid: true, consumed_at: { $exists: false } }, { $set: { consumed_at: new Date(), consumed_run_id: scoreRun.id } }, { returnDocument: "before" }) || await orders.findOne({ ...ownerTestnetOrderScope(req), user: uid, _id: pending.pendingPowerOrderId, consumed_run_id: scoreRun.id }) : null;
+        ? await consumeSelectedStartPower(orders, { ...powerOrderScope(req), user: uid, _id: pending.pendingPowerOrderId, product_id: selected.id }, scoreRun.id)
+        : false;
       const runMeta = { ...scoreRun, rulesVersion, unlockedWeaponLevels };
       const shipStage = selectedShipStage(spriteForShip(pending.skin), paidShipUpgrades.map((order: any) => order.product_id), pending.shipStage);
       const result = { shipStage, testnetCatalogAccess: ownerTestnet, ...(!mission ? { badgeMetrics: 1 } : {}), rulesVersion, combat: mission?.combat ?? null, armorBonus, weaponLevel: owned && weapon?.kind === "weapon" ? weapon.level : 1, unlockedWeaponLevels, ownedShipUpgrades: paidShipUpgrades.map((order: any) => order.product_id), powerUp: consumed && selected?.kind === "power" ? selected.powerUp : null, scoreRunId: scoreRun.id, startSector: mission?.sector || 1, startPhase: mission?.phase || "normal", checkpoint: mission?.snapshot || null, adminPreview: false, runMeta };

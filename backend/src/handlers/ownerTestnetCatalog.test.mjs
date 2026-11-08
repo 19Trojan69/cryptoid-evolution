@@ -15,7 +15,7 @@ const matches = (doc, query) => Object.entries(query).every(([path, expected]) =
   if (expected && typeof expected === 'object' && !(expected instanceof Date)) {
     if ('$exists' in expected) return (actual !== undefined) === expected.$exists;
     if ('$ne' in expected) return Array.isArray(actual) ? !actual.includes(expected.$ne) : actual !== expected.$ne;
-    if ('$in' in expected) return expected.$in.includes(actual);
+    if ('$in' in expected) return expected.$in.includes(actual ?? null);
     if ('$regex' in expected) return typeof actual === 'string' && new RegExp(expected.$regex, expected.$options || '').test(actual);
   }
   return expected === null ? actual == null : actual === expected;
@@ -88,6 +88,34 @@ async function payment(h, productId, options = {}) {
   return h.call('payments', '/complete', { paymentId: id, txid: `tx-${id}` }, options.request);
 }
 const inventory = h => h.call('hangar', '/inventory', null, { method: 'GET' });
+
+test('one confirmed power-up payment credits the entered quantity once and mission start reserves one unit', async t => {
+  owner(t); const h = harness(); pi(t, h);
+  await h.call('progress', '/me', null, { method: 'GET' });
+  const metadata = { productId: 'start_shield', powerModel: 1, quantity: 15 };
+  const count = async () => (await inventory(h)).body.consumables.find(item => item.id === metadata.productId).count;
+  const wrong = await payment(h, metadata.productId, { id: 'wrong-total', payment: { amount: .08, metadata } });
+  assert.equal(wrong.code, 400);
+  assert.equal(await count(), 0);
+  const confirmed = await payment(h, metadata.productId, { id: 'shield-batch', payment: { amount: 1.2, metadata } });
+  assert.equal(confirmed.code, 200);
+  assert.equal(await count(), 15);
+  assert.equal(h.orders.length, 1);
+  assert.equal(h.orders[0].power_model, 1);
+  assert.equal((await h.call('payments', '/complete', { paymentId: 'shield-batch', txid: 'tx-shield-batch' })).code, 200);
+  assert.equal(await count(), 15);
+  assert.equal((await h.call('hangar', '/equip', { weapon: null, power: metadata.productId })).code, 200);
+  const start = { action: 'new', version: h.profile().version, startKey: 'power-batch-start-01', rulesVersion: 2 };
+  const result = await h.call('hangar', '/start', start);
+  assert.equal(result.body.powerUp, 'shield');
+  const retry = await h.call('hangar', '/start', start);
+  assert.equal(retry.body.scoreRunId, result.body.scoreRunId);
+  assert.equal(await count(), 14);
+  assert.equal(h.orders[0].consumed_quantity, 1);
+  assert.equal(h.orders[0].consumed_at, undefined);
+  const mainnet = await h.call('hangar', '/inventory', null, { method: 'GET', network: 'mainnet' });
+  assert.equal(mainnet.body.consumables.find(item => item.id === metadata.productId).count, 0);
+});
 
 test('catalog authorization requires the verified Testnet owner outside free preview', async t => {
   owner(t);
