@@ -43,7 +43,12 @@ export default function LevelCompletion({ summary, name, headline, bonusHits, bo
         <p className="level-completion-status" role={failed ? 'alert' : 'status'}>{failed ? t(failureMessage || 'Save not confirmed. Please retry.') : saving ? t('Saving progress…')
           : prepared ? t('Game saved.') : t('Saving progress…')}</p>
         {failed && <button className="button button-secondary" type="button" disabled={saving || continuing} onClick={onRetry}>{t('Retry save')}</button>}
-        <button className="button button-primary" type="button" disabled={!ready} onClick={onContinue}>{t('Continue game')} <span aria-hidden="true">▶</span></button>
+        <button className="button button-primary" type="button" disabled={!ready} onClick={onContinue}>
+          {t('Continue game')}
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">
+            <path d="M4 12h15m-6-6 6 6-6 6" />
+          </svg>
+        </button>
       </footer>
     </section>
   </div>;

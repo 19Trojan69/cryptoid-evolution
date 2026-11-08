@@ -6,12 +6,19 @@ import WeaponTutorial from "./WeaponTutorial";
 import BossPhaseGuide from './BossPhaseGuide';
 import { useLocale } from "../i18n";
 import { shipEvolutionAsset } from "./shipEvolution";
+import { START_POWER_DURATION_MS } from "../../../backend/src/hangarCatalog";
+
+const powerSeconds = {
+  shield: START_POWER_DURATION_MS.shield / 1_000,
+  overdrive: START_POWER_DURATION_MS.overdrive / 1_000,
+  rapid: START_POWER_DURATION_MS.rapid / 1_000,
+};
 
 const topics = [
   {
     id: "overview", label: "Game description", title: "Defend Earth. Evolve your fleet.",
     intro: "Cryptoid Evolution is an arcade space shooter. Pilot your ship, defeat formations and bosses, collect boosts and build your fleet.",
-    details: ["Each level has nine visible Blocks, then a boss fight and a bonus round.", "Your ship fires automatically. Move to dodge and line up your shots.", "Boss hearts restore one lost heart up to your armor limit. At full hearts, collecting one grants 50 Shards instead.", "Open Rewards to see linked Blocks, boss stickers, stars, chain milestones, bonus medals and your current service rank."],
+    details: ["Each level has nine visible Blocks, then a boss fight and a bonus round.", "Your ship fires automatically. Move to dodge and line up your shots.", "Between levels, the summary shows bonus rewards, battle statistics and save status. Choose Continue game once saving is confirmed.", "Boss hearts restore one lost heart up to your armor limit. At full hearts, collecting one grants 50 Shards instead.", "Open Rewards to see linked Blocks, boss stickers, stars, chain milestones, bonus medals and your current service rank."],
   },
   {
     id: "visuals", label: "Illustrated guide", title: "Ships at a glance",
@@ -25,7 +32,7 @@ const topics = [
       "On a touchscreen, steer with your thumb in the lower playfield. The ship stays visible above your touch point.",
       "Steering works on both sides of the lower playfield. Handedness only changes the button positions.",
       "On a keyboard, use the arrow keys or WASD. Move left and right, with limited room to dodge upward.",
-      "The top HUD shows hearts, level, Shards, score and completed Blocks. Your active weapon is shown at the side; use the button at the top to pause.",
+      "The top bar shows Home, hearts, level, Shards, score, the current Block or boss number, and Pause. Open Weapons at the side to see your active weapon.",
     ],
   },
   {
@@ -41,14 +48,13 @@ const topics = [
     id: "survival", label: "Combat & hearts", title: "Survive the attacks",
     intro: "You start with 3 hearts, or 4 with Reinforced Hull and 6 with both armor upgrades. The mission ends when all hearts are lost.",
     details: [
-      "Collect the heart to start the bonus round.",
+      "After the boss, collect the heart or Shard orb to start the bonus round.",
       "Boss hearts restore one lost heart up to your armor limit. At full hearts, collecting one grants 50 Shards instead.",
-      "Advanced and Elite projectile protection does not increase your maximum hearts.",
       "Avoid enemy ships and projectiles. An active shield absorbs an impact; otherwise a collision or an unguarded projectile can cost a heart.",
       "Ship stages do not absorb hits. Active shields protect separately; armor determines your maximum hearts. The larger pickup radius applies only to normal power-ups, not boss hearts or bonus targets.",
       "Enemy hulls have different strengths. Even the first boss needs sustained fire; bosses attack faster as their hull weakens.",
-      "During the reactor weapon phase, small escorts return in waves. The pauses shorten as levels rise; from level 50, the next wave enters as soon as the previous one is cleared.",
-      "After all turrets explode, a concealed central weapon opens. Attack the now vulnerable hull and dodge its pulses.",
+      "Destroy the turrets first. When the reactor opens, aim at the reactor and dodge its pulses.",
+      "Escort waves return during the reactor phase. From Boss 5 onward, the next wave enters as soon as the previous one is cleared.",
       "Damaged turrets glow intense orange before exploding.",
     ],
   },
@@ -56,12 +62,13 @@ const topics = [
     id: "boosts", label: "Weapons & boosts", title: "Use your equipment",
     intro: "Fly through glowing drops to collect boosts that activate immediately.",
     details: [
-      "Shield absorbs hits, Overdrive doubles shot damage, Rapid Fire increases the firing rate and Weapon Upgrade raises the weapon stage. A short message explains each effect when collected.",
+      "A collected Shield blocks the next hit. Overdrive strengthens shots, Rapid Fire speeds up shooting and Weapon Upgrade raises the weapon by one tier for 20 seconds.",
       "Weapon stages go from the free single laser to twin, rapid twin, triple and plasma fire.",
-      "Nova Bomb destroys visible enemies and shots, hitting boss turrets before the exposed hull. EMP disables enemy weapons for seven seconds without stopping ships or shots.",
+      "Nova Bomb destroys visible enemies and hostile shots and damages boss turrets. It can weaken the exposed reactor. EMP disables enemy weapons for seven seconds while ships and existing shots keep moving. Each can be used once per mission.",
       "Open the side Weapons tab to choose equipment. Closing it resumes the mission after 3–2–1.",
-      "When a timed weapon expires, the strongest enabled weapon takes over; otherwise the standard laser. Auto-reload uses owned charges without pausing.",
-      "Collected weapon upgrades activate immediately. If another timed weapon is available, its own side button lets you switch between them. Previously owned start boosts have a separate activation button.",
+      "A purchased weapon charge lasts 45 seconds. Auto-reload can use another charge of the same weapon. Otherwise the game switches to a remaining weapon pickup, an enabled weapon with time left or the standard laser.",
+      "On Testnet, tap a stocked power-up beside Weapons to activate it. The icons show charges and remaining time. Different timed effects can run together.",
+      "Start Shield protects for {shield} seconds, Start Overdrive strengthens shots for {overdrive} seconds and Start Rapid Fire speeds up shooting for {rapid} seconds. Timers pause during mission transitions.",
       "Free boosts can appear throughout the campaign, but each type appears only once per level.",
     ],
   },
@@ -92,18 +99,19 @@ const topics = [
     id: "hangar", label: "Hangar & Testnet", title: "Expand your fleet",
     intro: "Grey Scout is free. Use earned Shards for available Standard ships and their color variants.",
     details: [
-      "On Testnet, ten Standard hulls are available, including Grey Scout. The remaining ten are visible as MAINNET READY and cannot be newly bought here.",
-      "Advanced and Elite ship stages, armor and new start power-up purchases are marked MAINNET READY. Previously owned items remain usable.",
-      "Only weapon shots can currently be purchased with Test-Pi. Test-Pi purchases require a connected Pi account; Shards and collectible awards have no Pi or cash value.",
+      "On Testnet, ten Standard hulls are available, including the free Grey Scout. Verified owner access opens all 20 hulls for Shards.",
+      "With a connected Pi account, regular Testnet pilots can buy Twin Laser and Rapid Twin charges with Test-Pi. Verified owner access also opens Triple Laser, Plasma, start power-ups, armor and ship upgrades.",
+      "For weapon and power-up charges, choose 1, 5 or 10, or enter a quantity before confirming the Test-Pi payment.",
+      "Shards and collectible rewards have no Pi or cash value.",
     ],
   },
   {
     id: "features", label: "Progress & settings", title: "Find your way around",
     intro: "The home screen opens Hangar, Shop, Weapons, Power-ups, Progress, Rewards and Top 100.",
     details: [
-      "Progress shows Career Score, Best Run with its level, highest stage and defeated enemies. Rewards shows your collection and service rank; Top 100 ranks verified completed runs by Career Score. Earlier records remain available.",
+      "Progress shows Career Score, Best Run with its level, highest stage and defeated enemies. Rewards shows your collection and service rank. Top 100 ranks pilots by Career Score from verified completed runs. Earlier records remain available.",
       "In System, choose language, touch-control side, sensitivity and ship start height. Music, effects volume and reduced visual effects have their own controls.",
-      "Signed-in players receive completed Rewards immediately in their Pi account. Admin test runs do not add collection progress.",
+      "Confirmed rewards are saved in your Pi account. Admin test runs are excluded from collection progress.",
     ],
   },
 ] as const;
@@ -142,7 +150,7 @@ const GameGuide = ({ onClose, initialTopic = "controls", backLabel = "Back to sy
         {topic.id === "visuals" && <div className="guide-ship-gallery">{([1, 2, 3] as const).map(stage => <figure key={stage}><ShipPortrait src={shipEvolutionAsset(0, stage)} color="grey" name={t(stage === 1 ? "Standard ship" : stage === 2 ? "Advanced ship" : "Elite ship")} /><figcaption>{t(stage === 1 ? "STANDARD" : stage === 2 ? "ADVANCED" : "ELITE")}</figcaption></figure>)}<figure className="guide-boss-example"><BossPortrait id={1} /><figcaption>#01 · {bossName(1)}</figcaption></figure></div>}
         {(topic.id === "boosts" || topic.id === "controls") && <WeaponTutorial />}
         {topic.id === "survival" && <BossPhaseGuide />}
-        <ul>{topic.details.map(detail => <li key={detail}>{t(detail)}</li>)}</ul>
+        <ul>{topic.details.map(detail => <li key={detail}>{t(detail, powerSeconds)}</li>)}</ul>
       </section>
       <button className="button button-secondary guide-back" type="button" onClick={onClose}><span className="guide-back-arrow" aria-hidden="true">←</span>{t(backLabel)}</button>
     </div>

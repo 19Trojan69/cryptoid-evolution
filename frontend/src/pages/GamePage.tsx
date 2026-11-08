@@ -21,7 +21,7 @@ import { enemyVisualDiameter } from './shipDisplayScale';
 import { automaticStartWeapon, autoReloadKey, nextActiveWeapon, parseAutoReload, shouldAutoReload, type AutoReloadPreferences } from './weaponAutoReload';
 import { shipSaveNetwork } from './shipFleet';
 import { isTestnetWeaponPurchaseEnabled } from '../../../backend/src/paymentPolicy';
-import { hangarCatalog } from '../../../backend/src/hangarCatalog';
+import { hangarCatalog, START_POWER_DURATION_MS } from '../../../backend/src/hangarCatalog';
 import { bossCardAvailable } from './cardAvailability';
 import { keepScreenAwake } from './screenWakeLock';
 import CardReveal from './CardReveal';
@@ -61,7 +61,7 @@ import { attackDuration, attackGroupSize, attackPosition, chooseAttackPattern, t
 import { entryPatternForSector, entryPosition, entryStartX, type EntryPattern } from "./entryPatterns";
 import { ENTRY_GAP_MS, FORMATION_SETTLE_MS, SECTION_CLEAR_MS, SECTION_INTRO_MS, arrangeFormationBySize, campaignLevel, formationBelowHud, formationLayout, formationReady, formationSlotsForCount, sectionInSector, sectionPhase, sectorInChapter, sectorName, type SectorPhase } from "./sectorManager";
 import { chooseCryptoid as originalCryptoid, cryptoidDisplayName, isGhostCloaked, type CryptoidClass, type CryptoidType, type FactionCode } from "./cryptoidRoster";
-import { collectPowerUp as applyPowerUp, createPowerUpDrop, movePowerUps, powerUpDescriptions, powerUpNames, powerUpSymbols, POWER_UP_DURATION_MS, PURCHASED_POWER_UP_DURATION_MS, resolvePlayerDamage, type PowerUp, type PowerUpType } from "./powerUps";
+import { collectPowerUp as applyPowerUp, createPowerUpDrop, movePowerUps, powerUpDescriptions, powerUpNames, powerUpSymbols, POWER_UP_DURATION_MS, resolvePlayerDamage, type PowerUp, type PowerUpType } from "./powerUps";
 import { readControlHand, readControlSensitivity, readControlZone, readShipStart, sensitivityMultiplier, shipStartHeight } from "./controlPreferences";
 import { advanceShot, contactWithEnemy, enemyMotionVisible, MAX_PLAYER_SHOTS, movePlayer, PURCHASED_WEAPON_DURATION_MS, retainContactLatch, shipCollisionOutcome, shipContactPoint, shotHitsEnemy, type PlayerPosition, type PlayerShot } from "./playerCombat";
 import { advanceEnemyShot, advanceEnemyFire, enemyVolleyKind, enemyAttackFireTime, enemyMuzzleOffsets, enemyShotHitsPlayer, enemyShotOutsideField, enemyShotLimit, type EnemyShot, type EnemyFireProgress } from "./enemyFire";
@@ -2379,12 +2379,12 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
         attackCooldownRef.current = 0;
       }
     } else if (power === "shield") {
-      state.purchasedShieldMs = PURCHASED_POWER_UP_DURATION_MS;
+      state.purchasedShieldMs = START_POWER_DURATION_MS.shield;
       state.shieldActive = true;
     } else {
-      Object.assign(state, applyPowerUp(state, power, PURCHASED_POWER_UP_DURATION_MS));
-      if (power === "overdrive") state.overdriveTotalMs = PURCHASED_POWER_UP_DURATION_MS;
-      if (power === "rapid") state.rapidFireTotalMs = PURCHASED_POWER_UP_DURATION_MS;
+      Object.assign(state, applyPowerUp(state, power, START_POWER_DURATION_MS[power]));
+      if (power === "overdrive") state.overdriveTotalMs = START_POWER_DURATION_MS.overdrive;
+      if (power === "rapid") state.rapidFireTotalMs = START_POWER_DURATION_MS.rapid;
     }
     if (state.pendingStartPower === power) state.pendingStartPower = null;
     persistGuestShards();
@@ -2693,9 +2693,9 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
   const bossHullReady = useHullSourceReady(game.boss?.config.image ?? fallingBossHull?.bossImage);
   usePreparedGameHulls(game.sector, game.encounter, hullOffset, hullWave, hullBonusGroup, hullRules);
   const levelComplete = game.encounter === "bonus" && game.phase === "SECTOR_CLEAR";
-  const dockOverdrive = testnetMissionPowers && (game.overdriveTotalMs === PURCHASED_POWER_UP_DURATION_MS
+  const dockOverdrive = testnetMissionPowers && (game.overdriveTotalMs > POWER_UP_DURATION_MS
     || !!powerInventory?.stock.overdrive || powerInventory?.pending?.power === 'overdrive' || game.pendingStartPower === 'overdrive');
-  const dockRapid = testnetMissionPowers && (game.rapidFireTotalMs === PURCHASED_POWER_UP_DURATION_MS
+  const dockRapid = testnetMissionPowers && (game.rapidFireTotalMs === START_POWER_DURATION_MS.rapid
     || !!powerInventory?.stock.rapid || powerInventory?.pending?.power === 'rapid' || game.pendingStartPower === 'rapid');
   const reinforcementIntro = game.encounter === "normal" && game.phase === "SECTOR_INTRO" && flightRef.current > 0;
   const sectorIntro = game.encounter === "normal" && game.phase === "SECTOR_INTRO" && round === 1 && !reinforcementIntro;
@@ -2835,7 +2835,7 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
               </div>
             </div>
             {game.purchasedShieldMs > 0 && !testnetMissionPowers && <div className="shield-control-wrap" data-active="true">
-              <TimedRing remainingMs={game.purchasedShieldMs} durationMs={PURCHASED_POWER_UP_DURATION_MS} />
+              <TimedRing remainingMs={game.purchasedShieldMs} durationMs={START_POWER_DURATION_MS.shield} />
               <div className="edge-action edge-action-shield shield-active-indicator" role="status" aria-label={`${t("BOUGHT SHIELD")} · ${Math.ceil(game.purchasedShieldMs / 1_000)}s`}>
                 <span aria-hidden="true">{powerUpSymbols.shield}</span>
                 <small>{t("SHIELD")}</small>

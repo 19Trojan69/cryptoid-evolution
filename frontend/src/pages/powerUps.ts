@@ -4,7 +4,6 @@ export type PowerStatus = { hearts: number; shieldCharges: number; shieldMs?: nu
 export type Threat = { x: number; y: number; radius: number };
 
 export const POWER_UP_DURATION_MS = 20_000;
-export const PURCHASED_POWER_UP_DURATION_MS = 60_000;
 export const OVERDRIVE_DURATION_MS = POWER_UP_DURATION_MS;
 export const RAPID_DURATION_MS = POWER_UP_DURATION_MS;
 export const MAX_ACTIVE_POWER_UPS = 3;

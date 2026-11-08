@@ -6,6 +6,7 @@ import ts from 'typescript';
 import { formatLives } from './locales/quantities.ts';
 import { languages, hasTranslation, translate, resolveLocale } from './i18n.ts';
 import { completeLanguages } from './locales/config.ts';
+import { hangarCatalog } from '../../backend/src/hangarCatalog.ts';
 
 const sourceRoot = path.dirname(new URL(import.meta.url).pathname);
 const rawUiTexts = [];
@@ -58,8 +59,11 @@ function discover(dir) {
 }
 discover(sourceRoot);
 required.add('Ship {number} · {stage}');
+for (const { name, description } of hangarCatalog) {
+  required.add(name);
+  required.add(description);
+}
 for (const [file, fields] of [
-  [path.resolve(sourceRoot, '../..', 'backend/src/hangarCatalog.ts'), ['name', 'description']],
   [path.resolve(sourceRoot, '../..', 'backend/src/rewardRules.ts'), ['name']],
 ]) {
   const ast = ts.createSourceFile(file, fs.readFileSync(file, 'utf8'), ts.ScriptTarget.Latest, true);
