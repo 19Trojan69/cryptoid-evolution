@@ -1,0 +1,378 @@
+{
+  "locale": "hr",
+  "sourceHash": "fa6d4efc4da8a285cc0f5bd832abb51ecd7b901bca9d4b331d612385bca0f1be",
+  "bosses": {
+    "1": [
+      "Odašiljač neželjenih poruka",
+      "Varneth je nekoć prenosio evidenciju o opskrbi između kolonija Genesis. Nestao je iza napuštene relejne postaje. Kad se vratio, više nije slao identifikacijski signal posade, a teretni su prostori bili pretvoreni u odašiljačke komore.",
+      "Sada preplavljuje trgovačke rute bezvrijednim transakcijama i beskrajnim kopijama poruka. Pozivi u pomoć gube se u šumu, dok stvarne isporuke čekaju potvrdu. Njegov oklopljeni trup štiti izvor smetnji. Zaustaviti Varneth znači obnoviti mrežu kojom se glasovi stanovnika kolonija ponovno mogu čuti."
+    ],
+    "2": [
+      "Nositeljica maski",
+      "Korvessa je služio diplomatska kurirski voznaša flota i naučio signale prepoznavanja svake granične postaje. Kada su njezini pokrovitelji nestali, zadržao je njihov identitet u skrivenoj arhivi.",
+      "Sada svaki dolazak nosi drugačije pouzdano ime. Krivotvorne poruke privlače brodove daleko od sigurnih ruta i prikrivaju neprijateljske narudžbe kao pomoć. Iza uljudnog poziva čeka ratni brod. Poraz Korvessa podsjeća kolonija da poznati glas nije dokaz poštenog pošiljatelja."
+    ],
+    "3": [
+      "Kradljivac pečata",
+      "Drelvorn je bio putujući trezor za pečate starih zapovjednika flote. Tijekom pobune, sustav čuvara zaključao je zakonite skrbnike i otišao sa svojim vjerodajnicema.",
+      "Sada prodaje ukradene ovlasti sjenovitoj floti. Poruke koje nose uhvaćene pečate otvaraju vrata koja bi trebala ostati zatvorena. Njegov trup štiti izgled autentičnosti, a ne blaga. Branitelji ga moraju zaustaviti prije nego što preostali arhivi izgube svoju sposobnost razlikovanja pouzdanih narudžbi od ukradenih imena."
+    ],
+    "4": [
+      "Krivotvoritelj kronika",
+      "Talvrek je zabilježio povijest mladih kolonija. Njezini arhivi preživjeli su rat, ali odanost njihovim tvorci nije. Novi zapovjednik pretvorio je kroničara u trgovca izmišljene povijesti.",
+      "Distribuiraju izmijenjene registre i tvrdnje da se poštene isporuke nikada nisu dogodile. Konfliktni zapisi sije sporovi oko vlasništva i obveza dok njegovo oružje drži istražitelje podalje. Misija protiv Talvreka štiti više od rute: štiti zajedničko sjećanje na to koja suradnja ovisi."
+    ],
+    "5": [
+      "Opsadnik čvorova",
+      "Zeraveth je započeo kao platforma za popravak koja može prigrliti cijele relejne prstenove. U sjeni flote, njezini priključna konstrukcija postala su položaji za opsadom.",
+      "Okruži važne mrežne postaje i smanjuje njihove posade za održavanje od potpore. Mali kvarovi izrastu u velike prekide, dok udaljene kolonije primaju samo fragmente vijesti. Vožnja Zeraveth omogućuje tehničarima da se vrate i ponovno povežu izolirane zajednice. Njegova izmišljena opsežna uloga odvojena je od stvarne borbene opreme navedene u nastavku."
+    ],
+    "6": [
+      "Lovac na odjeke",
+      "Orvask je jednom ispratio konvoje i sačuvao svaki razmak kao dokaz. Njegova sjećanja još uvijek sadrži glasove kapetana koji su davno nestali.",
+      "Flota u sjeni pretvorila je te snimke u arsenal starih zapovijedi. Orvask ih ponovno emitira kao trenutne upute, zarobiti stanice između pravih sadašnjih potreba i poznatih odjeka. Čuva taj arhiv s nasiljem pacijenata. Njegov poraz daje braniteljima vremena da odbace isteće narudžbe i vrate vrijednost nove potvrde."
+    ],
+    "7": [
+      "Most sjena",
+      "Keldrava je bila mobilna točka transfera između dvije udaljene kolone. Kada je njihova trajna veza propala, to je postao njihov jedini očigledan put prema vanjskom svijetu. Malo tko je primijetio da se posada promijenila.",
+      "Sada teret nestaje između svojih brava, dok umirujući računi obećavaju siguran prolaz. Ona iskorištava povjerenje u svakoj zajednici mjesta u drugoj. Njezine palube skrivaju plijen podijeljenih svjetova. Branitelji moraju zatvoriti ovaj lažni most prije nego što više kolonija pošalje svoju budućnost kroz svoje odjeljke za teret."
+    ],
+    "8": [
+      "Širitelj glasina",
+      "Veshkorn je jednom donio vijesti na najudaljenijim ispostavama. Njezini arhivi još uvijek sadrže pozdravne fanaske poljoprivrede mirnih emisija. Danas ti zvukovi najavljuju izmišljene katastrofe i predstojeće kolapse.",
+      "Kontrakcijska upozorenja čine da trgovci napuste sigurne rute, a kolone ne vjeruju svojim partnerima. Nijedna glasina ne mora trajati: druga je već na putu. Veshkorn štiti tvornicu neizvjesnosti. Njegov poraz čini prostor za provjerljive informacije umjesto beskrajne utrke protiv sljedeće proizvedene panike."
+    ],
+    "9": [
+      "Iluzionist salda",
+      "Neravoss svjetlušta izložbeni brod sajma. Njegovi projektori su nekoć prikazivali pravi teret i nove motore. Kad se sajam srušio, krajolik je preživio pod različitim vlasnicima.",
+      "Sada oglašava zalihe koje postoje samo na svojim izložbama. Izmišljeni ravnoteži i rezerve privlače prave isporuke; svatko tko ih pokuša izbrojiti susreće s oružjem. Branitelji progone Neravoss razotkrili jaz između atraktivnih brojeva i stvarnih posjeda prije nego što više teretnjaka nestane na svoje račune."
+    ],
+    "10": [
+      "Tiranin cestarina",
+      "Thalverik je čuvao uski prolaz kroz kristalni pojas. Njegova skromna navigacijska naknada nakon što je plaćena za stvarnu zaštitu. Kada se službena flota povukla, brod se proglasio jedinim autoritetom.",
+      "Sada svaka poruka i isporuka privlače još jednu izmišljenu naplatu. Čak i spasilačke ekipe dobivaju zahtjeve dok njihov prolaz ostaje blokiran. Mreža nije uništena, već stisnuta. Thalverik pretvara javnu vezu u zamku. Poraz vraća rutu zajednicama koje ovise o tome."
+    ],
+    "11": [
+      "Mnogoliki",
+      "Skorveth je smjestio simulacijske jezgre pilot akademije. Tisuće umjetnih kadeta jednom su se naučili zajedno kretati. Nakon neprijateljskog preuzimanja, ti su identiri obuke postali navodno neovisni glasovi.",
+      "Izmišljeni sudionici podržavaju jedni druge i stvaraju dojam ogromnog dogovora. Malim kolonijama je rečeno da su se njihovi susjedi već pridružili floti sjene. Ipak, iza gomile stoji jedan trup. Uništavanje Skorvetha razotkriva umjetnu većinu i daje stvarnim stanovnicima njihov glas natrag."
+    ],
+    "12": [
+      "Trovač ruta",
+      "Azhrel je mapirao prve skakačke veze kroz granicu maglice. Njezini grafikoni spasili su bezbroj konvoja. Zarobljene od strane neprijateljskih zapovjednika, te pouzdane karte postale su neobično uvjerljive zamke.",
+      "Širi lažne unose rute i preusmjerava poruke putem kontroliranih komunikacijskih stanica. Pozivi na pomoć dolaze kasno ili završavaju u praznom prostoru. Azhrel čuva raskrižje tih pogrešnih zavoja. Ne radi se o osvajanje drugog svijeta, već o pronalaženju sigurnog puta između svjetova koji već žele surađivati."
+    ],
+    "13": [
+      "Palikuća arhiva",
+      "Dornavik je pronašao oštećene zalihe podataka iz gorućih olupina. Njegova izolirana odaja nekoć su održavale zapise na životu kada je sve oko njih propalo. Flota u sjeni prepoznala je brod koji je mogao doći do arhiva koje drugi nisu mogli.",
+      "Sada nudi spašavanje i ostavlja osakaćene kopije iza sebe. Koloniji gube i informacije i dokaze potrebne za mjerenje gubitka. Njegov oklop čuva posljednje netaknute zarobljene ploče. Misija protiv Dornavika je za one fragmente koji još uvijek čekaju da ih se vrati kući."
+    ],
+    "14": [
+      "Zadržavatelj blokova",
+      "Velkrath je vodio istraživački konvoj koji je nosio nove blokove knjiga na ogromnim udaljenostima. Zatvoreni kontejneri sačuvali su svaki rekord nepromijenjen. Njegov sadašnji zapovjednik koristi te iste spremnike kako bi namjerno uskratio informacije.",
+      "Ispostave rade iz ustajalih pregleda, dok odabrana ažuriranja stižu samo kada mogu izazvati zabunu. Zajednička vremenska crta lomi u konkurentske verzije sadašnjosti. Velkrath čuva svoje arhive kao taoci. Branitelji moraju okončati zaostatak prije nego što se odgoda stvrdne u odugovlačenje u odugovlačenje."
+    ],
+    "15": [
+      "Manipulator satovima",
+      "Irdavoss sinkronizirao satove graničnih stanica. Cijela flota tem je tegnula svoje manevre na precizne emisije. Nakon tihe promjene zapovijedanja, signali su ostali jasni, ali njihova su očitanja postala lažna.",
+      "Pomaknuti vremenski žigovi čine da pravovremene poruke izgledaju kasno, a prozori za održavanje se raspadaju. Njegova prijetnja nije buka, već vjerodostojna netočnost. Zaustavljanje Irdavossa omogućuje kolonijama da ponovno uspoređuju neovisne satove, obnavljajući zajednički slijed koji im pomaže da shvate što se zapravo dogodilo."
+    ],
+    "16": [
+      "Tamničar ključeva",
+      "Rhazvorn je započeo kao zatvorski prijevoz s neovisno začepljenom ćelijama. Flota u sjeni uklonila je svoje zatvorenike i ispunila te odaje zaplijenjenim arhivima. Brod za pritvore je postao brod za iznuđivanje.",
+      "Zaključava zapise drugih zajednica i zahtijeva ustupke za njihovo puštanje na slobodu. Klinike i skladišta za opskrbu suočavaju se s pritiskom čak i dok se njihova oprema čini netaknutom. Rhazvorn brani svoje ćelije silom. Porazom otvara se put do zatvorenih zapisa, a ne na još jedan pregovori sa svojim otmčarima."
+    ],
+    "17": [
+      "Varalica proročišta",
+      "Kelvash je prikupio čitanja iz vremenskih plutača i resursnih sonda. Mnoge stanice oslanjale su se na svoja izvješća kako bi došle do obične odluke. Njegova neprijateljsko pretvorba sačuvala je i stari identifikator i poznati raspored emitiranja.",
+      "Danas se izvješćuje o zamišljenima zalihama i lažnim okolišnim uvjetima. Automatizirani procesi pomiču stvarne resurse kao odgovor na izmišljeni svijet. Kelvash štiti izvor tih laži. Branitelji ga moraju ušutkati prije nego što više života ovisi o mjerenjima koja nikada nisu uzeta."
+    ],
+    "18": [
+      "Gospodar račvanja",
+      "Othravel je izgrađen za kolonije koje se pokušavaju dogovoriti o zajedničkim pravilima nakon rata. Njegova konferencijska paluba jednom je sjedila na svakoj strani. Sada ugošćuje samo glasnike flote sjene.",
+      "Distribuiraju kontradiktorne verzije i govori svakoj stanici da je samo kopija legitimna. Nepovjerenje raste među zajednicama koje traže isti mir. Othravel postaje pokretno središte umjetnog razlafa. Njegov poraz stvara prostor za usporedbu razlika umjesto da ih pretvori u još jedan rat."
+    ],
+    "19": [
+      "Lažni spasitelj",
+      "Zarnvek je bio spasilački brod prepoznat po svojoj zlatnoj signalnoj bakljuri. Njegov dolazak značio je rezervne dijelove, sklonište i put kući. Neprijateljsko flota zabilježilo je baklju zajedno s brodom.",
+      "Sada njihove ponude pomoći zahtijevaju povjerljiva odobrenja. Odgovori su pronašli gledano pristanište umjesto sigurnosti. Zarnvek koristi nadu kao mamac i oklop kao osiguranje. Branitelji moraju razotkriti varalicu bez podučavanja izoliranih kolonija da se odmaknu od prave pomoći."
+    ],
+    "20": [
+      "Pljačkaš redova",
+      "Vorathen je upravljao redove dolaska ogromne trgovačke luke. Njegova zapovjedna paluba mogla bi naručiti tisuće prilaba bez gledanja broda. Kad je luka pala, odnijela je te arhive rasporeda.",
+      "Sada mijenja redoslijed zahtjeva za favoriziranje saveznika teretnjaka. Pošteni trgovci čekaju dok flota u sjeni zauzimaju svoja mjesta. Njegova snaga dolazi od malih preraspodjela s velikim posljedicama. Poraz Vorathen vraća sljedivi nalog gdje je pristup postao nešto potajno prodano."
+    ],
+    "21": [
+      "Raspršivač prašine",
+      "Drazkell je isporučio navigacijske plutače sa sitnim isporukama energije. Njegovi su držači dizajnirani za milijune malih transfera. Neprijateljski zapovjednici prenamijenili su tu sposobnost za tihu kampanju nadzora.",
+      "Raskriće neželjene pakete i primjećuje koje stanice reagiraju. Naizgled trivijalni kontakti postaju karte privatnih odnosa, pohranjenih iza oružja. Branitelji moraju presreti Drazkell prije nego što svakodnevno kretanje čitavih kolonija postane još jedna tajna roba koju trguje flota sjene."
+    ],
+    "22": [
+      "Lažni čuvar",
+      "Nethrava je nosio oznake cijenjenog čuvara flote. Nakon što se ta organizacija raspala, ostala je njezin posljednji vidljivi predstavnik. Malo tko je zamišljao da je poznata svila na mjestu i služila drugom cilju.",
+      "Proglašavaju uspješne inspekcije krivotvorenih i daje nesigurnim stranama izgled službenog odobrenja. Kolonija vjeruju svojim markama dok isporuke ne nestanu. Branitelji moraju razotkriti obmanu iza svog časne imena: povjerenje treba provjerljivu odgovornost, a ne samo stari amblem na oklopljeni trup."
+    ],
+    "23": [
+      "Pustošitelj memorije",
+      "Valdrek je održavao presavijene arhive. Jednom je uklonio samo potvrđene duplete i zadržao pedantne trupce. Flota u sjeni prvo je izbrisala te trupce, a zatim promijenila misiju.",
+      "Danas se okarakteristične dokaze kao nepotrebno nered. Nakon posjeta nedostaju povijesti opskrbe, vlasničkim zapisima i tragovi ranijih napada. Nitko ne zna koliko su široke praznine. Valdrek nosi alat korisnog zadatka kao oružje. Zaustavljanje sprječava više gubitaka koji dolaze bez eksplozije."
+    ],
+    "24": [
+      "Zrcalna tržnica",
+      "Korzeth je bio leteći bazar koji je povezivao trgovce iz mnogih svjetova. Njezini prozori pokazali su zauzetu trgovinu čak i dok je luka spavala. Većina ponuda sada potječe iz jedne skrivene zapovjedne sobe.",
+      "Učvršćuje trgovanje između izmišljenih partnera kako bi se bezvrijedni teret činio poželjnijim. Koloniji pogrešno miješaju umjetnu aktivnost za stvarnu potražnju, dok njegovo oružje drži inspektore izvan praznih skladišta. Branitelji moraju otvoriti zavjesu prije nego što se više pravih zaliha zamijeni za krajolik tržišta."
+    ],
+    "25": [
+      "Kradljivac potvrda",
+      "Thervoss je čuvao prijemne stanice međuzvjezdanih isporuka. Svjetla su mu jednom rekla kapetanima da je njihov teret stigao sigurno. Danas sjaje čak i kada nitko ne čeka iza vrata dokova.",
+      "Šalje izmišljene račune i pretvara se da su nedovršeni transferi završeni. Ispravne brodove se vraćaju kući dok destincijske kolone uzalud čekaju. Njegov oklop održava obmanu dovoljno dugom da presretnu još jedno opterećenje. Thervoss pasti tako da potvrda još jednom opisuje nešto što se stvarno dogodilo."
+    ],
+    "26": [
+      "Sudac magle",
+      "Akraveth je riješio sporove između udaljenih trgovačkih mjesta. Njezina komora jednom je usporedila dokaze i tražila pravedne ishode. Flota u sjeni zamijenila je svoje suce sustavom unaprijed dogovorenih presuda.",
+      "Odbacuje valjane zapise i svaki put favorizira iste skrivene pokrovitelje. Oni koji se protive su brendirani neprijatelji mreže. Akravethov izmišljeni autoritet počiva na zastrašivaju odjeven kao red. Branitelji se ne bore protiv pravde, već stroja koji posuđuje jezik pravde kako bi prikrio svoju svrhu."
+    ],
+    "27": [
+      "Crv opskrbnog lanca",
+      "Zelkharn je popravio teretnjake daleko od etabliranih brodogradilišta. Njegov rezervni dijelovi su pouzdani i instalirani s malo oklijevanja. Nakon uhićenja, izvor tih komponenti promijenio se prije njihovog ponašanja.",
+      "Rasprodana je izmijenjena paketa održavanja namijenjena za izradu drugih brodova ovisnih o floti u sjeni. Neuspjes se često pojavljuju tek nakon sljedećeg skoka. Zelkharn čuva izvor ove jezive sabotage. Poraz razbija lanac u kojem svaki dobronamjerni popravak može stvoriti drugu žrtvu."
+    ],
+    "28": [
+      "Trgovac praznim sigurnosnim kopijama",
+      "Odravik specijalizirao za očuvanje arhiva starih kolonija. Njegov ogroman skladišni niz obećao je zaštitu od bilo kakve katastrofe. Tek kada je postaja zatražila svoje zapise, netko je otkrio da su mnogi primjerci samo unosi u imenik.",
+      "Prodaj sigurnost bez preuzimanja odgovornosti iza sebe. Kupci se oslanjaju na putove oporavka koji ne vode nigdje. Odravik oružje štiti tu profitabilnu tajnu. Branitelji ga moraju razotkriti prije nego što još jedan gubitak pretvori izgubljenu pričuvnu u neriješeni dio povijesti."
+    ],
+    "29": [
+      "Filtar tišine",
+      "Varnokh je jednom uklonio smetnje iz prepunih radijskih kanala prometnih luka. Njegovi filtri pomogli su da se oglasi pozivi u nevolji. Flota sjene promijenila je samo jedan popis: koji su glasovi računali kao uplitanje.",
+      "Upozorenja od poštenih inspektora sada nestaju zajedno s izvješćima o neprijateljskih racija. Sektor se čini miroljubivim jer se njezini problemi ne mogu čuti. Varnokh čuva ovu proizvedenu tišinu. Zaustavljanje omogućuje mreži da ponovno prepozna vlastite neuspjehe i počne ih popravljati zajedno."
+    ],
+    "30": [
+      "Dražbovatelj identiteta",
+      "Kezravel je registrirao doseljenike putujuće flote kolonije. Njegovi arhivi su održali priču o svakom novom početku. Kada su se ti doseljenici raspršili, njihovo povjerenje je ostalo na brodu i palo u neprijateljskih ruku.",
+      "Prodaje ukradene identifikatore i dopušta strancima da djeluju pod imenjima poštenih stanovnika. Odnosi postaju kamuflažu, a osobna povijest postaje roba. Njezino oružje drži žrtve podalje od aukcija. Poraz Kezravel vraća više od rekorda: to pomaže njihovim vlasnicima da povrate kontrolu nad vlastitim pričama."
+    ],
+    "31": [
+      "Iluzionist releja",
+      "Dravosk je zamijenio neuspjele komunikacijske stanice u praznim regijama. Njegove vidljive antene obećale su vezu tamo gdje nitko nije ostao. Danas pozdravlja dolazne signale, ali ih prosljeđuje samo prema interesima svojih pokrovitelja.",
+      "Neke poruke dolaze promijenjene; druge nestaju između ohrabrujućih priznanja. Sudionici vide most gdje je stvarno vratar. Dravosk brani taj nevidljivi kontrolni punkt s vidljivom silom. Njegov poraz daje kolonijama priliku da ponovno provjere svoje veze na neovisnim rutama."
+    ],
+    "32": [
+      "Skupljač rojeva",
+      "Thalzek je jednom okupio slomljene radne bespilotne letjelice i vratio ih na njihove postaje. Čak se i najmanji stroj može skloniti ispod širokog trupa. Nakon konverzije, prikupljeni dronovi prestali su se vraćati kući.",
+      "U svojoj izmišljenoj povijesti postaju daljinski upravljani odašiljači koji preplavljivaju cijele regije sa simultanim zahtjevima. Njihovi vlasnici jedva prepoznaju vlastite strojeve. Razaranje Thalzeka završava zapovjedno područje roja u ovoj priči. Njegova stvarno montirana borbena oružja bilježe se odvojeno, bez izuma dodatnih borbenih sposobnosti."
+    ],
+    "33": [
+      "Ugovorna zamka",
+      "Orvethra je bio mobilni trgovački ured gdje su kolonije organizirale dugoročne zalihe. Njezini savjetnici obećali su jednostavna pravila za teška vremena. Danas svaki prikladan ugovor dovodi do obveza koje su prethodno držane izvan pogleda.",
+      "Širi obmanjujuće ponude koje vežu stanice za flotu sjena. Suradnja se pretvara u ovisnost dok njegov oklop štiti arhivu obećanja koje nitko nije u potpunosti razumio. Branitelji se suočavaju Orvethra kako bi budući savezi bili na jasnim uvjetima, a ne skrivenim zamkama."
+    ],
+    "34": [
+      "Krivotvoritelj kontrolnih zbrojeva",
+      "Kelzorn je obnovio oštećene olakšne podatke na napuštenim istraživačkim postajama. Njezini alati mogu učiniti da nedostaju površine izgledaju potpuno. Nova posada primijenila je tu vještinu na fasade nepouzdanih arhiva.",
+      "Prikaziva izmišljene rezultate inspekcije i atraktivne sigurnosne tuske lopate gdje su neovisne provjere odsutne. Krivotvoritelj je u samoj navodnoj sigurnosti. Kelzorn drži istražitelje podalje sa svojim oružjem. Njegov poraz otkriva koliko se njezini vlasnici najviše boje: drugi, neovisni pogled iza umirujuće površine."
+    ],
+    "35": [
+      "Trgovac lažnim zalihama",
+      "Vashravel je držao hitne rezerve za nekoliko graničnih kolonija. Njegovo ime značilo je opskrbu koje će ostati dostupne tijekom najgore zime. Nova administracija izdala je sve više i više potraživanja na istim trgovinama.",
+      "Sada obećava sigurnost mnogih zajednica koja ih ne može sve pokriti. Svijetli trup skriva prazne sobe i njegovo oružje sprječava bilo koga da broji zajedno. Branitelji moraju intervenirati prije nego što se uzajamno povjerenje pretvori u borbu oko posljednjih preostalih sanduka."
+    ],
+    "36": [
+      "Blokator granica",
+      "Zorveth je nadzirao razmjenu između dva neovisna registra. Njegov je zadatak bio izvršiti poštene prijenose koji se mogu pratiti na obje strane. Sada prepoznaje samo dokaze korisne za vlastitu flotu.",
+      "Isporuke ostaju u limbu, dok svaka zajednica vjeruje da ih druga zadržava. Zorveth crpi moć iz tog nesporazuma. Njegov trup je vidljiva granica nevidljivog spora. Branitelji moraju otvoriti prolaz bez okreta jedne kolone protiv druge."
+    ],
+    "37": [
+      "Princ kopija",
+      "Drelkash rijetke zvjezdane karte izrađivanjem jasno označenih primjeraka za škole i navigatore. Njezine radionice pomogle su u putovanju u znanje. Danas njegova posada uklanja oznake i prodaje svaki primjerak kao jedinstveni original.",
+      "Kolonije se svađaju zbog suprotstavljenih tvrdnji dok brod dopire do drugog tržišta. Obmana se odnosi na podrijetlo, a ne vrijednost zajedničkog znanja. Drelkash žestoko brani svoju dirljivu radionicu krivotvorenja. Njegov poraz ponovno povezuje rekorde s poviješću iz koje su zapravo došli."
+    ],
+    "38": [
+      "Proždirač redova",
+      "Nerthavel je organizirao zahtjeve za goleme opskrbne centre. Njegovo sjećanje može apsorbirati dane zaostatka. Flota sjene pretvorila je tu rezervu negdje gdje se traže da ostanu legitimni.",
+      "To stavlja bezvrijedne unose ispred hitnih isporuka i održava procese zauzet bez da im se dopusti da naprede. Izvana, sve izgleda kao obična operacija. Nerthavel čuva beskrajno zastoj. Poraziti ga ne samo sposobnost kolonija, već i vrijeme tiho oduzeto od njih."
+    ],
+    "39": [
+      "Krivotvoritelj dokaza",
+      "Rhazkora je bio laboratorij za leteće nesreće. Njezini zapisi pomogli su posadama da shvate neuspjehe i izbjegnu nove gubitke. Nakon hvatanja instrumenti su ostali, ali njihova su izvješća služila različitim pokroviteljima.",
+      "Razdvaja dokaze od konteksta i preuređuje fragmente sve dok žrtve ne izgledaju kao napadači. Pravi krivci ostaju izvan okvira. Njegov oklop štiti pažljivo izgrađenu laž. Zaustavljanje Rhazkora čini mjesta za potpune dokaze umjesto priča iz kojih su uklonjeni odlučujući dijelovi."
+    ],
+    "40": [
+      "Vratar glasovanja",
+      "Velzhar je nosio zapečaćene glasove između udaljenih vijećnica. Njegov neutralni put bio je dio svakog sporazuma. Sada dopire do odabranih luka na vrijeme i druge tek nakon što se odluke završe.",
+      "Oslanja se sudjelovanjem isključivanjem određenih kolonija iz zajedničkog razgovora. Svaki se rezultat još uvijek čini uredno snimljen; glasovi koji nedostaju su nevidljivi. Njegov pištolj čuva ovu selektivnu točnost. Branitelji se bore kako bi se zajednička budućnost doista mogla odlučiti zajedno."
+    ],
+    "41": [
+      "Saboter pristupa",
+      "Korthaven je bio veliki prijevoznik za pohranu koji je arhivirao u mnogim sektorima. Njegova posada obećala je da svaki traženi primjerak može biti isporučen. Flota sjene otkrila je snagu sadržanu u odbijenom odgovoru.",
+      "Potvrda da zapisi postoje dok zadržavaju svoj sadržaj. Istražitelji mogu vidjeti tvrdnju, ali ne mogu sami ispitati dokaze. Korthaven pretvara vidljivost u prazno osiguranje. Poraz to vraća pristup bez koje je čak i lijepa zaliger samo popis nedresurnih obećanja."
+    ],
+    "42": [
+      "Lažni tragač",
+      "Azravel je tražio izgubljene koloničke sonte gdje je nekoliko spasilačkih putovalo. Njegova pomoć je jednom stigla do zaboravljenih mjesta. Danas je usmjeren na stanice koje su upravo izgubile podatke ili pristup.",
+      "Obećava oporavak dok traži još više povjerljivih informacija, pretvarajući jedan gubitak u lanac novih. Njegova prijateljska pozivnasignka u suprotnosti je s naoružanom siluetom. Azravel mora biti zaustavljen tako da očaj više ne bi postao najvrjednija resurs kojim se trguju njezini gospodari."
+    ],
+    "43": [
+      "Preusmjerivač revizija",
+      "Threvask je koordinirao neovisne inspekcijske brodove i dodijelio sigurne pristupe. Karte situacije bile su poznate po preciznosti. Nakon uhićenja ti su isti inspektori bili usmjereni prema pažljivo pripremljenima prikazima.",
+      "Ona preusmjerava čekove od ranjivih čvorova i umjesto toga predstavlja besprijekoprimirane fasade. Izvješća ostaju ohrabrujući dok šteta raste negdje drugdje. Threvask štiti krajolik svoje narudžbe oružjem. Branitelji moraju skrenuti pozornost na sve što brod najviše radi kako bi prikrio."
+    ],
+    "44": [
+      "Lovac na uspomene",
+      "Dorzheva je pronašla osobne dnevnike iz uništenih teretnjaka i vratila ih obiteljima. Njegovi držači bili su ispunjeni malom, dragocjenom poviješću. Pod novim zapovjedništvom ta su sjećanja postala oruđa ciljane obmane.",
+      "Konstruiraju uvjerljive poruke iz poznatih detalja i pristupa žrtvama sa znanjem o njihovoj prošlosti. Njegova opasnost leži u bliskosti koju se pretvara da nudi. Dorzheva čuva zbirku ukradene familijarnosti. Porazljavajući ga sprječava da se tragovi života okrenu protiv njihovog vlasnika."
+    ],
+    "45": [
+      "Uzurpator izvanrednih ovlasti",
+      "Vezrakh izgrađen kako bi pomogao kada središnje zapovjedne postaje nisu uspjele. Njegov hitni mandat omogućio je brzo djelovanje u kaotičnim satima. Flota u sjeni naučila je to samo izjašnjavati o tim iznimnim okolnostima.",
+      "Širi lažna krizna izvješća i zahtijeva neposredne prijenose kontrole. Pitanja se odbacuju kao opasna kašnjenja. Njegov nametanje trupa daje kredibilitet proizvedenoj hitnosti. Branitelji moraju zaustaviti Vezrakh prije nego što strah od zamišljenog kolapsa uzrokuje pravu predaju neovisnosti kolonija."
+    ],
+    "46": [
+      "Kartograf povjerenja",
+      "Orzhaven je mapirao veze između humanitarnih skupina i opskrbnih stanica. Njezini grafikoni su nekoć olakšali suradnju. Ti isti odnosi sada identificiraju gdje bi izdaja nanio najveću štetu.",
+      "Ona ne traži najjaču stanicu, već vezu na koju se svi oslanjaju. Lažne preporuke stavljaju neprijateljski partnere u središte mreže. Njegovo oružje štiti kartu povjerenja. Branitelji progone Orzhaven prije nego što koristan most postane zajednička točka neuspjeha."
+    ],
+    "47": [
+      "Opsadnik konsenzusa",
+      "Keldroth je bio vijećnički brod gdje su suparničke kolone riješile svoje konačne sporove. Njezine komore su dizajnirane za strpljenje i razumijevanje. U sjeni flote postali su tvornica namjerno susporičkih zahtjeva.",
+      "Bliži sporazume s novim prigovorima i daje svakoj strani različite navodne uvjete. Dok se kolonija svađaju, neprijateljski brodovi zauzimaju svoje rute. Keldroth uopće napada sposobnost da djeluje zajedno. Njegov poraz daje vremena za razlikovanje stvarnih razlika od prepreka proizvedenih kako bi se spriječilo bilo kakvo rješavanje."
+    ],
+    "48": [
+      "Brisač podrijetla",
+      "Zhavrek je sačuvao zapise o podrijetlu za najstarije kolonijce. Čak su i zaboravljena brodogradilišta mogla biti pronađena kroz njegove arhive. Danas razmjenjuje podrijetlo i čini da se ukradena roba legitimno stečena.",
+      "Svaki raseljeni trag štiti još jednu pošiljku sjenom flote. Pošteni trgovci spadaju pod sumnju dok krivci mijenjaju imena. Njegov oklop čuva preostale originale. Branitelji moraju osigurati taj arhiv prije nego što podrijetlo cijelih flota ne postanu ništa više od uvjerljivih priča."
+    ],
+    "49": [
+      "Posljednji izolator",
+      "Vorthaz je branio utočište tražeći kontakt izvana nakon dugog rata. Zadatak je bio zadržati opasne veze podalje. Flota u sjeni uvrnula je tu dužnost sve dok se svaki nepoznati glas nije računao kao prijetnja.",
+      "Izolira kolonije i zamjenjuje njihov pogled na mrežu odabranim neprijateljskim porukama. Bez neovisne usporedbe, izmišljeni vanjski svijet izgleda stvarno. Vorthaz čuva ovaj zatvor od informacija. Poraziti ga znači dati stanovnicima slobodu da gledaju prema van za sebe, a ne ih osvajajući."
+    ],
+    "50": [
+      "Gospodar lažnih istina",
+      "Drazevorn je sastavljen s napuštenih zapovjednih paluba. Njezini arhivi ujedine prijeteće neprijatelje: ukradena imena, lažne kronike i zatečene dokaze. Simbolizira redoslijed kojim jedan glas sam odlučuje što je istina.",
+      "Njegova je misija podrediti svaki besplatni čvor u jedan neprijateljski registar. Sjećanja ne moraju nestati ako ih nitko ne može neovisno provjeriti. Poraz Drazevorn završava tu tvrdnju. Konačna pobjeda pripada sudionicima koji se još jednom mogu usporediti, ne slagati i odabrati povjerenje zajedno."
+    ]
+  },
+  "ships": {
+    "grey-scout": [
+      "Grey Scout nastao je u radionici koja je nakon kvara udaljenih relejnih postaja opstajala zahvaljujući dijelovima spašenima iz olupina. Prvi su piloti tražili nestale kurirske plutače. Svaki vraćeni zapis ponovno je povezao obitelj s njezinom kolonijom. Skroman trup podsjećao je da se mreža može obnoviti malim, ustrajnim koracima.",
+      "Pirati koji vrebaju oko relejnih postaja oteli su nekoliko brodova Grey Scout tijekom prepada na skladište spašenih dijelova. Oskudan plijen potrošili su na gorivo i popravke. Za nadogradnje gotovo ništa nije preostalo. Piloti danas katkad nailaze na neprijateljske brodove iz iste obitelji.",
+      "Napredna eskadrila bila je zadužena za oporavak poruka iz spornih relejnih zona. Njegovi piloti su zadržali pozive izvornih timova za potragu.",
+      "Elitsko izdanje prati posljednju preživjelu vezu ugroženog sektora. Njegova arhiva simbolički nosi imena svakog nestalog kurira."
+    ],
+    "nova-wing": [
+      "Nova Wing je dizajniran za prvo putovanje izvan svjetlećeg obruča. Njegovo brodogradilište dijelilo je planove s udaljenom kolonijama kako nitko ne bi bio isključen iz sigurne plovidbe. Piloti još uvijek govore o prvom povratku: oštećenom brodu, netaknutoj arhivi karte i nebu punom novih mogućnosti.",
+      "Zadužena tvrtka za mapiranje prodala je umirovljenu Nova Wings neprijatelju trgovcu. Njegovi sponzori mogli su si priuštiti trupove, ali malo novog oružja, ostavljajući najviše u svojoj izvornoj konfiguraciji.",
+      "Napredni piloti čuvaju kurire koji nose te karte dalje. Njihov znak prikazuje prvu mapiranu zvijezdu.",
+      "Elitna ekspedicija lovi izvore krivotvorenih zvjezdanih karata, nasljeđivanje svrhe izvorne istraživačke misije."
+    ],
+    "solar-lance": [
+      "Solar Lance je došao iz stanice koja je crpila energiju iz umiruće zvijezde. Kada je njegov konačni kolekcionarski prsten evakuiran, ovi brodovi su pratili spasilačke teretnjake kroz krhotke. Njihove duge siluete bile su ugravirane na spomenicima nove matične luke. Dizajn označava održavanje jasnog smjera dok cijeli svijet blijedi iza njega.",
+      "Neprijateljske posade napustile su Solarne Lanceove kada je pala baza za evakuaciju. Njihov proračun za opskrbu uglavnom je financirao rute bijega za zapovjednike, ostavljajući zarobljene brodove s improviziranim popravcima, a ne nadogradnjom.",
+      "Napredni sat zadržava premještene kolone. Svaki brod nosi stari kod evakuacije.",
+      "Elitne formacije brane nove solarne trgovine od flote u sjeni, štiteći svjetlo koje su izbjeglice uspjele nositi."
+    ],
+    "dark-delta": [
+      "Dark Delta nikada nije izgrađena za slavu. Njegova prva misija bila je pretražiti tihe ispostave za preživjele. Rani dnevnici sadrže više koordinata od imena jer su posade štitile privatnost spašenih doseljenika. Tradicija je proizarasla iz tog izbora: uspjeh se mjeri tko se sigurno vraća, a ne tko priča priču.",
+      "Broker pomfrit preusmjerio je pošiljku Dark Delta u flotu u sjeni. Nakon plaćanja izdaje, njegova sredstva su jedva pokrivala rezervne dijelove. Vrlo malo ukradenih trupa dobilo je bolju opremu.",
+      "Izvedba Advanced prati ugrožene arhiviste na putovima za bijeg. Izvješća o misiji otvaraju se tek kad sigurno stignu na odredište.",
+      "Elitni piloti prevoze svjedoke čiji računi mogu pomiriti cijele kolone. Njihova reputacija počiva na diskrecijskoj rediktnosti, a ne na spektakl."
+    ],
+    "gold-streak": [
+      "Gold Streak započela je u utrkama između trgovačkih mjeseca. Tijekom krize opskrbe, piloti su koristili svoje znanje o ruti kako bi nosili medicinsku dokumentaciju pored zatvorenih luka. Sportska liga postala je kurirske unije. Zlatne oznake podsjećaju na tanku sunčevu svjetlost između mjeseca koji su vodili svoje prve kurire, a ne bogatstvo.",
+      "Neprijateljske bande zaplijenile su zlatne pruge na napuštenom trkaćem mjesecu. Očekivali su nagradni novac, ali utrke su završile davno prije. Bez tog prihoda, rijetko su modernizirali svoju novu flotu.",
+      "Napredni kuriri nose provjerene obveze pomoći između klinika. Njihovi stari brojevi utrka čuvaju svoje zajedničko podrijetlo.",
+      "Elitna liga čuva vitalne konvoje sektora za spašavanje. Njegova najcjenjenija titula je posada koja je donesena kući završena."
+    ],
+    "iron-guard": [
+      "Iron Guard dizajnirali su radnici na pristanu koji nisu voljni napustiti obranu svog doma vanjskim flotama. Njegov prvi trup koristio je dijelove iz mirovite dizalice. Kobilica nosila imena ljudi koji su radili na njemu nakon svojih smjena. Serija se sjeća da obrana može značiti brigu za mjesto koje su izgradile mnoge ruke.",
+      "Nakon što su okupirali brodogradilište, napadači su prisilili svoje preostale radnike da obnove stare Željezne garde. Nedostajao im je i novac i dobavljači za novo oružje, tako da je većina ukradenih trupova zadržila svoje izvorne specifikacije.",
+      "Napredni sat prati mobilne pristaništa za popravak. Njezine posade znaju svako sklonište za hitne slučajeve oko lučkog prstena.",
+      "Elitni brodovi brane obnovu uništenih stanica. Njihove počasti priznaju posada brodogradilišta dovedene su na sigurno."
+    ],
+    "vector": [
+      "Vector nastao iz spora navigatora: vjerujte jednom savršenom tečaju ili usporedite neovisna mjerenja? Druga skupina izgradila je ovaj brod i prešla neistraženi prsten za krhotine. Njihov povratak postao je slučaj suradnje. Njezini preživjeli grafikoni čuvaju proturječna očitanja tako da kasnije piloti mogu razumjeti kako je pronađena zajednička ruta.",
+      "Krivotizirani ugovori o prijevozu prenijeli su brojne Vektore na neprijateljske vlasnike. Kada je prijevara otkrivena, njihovo financiranje je prestalo. Rezerve su držale brodove leteći, ali su platili nekoliko nadogradnji.",
+      "Napredne formacije provjeravaju ponovno otvorene trgovačke rute. Svaki tečaj nosi potpise nekoliko navigatora.",
+      "Elitna ekspedicija istražuje sustavno petljanje karata, prikupljajući dokaze gdje drugi vide samo suprotstavljene upute."
+    ],
+    "verdant": [
+      "Verdant je nosio prvi arhiv sjemena u koloniju bez prirodnog tla. Njegovi planovi putovali su uz kataloge biljaka kako bi druga naselja mogla postati neovisna. Njegovi piloti smatraju se čuvarima budućih žetvi. Netaknuta arhiva može biti važnija od blistavog tereta: može sadržavati cjelokupnu zimsku opskrbu hranom.",
+      "Raiders je zarobio Verdantse u nadi da će prodati vrijedne arhive sjemena. Arhivi su već bili premješteni, ostavljajući samo brodove i razočarane sponzore. Rijetko se slijede nova sredstva za nadogradnje.",
+      "Napredni brodovi osiguravaju razmjenu između stanica u staklenikima. Njihovi identifikatori čuvaju imena zaboravljenih biljaka.",
+      "Elitna garda štiti posljednji potpuni registar sjemena, uključujući koloniju koje tek treba uzgajati svoj prvi vrt."
+    ],
+    "storm-wing": [
+      "Storm Wing izgrađeno je tijekom sezone nemilosrdnih ionsko oluja. Brodogradilišta su radila između nesvjestici i razmjenjivali napredak kroz kurire. Nijedno mjesto nije držalo kompletan dizajn sve dok prvi brod nije spojio svaki dio. Njezino podrijetlo govori o mreži koja nastavlja raditi unatoč tome što je više puta gubila svoje veze.",
+      "Tijekom neslaganja mreže, neprijatelji su okupirali udaljeni hangar pun Storm Wingsa. Odsječeni opskrbni vodovi učinili su svaku zamjenu skupom. Njihov ograničeni proračun obično je pokrivao rad, a ne napredne remonte.",
+      "Napredna auzijata prati plutače za održavanje duž olujne granice, zatvarajući praznine između izoliranih stanica.",
+      "Elitni piloti štite velike konvoje za popravak nakon prekida rada. Njihov povratak znači da je pomoć ponovno pronašla rutu."
+    ],
+    "red-comet": [
+      "Red Comet dobio je ime po spasilački let čiji je sjajni trag prešao tri kolonija. Pilot nije donio blago, samo posljednji netaknuti dizajn za pročišćivač vode. Legende su uljepšale putovanje, ali brodogradilište čuva jednostavno izvorno izvješće: ljudi na odredištu mogli bi ponovno piti sljedećeg jutra.",
+      "Neprijateljska iznuđivačka skupina zaplijenila je Crvene komete pod lažnim nalogom za oduzimanje. Kolodije su prestale plaćati. Bez očekivanih prihoda, većina zarobljenih spasilačkih brodova ostala je tehnički nepromijenjena.",
+      "Napredni brodovi nose znanje o popravke u zone hitne pomoći. Njihove crvene oznake stoje za hitnu pomoć.",
+      "Elite izdanje prati konačne isporuke u opkoljene kolonije. Njezin pozivni znak ostaje aktivan sve dok primatelj ne odgovori."
+    ],
+    "twin-core": [
+      "Twin Core je izgradila dva brodogradilišta podijeljena starim sukobom. Svaki je isporučio dio dizajna i inzistirao na neovisnoj inspekciji. Tek kada su se njihovi izvještaji složili, započeo je zajednički prvi let. Model simbolizira povjerenje koje se uzgaja kroz međusobnu provjeru pacijenata, a ne zahtijeva na autoritet.",
+      "Prebjezi su isporučili nekoliko Twin Cores neprijateljske flote. Oba izvorna brodogradilišta odbila su dodatne zalihe. Zamjene su postale skupe, a novi vlasnici smanjili su gotovo svaku planiranu nadogradnju.",
+      "Napredne posade dolaze iz obje kućne luke. Njihovi zajednički dnevnici čuvaju nesuglasice, kao i odluke.",
+      "Elitna formacija štiti sporazume između nekada neprijateljskih sektora. Njegova misija završava tek kada obje strane stignu sigurno."
+    ],
+    "orbit-arc": [
+      "Orbit Arc je služio stanice čije su se staze rijetko susrele. Njezini prvi piloti nosili su slova između udaljenih orbita. Odgovori su ponekad trebali mjeseci, ali svaki susret imao je pouzdan prozor. Ta mala imenovanja prerasla su u ostalu trgovinu. Dizajn pamti da je čak i rijetki kontakti važni kada ljudi mogu ovisiti o tome.",
+      "Krijumčari su prodali nestali Orbit Arcs neprijateljski kraj granice. Dugi opskrbni putovi potrošili su svoju riznicu, ostavljajući novac za moderne sustave samo u rijetkim prilikama.",
+      "Napredni kurire štite planirane razmjene na vanjskim prstenovima. Nijedan obećani sastanak ne bi trebao proći bez poruke.",
+      "Elitni brodovi čuvaju velika okupljanja putujućih kolonija. Njihov dolazak najavljuje obnovljenu vezu."
+    ],
+    "night-guard": [
+      "Night Guard je došla iz kolonija na plimno zaključanoj mjesečevoj tamnoj strani. Njezine luke nisu znale izlazak sunca, ali su prepoznale povratna patrolna svjetla. Brodogradilište je izgradilo to obećanje u trup: vratite se, provjerite, ne zaboravite nikoga. Njezine priče zabrinjavaju manje velikih pobjeda od jednog doka koji je ostao otvoren za kasni teretni brod.",
+      "Napadači su ukrali nekoliko noćnih čuvara tijekom promjene sata. Njihovi sponzori platili su napad, a ne dugoročno održavanje. Većina zarobljenih brodova stoga je ostala osnovna patrolna modela.",
+      "Napredni satovi prati zalihe kroz dugotrajnu radio tišinu. Njihove smjene uzimaju imena spašenih brodova.",
+      "Elitna straža drži posljednje utočište u blizini. Napušta stanicu tek nakon posljednje evakuacije."
+    ],
+    "striker": [
+      "Striker je uslijedio nakon niza napada na konvoje za popravak. Njezini dizajneri nisu željeli osvajača, već pratnju koja bi mogla kupiti ugroženo vrijeme radionice. Prva jedinica sastojala se od bivših mehaničara. Znali su što svaka minuta znači kada oštećeni motor još nije mogao početi. To podrijetlo je važnije od izvanrednog imena.",
+      "Neprijateljski plaćenici prihvatili su Striker trupove od nesolventnog poslodavca. Preprodaja je donijela premalo, pa su neki zadržali brodove. Malo je posade moglo priuštiti znatnu obnovu.",
+      "Napredne jedinice čuvaju mobilne radionice tijekom teških oporavka. Njihovi piloti znaju hitne signale timova za popravak.",
+      "Elitni brodovi pokrivaju povlačenje završnih spasilačkih timova. Njihove počasti navode radionice koje su preživjele ponovno raditi."
+    ],
+    "cargo-hawk": [
+      "Cargo Hawk je nastao u luci čiji su mali tegljači često bili zanemareni. Kada je lanac prijevare krivotvori račune, njihove posade prikupile su neovisne dnevnike i spoje ih unatoč prijetnjama. Novi trup je uzeo ime iz tog kurirskog saveza. U svojoj legendi, najvažniji teret je potpuni dokaz zakonitog vlasništva.",
+      "Okupirano carinsko skladište opskrbljivalo je neprijatelja Cargo Hawksima. Umjesto blaga, držači su sadržavali uglavnom zapečaćene dokaze. Loši prihodi nisu mogli financirati veliku obnovu zarobljene flote.",
+      "Napredni brodovi prate sporni teret za zajedničku inspekciju. Njihovi zapisi ostaju dostupni objema stranama.",
+      "Elitna flota štiti velike arhive opskrbnog lanca. Njegov amblem predstavlja sljedivo podrijetlo, a ne vrijedan plijen."
+    ],
+    "ring-flare": [
+      "Ring Flare je testiran među ledenom prstenom plinskog diva. Njezina navigacijska svjetla postala su pokretna mjesta susreta za raspršene istraživačke timove. Kada je ekspedicija završila, signali su povezali novoosnovane ispostave. Njihovi se stanovnici još uvijek sjećaju kako su odvojena svjetla formirala zajedničku rutu prije nego što je postojao bilo koji službeni grafikon.",
+      "Kada je ispostava izgubila svoj proračun za istraživanje, namještena aukcija postavila je Ring Flares u neprijateljske ruke. Kupci su iscrpili svoja sredstva koja su ih stekla. Malo ih je poboljšalo izvan njihove osnovne specifikacije.",
+      "Napredne eskedrile održavaju kontakt s plutajućim istraživačkim stanicama. Njihovi pozivi slijede stare točke susreta prstena.",
+      "Elitni piloti štite zajedničku arhivu promatranja od krivotvorenih čitanja, čuvajući godine neovisnih istraživanja."
+    ],
+    "sky-breaker": [
+      "Sky Breaker bio je prvi brod iz izolirane kolone koji je prešao svoj izgrađeni informativni horizont. Izvješća o povratku proturječe pričama koje su se koristile kako bi uplašile stanovnike. Brodogradilište je objavilo sve rekorde misije. Dizajn zapamti da otvorena veza može biti važnija od bilo kojeg odgovora koji je dopustilo jedno tijelo.",
+      "Neprijateljsku blokadu presreli su povratak Sky Breakersa. Održavanje blokada trošilo je svoje financiranje, pa su zarobljeni brodovi obično nastavili s opremom s kojom su lansirali.",
+      "Napredne formacije prate neovisne glasnike preko zatvorenih granica. Nosili su više izvora, a ne jednu propisanu istinu.",
+      "Elitna ekspedicija ponovno povezuje izgubljene kolonije. Njegov dolazak nudi mogućnosti za usporedbu, a ne svježe naredbe."
+    ],
+    "olive-fortress": [
+      "Olive Fortress je izgrađeno tijekom primirja u neutralnom brodogradilištu. Bivši neprijatelji dijelili su alate bez zaboravljanja svoje prošlosti. Prvi trup nosio je radionastične boje umjesto boje pobjednika. Njegova legenda odnosi se na granice koje štite bez isključivanja svakog susreta: tvrđava također može biti negdje gdje se pregovori odvijaju sigurno.",
+      "Nakon prekida primirja, neprijateljsko izaslanstvo nastavilo je posuditi Olive Fortress. Neutralni pristaše zamrznuli su sva sredstva. Zamjena neuspjelih dijelova tada je imala prioritet nad nadogradnjama.",
+      "Napredni brodovi osiguravaju sastanke između neovisnih izaslanstava. Njihova pratnja završava u obje kućne luke.",
+      "Elitni sat brani neutralne arhive od uhićenja. Njegova dužnost štiti zajedničke dokaze čak i protiv želja vlastitih saveznika."
+    ],
+    "pi-vanguard": [
+      "Pi Vanguard je započeo kao zajednički projekt malih pionirskih brodogradilišta. Nitko nije mogao financirati cijeli brod sam, ali zajedno su isporučivali materijale, vrijeme i iskustvo. Njegova prva misija osigurala je otvorenu opskrbnu rutu za svaku koloniju koja sudjeluje. U ovom izmišljenom svemiru dizajn predstavlja snagu kroz sudjelovanje, a ne kontrolu jednog glumca.",
+      "Neprijateljske skupine kopirale su stare planove Pi Vanguarda i preuzele trupove s razgradnjom. Nedostajale su im sredstva za noviju precizniju sklopove, ostavljajući svoju malu flotu uglavnom u ranoj konfiguraciji.",
+      "Napredni pioniri prationice konvoji na svojim prvim zajedničkim putovanjima. Njihovi identifikatori se sjećaju radionica koje su pridonijele.",
+      "Elitna formacija štiti slobodne čvorove od Drazevornova prava na isključivost. Njegova priča ostaje fikcija i ne daje pravu mrežnu funkciju."
+    ],
+    "core-carrier": [
+      "Core Carrier je izgrađen kada je nekoliko kolonija trebalo zaštititi svoje konačne arhive znanja. Svaki je pridonio trgovini, ali nitko nije mogao kontrolirati samo kolekciju. Posada je zadržala odvojene zapise o podrijetlu i dijelila kataloge. Dizajn predstavlja nošenje znanja drugih bez da je tvrdi: njihova je svrha sljedeća sigurna primopredaja.",
+      "Arhivski pljačkaši uhvatili su Core Carriers u nadi da će prodati svoje znanje. Distribuirani ključevi učinili su ukradene arhive bezvrijednima. Razočarani pokrovitelji povukli su se, čineći skupe nadogradnje rijetkom iznimkom.",
+      "Napredni nosači povezuju distribuirana skladišta znanja. Nekoliko skrbnika prati svaku primopredaju.",
+      "Stražbi Elite izdanja dijelili su sjećanje nakon posljednje bitke za šefa. Njegov najvrjedniji teret je sposobnost samostalne provjere povijesti."
+    ]
+  }
+}

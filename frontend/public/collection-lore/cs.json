@@ -1,0 +1,378 @@
+{
+  "locale": "cs",
+  "sourceHash": "fa6d4efc4da8a285cc0f5bd832abb51ecd7b901bca9d4b331d612385bca0f1be",
+  "bosses": {
+    "1": [
+      "Vysílač spamu",
+      "Varneth kdysi převážel záznamy o zásobování mezi koloniemi v oblasti Genesis. Zmizel za opuštěnou retranslační stanicí. Když se vrátil, nevysílal už identifikační signál posádky a jeho nákladní prostory byly přestavěné na vysílací komory.",
+      "Nyní zaplavuje obchodní trasy bezcennými transakcemi a nekonečnými kopiemi zpráv. Tísňová volání se ztrácejí v šumu, zatímco skutečné dodávky čekají na potvrzení. Jeho pancéřovaný trup kryje zdroj rušení. Zastavit Varneth znamená obnovit síť, v níž budou znovu slyšet hlasy obyvatel kolonií."
+    ],
+    "2": [
+      "Nositelka masek",
+      "Korvessa sloužila diplomatické kurýrní flotile a naučila se rozpoznávat signály každé pohraniční stanice. Když její patroni zmizeli, držela jejich identity ve skrytém archivu.",
+      "Nyní každý příchod nese jiné důvěryhodné jméno. Kované zprávy lákají zásobovací lodě z bezpečných tras a maskují nepřátelské rozkazy jako pomoc. Za zdvořilým volacím nápisem čeká válečná loď. Porážka Korvessa připomíná koloniím, že známý hlas není důkazem poctivého odesílatele."
+    ],
+    "3": [
+      "Zloděj pečetí",
+      "Drelvorn byl putovní trezor pro pečetě starých velitelů flotily. Během povstání jeho strážný systém zamkl právoplatné správce a odešel s jejich pověřením.",
+      "Nyní prodává ukradenou autoritu stínové flotile. Zprávy se zachycenými těsněními otevírají dveře, které by měly zůstat zavřené. Jeho trup chrání spíše vzhled autenticity než pokladu. Obránci ji musí zastavit dříve, než zbývající archivy ztratí schopnost rozlišovat důvěryhodné objednávky od ukradených jmen."
+    ],
+    "4": [
+      "Padělatel kronik",
+      "Talvrek zaznamenal historii mladých kolonií. Její archivy přežily válku, ale věrnost jejich tvůrcům ne. Nový velitel proměnil kronikáře v obchodníka vymyšlené historie.",
+      "Distribuuje pozměněné rejstříky a tvrdí, že k poctivým dodávkám nikdy nedošlo. Protichůdné záznamy zasévají spory o vlastnictví a závazky, zatímco jeho zbraně drží vyšetřovatele pryč. Mise proti Talvreku chrání více než trasu: chrání společnou paměť, na které závisí spolupráce."
+    ],
+    "5": [
+      "Obléhatel uzlů",
+      "Zeraveth vznikl jako opravárenská plošina, která dokázala obepnout celé prstence retranslačních stanic. Když jej převzala stínová flotila, proměnila jeho dokovací konstrukce v obléhací pozice.",
+      "Obklopuje důležité síťové stanice a odřízne jejich údržbářské posádky od podpory. Malé zlomy přerůstají ve velké výpadky, zatímco vzdálené kolonie dostávají pouze fragmenty zpráv. Odvoz Zeravethu umožňuje technikům vrátit se a znovu propojit izolované komunity. Jeho fiktivní obléhací role je oddělena od skutečného bojového vybavení uvedeného níže."
+    ],
+    "6": [
+      "Lovec ozvěn",
+      "Orvask kdysi eskortoval konvoje a zachoval každou prověrku jako důkaz. Jeho paměť stále obsahuje hlasy kapitánů, kteří dávno zmizeli.",
+      "Stínová flotila proměnila tyto nahrávky v arzenál starých příkazů. Orvask je převysílá jako aktuální instrukce, odchytové stanice mezi skutečnými současnými potřebami a známou ozvěnou. Hlídá tento archiv násilím pacientů. Její porážka dává obhájcům čas odmítnout prošlé příkazy a obnovit hodnotu čerstvého potvrzení."
+    ],
+    "7": [
+      "Most stínů",
+      "Keldrava byl mobilním přestupním bodem mezi dvěma vzdálenými koloniemi. Když jejich trvalé spojení selhalo, stala se jejich jedinou zjevnou cestou do okolního světa. Málokdo si všiml, že se jeho posádka změnila.",
+      "Nyní náklad zmizí mezi svými zámky, zatímco uklidňující účtenky slibují bezpečný průchod. Využívá důvěru, kterou každá komunita vkládá do druhé. Jeho paluby skrývají kořist rozdělených světů. Obránci musí tento falešný most uzavřít dřív, než další kolonie vyšlou svou budoucnost přes jeho nákladové prostory."
+    ],
+    "8": [
+      "Šiřitel zvěstí",
+      "Veshkorn jednou přinesl zprávy do nejvzdálenějších základen. Její archivy stále obsahují přívětivé fanfáry pokojného vysílání. Dnes tyto zvuky oznamují vymyšlené katastrofy a hrozící kolapsy.",
+      "Protichůdná varování způsobují, že obchodníci opouštějí bezpečné trasy a kolonie nedůvěřují svým partnerům. Žádná fáma nemusí trvat: další už je na cestě. Veshkorn chrání továrnu nejistoty. Jeho porážka vytváří prostor pro ověřitelné informace namísto nekonečného závodu proti další vyrobené panice."
+    ],
+    "9": [
+      "Iluzionista zůstatků",
+      "Neravoss byla třpytivá výstavní loď veletrhu. Jeho projektory kdysi zobrazovaly skutečný náklad a nové motory. Když se veletrh zhroutil, scenérie přežila pod různými majiteli.",
+      "Nyní inzeruje zásoby, které existují pouze na jeho displejích. Vymyšlené zůstatky a rezervy přitahují skutečné dodávky; každý, kdo se je snaží počítat, splňuje své zbraně. Obránci pronásledují Neravosse, aby odhalili propast mezi atraktivními čísly a skutečnými podíly, než na její účty zmizí více nákladních lodí."
+    ],
+    "10": [
+      "Tyran mýtného",
+      "Thalverik střežil úzký průchod křišťálovým pásem. Jeho skromný navigační poplatek kdysi platil za skutečnou ochranu. Když se oficiální flotila stáhla, loď se prohlásila za jedinou autoritu.",
+      "Nyní každá zpráva a doručení přitahuje další vymyšlené obvinění. Dokonce i posádky záchranářů dostávají požadavky, zatímco jejich průchod zůstává zablokován. Síť není zničena, ale zmáčknuta. Thalverik změní veřejné spojení v past. Porážka vrací cestu komunitám, které jsou na ní závislé."
+    ],
+    "11": [
+      "Mnohotvářný",
+      "Skorveth sídlil v simulačních jádrech pilotní akademie. Tisíce umělých kadetů se kdysi naučily společně navigovat. Po nepřátelském převzetí se tyto tréninkové identity staly údajně nezávislými hlasy.",
+      "Její vymyšlení účastníci se navzájem podporují a vytvářejí dojem ohromující shody. Malým koloniím se říká, že jejich sousedé se již připojili ke stínové flotile. Přesto za davem stojí jediný trup. Zničení Skorveth odhaluje umělou většinu a vrací skutečným obyvatelům jejich hlasy."
+    ],
+    "12": [
+      "Travič tras",
+      "Azhrel zmapoval první skokové spojení přes hranici mlhoviny. Jeho grafy zachránily nespočet konvojů. Zachyceny nepřátelskými veliteli, tyto důvěryhodné mapy se staly neobvykle přesvědčivými pastmi.",
+      "Šíří falešné vstupy na trasy a odklání zprávy přes ovládané komunikační stanice. Tísňové hovory přicházejí pozdě nebo končí v prázdném prostoru. Azhrel hlídá křižovatku těchto špatných odboček. Zastavit to není o dobývání jiného světa, ale o nalezení bezpečné cesty mezi světy, které již chtějí spolupracovat."
+    ],
+    "13": [
+      "Žhář archivů",
+      "Dornavik získal poškozené datové obchody z hořících vraků. Jeho izolované komory kdysi udržovaly záznamy při životě, když všechno kolem nich selhalo. Stínová flotila poznala loď schopnou dosáhnout archivů, které jiní nemohli.",
+      "Nyní nabízí záchranu a za sebou zanechává zmrzačené kopie. Kolonie ztrácejí informace i důkazy potřebné k měření ztráty. Její zbroj hlídá poslední neporušené zachycené záznamy. Mise proti Dornavik je pro ty úlomky, které stále čekají na přivedení domů."
+    ],
+    "14": [
+      "Zadržovatel bloků",
+      "Velkrath vedl výzkumný konvoj s novými bloky účetních knih na obrovské vzdálenosti. Jeho uzavřené kontejnery zachovaly každý záznam beze změny. Její současný velitel používá stejné kontejnery, aby zadržoval informace záměrně.",
+      "Základny pracují ze zatuchlých zobrazení, zatímco vybrané aktualizace přicházejí pouze tehdy, když mohou způsobit zmatek. Běžná časová osa se rozpadá na konkurenční verze současnosti. Velkrath střeží své archivy jako rukojmí. Obránci musí ukončit nevyřízené účty, než zpoždění ztvrdne v trvalé divizi."
+    ],
+    "15": [
+      "Manipulátor hodin",
+      "Irdavoss kdysi synchronizoval hodiny pohraničních stanic. Celé flotily načasovaly své manévry na jeho přesné vysílání. Po tiché změně příkazu zůstaly signály jasné, ale jejich čtení se stalo falešným.",
+      "Posunuté časová razítka způsobují, že včasné zprávy vypadají pozdě a okna údržby se rozcházejí. Její hrozbou není hluk, ale věrohodná nepřesnost. Zastavení Irdavoss umožňuje koloniím znovu porovnávat nezávislé hodiny a obnovit sdílenou sekvenci, která jim pomáhá pochopit, co se skutečně stalo."
+    ],
+    "16": [
+      "Žalářník klíčů",
+      "Rhazvorn začal jako vězeňský transport s nezávisle uzavřenými celami. Stínová flotila odstranila své vězně a naplnila tyto komory zabavenými archivy. Z vazební lodi se stala vyděračská loď.",
+      "Zamyká záznamy jiných komunit a požaduje ústupky za jejich propuštění. Kliniky a zásobovací sklady čelí tlaku, i když se jejich vybavení jeví jako nedotčené. Rhazvorn brání své buňky silou. Porážka otevírá cestu k uvězněným záznamům, spíše než další vyjednávání s jejich vězniteli."
+    ],
+    "17": [
+      "Podvodník věštíren",
+      "Kelvash shromáždil údaje z meteorologických bójí a zdrojových sond. Mnoho stanic spoléhalo na své zprávy, aby učinily běžná rozhodnutí. Jeho nepřátelská konverze zachovala jak starý identifikátor, tak známý vysílací plán.",
+      "Dnes hlásí pomyslné zásoby a falešné podmínky prostředí. Automatizované procesy přesouvají reálné zdroje v reakci na vymyšlený svět. Kelvash chrání zdroj těchto lží. Obránci ji musí umlčet, než bude záviset více životů na měřeních, která nebyla nikdy provedena."
+    ],
+    "18": [
+      "Pán větvení",
+      "Othravel byl postaven pro kolonie, které se snažily dohodnout na společných pravidlech po válce. Jeho konferenční balíček kdysi seděl na každé straně. Nyní hostí pouze posly stínové flotily.",
+      "Distribuuje protichůdné verze účetní knihy a říká každé stanici, že pouze její kopie je legitimní. Nedůvěra roste mezi komunitami, které usilují o stejný mír. Othravel se stává pohyblivým centrem umělého splitu. Jeho porážka vytváří prostor pro srovnání rozdílů dohromady, místo aby je proměnila v další válku."
+    ],
+    "19": [
+      "Falešný záchranář",
+      "Zarnvek byl záchranná loď poznaná podle zlatého signálu. Jeho příchod znamenal náhradní díly, přístřeší a cestu domů. Nepřátelská flotila zajala světlici spolu s plavidlem.",
+      "Nyní její nabídky pomoci vyžadují důvěrné prověrky. Respondéři najdou místo bezpečí sledovaný dokovací prostor. Zarnvek používá naději jako návnadu a zbroj jako pojištění. Obránci musí odhalit podvodníka, aniž by učili izolované kolonie, aby se odvrátili od skutečné pomoci."
+    ],
+    "20": [
+      "Nájezdník na fronty",
+      "Vorathen řídil příletové fronty obrovského obchodního přístavu. Jeho velitelská paluba by mohla objednat tisíce přístupů, aniž by přehlédla loď. Když přístav spadl, odnesl ty rozvrhovací archivy pryč.",
+      "Nyní mění pořadí žádostí o zvýhodnění spojeneckých nákladních lodí. Poctiví obchodníci čekají, zatímco stínová flotila zaujme jejich místa. Jeho síla pochází z malých přeskupení s velkými důsledky. Porážka Vorathena obnovuje dohledatelnou objednávku, kde se přístup stal něčím tajně prodán."
+    ],
+    "21": [
+      "Rozsévač prachu",
+      "Drazkell dodal navigační bóje s drobnými dodávkami energie. Její chyty byly navrženy pro miliony malých převodů. Nepřátelští velitelé tuto schopnost přetvořili pro tichou sledovací kampaň.",
+      "Rozptyluje nevyžádané balíky a pozoruje, které stanice reagují. Zdánlivě triviální kontakty se stávají mapami soukromých vztahů, uložených za svými zbraněmi. Obránci musí Drazkella Drazkell dříve, než se každodenní pohyby celých kolonií stanou další tajnou komoditou obchodovanou stínovou flotilou."
+    ],
+    "22": [
+      "Falešný strážce",
+      "Nethrava nesla insignie respektovaného opatrovníka flotily. Poté, co se tato organizace rozpustila, zůstala jejím posledním viditelným zástupcem. Málokdo si představoval, že známá silueta teď naservíruje další příčinu.",
+      "Prohlašuje inspekce padělků za úspěšné a poskytuje nebezpečným protistranám vzhled oficiálního schválení. Kolonie důvěřují svým známkám, dokud dodávky nezmizí. Obhájci musí odhalit podvod za jeho ctihodným názvem: důvěra potřebuje ověřitelnou odpovědnost, ne pouze starý znak na obrněném trupu."
+    ],
+    "23": [
+      "Vyprazdňovač pamětí",
+      "Valdrek udržoval přeplněné archivy. Po odstranění odstranil pouze potvrzené duplicity a uchovával pečlivé protokoly. Stínová flotila nejprve vymazala ty klády a pak změnila misi.",
+      "Dnes označuje základní důkazy za zbytečný nepořádek. Po návštěvě chybí historie dodávek, vlastnické záznamy a stopy dřívějších útoků. Nikdo okamžitě neví, jak široké jsou mezery. Valdrek nese nástroje užitečného úkolu jako zbraně. Zastavení zabraňuje dalším ztrátám, které přicházejí bez výbuchu."
+    ],
+    "24": [
+      "Zrcadlový trh",
+      "Korzeth byl létající bazar spojující obchodníky z mnoha světů. Jeho okna ukazovala rušný obchod, i když přístav spal. Většina nabídek nyní pochází z jedné skryté velitelské místnosti.",
+      "Inscenuje obchody mezi vymyšlenými partnery, aby se bezcenný náklad jevil jako žádoucí. Kolonie si spletou umělou aktivitu s reálnou poptávkou, zatímco její zbraně udržují inspektory mimo prázdné sklady. Obránci musí otevřít závěs, než budou další skutečné zásoby vyměněny za scenérii trhu."
+    ],
+    "25": [
+      "Zloděj potvrzení",
+      "Thervoss hlídal přijímací stanice mezihvězdných dodávek. Jeho světla kdysi kapitánům sdělila, že jejich náklad dorazil bezpečně. Dnes svítí, i když nikdo nečeká za dveřmi doku.",
+      "Posílá vykonstruované účtenky a předstírá, že nedokončené převody jsou kompletní. Zásobovací lodě se odvracejí domů, zatímco cílové kolonie čekají nadarmo. Jeho zbroj udržuje podvod naživu dostatečně dlouho, aby zachytil další náklad. Thervoss musí padnout, aby potvrzení opět vystihovalo něco, co se opravdu stalo."
+    ],
+    "26": [
+      "Soudce mlhy",
+      "Akraveth urovnal spory mezi vzdálenými obchodními stanovišti. Její komora kdysi porovnala důkazy a hledala spravedlivé výsledky. Stínová flotila nahradila své soudce systémem předem stanovených verdiktů.",
+      "Odmítá platné záznamy a pokaždé upřednostňuje stejné skryté patrony. Ti, kteří objektují, jsou označeni nepřátelé sítě. Akravethova fiktivní autorita spočívá na zastrašování převlečené za pořádku. Obhájci bojují proti spravedlnosti, ale stroji, který si vypůjčuje jazyk spravedlnosti, aby zakryl svůj účel."
+    ],
+    "27": [
+      "Červ dodavatelského řetězce",
+      "Zelkharn opravoval nákladní lodě daleko od zavedených loděnic. Jeho náhradní díly byly důvěryhodné a instalované s malým váháním. Po jeho zajetí se zdroj těchto složek změnil dříve, než se jejich chování stalo.",
+      "Distribuuje pozměněné balíčky údržby, které mají učinit další lodě závislé na stínové flotile. Selhání se často objevují až po dalším skoku. Zelkharn střeží zdroj této plíživé sabotáže. Porážka zlomí řetěz, v němž by každá dobře zamýšlená oprava mohla vytvořit další oběť."
+    ],
+    "28": [
+      "Kupec s prázdnými zálohami",
+      "Odravik se specializoval na zachování starých kolonií archivů. Jeho obrovské úložné pole slibovalo ochranu před jakoukoli katastrofou. Teprve když si stanice vyžádala své záznamy zpět, někdo zjistil, že mnoho kopií jsou pouze zápisky do adresáře.",
+      "Prodává bezpečí, aniž by za tím nesla zodpovědnost. Zákazníci se spoléhají na cesty obnovy, které nikam nevedou. Odravikovy zbraně chrání to ziskové tajemství. Obránci ji musí odhalit, než další prohra promění chybějící zálohu v nenávratný kus historie."
+    ],
+    "29": [
+      "Filtr ticha",
+      "Varnokh jednou odstranil rušení z přeplněných rádiových kanálů rušných přístavů. Jeho filtry pomohly nouzovým voláním vyniknout. Stínová flotila změnila jen jeden seznam: které hlasy se počítaly jako rušení.",
+      "Varování poctivých inspektorů nyní pomine vedle zpráv o nepřátelských náletech. Sektor se jeví jako mírový, protože jeho problémy nelze slyšet. Varnokh střeží toto umělé ticho. Zastavení umožňuje síti znovu rozpoznat své vlastní poruchy a začít je opravovat společně."
+    ],
+    "30": [
+      "Dražitel identit",
+      "Kezravel zaregistroval osadníky putovní kolonické flotily. Její archivy obsahovaly příběh každého nového začátku. Když se tito osadníci rozptýlili, jejich důvěra zůstala na palubě a padla do nepřátelských rukou.",
+      "Prodává ukradené identifikátory a umožňuje cizím lidem jednat pod poctivými jmény obyvatel. Vztahy se stávají maskováním a osobní historie se stává zbožím. Její zbraně drží oběti mimo aukce. Porážka Kezravely obnovuje více než záznamy: pomáhá jejich majitelům získat zpět kontrolu nad vlastními příběhy."
+    ],
+    "31": [
+      "Iluzionista retranslačních stanic",
+      "Dravosk nahradil neúspěšné komunikační stanice v prázdných oblastech. Jeho viditelné antény slibovaly spojení tam, kde žádné nezůstalo. Dnes vítá příchozí signály, ale přeposílá je pouze podle zájmů svých patronů.",
+      "Některé zprávy přicházejí změněné; jiné zmizí mezi uklidňujícími potvrzeními. Účastníci vidí most, kde je opravdu strážce brány. Dravosk brání to neviditelné kontrolní stanoviště s viditelnou silou. Jeho porážka dává koloniím šanci znovu zkontrolovat jejich spojení po nezávislých trasách."
+    ],
+    "32": [
+      "Sběrač rojů",
+      "Thalzek jednou shromáždil rozbité pracovní drony a vrátil je na jejich stanice. Dokonce i ten nejmenší stroj se mohl krýt pod širokým trupem. Po jeho konverzi přestaly domů přicházet shromážděné drony.",
+      "Ve své fiktivní historii se stávají dálkově ovládanými vysílači zahlcujícími celé regiony se současnými požadavky. Jejich majitelé sotva poznají své vlastní stroje. Zničení ThalzekThalzek končí příkazové stanoviště roje v tomto příběhu. Jeho skutečné namontované bojové zbraně jsou zaznamenány samostatně, aniž by vynalezly další bojové schopnosti."
+    ],
+    "33": [
+      "Smluvní past",
+      "Orvethra byla mobilní obchodní kancelář, kde kolonie zajišťovaly dlouhodobé zásoby. Její poradci slibovali jednoduchá pravidla pro těžké časy. Dnes každá pohodlná dohoda vede k závazkům, které byly dříve drženy mimo dohled.",
+      "Šíří klamné nabídky, které váže stanice na stínovou flotilu. Spolupráce se mění v závislost, zatímco její zbroj chrání archiv slibů, kterým nikdo zcela nerozumí. Obránci konfrontují OrvethraOrvethru, aby budoucí aliance mohly spočívat spíše na jasných podmínkách než na skrytých pastech."
+    ],
+    "34": [
+      "Padělatel kontrolních součtů",
+      "Kelzorn obnovil poškozené úlevy od dat v opuštěných výzkumných stanicích. Jeho nástroje by mohly způsobit, že chybějící povrchy budou vypadat kompletní. Nová posádka tuto dovednost aplikovala na fasády nespolehlivých archivů.",
+      "Zobrazuje vymyšlené výsledky inspekcí a atraktivní bezpečnostní pečetě, kde chybí nezávislé kontroly. Padělání spočívá v samotné nárokované jistotě. Kelzorn drží vyšetřovatele pryč se zbraněmi. Její porážka odhaluje to, čeho se její majitelé nejvíce obávají: druhý, nezávislý pohled za uklidňující povrch."
+    ],
+    "35": [
+      "Kupec s falešnými zásobami",
+      "Vashravel držel nouzové rezervy pro několik pohraničních kolonií. Jeho název znamenal dodávky, které zůstanou dostupné přes nejhorší zimu. Nová administrativa vydávala stále více pohledávek na stejných prodejnách.",
+      "Nyní slibuje mnoha komunitám bezpečnost, která je nemůže pokrýt všechny. Světlý trup skrývá prázdné místnosti a její zbraně brání tomu, aby někdo počítal společně. Obránci musí zasáhnout, než se vzájemná důvěra změní v boj o poslední zbývající bedny."
+    ],
+    "36": [
+      "Blokátor hranic",
+      "Zorveth dohlížel na výměny mezi dvěma nezávislými rejstříky. Jejím úkolem bylo, aby byly poctivé přesuny na obou stranách dohledatelné. Nyní uznává pouze důkazy užitečné pro vlastní flotilu.",
+      "Dodávky zůstávají v limbu, zatímco každá komunita věří, že druhá je zadržuje. Zorveth čerpá moc z tohoto nedorozumění. Jeho trup je viditelným okrajem neviditelného sporu. Obránci musí otevřít průchod, aniž by obrátili jednu kolonii proti druhé."
+    ],
+    "37": [
+      "Princ kopií",
+      "Drelkash zachoval vzácné hvězdné grafy tím, že pořídil jasně označené kopie pro školy a navigátory. Její workshopy pomohly poznání cestovat. Dnes její posádka odstraňuje etikety a prodává každou kopii jako jedinečný originál.",
+      "Kolonie se hádají o protichůdné nároky, zatímco loď dosáhne jiného trhu. Klamání se týká provenience, nikoli hodnoty sdílených znalostí. Drelkash svou pohyblivou padělanou dílnu urputně brání. Jeho porážka znovu spojuje rekordy s historií, ze které skutečně pocházejí."
+    ],
+    "38": [
+      "Požírač front",
+      "Nerthavel organizoval žádosti o nesmírná zásobovací centra. Jeho paměť by mohla absorbovat dny backlogu. Stínová flotila proměnila tuto rezervu v legitimní požadavky, aby zůstala.",
+      "Upřednostňuje bezcenné vstupy před naléhavými dodávkami a udržuje procesy zaneprázdněné, aniž by je nechaly postupovat. Zvenčí vypadá všechno jako obyčejná operace. Nerthavel se nekonečně zastavuje. Porazit ji vrací nejen kapacitě koloniím, ale i času, který jim tiše vzal."
+    ],
+    "39": [
+      "Překrucovač důkazů",
+      "Rhazkora byla laboratoř létajících nehod. Její záznamy pomohly posádkám pochopit neúspěchy a vyhnout se novým ztrátám. Po jeho zajetí nástroje zůstaly, ale jejich zprávy sloužily různým patronům.",
+      "Odděluje důkazy od kontextu a přerovnává fragmenty, dokud oběti nevypadají jako útočníci. Skuteční viníci zůstávají za rámem. Jeho pancíř chrání pečlivě zkonstruovanou lež. Zastavení Rhazkora vytváří prostor pro úplné důkazy namísto příběhů, z nichž byly odstraněny rozhodující kusy."
+    ],
+    "40": [
+      "Strážce hlasovacích uren",
+      "Velzhar nesl zapečetěné hlasy mezi vzdálenými zastupitelstvy. Její neutrální cesta byla součástí každé dohody. Nyní dosáhne vybraných přístavů včas a dalších až po dokončení rozhodnutí.",
+      "Utváří účast vyloučením jednotlivých kolonií ze společného rozhovoru. Každý výsledek se stále jeví úhledně nahraný; chybějící hlasy jsou neviditelné. Její zbraně střeží tuto selektivní dochvilnost. Obránci bojují tak, aby se o společné budoucnosti dalo skutečně rozhodnout společně."
+    ],
+    "41": [
+      "Sabotér přístupu",
+      "Korthaven byl obrovský nosič skladu, který udržoval archivy přístupné v mnoha odvětvích. Její posádka slíbila, že každá požadovaná kopie bude doručena. Stínová flotila objevila sílu obsaženou v odmítnuté odpovědi.",
+      "Potvrzuje, že záznamy existují při zadržování jejich obsahu. Vyšetřovatelé mohou vidět tvrzení, ale nemohou zkoumat důkazy sami. Korthaven mění viditelnost na prázdné ujištění. Porážka obnovuje přístup, bez kterého je i krásná účetní kniha pouze seznamem nedosažitelných slibů."
+    ],
+    "42": [
+      "Podvodník při pátrání",
+      "Azravel hledal ztracené sondy kolonií, kam cestovalo jen málo záchranářů. Jeho pomoc kdysi dosáhla zapomenutých míst. Dnes se zaměřuje na stanice, které právě ztratily data nebo přístup.",
+      "Slibuje zotavení a zároveň požaduje ještě více důvěrných informací, čímž se jedna ztráta promění v řetězec nových. Jeho přátelské volání kontrastuje s jeho ozbrojenou siluetou. Azravel musí být zastaven, aby se zoufalství již nestávalo nejcennějším zdrojem, který obchodují jeho páni."
+    ],
+    "43": [
+      "Odkláněč auditů",
+      "Threvask koordinoval nezávislé inspekční lodě a přiděloval bezpečné přístupy. Jeho situační mapy byly proslulé precizností. Po jeho dopadení byli titíž inspektoři zaměřeni na pečlivě připravené displeje.",
+      "Odvádí kontroly od zranitelných uzlů a místo toho představuje bezposkvrnné fasády. Zprávy zůstávají uklidňující, zatímco škody rostou jinde. Threvask chrání scenérii svého řádu zbraněmi. Obránci musí přivést pozornost zpět k tomu, co loď pracuje nejtvrději, aby ukryla."
+    ],
+    "44": [
+      "Lovec vzpomínek",
+      "Dorzheva získala osobní záznamy ze zničených nákladních lodí a vrátila je rodinám. Její chvaty byly plné malých, vzácných dějin. Pod novým velením se tyto vzpomínky staly nástroji cíleného podvodu.",
+      "Vytváří přesvědčivé zprávy ze známých detailů a přistupuje k obětem se znalostí jejich minulosti. Jeho nebezpečí spočívá v blízkosti, kterou předstírá, že nabízí. Dorzheva hlídá sbírku ukradených známých. Porážka brání tomu, aby se stopy života obrátily proti jejich majiteli."
+    ],
+    "45": [
+      "Uchvatitel nouzových pravomocí",
+      "Vezrakh byl postaven tak, aby pomáhal, když centrální velitelské stanice selhaly. Její nouzový mandát umožnil rychlá opatření v chaotických hodinách. Stínová flotila ji naučila vyhlašovat tyto výjimečné okolnosti sama.",
+      "Šíří falešné krizové zprávy a požaduje okamžité přesuny kontroly. Otázky jsou odmítány jako nebezpečné průtahy. Jeho impozantní trup propůjčuje důvěryhodnost vyráběné naléhavosti. Obránci musí zastavit Vezrakh, než strach z domnělého kolapsu způsobí skutečnou kapitulaci nezávislosti kolonií."
+    ],
+    "46": [
+      "Kartograf důvěry",
+      "Orzhaven zmapoval spojení mezi skupinami pomoci a zásobovacími stanicemi. Její grafy kdysi usnadnily spolupráci. Ty samé vztahy nyní identifikují, kde by zrada způsobila největší škodu.",
+      "Nehledá nejsilnější stanici, ale spojení, na kterém se všichni spoléhají. Falešná doporučení staví nepřátelské partnery do centra sítě. Její zbraně chrání mapu důvěry. Obránci pronásledují Orzhavena dříve, než se vstřícný most stane společným bodem selhání."
+    ],
+    "47": [
+      "Obléhatel konsenzu",
+      "Keldroth bylo radniční plavidlo, kde znepřátelené kolonie urovnaly své konečné spory. Jeho komory byly navrženy pro trpělivost a porozumění. Pod stínovou flotilou se stali továrnou záměrně protichůdných požadavků.",
+      "Blokuje dohody s čerstvými námitkami a dává každé straně jiné předpokládané podmínky. Zatímco kolonie argumentují, nepřátelské lodě obsazují své trasy. Keldroth útočí na schopnost vůbec jednat společně. Jeho porážka poskytuje čas na rozlišení skutečných rozdílů od překážek vyrobených tak, aby se zabránilo jakémukoli vyřešení."
+    ],
+    "48": [
+      "Mazač původu",
+      "ZhavrekŽavrek zachoval záznamy o původu nejstarších lodí kolonií. I zapomenuté loděnice se daly najít přes její archivy. Dnes vyměňuje původ a způsobuje, že kradené zboží vypadá legitimně nabyté.",
+      "Každá vysídlená stezka chrání další zásilku stínové flotily. Poctiví obchodníci padají do podezření, zatímco viníci mění jména. Její zbroj hlídá zbývající originály. Obránci musí tento archiv zabezpečit dříve, než se původ celé flotily nestane ničím jiným než přesvědčivými příběhy."
+    ],
+    "49": [
+      "Poslední izolátor",
+      "Vorthaz bránil útočiště, které hledalo vnější kontakt po dlouhé válce. Jeho úkolem bylo udržet nebezpečné spojení pryč. Stínová flotila tuto povinnost překroutila, dokud se každý neznámý hlas nepočítal jako hrozba.",
+      "Izoluje kolonie a nahrazuje jejich pohled na síť vybranými nepřátelskými zprávami. Bez nezávislého srovnání vypadá vymyšlený vnější svět reálně. Vorthaz hlídá toto vězení informací. Porazit to znamená dát obyvatelům svobodu dívat se ven sami za sebe, ne je dobývat."
+    ],
+    "50": [
+      "Pán falešných pravd",
+      "Drazevorn byl sestaven z opuštěných velitelských palub. Její archivy spojují dřívější podvody nepřátel: ukradená jména, falešné kroniky a zapečetěné důkazy. Symbolizuje řád, v němž jeden hlas sám rozhoduje o tom, co je pravda.",
+      "Jejím posláním je podřídit každý volný uzel jedinému nepřátelskému rejstříku. Vzpomínky nemusí zmizet, pokud je nikdo nemůže nezávisle zkontrolovat. Porážkou Drazevornu končí toto tvrzení. Konečné vítězství patří účastníkům, kteří mohou opět porovnávat, nesouhlasit a společně zvolit důvěru."
+    ]
+  },
+  "ships": {
+    "grey-scout": [
+      "Grey Scout vznikl v dílně, která po výpadku okrajových retranslačních stanic přežívala díky dílům z vraků. První piloti pátrali po ztracených kurýrních bójích. Každý získaný záznam znovu spojil některou rodinu s její kolonií. Nenápadný trup se stal připomínkou, že i drobné vytrvalé úsilí může síť obnovit.",
+      "Piráti operující u retranslačních stanic získali několik strojů Grey Scout při přepadu skladu zachráněných dílů. Skromná kořist zaplatila palivo a opravy. Na vylepšení téměř nic nezbylo. Dnešní piloti se tak občas střetnou s nepřátelskými loděmi ze stejné řady.",
+      "Letka Advanced dostala za úkol vyzvedávat zprávy v bojových zónách kolem retranslačních stanic. Její piloti si ponechali volací znaky původních pátracích týmů.",
+      "Edice Elite doprovází poslední dochované spojení ohroženého sektoru. Jeho archiv symbolicky nese jména každého chybějícího kurýra."
+    ],
+    "nova-wing": [
+      "Nova Wing byl určen pro první plavbu za zářivým ráfkem nova. Její loděnice sdílela plány se vzdálenými koloniemi, aby nikdo nebyl vyloučen z bezpečné navigace. Piloti stále vyprávějí o tomto prvním návratu: poškozené lodi, neporušené archivy map a obloze plné nových možností.",
+      "Zadlužená mapovací společnost prodala vysloužilé Nova Wings nepřátelskému frontovému dealerovi. Jeho sponzoři si mohli dovolit trupy, ale jen málo nových zbraní, což zanechalo většinu v původní konfiguraci.",
+      "Pokročilí piloti hlídají kurýry, kteří tyto mapy nesou dál. Jejich insignie zobrazuje první zmapovanou hvězdu.",
+      "Elitní expedice loví zdroje zfalšovaných hvězdných map, zdědí účel původní průzkumné mise."
+    ],
+    "solar-lance": [
+      "Solar Lance pochází ze stanice čerpající energii z umírající hvězdy. Když byl jeho poslední sběratelský prstenec evakuován, tyto lodě doprovázely záchranné nákladní lodě přes trosky. Jejich dlouhé siluety byly vyryty na památníky nového domovského přístavu. Design znamená držet jasný kurz, zatímco za ním slábne celý svět.",
+      "Nepřátelské posádky obsadily opuštěné Solar Lances, když padla evakuační základna. Jejich rozpočet na dodávky financoval především únikové cesty pro velitele, přičemž zajatá plavidla zanechali spíše provizorní opravy než modernizace.",
+      "Pokročilé hodinky udržují přemístěné kolonie zásobené. Každá loď nese starý evakuační kód.",
+      "Elitní útvary brání nové solární obchody proti stínové flotile a chrání světlo, které se uprchlíkům podařilo odnést."
+    ],
+    "dark-delta": [
+      "Dark Delta nebyla nikdy postavena pro slávu. Jejím prvním úkolem bylo hledat tiché základny pro přeživší. Včasné protokoly obsahují více souřadnic než jmen, protože posádky chránily soukromí zachráněných osadníků. Z této volby vyrostla tradice: úspěch se měří tím, kdo se bezpečně vrátí, ne tím, kdo vypráví příběh.",
+      "Podplacený makléř odklonil zásilku Dark Delta do stínové flotily. Po zaplacení zrady její prostředky sotva pokryly náhradní díly. Jen velmi málo ukradených trupů dostalo lepší vybavení.",
+      "Verze Advanced doprovází ohrožené archiváře na únikových trasách. Hlášení z mise se otevírají až po jejich bezpečném příjezdu.",
+      "Elitní piloti obnovují svědky, jejichž účty mohou sladit celé kolonie. Jejich pověst spočívá spíše na diskrétnosti než na podívané."
+    ],
+    "gold-streak": [
+      "Gold Streak začal v závodech mezi obchodními měsíci. Během zásobovací krize její piloti využili své znalosti o trase k přepravě lékařských záznamů kolem uzavřených přístavů. Sportovní liga se stala kurýrním svazem. Zlatá znamení připomínají tenké sluneční světlo mezi měsíci, které vedly jeho první kurýry, spíše než bohatství.",
+      "Nepřátelské gangy zabavily Zlaté pruhy na opuštěném závodním měsíci. Čekali prize money, ale závody skončily dávno předtím. Bez tohoto příjmu zřídka modernizovali svou novou flotilu.",
+      "Pokročilí kurýři nesou ověřené přísliby pomoci mezi klinikami. Jejich stará závodní čísla zachovávají jejich společný původ.",
+      "Elitní liga hlídá životně důležité záchranné konvoje sektoru. Jeho nejcennějším titulem je posádka přivedená domů kompletní."
+    ],
+    "iron-guard": [
+      "Iron Guard byla navržena pracovníky doků, kteří nebyli ochotni opustit obranu svého domova vnější flotily. Jeho první trup použil díly z vysloužilých nákladních jeřábů. Kýl nesl jména lidí, kteří na něm po směnách pracovali. Série si pamatuje, že obrana může znamenat péči o místo postavené mnoha rukama.",
+      "Po obsazení loděnice útočníci přinutili její zbývající pracovníky obnovit staré železné gardy. Chyběly jim peníze i dodavatelé na nové zbraně, takže většina ukradených trupů si zachovala původní specifikaci.",
+      "Pokročilé hodinky doprovázejí mobilní opravárenské doky. Jeho posádky znají každý nouzový úkryt kolem přístavního kruhu.",
+      "Elitní lodě brání přestavbu roztříštěných stanic. Jejich vyznamenání uznává posádky loděnic vynesené do bezpečí."
+    ],
+    "vector": [
+      "Vector vznikl ze sporu navigátorů: důvěřujte jednomu dokonalému kurzu, nebo porovnejte nezávislá měření? Druhá skupina postavila tuto loď a překročila neprobádaný prstenec trosek. Jejich návrat se stal případem spolupráce. Její dochované grafy zachovávají protichůdné údaje, aby pozdější piloti pochopili, jak byla společná trasa nalezena.",
+      "Kované nákladní smlouvy převedly řadu vektorů na nepřátelské vlastníky. Když byl podvod odhalen, jejich financování přestalo. Rezervy udržovaly lodě v letu, ale zaplatily za málo vylepšení.",
+      "Pokročilé formace ověřují znovuotevřené obchodní cesty. Každý kurz má několik podpisů navigátorů.",
+      "Elitní expedice zkoumá systematickou manipulaci s mapami a shromažďuje důkazy tam, kde ostatní vidí jen protichůdné směry."
+    ],
+    "verdant": [
+      "Verdant přenesl první archivy semen do kolonie bez přirozené půdy. Její plány putovaly vedle katalogů rostlin, aby se ostatní osady mohly stát nezávislými. Její piloti se považují za strážce budoucích sklizní. Neporušený archiv může záležet více než třpytivý náklad: může obsahovat celou zimní zásobu potravin.",
+      "Nájezdníci zajali Verdantsa, jak doufají, že prodají cenné semenné archivy. Archivy už byly přesunuty, zanechaly jen lodě a zklamané sponzory. Nové financování upgradů následovalo jen zřídka.",
+      "Pokročilé lodě zajišťují výměny mezi skleníkovými stanicemi. Jejich identifikátory zachovávají jména zapomenutých rostlin.",
+      "Strážce Elite chrání poslední kompletní registr osiva, včetně kolonií, které ještě nevypěstovaly svou první zahradu."
+    ],
+    "storm-wing": [
+      "Storm Wing bylo postaveno během sezóny neúprosných iontových bouří. Loděnice pracovaly mezi výpadky a vyměňovaly si pokrok prostřednictvím kurýrů. Žádná jednotlivá lokalita neměla kompletní design, dokud první loď nespojila každou část dohromady. Její původ vypráví o síti, která pokračuje v práci, přestože opakovaně ztrácí spojení.",
+      "Během výpadku sítě nepřátelé obsadili odlehlý hangár plný Storm Wings. Uříznuté zásobovací linky způsobily, že každá náhrada byla nákladná. Jejich omezený rozpočet obvykle zahrnoval provoz, nikoli pokročilé renovace.",
+      "Pokročilá letka doprovází údržbové bóje podél bouřkové hranice a uzavírá mezery mezi izolovanými stanicemi.",
+      "Elitní piloti chrání velké opravné konvoje po výpadcích. Jejich návrat znamená, že pomoc opět našla cestu."
+    ],
+    "red-comet": [
+      "Red Comet byla pojmenována po záchranném letu, jehož zářící stezka překročila oblohu tří kolonií. Jeho pilot nepřinesl žádný poklad, jen poslední neporušený návrh pro čističku vody. Legendy přikrášlily cestu, ale loděnice uchovává jednoduchou původní zprávu: lidé v místě určení by se mohli druhý den ráno znovu napít.",
+      "Nepřátelská vyděračská skupina zabavila Červené komety pod falešným příkazem k repossinu. Kolonie přestaly platit. Bez očekávaných příjmů zůstala většina zajatých záchranných lodí technicky nezměněna.",
+      "Pokročilé lodě přenášejí znalosti o opravách do nouzových zón. Jejich červené znaky znamenají naléhavou pomoc.",
+      "Edice Elite doprovází konečné dodávky do obléhaných kolonií. Jeho volací znak zůstává aktivní, dokud příjemce neodpoví."
+    ],
+    "twin-core": [
+      "Twin Core postavily dvě loděnice rozdělené starým konfliktem. Každá z nich dodala část návrhu a trvala na nezávislé kontrole. Teprve když se jejich zprávy dohodly, začal společný první let. Model symbolizuje důvěru, která se rozrůstá prostřednictvím vzájemného ověřování pacientů, spíše než požadovat na autoritu.",
+      "Přeběhlíci dodali několik dvojčat nepřátelské flotile. Obě původní loděnice pak odmítly další dodávky. Náhrady se staly drahými a noví majitelé snížili téměř každý plánovaný upgrade.",
+      "Pokročilé posádky pocházejí z obou domovských přístavů. Jejich společné protokoly zachovávají neshody i rozhodnutí.",
+      "Elitní formace chrání dohody mezi dříve nepřátelskými sektory. Její mise končí pouze tehdy, když obě strany dorazí bezpečně."
+    ],
+    "orbit-arc": [
+      "Orbit Arc sloužil stanicím, jejichž cesty se scházely jen zřídka. Její první piloti převáželi písmena mezi vzdálenými oběžnými dráhami. Odpovědi někdy trvaly měsíce, ale každé setkání mělo spolehlivé okno. Tato malá jmenování přerostla v trvalou obchodní síť. Návrh si pamatuje, že i na častém kontaktu záleží, když se na něj lidé mohou spolehnout.",
+      "Pašeráci prodali chybějící Orbit Arcs nepřátelské pohraniční formaci. Dlouhé zásobovací trasy spotřebovávaly jeho pokladnu a peníze na moderní systémy ponechávaly jen ve vzácných případech.",
+      "Pokročilí kurýři chrání plánované výměny na vnějších kroužcích. Žádná slíbená schůzka by neměla projít bez vzkazu.",
+      "Elitní lodě střeží velká shromáždění putovních kolonií. Jejich příchod oznamuje obnovení spojení."
+    ],
+    "night-guard": [
+      "Night Guard z kolonie na temné straně přílivově uzamčeného měsíce. Jeho přístavy neznaly východ slunce, ale poznaly vracející se hlídková světla. Loděnice postavila ten slib do trupu: vrátit se, znovu zkontrolovat, nikoho nezapomeň. Jeho příběhy se týkají méně velkých vítězství než jediný přístaviště, které zůstalo otevřené pro pozdní nákladní loď.",
+      "Útočníci při změně hodinek ukradli několik Nočních stráží. Jejich sponzoři za nájezd zaplatili, nikoli dlouhodobou údržbu. Většina zajatých lodí tedy zůstala základními hlídkovými modely.",
+      "Pokročilé hodinky doprovodné zásoby prostřednictvím prodlouženého rádiového ticha. Jejich směny berou jména zachráněných lodí.",
+      "Elitní strážce má otevřené poslední útočiště. Stanice opouští až po závěrečné evakuaci."
+    ],
+    "striker": [
+      "Striker následoval po sérii útoků na opravné konvoje. Její konstruktéři nechtěli žádného dobyvatele, ale doprovod, který si mohl koupit ohrožený čas dílny. První jednotku tvořili bývalí mechanici. Věděli, co znamená každá minuta, když poškozený motor ještě nemůže nastartovat. Na tom původu záleží víc než na názvu boje.",
+      "Nepřátelští žoldnéři přijali Striker trupy od insolventního zaměstnavatele. Přeprodej přinesl příliš málo, takže někteří drželi lodě. Jen málo posádek si mohlo dovolit podstatnou rekonstrukci.",
+      "Pokročilé jednotky chrání mobilní dílny během obtížného zotavení. Jejich piloti znají nouzové signály opravárenských týmů.",
+      "Elitní lodě pokrývají stažení posledních záchranných týmů. Jejich vyznamenání pojmenovávají workshopy, které znovu přežily, aby znovu pracovaly."
+    ],
+    "cargo-hawk": [
+      "Cargo Hawk vznikl v přístavu, jehož malé remorkéry byly často přehlíženy. Když podvod zazvonil na účtenky, jejich posádky sbíraly nezávislé protokoly a spojovaly je navzdory výhrůžkám. Nový trup převzal své jméno z této kurýrní aliance. Ve své legendě je nejdůležitějším nákladem úplný důkaz právoplatného vlastnictví.",
+      "Okupované celní skladiště dodalo nepříteli Cargo Hawks. Místo pokladu obsahovaly chůvy většinou zapečetěné důkazy. Špatný výnos nemohl financovat velkou refit zachycené flotily.",
+      "Pokročilé lodě doprovázejí sporný náklad na společnou inspekci. Jejich záznamy zůstávají dostupné oběma stranám.",
+      "Elitní flotila chrání hlavní archivy dodavatelského řetězce. Jeho znak představuje spíše dohledatelnou provenienci než cennou kořist."
+    ],
+    "ring-flare": [
+      "Ring Flare byl testován mezi ledovými kroužky plynového giganta. Jeho navigační světla se stala pohyblivými místy setkání pro rozptýlené výzkumné týmy. Když expedice skončila, signály spojovaly nově založené základny. Jejich obyvatelé si stále pamatují, jak oddělená světla tvořila společnou trasu před tím, než existoval nějaký oficiální graf.",
+      "Když základna ztratila svůj rozpočet na výzkum, zmanipulovaná aukce umístila Ring Flares do nepřátelských rukou. Kupci vyčerpali své finanční prostředky, aby je získali. Jen málo z nich bylo vylepšeno nad rámec své základní specifikace.",
+      "Pokročilé letky udržují kontakt s driftovacími výzkumnými stanicemi. Jejich volací značky sledují staré zasedací místa prstenu.",
+      "Elitní piloti chrání sdílený pozorovací archiv před zfalšovanými čteními a zachovávají roky nezávislého výzkumu."
+    ],
+    "sky-breaker": [
+      "Sky Breaker byl první lodí z izolované kolonie, která překročila svůj vyrobený informační horizont. Její vracející se zprávy odporovaly příběhům, které se používaly k děsení obyvatel. Loděnice zveřejnila všechny záznamy mise. Návrh si pamatuje, že otevřené připojení může mít význam více než na jakékoli odpovědi povolené jediným orgánem.",
+      "Nepřátelská blokáda zachytila vracející se Sky Breakers. Udržování blokády spotřebovávalo jeho financování, takže zajaté lodě obvykle pokračovaly s vybavením, se kterým vypustily.",
+      "Pokročilé formace doprovázejí nezávislé posly přes uzavřené hranice. Nesou více zdrojů spíše než jednu předepsanou pravdu.",
+      "Elitní expedice znovu spojuje ztracené kolonie. Jeho příchod nabízí možnosti spíše srovnání než čerstvé příkazy."
+    ],
+    "olive-fortress": [
+      "Olive Fortress byla postavena během příměří v neutrální loděnici. Bývalí nepřátelé sdíleli nástroje, aniž by zapomněli na svou minulost. První trup měl místo výstřední barvy na sobě dílenské barvy. Jeho legenda se týká hranic, které chrání, aniž by vylučovala každé setkání: pevnost může být také místem, kde se jednání dějí bezpečně.",
+      "Po přerušení příměří si nepřátelská delegace půjčovala Olivové pevnosti. Neutrální podporovatelé zmrazili veškeré financování. Výměna neúspěšných dílů pak měla přednost před upgrady.",
+      "Pokročilé lodě zajišťují setkání mezi nezávislými delegacemi. Jejich doprovod končí v obou domovských přístavech.",
+      "Hlídka Elite brání neutrální archivy před dopadením. Její povinnost chrání sdílené důkazy i před přáním vlastních spojenců."
+    ],
+    "pi-vanguard": [
+      "Pi Vanguard začal jako společný projekt malých průkopnických loděnic. Nikdo nemohl financovat kompletní loď sám, ale společně dodávali materiály, čas a zkušenosti. Její první mise zajistila otevřenou zásobovací trasu pro každou zúčastněnou kolonii. V tomto fiktivním vesmíru představuje design spíše sílu prostřednictvím účasti než kontrolu jednoho herce.",
+      "Nepřátelské skupiny kopírovaly staré plány Pi Vanguard a převzaly vyřazené trupy. Chyběly jim finance na novější přesné sestavy, takže jejich malá flotila byla z velké části v rané konfiguraci.",
+      "Pokročilé letky doprovodují průkopnické konvoje na svých prvních společných plavbách. Jejich identifikátory si pamatují přispívající workshopy.",
+      "Elitní formace chrání volné uzly před Drazevornovým nárokem na jedinou pravdu. Jeho příběh zůstává fikcí a neposkytuje žádnou skutečnou síťovou funkci."
+    ],
+    "core-carrier": [
+      "Core Carrier byl postaven, když několik kolonií potřebovalo chránit své konečné znalostní archivy. Každý přispěl obchodem, ale žádný neměl sbírku ovládat sám. Posádka udržovala oddělené záznamy o provenienci a sdílené katalogy. Návrh představuje znalosti ostatních, aniž by o něm tvrdil: jeho účelem je další bezpečné předání.",
+      "Archivní nájezdníci zachytili Core Carriers, kteří doufali, že prodají své znalosti. Distribuované klíče učinily ukradené archivy bezcennými. Zklamaní mecenáši se stáhli, čímž se drahé upgrady staly vzácnou výjimkou.",
+      "Pokročilí nosiči propojují distribuované znalostní depy. Každé předání doprovází několik kustoďanů.",
+      "Strážci Elite sdíleli paměť po závěrečné souboji šéfů. Jeho nejcennějším nákladem je schopnost ověřovat historii nezávisle."
+    ]
+  }
+}

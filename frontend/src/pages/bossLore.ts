@@ -1,5 +1,6 @@
 import { translate, hasTranslation } from '../i18n.ts';
 import { normalizeLocale } from '../locales/config.ts';
+import type { CollectionLore } from './collectionLore.ts';
 /** Fictional enemy dossiers. Index + 1 is the stable reward/boss id, never originalId. */
 export type BossLore = { title: string; story: string[] };
 const entry = (title: string, story: string): BossLore => ({ title, story: story.split('|') });
@@ -108,12 +109,16 @@ export const bossLoreEn: readonly BossLore[] = [
   entry('The Final Isolator', 'Vorthaz defended a refuge seeking outside contact after a long war. Its task was to keep dangerous connections away. The shadow fleet twisted that duty until every unfamiliar voice counted as a threat.|It isolates colonies and replaces their view of the network with selected hostile messages. Without independent comparison, the invented outside world looks real. Vorthaz guards this prison of information. Defeating it means giving residents the freedom to look outward for themselves, not conquering them.'),
   entry('The Lord of False Truth', 'Drazevorn was assembled from abandoned command decks. Its archives unite the earlier enemies’ deceptions: stolen names, false chronicles and sealed evidence. It symbolises an order in which one voice alone decides what is true.|Its mission is to subordinate every free node to a single hostile register. Memories need not vanish if nobody can check them independently. Defeating Drazevorn ends that claim. The final victory belongs to participants who can once again compare, disagree and choose trust together.'),
 ];
-export function bossLore(id: number, locale: string): BossLore | undefined {
+export function bossLore(id: number, locale: string, pack?: CollectionLore): BossLore | undefined {
   const language=normalizeLocale(locale)??'en';
   const dossier=(language==='de'?bossLoreDe:bossLoreEn)[id-1];
   if(!dossier||language==='de'||language==='en')return dossier;
+  const localized = pack?.locale === language ? pack.bosses[id] : undefined;
+  if (localized) {
+    const [title, origin, current] = localized;
+    return { title, story: [origin, current] };
+  }
   if(![dossier.title,...dossier.story].some(text=>hasTranslation(language,text)))return dossier;
   return {title:translate(language,dossier.title),story:dossier.story.map(text=>translate(language,text))};
 }
-/** Missing dossier translations use the English source until the release gate passes. */
 export const bossDossierLabel = (locale: string) => locale.toLowerCase().startsWith('de') ? 'Feindakte öffnen ↗' : translate(normalizeLocale(locale)??'en','Open dossier ↗');

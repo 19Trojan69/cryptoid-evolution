@@ -1,10 +1,17 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import ts from 'typescript';
 import { fileURLToPath } from 'node:url';
 import { languages, hasExplicitTranslation, translate } from '../src/i18n.ts';
 import { completeLanguages } from '../src/locales/config.ts';
 import { powerUpDescriptions, powerUpNames } from '../src/pages/powerUps.ts';
+import { bossLoreEn } from '../src/pages/bossLore.ts';
+import { BOSS_NAMES } from '../src/pages/bossNames.ts';
+import { supplementalCollectionLocales } from '../src/pages/collectionLore.ts';
+import { shipStories } from '../src/pages/shipLore.ts';
+import { shipCaptureLore } from '../src/pages/shipCaptureLore.ts';
 import { hangarCatalog } from '../../backend/src/hangarCatalog.ts';
 
 // Static copy only: no runtime account, payment, database, configuration or secret values.
@@ -33,6 +40,36 @@ const missionFiles = new Set([
   'SystemSettings.tsx', 'LanguagePicker.tsx', 'GameGuide.tsx', 'BossPhaseGuide.tsx', 'RouteRecovery.tsx',
   'bonusChallenge.ts', 'completionSaveFailure.ts', 'useAuth.ts', 'usePayments.ts',
 ]);
+const collectionFiles = new Set([
+  'Collection.tsx', 'CollectionCardView.tsx', 'CardReveal.tsx', 'BossDossier.tsx', 'collectionData.ts',
+  'collectionExport.ts', 'useCollectionLore.tsx', 'bossLore.ts', 'shipLore.ts', 'shipCaptureLore.ts',
+]);
+const collectionStories = (() => {
+  const bosses = bossLoreEn.map(({ title, story }, index) => ({ id: index + 1, name: BOSS_NAMES[index], copy: [title, ...story] }));
+  const ships = Object.entries(shipStories).map(([id, story]) => ({ id, copy: [story.en, shipCaptureLore[id][1], story.advanced[1], story.elite[1]] }));
+  const sourceHash = createHash('sha256').update(JSON.stringify({ bosses, ships })).digest('hex');
+  return new Map([...supplementalCollectionLocales].map(locale => {
+    assert(Object.hasOwn(languages, locale), `Unexpected card language ${locale}`);
+    const pack = JSON.parse(fs.readFileSync(new URL(`../public/collection-lore/${locale}.json`, import.meta.url), 'utf8'));
+    assert.equal(pack.locale, locale);
+    assert.equal(pack.sourceHash, sourceHash, `Card story sources changed for ${locale}`);
+    const localized = new Map();
+    for (const [cards, translations] of [[bosses, pack.bosses], [ships, pack.ships]]) {
+      assert.deepEqual(Object.keys(translations), cards.map(({ id }) => String(id)), `Card IDs for ${locale}`);
+      for (const { id, copy } of cards) {
+        const lines = translations[id];
+        assert.equal(lines.length, copy.length, `Card ${locale}/${id}`);
+        for (const [index, line] of lines.entries()) {
+          assert(typeof line === 'string' && line.trim() && !/[<>\n]|\{\{/.test(line) && line !== copy[index],
+            `Untranslated or malformed card text ${locale}/${id}/${index}`);
+          localized.set(copy[index], line);
+        }
+      }
+    }
+    assert.equal(new Set(Object.values(pack.bosses).map(([title]) => title)).size, bosses.length, `Duplicate boss titles for ${locale}`);
+    return [locale, localized];
+  }));
+})();
 function scan(directory) {
   for (const item of fs.readdirSync(directory, { withFileTypes: true })) {
     const file = path.join(directory, item.name), name = item.name;
@@ -126,19 +163,24 @@ scan(root);
 const entries = [...texts.values()].sort((a, b) => a.language.localeCompare(b.language) || a.source.localeCompare(b.source)).map((entry, id) => ({ id, ...entry }));
 const placeholders = text => [...text.matchAll(/\{(\w+)\}/g)].map(match => match[1]).sort().join('|');
 const coverage = Object.fromEntries(Object.keys(languages).map(locale => {
-  const missing = entries.filter(entry => locale !== entry.language && !hasExplicitTranslation(locale, entry.source)).map(entry => entry.id);
-  const invalidPlaceholders = entries.filter(entry => !missing.includes(entry.id) && placeholders(translate(locale, entry.source)) !== placeholders(entry.source)).map(entry => entry.id);
+  const stories = collectionStories.get(locale);
+  const missing = entries.filter(entry => locale !== entry.language && !hasExplicitTranslation(locale, entry.source) && !stories?.has(entry.source)).map(entry => entry.id);
+  const invalidPlaceholders = entries.filter(entry => !missing.includes(entry.id) && placeholders(stories?.get(entry.source) ?? translate(locale, entry.source)) !== placeholders(entry.source)).map(entry => entry.id);
   return [locale, { label: languages[locale], required: entries.length, translated: entries.length - missing.length, missing, invalidPlaceholders, draft: !completeLanguages.includes(locale) }];
 }));
 const missionEntries = new Set(entries.filter(entry => entry.files.some(file => missionFiles.has(path.basename(file)))).map(entry => entry.id));
 const missionMissing = Object.fromEntries(Object.entries(coverage).map(([locale, row]) => [locale, row.missing.filter(id => missionEntries.has(id))]));
+const collectionEntries = new Set(entries.filter(entry => entry.files.some(file => collectionFiles.has(path.basename(file)))).map(entry => entry.id));
+const collectionMissing = Object.fromEntries(Object.entries(coverage).map(([locale, row]) => [locale, row.missing.filter(id => collectionEntries.has(id))]));
 // Missing entries reference IDs above rather than duplicating long stories for every language.
 const report = {
   schemaVersion: 2, staticCopyOnly: true, entries, unwrapped, coverage, completeLanguages,
   missionCoverage: { required: missionEntries.size, missing: missionMissing },
+  collectionCoverage: { required: collectionEntries.size, missing: collectionMissing },
   releaseReady: unwrapped.length === 0
     && completeLanguages.every(code => coverage[code]?.missing.length === 0)
     && Object.values(missionMissing).every(missing => missing.length === 0)
+    && Object.values(collectionMissing).every(missing => missing.length === 0)
     && Object.values(coverage).every(locale => locale.invalidPlaceholders.length === 0),
 };
 if (process.argv.includes('--json')) process.stdout.write(JSON.stringify(report, null, 2) + '\n');
@@ -148,6 +190,10 @@ else {
   console.log(`Mission interface: ${missionEntries.size} texts checked in ${Object.keys(coverage).length} languages.`);
   for (const [code, missing] of Object.entries(missionMissing)) {
     if (missing.length) console.log(`${code} missing mission texts: ${missing.map(id => entries[id].source).join(' | ')}`);
+  }
+  console.log(`Collection cards: ${collectionEntries.size} texts checked in ${Object.keys(coverage).length} languages.`);
+  for (const [code, missing] of Object.entries(collectionMissing)) {
+    if (missing.length) console.log(`${code} missing card texts: ${missing.map(id => entries[id].source).join(' | ')}`);
   }
   console.log(`Complete language gate: ${completeLanguages.join(', ')}; release ready: ${report.releaseReady}`);
 }

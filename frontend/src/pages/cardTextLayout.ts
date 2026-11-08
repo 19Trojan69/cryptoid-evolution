@@ -1,12 +1,23 @@
 /** Word wrapping shared by measurement and paint. Long words are split, never clipped. */
 const graphemeSegmenter = typeof Intl.Segmenter === 'function' ? new Intl.Segmenter(undefined, { granularity: 'grapheme' }) : null;
-export function wrapCardText(text: string, maxWidth: number, measure: (text: string) => number): string[] {
+const wordSegmenters = new Map(['th', 'zh'].map(locale => [locale, graphemeSegmenter && new Intl.Segmenter(locale, { granularity: 'word' })]));
+
+export function wrapCardText(text: string, maxWidth: number, measure: (text: string) => number, locale = 'en'): string[] {
   if (!(maxWidth > 0)) throw new Error('Card text width must be positive');
   const lines: string[] = [];
   for (const paragraph of text.split('\n')) {
     let line = '';
-    for (const word of paragraph.trim().split(/\s+/).filter(Boolean)) {
-      const next = line ? `${line} ${word}` : word;
+    const segmenter = wordSegmenters.get(locale);
+    const trimmed = paragraph.trim();
+    const segments = segmenter
+      ? Array.from(segmenter.segment(trimmed), part => part.segment)
+      : trimmed.split(/(\s+)/);
+    let space = '';
+    for (const word of segments) {
+      if (!word) continue;
+      if (/^\s+$/.test(word)) { space = ' '; continue; }
+      const next = line ? `${line}${space}${word}` : word;
+      space = '';
       if (measure(next) <= maxWidth) { line = next; continue; }
       if (line) { lines.push(line); line = ''; }
       // Keep combining marks, Indic syllables and joined emoji with their base glyph.

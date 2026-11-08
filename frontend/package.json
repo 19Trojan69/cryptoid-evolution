@@ -25,7 +25,7 @@
     "test:canvas-static-url": "node --experimental-strip-types --test scripts/canvasStaticUrl.test.mjs",
     "test:weapon-reload-recovery": "node --experimental-strip-types --test scripts/weaponReloadRecovery.test.mjs src/hooks/usePayments.test.mjs src/pages/weaponMenuPersistence.test.mjs src/pages/immediateReload.test.mjs",
     "test:full-session": "node --experimental-strip-types --test src/pages/fullSessionRecorder.test.mjs src/pages/fullSessionTransfer.test.mjs src/pages/hullPreparationDiagnostics.test.mjs src/pages/fullSessionStoreCallbacks.test.mjs",
-    "test:i18n": "node --experimental-strip-types --test src/i18n.test.mjs",
+    "test:i18n": "node --experimental-strip-types --test src/i18n.test.mjs src/locales/collectionEquipment.test.mjs",
     "audit:i18n": "node --experimental-strip-types scripts/localization-inventory.mjs",
     "check:i18n:release": "node --experimental-strip-types scripts/localization-inventory.mjs --check",
     "test:rock-display-bounds": "node --test src/pages/BonusRockLayerDisplay.test.mjs",
