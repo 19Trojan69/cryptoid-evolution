@@ -103,9 +103,10 @@ test('denied storage still produces a usable panel in the device language', () =
   const h = host({ denied: true, devices: ['de-AT'] }); h.advance(8000);
   assert.equal(h.panel.children[2].textContent, translate('de', keys[2])); assert.equal(h.panel.lang, 'de');
 });
-test('startup copy matches the existing translations and English fallbacks for every selectable language', () => {
+test('startup recovery uses every selectable language and matches the normal interface copy', () => {
   for (const locale of Object.keys(supportedLanguages)) {
     const h = host({ stored: locale }); h.advance(8000);
+    assert.equal(h.panel.lang, locale === 'zh' ? 'zh-Hans' : locale);
     assert.deepEqual(h.panel.children.map(x => x.textContent), keys.map(key => translate(locale, key)), locale);
   }
 });

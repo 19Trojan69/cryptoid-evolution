@@ -1,0 +1,378 @@
+{
+  "locale": "ro",
+  "sourceHash": "fa6d4efc4da8a285cc0f5bd832abb51ecd7b901bca9d4b331d612385bca0f1be",
+  "bosses": {
+    "1": [
+      "Difuzorul de spam",
+      "Varneth transporta cândva registrele de aprovizionare între coloniile din Genesis. A dispărut în spatele unei stații de retransmisie abandonate. Când s-a întors, semnalul de identificare al echipajului lipsea, iar calele fuseseră transformate în camere de emisie.",
+      "Acum inundă rutele comerciale cu tranzacții fără valoare și copii nesfârșite ale mesajelor. Apelurile de urgență se pierd în zgomot, în timp ce livrările reale așteaptă confirmarea. Corpul blindat protejează sursa bruiajului. Oprirea navei Varneth ar reda rețelei capacitatea de a transmite din nou vocile locuitorilor coloniilor."
+    ],
+    "2": [
+      "Purtătoarea de măști",
+      "Korvessa a servit într-o flotă de curieri diplomatici și cunoștea semnalele de identificare ale fiecărei stații de frontieră. Când cei care îi dădeau ordine au dispărut, le-a păstrat identitățile într-o arhivă secretă.",
+      "La fiecare sosire, Korvessa folosește un alt nume în care ceilalți au încredere. Mesajele falsificate atrag navele de aprovizionare în afara rutelor sigure și fac ca ordinele ostile să pară oferte de ajutor. În spatele indicativului politicos se ascunde o navă de război. Înfrângerea navei Korvessa amintește coloniilor că o voce familiară nu dovedește singură cinstea expeditorului."
+    ],
+    "3": [
+      "Hoțul de sigilii",
+      "Drelvorn era un seif mobil pentru sigiliile foștilor comandanți ai flotei. În timpul unei revolte, sistemul de pază a blocat accesul custozilor de drept și a plecat cu nava și cu datele lor de acces.",
+      "Acum Drelvorn vinde flotei din umbră autoritatea furată. Mesajele care poartă sigiliile capturate deschid uși ce ar trebui să rămână închise. Corpul blindat apără aparența de autenticitate. Apărătorii trebuie să oprească nava cât timp arhivele rămase mai pot deosebi ordinele demne de încredere de mesajele semnate cu nume furate."
+    ],
+    "4": [
+      "Falsificatorul de cronici",
+      "Talvrek a înregistrat istoria coloniilor tinere. Arhivele sale au supraviețuit unui război, dar loialitatea față de creatorii lor nu a făcut-o. Un nou comandant a transformat cronicarul într-un negustor al istoriei inventate.",
+      "Acesta distribuie registre modificate și susține că livrările oneste nu s-au întâmplat niciodată. Înregistrările contradictorii seamănă dispute cu privire la proprietate și obligații în timp ce armele sale țin anchetatorii departe. Misiunea împotriva Talvrek protejează mai mult decât o cale: protejează memoria comună de care depinde cooperarea."
+    ],
+    "5": [
+      "Asediatorul nodurilor",
+      "Zeraveth a început ca o platformă de reparații suficient de mare pentru a cuprinde inele întregi de stații de retransmisie. Flota din umbră a preluat platforma și a transformat structurile de andocare în poziții de asediu.",
+      "Zeraveth blochează stațiile de rețea importante și întrerupe suportul pentru echipajele lor de întreținere. Micile defecte devin ieșiri majore, iar coloniile îndepărtate primesc doar fragmente de știri. Conducerea navei în deplasare permite tehnicienilor să se întoarcă și să reconecteze comunitățile izolate. Această blocadă face parte din poveste. Echipamentul listat mai jos provine din joc."
+    ],
+    "6": [
+      "Vânătorul de ecouri",
+      "Orvask escorta odinioară convoaie și păstra fiecare autorizație de trecere drept dovadă. În memoria sa se mai păstrează vocile unor căpitani dispăruți de mult.",
+      "Flota de umbră a transformat acele înregistrări într-un arsenal de comenzi vechi. Orvask le redifuzează ca instrucțiuni actuale, stații de capcane între nevoile prezente autentice și ecourile familiare. Acesta păzește acea arhivă cu violență răbdătoare. Înfrângerea sa le dă apărătorilor timp să respingă ordinele expirate și să restabilească valoarea unei noi confirmări."
+    ],
+    "7": [
+      "Podul din umbră",
+      "Keldrava a fost un punct mobil de transfer de marfă între două colonii îndepărtate. După ce conexiunea lor permanentă a eșuat, nava părea să fie singura lor rută către lumea exterioară. Puțini oameni au observat că are un echipaj diferit.",
+      "Încărcătura dispare acum în interiorul navei, în timp ce chitanțele promit încă trecerea în siguranță. Keldrava exploatează încrederea pe care cele două comunități o plasează una în cealaltă. Echipajul ascunde bunuri furate la bord. Apărătorii trebuie să închidă această legătură falsă înainte ca mai multe colonii să-și încredințeze viitorul compartimentelor sale de marfă."
+    ],
+    "8": [
+      "Purtătorul de zvonuri",
+      "Veshkorn a dus odată știri celor mai îndepărtate avanposturi. Arhiva sa deține încă muzica care a deschis emisiuni pașnice. Acum, aceeași muzică introduce rapoarte false despre dezastre și avertismente de prăbușire.",
+      "Avertismentele contradictorii îi îndepărtează pe comercianții de pe rute sigure și fac coloniile să nu aibă încredere în partenerii lor. Fiecare zvon este înlocuit rapid de altul. Veshkorn protejează operațiunea care produce aceste rapoarte false. Înfrângerea navei face loc pentru știri pe care oamenii le pot verifica."
+    ],
+    "9": [
+      "Iluzionistul soldurilor",
+      "Neravoss a fost nava expozițională strălucitoare a unui târg comercial. Proiectoarele sale au afișat odată o încărcătură reală și motoare noi. Când târgul s-a prăbușit, peisajul a supraviețuit sub diferiți proprietari.",
+      "Neravoss face acum publicitatea de materiale care există numai pe ecranele sale. Acesta utilizează solduri false ale conturilor și rezerve false pentru a atrage livrări autentice. Echipajul său trage asupra oricui încearcă să inspecteze bunurile. Apărătorii îl urmăresc pentru a expune diferența dintre numerele afișate și stocul real înainte ca mai multe nave de marfă să dispară."
+    ],
+    "10": [
+      "Tiranul taxelor de trecere",
+      "Thalverik a păzit o trecere îngustă prin centura de cristal. Taxa sa de navigare modestă a fost odată plătită pentru o protecție reală. Când flota oficială s-a retras, nava s-a declarat singura autoritate.",
+      "Thalverik percepe acum o taxă nouă pentru fiecare mesaj și fiecare livrare. Chiar și echipajelor de salvare li se cere să plătească, deși trecerea rămâne blocată. Rețeaua încă funcționează, dar taxele o sufocă. Nava a transformat o rută publică într-o capcană. Înfrângerea ei redă trecerea comunităților care depind de aceasta."
+    ],
+    "11": [
+      "Cel cu multe fețe",
+      "Skorveth a găzduit nucleele de simulare ale unei academii pilot. Mii de cadeți artificiali au învățat odată să navigheze împreună. După o preluare ostilă, aceste identități de antrenament au devenit voci presupuse independente.",
+      "Participanții falși se susțin reciproc și creează impresia că aproape toată lumea este de acord. Coloniilor mici li se spune că vecinii lor s-au alăturat deja flotei umbrelor. Toate aceste voci provin de pe o singură navă. Distrugerea Skorveth expune majoritatea falsa si ofera locuitorilor o sansa de a vorbi pentru ei insisi."
+    ],
+    "12": [
+      "Otrăvitorul rutelor",
+      "Azhrel a cartografiat primele trasee de salt prin frontiera nebuloasei. Graficele au salvat nenumărate convoaie. Comandanții ostili au capturat nava și au folosit acele hărți de încredere pentru a stabili capcane convingătoare.",
+      "Azhrel publică rute false și redirecționează mesajele prin stațiile de comunicații controalele inamice. Apelurile de urgență ajung la destinație târziu sau dispar în spațiul gol. Nava păzeşte intersecţiei rutelor false. Oprirea restabilește o rută sigură între lumi care deja doresc să coopereze."
+    ],
+    "13": [
+      "Incendiatorul arhivelor",
+      "Dornavik a recuperat dispozitivele deteriorate de stocare a datelor din epavele care au ars. Camerele sale izolate au protejat înregistrările atunci când sistemele din jurul lor au eșuat. Flota din umbră a văzut că această navă ar putea ajunge la arhive pe care alții nu le-au putut.",
+      "Dornavik se oferă să recupereze înregistrările și lasă în urmă copii deteriorate. Coloniile își pierd datele și dovezile trebuiau să spună cât de mult s-a pierdut. Armourul său păzește ultimele înregistrări intacte pe care le-a capturat. Apărătorii luptă pentru a aduce acele recorduri rămase acasă."
+    ],
+    "14": [
+      "Cel care ascunde blocurile",
+      "Velkrath a condus un convoi de cercetare care transporta noi blocuri de registru pe distanțe imense. Containerele sigilate au păstrat fiecare înregistrare intactă. Noul său comandant folosește aceleași containere pentru a ascunde înregistrările intenționat.",
+      "Avanposturile sunt obligate să folosească informații vechi. Actualizările selectate ajung numai atunci când pot provoca confuzie. Diferite stații ajung să lucreze cu termene incompatibile. Velkrath păzeşte înregistrările ca nişte ostatici. Apărătorii trebuie să elibereze restanțele înainte ca coloniile să devină împărțite permanent."
+    ],
+    "15": [
+      "Manipulatorul ceasurilor",
+      "Irdavoss a setat odată ceasurile stațiilor de frontieră la același timp. Flotele întregi au folosit emisiunile sale precise pentru a-și cronometrarile. Un nou comandant a preluat controlul fără un anunţ. Semnalele au rămas clare, dar timpul pe care l-au dat a fost fals.",
+      "Cliștii de timp falși fac ca mesajele trimise la timp să arate târziu. Perioadele de întreținere programate ale stațiilor nu se mai aliniază. Vremurile false sunt convingătoare, ceea ce le face periculoase. Oprirea Irdavoss permite coloniilor să compare ceasurile independente și să recupereze adevărata ordine a evenimentelor."
+    ],
+    "16": [
+      "Temnicerul cheilor",
+      "Rhazvorn a început ca un transport de închisoare cu celule care ar putea fi sigilate separat. Flota din umbră i-a scos pe prizonieri şi a folosit celulele pentru a stoca arhivele furate. Nava a devenit un mijloc de extorcare.",
+      "Închide înregistrările altor comunități și cere concesii pentru eliberarea lor. Clinicile și depozitele de aprovizionare se confruntă cu presiune chiar și în timp ce echipamentul lor pare intact. Rhazvorn își apără celulele cu forța. Înfrângerea ei deschide o cale către înregistrările întemnițate, mai degrabă decât o altă negociere cu răpitorii lor."
+    ],
+    "17": [
+      "Înșelătorul oracolelor",
+      "Kelvash a colectat măsurători de la geamandurile meteorologice și instrumentele care au analizat resursele. Multe stații și-au folosit rapoartele pentru a lua decizii de zi cu zi. După ce inamicul a preluat nava, a păstrat vechiul cod de identificare și programul de difuzare.",
+      "Kelvash raportează stocuri care nu există și oferă lecturi false despre condițiile locale. Sistemele automate mută provizii reale pe puterea acestor informații false. Nava protejează echipamentul care produce minciunile. Apărătorii trebuie să-l oprească înainte ca mai multe vieți să depindă de măsurătorile inventate."
+    ],
+    "18": [
+      "Stăpânul bifurcațiilor",
+      "Othravel a fost construit pentru coloniile care încearcă să cadă de acord asupra regulilor comune după un război. Birma sa de conferințe a salutat odată toate părțile. Acum se întâlnesc doar mesageri din flota de umbră.",
+      "Othravel distribuie versiuni contradictorii ale aceluiași registru. Acesta spune fiecărei stații că propria copie este singura validă. Comunitățile care toți doresc pacea încep să nu aibă încredere unul în celălalt. Othravel păstrează această scindare artificială vie. Înfrângerea permite comunităților să-și compare înregistrările și să rezolve dezacordurile înainte de a începe un alt război."
+    ],
+    "19": [
+      "Falsul salvator",
+      "Zarnvek a fost o navă de salvare cunoscută pentru flacăra sa de semnal de aur. A adus piese de schimb, adăpost și un traseu spre casă. Flota inamică a capturat nava și flacăra sa distinctivă.",
+      "Acum, ofertele sale de asistență necesită autorizații confidențiale. Respondenții găsesc un șezgon de andocare urmărit în loc de siguranță. Zarnvek folosește speranța ca momeală și armură ca asigurare. Apărătorii trebuie să-l expună pe impostor fără a învăța colonii izolate să se îndepărteze de ajutorul autentic."
+    ],
+    "20": [
+      "Prădătorul cozilor",
+      "Vorathen a gestionat sosirile navelor într-un port comercial uriaș. Pachetul său de comandă ar putea coordona mii de abordări și ar putea explica fiecare navă. Când a căzut portul, Vorathen a scăpat cu înregistrările de programare.",
+      "Acum schimbă ordinea cererilor de favorizare a cargocarurilor aliate. Comercianții onești așteaptă în timp ce flota umbrei le ia locurile. Puterea sa provine din rearanjamente mici, cu consecințe mari. Înfrângerea lui Vorathen restabilește o ordine trasabilă în care accesul a devenit ceva vândut în secret."
+    ],
+    "21": [
+      "Împrăștietorul de praf",
+      "Drazkell a furnizat geamanduri de navigație cu mici livrări de energie. Deținerile sale au fost concepute pentru milioane de transferuri mici. Comandanții ostili au repurtat această capacitate pentru o campanie de supraveghere liniștită.",
+      "Împrăștie colete nesolicitate și observă ce stații răspund. Contactele aparent banale devin hărți ale relațiilor private, stocate în spatele armelor sale. Apărătorii trebuie să-l intercepteze Drazkell înainte ca mișcările zilnice ale unor colonii întregi să devină o altă marfă secretă tranzacționată de flota umbrelor."
+    ],
+    "22": [
+      "Falsul custode",
+      "Nethrava a purtat însemnele unei organizații de gardă respectată. După ce această organizație s-a dizolvat, nava a rămas ultimul reprezentant vizibil. Aspectul său familiar a ascuns faptul că acum a servit o cauză diferită.",
+      "Nethrava aprobă inspecţii false şi prezintă parteneri comerciali nesiguri ca fiind aprobaţi oficial. Coloniile au încredere în timbrele sale până când proviziile lor dispar. Apărătorii trebuie să expună înșelăciunea. Un inspector de încredere trebuie să-și asume responsabilitatea și să permită altora să verifice rezultatele."
+    ],
+    "23": [
+      "Pustiitorul memoriei",
+      "Valdrek a avut grijă de arhivele supraaglomerate. Acesta a eliminat duplicatele confirmate și a păstrat jurnale detaliate ale lucrărilor sale. Flota de umbră a şters acele buşteni înainte de a da navei o nouă misiune.",
+      "Valdrek clasifică acum dovezile esențiale ca înregistrări care pot fi aruncate. După ce pleacă, istoricul de aprovizionare, înregistrările de proprietate și urmele atacurilor anterioare lipsesc. Este nevoie de timp pentru a descoperi cât de mult a dispărut. Nava şi-a transformat uneltele de arhivă în arme. Oprirea împiedică pierderi mai liniștite."
+    ],
+    "24": [
+      "Piața oglinzilor",
+      "Korzeth a fost o piață zburătoare pentru comercianții din multe lumi. Geamurile afișajului arătau comerț aglomerat chiar și atunci când portul dormea. Acum, cele mai multe dintre ofertele sale provin dintr-o singură cameră de control ascunsă.",
+      "Korzeth pune în scenă tranzacții între comercianții falși pentru a face mărfurile fără valoare să pară dorite. Coloniile confundă tranzacţiile puse în scenă pentru o cerere reală. Armele îi ţin pe inspectori departe de depozitele goale. Apărătorii trebuie să expună piața falsă înainte ca livrările mai autentice să fie tranzacționate."
+    ],
+    "25": [
+      "Hoțul confirmărilor",
+      "Thervoss obișnuia să păzească stațiile care primeau livrări de la alte stele. Luminile sale le-au spus căpitanilor că încărcătura lor a ajuns în siguranță. Acum luminile strălucesc chiar și atunci când nimeni nu așteaptă în spatele ușilor docului.",
+      "Thervoss trimite chitanțe false și susține că livrările incomplete sunt terminate. Navele de marfă se întorc spre casă în timp ce coloniile așteaptă provizii care nu ajung niciodată. Armura sa protejează înșelăciunea în timp ce interceptează un alt transport. Apărătorii trebuie să-l oprească, astfel încât încasările să poată confirma din nou livrările reale."
+    ],
+    "26": [
+      "Judecătorul ceții",
+      "Akraveth a soluționat disputele dintre posturile comerciale îndepărtate. Judecătorii săi obișnuiau să compare probele și să caute decizii corecte. Flota de umbră le-a înlocuit cu un sistem care decide rezultatul în avans.",
+      "Akraveth respinge înregistrările valide și favorizează întotdeauna aceiași sponsori secreți. Se numește pe oricine obiectează un dușman al rețelei. În poveste, nava folosește intimidarea și se preface că impune ordinea. Apărătorii se luptă cu o mașină care folosește un limbaj legal pentru a-și ascunde scopul."
+    ],
+    "27": [
+      "Viermele lanțului de aprovizionare",
+      "Zelkharn a reparat nave de marfă departe de șantierele navale stabilite. Echipajele au avut încredere în piesele sale de schimb și le-au instalat fără ezitare. După ce inamicul a capturat nava, piesele proveneau de la un alt furnizor. Dificultățile lor nu au apărut imediat.",
+      "Acesta distribuie pachete de întreținere modificate menite să facă alte nave dependente de flota umbrelor. Eșecurile apar adesea numai după următoarea săritură. Zelkharn păzește sursa acestui sabotaj înfiorător. Înfrângerea ei rupe un lanț în care fiecare reparație bine intenționată ar putea crea o altă victimă."
+    ],
+    "28": [
+      "Negustorul de copii de rezervă goale",
+      "Odravik se specializase în păstrarea arhivelor vechi ale coloniilor. Sistemul său uriaș de stocare promitea protecție în fața oricărui dezastru. Când o stație și-a cerut înregistrările înapoi, a aflat că numeroase copii de siguranță existau doar ca intrări în director.",
+      "Odravik vinde protecție de rezervă, refuzând în același timp responsabilitatea pentru returnarea înregistrărilor. Clienții săi se bazează pe proceduri de recuperare care nu recuperează nimic. Armele sale păstrează această fraudă profitabilă secretă. Apărătorii trebuie să-l expună înainte ca o altă arhivă pierdută să nu mai poată fi recuperată."
+    ],
+    "29": [
+      "Filtrul tăcerii",
+      "Varnokh obișnuia să elimine interferențele de pe canalele radio portuare aglomerate. Filtrele sale au făcut apelurile de urgență mai ușor de auzit. Flota din umbră a modificat lista vocilor tratate ca interferențe.",
+      "Avertismentele inspectorilor cinsti dispără acum alături de rapoartele de raiduri ostile. Sectorul pare pașnic, deoarece problemele sale nu pot fi auzite. Varnokh păzește această tăcere fabricată. Oprirea acesteia permite rețelei să-și recunoască din nou propriile defecțiuni și să înceapă să le repare împreună."
+    ],
+    "30": [
+      "Licitarul identităților",
+      "Kezravel a înregistrat coloniștii unei flote de colonii care călătorea. Arhivele sale au înregistrat istoria fiecărei noi așezări. Când coloniștii s-au dispersat, datele personale pe care le încredințaseră navei au căzut în mâini ostile.",
+      "Kezravel vinde date de identificare furate și permite străinilor să acționeze sub numele de rezidenți cinstiți. Cumpărătorii folosesc relațiile victimelor ca acoperire. Nava își vinde istoriile personale și folosește armele pentru a le ține departe de licitații. Înfrângerea îi permite proprietarilor să-și recupereze înregistrările și să-și recapete controlul asupra propriilor istorii."
+    ],
+    "31": [
+      "Iluzionistul stațiilor de retransmisie",
+      "Dravosk a înlocuit stațiile de comunicații eșuate în regiuni îndepărtate. Antenele sale au oferit o conexiune în locurile în care nu a rămas niciunul. Încă acceptă semnale, dar acum le înainteaza în funcție de interesele sponsorilor săi.",
+      "Unele mesaje sosesc schimbate; altele dispar între recunoașteri liniștitoare. Participanții văd un pod unde există într-adevăr un portar. Dravosk apără acel punct de control invizibil cu forță vizibilă. Înfrângerea sa oferă coloniilor șansa de a-și verifica din nou conexiunile de-a lungul rutelor independente."
+    ],
+    "32": [
+      "Colecționarul de roiuri",
+      "Thalzek a luat drone de întreținere avariate și le-a returnat la stațiile lor. Chiar și cea mai mică dronă s-ar putea adăposti sub coca sa largă. După ce nava a fost transformată, a încetat să mai returneze dronele.",
+      "În poveste, Thalzek transformă dronele în emițătoare controlate de la distanță. Solicitările lor simultane supraîncarcă regiuni întregi, iar proprietarii abia își mai recunosc aparatele. Distrugerea navei oprește centrul de comandă al roiului din poveste. Lista separată arată armamentul instalat în joc."
+    ],
+    "33": [
+      "Capcana contractuală",
+      "Orvethra a fost un birou de comerț mobil unde coloniile au aranjat provizii pe termen lung. Consilierii săi au promis reguli ușoare în vremuri dificile. Acum, acordurile convenabile ascund obligațiile pe care cumpărătorii le descoperă doar mai târziu.",
+      "Orvethra distribuie oferte înșelătoare care fac stațiile să depindă de flota umbrei. Cooperarea devine dependență. Armura navei protejează înregistrările promisiunilor pe care semnatarii nu le-au înțeles pe deplin. Înfrângerea ei oferă coloniilor o șansă de a construi viitoare alianțe în condiții clare."
+    ],
+    "34": [
+      "Falsificatorul sumelor de control",
+      "Kelzorn restaura modele tridimensionale de date deteriorate în stații de cercetare abandonate. Uneltele lui făceau suprafața să pară întreagă chiar când lipseau bucăți. Noul echipaj a folosit tehnica pentru a da arhivelor nesigure o aparență credibilă.",
+      "Afișează rezultatele inspecției inventate și sigiliile atractive de securitate în care sunt absente controalele independente. Preluarea constă în certitudinea pretinsă în sine. Kelzorn îi ţine pe anchetatori departe cu armele. Înfrângerea sa dezvăluie de ceea ce se tem cel mai mult proprietarii săi: o a doua privire independentă în spatele unei suprafețe liniștitoare."
+    ],
+    "35": [
+      "Negustorul de rezerve iluzorii",
+      "Vashravel deținea rezerve de urgență pentru mai multe colonii de frontieră. Numele său însemna provizii care vor rămâne disponibile pe parcursul celei mai rele ierni. O nouă administrație a emis din ce în ce mai multe revendicări cu privire la aceleași magazine.",
+      "Vashravel promite protecție pentru mai multe comunități decât pot sprijini proviziile sale. Coca sa strălucitoare ascunde depozite goale. Armele sale împiedică comunitățile să verifice stocul împreună. Apărătorii trebuie să intervină înainte ca coloniile să înceapă să lupte pentru ultimele lăzi."
+    ],
+    "36": [
+      "Blocatorul frontierelor",
+      "Zorveth a supravegheat schimburile între două registre independente. Sarcina sa a fost de a face transferurile oneste trasabile de ambele părți. Acum recunoaște doar dovezile utile propriei flote.",
+      "Livrările rămân în limbo, în timp ce fiecare comunitate crede că cealaltă îi reține. Zorveth atrage puterea din această neînţelegere. Carena sa este granița vizibilă a unei dispute invizibile. Apărătorii trebuie să deschidă pasajul fără a întoarce o colonie împotriva celeilalte."
+    ],
+    "37": [
+      "Prințul copiilor",
+      "Drelkash a păstrat diagrame rare de stele, făcând copii clar etichetate pentru școli și navigatori. Atelierele sale au ajutat la călătoriile cu cunoștințe. Astăzi, echipajul său elimină etichetele și vinde fiecare copie ca original unic.",
+      "Coloniile se ceartă cu privire la afirmațiile contradictorii în timp ce nava ajunge pe o altă piață. Înșelăciunea se referă la proveniență, nu la valoarea cunoștințelor comune. Drelkash își apără cu înverșunare atelierul de falsificare în mișcare. Înfrângerea sa reconectează înregistrările cu istoria din care au venit de fapt."
+    ],
+    "38": [
+      "Devoratorul cozilor",
+      "Nerthavel a gestionat cererile pentru centre de aprovizionare enorme. Depozitarea sa ar putea avea zile de cereri în așteptare. Flota din umbră a folosit această capacitate pentru a reține cererile legitime pe termen nelimitat.",
+      "Acesta plasează intrările fără valoare înaintea livrărilor urgente și menține procesele ocupate fără a le lăsa să avanseze. Din exterior, totul arată ca o operațiune obișnuită. Nerthavel păzește un impas nesfârșit. Înfrângerea ei revine nu numai capacitatea coloniilor, ci și timpul luat în liniște de la ele."
+    ],
+    "39": [
+      "Manipulatorul probelor",
+      "Rhazkora a fost un laborator zburător care a investigat accidentele. Rapoartele sale au ajutat echipajele să înțeleagă eșecurile și să prevină noi pierderi. După ce nava a fost capturată, instrumentele au rămas aceleași, dar rapoartele au servit diferiți sponsori.",
+      "Rhazkora dezbracă dovezile de context și rearanjează fragmente pentru a face victimele să arate ca atacatorii. Atacatorii adevăraţi sunt lăsaţi în afara rapoartelor. Armura navei protejează minciuna. Oprirea îi permite anchetatorilor să vadă din nou probele complete."
+    ],
+    "40": [
+      "Paznicul urnelor",
+      "Velzhar a efectuat buletine de vot sigilate între secțiile de consiliu îndepărtate. Traseul său neutru a făcut parte din acorduri. Acum ajunge la locurile selectate la timp și ajunge în alte porturi după ce deciziile au fost luate.",
+      "Ea modelează participarea prin excluderea anumitor colonii din conversația comună. Fiecare rezultat pare încă înregistrat cu grijă; vocile lipsă sunt invizibile. Armele sale păzesc această punctualitate selectivă. Apărătorii luptă pentru ca un viitor comun să poată fi cu adevărat decis împreună."
+    ],
+    "41": [
+      "Sabotorul accesului",
+      "Korthaven a fost o navă mare care a păstrat arhivele accesibile în multe sectoare. Echipajul său a promis să livreze orice copie care a fost solicitată. Flota din umbră și-a dat seama că ar putea câștiga energie prin refuzul de a furniza copiile.",
+      "Korthaven confirmă că înregistrările există, dar refuză să împărtășească conținutul lor. Anchetatorii pot vedea că cineva a făcut o afirmație, dar nu poate inspecta probele. Nava oferă aspectul accesului. Înfrângerea ei permite oamenilor să citească înregistrările și să verifice promisiunile din registru."
+    ],
+    "42": [
+      "Impostorul misiunilor de recuperare",
+      "Azravel a căutat sonde de colonii pierdute în locuri în care puțini salvatori au vizitat. Odată a adus ajutor la stațiile uitate. Acum vizează stațiile care tocmai și-au pierdut datele sau accesul la ele.",
+      "Acesta promite recuperarea în timp ce solicită și mai multe informații confidențiale, transformând o pierdere într-un lanț de altele noi. Consemnul său de apel prietenos contrastează cu silueta sa armată. Azravel trebuie oprit astfel încât disperarea să nu mai devină cea mai valoroasă resursă tranzacționată de stăpânii săi."
+    ],
+    "43": [
+      "Deviatorul inspecțiilor",
+      "Threvask a fost folosit pentru a coordona navele de inspecție independente și pentru a le oferi abordări sigure. Hărțile sale de situație erau cunoscute pentru precizie. După ce inamicul l-a capturat, Threvask a început să trimită aceiași inspectori la expoziții atent înscenate.",
+      "Threvask trimite inspectorii departe de nodurile de rețea vulnerabile și le arată site-uri făcute pentru a arăta fără pată. Rapoartele rămân liniștitoare în timp ce daunele cresc în altă parte. Armele sale protejează falsa apariție a ordinii. Apărătorii trebuie să redirecționeze inspectorii către daunele pe care încearcă din greu să le ascundă."
+    ],
+    "44": [
+      "Vânătorul de amintiri",
+      "Dorzheva a recuperat bușteni personali de la navele de marfă distruse și le-a returnat familiilor proprietarilor. Compartimentele sale de marfă dețineau multe istorii personale mici, prețioase. Sub o nouă comandă, nava a început să folosească acele amintiri pentru a înşela anumite persoane.",
+      "Dorzheva construiește mesaje convingătoare din detalii familiare. Se apropie de victime folosind ceea ce știe despre viața lor. Pericolul vine din sentimentul de apropiere pe care îl imită. Păzește o colecție de detalii personale pe care le-a luat de la alții. Înfrângerea acesteia împiedică aceste detalii să fie folosite împotriva proprietarilor lor."
+    ],
+    "45": [
+      "Uzurpatorul puterilor de urgență",
+      "Vezrakh a fost construit pentru a ajuta atunci când stațiile centrale de comandă au eșuat. Mandatul său de urgență a permis o acțiune rapidă în ore haotice. Flota din umbră a învățat-o să declare aceste circumstanțe excepționale în sine.",
+      "Vezrakh răspândește rapoarte false de criză și cere transferul imediat de control. Tratează întrebările ca întârzieri periculoase. Învelirea sa impunătoare face ca urgența falsă să fie credibilă. Apărătorii trebuie să-l oprească înainte ca teama de un colaps fictiv să facă coloniile să-și predea independența."
+    ],
+    "46": [
+      "Cartograful încrederii",
+      "Orzhaven a cartografiat conexiunile dintre grupurile de ajutor și stațiile de aprovizionare. Graficele sale au făcut odată cooperarea mai ușoară. Aceleași relații identifică acum unde o trădare ar provoca cel mai mare rău.",
+      "Orzhaven vizează link-ul de care depinde întreaga rețea, chiar dacă această legătură nu este cea mai puternică stație a sa. Recomandările false plasează partenerii ostili în centrul rețelei. Armele sale protejează harta relațiilor de încredere. Apărătorii o urmăresc înainte ca o legătură utilă să devină un singur punct de eșec pentru toată lumea."
+    ],
+    "47": [
+      "Asediatorul consensului",
+      "Keldrothe a fost o navă de consiliu unde coloniile rivale și-au soluționat disputele finale. Camerele sale au fost concepute pentru răbdare și înțelegere. Sub flota umbrelor au devenit o fabrică de cereri deliberat conflictuale.",
+      "Keldrothe blochează acordurile prin ridicarea de noi obiecții și oferind părților diferite presupuși termeni. În timp ce coloniile argumentează, navele ostile preiau controlul asupra rutelor lor. Scopul este de a-i opri să acționeze împreună. Înfrângerea ei le oferă timp pentru a distinge dezacordurile reale de obstacolele create pentru a preveni o soluție."
+    ],
+    "48": [
+      "Ștergătorul originilor",
+      "Zhavrek a păstrat înregistrările de proveniență pentru cele mai vechi nave de colon. Chiar și șantierele navale uitate puteau fi găsite prin arhivele sale. Astăzi schimbă originile și face ca bunurile furate să pară dobândite în mod legitim.",
+      "Fiecare înregistrare falsificată despre proveniență ascunde încă un transport al flotei din umbră. Comercianții cinstiți cad sub suspiciune, în timp ce vinovații își schimbă numele. Blindajul apără documentele originale rămase. Apărătorii trebuie să pună arhiva la adăpost cât timp proveniența flotelor mai poate fi verificată."
+    ],
+    "49": [
+      "Ultimul izolator",
+      "Vorthaz a apărat un refugiu care a căutat contactul exterior după un război lung. Sarcina sa inițială a fost de a ține comunicațiile periculoase departe. Flota din umbră a schimbat regulile astfel încât fiecare voce necunoscută să devină o amenințare.",
+      "Acesta izolează coloniile și înlocuiește viziunea lor asupra rețelei cu mesaje ostile selectate. Fără o comparație independentă, lumea exterioară inventată arată real. Vorthaz păzeşte această închisoare de informaţii. Înfrângerea înseamnă a oferi locuitorilor libertatea de a privi spre exterior, nu să-i cucerești."
+    ],
+    "50": [
+      "Stăpânul adevărurilor false",
+      "Drazevorn a fost asamblat din punți de comandă abandonate. Arhivele sale reunesc înșelătoriile dușmanilor de dinainte, de la identități furate la cronici falsificate și dovezi sigilate. Reprezintă o ordine în care o singură voce hotărăște ce este adevărat.",
+      "Drazevorn vrea să supună fiecare nod liber unui registru unic controlat de inamic. Poate păstra înregistrările vechi câtă vreme nimeni nu le poate verifica independent. Înfrângerea lui pune capăt acestui control. Victoria le aparține celor care pot din nou să compare înregistrările, să aibă opinii diferite și să decidă împreună în cine au încredere."
+    ]
+  },
+  "ships": {
+    "grey-scout": [
+      "Grey Scout a fost construit într-un atelier care supraviețuia folosind piese recuperate, după ce stațiile de retransmisie de la periferie au cedat. Primii piloți căutau balize de curierat dispărute. Fiecare înregistrare recuperată lega din nou o familie de colonia ei. Nava modestă amintea că o rețea se poate reface prin eforturi mici și stăruitoare.",
+      "Pirații care vânau nave în preajma stațiilor de retransmisie au capturat mai multe Grey Scout în timpul unui raid asupra unui depozit de piese recuperate. Prada modestă a acoperit combustibilul și reparațiile, lăsând aproape nimic pentru modernizare. Astăzi, piloții mai întâlnesc uneori nave inamice din aceeași familie.",
+      "Escadrila Advanced recuperează mesaje din zonele unde se luptă pentru controlul stațiilor de retransmisie. Piloții au păstrat indicativele primelor echipe de căutare.",
+      "Versiunea Elite păzește ultima legătură activă a unui sector amenințat. Arhiva ei păstrează simbolic numele tuturor curierilor dispăruți."
+    ],
+    "nova-wing": [
+      "Nova Wing a fost proiectat pentru prima călătorie dincolo de marginea luminoasă a novei. Șantierul naval a transmis planurile coloniilor îndepărtate, ca toate să poată naviga în siguranță. Piloții încă povestesc despre prima întoarcere. Nava era avariată, arhiva de hărți stelare rămăsese intactă, iar cerul deschidea noi posibilități.",
+      "O companie de cartografie îndatorată a vândut nave Nova Wing scoase din uz unui comerciant care servea drept paravan inamicului. Finanțatorii lui își puteau permite corpurile navelor și doar câteva arme noi. Cele mai multe nave au păstrat echiparea inițială.",
+      "Piloții Advanced îi apără pe curierii care transportă mai departe hărțile stelare. Emblema lor înfățișează prima stea cartografiată.",
+      "Expediția Elite caută sursa hărților stelare falsificate. Continuă misiunea primilor exploratori."
+    ],
+    "solar-lance": [
+      "Solar Lance a apărut pe o stație alimentată de o stea pe cale să se stingă. Când ultimul inel de colectoare a fost evacuat, aceste nave au escortat cargourile de salvare printre resturi. Siluetele lor alungite au fost gravate pe monumentele noului port de origine. Modelul amintește cât de important este să păstrezi direcția când o lume întreagă se stinge în urma ta.",
+      "După căderea unei baze de evacuare, echipajele inamice au capturat navele Solar Lance abandonate. Cei mai mulți bani destinați aprovizionării au fost folosiți pentru a asigura rute de scăpare comandanților. Navele capturate au primit de obicei doar reparații provizorii.",
+      "Patrula Advanced aprovizionează coloniile strămutate. Fiecare navă poartă un vechi cod de evacuare.",
+      "Formațiile Elite apără noile rezerve de energie solară împotriva flotei din umbră. Ele protejează lumina pe care refugiații au reușit să o ia cu ei."
+    ],
+    "dark-delta": [
+      "Dark Delta a fost conceput pentru misiuni discrete. Prima sa misiune a fost căutarea supraviețuitorilor în avanposturi care nu mai răspundeau. În primele jurnale de bord apar mai multe coordonate decât nume, fiindcă echipajele protejau intimitatea coloniștilor salvați. Așa s-a născut o tradiție. Succesul se măsoară prin oamenii care ajung înapoi în siguranță.",
+      "Un intermediar mituit a deturnat un transport de nave Dark Delta spre flota din umbră. După ce a plătit trădarea, flota abia mai avea bani de piese de schimb. Foarte puține dintre navele furate au primit echipament mai bun.",
+      "Versiunea Advanced escortează arhiviștii aflați în pericol pe rutele de evacuare. Rapoartele misiunii sunt deschise doar după ce aceștia ajung în siguranță.",
+      "Piloții Elite aduc la adăpost martori ale căror mărturii pot împăca întregi colonii. Sunt cunoscuți pentru discreție."
+    ],
+    "gold-streak": [
+      "Gold Streak a debutat în cursele dintre sateliții comerciali. În timpul unei crize de aprovizionare, piloții și-au folosit cunoștințele despre rute ca să transporte fișe medicale ocolind porturile închise. Liga sportivă a devenit un sindicat al curierilor. Însemnele aurii amintesc de raza subțire de soare care îi călăuzea pe primii curieri printre sateliți.",
+      "Bande ostile au confiscat nave Gold Streak pe un satelit de curse abandonat. Se așteptau să găsească banii de premii, dar cursele se încheiaseră de mult. Fără acele venituri, flota capturată a fost modernizată arareori.",
+      "Curierii Advanced duc între clinici angajamente de ajutor verificate. Vechile numere de concurs le amintesc de originea comună.",
+      "Liga Elite protejează convoaiele de salvare vitale pentru sector. Cea mai înaltă distincție a ei este să aducă acasă un echipaj întreg."
+    ],
+    "iron-guard": [
+      "Iron Guard a fost proiectat de muncitori din docuri hotărâți să-și apere singuri casa. Primul corp al navei a fost asamblat din componentele unor macarale de marfă dezafectate. Pe chilă erau gravate numele celor care lucraseră la navă după terminarea schimbului. Seria amintește că a apăra un loc înseamnă și a avea grijă de ceea ce au construit multe mâini.",
+      "După ocuparea unui șantier naval, atacatorii i-au silit pe muncitorii rămași să repună în funcțiune nave Iron Guard vechi. Le lipseau banii și furnizorii de arme noi. Cele mai multe nave furate au păstrat echiparea inițială.",
+      "Patrula Advanced escortează docuri mobile de reparații. Echipajele ei cunosc fiecare adăpost de urgență de pe inelul portuar.",
+      "Navele Elite protejează reconstrucția stațiilor distruse. Decorațiile lor cinstesc echipele de șantier naval aduse la adăpost."
+    ],
+    "vector": [
+      "Vector s-a născut dintr-o dispută între navigatori. Unii se bazau pe o traiectorie perfectă, ceilalți voiau să compare măsurători independente. Al doilea grup a construit nava și a traversat un inel de resturi necartografiat. Întoarcerea lor a arătat valoarea cooperării. Hărțile păstrate cuprind măsurătorile divergente, pentru ca viitorii piloți să înțeleagă cum a fost găsită ruta comună.",
+      "Prin contracte de transport falsificate, mai multe nave Vector au ajuns în mâinile inamicului. Când înșelătoria a ieșit la iveală, finanțarea a încetat. Rezervele au ajuns pentru a menține navele în zbor și pentru câteva îmbunătățiri.",
+      "Formațiile Advanced verifică rutele comerciale redeschise. Fiecare rută poartă semnăturile mai multor navigatori.",
+      "Expediția Elite investighează falsificarea sistematică a hărților. Adună probe acolo unde alții văd doar indicații contradictorii."
+    ],
+    "verdant": [
+      "Verdant a dus primele bănci de semințe într-o colonie fără sol natural. Planurile navei au fost trimise împreună cu cataloagele de plante, pentru ca și alte așezări să se poată întreține singure. Piloții se consideră paznicii recoltelor viitoare. O bancă de semințe intactă poate prețui mai mult decât o încărcătură strălucitoare, fiindcă poate adăposti hrana pentru o iarnă întreagă.",
+      "Jefuitorii au capturat nave Verdant sperând să vândă bănci valoroase de semințe. Acestea fuseseră deja mutate. Au rămas doar navele și finanțatorii dezamăgiți, care rareori au mai dat bani pentru modernizări.",
+      "Navele Advanced asigură schimburile dintre stațiile cu sere. Codurile lor de identificare păstrează numele plantelor uitate.",
+      "Garda Elite protejează ultimul registru complet de semințe, inclusiv pentru coloniile care încă nu și-au plantat prima grădină."
+    ],
+    "storm-wing": [
+      "Storm Wing a fost construit într-un anotimp cu furtuni ionice neîncetate. Șantierele lucrau între întreruperile de curent și trimiteau prin curieri vești despre stadiul lucrărilor. Niciun șantier nu avea proiectul complet până când toate piesele au fost asamblate în prima navă. Povestea sa arată cum o rețea poate continua să funcționeze în ciuda pierderilor repetate de conexiune.",
+      "În timpul unei întreruperi a rețelei, inamicul a ocupat un hangar îndepărtat plin de nave Storm Wing. După tăierea rutelor de aprovizionare, orice piesă de schimb a devenit costisitoare. Bugetul limitat ajungea, de obicei, doar pentru a ține navele în serviciu.",
+      "Escadrila Advanced escortează balizele de întreținere de-a lungul frontului de furtuni. Astfel restabilește legăturile dintre stațiile izolate.",
+      "Piloții Elite protejează marile convoaie de reparații după întreruperi. Întoarcerea lor arată că ajutorul are din nou o rută."
+    ],
+    "red-comet": [
+      "Red Comet poartă numele unui zbor de salvare a cărui dâră luminoasă a străbătut cerul a trei colonii. Pilotul transporta ultimul plan intact al unui purificator de apă. Legendele au înfrumusețat călătoria, însă șantierul păstrează raportul simplu, original. Chiar a doua zi dimineață, locuitorii de la destinație au putut bea din nou apă curată.",
+      "O grupare inamică de șantajiști a capturat nave Red Comet în baza unui ordin de confiscare falsificat. Coloniile au încetat să plătească. Fără veniturile așteptate, majoritatea navelor de salvare capturate și-au păstrat echiparea inițială.",
+      "Navele Advanced duc cunoștințe de reparații în zonele de urgență. Marcajele roșii semnalează intervenția urgentă.",
+      "Versiunea Elite escortează ultimele transporturi spre coloniile asediate. Indicativul rămâne în emisie până când destinatarul răspunde."
+    ],
+    "twin-core": [
+      "Twin Core a fost construit de două șantiere navale despărțite de un conflict vechi. Fiecare a realizat o parte a proiectului și a cerut o inspecție independentă. Primul zbor comun a început abia după ce rapoartele lor au coincis. Modelul simbolizează încrederea câștigată prin verificare reciprocă și răbdătoare.",
+      "Dezertorii au predat mai multe nave Twin Core unei flote inamice. Ambele șantiere de origine au refuzat să mai trimită provizii. Piesele de schimb s-au scumpit, iar noii proprietari au renunțat la aproape toate modernizările planificate.",
+      "Echipajele Advanced vin din ambele porturi de origine. Jurnalele comune păstrează atât dezacordurile, cât și deciziile.",
+      "Formația Elite protejează acordurile dintre sectoare odinioară ostile. Misiunea se termină abia când ambele părți ajung în siguranță."
+    ],
+    "orbit-arc": [
+      "Orbit Arc deservea stații ale căror traiectorii se intersectau rar. Primii piloți duceau scrisori între orbite îndepărtate. Răspunsurile întârziau uneori luni întregi, dar fiecare întâlnire avea un interval stabilit. Din micile întâlniri a crescut o rețea comercială durabilă. Modelul amintește că și un contact rar contează atunci când te poți baza pe el.",
+      "Contrabandiștii au vândut navele Orbit Arc dispărute unei formații inamice de frontieră. Rutele lungi de aprovizionare i-au consumat fondurile. Doar arareori mai rămâneau bani pentru sisteme moderne.",
+      "Curierii Advanced protejează schimburile programate la inelele exterioare. La fiecare întâlnire stabilită trebuie să ajungă un mesaj.",
+      "Navele Elite păzesc marile întruniri ale coloniilor călătoare. Sosirea lor anunță că legătura a fost restabilită."
+    ],
+    "night-guard": [
+      "Night Guard provenea dintr-o colonie de pe partea întunecată a unui satelit cu rotație sincronă. În porturile ei, soarele nu răsărea niciodată, dar oamenii recunoșteau luminile patrulelor care reveneau. Șantierul naval a dat acestei promisiuni forma unei nave. Întoarce-te, mai verifică o dată și adu-i pe toți acasă. În poveștile navei revine imaginea unui doc lăsat deschis pentru un cargou întârziat.",
+      "Atacatorii au furat câteva nave Night Guard la schimbarea gărzii. Finanțatorii au plătit raidul fără să aloce bani pentru întreținere pe termen lung. Majoritatea navelor capturate au rămas la echiparea de patrulare de bază.",
+      "Patrulele Advanced escortează proviziile în perioadele lungi de tăcere radio. Fiecare tură poartă numele unei nave salvate.",
+      "Garda Elite ține deschise ultimele porturi de refugiu. Părăsește stația numai după încheierea ultimei evacuări."
+    ],
+    "striker": [
+      "Striker a apărut după o serie de atacuri asupra convoaielor de reparații. Proiectanții voiau o navă de escortă care să câștige timp pentru un atelier amenințat. Prima unitate era alcătuită din foști mecanici. Ei știau cât prețuiește fiecare minut când un motor avariat nu poate porni încă. Această origine contează mai mult decât numele războinic.",
+      "Mercenarii inamici au primit nave Striker de la un angajator insolvabil. Revânzarea ar fi adus prea puțini bani, așa că unii au păstrat navele. Puține echipaje își permiteau o modernizare serioasă.",
+      "Unitățile Advanced protejează atelierele mobile în timpul operațiunilor dificile de recuperare. Piloții cunosc semnalele de urgență ale echipelor de reparații.",
+      "Navele Elite acoperă retragerea ultimelor echipe de recuperare a epavelor. Decorațiile lor poartă numele atelierelor care și-au putut relua activitatea."
+    ],
+    "cargo-hawk": [
+      "Cargo Hawk s-a născut într-un port unde remorcherele mici treceau adesea neobservate. Când o rețea de escroci a falsificat documentele de recepție, echipajele au strâns registre independente și le-au confruntat în ciuda amenințărilor. Nava nouă a preluat numele acestei alianțe de curieri. În legenda ei, cea mai prețioasă încărcătură este dovada deplină a proprietății de drept.",
+      "Dintr-un depozit vamal ocupat, inamicul a obținut nave Cargo Hawk. Calele conțineau în principal dovezi sigilate. Câștigul modest nu a ajuns pentru o modernizare amplă a flotei capturate.",
+      "Navele Advanced escortează încărcăturile disputate la inspecții comune. Registrele de transport rămân accesibile ambelor părți.",
+      "Flota Elite apără arhivele principale ale lanțului de aprovizionare. Emblema ei reprezintă posibilitatea de a urmări proveniența încărcăturii."
+    ],
+    "ring-flare": [
+      "Ring Flare a fost testat printre inelele înghețate ale unui gigant gazos. Luminile sale de navigație au devenit puncte de întâlnire mobile pentru echipele de cercetare risipite. După expediție, semnalele au legat avanposturile nou înființate. Locuitorii lor încă își amintesc cum luminile separate au trasat o rută comună înainte să existe o hartă oficială.",
+      "Când un avanpost și-a pierdut bugetul de cercetare, o licitație trucată a dat nave Ring Flare pe mâna inamicului. Cumpărătorii și-au cheltuit fondurile pe achiziție. Puține nave au primit echipament peste cel de bază.",
+      "Escadrilele Advanced păstrează legătura cu stațiile de cercetare în derivă. Indicativele amintesc de vechile locuri de întâlnire de pe inel.",
+      "Piloții Elite apără arhiva comună de observații împotriva datelor falsificate. Astfel păstrează rezultatele anilor de cercetare independentă."
+    ],
+    "sky-breaker": [
+      "Sky Breaker a fost prima navă a unei colonii izolate care a trecut de bariera artificială impusă accesului la informații. Rapoartele aduse înapoi contraziceau poveștile folosite pentru a-i speria pe locuitori. Șantierul naval a publicat toate înregistrările misiunii. Modelul amintește valoarea unei legături deschise atunci când o singură autoritate vrea să decidă ce răspunsuri pot auzi oamenii.",
+      "Blocada inamică a interceptat nave Sky Breaker la întoarcere. Menținerea blocadei a consumat fondurile disponibile. Navele capturate au continuat de obicei să zboare cu echipamentul de la plecare.",
+      "Formațiile Advanced escortează mesageri independenți peste frontierele închise. Mesagerii duc informații din mai multe surse.",
+      "Expediția Elite reia legătura cu coloniile pierdute. Sosirea ei le permite să compare singure informațiile."
+    ],
+    "olive-fortress": [
+      "Olive Fortress a fost construit în timpul unui armistițiu, într-un șantier neutru. Foștii dușmani au împărțit uneltele, păstrând amintirea trecutului. Primul corp de navă a purtat culorile discrete ale atelierului. Legenda vorbește despre granițe care ocrotesc și permit întâlnirile. O fortăreață poate fi și un loc sigur pentru negocieri.",
+      "După încălcarea armistițiului, o delegație ostilă a păstrat navele Olive Fortress împrumutate. Finanțatorii neutri au înghețat toate fondurile. Înlocuirea pieselor defecte a devenit prioritară.",
+      "Navele Advanced asigură întâlnirile delegațiilor independente. Fiecare delegație este escortată până în propriul port de origine.",
+      "Garda Elite împiedică acapararea arhivelor neutre. Protejează dovezile comune chiar și împotriva voinței propriilor aliați."
+    ],
+    "pi-vanguard": [
+      "Pi Vanguard a început ca un proiect comun al unor șantiere navale mici ale pionierilor. Niciunul nu putea finanța o navă întreagă, dar împreună au oferit materiale, timp și experiență. Prima misiune a asigurat o rută de aprovizionare deschisă tuturor coloniilor participante. În lumea fictivă a jocului, modelul reprezintă forța participării comune.",
+      "Grupările inamice au copiat planurile vechi ale navei Pi Vanguard și au preluat corpuri scoase din uz. Nu aveau fonduri pentru ansambluri de precizie mai noi. Mica lor flotă a păstrat în mare parte echiparea de la început.",
+      "Escadrilele Advanced escortează convoaiele pionierilor la primele călătorii comune. Codurile de identificare amintesc de atelierele care au contribuit la construcție.",
+      "Formația Elite apără nodurile libere de Drazevorn, care pretinde că deține singurul adevăr. Rolul acesta există doar în povestea jocului."
+    ],
+    "core-carrier": [
+      "Core Carrier a fost construit când mai multe colonii trebuiau să-și salveze ultimele arhive de cunoștințe. Fiecare a contribuit cu un depozit și toate răspundeau împreună de colecție. Echipajul ținea registre de proveniență separate și cataloage comune. Modelul simbolizează răspunderea de a transporta cunoștințele altora până la următoarea predare în siguranță.",
+      "Jefuitorii de arhive au capturat nave Core Carrier în speranța că vor vinde cunoștințele transportate. Cheile de acces erau distribuite, așa că arhivele furate nu puteau fi folosite. Finanțatorii dezamăgiți s-au retras, iar modernizările costisitoare au devenit rare.",
+      "Navele de transport Advanced leagă depozitele de cunoștințe răspândite în colonii. Mai mulți custozi asistă la fiecare predare.",
+      "Versiunea Elite păzește memoria comună după ultima luptă cu un boss. Cea mai prețioasă încărcătură a ei este posibilitatea de a verifica independent istoria."
+    ]
+  }
+}

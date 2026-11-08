@@ -1,0 +1,378 @@
+{
+  "locale": "tr",
+  "sourceHash": "fa6d4efc4da8a285cc0f5bd832abb51ecd7b901bca9d4b331d612385bca0f1be",
+  "bosses": {
+    "1": [
+      "Spam yayıncısı",
+      "Varneth bir zamanlar Genesis kolonileri arasında ikmal kayıtları taşırdı. Terk edilmiş bir aktarma istasyonunun arkasında gözden kayboldu. Geri döndüğünde mürettebatın kimlik sinyali yoktu ve yük bölmeleri yayın odalarına dönüştürülmüştü.",
+      "Artık ticaret rotalarını değersiz işlemler ve sonu gelmeyen mesaj kopyalarıyla dolduruyor. Gerçek teslimatlar onay beklerken imdat çağrıları parazitte kayboluyor. Zırhlı gövdesi parazitin kaynağını koruyor. Varneth'i durdurmak, kolonilerin sesini yeniden duyurabileceği bir ağı ayağa kaldırmak demek."
+    ],
+    "2": [
+      "Maske taşıyıcısı",
+      "Korvessa, diplomatik kurye filosunda görev yaparken her sınır istasyonunun tanıma sinyalini öğrendi. Onu görevlendirenler ortadan kaybolunca kimlik bilgilerini gizli bir arşivde sakladı.",
+      "Korvessa artık her gelişinde güvenilir görünen başka bir isim kullanıyor. Sahte mesajlar ikmal gemilerini güvenli rotalardan uzaklaştırıyor ve düşman emirlerine yardım teklifi görünümü veriyor. Kibar çağrı işaretinin ardında bir savaş gemisi bekliyor. Korvessa’yı yenmek kolonilere, tanıdık bir sesin gönderenin dürüstlüğünü kanıtlamadığını hatırlatıyor."
+    ],
+    "3": [
+      "Mühür hırsızı",
+      "Drelvorn, eski filo komutanlarının mühürlerini saklayan seyyar bir kasaydı. Bir isyan sırasında güvenlik sistemi, meşru görevlilerin kasaya girişini kapattı ve onların erişim bilgilerini alıp uzaklaştı.",
+      "Şimdi çaldığı yetkiyi Gölge Filo’ya satıyor. Ele geçirilen mühürleri taşıyan mesajlar, kapalı kalması gereken kapıları açıyor. Zırhlı gövdesi, sahte emirlerin inandırıcılığını koruyor. Savunucular, kalan arşivler güvenilir emirlerle çalınmış kimlikleri birbirinden ayıramaz hâle gelmeden Drelvorn’u durdurmalı."
+    ],
+    "4": [
+      "Tarih kayıtları sahtekârı",
+      "Talvrek genç kolonilerin tarihini kaydetti. Arşivleri bir savaştan sağ çıktı, ancak yaratıcılarına sadakat etmedi. Yeni bir komutan, kronikçiyi icat edilmiş bir tarih tüccarı haline getirdi.",
+      "Talvrek sahte defterleri dolaşıma sokar ve meşru teslimatların asla gerçekleşmediği iddialarını iddia ediyor. Çelişkili girişler mülkiyet ve görevlerle ilgili anlaşmazlıklara neden olur. Silahları müfettişleri uzak tutuyor. Gemiyi durdurmak, tedarik yolunu ve işbirliğinin bağlı olduğu paylaşılan tarihi kayıtları korur."
+    ],
+    "5": [
+      "Düğüm kuşatmacısı",
+      "Zeraveth, aktarma istasyonlarının bütün halkalarını çevreleyebilecek büyüklükte bir onarım platformuydu. Gölge Filo kontrolü ele geçirince yanaşma yapılarını kuşatma mevzilerine dönüştürdü.",
+      "Zeraveth, önemli ağ istasyonlarını abluka altına alır ve bakım ekipleri için desteği keser. Küçük faylar büyük kesintiler haline gelir ve uzak koloniler sadece haber parçaları alır. Gemiyi uzaklaştırmak, teknisyenlerin geri dönmesini ve izole toplulukları yeniden bağlamasını sağlar. Bu abluka hikayenin bir parçası. Aşağıda listelenen ekipman oyundan geliyor."
+    ],
+    "6": [
+      "Yankı avcısı",
+      "Orvask bir zamanlar konvoylara eşlik eder ve her geçiş iznini kanıt olarak saklardı. Uzun zaman önce kaybolan kaptanların sesleri hâlâ belleğinde duruyor.",
+      "Gölge Filo eski ses kayıtlarını bir silaha dönüştürdü. Orvask eski emirleri yeniden yayınlayarak güncel talimatlar gibi gösteriyor. İstasyonlar gerçek ihtiyaçlarla tanıdık sesler arasında kalıyor. Gemi arşivi silah zoruyla koruyor. Yenilmesi, savunuculara süresi dolmuş emirleri ayıklamak ve yeni doğrulamalar istemek için zaman kazandıracak."
+    ],
+    "7": [
+      "Gölge köprü",
+      "Keldrava, iki uzak koloni arasında bir mobil transfer noktasıydı. Kalıcı bağlantıları başarısız olduğunda, dış dünyaya giden tek belirgin rotaları haline geldi. Çok az kişi mürettebatının değiştiğini fark etti.",
+      "Kargo şimdi geminin içinde kaybolurken, makbuzlar hala güvenli geçiş vaat ediyor. Keldrava, iki toplumun birbirine verdiği güveni istismar ediyor. Mürettebat gemide çalıntı malları saklıyor. Savunucuları, daha fazla koloni geleceklerini kargo bölmelerine emanet etmeden önce bu yanlış bağlantıyı kapatmalıdır."
+    ],
+    "8": [
+      "Söylenti yayıcı",
+      "Veshkorn bir zamanlar en uzak karakollara haber taşıdı. Arşivi hala barışçıl yayınlar açan müziği tutuyor. Şimdi aynı müzik, yanlış felaket raporlarını ve çökme uyarılarını da sunuyor.",
+      "Çelişkili uyarılar, tüccarların güvenli rotaları terk etmelerini ve kolonilerin ortaklarına güvenmememesini sağlar. Söylentilerin sürmesi gerekmez: bir diğeri zaten yolda. Veshkorn bir belirsizlik fabrikasını koruyor. Mağlubiyeti, bir sonraki üretilen paniğe karşı sonsuz bir yarış yerine doğrulanabilir bilgilere yer açar."
+    ],
+    "9": [
+      "Bakiye illüzyonisti",
+      "Neravoss bir ticaret fuarında bir sergi gemisiydi. Projektörleri gerçek kargo ve yeni motorlar gösterdi. Fuar başarısız olduğunda, sergi ekipmanı yeni sahiplerine geçti.",
+      "Neravoss şimdi sadece ekranlarında var olan malzemelerin reklamını yapıyor. Gerçek teslimatları çekmek için sahte hesap bakiyeleri ve sahte rezervler kullanır. Mürettebatı, malları incelemeye çalışan herkese ateş ediyor. Savunmacılar, daha fazla kargo gemisi kaybolmadan önce görüntülenen sayılar ile gerçek stok arasındaki farkı ortaya çıkarmak için takip ediyor."
+    ],
+    "10": [
+      "Geçiş vergisi tiranı",
+      "Thalverik, kristal kuşaktan dar bir geçişi korudu. Mütevazı navigasyon ücreti bir kez gerçek koruma için ödendi. Resmi filo çekildiğinde, gemi kendini tek yetki ilan etti.",
+      "Thalverik artık her mesaj ve teslimat için yeni bir ücret istiyor. Geçit kapalı kalırken kurtarma ekiplerine bile ödeme talebi geliyor. Ağ hâlâ çalışıyor, fakat ücretlerin baskısı altında. Gemi herkese açık rotayı bir tuzağa çevirdi. Yenilmesi, geçidi ona ihtiyaç duyan topluluklara geri verecek."
+    ],
+    "11": [
+      "Çok yüzlü",
+      "Skorveth, bir pilot okulun simülasyon sistemlerini barındırıyordu. Binlerce sanal öğrenci birlikte gezinmeyi öğrendi. Düşmanca bir güç gemiyi ele geçirdikten sonra, birçok bağımsız insanı taklit etmek için eğitim profillerini kullandı.",
+      "Sahte katılımcılar birbirlerini destekler ve neredeyse herkesin kabul ettiği izlenimini yaratırlar. Küçük kolonilere komşularının zaten gölge filosuna katıldığı söyleniyor. Bütün bu sesler bir gemiden geliyor. Skorveth'i yok etmek sahte çoğunluğu ortaya çıkarır ve sakinlere tekrar kendileri için konuşma şansı verir."
+    ],
+    "12": [
+      "Rota zehirleyicisi",
+      "Azhrel, ilk atlama rotalarını bulutsu sınırından geçirdi. Grafikler sayısız konvoyu kurtardı. Düşman komutanlar gemiyi ele geçirdi ve bu güvenilir haritaları ikna edici tuzaklar kurmak için kullandılar.",
+      "Azhrel yanlış rotalar yayınlar ve düşmanın kontrol ettiği iletişim istasyonları aracılığıyla mesajları yönlendirir. Acil durum çağrıları varış yerlerine geç ulaşır veya boş alana kaybolur. Gemi sahte rotaların kavşağına karşı koruma sağlar. Onu durdurmak, zaten işbirliği yapmak isteyen dünyalar arasında güvenli bir rotayı restore eder."
+    ],
+    "13": [
+      "Arşiv kundakçısı",
+      "Dornavik, enkazları yakmaktan hasarlı veri depolama cihazlarını kurtardı. Yalıtılmış odaları, etraflarındaki sistemler başarısız olduğunda kayıtları korudu. Gölge filosu, bu geminin başkalarının ulaşamadığı arşivlere ulaşabileceğini gördü.",
+      "Dornavik kayıtları kurtarmayı teklif ediyor ve hasarlı kopyaları geride bırakıyor. Koloniler verilerini kaybeder ve kanıtların ne kadar kaybolduğunun duyulması gerekir. Zırhı, yakaladığı son sağlam kayıtları korur. Savunmacılar kalan kayıtları eve getirmek için savaşıyorlar."
+    ],
+    "14": [
+      "Blok alıkoyan",
+      "Velkrath, muazzam mesafelerde yeni defter blokları taşıyan bir araştırma konvoyu yönetdi. Mühürlü kapları değişmeyen her kaydı korudu. Mevcut komutanı, bilgiyi kasıtlı olarak saklamak için aynı konteynerleri kullanır.",
+      "Outpostlar bayat görünümlerden çalışırken, seçilen güncellemeler sadece karışıklığa neden olabilecekleri zaman gelir. Yaygın bir zaman çizelgesi, bugünün rakip versiyonlarına kırılır. Velkrath arşivlerini rehineler gibi koruyor. Savunmacılar, gecikme kalıcı bölünmeye sertleşmeden önce backlog'u sona erdirmelidir."
+    ],
+    "15": [
+      "Saat düzenbazı",
+      "Irdavoss bir zamanlar sınır istasyonlarının saatlerini aynı zamana ayarladı. Tam filolar, manevralarını zamanlamak için kesin yayınlarını kullandı. Yeni bir komutan bir duyuru yapmadan devraldı. Sinyaller açık kaldı ama verdikleri süre yanlıştı.",
+      "Yanlış zaman damgaları zamanında gönderilen mesajları geç gösterir. İstasyonların planlanan bakım periyotları artık sıraya girmiyor. Sahte zamanlar ikna edicidir, bu da onları tehlikeli kılar. Irdavoss'u durdurmak, kolonilerin bağımsız saatleri karşılaştırmasını ve olayların gerçek düzenini geri kazanmasını sağlar."
+    ],
+    "16": [
+      "Anahtar gardiyanı",
+      "Rhazvorn bağımsız olarak mühürlenmiş hücrelerle bir hapishane taşımacılığı olarak başladı. Gölge filosu mahkumlarını çıkardı ve bu odaları ele geçirilen arşivlerle doldurdu. Gözaltına alınan bir gemi bir gasp gemisi haline geldi.",
+      "Rhazvorn, diğer toplulukların kayıtlarını kilitler ve iade etme karşılığında tavizler talep ediyor. Klinikler ve tedarik depoları, ekipmanları hala çalışırken bile baskı altına giriyor. Gemi mühürlü hücreleri zorla savunur. Bunu yenmek, topluluklara kayıtlarını kurtarmanın bir yolunu sunar."
+    ],
+    "17": [
+      "Kâhin aldatıcısı",
+      "Kelvash, meteoroloji şamandıralarından ve kaynak sondalarından ölçümler toplardı. Birçok istasyon günlük kararlarını bu raporlara dayanarak verirdi. Düşman gemiyi ele geçirince eski kimlik kodunu ve alışılmış yayın saatlerini korudu.",
+      "Bugün hayali stokları ve yanlış çevresel koşulları rapor ediyor. Otomatik süreçler, gerçek kaynakları icat edilmiş bir dünyaya yanıt olarak taşır. Kelvash bu yalanların kaynağını koruyor. Savunmacılar, daha fazla hayat hiç alınmayan ölçümlere bağlı olmadan önce susturmalıdır."
+    ],
+    "18": [
+      "Çatalların efendisi",
+      "Othravel, bir savaştan sonra ortak kurallar üzerinde anlaşmaya çalışan koloniler için inşa edildi. Konferans güvertesi bir zamanlar tüm partileri karşıladı. Şimdi sadece gölge filosundan gelen elçiler orada buluşuyor.",
+      "Othravel, aynı defterin çelişkili versiyonlarını dağıtır. Her istasyona kendi kopyasının tek geçerli olduğunu söyler. Barışı isteyen topluluklar birbirlerine güvensizlik yaratmaya başlar. Othral bu yapay bölünmeyi canlı tutar. Bunu yenmek, toplulukların kayıtlarını karşılaştırmalarını ve başka bir savaş başlamadan önce anlaşmazlıkları çözmelerini sağlar."
+    ],
+    "19": [
+      "Sahte kurtarıcı",
+      "Zarnvek, altın sinyal patlamasıyla bilinen bir kurtarma gemisiydi. Yedek parça, barınak ve eve dönüş yolu getirdi. Düşman filosu gemiyi ve ayırt edici işaret fişeğini ele geçirdi.",
+      "Zarnvek yardım teklif ediyor, ancak karşılığında gizli geçiş izinlerinin açıklanmasını istiyor. Yanıt verenleri güvenli bir sığınak yerine gözetim altındaki bir yanaşma bölmesi bekliyor. Gemi umudu yem, zırhı güvence olarak kullanıyor. Savunucular, kolonilerin gerçek yardıma duyduğu güveni koruyarak sahte kurtarıcıyı ortaya çıkarmalı."
+    ],
+    "20": [
+      "Kuyruk yağmacısı",
+      "Vorathen, büyük bir ticaret limanına gemi varışlarını yönetmiştir. Komuta güvertesi binlerce yaklaşımı koordine edebilir ve her gemiyi hesaplayabilir. Liman düştüğünde, Vorathen planlama kayıtlarıyla kaçtı.",
+      "Vorathen şimdi müttefik kargo gemilerini ilk sıraya koyma taleplerini yeniden düzenliyor. Dürüst tüccarlar gölge filosu yerlerini alırken beklerler. Kuyruktaki küçük değişikliklerin büyük sonuçları var. Gemiyi yenmek, erişimin gizli olarak satıldığı bir süre sonra herkesin doğrulayabileceği bir emri geri yükler."
+    ],
+    "21": [
+      "Toz saçan",
+      "Drazkell navigasyon şamandıralarına az miktarda güç verdi. Kargo bölmeleri milyonlarca minik transferle işleyebilir. Düşman komutanları, dikkat çekmeden insanları izlemek için sistemi uyarladı.",
+      "Drazkell, kimsenin talep ettiği küçük paketleri gönderir ve hangi istasyonların yanıt verdiğini izler. Görünüşuk önemsiz temasları özel ilişkilerin haritalarına dönüştürür ve bu bilgileri silahlarıyla korur. Defansçiler, gölge filosu tüm kolonilerin günlük hareketleri hakkında bilgi satmaya başlamadan önce onu ele geçirmelidir."
+    ],
+    "22": [
+      "Sahte muhafız",
+      "Nethrava, saygın bir filo vasisinin işaretini taşıdı. Bu örgüt dağıldıktan sonra, son görünür temsilcisi olarak kaldı. Çok az kişi tanıdık siluetin şimdi başka bir nedene hizmet ettiğini hayal etti.",
+      "Sahte denetimleri başarılı ilan eder ve güvensiz karşı taraflara resmi onayın ortaya çıkmasını sağlar. Koloniler, teslimatlar kaybolana kadar pullarına güveniyor. Savunmacılar saygıdeğer adının arkasındaki aldatmayı ortaya çıkarmalıdır: güvenin doğrulanabilir bir sorumluluğa ihtiyacı var, sadece zırhlı bir gövdede eski bir amblem değil."
+    ],
+    "23": [
+      "Hafıza boşaltan",
+      "Valdrek aşırı dolu arşivlerin bakımını yapardı. Yalnızca aynı olduğu doğrulanan kopyaları siler ve yaptığı işlemleri ayrıntılı biçimde kaydederdi. Gölge Filo önce bu kayıtları sildi, ardından geminin görevini değiştirdi.",
+      "Valdrek şimdi gerekli kanıtları atılabilir kayıtlar olarak sınıflandırıyor. Ayrıldıktan sonra, tedarik geçmişleri, mülkiyet kayıtları ve önceki saldırıların izleri eksik. Ne kadar gittiğini keşfetmek zaman alır. Gemi arşiv araçlarını silaha çevirdi. Durdurmak daha sessiz kayıpları önler."
+    ],
+    "24": [
+      "Ayna pazarı",
+      "Korzeth birçok dünyadan tüccarlar için uçan bir pazardı. Ekran pencereleri, liman uyurken bile yoğun ticaret gösterdi. Şimdi tekliflerinin çoğu tek bir gizli kontrol odasından geliyor.",
+      "Korzeth, değersiz kargoların arzu edilir görünmesini sağlamak için sahte tüccarlar arasındaki anlaşmalar. Koloniler, sahnelenen anlaşmaları gerçek taleple karıştırır. Silahları müfettişleri boş depolardan uzak tutuyor. Savunmacılar, daha fazla gerçek arz işlemden önce sahte piyasayı ortaya çıkarmalıdır."
+    ],
+    "25": [
+      "Onay hırsızı",
+      "Thervoss, diğer yıldızlardan teslimat alan istasyonları korurdu. Işıkları kaptanlara kargolarının güvenli bir şekilde geldiğini söyledi. Şimdi kimse rısh kapılarının arkasından kimse beklerken bile ışıklar parlıyor.",
+      "Thervoss sahte teslim makbuzları gönderiyor ve tamamlanmamış sevkiyatları bitmiş gibi gösteriyor. Yük gemileri geri dönerken hedef koloniler boşuna bekliyor. Zırhı, yeni bir yükü ele geçirene kadar aldatmacayı sürdürebilmesini sağlıyor. Onu durdurmak, teslim onaylarının yeniden gerçekten ulaşan yükleri göstermesini sağlayacak."
+    ],
+    "26": [
+      "Sis yargıcı",
+      "Akraveth, uzak ticaret merkezleri arasındaki anlaşmazlıkları çözdü. Yargıçları kanıtları karşılaştırmak ve adil kararlar almak için kullanılırdı. Gölge filosu onları sonucu önceden karar veren bir sistemle değiştirdi.",
+      "Akraveth geçerli kayıtları reddeder ve her zaman aynı gizli sponsorları tercih eder. Ağın düşmanı olan herkese bir düşman diyor. Hikayede, gemi korkutma kullanır ve düzeni zorlar gibi davranır. Savunmacılar, amacını gizlemek için yasal dili kullanan bir makineyle savaşır."
+    ],
+    "27": [
+      "Tedarik zinciri solucanı",
+      "Zelkharn, yerleşik tersanelerden uzak kargo gemilerini onardı. Ekipler yedek parçalarına güvendi ve tereddüt etmeden kurdu. Düşman gemiyi ele geçirdikten sonra parçalar farklı bir tedarikçiden geldi. Hataları hemen ortaya çıkmadı.",
+      "Diğer gemileri gölge filosuna bağımlı hale getirmek için değiştirilmiş bakım paketlerini dağıtır. Başarısızlıklar genellikle sadece bir sonraki atlayıştan sonra ortaya çıkar. Zelkharn bu sürünen sabotajın kaynağını koruyor. Onu yenmek, her iyi niyetli onarımın başka bir kurban yaratabileceği bir zinciri kırar."
+    ],
+    "28": [
+      "Boş yedek satıcısı",
+      "Odravik eski koloni arşivlerini koruma konusunda uzmanlaşmıştı. Devasa depolama sistemi her felakete karşı güvence vaat ediyordu. Bir istasyon kayıtlarını geri istediğinde, birçok yedek kopyanın aslında yalnızca dizin kaydından ibaret olduğu anlaşıldı.",
+      "Sorumluluğu arkasına taşımadan güvenliği satar. Müşteriler hiçbir yere varmayan kurtarma yollarına güveniyor. Odravik'in silahları bu karlı sırrı koruyor. Savunmacılar, başka bir kayıp eksik bir yedeklemesi geri kazanılamaz bir tarih parçasına dönüştürmeden önce ortaya çıkarmalıdır."
+    ],
+    "29": [
+      "Sessizlik filtresi",
+      "Varnokh, yoğun liman radyo kanallarından müdahaleyi giderirdi. Filtreleri acil durum çağrılarını duymayı kolaylaştırdı. Gölge filosu, müdahale olarak ele alınan seslerin listesini değiştirdi.",
+      "Dürüst müfettişlerin uyarıları ve düşmanca baskınların raporları şimdi ortadan kalkıyor. Sektör sadece barışçıl görünüyor çünkü kimse neyin yanlış gittiğini duyamıyor. Varnokh bu yapay sessizliği savunuyor. Bunu durdurmak, ağın başarısızlık raporlarını duymasına ve birlikte onarmaya başlamasını sağlar."
+    ],
+    "30": [
+      "Kimlik mezatçısı",
+      "Kezravel, seyahat eden bir koloni filosunun yerleşim yerlerini kaydetti. Arşivleri her yeni yerleşimin tarihini kaydetti. Yerleşimciler dağıldığında gemiye emanet ettikleri kişisel veriler düşmanca ellere düştü.",
+      "Kezravel çalıntı kimlik verilerini satıyor ve yabancıların dürüst sakinlerin isimleri altında hareket etmelerini sağlar. Alıcılar kurbanların ilişkilerini kapak olarak kullanırlar. Gemi kişisel geçmişlerini satıyor ve silahlarını açık artırmalardan uzak tutmak için kullanıyor. Bunu yenmek, sahiplerinin kayıtlarını geri kazanmalarını ve kendi geçmişleri üzerinde kontrole yeniden kavuşmasını sağlar."
+    ],
+    "31": [
+      "Aktarıcı illüzyonisti",
+      "Dravosk uzak bölgelerdeki başarısız iletişim istasyonlarını değiştirdi. Antenler, hiç kimsenin kalmadığı yerlerde bir bağlantı sundu. Hala sinyalleri kabul ediyor, ancak şimdi onları sponsorlarının çıkarlarına göre ilet.",
+      "Bazı mesajlar değişir; diğerleri güven verici kabuller arasında kaybolur. Katılımcılar gerçekten bir kapı bekçisinin olduğu bir köprü görüyorlar. Dravosk bu görünmez kontrol noktasını görünür güçle savunur. Yenilgisi, kolonilere bağımsız rotalar boyunca bağlantılarını tekrar kontrol etme şansı verir."
+    ],
+    "32": [
+      "Sürü toplayıcısı",
+      "Thalzek hasarlı bakım dronlarını aldı ve istasyonlarına geri verdi. En küçük drone bile geniş gövdesinin altında barınabilir. Gemi dönüştürüldükten sonra İHA'ları iade etmeyi bıraktı.",
+      "Oyunun hikâyesinde Thalzek, dronları uzaktan kumandalı vericilere dönüştürür. Aynı anda gelen istekler bölgelerin tamamını aşırı yükler. Sahipleri kendi makinelerini tanımakta zorlanır. Thalzek'in yok edilmesi, hikâyedeki sürünün komuta merkezini kapatır. Ayrı donanım listesinde oyunda takılı olan silahlar gösterilir."
+    ],
+    "33": [
+      "Sözleşme tuzağı",
+      "Orvethra, kolonilerin uzun vadeli tedarikler düzenlediği bir mobil ticaret ofisiydi. Danışmanları zor zamanlarda kolay kurallar vaat etti. Şimdi uygun anlaşmalar, alıcıların sadece daha sonra keşfettiği yükümlülükleri gizlemek.",
+      "İstasyonları gölge filosuna bağlayan aldatıcı teklifler yayar. İşbirliği bağımlı hale gelirken, zırhı tam olarak anlaşılmayan vaatlerin arşivini korur. Savunucuları Orvethra'ya karşı çıkıyor, böylece gelecekteki ittifaklar gizli tuzaklardan ziyade net koşullara dayanabilir."
+    ],
+    "34": [
+      "Sağlama toplamı sahtekârı",
+      "Kelzorn, terk edilmiş araştırma istasyonlarında hasarlı kabartma veri modellerini onarırdı. Aletleri, eksik parçaları olan bir yüzeyi bile bütün gösterebiliyordu. Yeni mürettebat bu beceriyi güvenilmez arşivlere inandırıcı bir görünüm vermek için kullandı.",
+      "İcat edilmiş denetim sonuçlarını ve bağımsız kontrollerin bulunmadığı cazip güvenlik mühürleri görüntüler. Sahtecilik, iddia edilen kesinliğin içinde yatmaktadır. Kelzorn, araştırmacıları silahlarıyla uzak tutar. Yenilgi, sahiplerinin en çok korktuğu şeyi ortaya koyuyor: güven verici bir yüzeyin arkasında ikinci, bağımsız bir bakış."
+    ],
+    "35": [
+      "Sahte rezerv satıcısı",
+      "Vashravel, sınır kolonileri için acil durum rezervlerini depoladı. Adı, en kötü kışta hala mevcut olan malzemeler anlamına geliyordu. Yeni bir yönetim, aynı stokta daha fazla topluluk iddiası verdi.",
+      "Vashravel, malzemelerinin destekleyebileceğinden daha fazla topluluğa koruma sözü veriyor. Parlak gövdesi boş depoları gizleir. Silahları, toplulukların stokları birlikte kontrol etmesini engelliyor. Savunucuları, koloniler son sandıklar için savaşmaya başlamadan önce müdahale etmelidir."
+    ],
+    "36": [
+      "Sınır engelleyicisi",
+      "Zorveth, iki bağımsız kayıt arasındaki değişimleri denetledi. Görevi, dürüst transferleri her iki tarafta da izlenebilir hale getirmek oldu. Şimdi sadece kendi filosu için yararlı olan kanıtları kabul ediyor.",
+      "Teslimatlar limboda kalırken, her topluluk diğerinin onları sakladığına inanır. Zorveth bu yanlış anlaşılmadan güç alır. Gövdesi görünmez bir anlaşmazlığın görünür sınırıdır. Savunmacılar, bir koloniyi diğerine çevirmeden geçişi açmalıdır."
+    ],
+    "37": [
+      "Kopyaların prensi",
+      "Drelkash, okullar ve navigasyoncular için açıkça işaretlenmiş kopyalar yaparak nadir yıldız grafiklerini korudu. Atölyeler insanların bilgiyi paylaşmalarına yardımcı oldu. Şimdi mürettebat etiketleri kaldırıyor ve her bir kopyayı benzersiz bir orijinal olarak satıyor.",
+      "Koloniler çelişkili sahiplik iddiaları yüzünden tartışırken Drelkash bir sonraki pazara gidiyor. Sahtecilik, yıldız haritalarının gerçek kaynağını gizliyor. Gemi, seyyar sahtecilik atölyesini silah zoruyla savunuyor. Yenilmesi, kayıtların gerçek geçmişleriyle yeniden ilişkilendirilmesini sağlar."
+    ],
+    "38": [
+      "Kuyruk yiyen",
+      "Nerthavel muazzam tedarik merkezleri için talepleri yönetmiştir. Depolama, bekleyen taleplerin günlerini tutabilir. Gölge filosu bu kapasiteyi meşru talepleri süresiz olarak geri almak için kullandı.",
+      "Nerthavel, acil sevkiyatların önüne işe yaramaz girişler koyar. Sistem önemli talepleri tamamlamadan meşguldür. Dışarıdan, normal şekilde çalışıyor gibi görünüyor. Gemi bu durağanlığı koruyor. Onu yenmek, kolonilere hem kapasitelerini hem de onlardan aldığı süreyi geri verir."
+    ],
+    "39": [
+      "Delil çarpıtıcısı",
+      "Rhazkora kazaları araştıran uçan bir laboratuvardı. Raporlar, ekiplerin başarısızlıkları anlamalarına ve yeni kayıpları önlemelerine yardımcı oldu. Gemi yakalandıktan sonra, enstrümanlar aynı kaldı, ancak raporlar farklı sponsorlara hizmet etti.",
+      "Kanıtları bağlamdan ayırır ve kurbanlar saldırganlara benzeyene kadar parçaları yeniden düzenler. Gerçek suçlular çerçevenin ötesinde kalırlar. Zırhı özenle inşa edilmiş bir yalanı korur. Rhazkora durdurmak, belirleyici parçaların kaldırıldığı hikayeler yerine tam kanıtlara yer açar."
+    ],
+    "40": [
+      "Sandık bekçisi",
+      "Velzhar, uzak konsey istasyonları arasında mühürlü oy pusulaları taşıdı. Tarafsız rotası anlaşmaların bir parçasıydı. Şimdi zamanında seçilen limanlara ulaşıyor ve kararlar alındıktan sonra diğer limanlara geliyor.",
+      "Velzhar, belirli kolonileri dışarıda bırakarak kimin katılabileceğini kontrol eder. Sonuçlar hala düzgün bir şekilde kaydediliyor, bu yüzden eksik sesleri görmek zor. Silahları bu seçici programı korur. Savunmacılar, tüm kolonilere ortak geleceklerinde söz hakkı vermek için savaşıyorlar."
+    ],
+    "41": [
+      "Erişim sabotajcısı",
+      "Korthaven, birçok sektörde arşivleri erişilebilir tutan büyük bir gemiydi. Mürettebatı, istenen herhangi bir kopyasını teslim edeceğine söz verdi. Gölge filosu, kopyaları tedarik etmeyi reddederek güç kazanabileceğini fark etti.",
+      "Korthaven, kayıtların var olduğunu ancak içeriğini paylaşmayı reddettiğini doğruluyor. Müfettişler, birinin bir iddiada bulunmadığını, ancak kanıtları inceleyemeyeceğini görebilirler. Gemi erişim görünümü sunuyor. Bunu yenmek, insanların kayıtları okumasına ve defterdeki vaatleri doğrulamasına olanak tanır."
+    ],
+    "42": [
+      "Sahte arama kurtarma gemisi",
+      "Azravel, az sayıda kurtarıcının ziyaret edilen yerlerde kayıp koloni sondalarını aradı. Bir zamanlar unutulmuş istasyonlara yardım getirdi. Şimdi sadece verilerini veya erişimini kaybeden istasyonları hedef alıyor.",
+      "Daha fazla gizli bilgi talep ederken kurtarma sözü veriyor ve bir kaybı yeni bir zincire dönüştürüyor. Dostça çağrı işareti, silahlı silueti ile tezat oluşturuyor. Azravel durdurulmalı, böylece çaresizlik artık efendileri tarafından işlem görene dönüşmeyen en değerli kaynak haline getirilmez."
+    ],
+    "43": [
+      "Denetim saptırıcısı",
+      "Threvask, bağımsız denetim gemilerini koordine etmek ve onlara güvenli yaklaşımlar vermek için kullanılır. Durum haritaları hassasiyetle biliniyordu. Düşman onu ele geçirdikten sonra Threvask, aynı müfettişleri dikkatlice sahnelenmiş görüntülere göndermeye başladı.",
+      "Threvask müfettişleri savunmasız ağ düğümlerinden uzaklaştırırken ve lekesiz görünmek için yapılmış siteleri gösterir. Raporlar güven verici olmaya devam ederken, hasar başka yerlerde de artıyor. Silahları, düzenin yanlış görünümünü korur. Savunmacılar, müfettişleri gizlemek için en çok çaba gösterdiği hasara yönlendirmelidir."
+    ],
+    "44": [
+      "Anı avcısı",
+      "Dorzheva, hurdaya dönen kargo gemilerinden kişisel kütükler kurtardı ve onları sahiplerinin ailelerine iade etti. Kargo bölmeleri birçok küçük, değerli kişisel tarihi barındırıyordu. Yeni komuta altında, gemi belirli insanları aldatmak için bu anıları kullanmaya başladı.",
+      "Dorzheva, tanıdık detaylardan ikna edici mesajlar oluşturur. Kurbanlara hayatları hakkında bildiklerini kullanarak yaklaşır. Tehlike, taklit ettiği yakınlık duygusundan geliyor. Başkalarından aldığı kişisel detayların bir koleksiyonuna dikkat çekiyor. Bunu yenmek, bu ayrıntıların sahiplerine karşı kullanılmasını engeller."
+    ],
+    "45": [
+      "Acil durum gaspçısı",
+      "Vezrakh, merkez komutanlık istasyonları başarısız olduğunda yardım etmek için inşa edildi. Acil durum yetkileri kaotik durumlarda hızlı kararlara izin verdi. Gölge filosu, bu acil durumların kendisini ilan etmek için gemiyi eğittti.",
+      "Vezrakh yanlış kriz raporlarını yayıyor ve derhal kontrol devri talep ediyor. Soruları tehlikeli gecikmeler olarak ele alır. İtici gövdesi yanlış aciliyeti inandırıcı kılar. Savunucuları, kurgusal bir çöküş korkusu kolonilerin bağımsızlıklarını teslim etmelerini sağlamadan önce bunu durdurmalı."
+    ],
+    "46": [
+      "Güven haritacısı",
+      "Orzhaven, yardım grupları ve tedarik istasyonları arasındaki bağlantıların haritalarını çizdi. Bu haritalar bir zamanlar işbirliğini kolaylaştırdı. Şimdi aynı bağlantılar, bir ihanetin en çok zarar vereceği yeri ortaya koyuyor.",
+      "En güçlü istasyonu değil, herkesin güvendiği bağlantıyı arar. Yanlış tavsiyeler, düşmanca ortakları ağın merkezinde yerleştiriyor. Silahları bir güven haritasını korur. Savunmacılar, yardımsever bir köprü ortak bir başarısızlık noktası haline gelmeden önce Orzhaven'ı takip ediyor."
+    ],
+    "47": [
+      "Uzlaşı kuşatmacısı",
+      "Keldroth, rakip kolonilerin anlaşmazlıkları çözen bir konsey gemisiydi. Odaları, insanların farklılıklarını sabırla tartışmalarına izin vermek için tasarlandı. Gölge filosunun altında, aynı odalar birbirleriyle çelişen talepler üretti.",
+      "Yeni itirazlarla anlaşmaları engeller ve her bir tarafa farklı sözde koşullar verir. Koloniler tartışırken, düşman gemiler rotalarını işgal ediyor. Keldroth, birlikte hareket etme yeteneğine saldırıyor. Yenilgisi, gerçek farklılıkları herhangi bir çözünürlüğü önlemek için üretilen engellerden ayırmak için zaman sağlar."
+    ],
+    "48": [
+      "Köken silici",
+      "Zhavrek, en eski koloni gemilerinin nereden geldiğini gösteren kayıtlar tuttu. Arşivleri unutulmuş tersaneleri bile tanımlayabilir. Şimdi, çalınan kargoların yasal olarak edinilmiş gibi gemilerin ve malların kaydedilen kökenlerini değiştiriyor.",
+      "Sahte kaynak kayıtlarının her biri, Gölge Filo'nun başka bir sevkiyatını gizliyor. Suçlular ad değiştirirken dürüst tüccarlar şüphe altında kalıyor. Zırh, elde kalan özgün kayıtları koruyor. Savunucular, filoların kökenini doğrulamak hâlâ mümkünken arşivi güvenceye almalı."
+    ],
+    "49": [
+      "Son tecritçi",
+      "Vorthaz, uzun bir savaştan sonra dışarıyla yeniden iletişim kurmak isteyen bir sığınağı koruyordu. İlk görevi tehlikeli bağlantıları engellemekti. Gölge Filo bu görevi çarpıttı ve tanıdık olmayan her sesi tehdit saymaya başladı.",
+      "Vorthaz kolonileri izole eder ve onlara sadece düşmandan seçilmiş mesajlar gösterir. Karşılaştırılacak bağımsız kaynaklar olmadan, sakinler dış dünyanın icat edilmiş resmine inanıyorlar. Gemi bu bilgi hapishanesini koruyor. Bunu yenmek, sakinlere ağı kendileri için keşfetme özgürlüğü verir."
+    ],
+    "50": [
+      "Sahte gerçeklerin efendisi",
+      "Drazevorn, terk edilmiş komuta köprülerinden bir araya getirildi. Arşivi, çalınmış kimliklerden sahte tarih kayıtlarına ve mühürlenmiş kanıtlara kadar önceki düşmanların hilelerini birleştiriyor. Gerçeğin ne olduğuna tek bir sesin karar verdiği düzeni temsil ediyor.",
+      "Drazevorn her özgür ağ düğümünü düşmanın denetimindeki tek bir sicile bağlamak istiyor. Kimse bağımsız olarak doğrulayamadığı sürece eski kayıtları olduğu yerde bırakabilir. Yenilgisi bu denetimi sona erdirir. Zafer, kayıtları tekrar karşılaştırabilen, görüş ayrılıklarını dile getirebilen ve kime güveneceklerine birlikte karar verebilenlerin olur."
+    ]
+  },
+  "ships": {
+    "grey-scout": [
+      "Grey Scout, dış aktarma istasyonları arızalandıktan sonra sökülüp kurtarılan parçalarla ayakta kalan bir atölyede ortaya çıktı. İlk pilotları kayıp haberleşme şamandıralarını aradı. Geri getirilen her kayıt bir aileyi yeniden kolonisine bağladı. Bu mütevazı gövde, küçük ama kararlı çabaların ağı ayağa kaldırabileceğini hatırlatıyordu.",
+      "Aktarma istasyonları çevresinde pusu kuran korsanlar, kurtarma deposuna düzenledikleri baskında birkaç Grey Scout ele geçirdi. Kısıtlı ganimet yakıt ve onarıma gitti. Yükseltmelere neredeyse hiçbir şey kalmadı. Bugün pilotlar zaman zaman aynı gemi ailesinden düşman araçlarıyla karşılaşıyor.",
+      "Advanced filosu, aktarma istasyonlarının çekişme konusu olduğu bölgelerden mesajları geri getirir. Pilotları ilk arama ekiplerinin çağrı işaretlerini korur.",
+      "Elite sürümü, tehdit altındaki bir sektörün son çalışan bağlantısını korur. Arşivinde kayıp kuryelerin tümünün adı sembolik olarak yer alır."
+    ],
+    "nova-wing": [
+      "Nova Wing, novanın ışıklı sınırının ötesine yapılacak ilk sefer için tasarlandı. Tersane, herkesin güvenle yol alabilmesi için planları uzak kolonilerle paylaştı. Pilotlar ilk dönüşü hâlâ anlatır. Gemi hasarlıydı, yıldız haritaları sağlamdı ve gökyüzü yeni olanaklar sunuyordu.",
+      "Borç içindeki bir haritacılık şirketi, hizmetten çekilmiş Nova Wing gemilerini düşman adına paravan olarak çalışan bir tüccara sattı. Finansörlerin bütçesi gövdelere ve az sayıda yeni silaha yetti. Gemilerin çoğu ilk donanımıyla kaldı.",
+      "Advanced pilotları yıldız haritalarını ileriye taşıyan kuryeleri korur. Armalarında haritaya işlenen ilk yıldız vardır.",
+      "Elite keşif ekibi sahte yıldız haritalarının kaynağını araştırır. İlk kâşiflerin görevini sürdürür."
+    ],
+    "solar-lance": [
+      "Solar Lance, sönmekte olan bir yıldızdan enerji çeken bir istasyonda doğdu. Son enerji toplama halkası boşaltılırken bu gemiler kurtarma yük gemilerine enkazın arasından geçerken eşlik etti. Uzun siluetleri yeni ana limandaki anıtlara işlendi. Bu tasarım, arkada bir dünya sönerken bile rotayı korumayı simgeliyor.",
+      "Bir tahliye üssü düşünce düşman mürettebatı terk edilmiş Solar Lance gemilerine el koydu. İkmal bütçesinin büyük kısmı komutanların kaçış yollarına ayrıldı. Ele geçirilen gemiler çoğunlukla geçici onarımlarla uçuruldu.",
+      "Advanced devriyesi, yer değiştiren kolonilere erzak ulaştırır. Her gemi eski bir tahliye kodu taşır.",
+      "Elite filoları yeni güneş enerjisi depolarını Gölge Filo’ya karşı savunur. Sığınmacıların yanlarında getirmeyi başardıkları ışığı korurlar."
+    ],
+    "dark-delta": [
+      "Dark Delta sessiz görevler için tasarlandı. İlk görevi, haber alınamayan karakollarda sağ kalanları aramaktı. Mürettebat kurtarılan kolonistlerin mahremiyetini koruduğu için ilk seyir defterlerinde isimden çok koordinat vardır. Bu seçim bir geleneğe dönüştü. Görevin başarısını sağ salim dönenler belirler.",
+      "Rüşvet alan bir aracı, Dark Delta sevkiyatını Gölge Filo’ya yönlendirdi. İhanetin bedeli ödendikten sonra filo yedek parçaları bile güçlükle karşılayabildi. Çalınan gemilerden çok azı daha iyi donanım aldı.",
+      "Advanced sürümü, tehlike altındaki arşivcilere kaçış rotalarında eşlik eder. Görev raporları ancak arşivciler güvenle varış noktasına ulaştığında açılır.",
+      "Elite pilotları, ifadeleri bütün kolonileri barıştırabilecek tanıkları güvenli yere götürür. Ketumluklarıyla tanınırlar."
+    ],
+    "gold-streak": [
+      "Gold Streak, ticaret uyduları arasındaki yarışlarda ortaya çıktı. Bir ikmal krizinde pilotları, rotaları iyi bildikleri için kapalı limanları dolaşarak hasta kayıtlarını ulaştırdı. Yarış ligi zamanla bir kurye birliğine dönüştü. Altın renkli işaretler, ilk kuryelere uydular arasında yol gösteren ince güneş ışığını anımsatıyor.",
+      "Düşman çeteler terk edilmiş bir yarış uydusunda Gold Streak gemilerine el koydu. Ödül parası bekliyorlardı, ama yarışlar çok önce sona ermişti. O gelir olmayınca yeni ele geçirdikleri filoyu nadiren yenileyebildiler.",
+      "Advanced kuryeleri, doğrulanmış yardım taahhütlerini klinikler arasında taşır. Eski yarış numaraları, ortak geçmişlerini hatırlatır.",
+      "Elite birliği, sektörün hayati kurtarma konvoylarını korur. En büyük onuru bir mürettebatı eksiksiz eve döndürmektir."
+    ],
+    "iron-guard": [
+      "Iron Guard, yurtlarını bizzat savunmak isteyen tersane işçileri tarafından tasarlandı. İlk gövde hizmetten çekilmiş yük vinçlerinin parçalarından yapıldı. Omurgaya, vardiyalarından sonra gemide çalışanların adları işlendi. Bu seri, bir yeri savunmanın ortak emekle inşa edilene sahip çıkmak anlamına da geldiğini hatırlatıyor.",
+      "Saldırganlar bir tersaneyi işgal edince kalan işçileri eski Iron Guard gemilerini onarmaya zorladı. Yeni silah alacak paraları ve bu silahları sağlayacak tedarikçileri yoktu. Çalınan gemilerin çoğu ilk donanımını korudu.",
+      "Advanced devriyesi, seyyar tamir doklarına eşlik eder. Mürettebatı liman halkasındaki bütün acil sığınakları bilir.",
+      "Elite gemileri yıkılmış istasyonlar yeniden kurulurken onları korur. Nişanları, güvenliğe ulaştırılan tersane ekiplerini onurlandırır."
+    ],
+    "vector": [
+      "Vector, seyir uzmanları arasındaki bir anlaşmazlıktan doğdu. Bir grup kusursuz bir rotaya güveniyor, diğeri bağımsız ölçümleri karşılaştırmayı savunuyordu. İkinci grup bu gemiyi inşa edip haritası çıkarılmamış bir enkaz halkasını geçti. Dönüşleri işbirliğinin değerini gösterdi. Sağ kalan haritalarda farklı ölçümler yer alır, böylece sonraki pilotlar ortak rotanın nasıl bulunduğunu anlayabilir.",
+      "Sahte yük sözleşmeleriyle bazı Vector gemileri düşmanlara devredildi. Dolandırıcılık açığa çıkınca finansman kesildi. Yedek bütçe gemileri uçurmaya ve birkaç yükseltme yapmaya yetti.",
+      "Advanced filoları yeniden açılan ticaret yollarını denetler. Her rotada birden çok seyir uzmanının imzası vardır.",
+      "Elite keşif ekibi haritaların sistemli biçimde değiştirilmesini araştırır. Başkalarının çelişkili yön tarifleri gördüğü yerlerde kanıt toplar."
+    ],
+    "verdant": [
+      "Verdant, ilk tohum arşivlerini doğal toprağı olmayan bir koloniye taşıdı. Başka yerleşimlerin de kendi kendine yetebilmesi için geminin planları bitki kataloglarıyla birlikte gönderildi. Pilotları kendilerini geleceğin hasatlarının bekçisi olarak görür. Sağlam kalan bir arşiv, bir kışlık yiyecek sağlayabileceği için göz alıcı bir kargodan daha değerli olabilir.",
+      "Yağmacılar değerli tohum arşivlerini satma umuduyla Verdant gemilerini ele geçirdi. Arşivler çoktan taşınmıştı. Ellerinde gemiler ve hayal kırıklığına uğramış finansörler kaldı. Yeni donanım için nadiren para bulabildiler.",
+      "Advanced gemileri sera istasyonları arasındaki alışverişin güvenliğini sağlar. Kimlik kodlarında unutulmuş bitkilerin adları yaşar.",
+      "Elite muhafızları son eksiksiz tohum kaydını korur. Kayıt, henüz ilk bahçesini yetiştirmemiş kolonilere de hizmet eder."
+    ],
+    "storm-wing": [
+      "Storm Wing, bitmek bilmeyen iyon fırtınalarının yaşandığı bir mevsimde yapıldı. Tersaneler elektrik kesintileri arasında çalışıyor, ilerlemeyi kuryelerle birbirine bildiriyordu. İlk gemi bütün parçaları bir araya getirene kadar tasarımın tamamı hiçbir tersanede yoktu. Öyküsü, bağlantılar sık sık kopsa da çalışan bir ağı anlatıyor.",
+      "Ağ kesintisi sırasında düşman, Storm Wing gemileriyle dolu uzak bir hangarı işgal etti. İkmal hatları kesilince her yedek parça pahalıya mal oldu. Sınırlı bütçe genellikle gemileri çalışır durumda tutmaya yetiyordu.",
+      "Advanced filosu fırtına sınırında bakım şamandıralarına eşlik eder. Böylece yalıtılmış istasyonlar arasındaki bağlantıyı yeniden kurar.",
+      "Elite pilotları arızaların ardından büyük onarım konvoylarını korur. Dönüşleri yardımın yeniden yol bulduğunu gösterir."
+    ],
+    "red-comet": [
+      "Red Comet adını, ışıklı izi üç koloninin göğünü geçen bir kurtarma uçuşundan aldı. Pilot, su arıtıcısının sağlam kalan son çizimini taşıyordu. Efsaneler yolculuğu süsledi, ama tersanede ilk rapor saklanır. Varış yerindeki insanlar ertesi sabah yeniden içme suyuna kavuşmuştu.",
+      "Düşman adına haraç toplayan bir grup, sahte bir geri alma emriyle Red Comet gemilerine el koydu. Koloniler ödeme yapmayı kesti. Beklenen gelir gelmeyince ele geçirilen kurtarma gemilerinin çoğu ilk donanımıyla kaldı.",
+      "Advanced gemileri acil durum bölgelerine onarım bilgisi taşır. Kırmızı işaretleri acil yardımı simgeler.",
+      "Elite sürümü, kuşatma altındaki kolonilere giden son sevkiyatlara eşlik eder. Alıcı yanıt verene kadar çağrı işaretini yayında tutar."
+    ],
+    "twin-core": [
+      "Twin Core, eski bir çatışmayla birbirinden ayrılmış iki tersane tarafından yapıldı. Her biri tasarımın bir bölümünü hazırladı ve bağımsız inceleme istedi. İlk ortak uçuş ancak raporlar uyuştuğunda başladı. Model, sabırla karşılıklı doğrulama yaparak kazanılan güveni simgeler.",
+      "Taraf değiştirenler birkaç Twin Core gemisini düşman filosuna teslim etti. İki tersane de yeni malzeme vermeyi reddetti. Yedek parçalar pahalılaştı ve yeni sahipler planlanan yükseltmelerin neredeyse hepsini iptal etti.",
+      "Advanced mürettebatı iki ana limandan gelir. Ortak kayıtlarında hem anlaşmazlıkları hem kararları saklarlar.",
+      "Elite filosu geçmişte düşman olan sektörler arasındaki anlaşmaları korur. Görev, iki taraf da güvenle vardığında sona erer."
+    ],
+    "orbit-arc": [
+      "Orbit Arc, rotaları pek seyrek kesişen istasyonlara hizmet verirdi. İlk pilotları uzak yörüngeler arasında mektup taşıdı. Yanıtlar bazen aylar sürse de her buluşmanın güvenilir bir zaman aralığı vardı. Bu küçük randevular kalıcı bir ticaret ağına dönüştü. Model, güvenilebildiğinde seyrek temasın bile değerli olduğunu hatırlatır.",
+      "Kaçakçılar kayıp Orbit Arc gemilerini sınırdaki düşman birliğine sattı. Uzun ikmal rotaları birliğin kasasını tüketti. Modern sistemlere ancak nadiren para kalıyordu.",
+      "Advanced kuryeleri dış halkalardaki planlı alışverişi korur. Kararlaştırılan her buluşmada bir mesajın ulaşması gerekir.",
+      "Elite gemileri gezgin kolonilerin büyük buluşmalarını korur. Gelişleri bağlantının yeniden kurulduğunu duyurur."
+    ],
+    "night-guard": [
+      "Night Guard, eşzamanlı dönen bir uydunun karanlık yüzündeki koloniden geldi. Limanlarında güneş hiç doğmaz, fakat dönen devriyelerin ışıkları tanınırdı. Tersane bu sözü bir gövdede somutlaştırdı. Geri dön, bir daha kontrol et ve herkesi eve getir. Öykülerinde öne çıkan, geciken bir yük gemisi için açık tutulan rıhtımdır.",
+      "Saldırganlar nöbet değişiminde birkaç Night Guard gemisini çaldı. Finansörler baskın masrafını karşıladı, uzun vadeli bakım için bütçe ayırmadı. Bu nedenle ele geçirilen gemilerin çoğu temel devriye donanımını korudu.",
+      "Advanced devriyeleri uzun radyo sessizliği boyunca ikmal konvoylarına eşlik eder. Her nöbet kurtarılan bir geminin adını taşır.",
+      "Elite muhafızları son sığınak limanlarını açık tutar. Son tahliye tamamlandıktan sonra istasyondan ayrılırlar."
+    ],
+    "striker": [
+      "Striker, onarım konvoylarına yönelik bir dizi saldırının ardından ortaya çıktı. Tasarımcıları tehdit altındaki atölyeye zaman kazandıracak bir eskort gemisi istiyordu. İlk birlik eski teknisyenlerden oluşuyordu. Hasarlı bir motor henüz çalışmadığında her dakikanın değerini biliyorlardı. Geminin bu kökeni, savaşçı adından daha önemlidir.",
+      "Düşman paralı askerleri, ödeme gücünü yitirmiş işverenlerinden Striker gemileri aldı. Satıştan fazla para çıkmayınca bazıları gemileri tuttu. Pek az mürettebat kapsamlı bir yenilemeyi karşılayabildi.",
+      "Advanced birlikleri zorlu kurtarma operasyonlarında seyyar atölyeleri korur. Pilotlar onarım ekiplerinin acil durum sinyallerini tanır.",
+      "Elite gemileri son enkaz kurtarma ekiplerinin çekilmesini korur. Nişanları, ayakta kalıp yeniden çalışabilen atölyelerin adını taşır."
+    ],
+    "cargo-hawk": [
+      "Cargo Hawk, küçük römorkörlerin pek önemsenmediği bir limanda doğdu. Bir dolandırıcılık ağı makbuzları sahteleyince römorkör mürettebatı tehditlere rağmen bağımsız kayıtları topladı ve bir araya getirdi. Yeni model adını bu kurye birliğinden aldı. Efsanesinde en değerli yük, meşru mülkiyetin eksiksiz kanıtıdır.",
+      "İşgal edilen bir gümrük deposu, düşmana Cargo Hawk gemileri sağladı. Ambarlarda çoğunlukla mühürlenmiş kanıtlar vardı. Elde edilen az gelir, ele geçirilen filonun kapsamlı yenilenmesine yetmedi.",
+      "Advanced gemileri anlaşmazlık konusu yükleri ortak denetime götürür. Nakliye kayıtları iki tarafın da erişimine açıktır.",
+      "Elite filosu tedarik zincirinin önemli arşivlerini korur. Arması, yükün kaynağının izlenebilirliğini simgeler."
+    ],
+    "ring-flare": [
+      "Ring Flare, gaz devinin buzlu halkalarında denendi. Seyir ışıkları dağınık araştırma ekiplerinin hareketli buluşma noktaları oldu. Keşif sona erince sinyaller yeni kurulan karakolları birbirine bağladı. Orada yaşayanlar, resmî haritalar çizilmeden önce ayrı ayrı ışıkların ortak bir rota oluşturduğunu hâlâ hatırlıyor.",
+      "Bir karakolun araştırma bütçesi kesilince hileli bir açık artırma Ring Flare gemilerini düşmana geçirdi. Alıcılar paralarının tamamını satın almaya harcadı. Çok az gemi temel donanımın ötesinde geliştirildi.",
+      "Advanced filoları sürüklenen araştırma istasyonlarıyla teması sürdürür. Çağrı işaretleri halkanın eski buluşma noktalarını hatırlatır.",
+      "Elite pilotları ortak gözlem arşivini sahte ölçümlere karşı korur. Yılların bağımsız araştırmasını muhafaza ederler."
+    ],
+    "sky-breaker": [
+      "Sky Breaker, yalıtılmış bir koloninin bilgiye erişimini kısıtlayan yapay sınırı aşan ilk gemiydi. Dönüşte getirdiği raporlar, sakinleri korkutmak için anlatılan öykülerle çelişiyordu. Tersane bütün görev kayıtlarını yayımladı. Model, bir otorite duyulacak yanıtları tek başına seçmeye çalıştığında açık bağlantının değerini hatırlatır.",
+      "Düşman ablukası dönen Sky Breaker gemilerini durdurdu. Ablukayı sürdürmek bütçeyi tüketti. Ele geçirilen gemiler genellikle kalkıştaki donanımlarıyla uçmaya devam etti.",
+      "Advanced filoları bağımsız habercilere kapalı sınırların ötesine kadar eşlik eder. Haberciler farklı kaynaklardan bilgi taşır.",
+      "Elite keşif ekibi kayıp kolonilerle bağlantıyı yeniden kurar. Kolonilere bilgileri kendi başlarına karşılaştırma olanağı sunar."
+    ],
+    "olive-fortress": [
+      "Olive Fortress, ateşkes sırasında tarafsız bir tersanede yapıldı. Eski düşmanlar geçmişi hatırlayarak aletleri paylaştı. İlk gövde atölyenin sade renklerini taşıdı. Efsanesi, buluşmaya imkân verirken koruma sağlayan sınırlarla ilgilidir. Bir kale de güvenli görüşmelere ev sahipliği yapabilir.",
+      "Ateşkesi bozan düşman heyeti ödünç aldığı Olive Fortress gemilerini iade etmedi. Tarafsız destekçiler bütün ödemeleri dondurdu. Arızalanan parçaları değiştirmek yükseltmelerden daha önemli hâle geldi.",
+      "Advanced gemileri bağımsız heyetlerin buluşmalarını güvenceye alır. Her heyete kendi ana limanına kadar eşlik eder.",
+      "Elite muhafızları tarafsız arşivlerin ele geçirilmesini önler. Ortak kanıtları, kendi müttefiklerinin isteğine karşı bile korur."
+    ],
+    "pi-vanguard": [
+      "Pi Vanguard, küçük öncü tersanelerin ortak projesi olarak başladı. Hiçbiri tek başına bütün bir gemiyi karşılayamıyordu. Birlikte malzeme, zaman ve deneyim sağladılar. İlk görev, katılan bütün kolonilere açık bir ikmal rotasını güvenceye aldı. Oyunun kurgusunda bu tasarım, ortak katılımdan doğan gücü temsil eder.",
+      "Düşman grupları eski Pi Vanguard planlarını kopyaladı ve hizmetten çekilen gövdelere el koydu. Daha yeni, hassas parçaları karşılayacak kaynakları yoktu. Küçük filonun çoğu ilk donanımıyla kaldı.",
+      "Advanced filoları öncü konvoylara ilk ortak seferlerinde eşlik eder. Kimlik kodları, gemilerin yapımına katkı sağlayan atölyeleri hatırlatır.",
+      "Elite filosu özgür düğümleri, tek doğruyu kendisinin bildiğini öne süren Drazevorn’a karşı korur. Bu görev yalnızca oyunun kurgusunda vardır."
+    ],
+    "core-carrier": [
+      "Core Carrier, birkaç koloninin son bilgi arşivlerini güvenceye alması gerektiğinde yapıldı. Her koloni bir arşiv sağladı ve bütün koleksiyonun sorumluluğu ortak kaldı. Mürettebat ayrı kaynak kayıtları ve ortak kataloglar tuttu. Model, başkalarının bilgisini güvenli bir sonraki teslimata ulaştırma sorumluluğunu simgeler.",
+      "Arşiv yağmacıları, taşıdıkları bilgiyi satma umuduyla Core Carrier gemilerini ele geçirdi. Erişim anahtarları farklı yerlerde saklandığı için çalınan arşivler kullanılamadı. Hayal kırıklığına uğrayan finansörler çekildi ve pahalı yükseltmeler enderleşti.",
+      "Advanced nakliye gemileri farklı yerlere dağılmış bilgi depolarını birbirine bağlar. Her teslimata birden çok arşiv sorumlusu eşlik eder.",
+      "Elite sürümü son boss savaşından sonra ortak belleği korur. En değerli yükü, geçmişi bağımsız olarak doğrulama olanağıdır."
+    ]
+  }
+}

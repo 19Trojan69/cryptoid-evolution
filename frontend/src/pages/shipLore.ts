@@ -2,6 +2,7 @@ import { translate } from '../i18n.ts';
 import { normalizeLocale } from '../locales/config.ts';
 import { shipCaptureLore } from './shipCaptureLore.ts';
 import type { ShipStage } from './shipEvolution';
+import type { CollectionLore } from './collectionLore.ts';
 type Story = { de: string; en: string; advanced: [string,string]; elite: [string,string] };
 /** Fictional histories keyed by stable hull id, not the sprite order. */
 export const shipStories: Record<string, Story> = {
@@ -29,12 +30,17 @@ export const shipStories: Record<string, Story> = {
 export const sharedHullNote = (de: boolean) => de
  ? 'Diese Baureihe wird von Spielern UND gegnerischen Flotten eingesetzt. Die Silhouette verrät keine Zugehörigkeit; Gegnerwerte richten sich nach ihrer eigenen Klasse und dem Level.'
  : 'This hull family is used by BOTH players and enemy fleets. Its silhouette does not identify allegiance; enemy stats depend on their own class and level.';
-export function playerShipStory(id: string, stage: ShipStage, locale: boolean | string): string[] {
+export function playerShipStory(id: string, stage: ShipStage, locale: boolean | string, pack?: CollectionLore): string[] {
  const resolved=typeof locale==='boolean'?(locale?'de':'en'):normalizeLocale(locale)??'en', de=resolved==='de';
  const item = shipStories[id]; if (!item) return [];
  const language = de ? 0 : 1;
  const purpose = stage === 2 ? item.advanced[language] : item.elite[language];
  const upgrade = translate(resolved, stage === 2 ? "Advanced: permanent twin fire with 15% more total damage than Standard and a 10% larger pickup radius for normal power-ups." : "Elite: permanent twin fire with 30% more total damage than Standard and a 20% larger pickup radius for normal power-ups. Requires Advanced.");
+ const localized = pack?.locale === resolved ? pack.ships[id] : undefined;
+ if (localized) {
+   const [origin, capture, advanced, elite] = localized;
+   return stage === 1 ? [origin, capture] : [stage === 2 ? advanced : elite, upgrade, translate(resolved, sharedHullNote(false))];
+ }
  const paragraphs = stage === 1
    ? [de ? item.de : item.en, shipCaptureLore[id][language]]
    : [purpose, upgrade, sharedHullNote(de)];

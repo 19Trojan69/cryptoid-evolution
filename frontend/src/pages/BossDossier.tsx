@@ -9,6 +9,7 @@ import { bossWeapons, type BossWeaponKind } from './bossWeapons';
 import { turretHealth } from './bossTurrets';
 import { levelDifficulty } from './levelDifficulty';
 import { bossDifficulty } from './bossDifficulty';
+import { CollectionLoreStatus, useCollectionLore } from './useCollectionLore';
 import './bossDossier.css';
 
 const weaponLabels: Record<BossWeaponKind, [string, string]> = {
@@ -23,7 +24,9 @@ export default function BossDossier({ id, stars, onClose }: { id: number; stars:
   const say = (german: string, english: string) => de ? german : t(english);
   const dialog = useRef<HTMLDialogElement>(null);
   const close = useRef<HTMLButtonElement>(null);
-  const lore = bossLore(id, locale);
+  const cardLanguage = useCollectionLore(locale, stars > 0);
+  const lore = bossLore(id, locale, cardLanguage.lore);
+  const loreReady = !cardLanguage.pending && !cardLanguage.failed;
   const config = bossManifest.find(boss => boss.id === id);
   const guns = bossWeapons[id - 1];
   const valid = Boolean(stars > 0 && lore && config && guns);
@@ -39,13 +42,14 @@ export default function BossDossier({ id, stars, onClose }: { id: number; stars:
   const difficulty = levelDifficulty(config.level);
   const pressure = bossDifficulty(id);
   const format = (value: number) => value.toLocaleString(locale, { maximumFractionDigits: 1 });
+  const formatHealth = new Intl.NumberFormat(locale, { maximumFractionDigits: 6 }).format;
   return createPortal(<dialog ref={dialog} className="boss-dossier" aria-labelledby="boss-dossier-title"
     onCancel={event => { event.preventDefault(); event.stopPropagation(); onClose(); }}>
     <div className="boss-dossier-shell">
       <header className="boss-dossier-header">
         <div><p className="boss-dossier-eyebrow">{say('FEINDAKTE · ENTSCHLÜSSELT', 'ENEMY DOSSIER · DECRYPTED')}</p>
           <h2 id="boss-dossier-title">#{String(id).padStart(2, '0')} · {bossName(id)}</h2>
-          <p>{lore.title}</p></div>
+          {loreReady && <p>{lore.title}</p>}</div>
         <span className="boss-dossier-hostile">{say('FEINDLICH', 'HOSTILE')}</span>
       </header>
       <div className="boss-dossier-scroll" tabIndex={0} aria-label={say('Schiffsgeschichte und Kampfdaten', 'Ship story and combat data')}>
@@ -53,17 +57,17 @@ export default function BossDossier({ id, stars, onClose }: { id: number; stars:
         <p className="boss-dossier-stars" aria-label={say(`${stars} von 3 Sternen`, t("{value0} of 3 stars", {value0: stars}))}>{'★'.repeat(Math.min(3, stars))}{'☆'.repeat(Math.max(0, 3 - stars))} <span>{say('Deine Auszeichnung', 'Your award')}</span></p>
         <section aria-labelledby="boss-lore-heading"><h3 id="boss-lore-heading">{say('Die Geschichte', 'The story')}</h3>
           <p className="boss-dossier-note">{say('Fiktive Geschichte aus dem Cryptoid-Universum. Keine zusätzlichen Kampffähigkeiten.', 'Fiction from the Cryptoid universe. Does not add combat abilities.')}</p>
-          {lore.story.map((paragraph, index) => <p key={index}>{paragraph}</p>)}
+          {loreReady ? lore.story.map((paragraph, index) => <p key={index}>{paragraph}</p>) : <CollectionLoreStatus {...cardLanguage} />}
         </section>
         <section aria-labelledby="boss-data-heading"><h3 id="boss-data-heading">{say('Tatsächliche Kampfdaten', 'Actual combat data')}</h3>
           <p className="boss-dossier-note">{say('Direkt aus der aktuellen Spielkonfiguration. Panzerung = Lebenspunkte, nicht Materialstärke; Kaliber = relativer Spielwert, nicht Millimeter.', 'Read from the current game configuration. Armour means health points, not material thickness; calibre is a relative game value, not millimetres.')}</p>
           <dl className="boss-dossier-stats">
             <div><dt>{say('Boss-Stufe', 'Boss stage')}</dt><dd>{id} / 50</dd></div>
-            <div><dt>{say('Rumpfpanzerung', 'Hull armour')}</dt><dd>{format(difficulty.bossHealth)} {say('LP', 'HP')}</dd></div>
+            <div><dt>{t('Reactor health')}</dt><dd>{formatHealth(difficulty.bossHealth)} {say('LP', 'HP')}</dd></div>
             <div><dt>{say('Geschütztürme', 'Turrets')}</dt><dd>{guns.length}</dd></div>
             <div><dt>{say('Läufe gesamt', 'Total barrels')}</dt><dd>{guns.reduce((sum, gun) => sum + gun.barrels.length, 0)}</dd></div>
           </dl>
-          <p>{say('Zuerst alle Geschütze zerstören. Danach wird der Rumpf verwundbar und nimmt doppelten Schaden; die zentrale Spezialwaffe öffnet sich.', 'Destroy every turret first. The hull then becomes vulnerable and takes double damage; the central special weapon opens.')}</p>
+          <p>{t('Destroy all turrets first. After the reactor opens, shoot it directly. Each reactor hit deals double damage.')}</p>
           <h4>{say('Montierte Bewaffnung', 'Mounted armament')}</h4>
           <p className="boss-dossier-note">{say('Die Waffen richten sich unabhängig aus und schießen erst nach Zielerfassung. Die unten angegebene Pause folgt einer abgeschlossenen Salve; Zielsuche und das gemeinsame Projektil-Limit können sie verlängern.', 'Weapons aim independently and fire only after target lock. The delay below follows a completed volley; targeting and the shared projectile limit may extend it.')}</p>
           <ol className="boss-dossier-guns">{guns.map((gun, index) => {
@@ -71,8 +75,8 @@ export default function BossDossier({ id, stars, onClose }: { id: number; stars:
             const position = left < .4 ? say('Links', 'Left') : left > .6 ? say('Rechts', 'Right') : say('Mitte', 'Centre');
             const full = gun.interval * (2500 - difficulty.progress * 420) / 2500 * pressure.cadenceScale;
             return <li key={gun.key}><h5><span className="boss-dossier-swatch" style={{ backgroundColor: gun.shotColor }} />{index + 1}. {de ? gun.name : t(weaponLabels[gun.kind][1])} · {position}</h5>
-              <p>{de ? weaponLabels[gun.kind][0] : t(weaponLabels[gun.kind][1])} · {say('Kaliber', 'Calibre')} {gun.caliber} · {gun.barrels.length} {say('Läufe', 'barrels')} · {gun.rows} {say('Salvenreihen', 'volley rows')}</p>
-              <p>{say('Panzerung', 'Armour')}: {turretHealth(id, gun)} {say('LP', 'HP')} · {say('Salvenpause', 'Volley delay')}: {format(full)} s</p>
+              <p>{de ? weaponLabels[gun.kind][0] : t(weaponLabels[gun.kind][1])} · {say('Kaliber', 'Calibre')} {gun.caliber} · {say('Läufe', 'barrels')}: {gun.barrels.length} · {say('Salvenreihen', 'volley rows')}: {gun.rows}</p>
+              <p>{say('Panzerung', 'Armour')}: {formatHealth(turretHealth(id, gun))} {say('LP', 'HP')} · {say('Salvenpause', 'Volley delay')}: {format(full)} s</p>
             </li>;
           })}</ol>
           <h4>{say('Zentrale Spezialwaffe', 'Central special weapon')}</h4>

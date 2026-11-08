@@ -1,7 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import PiSignInCallback from "./pages/PiSignInCallback.tsx";
 import LegalPage from "./pages/LegalPage.tsx";
-import RouteRecovery from "./RouteRecovery";
+import RouteRecovery, { AdminRouteRecovery } from "./RouteRecovery";
 
 export const router = createBrowserRouter([
   {
@@ -12,7 +12,7 @@ export const router = createBrowserRouter([
   {
     path: "/admin",
     lazy: async () => ({ Component: (await import("./pages/AdminPage")).default }),
-    errorElement: <RouteRecovery />,
+    errorElement: <AdminRouteRecovery />,
   },
   {
     path: "/",

@@ -31,4 +31,7 @@ test('card wrapping keeps combining characters and joined symbols together', () 
   const lines = wrapCardText('飞船故事和当前装备', 3, text => [...text].length);
   assert.equal(lines.join(''), '飞船故事和当前装备');
   assert.ok(lines.every(line => [...line].length <= 3));
+  const thai = 'ทำลายป้อมปืน';
+  assert.deepEqual(wrapCardText(thai, 7, text => [...text].length, 'th'), ['ทำลาย', 'ป้อมปืน']);
+  assert.equal(wrapCardText('飞船故事和当前装备', 3, text => [...text].length, 'zh').join(''), '飞船故事和当前装备');
 });

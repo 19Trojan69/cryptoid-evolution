@@ -62,9 +62,42 @@ const changes = [
   }
 ];
 
+// Restore the duration and indicator edits before the earlier mission power changes.
+const durationChanges = [
+  {
+    "before": "import { hangarCatalog } from '../../../backend/src/hangarCatalog';\n",
+    "after": "import { hangarCatalog, START_POWER_DURATION_MS } from '../../../backend/src/hangarCatalog';\n"
+  },
+  {
+    "before": "import { collectPowerUp as applyPowerUp, createPowerUpDrop, movePowerUps, powerUpDescriptions, powerUpNames, powerUpSymbols, POWER_UP_DURATION_MS, PURCHASED_POWER_UP_DURATION_MS, resolvePlayerDamage, type PowerUp, type PowerUpType } from \"./powerUps\";\n",
+    "after": "import { collectPowerUp as applyPowerUp, createPowerUpDrop, movePowerUps, powerUpDescriptions, powerUpNames, powerUpSymbols, POWER_UP_DURATION_MS, resolvePlayerDamage, type PowerUp, type PowerUpType } from \"./powerUps\";\n"
+  },
+  {
+    "before": "      state.purchasedShieldMs = PURCHASED_POWER_UP_DURATION_MS;\n",
+    "after": "      state.purchasedShieldMs = START_POWER_DURATION_MS.shield;\n"
+  },
+  {
+    "before": "      Object.assign(state, applyPowerUp(state, power, PURCHASED_POWER_UP_DURATION_MS));\n      if (power === \"overdrive\") state.overdriveTotalMs = PURCHASED_POWER_UP_DURATION_MS;\n      if (power === \"rapid\") state.rapidFireTotalMs = PURCHASED_POWER_UP_DURATION_MS;\n",
+    "after": "      Object.assign(state, applyPowerUp(state, power, START_POWER_DURATION_MS[power]));\n      if (power === \"overdrive\") state.overdriveTotalMs = START_POWER_DURATION_MS.overdrive;\n      if (power === \"rapid\") state.rapidFireTotalMs = START_POWER_DURATION_MS.rapid;\n"
+  },
+  {
+    "before": "  const dockOverdrive = testnetMissionPowers && (game.overdriveTotalMs === PURCHASED_POWER_UP_DURATION_MS\n",
+    "after": "  const dockOverdrive = testnetMissionPowers && (game.overdriveTotalMs > POWER_UP_DURATION_MS\n"
+  },
+  {
+    "before": "  const dockRapid = testnetMissionPowers && (game.rapidFireTotalMs === PURCHASED_POWER_UP_DURATION_MS\n",
+    "after": "  const dockRapid = testnetMissionPowers && (game.rapidFireTotalMs === START_POWER_DURATION_MS.rapid\n"
+  },
+  {
+    "before": "              <TimedRing remainingMs={game.purchasedShieldMs} durationMs={PURCHASED_POWER_UP_DURATION_MS} />\n",
+    "after": "              <TimedRing remainingMs={game.purchasedShieldMs} durationMs={START_POWER_DURATION_MS.shield} />\n"
+  }
+];
+
 export function restoreTestnetMissionPowerChanges(source) {
   if (!source.includes("import MissionPowerDock from './MissionPowerDock';")) return source;
-  for (const { before, after } of changes) {
+  const reviewed = source.includes("START_POWER_DURATION_MS") ? [...durationChanges, ...changes] : changes;
+  for (const { before, after } of reviewed) {
     if (source.split(after).length !== 2) throw Error('Expected one exact Testnet mission power change');
     source = source.replace(after, () => before);
   }

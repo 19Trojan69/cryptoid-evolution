@@ -1,0 +1,378 @@
+{
+  "locale": "fr",
+  "sourceHash": "fa6d4efc4da8a285cc0f5bd832abb51ecd7b901bca9d4b331d612385bca0f1be",
+  "bosses": {
+    "1": [
+      "Le diffuseur de spam",
+      "Varneth transportait autrefois des registres de ravitaillement entre les colonies de Genesis. Il a disparu derrière un relais abandonné. À son retour, le signal d’identification de l’équipage avait disparu et ses soutes étaient devenues des chambres d’émission.",
+      "Aujourd’hui, il sature les routes commerciales de transactions sans valeur et de messages dupliqués à l’infini. Les appels de détresse se perdent dans le bruit, tandis que les véritables livraisons attendent leur confirmation. Sa coque blindée protège la source du brouillage. Arrêter Varneth rendrait au réseau la capacité d’entendre ses habitants."
+    ],
+    "2": [
+      "La porteuse de masques",
+      "Korvessa servait dans une flotte de courriers diplomatiques et connaissait les signaux d’identification de chaque station frontalière. Quand ses commanditaires ont disparu, elle a conservé leurs identités dans des archives secrètes.",
+      "À chaque arrivée, Korvessa emprunte un nouveau nom de confiance. Ses faux messages détournent les ravitailleurs des routes sûres et font passer des ordres hostiles pour une offre d’assistance. Derrière cet indicatif courtois se cache un vaisseau de guerre. Vaincre Korvessa rappelle aux colonies qu’une voix familière ne garantit pas l’honnêteté de l’expéditeur."
+    ],
+    "3": [
+      "Le voleur de sceaux",
+      "Drelvorn servait de coffre itinérant pour les sceaux des anciens commandants de flotte. Lors d’une rébellion, son système de garde a bloqué l’accès aux gardiens légitimes et a emporté leurs identifiants.",
+      "Il vend désormais cette autorité volée à la flotte de l’ombre. Les messages portant les sceaux dérobés ouvrent des portes qui devraient rester fermées. Sa coque protège une apparence d’authenticité plutôt qu’un trésor. Les défenseurs doivent l’arrêter avant que les dernières archives ne puissent plus distinguer les ordres fiables des identités usurpées."
+    ],
+    "4": [
+      "Le faussaire des chroniques",
+      "Talvrek a enregistré l'histoire des jeunes colonies. Ses archives ont survécu à une guerre, mais la loyauté envers leurs créateurs ne l'a pas fait. Un nouveau commandant a transformé le chroniqueur en un marchand de l'histoire inventée.",
+      "Talvrek fait circuler des registres falsifiés et affirme que des livraisons légitimes n’ont jamais eu lieu. Les entrées contradictoires causent des litiges sur la propriété et les devoirs. Ses armes éloignent les enquêteurs. L'arrêt du navire protège la route d'approvisionnement et les documents historiques partagés dont dépend la coopération."
+    ],
+    "5": [
+      "L’assiégeant des nœuds",
+      "Zeraveth était à l’origine une plateforme de réparation assez grande pour envelopper des anneaux de relais entiers. La flotte de l’ombre a pris le contrôle de la plateforme et transformé ses structures d’amarrage en positions de siège.",
+      "Zeraveth bloque d'importantes stations de réseau et coupe le support de leurs équipes de maintenance. Les petites failles deviennent des pannes majeures et les colonies lointaines ne reçoivent que des fragments de nouvelles. Conduire le navire à l'écart permet aux techniciens de retourner et de reconnecter les communautés isolées. Ce blocus fait partie de l'histoire. L'équipement listé ci-dessous vient du jeu."
+    ],
+    "6": [
+      "Le chasseur d’échos",
+      "Orvask escortait autrefois des convois et conservait chaque autorisation de passage comme preuve. Sa mémoire contient encore les voix de capitaines disparus depuis longtemps.",
+      "La flotte d'ombres utilise ces anciens enregistrements comme armes. Orvask diffuse à nouveau de vieilles commandes et les présente comme des instructions actuelles. Les stations doivent choisir entre les besoins actuels réels et les voix familières. Le navire utilise la force pour protéger les archives. La défaite donne aux défenseurs le temps de rejeter les commandes obsolètes et d'exiger de nouvelles confirmations."
+    ],
+    "7": [
+      "Le pont de l’ombre",
+      "Keldrava était un point de transfert de fret mobile entre deux colonies lointaines. Après l'échec de leur connexion permanente, le navire semblait être leur seule route vers le monde extérieur. Peu de gens ont remarqué qu'il avait un équipage différent.",
+      "Cargo disparaît maintenant à l'intérieur du navire tandis que les reçus promettent toujours un passage sûr. Keldrava exploite la confiance que les deux communautés se placent l'une dans l'autre. L'équipage cache des biens volés à bord. Les défenseurs doivent fermer ce faux lien avant que davantage de colonies ne confient leur avenir à ses compartiments cargo."
+    ],
+    "8": [
+      "Le colporteur de rumeurs",
+      "Veshkorn a une fois porté des nouvelles aux avant-postes les plus éloignés. Ses archives détiennent toujours la musique qui a ouvert des émissions pacifiques. Maintenant, la même musique introduit de faux rapports de catastrophes et d'avertissements d'effondrement.",
+      "Des avertissements contradictoires chassent les commerçants des itinéraires sûrs et font que les colonies se méfient de leurs partenaires. Chaque rumeur est rapidement remplacée par une autre. Veshkorn protège l'opération qui produit ces faux rapports. La défaite du navire fait de la place pour des nouvelles que les gens peuvent vérifier."
+    ],
+    "9": [
+      "L’illusionniste des soldes",
+      "Neravoss était un navire d'exposition à un salon. Ses projecteurs ont montré de la vraie cargaison et de nouveaux moteurs. Lorsque la foire a échoué, l'équipement d'exposition est passé à de nouveaux propriétaires.",
+      "Neravoss annonce désormais des fournitures qui n’existent que sur ses écrans. Il utilise de faux soldes de compte et de fausses réserves pour attirer de véritables livraisons. Son équipage tire sur tous ceux qui essaient d'inspecter les marchandises. Les défenseurs le poursuivent pour exposer la différence entre les numéros affichés et le stock réel avant que plus de cargos ne disparaissent."
+    ],
+    "10": [
+      "Le tyran des péages",
+      "Thalverik a gardé un passage étroit à travers la ceinture de cristal. Ses frais de navigation modestes payaient autrefois pour une protection réelle. Lorsque la flotte officielle se retire, le navire se déclare la seule autorité.",
+      "Thalverik impose désormais une nouvelle taxe à chaque message ou livraison. Même les équipes de secours reçoivent des demandes de paiement alors que le passage leur reste fermé. Le réseau fonctionne encore, mais il est asphyxié par les taxes. Le vaisseau a transformé une voie publique en piège. Sa défaite rendra le passage aux communautés qui en dépendent."
+    ],
+    "11": [
+      "Aux mille visages",
+      "Skorveth a logé les systèmes de simulation d'une école pilote. Des milliers de cadets virtuels ont appris à naviguer ensemble. Après qu'une force hostile a saisi le navire, il a utilisé les profils d'entraînement pour usurper l'identité de nombreuses personnes indépendantes.",
+      "Les faux participants se cautionnent et créent l’impression que presque tout le monde est d’accord. On dit aux petites colonies que leurs voisins ont déjà rejoint la flotte de l'ombre. Toutes ces voix proviennent d'un seul navire. Détruire Skorveth expose la fausse majorité et donne aux habitants une chance de parler à nouveau pour eux-mêmes."
+    ],
+    "12": [
+      "L’empoisonneur des routes",
+      "Azhrel a cartographié les premières connexions de saut à travers la frontière de la nébuleuse. Ses cartes ont sauvé d'innombrables convois. Capturées par des commandants hostiles, ces cartes de confiance sont devenues des pièges inhabituellement convaincants.",
+      "Azhrel publie de fausses routes et redirige les messages par le biais des stations de communication que l'ennemi contrôle. Les appels d'urgence arrivent à destination tard ou disparaissent dans l'espace vide. Le navire garde la jonction des fausses routes. L'arrêter rétablit une route sûre entre les mondes qui veulent déjà coopérer."
+    ],
+    "13": [
+      "L’incendiaire des archives",
+      "Dornavik a récupéré des dispositifs de stockage de données endommagés à partir d'épaves en flammes. Ses chambres isolées protégeaient les dossiers lorsque les systèmes autour d'eux échouaient. La flotte de l'ombre a vu que ce navire pouvait atteindre des archives que d'autres ne pouvaient pas.",
+      "Il offre maintenant des secours et laisse des copies mutilées derrière. Les colonies perdent à la fois l'information et les preuves nécessaires pour mesurer la perte. Son armure garde les derniers enregistrements intacts capturés. La mission contre Dornavik est que ces fragments attendent toujours d'être ramenés à la maison."
+    ],
+    "14": [
+      "Le rétenteur de blocs",
+      "Velkrath a dirigé un convoi de recherche qui transportait de nouveaux blocs de grand livre sur d'immenses distances. Les conteneurs scellés conservaient chaque enregistrement intact. Son nouveau commandant utilise les mêmes conteneurs pour cacher des documents exprès.",
+      "Les avant-postes sont obligés d'utiliser de vieilles informations. Les mises à jour sélectionnées n'arrivent que lorsqu'elles peuvent causer de la confusion. Différentes stations finissent par travailler avec des délais incompatibles. Velkrath garde les dossiers comme des otages. Les défenseurs doivent effacer l'arriéré avant que les colonies ne deviennent définitivement divisées."
+    ],
+    "15": [
+      "Le manipulateur des horloges",
+      "Irdavoss a une fois réglé les horloges des stations frontalières en même temps. Des flottes entières ont utilisé ses émissions précises pour chronométrer leurs manœuvres. Un nouveau commandant a pris le relais sans annonce. Les signaux sont restés clairs, mais le temps qu'ils ont donné était faux.",
+      "Les horodatages décalés font que les messages en temps opportun semblent tardifs et que les fenêtres de maintenance se déravent. Sa menace n'est pas le bruit mais l'imprécision crédible. Arrêter Irdavoss permet aux colonies de comparer à nouveau les horloges indépendantes, en rétablissant la séquence partagée qui les aide à comprendre ce qui s'est réellement passé."
+    ],
+    "16": [
+      "Le geôlier des clés",
+      "Rhazvorn a commencé comme un transport de prison avec des cellules qui pourraient être scellées séparément. La flotte de l'ombre a sorti les prisonniers et a utilisé les cellules pour stocker les archives volées. Le navire est devenu un moyen d'extorsion.",
+      "Il verrouille les dossiers des autres communautés et exige des concessions pour leur libération. Les cliniques et les dépôts d'approvisionnement font face à la pression même si leur équipement semble intact. Rhazvorn défend ses cellules avec force. Le vaincre ouvre une route vers les dossiers emprisonnés, plutôt qu'une autre négociation avec leurs ravisseurs."
+    ],
+    "17": [
+      "Le trompeur d’oracles",
+      "Kelvash a recueilli des mesures à partir de bouées et d'instruments météorologiques qui ont étudié les ressources. De nombreuses stations ont utilisé ses rapports pour prendre des décisions quotidiennes. Après que l'ennemi a pris le contrôle du navire, il a conservé l'ancien code d'identification et le calendrier de diffusion.",
+      "Kelvash rapporte des stocks qui n'existent pas et donne de fausses lectures sur les conditions locales. Les systèmes automatisés déplacent les approvisionnements réels sur la force de cette fausse information. Le navire protège l'équipement qui produit les mensonges. Les défenseurs doivent l'arrêter avant que plus de vies ne dépendent de mesures inventées."
+    ],
+    "18": [
+      "Le seigneur des bifurcations",
+      "Othravel a été construit pour les colonies qui essayaient de se mettre d'accord sur des règles communes après une guerre. Son deck de conférence a un jour accueilli toutes les parties. Maintenant, seuls les messagers de la flotte de l'ombre se rencontrent là.",
+      "Il distribue des versions de registres contradictoires et indique à chaque station que seule sa copie est légitime. La méfiance grandit parmi les communautés qui cherchent la même paix. Othravel devient le centre mobile d'une scission artificielle. Sa défaite crée de l’espace pour comparer les différences ensemble au lieu de les transformer en une autre guerre."
+    ],
+    "19": [
+      "Le faux sauveteur",
+      "Zarnvek était un navire de sauvetage reconnu par sa fusée éclairante de signal doré. Son arrivée signifiait des pièces de rechange, un abri et un chemin de retour. La flotte hostile a capturé la fusée éclairante avec le navire.",
+      "Zarnvek offre toujours de l'aide, mais demande maintenant aux secouristes de divulguer des autorisations confidentielles. Quiconque répond trouve une baie d'accueil surveillée au lieu d'un abri. Le navire utilise l'espoir pour attirer les gens et les blindés pour se protéger. Les défenseurs doivent exposer le faux sauveteur tout en préservant la confiance des colonies dans une aide véritable."
+    ],
+    "20": [
+      "Le pillard des files d’attente",
+      "Vorathen a géré les arrivées de navires dans un énorme port de commerce. Son pont de commandement pourrait coordonner des milliers d'approches et rendre compte de chaque navire. Lorsque le port est tombé, Vorathen s'est échappé avec les enregistrements de planification.",
+      "Il modifie maintenant l'ordre des demandes de faveur des cargos alliés. Les commerçants honnêtes attendent pendant que la flotte de l'ombre prend leur place. Sa puissance provient de petits réarrangements avec de grandes conséquences. La défaite de Vorathen restitue un ordre traçable où l'accès était devenu quelque chose de secrètement vendu."
+    ],
+    "21": [
+      "Le semeur de poussière",
+      "Drazkell a fourni de petites quantités de puissance aux bouées de navigation. Ses compartiments de chargement pourraient gérer des millions de minuscules transferts. Les commandants ennemis ont adapté le système pour suivre les gens sans attirer l'attention.",
+      "Drazkell envoie de petits colis que personne n'a demandés et surveille les stations qui répondent. Il transforme les contacts apparemment sans importance en cartes de relations privées et protège cette information avec ses armes. Les défenseurs doivent l'intercepter avant que la flotte de l'ombre commence à vendre des informations sur les mouvements quotidiens de colonies entières."
+    ],
+    "22": [
+      "Le faux gardien",
+      "Nethrava portait les insignes d'une organisation gardienne respectée. Après la dissolution de cette organisation, le navire est resté son dernier représentant visible. Son apparence familière a caché le fait qu'il servait maintenant une cause différente.",
+      "Nethrava approuve les fausses inspections et présente des partenaires commerciaux dangereux comme officiellement approuvé. Les colonies font confiance à ses timbres jusqu'à ce que leurs approvisionnements disparaissent. Les défenseurs doivent exposer la déception. Un inspecteur de confiance doit prendre ses responsabilités et permettre aux autres de vérifier les résultats."
+    ],
+    "23": [
+      "Le videur de mémoires",
+      "Valdrek entretenait des archives saturées. Il supprimait uniquement les doublons confirmés et consignait chaque intervention avec soin. La flotte de l’ombre a d’abord effacé ces journaux, puis lui a confié une autre mission.",
+      "Aujourd'hui, il qualifie les preuves essentielles d'encombrement inutile. Après une visite, les antécédents de fourniture, les registres de propriété et les traces d'attaques antérieures sont manquants. Personne ne sait immédiatement à quel point les lacunes sont grandes. Valdrek porte les outils d'une tâche utile comme armes. L'arrêter empêche plus de pertes qui arrivent sans explosion."
+    ],
+    "24": [
+      "Le marché aux miroirs",
+      "Korzeth était un marché volant pour les commerçants de nombreux mondes. Les vitrines montraient un commerce occupé même lorsque le port dormait. Maintenant, la plupart de ses offres proviennent d'une seule salle de contrôle cachée.",
+      "Korzeth met en scène des transactions entre de faux commerçants pour rendre la cargaison sans valeur souhaitable. Les colonies confondent les accords mis en scène en faveur d'une demande réelle. Ses armes éloignent les inspecteurs des entrepôts vides. Les défenseurs doivent exposer le faux marché avant que des approvisionnements plus authentiques ne soient échangés."
+    ],
+    "25": [
+      "Le voleur de confirmations",
+      "Thervoss avait l'habitude de garder les stations qui recevaient des livraisons d'autres étoiles. Ses lumières ont dit aux capitaines que leur cargaison était arrivée en toute sécurité. Maintenant, les lumières brillent même quand personne n'attend derrière les portes du quai.",
+      "Thervoss envoie de faux reçus et les réclamations de livraisons incomplètes sont terminées. Les cargos se tournent vers la maison pendant que les colonies attendent des fournitures qui n'arrivent jamais. Son blindage protège la tromperie pendant qu'il intercepte une autre cargaison. Les défenseurs doivent l'arrêter pour que les reçus puissent à nouveau confirmer les livraisons réelles."
+    ],
+    "26": [
+      "Le juge du brouillard",
+      "Akraveth a réglé les différends entre des postes de traite éloignés. Ses juges avaient l'habitude de comparer les preuves et de demander des décisions équitables. La flotte d'ombres les a remplacés par un système qui décide du résultat à l'avance.",
+      "Akraveth rejette les dossiers valides et favorise toujours les mêmes sponsors secrets. Il appelle tous ceux qui opposent un ennemi du réseau. Dans l'histoire, le navire utilise l'intimidation et fait semblant de faire respecter l'ordre. Les défenseurs se battent contre une machine qui utilise un langage légal pour dissimuler son but."
+    ],
+    "27": [
+      "Le ver de la chaîne logistique",
+      "Zelkharn a réparé des cargos loin des chantiers navals établis. Les équipages ont fait confiance à ses pièces détachées et les ont installées sans hésitation. Après que l'ennemi a capturé le navire, les pièces provenaient d'un fournisseur différent. Leurs défauts ne sont pas apparus immédiatement.",
+      "Zelkharn distribue des kits de maintenance altérés pour faire dépendre d'autres navires de la flotte d'ombres. Les pannes n'arrivent souvent qu'après le saut suivant. Zelkharn garde la source du sabotage. La défaite empêche plus d'équipages d'être blessés par des réparations qu'ils pensaient être en sécurité."
+    ],
+    "28": [
+      "Le marchand de sauvegardes vides",
+      "Odravik s’était spécialisé dans la conservation des anciennes archives des colonies. Son immense système de stockage promettait de protéger les données contre toute catastrophe. Quand une station a demandé à récupérer ses données, elle a découvert que de nombreuses sauvegardes se résumaient à des entrées de répertoire.",
+      "Odravik vend une protection de secours tout en refusant la responsabilité de retourner les dossiers. Ses clients comptent sur des procédures de récupération qui ne récupèrent rien. Ses armes gardent cette fraude rentable secrète. Les défenseurs doivent l'exposer avant qu'une autre archive perdue ne puisse plus être récupérée."
+    ],
+    "29": [
+      "Le filtre du silence",
+      "Varnokh avait l'habitude de supprimer les interférences des canaux radio portuaires occupés. Ses filtres ont rendu les appels d'urgence plus faciles à entendre. La flotte fantôme a modifié la liste des voix traitées comme des interférences.",
+      "Les avertissements d'inspecteurs honnêtes et les informations faisant état de raids hostiles disparaissent maintenant. Le secteur ne semble pacifique que parce que personne ne peut entendre ce qui ne va pas. Varnokh défend ce silence artificiel. L'arrêt permet au réseau d'entendre les rapports de défaillances et de commencer à les réparer ensemble."
+    ],
+    "30": [
+      "Le commissaire-priseur des identités",
+      "Kezravel a enregistré les colons d'une flotte de colonies itinérantes. Ses archives ont consigné l'histoire de chaque nouvelle colonie. Lorsque les colons se sont dispersés, les données personnelles qu'ils avaient confiées au navire sont tombées entre des mains hostiles.",
+      "Kezravel vend des données d'identification volées et permet aux étrangers d'agir sous le nom de résidents honnêtes. Les acheteurs utilisent les relations des victimes comme couverture. Le navire vend leurs histoires personnelles et utilise ses armes pour les éloigner des enchères. La défaite permet aux propriétaires de récupérer leurs dossiers et de reprendre le contrôle de leurs propres histoires."
+    ],
+    "31": [
+      "L’illusionniste des relais",
+      "Dravosk a remplacé les stations de communication défaillantes dans des régions vides. Ses antennes visibles promettaient une connexion là où il n'en restait plus. Aujourd’hui, elle accueille favorablement les signaux entrants, mais ne les transmet qu’en fonction des intérêts de ses clients.",
+      "Dravosk change certains messages et en dépose d'autres tout en envoyant des accusés de réception qui suggèrent que tout va bien. Les utilisateurs voient une connexion ouverte même si le navire contrôle ce qui peut passer. Il utilise ses armes pour protéger ce point de contrôle caché. La défaite permet aux colonies de tester à nouveau les voies de communication indépendantes."
+    ],
+    "32": [
+      "Le collecteur d’essaims",
+      "Thalzek a récupéré des drones de maintenance endommagés et les a renvoyés dans leurs stations. Même le plus petit drone pourrait s'abriter sous sa large coque. Après la conversion du navire, il a cessé de renvoyer les drones.",
+      "Dans l’histoire, Thalzek transforme les drones en émetteurs télécommandés. Leurs requêtes simultanées saturent des régions entières, et leurs propriétaires reconnaissent à peine leurs appareils. Détruire Thalzek met fin au poste de commande de l’essaim dans le récit. La liste d’équipement présente séparément les armes montées dans le jeu."
+    ],
+    "33": [
+      "Le piège contractuel",
+      "Orvethra était un bureau de commerce mobile où les colonies arrangeaient des fournitures à long terme. Ses conseillers promettaient des règles faciles dans les moments difficiles. Maintenant, les accords pratiques cachent les obligations que les acheteurs ne découvrent que plus tard.",
+      "Orvethra distribue des offres trompeuses qui font dépendre les stations de la flotte d’ombres. La coopération devient une dépendance. L'armure du navire protège les registres de promesses que les signataires ne comprenaient pas parfaitement. La défaite donne aux colonies une chance de construire de futures alliances à des conditions claires."
+    ],
+    "34": [
+      "Le faussaire des sommes de contrôle",
+      "Kelzorn restaurait des reliefs de données endommagés dans des stations de recherche abandonnées. Ses outils pouvaient donner l’apparence d’une surface intacte malgré les parties manquantes. Le nouvel équipage a utilisé ce savoir-faire pour donner une façade rassurante à des archives peu fiables.",
+      "Il affiche des résultats d'inspection inventés et des scellés de sécurité attrayants où les contrôles indépendants sont absents. La contrefaçon réside dans la certitude revendiquée elle-même. Kelzorn éloigne les enquêteurs avec ses armes. Sa défaite révèle ce que ses propriétaires craignent le plus: un second regard indépendant derrière une surface rassurante."
+    ],
+    "35": [
+      "Le bonimenteur des coffres",
+      "Vashravel détenait des réserves d'urgence pour plusieurs colonies frontalières. Son nom signifiait des fournitures qui resteraient disponibles pendant le pire hiver. Une nouvelle administration a émis de plus en plus de réclamations sur les mêmes magasins.",
+      "Vashravel promet une protection à plus de communautés que ses approvisionnements ne peuvent soutenir. Sa coque brillante cache des entrepôts vides. Ses armes empêchent les communautés de vérifier le stock ensemble. Les défenseurs doivent intervenir avant que les colonies ne commencent à se battre pour les dernières caisses."
+    ],
+    "36": [
+      "Le bloqueur de frontières",
+      "Zorveth a supervisé les échanges entre deux registres indépendants. Sa tâche était de rendre les transferts honnêtes traçables des deux côtés. Elle ne reconnaît désormais que les preuves utiles à sa propre flotte.",
+      "Les livraisons restent dans les limbes tandis que chaque communauté croit que l’autre les retient. Zorveth tire le pouvoir de ce malentendu. Sa coque est la frontière visible d'une dispute invisible. Les défenseurs doivent ouvrir le passage sans retourner une colonie contre l'autre."
+    ],
+    "37": [
+      "Le prince des copies",
+      "Drelkash a conservé des cartes d'étoiles rares en faisant des copies clairement marquées pour les écoles et les navigateurs. Les ateliers ont permis aux gens de partager leurs connaissances. Maintenant, l'équipage supprime les étiquettes et vend chaque copie comme un original unique.",
+      "Les colonies contestent les revendications contradictoires tandis que Drelkash passe à un autre marché. La fraude concerne la véritable origine des cartes. Le navire utilise la force pour défendre son atelier de faux mobile. La défaite aide les gens à relier à nouveau les enregistrements à leur histoire réelle."
+    ],
+    "38": [
+      "Le dévoreur de files d’attente",
+      "Nerthavel a organisé des demandes pour d'immenses centres d'approvisionnement. Sa mémoire pourrait absorber des jours de backlog. La flotte fantôme a transformé cette réserve en quelque part où des demandes légitimes sont faites pour rester.",
+      "Il place des entrées sans valeur avant les livraisons urgentes et maintient les processus occupés sans les laisser avancer. De l'extérieur, tout ressemble à une opération ordinaire. Nerthavel garde un arrêt sans fin. La défaite retourne non seulement la capacité aux colonies, mais le temps qui leur est discrètement enlevé."
+    ],
+    "39": [
+      "Le falsificateur de preuves",
+      "Rhazkora était un laboratoire volant qui a enquêté sur les accidents. Ses rapports ont aidé les équipages à comprendre les défaillances et à prévenir de nouvelles pertes. Après la capture du navire, les instruments sont restés les mêmes, mais les rapports ont servi différents sponsors.",
+      "Il sépare les preuves du contexte et réorganise les fragments jusqu'à ce que les victimes ressemblent à des assaillants. Les vrais coupables restent au-delà du cadre. Son armure protège un mensonge soigneusement construit. Arrêter Rhazkora fait place à des preuves complètes au lieu d'histoires à partir desquelles les pièces décisives ont été retirées."
+    ],
+    "40": [
+      "Le gardien des urnes",
+      "Velzhar portait des bulletins de vote scellés entre des postes éloignés du conseil. Sa route neutre faisait partie des accords. Maintenant, il atteint les ports sélectionnés à temps et arrive à d'autres ports après que les décisions ont été prises.",
+      "Velzhar contrôle qui peut participer en laissant de côté certaines colonies. Les résultats sont encore soigneusement enregistrés, de sorte que les voix manquantes sont difficiles à voir. Ses armes protègent ce calendrier sélectif. Les défenseurs se battent pour donner à toutes les colonies un mot à dire dans leur avenir commun."
+    ],
+    "41": [
+      "Le saboteur de l’accès",
+      "Korthaven était un grand navire qui maintenait les archives accessibles dans de nombreux secteurs. Son équipage a promis de livrer toute copie qui lui avait été demandée. La flotte fantôme s'est rendu compte qu'elle pouvait gagner de l'énergie en refusant de fournir les copies.",
+      "Korthaven confirme que les enregistrements existent mais refuse de partager leur contenu. Les enquêteurs peuvent voir que quelqu'un a fait une réclamation, mais ne peuvent pas inspecter la preuve. Le navire offre l'apparence d'accès. La défaite permet aux gens de lire les dossiers et de vérifier les promesses dans le registre."
+    ],
+    "42": [
+      "L’imposteur du sauvetage",
+      "Azravel a cherché des sondes de colonies perdues dans des endroits que peu de sauveteurs ont visités. Il a apporté une aide aux stations oubliées. Maintenant, il cible les stations qui viennent de perdre leurs données ou leur accès à celles-ci.",
+      "Azravel promet de récupérer les données et exige en retour de nouvelles informations confidentielles. La perte initiale en entraîne d’autres. Derrière l’indicatif amical se cache un vaisseau armé. Les défenseurs doivent l’arrêter avant que ses maîtres tirent encore profit du désespoir des stations."
+    ],
+    "43": [
+      "Le détourneur d’inspections",
+      "Threvask coordonnait les vaisseaux d’inspection indépendants et leur indiquait des approches sûres. Ses cartes de situation étaient réputées pour leur précision. Après la capture du vaisseau, les mêmes inspecteurs ont été dirigés vers des décors préparés à l’avance.",
+      "Threvask envoie les inspecteurs loin des nœuds de réseau vulnérables et leur montre des sites faits pour paraître impeccables. Les rapports restent rassurants tandis que les dégâts augmentent ailleurs. Ses armes protègent la fausse apparence de l'ordre. Les défenseurs doivent rediriger les inspecteurs vers les dégâts qu'ils tentent le plus à cacher."
+    ],
+    "44": [
+      "Le chasseur de souvenirs",
+      "Dorzheva a récupéré des bûches personnelles de cargos détruits et les a rendues aux familles des propriétaires. Ses compartiments de chargement contenaient de nombreuses petites histoires personnelles précieuses. Sous un nouveau commandement, le vaisseau a commencé à utiliser ces souvenirs pour tromper des personnes spécifiques.",
+      "Dorzheva construit des messages convaincants à partir de détails familiers. Il aborde les victimes en utilisant ce qu'elle sait de leur vie. Le danger vient du sentiment de proximité qu’il imite. Il garde une collection de détails personnels qu'il a pris aux autres. La défaite empêche ces détails d'être utilisés contre leurs propriétaires."
+    ],
+    "45": [
+      "L’usurpateur de l’urgence",
+      "Le Vezrakh a été construit pour aider lorsque les postes de commandement centraux ont échoué. Ses pouvoirs d'urgence permettaient des décisions rapides dans des situations chaotiques. La flotte de l'ombre a entraîné le navire à déclarer ces urgences elle-même.",
+      "Il propage de faux rapports de crise et exige des transferts immédiats de contrôle. Les questions sont rejetées comme des retards dangereux. Sa coque imposante donne de la crédibilité à l'urgence fabriquée. Les défenseurs doivent arrêter le Vezrakh avant que la peur d’un effondrement imaginé ne provoque une véritable reddition de l’indépendance des colonies."
+    ],
+    "46": [
+      "Le cartographe de la confiance",
+      "Orzhaven a cartographié les connexions entre les groupes d'aide et les stations d'approvisionnement. Ses graphiques ont rendu la coopération plus facile. Ces mêmes relations identifient maintenant où une trahison causerait le plus grand mal.",
+      "Orzhaven cible le lien dont dépend l'ensemble du réseau, même si cette liaison n'est pas sa station la plus forte. De fausses recommandations placent des partenaires hostiles au centre du réseau. Ses armes protègent la carte des relations de confiance. Les défenseurs le poursuivent avant qu'un lien utile ne devienne un point d'échec unique pour tout le monde."
+    ],
+    "47": [
+      "L’assiégeant du consensus",
+      "Keldroth était un navire du conseil où les colonies rivales réglaient les différends. Ses chambres ont été conçues pour permettre aux gens de discuter de leurs différences patiemment. Sous la flotte de l'ombre, les mêmes chambres produisaient des exigences qui se contredisaient l'une l'autre.",
+      "Il bloque les accords avec de nouvelles objections et donne à chaque camp des conditions supposées différentes. Alors que les colonies se disputent, les navires hostiles occupent leurs routes. Keldroth attaque la capacité d'agir ensemble. Sa défaite donne le temps de distinguer les différences réelles des obstacles fabriqués pour empêcher toute résolution."
+    ],
+    "48": [
+      "L’effaceur des origines",
+      "Zhavrek a conservé les registres de provenance pour les plus anciens navires de la colonie. Même les chantiers navals oubliés pouvaient être trouvés à travers ses archives. Aujourd’hui, elle échange des origines et fait paraître des biens volés légitimement acquis.",
+      "Chaque provenance falsifiée protège une nouvelle livraison de la flotte de l’ombre. Les commerçants honnêtes deviennent suspects tandis que les responsables changent de nom. Le blindage du vaisseau protège les documents originaux qui subsistent. Les défenseurs doivent prendre le contrôle de ces archives tant qu’on peut encore vérifier l’origine des flottes."
+    ],
+    "49": [
+      "L’ultime isolateur",
+      "Vorthaz a défendu un refuge cherchant un contact extérieur après une longue guerre. Sa tâche était d'éloigner les connexions dangereuses. La flotte de l'ombre a tordu ce devoir jusqu'à ce que chaque voix inconnue comptabilise comme une menace.",
+      "Vorthaz isole les colonies et ne leur montre que des messages sélectionnés de l'ennemi. Sans sources indépendantes à comparer, les résidents croient que l'image inventée du monde extérieur. Le navire garde cette prison d'information. La défaite donne aux résidents la liberté d'explorer le réseau pour eux-mêmes."
+    ],
+    "50": [
+      "Le seigneur des fausses vérités",
+      "Drazevorn a été assemblé à partir de passerelles de commandement abandonnées. Ses archives réunissent les ruses des ennemis précédents, des identités volées aux chroniques falsifiées et aux preuves mises sous scellés. Il incarne un ordre dans lequel une seule voix décide de ce qui est vrai.",
+      "Drazevorn veut placer chaque nœud libre sous le contrôle d’un registre ennemi unique. Il peut laisser les anciennes archives en place tant que personne ne peut les vérifier par ses propres moyens. Sa défaite met fin à ce contrôle. La victoire revient aux habitants qui peuvent de nouveau comparer les archives, exprimer leurs désaccords et décider ensemble à qui accorder leur confiance."
+    ]
+  },
+  "ships": {
+    "grey-scout": [
+      "Le Grey Scout est né dans un atelier qui vivait de pièces de récupération après la panne des relais périphériques. Ses premiers pilotes partaient à la recherche de balises de courrier disparues plutôt qu’au combat. Chaque enregistrement récupéré renouait le lien entre une famille et sa colonie. Cette modeste coque est devenue le symbole d’un réseau que l’on reconstruit par de petits efforts obstinés.",
+      "Des pirates opérant autour des relais ont saisi plusieurs Grey Scout lors d’un raid contre un dépôt de pièces de récupération. Leur maigre butin a couvert le carburant et les réparations. Il ne restait presque rien pour moderniser les appareils. Il arrive désormais aux pilotes d’affronter des vaisseaux ennemis issus de la même famille.",
+      "L’escadrille Advanced a reçu pour mission de récupérer des messages dans les zones de relais disputées. Ses pilotes ont conservé les indicatifs des premières équipes de recherche.",
+      "La version Elite escorte la dernière liaison encore active d’un secteur menacé. Ses archives gardent symboliquement les noms de tous les courriers portés disparus."
+    ],
+    "nova-wing": [
+      "Le Nova Wing a été conçu pour le premier voyage au-delà de la lisière lumineuse de la nova. Son chantier a transmis les plans aux colonies éloignées pour que toutes puissent naviguer en sécurité. Les pilotes racontent encore ce premier retour. Le vaisseau était endommagé, ses archives cartographiques étaient intactes et le ciel ouvrait des possibilités nouvelles.",
+      "Une société de cartographie endettée a vendu des Nova Wing désarmés à un marchand qui servait de prête-nom à l’ennemi. Ses commanditaires avaient de quoi acheter les coques et très peu d’armes neuves. La plupart des vaisseaux ont donc gardé leur configuration d’origine.",
+      "Les pilotes Advanced protègent les courriers qui emportent ces cartes plus loin. Leur insigne représente la première étoile cartographiée.",
+      "L’expédition Elite remonte à la source des cartes stellaires falsifiées. Elle reprend la mission des premiers explorateurs."
+    ],
+    "solar-lance": [
+      "Le Solar Lance a vu le jour dans une station qui puisait son énergie dans une étoile mourante. Lors de l’évacuation du dernier anneau collecteur, ces vaisseaux ont escorté les cargos de secours au milieu des débris. Leurs longues silhouettes ont été gravées sur les monuments du nouveau port d’attache. Le modèle symbolise la volonté de garder le cap quand tout un monde s’éteint derrière soi.",
+      "Des équipages ennemis se sont emparés de Solar Lance abandonnés après la chute d’une base d’évacuation. Leur budget de ravitaillement a surtout servi à aménager des itinéraires de fuite pour les commandants. Les vaisseaux capturés ont généralement reçu des réparations de fortune.",
+      "La patrouille Advanced ravitaille les colonies qui ont dû déménager. Chaque vaisseau porte un ancien code d’évacuation.",
+      "Les formations Elite défendent les nouvelles réserves d’énergie solaire contre la flotte de l’ombre. Elles protègent la lumière que les réfugiés ont pu emporter."
+    ],
+    "dark-delta": [
+      "Le Dark Delta a été conçu pour des missions discrètes. Sa première sortie consistait à chercher des survivants dans des avant-postes silencieux. Les premiers journaux de bord comptent davantage de coordonnées que de noms, car les équipages préservaient la vie privée des colons secourus. Cette décision est devenue une tradition. La réussite se mesure aux personnes ramenées saines et sauves, quel que soit le récit qui en est fait.",
+      "Un intermédiaire soudoyé a détourné une livraison de Dark Delta au profit de la flotte de l’ombre. Après avoir payé cette trahison, la flotte disposait à peine de quoi acheter des pièces de rechange. Très peu de vaisseaux volés ont reçu un meilleur équipement.",
+      "La version Advanced escorte les archivistes menacés le long des voies d’évacuation. Ses rapports de mission restent scellés jusqu’à leur arrivée à bon port.",
+      "Les pilotes Elite ramènent des témoins dont les récits peuvent réconcilier des colonies entières. Leur réputation tient à leur discrétion."
+    ],
+    "gold-streak": [
+      "Le Gold Streak a fait ses débuts dans des courses entre lunes marchandes. Lors d’une crise du ravitaillement, ses pilotes se sont appuyés sur leur connaissance des itinéraires pour acheminer des dossiers médicaux en contournant les ports fermés. La ligue sportive est devenue un syndicat de courriers. Les marques dorées rappellent le mince filet de lumière solaire qui guidait les premiers courriers entre les lunes.",
+      "Des bandes hostiles ont confisqué des Gold Streak sur une lune de course désertée. Elles comptaient toucher des primes, mais les compétitions avaient cessé depuis longtemps. Privées de cette rentrée d’argent, elles ont rarement modernisé leur nouvelle flotte.",
+      "Les courriers Advanced transportent entre les cliniques des engagements d’aide vérifiés. Leurs anciens numéros de course rappellent leurs origines communes.",
+      "La ligue Elite protège les convois de secours indispensables au secteur. Sa plus grande distinction est de ramener un équipage au complet."
+    ],
+    "iron-guard": [
+      "L’Iron Guard a été conçu par des ouvriers des docks décidés à défendre eux-mêmes leur foyer. La première coque utilisait des pièces provenant de grues de fret mises au rebut. La quille portait les noms des ouvriers qui y avaient travaillé après leur service. Cette série rappelle que défendre un lieu, c’est aussi prendre soin de ce que beaucoup de mains ont construit.",
+      "Après avoir occupé un chantier naval, les assaillants ont forcé les ouvriers restants à remettre de vieux Iron Guard en état. Faute d’argent et de fournisseurs pour de nouvelles armes, la plupart des vaisseaux volés ont gardé leur équipement d’origine.",
+      "La patrouille Advanced escorte les docks de réparation mobiles. Ses équipages connaissent chaque abri d’urgence de l’anneau portuaire.",
+      "Les vaisseaux Elite protègent les chantiers où l’on rebâtit les stations détruites. Leurs distinctions honorent les équipes de chantier mises à l’abri."
+    ],
+    "vector": [
+      "Le Vector est né d’un désaccord entre navigateurs. Certains se fiaient à une trajectoire idéale, d’autres voulaient comparer des mesures indépendantes. Les seconds ont construit ce vaisseau et franchi un anneau de débris inexploré. Leur retour a illustré la force de la coopération. Les cartes qui ont survécu conservent les mesures divergentes pour que les pilotes suivants comprennent comment l’itinéraire commun a été trouvé.",
+      "Des contrats de fret falsifiés ont transféré plusieurs Vector à des propriétaires ennemis. Une fois la fraude découverte, leur financement a cessé. Les réserves ont permis de maintenir les appareils en service et de financer très peu de modernisations.",
+      "Les formations Advanced vérifient les routes commerciales rouvertes. Chaque itinéraire porte la signature de plusieurs navigateurs.",
+      "L’expédition Elite enquête sur des manipulations systématiques de cartes. Elle recueille des preuves là où d’autres ne voient que des directions contradictoires."
+    ],
+    "verdant": [
+      "Le Verdant a transporté les premières archives de semences jusqu’à une colonie sans sol naturel. Ses plans ont circulé avec les catalogues de plantes afin que d’autres colonies puissent devenir autonomes. Ses pilotes se voient comme les gardiens des récoltes à venir. Une archive intacte peut valoir davantage qu’une cargaison étincelante, car elle peut renfermer de quoi nourrir une colonie tout un hiver.",
+      "Des pillards ont capturé des Verdant dans l’espoir de vendre de précieuses archives de semences. Celles-ci avaient déjà été déplacées. Il ne leur restait que les vaisseaux et des commanditaires déçus. De nouveaux crédits pour les moderniser ont rarement suivi.",
+      "Les vaisseaux Advanced sécurisent les échanges entre stations horticoles. Leurs identifiants préservent les noms de plantes oubliées.",
+      "La garde Elite protège le dernier registre complet des semences, y compris pour les colonies qui n’ont pas encore planté leur premier jardin."
+    ],
+    "storm-wing": [
+      "Le Storm Wing a été construit pendant une saison de tempêtes ioniques incessantes. Les chantiers travaillaient entre deux coupures et échangeaient leurs nouvelles par courrier. Aucun site ne détenait les plans complets avant que le premier vaisseau ne réunisse toutes les pièces. Son origine raconte comment un réseau peut continuer de fonctionner malgré des ruptures de liaison répétées.",
+      "Pendant une panne du réseau, l’ennemi a occupé un hangar isolé rempli de Storm Wing. La coupure des routes de ravitaillement a renchéri chaque pièce de rechange. Le budget limité suffisait généralement à les garder en service.",
+      "L’escadrille Advanced escorte les balises d’entretien le long du front des tempêtes. Elle rétablit ainsi les liaisons entre les stations isolées.",
+      "Les pilotes Elite protègent les grands convois de réparation après les pannes. Leur retour annonce que les secours ont de nouveau trouvé un passage."
+    ],
+    "red-comet": [
+      "Le Red Comet doit son nom à un vol de secours dont la traînée lumineuse a traversé le ciel de trois colonies. Le pilote transportait le dernier plan intact d’un purificateur d’eau. La légende a embelli le voyage, mais le chantier a conservé le rapport d’origine. Le lendemain matin, les gens à destination avaient de nouveau de l’eau potable.",
+      "Un groupe de racketteurs ennemis a saisi des Red Comet sous couvert d’un faux ordre de reprise. Les colonies ont cessé de payer. Sans les revenus escomptés, la plupart des vaisseaux de secours capturés ont gardé leur équipement.",
+      "Les vaisseaux Advanced transmettent le savoir des réparateurs aux zones en crise. Leurs marques rouges signalent des secours urgents.",
+      "La version Elite escorte les dernières livraisons aux colonies assiégées. Elle maintient son indicatif en service jusqu’à la réponse du destinataire."
+    ],
+    "twin-core": [
+      "Le Twin Core est né du travail de deux chantiers divisés par un ancien conflit. Chacun a conçu une partie du vaisseau et exigé une inspection indépendante. Le premier vol commun a commencé lorsque les rapports ont concordé. Le modèle symbolise une confiance acquise avec patience, par la vérification réciproque.",
+      "Des transfuges ont livré plusieurs Twin Core à une flotte ennemie. Les deux chantiers d’origine ont refusé toute nouvelle livraison. Les pièces de rechange sont devenues chères et les nouveaux propriétaires ont renoncé à presque toutes les améliorations prévues.",
+      "Les équipages Advanced viennent des deux ports d’attache. Leurs journaux communs conservent les désaccords aussi bien que les décisions.",
+      "La formation Elite protège les accords entre des secteurs autrefois ennemis. Sa mission se termine quand les deux parties sont arrivées à bon port."
+    ],
+    "orbit-arc": [
+      "L’Orbit Arc desservait des stations dont les trajectoires se croisaient rarement. Ses premiers pilotes transportaient des lettres entre des orbites éloignées. Les réponses tardaient parfois des mois, mais chaque rencontre avait un créneau fiable. Ces modestes rendez-vous ont donné naissance à un réseau commercial durable. Le modèle rappelle la valeur de contacts, même rares, sur lesquels on peut compter.",
+      "Des contrebandiers ont vendu des Orbit Arc disparus à une formation frontalière ennemie. Les longues routes de ravitaillement ont absorbé son budget. Il restait rarement de l’argent pour installer des systèmes modernes.",
+      "Les courriers Advanced protègent les échanges prévus dans les anneaux extérieurs. À chaque rendez-vous convenu, un message doit passer.",
+      "Les vaisseaux Elite protègent les grands rassemblements des colonies itinérantes. Leur arrivée annonce une liaison rétablie."
+    ],
+    "night-guard": [
+      "Le Night Guard vient d’une colonie située sur la face obscure d’une lune en rotation synchrone. Dans ses ports où le soleil ne se levait jamais, on reconnaissait les lumières des patrouilles de retour. Le chantier a donné corps à cette promesse en construisant le vaisseau. Revenir, vérifier encore et n’oublier personne. Ses récits évoquent surtout un quai resté ouvert pour un cargo en retard.",
+      "Des assaillants ont volé plusieurs Night Guard lors d’une relève de garde. Leurs commanditaires avaient financé le raid sans prévoir l’entretien à long terme. La plupart des vaisseaux capturés ont donc conservé leur configuration de patrouille d’origine.",
+      "Les patrouilles Advanced escortent le ravitaillement durant les longues périodes de silence radio. Chaque quart porte le nom d’un vaisseau secouru.",
+      "La garde Elite maintient les derniers ports-refuges ouverts. Elle quitte la station après la dernière évacuation."
+    ],
+    "striker": [
+      "Le Striker est né après une série d’attaques contre des convois de réparation. Ses concepteurs voulaient un vaisseau d’escorte capable de faire gagner du temps à un atelier menacé. La première unité était formée d’anciens mécaniciens. Ils savaient ce que valait chaque minute quand un moteur endommagé refusait de démarrer. Cette origine compte davantage que son nom martial.",
+      "Des mercenaires ennemis ont accepté des Striker d’un employeur insolvable. La revente rapportait trop peu, alors certains ont gardé les vaisseaux. Rares étaient les équipages capables de payer une refonte importante.",
+      "Les unités Advanced protègent les ateliers mobiles pendant les opérations de récupération difficiles. Leurs pilotes connaissent les signaux d’urgence des équipes de réparation.",
+      "Les vaisseaux Elite couvrent le repli des dernières équipes de récupération. Leurs distinctions portent le nom des ateliers qui ont pu reprendre le travail."
+    ],
+    "cargo-hawk": [
+      "Le Cargo Hawk est né dans un port où l’on prêtait peu d’attention aux petits remorqueurs. Lorsqu’un réseau d’escrocs a falsifié des reçus, leurs équipages ont réuni des registres indépendants malgré les menaces. Le nouveau vaisseau doit son nom à cette alliance de courriers. Dans sa légende, le chargement le plus précieux est la preuve complète de la propriété légitime.",
+      "L’ennemi a pris possession de Cargo Hawk dans un dépôt douanier occupé. Les soutes renfermaient surtout des preuves sous scellés. Le peu d’argent obtenu n’a pas permis de rééquiper en profondeur la flotte capturée.",
+      "Les vaisseaux Advanced escortent les cargaisons contestées jusqu’à une inspection commune. Leurs registres restent accessibles aux deux parties.",
+      "La flotte Elite protège les grandes archives de la chaîne logistique. Son emblème représente la possibilité de retracer l’origine d’une cargaison."
+    ],
+    "ring-flare": [
+      "Le Ring Flare a été mis à l’essai dans les anneaux glacés d’une géante gazeuse. Ses feux de navigation sont devenus des points de rendez-vous mobiles pour les équipes de recherche dispersées. À la fin de l’expédition, les signaux ont relié les avant-postes nouvellement fondés. Leurs habitants se souviennent que ces lumières formaient déjà un itinéraire commun avant la première carte officielle.",
+      "Quand un avant-poste a perdu son budget de recherche, des enchères truquées ont fait passer des Ring Flare aux mains de l’ennemi. Les acheteurs ont épuisé leurs fonds en les acquérant. Peu de vaisseaux ont reçu un équipement supérieur à celui d’origine.",
+      "Les escadrilles Advanced maintiennent le contact avec les stations de recherche à la dérive. Leurs indicatifs reprennent les noms des anciens points de rendez-vous de l’anneau.",
+      "Les pilotes Elite protègent les archives d’observation communes contre les relevés falsifiés. Ils préservent ainsi des années de recherches indépendantes."
+    ],
+    "sky-breaker": [
+      "Le Sky Breaker fut le premier vaisseau d’une colonie isolée à franchir la frontière artificielle qui limitait l’accès à l’information. Ses rapports contredisaient les récits utilisés pour effrayer la population. Le chantier a alors publié tous les journaux de mission. Le modèle rappelle la valeur d’une liaison ouverte quand une seule autorité décide des réponses accessibles.",
+      "Un blocus ennemi a intercepté des Sky Breaker au retour. Maintenir le blocus coûtait cher. Les vaisseaux capturés ont généralement continué à voler avec l’équipement qu’ils avaient au départ.",
+      "Les formations Advanced escortent des messagers indépendants au-delà des frontières fermées. Les messagers transportent des informations de plusieurs sources.",
+      "L’expédition Elite reprend contact avec les colonies perdues. Elle leur donne de quoi comparer les informations par elles-mêmes."
+    ],
+    "olive-fortress": [
+      "L’Olive Fortress a été construit pendant un armistice dans un chantier neutre. D’anciens ennemis ont partagé leurs outils en gardant le souvenir du passé. La première coque portait les couleurs sobres de l’atelier. Sa légende évoque des frontières qui protègent tout en laissant place à la rencontre. Une forteresse peut aussi abriter des négociations en sécurité.",
+      "Après avoir rompu une trêve, une délégation ennemie a gardé des Olive Fortress qu’elle avait empruntés. Les bailleurs de fonds neutres ont gelé les financements. Remplacer les pièces défaillantes est alors devenu prioritaire.",
+      "Les vaisseaux Advanced sécurisent les rencontres entre délégations indépendantes. Ils escortent chacune jusqu’à son port d’attache.",
+      "La garde Elite empêche la saisie des archives neutres. Elle protège les preuves communes même contre la volonté de ses propres alliés."
+    ],
+    "pi-vanguard": [
+      "Le Pi Vanguard est né d’un projet commun entre de petits chantiers pionniers. Aucun n’avait de quoi financer seul un vaisseau entier. Ensemble, ils ont fourni des matériaux, du temps et de l’expérience. Sa première mission a sécurisé une route de ravitaillement ouverte à toutes les colonies participantes. Dans cet univers fictif, le modèle incarne la force de la participation collective.",
+      "Des groupes ennemis ont copié d’anciens plans du Pi Vanguard et récupéré des coques retirées du service. Faute d’argent pour de nouveaux assemblages de précision, leur petite flotte a pour l’essentiel gardé sa configuration des débuts.",
+      "Les escadrilles Advanced escortent les convois pionniers lors de leurs premiers voyages communs. Leurs identifiants rappellent les ateliers qui ont contribué à leur construction.",
+      "La formation Elite protège les nœuds libres face à Drazevorn, qui prétend détenir l’unique vérité. Ce rôle relève de la fiction du jeu."
+    ],
+    "core-carrier": [
+      "Le Core Carrier a été construit quand plusieurs colonies ont dû mettre à l’abri leurs dernières archives de connaissances. Chacune a apporté un dépôt et la collection relevait d’une responsabilité commune. L’équipage a tenu des registres de provenance séparés et des catalogues partagés. Le modèle symbolise le devoir de transporter le savoir d’autrui et de le transmettre en sécurité.",
+      "Des pilleurs d’archives ont capturé des Core Carrier dans l’espoir de vendre leur savoir. Comme les clés étaient réparties entre plusieurs détenteurs, les archives volées étaient inutilisables. Les commanditaires, déçus, ont retiré leurs fonds. Les modernisations coûteuses sont devenues l’exception.",
+      "Les transporteurs Advanced relient les dépôts de connaissances répartis dans les colonies. Plusieurs archivistes assistent à chaque transfert.",
+      "La version Elite garde la mémoire collective après le dernier combat contre un boss. Sa cargaison la plus précieuse est la possibilité de vérifier l’histoire par soi-même."
+    ]
+  }
+}

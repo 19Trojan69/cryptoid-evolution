@@ -3,7 +3,7 @@ import { cardFilename, canShareCard, shareCard } from './cardDownload';
 import { collectionBackground, cardBackgroundAsset } from './cardBackgrounds';
 import { bossCardAvailable, shipCardAvailable } from './cardAvailability';
 import CollectionCardView from './CollectionCardView';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useLocale } from '../i18n';
 import { localInventory, loadAccountSave } from '../lib/accountSave';
@@ -17,6 +17,8 @@ import BossPortrait from './BossPortrait';
 import ShipPortrait from './ShipPortrait';
 import { playerCardUnlocked } from './collectionRules';
 import { bossCard, shipCard } from './collectionData';
+import type { CollectionLore } from './collectionLore';
+import { CollectionLoreStatus, useCollectionLore } from './useCollectionLore';
 import './collection.css';
 import './shopPurchase.css';
 
@@ -38,15 +40,16 @@ export default function Collection({uid,onClose}:{uid?:string;onClose:()=>void})
   return()=>{alive=false;};
  },[uid,retry]);
  useEffect(()=>()=>{if(download)URL.revokeObjectURL(download);},[download]);
- useEffect(()=>{const versionRef=exportVersion;versionRef.current++;const grid=gridPosition.current;scroller.current?.scrollTo(0,!selectedKey&&grid.category===category&&grid.owner===uid?grid.top:0);close.current?.focus({preventScroll:true});setDownload(null);setDownloadBlob(null);setImageOpen(false);setExportError(false);setBusy(false);return()=>{versionRef.current++;};},[selectedKey,category,uid]);
+ useLayoutEffect(()=>{const versionRef=exportVersion;versionRef.current++;const grid=gridPosition.current;scroller.current?.scrollTo(0,!selectedKey&&grid.category===category&&grid.owner===uid?grid.top:0);close.current?.focus({preventScroll:true});setDownload(null);setDownloadBlob(null);setImageOpen(false);setExportError(false);setBusy(false);return()=>{versionRef.current++;};},[selectedKey,category,uid,locale]);
  const visibleOwnership=ownership.owner===(uid||'guest')?ownership:{used:[],upgrades:[],wins:{} as Record<string,number>,fleet:{} as ShipFleet,skin:undefined,color:undefined};
  const ownerTestnet='testnetCatalogAccess' in visibleOwnership&&visibleOwnership.testnetCatalogAccess===true;
  const categories=[say('Bosse','Bosses'),t('STANDARD'),t('ADVANCED'),t('ELITE')];
- const entries=category===0?bossManifest.map(b=>({key:`boss-${b.id}`,name:bossName(b.id),image:b.image,available:bossCardAvailable(b.id,ownerTestnet),unlocked:bossCardAvailable(b.id,ownerTestnet)&&(visibleOwnership.wins[b.id]||0)>0,tier:Math.ceil(b.id/10),serial:`B-${String(b.id).padStart(2,'0')}`,make:()=>bossCard(b.id,locale),boss:b.id})):playerSkins.map(ship=>({key:`${ship.id}-${category}`,name:ship.name,image:shipEvolutionAsset(ship.sprite,category as ShipStage),available:shipCardAvailable(ship.sprite,category as ShipStage,ownerTestnet),unlocked:shipCardAvailable(ship.sprite,category as ShipStage,ownerTestnet)&&playerCardUnlocked(ship.id,ship.sprite,category as ShipStage,visibleOwnership.used,visibleOwnership.upgrades),tier:category,serial:`P-${String(ship.sprite+1).padStart(2,'0')}/${category}`,make:()=>shipCard(ship.id,category as ShipStage,locale),boss:0}));
+ const entries=category===0?bossManifest.map(b=>({key:`boss-${b.id}`,name:bossName(b.id),image:b.image,available:bossCardAvailable(b.id,ownerTestnet),unlocked:bossCardAvailable(b.id,ownerTestnet)&&(visibleOwnership.wins[b.id]||0)>0,tier:Math.ceil(b.id/10),serial:`B-${String(b.id).padStart(2,'0')}`,make:(pack?:CollectionLore)=>bossCard(b.id,locale,pack),boss:b.id})):playerSkins.map(ship=>({key:`${ship.id}-${category}`,name:ship.name,image:shipEvolutionAsset(ship.sprite,category as ShipStage),available:shipCardAvailable(ship.sprite,category as ShipStage,ownerTestnet),unlocked:shipCardAvailable(ship.sprite,category as ShipStage,ownerTestnet)&&playerCardUnlocked(ship.id,ship.sprite,category as ShipStage,visibleOwnership.used,visibleOwnership.upgrades),tier:category,serial:`P-${String(ship.sprite+1).padStart(2,'0')}/${category}`,make:(pack?:CollectionLore)=>shipCard(ship.id,category as ShipStage,locale,pack),boss:0}));
  const cardPaint = (id:string) => id === visibleOwnership.skin ? allPlayerColors.find(color => color.id === visibleOwnership.color)?.id : Object.keys(visibleOwnership.fleet[id as keyof ShipFleet] || {})[0] as PlayerColorId | undefined;
  const selectedIndex=entries.findIndex(entry=>entry.key===selectedKey);
  const activeEntry=selectedIndex>=0?entries[selectedIndex]:null;
- const selected=activeEntry?.unlocked?activeEntry.make():null;
+ const cardLanguage = useCollectionLore(locale, activeEntry?.unlocked === true);
+ const selected=activeEntry?.unlocked && !cardLanguage.pending && !cardLanguage.failed ? activeEntry.make(cardLanguage.lore) : null;
  if (selected && !selected.bossId) selected.color = cardPaint(selected.key.replace(/-\d$/, ""));
  const moveCard=(direction:number)=>{
   const next=selectedIndex+direction;
@@ -68,7 +71,7 @@ export default function Collection({uid,onClose}:{uid?:string;onClose:()=>void})
       <div className="collection-art">{entry.boss?<BossPortrait id={entry.boss} silhouette={!entry.unlocked}/>:<ShipPortrait src={entry.image} name={entry.name} color={cardPaint(entry.key.replace(/-\d$/, ""))} silhouette={!entry.unlocked}/>}</div>
       <strong>{entry.name}</strong><small className={!entry.unlocked && !entry.available ? "mainnet-ready-badge" : undefined}>{entry.unlocked?say('Karte öffnen','Open card'):!entry.available?say('MAINNET READY','MAINNET READY'):say('GESPERRT','LOCKED')}</small>
      </button>)}</div></>}
-   </>:selected?<>{imageOpen&&download&&<figure className="card-save-preview"><img src={download} alt={selected.name}/><figcaption>{t("Hold the image to save it, or use your browser’s image menu.")}</figcaption></figure>}<CollectionCardView card={selected} stars={selected.bossId ? visibleOwnership.wins[selected.bossId] || 0 : 0}/></>:<article className="collection-card collection-locked-detail">
+   </>:selected?<>{imageOpen&&download&&<figure className="card-save-preview"><img src={download} alt={selected.name}/><figcaption>{t("Hold the image to save it, or use your browser’s image menu.")}</figcaption></figure>}<CollectionCardView card={selected} stars={selected.bossId ? visibleOwnership.wins[selected.bossId] || 0 : 0}/></>:activeEntry.unlocked?<CollectionLoreStatus {...cardLanguage} />:<article className="collection-card collection-locked-detail">
     <span className="collection-serial">{activeEntry.serial}</span><h3>{activeEntry.name}</h3>
     <div className="collection-card-art">{activeEntry.boss?<BossPortrait id={activeEntry.boss} silhouette/>:<ShipPortrait src={activeEntry.image} name={say('Gesperrte Schiffssilhouette','Locked ship silhouette')} silhouette/>}</div>
     <h4 className={!activeEntry.available ? "mainnet-ready-badge" : undefined}>{activeEntry.available?say('GESPERRT','LOCKED'):say('MAINNET READY','MAINNET READY')}</h4>

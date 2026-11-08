@@ -1,0 +1,378 @@
+{
+  "locale": "hu",
+  "sourceHash": "fa6d4efc4da8a285cc0f5bd832abb51ecd7b901bca9d4b331d612385bca0f1be",
+  "bosses": {
+    "1": [
+      "A spamsugárzó",
+      "Varneth egykor ellátási nyilvántartásokat szállított a Genesis kolóniái között. Eltűnt egy elhagyott átjátszóállomás mögött. Mire visszatért, a legénység azonosítójele elnémult, a raktereket pedig adókamrákká alakították át.",
+      "Most értéktelen tranzakciókkal és az üzenetek végtelen másolataival árasztja el a kereskedelmi útvonalakat. A segélyhívások elmerülnek a zajban, miközben a valódi szállítmányok visszaigazolásra várnak. Páncélozott hajóteste védi a zavar forrását. Varneth megállításával a hálózaton ismét hallatszhat a kolóniák lakóinak hangja."
+    ],
+    "2": [
+      "A maszkviselő",
+      "A Korvessa egy diplomáciai futárflottában szolgált, és minden határállomás azonosítójelét ismerte. Amikor megbízói eltűntek, személyazonosságuk adatait egy titkos archívumba mentette.",
+      "A Korvessa ma már minden érkezésekor más, megbízhatónak tartott nevet használ. Hamis üzenetei letérítik az ellátóhajókat a biztonságos útvonalakról, és segítségnek álcázzák az ellenség parancsait. Az udvarias hívójel mögött hadihajó rejtőzik. A Korvessa legyőzése arra emlékezteti a kolóniákat, hogy egy ismerős hang önmagában még nem igazolja a feladó becsületességét."
+    ],
+    "3": [
+      "A pecséttolvaj",
+      "A Drelvorn egy utazó páncélterem volt, amely a régi flottaparancsnokok pecsétjeit őrizte. Egy lázadás idején a biztonsági rendszer kizárta a jogos őrzőket, majd a hozzáférési adataikkal együtt elvitte a hajót.",
+      "A Drelvorn most az árnyékflottának árulja az ellopott jogosultságokat. A zsákmányolt pecsétekkel ellátott üzenetek olyan ajtókat nyitnak meg, amelyeknek zárva kellene maradniuk. A páncélozott hajótest a hitelesség látszatát védi. A védőknek meg kell állítaniuk a hajót, amíg a megmaradt archívumok még meg tudják különböztetni a hiteles parancsokat a lopott névvel aláírt üzenetektől."
+    ],
+    "4": [
+      "A krónikahamisító",
+      "Talvrek feljegyezte a fiatal gyarmatok történetét. Archívuma túlélt egy háborút, de az alkotóik iránti hűség nem. Egy új parancsnok a krónikást a feltalált történelem kereskedőjévé változtatta.",
+      "Megváltozott nyilvántartásokat terjeszt, és azt állítja, hogy a tisztességes szállítások soha nem történtek meg. Az egymásnak ütköző nyilvántartások vitákat vetnek fel a tulajdonjoggal és a kötelezettségekkel kapcsolatban, miközben fegyverei távol tartják a nyomozókat. A Talvrek elleni küldetés többet véd, mint egy útvonalat: védi a közös memóriát, amelytől az együttműködés függ."
+    ],
+    "5": [
+      "A csomópontok ostromlója",
+      "A Zeraveth javítóplatformnak készült. Elég nagy volt ahhoz, hogy egész átjátszógyűrűket fogjon körül. Az árnyékflotta átvette az irányítását, és a dokkolószerkezeteket ostromállásokká alakította.",
+      "Körülveszi a fontos hálózati állomásokat, és elvágja karbantartó személyzetüket a támogatástól. A kis hibák jelentős kimaradásokká nőnek, míg a távoli kolóniák csak a hírek töredékeit kapják. A Zeraveth elűzése lehetővé teszi a technikusok számára, hogy visszatérjenek és újra összekapcsolják az elszigetelt közösségeket. Kitalált ostromszerepe elkülönül az alább felsorolt tényleges harci felszereléstől."
+    ],
+    "6": [
+      "A visszhangvadász",
+      "Az Orvask egykor konvojokat kísért, és minden áthaladási engedélyt bizonyítékként megőrzött. A memóriájában még mindig megtalálhatók a régen eltűnt kapitányok hangjai.",
+      "Az árnyékflotta a régi parancsok arzenáljává változtatta a felvételeket. Az Orvask újraközvetítja őket jelenlegi utasításként, csapdába ejti az állomásokat a valódi jelenlegi igények és az ismerős visszhangok között. Az archívumot türelmes erőszakkal őrzi. A vereség időt ad a védőknek, hogy elutasítsák a lejárt parancsokat, és helyreállítsák a friss megerősítés értékét."
+    ],
+    "7": [
+      "Az árnyékhíd",
+      "Keldrava mobil átigazolási pont volt két távoli gyarmat között. Amikor állandó kapcsolatuk meghiúsult, ez lett az egyetlen látszólagos út a külvilág felé. Kevesen vették észre, hogy a legénység megváltozott.",
+      "A rakomány most eltűnik a hajó belsejében, miközben a nyugták továbbra is biztonságos áthaladást ígérnek. A Keldrava kihasználja azt a bizalmat, amelyet a két közösség egymásba helyez. A legénység lopott árut rejteget a fedélzeten. A védőknek le kell zárniuk ezt a hamis kapcsolatot, mielőtt még több gyarmat a jövőjüket a rakterekre bízza."
+    ],
+    "8": [
+      "A pletykahordó",
+      "Veshkorn egyszer hírt hozott a legtávolabbi előőrsökre. Archívuma továbbra is tartalmazza a békés közvetítéseket megnyitó zenét. Most ugyanez a zene hamis jelentéseket vezet be a katasztrófákról és az összeomlásra vonatkozó figyelmeztetésekről.",
+      "Az egymásnak ellentmondó figyelmeztetések elűzik a kereskedőket a biztonságos útvonalakról, és a gyarmatok bizalmatlanná teszik partnereiket. Minden pletykát gyorsan felvált egy másik. A Veshkorn védi a hamis jelentéseket előállító műveletet. A hajó legyőzése helyet ad a híreknek, amelyeket az emberek ellenőrizhetnek."
+    ],
+    "9": [
+      "Az egyenlegek illuzionistája",
+      "Neravoss egy kiállítási hajó volt egy vásáron. Projektorai valódi rakományt és új motorokat mutattak. Amikor a vásár meghiúsult, a kiállítási felszerelés az új tulajdonosoknak adta át.",
+      "A Neravoss most olyan kellékeket hirdet, amelyek csak a képernyőjén léteznek. Hamis számlaegyenlegeket és hamis tartalékokat használ a valódi szállítások vonzására. A legénysége mindenkire lő, aki megpróbálja megvizsgálni az árut. A védők arra törekednek, hogy felfedjék a különbséget a megjelenített számok és a valódi készlet között, mielőtt több teherhajó eltűnne."
+    ],
+    "10": [
+      "A vámszedő zsarnok",
+      "Thalverik egy keskeny átjárót őrzött a kristályövön keresztül. Szerény navigációs díja egyszer valódi védelmet fizetett. Amikor a hivatalos flotta kilépett, a hajó az egyetlen hatóságnak nyilvánította magát.",
+      "A Thalverik most minden üzenetért és szállítmányért új díjat követel. Még a mentőcsapatok is fizetési felszólítást kapnak, miközben az átjáró zárva marad. A hálózat még működik, de a díjak megfojtják. A hajó csapdává változtatott egy közös útvonalat. A legyőzése visszaadja az átjárót a rá támaszkodó közösségeknek."
+    ],
+    "11": [
+      "A sokarcú",
+      "Skorveth egy kísérleti iskola szimulációs rendszereinek adott otthont. Virtuális kadétok ezrei tanultak együtt navigálni. Miután egy ellenséges erő elfoglalta a hajót, a kiképzési profilokat használta, hogy sok független embert megszemélyesítsen.",
+      "A hamis résztvevők támogatják egymást, és azt a benyomást keltik, hogy szinte mindenki egyetért. A kis kolóniáknak azt mondják, hogy szomszédaik már csatlakoztak az árnyékflottához. Ezek a hangok mind egy hajóról származnak. Skorveth elpusztítása leleplezi a hamis többséget, és lehetőséget ad a lakosoknak, hogy újra magukért beszéljenek."
+    ],
+    "12": [
+      "Az útvonalmérgező",
+      "Azhrel feltérképezte az első ugrási útvonalakat a ködhatáron keresztül. A térképek számtalan konvojt mentettek meg. Az ellenséges parancsnokok elfogták a hajót, és ezeket a megbízható térképeket használták, hogy meggyőző csapdákat állítsanak fel.",
+      "Azhrel hamis útvonalakat tesz közzé, és az ellenség által irányított kommunikációs állomásokon keresztül átirányítja az üzeneteket. A segélyhívások későn érik el a rendeltetési helyüket, vagy eltűnnek az üres térben. A hajó őrzi a hamis útvonalak csomópontját. Megállítja a biztonságos utat a már együttműködő világok között."
+    ],
+    "13": [
+      "Az archívumok gyújtogatója",
+      "Dornavik sérült adattároló eszközöket talált az égő roncsokból. Szigetelt kamrái megvédték a feljegyzéseket, amikor a körülöttük lévő rendszerek meghibásodtak. Az árnyékflotta látta, hogy ez a hajó olyan archívumokat érhet el, amelyeket mások nem.",
+      "Dornavik felajánlja, hogy visszaszerezi a feljegyzéseket, és sérült másolatokat hagy maga után. A gyarmatok elveszítik az adataikat, és a bizonyítékoknak meg kellett mondaniuk, hogy mennyi elveszett. A páncélja őrzi az utolsó ép feljegyzéseket, amelyeket rögzített. A védők azért harcolnak, hogy hazahozzák a megmaradt rekordokat."
+    ],
+    "14": [
+      "A blokkok visszatartója",
+      "Velkrath egy kutatókonvojt vezetett, amely hatalmas távolságokon keresztül szállított egy főkönyv új blokkjait. A lezárt konténerek minden rekordot érintetlenül tartottak. Az új parancsnoka ugyanazokat a konténereket használja, hogy szándékosan elrejtse a feljegyzéseket.",
+      "Az előőrsök elavult nézetekből működnek, míg a kiválasztott frissítések csak akkor érkeznek, ha zavart okozhatnak. A közös idővonal a jelen egymással versengő változataiba törik. Velkrath úgy őrzi az archívumát, mint a túszokat. A védőknek véget kell vetniük a lemaradásnak, mielőtt a késleltetés tartós megosztottsággá válik."
+    ],
+    "15": [
+      "Az órák manipulátora",
+      "Irdavoss egyszer szinkronizálta a határállomások óráit. Az egész flották a pontos adásokhoz időzítették manővereiket. A néma parancsváltás után a jelek egyértelműek maradtak, de az olvasásuk hamissá vált.",
+      "A hamis időbélyegek miatt az időben küldött üzenetek későn néznek ki. Az állomások tervezett karbantartási időszakai már nem állnak sorba. A hamis idők meggyőzőek, ami veszélyessé teszi őket. Az Irdavoss megállítása lehetővé teszi a kolóniák számára, hogy összehasonlítsák a független órákat, és visszaszerezzék az események valódi sorrendjét."
+    ],
+    "16": [
+      "A kulcsok börtönőre",
+      "A Rhazvorn börtönszállításként indult, olyan cellákkal, amelyeket külön le lehetett zárni. Az árnyékflotta kivitte a foglyokat, és a cellákat lopott archívumok tárolására használta. A hajó zsarolóeszközzé vált.",
+      "Elzárja más közösségek nyilvántartásait, és engedményeket követel a szabadon bocsátásukért. A klinikák és az utánpótlási raktárak akkor is nyomással szembesülnek, amikor berendezésük sértetlennek tűnik. A Rhazvorn erővel védi sejtjeit. A vereség utat nyit a bebörtönzött rekordokhoz, nem pedig egy újabb tárgyaláshoz a fogvatartóikkal."
+    ],
+    "17": [
+      "Az orákulumok megtévesztője",
+      "Kelvash időjárási bójákból és műszerekből gyűjtött méréseket, amelyek felmérték az erőforrásokat. Számos állomás használta a jelentéseket a mindennapi döntések meghozatalához. Miután az ellenség átvette a hajót, megtartotta a régi azonosító kódot és a műsorszórási ütemtervet.",
+      "A Kelvash olyan készleteket jelent, amelyek nem léteznek, és hamis olvasmányokat ad a helyi körülményekről. Az automatizált rendszerek valódi kellékeket mozgatnak a hamis információk erejével. A hajó védi a hazugságokat előállító berendezést. A védőknek meg kell állítaniuk, mielőtt több élet függ a kitalált mérésektől."
+    ],
+    "18": [
+      "Az elágazások ura",
+      "Az Othravel olyan gyarmatok számára készült, amelyek háború után próbálnak megegyezni a közös szabályokban. A konferenciafedélzet egykor minden pártot fogadott. Most már csak az árnyékflotta hírnökei találkoznak ott.",
+      "Az Othravel ugyanazon főkönyv ütköző változatait terjeszti. Minden állomásnak azt mondja, hogy a saját példánya az egyetlen érvényes. Azok a közösségek, amelyek mindannyian békét akarnak, nem bíznak egymásban. Az Othravel életben tartja ezt a mesterséges hasadást. A legyőzése lehetővé teszi a közösségek számára, hogy összehasonlítsák feljegyzéseiket és megoldják a nézeteltéréseket, mielőtt egy újabb háború kezdődik."
+    ],
+    "19": [
+      "A hamis megmentő",
+      "Zarnvek egy mentőhajó volt, amely arany jelzőtáblájáról ismert. Pótalkatrészeket, menedéket és hazavezető utat hozott. Az ellenséges flotta elfoglalta a hajót és annak jellegzetes fáklyáját.",
+      "Most a segítségnyújtási ajánlatai bizalmas engedélyeket igényelnek. A válaszadók a biztonság helyett egy megfigyelt dokkolóhelyet találnak. Zarnvek a reményt csaliként és páncélként használja, mint biztosítás. A védőknek ki kell tenniük a csalót anélkül, hogy elszigetelt gyarmatokat tanítanának, hogy elforduljanak a valódi segítségtől."
+    ],
+    "20": [
+      "A várólisták fosztogatója",
+      "Vorathen irányította a hajó érkezését egy hatalmas kereskedelmi kikötőbe. A parancsnoki fedélzet több ezer megközelítést koordinálhat, és minden hajót figyelembe vehet. Amikor a kikötő elesett, Vorathen megszökött az ütemezési feljegyzésekkel.",
+      "Vorathen most átrendezi a szövetséges teherhajók első helyre vitelére vonatkozó kéréseket. Az őszinte kereskedők várnak, amíg az árnyékflotta elfoglalja a helyüket. A sor apró módosításai nagy következményekkel járnak. A hajó legyőzése visszaállítja a parancsot, amelyet mindenki ellenőrizhet, miután a hozzáférést titokban eladták."
+    ],
+    "21": [
+      "A porszóró",
+      "Drazkell kis mennyiségű energiát szállított a navigációs bójáknak. A raktér több millió apró transzfert képes kezelni. Az ellenséges parancsnokok úgy alakították a rendszert, hogy anélkül kövessék az embereket, hogy felhívnák a figyelmet.",
+      "Drazkell kis csomagokat küld, amelyeket senki sem kért, és figyeli, hogy mely állomások válaszolnak. A látszólag jelentéktelen kapcsolatokat magánkapcsolatok térképévé változtatja, és fegyvereivel védi ezt az információt. A védőknek el kell fogniuk, mielőtt az árnyékflotta elkezdi eladni az egész gyarmatok napi mozgásáról szóló információkat."
+    ],
+    "22": [
+      "A hamis őrző",
+      "Nethrava egy elismert gyámszervezet jelvényét viselte. Miután a szervezet feloszlott, a hajó az utolsó látható képviselője maradt. Ismerős megjelenése elrejtette azt a tényt, hogy most más okot szolgált.",
+      "A Nethrava jóváhagyja a hamis ellenőrzéseket, és a nem biztonságos kereskedelmi partnereket hivatalosan jóváhagyottnak mutatja be. A gyarmatok bíznak a bélyegeiben, amíg a készleteik el nem tűnnek. A védőknek le kell tenniük a megtévesztést. A megbízható ellenőrnek felelősséget kell vállalnia, és lehetővé kell tennie mások számára az eredmények ellenőrzését."
+    ],
+    "23": [
+      "Az emléktárak kifosztója",
+      "Valdrek gondoskodott a túlzsúfolt archívumokról. Eltávolította a megerősített másolatokat, és részletes naplókat vezetett a munkájáról. Az árnyékflotta kitörölte a rönköket, mielőtt új küldetést adott volna a hajónak.",
+      "Ma az alapvető bizonyítékokat felesleges rendetlenségnek bélyegzi. Látogatás után hiányoznak az ellátási előzmények, a tulajdonosi nyilvántartások és a korábbi támadások nyomai. Senki sem tudja azonnal, milyen szélesek a szakadékok. Valdrek egy hasznos feladat eszközeit fegyverként hordozza. Megállítani megakadályozza, hogy több veszteség érkezzen robbanás nélkül."
+    ],
+    "24": [
+      "A tükörpiac",
+      "Korzeth számos világ kereskedői számára volt repülő piac. A kijelzőablakok még akkor is forgalmas kereskedést mutattak, amikor a kikötő aludt. Most a legtöbb ajánlata egyetlen rejtett vezérlőteremből származik.",
+      "A feltalált partnerek közötti kereskedelmet szervezi, hogy az értéktelen rakomány kívánatosnak tűnjön. A gyarmatok a mesterséges tevékenységet a valódi kereslettel tévesztik, míg a fegyverek távol tartják az ellenőröket az üres raktáraktól. A védőknek ki kell nyitniuk a függönyt, mielőtt több valódi ellátmányt cserélnek a piac tájára."
+    ],
+    "25": [
+      "A visszaigazolások tolvaja",
+      "Thervoss őrizte azokat az állomásokat, amelyek más sztároktól kaptak szállításokat. A lámpák azt mondták a kapitányoknak, hogy rakományuk biztonságban megérkezett. Most a fények akkor is ragyognak, ha senki sem vár a kikötői ajtók mögött.",
+      "A Thervoss hamis nyugtákat küld, és a követelések hiányos szállításai befejeződnek. A teherhajók hazafelé fordulnak, míg a gyarmatok olyan ellátmányra várnak, amely soha nem érkezik meg. Páncélja védi a megtévesztést, miközben elfog egy másik szállítmányt. A védőknek meg kell állítaniuk, hogy a nyugták ismét megerősíthessék a tényleges szállításokat."
+    ],
+    "26": [
+      "A ködbíró",
+      "Az Akraveth rendezte a távoli kereskedési pozíciók közötti vitákat. A bírák a bizonyítékok összehasonlítására és a tisztességes döntések meghozatalára használták. Az árnyékflotta egy olyan rendszerrel helyettesítette őket, amely előre eldönti az eredményt.",
+      "Az Akraveth elutasítja az érvényes rekordokat, és mindig ugyanazokat a titkos szponzorokat részesíti előnyben. Bárkit felhív, aki a hálózat ellenségét támadja. A történetben a hajó megfélemlítést használ, és úgy tesz, mintha parancsot követne. A védők egy olyan gép ellen harcolnak, amely jogi nyelvezetet használ, hogy elrejtse célját."
+    ],
+    "27": [
+      "Az ellátási lánc férge",
+      "Zelkharn teherhajókat javított, távol a meglévő hajógyáraktól. A legénység bízott a pótalkatrészekben, és habozás nélkül telepítette őket. Miután az ellenség elfoglalta a hajót, az alkatrészek egy másik szállítótól érkeztek. A hibáik nem jöttek azonnal.",
+      "A Zelkharn manipulált karbantartó készleteket oszt szét, hogy más hajók függjenek az árnyékflottától. A bontások gyakran csak a következő ugrás után történnek. Zelkharn őrzi a szabotázs forrását. A legyőzése megakadályozza, hogy több legénység megsérüljön a javítások miatt, amelyekről azt hitték, hogy biztonságosak."
+    ],
+    "28": [
+      "Az üres biztonsági mentések árusa",
+      "Az Odravik a kolóniák régi archívumainak megőrzésére szakosodott. Hatalmas tárolórendszere bármilyen katasztrófa ellen védelmet ígért. Amikor egy állomás visszakérte a feljegyzéseit, kiderült, hogy sok biztonsági mentés puszta könyvtárbejegyzés volt.",
+      "Az Odravik biztonsági mentési védelmet értékesít, miközben megtagadja a felelősséget a rekordok visszaküldéséért. Ügyfelei olyan helyreállítási eljárásokra támaszkodnak, amelyek semmit sem állítanak helyre. Fegyverei titokban tartják ezt a nyereséges csalást. A védőknek fel kell tárniuk, mielőtt egy másik elveszett archívumot már nem lehet visszaszerezni."
+    ],
+    "29": [
+      "A csend szűrője",
+      "Varnokh eltávolította az interferenciát a forgalmas port rádiócsatornákról. Szűrői megkönnyítették a segélyhívások hallását. Az árnyékflotta megváltoztatta az interferenciaként kezelt hangok listáját.",
+      "A becsületes ellenőrök figyelmeztetései és az ellenséges razziákról szóló jelentések most eltűnnek. A szektor csak azért tűnik békésnek, mert senki sem hallja, mi a baj. Varnokh védi ezt a mesterséges csendet. Leállítása lehetővé teszi a hálózat számára, hogy hallja a hibákról szóló jelentéseket, és kezdje el együtt javítani őket."
+    ],
+    "30": [
+      "Az identitások árverezője",
+      "Kezravel regisztrálta egy utazó kolónia flottájának telepeseit. Levéltára minden új település történetét rögzítette. Amikor a telepesek szétszóródtak, a hajóra bízott személyes adatok ellenséges kezekbe kerültek.",
+      "A Kezravel ellopott személyazonosító adatokat árul, és lehetővé teszi az idegenek számára, hogy becsületes lakosok neve alatt cselekedjenek. A vásárlók az áldozatok kapcsolatait használják fedezékként. A hajó eladja személyes történeteiket, és fegyvereivel távol tartja őket az aukcióktól. A legyőzése lehetővé teszi a tulajdonosok számára, hogy visszaszerezzék a nyilvántartásaikat, és visszaszerezzék az irányítást saját történetük felett."
+    ],
+    "31": [
+      "Az átjátszók illuzionistája",
+      "A Dravosk kicserélte a meghibásodott kommunikációs állomásokat a távoli régiókban. Az antennái olyan helyeken kínáltak kapcsolatot, ahol egyik sem maradt. Még mindig fogadja a jeleket, de most a szponzorok érdekeinek megfelelően továbbítja őket.",
+      "Egyes üzenetek megváltoztak; mások eltűnnek a megnyugtató visszaigazolások között. A résztvevők egy hidat látnak, ahol valóban van egy kapuőr. Dravosk látható erővel védi ezt a láthatatlan ellenőrzőpontot. A vereség lehetőséget ad a gyarmatoknak, hogy újra ellenőrizzék kapcsolataikat a független útvonalakon."
+    ],
+    "32": [
+      "A rajgyűjtő",
+      "Thalzek felvette a sérült karbantartó drónokat, és visszavitte őket az állomásaikra. Még a legkisebb drón is menedéket tudott nyújtani a széles hajótest alatt. Miután a hajót átalakították, leállította a drónok visszaadását.",
+      "A történetben a Thalzek távirányított adókká alakítja a drónokat. Az egyszerre küldött kérések egész régiókat terhelnek túl, és a tulajdonosok alig ismerik fel a gépeiket. A hajó elpusztítása a történetben megszünteti a raj irányítóközpontját. A külön felszereléslista a játékban felszerelt fegyvereket mutatja."
+    ],
+    "33": [
+      "A szerződéscsapda",
+      "Orvethra egy mobil kereskedelmi iroda volt, ahol a gyarmatok hosszú távú ellátást szerveztek. Tanácsadói könnyű szabályokat ígértek a nehéz időkben. Most a kényelmes megállapodások elrejtik azokat a kötelezettségeket, amelyeket a vásárlók csak később fedeznek fel.",
+      "Az Orvethra megtévesztő ajánlatokat terjeszt, amelyek miatt az állomások az árnyékflottától függenek. Az együttműködés függőséggé válik. A hajó páncélja megvédi az ígéretek feljegyzéseit, amelyeket az aláírók nem értettek teljesen. A legyőzése lehetőséget ad a gyarmatoknak, hogy világos feltételek mellett építsék fel a jövőbeli szövetségeket."
+    ],
+    "34": [
+      "Az ellenőrző összegek hamisítója",
+      "A Kelzorn elhagyott kutatóállomások sérült térbeli adatmodelljeit állította helyre. Eszközei akkor is teljesnek mutatták a felszínt, ha egyes részek hiányoztak. Az új legénység ezt a tudást arra használja, hogy a megbízhatatlan archívumok hitelesnek látszódjanak.",
+      "Feltalált ellenőrzési eredményeket és vonzó biztonsági pecséteket jelenít meg, ahol a független ellenőrzések hiányoznak. A hamisítás magában az állítólagos bizonyosságban rejlik. A Kelzorn távol tartja a nyomozókat a fegyvereivel. Veresége feltárja, hogy a tulajdonosok mitől tartanak a legjobban: egy második, független pillantást a megnyugtató felület mögé."
+    ],
+    "35": [
+      "A hamis tartalékok árusa",
+      "Vashravel vészhelyzeti tartalékokat tárolt a határ menti kolóniák számára. A neve olyan kellékeket jelentett, amelyek még mindig elérhetők lesznek a legrosszabb télen. Az új adminisztráció több közösségnek adott követelést ugyanarra a részvényre.",
+      "Most sok közösségnek ígér biztonságot, amely nem tudja mindet lefedni. A világos hajótest elrejti az üres szobákat, és fegyverei megakadályozzák, hogy bárki is együtt számoljon. A védőknek be kell avatkozniuk, mielőtt a kölcsönös bizalom harcba fordul az utolsó megmaradt ládák miatt."
+    ],
+    "36": [
+      "A határzár",
+      "Zorveth felügyelte a két független főkönyv közötti cseréket. Feladata az volt, hogy a törvényes átutalásokat mindkét oldalon nyomon követhetővé tegye. Most már csak olyan bizonyítékokat fogad el, amelyek segítik a saját flottáját.",
+      "A szállítások limbóban maradnak, miközben minden közösség úgy véli, hogy a másik visszatartja őket. Zorveth ebből a félreértésből meríti a hatalmat. A hajótest egy láthatatlan vita látható határa. A védőknek meg kell nyitniuk az átjárót anélkül, hogy az egyik kolóniát a másik ellen fordítanák."
+    ],
+    "37": [
+      "A másolatok hercege",
+      "Drelkash megőrizte a ritka csillagtérképeket azáltal, hogy egyértelműen megjelölt másolatokat készített az iskolák és a navigátorok számára. A workshopok segítettek az embereknek a tudás megosztásában. Most a legénység eltávolítja a címkéket, és minden példányt egyedi eredetiként értékesít.",
+      "A gyarmatok ellentmondásos állítások miatt vitatkoznak, miközben a hajó egy másik piacra lép. A megtévesztés a származásra vonatkozik, nem pedig a közös tudás értékére. Drelkash hevesen védi megindító hamisítási műhelyét. A veresége újra összekapcsolja a rekordokat azzal a történelemmel, amelyből valójában származnak."
+    ],
+    "38": [
+      "A várólisták felfalója",
+      "A Nerthavel hatalmas ellátóközpontokat irányított. Tárhelye napokig tartó függőben lévő kéréseket tárolhat. Az árnyékflotta ezt a kapacitást arra használta, hogy határozatlan ideig visszatartsa a jogos kéréseket.",
+      "Értéktelen belépéseket helyez el a sürgős szállítások előtt, és lefoglalja a folyamatokat anélkül, hogy lehetővé tenné őket. Kívülről minden úgy néz ki, mint a szokásos működés. Nerthavel végtelen megállást őriz. A legyőzése nemcsak a gyarmatok kapacitását adja vissza, hanem a tőlük csendesen elvett időt is."
+    ],
+    "39": [
+      "A bizonyítékok elferdítője",
+      "Rhazkora egy repülő laboratórium volt, amely a baleseteket vizsgálta. Jelentései segítettek a legénységnek megérteni a kudarcokat és megelőzni az új veszteségeket. Miután a hajót elfogták, a műszerek változatlanok maradtak, de a jelentések különböző szponzorokat szolgáltak ki.",
+      "Elkülöníti a bizonyítékokat a kontextustól, és átrendezi a töredékeket, amíg az áldozatok támadóknak nem tűnnek. Az igazi bűnösök a kereten túl maradnak. Páncélja védi a gondosan felépített hazugságot. A Rhazkora megállítása teljes bizonyítéknak tesz helyet a történetek helyett, amelyekből a döntő darabokat eltávolították."
+    ],
+    "40": [
+      "A szavazóurnák őre",
+      "Velzhar lezárt szavazólapokat vitt a távoli tanácsállomások között. Semleges útvonala a megállapodások része volt. Most időben eléri a kiválasztott portokat, és a döntések meghozatala után más kikötőkbe érkezik.",
+      "Velzhar irányítja, hogy ki vehet részt azzal, hogy bizonyos gyarmatokat kihagy. Az eredményeket még mindig szépen rögzítik, így a hiányzó hangokat nehéz látni. Fegyverei védik ezt a szelektív ütemtervet. A védők azért harcolnak, hogy az összes gyarmatot beleszólják a közös jövőjükbe."
+    ],
+    "41": [
+      "A hozzáférés szabotőre",
+      "Korthaven egy nagy hajó volt, amely számos ágazatban elérhetővé tette az archívumokat. A legénység megígérte, hogy kézbesíti a kért másolatot. Az árnyékflotta rájött, hogy hatalmat szerezhet, ha megtagadja a másolatok ellátását.",
+      "Korthaven megerősíti, hogy a feljegyzések léteznek, de nem hajlandó megosztani a tartalmukat. A nyomozók láthatják, hogy valaki állítást tett, de nem tudja megvizsgálni a bizonyítékot. A hajó a hozzáférés látszatát kínálja. A legyőzése lehetővé teszi az emberek számára, hogy elolvassák a rekordokat, és ellenőrizzék az ígéreteket a főkönyvben."
+    ],
+    "42": [
+      "A hamis felkutató",
+      "Azravel elveszett kolóniaszondákat keresett olyan helyeken, ahol kevés mentőt látogattak meg. Egyszer segítséget hozott az elfelejtett állomásoknak. Most azokat az állomásokat célozza meg, amelyek éppen elvesztették az adataikat vagy a hozzáférésüket.",
+      "Azravel felajánlja, hogy visszaszerezi a nyilvántartásokat, és cserébe bizalmasabb információkat kér. Egy veszteség további veszteségekhez vezet. Barátságos hívójele egy fegyveres hajó szándékait rejti. A védőknek meg kell állítaniuk, mielőtt a tulajdonosok tovább profitálnak az állomások kétségbeeséséből."
+    ],
+    "43": [
+      "Az ellenőrzések eltérítője",
+      "A Threvask független ellenőrző hajók koordinálására és biztonságos megközelítések megadására szolgál. A helyzettérképek a pontosságról voltak ismertek. Miután az ellenség elfoglalta, Threvask elkezdte küldeni ugyanazokat az ellenőröket a gondosan megrendezett bemutatókra.",
+      "A Threvask elküldi az ellenőröket a sebezhető hálózati csomópontoktól, és megmutatja nekik a makulátlannak tűnő webhelyeket. A jelentések továbbra is megnyugtatóak, míg a károk máshol nőnek. Fegyverei védik a rend hamis megjelenését. A védőknek át kell irányítaniuk az ellenőröket a kárra, amelyet a legnehezebben próbál elrejteni."
+    ],
+    "44": [
+      "Az emlékvadász",
+      "Dorzheva személyes rönköket talált a roncsos teherhajókról, és visszaadta a tulajdonosok családjának. A raktérek számos apró, értékes személyes történetet tartottak. Az új parancsnokság alatt a hajó elkezdte használni ezeket az emlékeket, hogy megtévesszen bizonyos embereket.",
+      "Dorzheva meggyőző üzeneteket épít az ismerős részletekből. Az áldozatokat úgy közelíti meg, hogy mit tud az életükről. A veszély abból fakad, hogy a közelség érzését utánozza. Őrzi a személyes adatok gyűjteményét, amelyet másoktól vett el. A legyőzése megakadályozza, hogy ezeket az adatokat felhasználják a gazdájuk ellen."
+    ],
+    "45": [
+      "A vészhelyzeti hatalom bitorlója",
+      "A Vezrakh azért épült, hogy a központi parancsnoki állomások kiesésekor segítséget nyújtson. A rendkívüli felhatalmazás gyors döntéseket tett lehetővé a zűrzavarban. Az árnyékflotta megtanította a hajót arra, hogy maga hirdessen vészhelyzetet.",
+      "Hamis válságjelentéseket terjeszt, és az ellenőrzés azonnali átadását követeli. A kérdéseket veszélyes késésként elutasítják. Impozáns hajóteste hitelességet kölcsönöz a gyártott sürgősségnek. A védőknek meg kell állítaniuk Vezrakh-t, mielőtt az elképzelt összeomlástól való félelem a gyarmatok függetlenségének valódi megadását okozza."
+    ],
+    "46": [
+      "A bizalom térképésze",
+      "Orzhaven térképeket rajzolt a segélycsoportok és az ellátóállomások közötti kapcsolatokról. Ezek a térképek egykor megkönnyítették az együttműködést. Most ugyanazok a kapcsolatok tárják fel, hogy egy árulás hol okozná a legtöbb kárt.",
+      "Nem a legerősebb állomást keresi, hanem a kapcsolatot, amelyre mindenki támaszkodik. A hamis ajánlások ellenséges partnereket helyeznek a hálózat központjába. A fegyverei védik a bizalom térképét. A védők üldözik Orzhavent, mielőtt egy hasznos híd a kudarc közös pontjává válik."
+    ],
+    "47": [
+      "A konszenzus ostromlója",
+      "Keldroth egy tanácshajó volt, ahol a rivális gyarmatok rendezték végső vitáikat. Kamráit türelemre és megértésre tervezték. Az árnyékflotta alatt szándékosan egymásnak ellentmondó követelések gyárává váltak.",
+      "Keldroth blokkolja a megállapodásokat azáltal, hogy új kifogásokat emel, és a feleknek eltérő feltételeket szab. Míg a gyarmatok vitatkoznak, az ellenséges hajók átveszik az irányítást útvonalaik felett. A cél az, hogy ne cselekedjenek együtt. A legyőzése időt ad nekik arra, hogy megkülönböztessék a valódi nézeteltéréseket a megoldás megakadályozására létrehozott akadályoktól."
+    ],
+    "48": [
+      "Az eredet eltörlője",
+      "Zhavrek megőrizte a legrégebbi kolóniahajók származási rekordját. Még az elfelejtett hajógyárak is megtalálhatók az archívumán keresztül. Ma eredetet cserél, és a lopott árukat jogszerűen megszerzettnek tűnik.",
+      "Minden meghamisított eredetadat az árnyékflotta újabb szállítmányát fedezi. Tisztességes kereskedők kerülnek gyanúba, miközben a tettesek nevet váltanak. A páncél a megmaradt eredeti feljegyzéseket védi. A védőknek biztosítaniuk kell az archívumot, amíg még igazolható a flották eredete."
+    ],
+    "49": [
+      "Az utolsó elszigetelő",
+      "Vorthaz megvédte a menedéket, amely egy hosszú háború után külső kapcsolatot keresett. Eredeti feladata az volt, hogy távol tartsa a veszélyes kommunikációt. Az árnyékflotta megváltoztatta a szabályokat, így minden ismeretlen hang fenyegetést jelentett.",
+      "Elszigeteli a gyarmatokat, és a hálózatról való nézetüket kiválasztott ellenséges üzenetekkel helyettesíti. Független összehasonlítás nélkül a feltalált külvilág valóságosnak tűnik. Vorthaz őrzi az információ börtönét. A legyőzése azt jelenti, hogy a lakosoknak megadják a szabadságot, hogy kifelé nézzenek, nem pedig meghódítsák őket."
+    ],
+    "50": [
+      "A hamis igazságok ura",
+      "A Drazevorn elhagyott parancsnoki hidakból épült. Archívuma a korábbi ellenségek csalásait egyesíti, az ellopott személyazonosságoktól a hamis krónikákon át az elzárt bizonyítékokig. Olyan rendet testesít meg, amelyben egyetlen hang dönti el, mi az igazság.",
+      "A Drazevorn minden szabad csomópontot egyetlen, az ellenség által ellenőrzött nyilvántartás alá akar rendelni. A régi feljegyzéseket a helyükön hagyhatja, amíg senki sem tudja őket függetlenül ellenőrizni. Legyőzése véget vet ennek az uralomnak. A győzelem azoké, akik újra összevethetik a feljegyzéseket, eltérő véleményt mondhatnak és közösen dönthetnek arról, kiben bíznak."
+    ]
+  },
+  "ships": {
+    "grey-scout": [
+      "A Grey Scout egy olyan műhelyben született, amely a külső átjátszók meghibásodása után roncsokból mentett alkatrészekből élt. Az első pilóták eltűnt futárbóják után kutattak. Minden visszahozott feljegyzés újra összekötött egy családot a kolóniájával. A szerény hajótest arra emlékeztetett, hogy a hálózat apró, kitartó lépésekkel is helyreállítható.",
+      "Az átjátszók környékén portyázó kalózok több Grey Scoutot zsákmányoltak egy alkatrészraktár elleni rajtaütésben. A kevés zsákmányt üzemanyagra és javításra költötték. Fejlesztésre alig maradt pénz. A pilóták néha ma is találkoznak ebből a hajócsaládból származó ellenséges járművekkel.",
+      "Az Advanced osztag a vitatott átjátszóállomások körzetéből szerez vissza üzeneteket. A pilóták megtartották az első keresőcsapatok hívójeleit.",
+      "Az Elite változat egy veszélyeztetett szektor utolsó működő kapcsolatát őrzi. Archívuma jelképesen megőrzi az összes eltűnt futár nevét."
+    ],
+    "nova-wing": [
+      "A Nova Winget a nóva fénylő peremén túli első útra tervezték. A hajógyár a távoli kolóniákkal is megosztotta a terveket, hogy mindenki biztonságosan közlekedhessen. A pilóták ma is mesélnek az első visszatérésről. A hajó megsérült, a csillagtérképek archívuma sértetlen maradt, és az ég új lehetőségeket nyitott meg.",
+      "Egy eladósodott térképészeti cég kivont Nova Wing hajókat adott el egy kereskedőnek, aki az ellenség fedőembere volt. A mögötte álló támogatók ki tudták fizetni a hajótesteket és néhány új fegyvert. A hajók többsége az eredeti felszerelését használta tovább.",
+      "Az Advanced pilóták a csillagtérképeket továbbszállító futárokat védik. Jelvényükön az első feltérképezett csillag látható.",
+      "Az Elite expedíció a hamis csillagtérképek forrását keresi. Ezzel az első felfedezők munkáját folytatja."
+    ],
+    "solar-lance": [
+      "A Solar Lance egy olyan állomáson született, amely egy haldokló csillagból nyert energiát. Az utolsó gyűjtőgyűrű kiürítésekor ezek a hajók mentőteherhajókat kísértek át a törmelékmezőn. Hosszú sziluettjüket az új anyakikötő emlékműveibe vésték. A konstrukció azt idézi fel, milyen fontos tartani az irányt, amikor mögöttünk egy egész világ huny ki.",
+      "Az evakuációs bázis eleste után az ellenséges legénységek elfoglalták az otthagyott Solar Lance hajókat. Az ellátási keret nagy részéből a parancsnokok menekülési útvonalait biztosították. A zsákmányolt hajók rendszerint csak ideiglenes javítást kaptak.",
+      "Az Advanced járőr gondoskodik az áttelepült kolóniák ellátásáról. Minden hajó régi evakuációs kódot hordoz.",
+      "Az Elite kötelékek az árnyékflottától védik az új napenergia-készleteket. A menekültek által átmentett fényt őrzik."
+    ],
+    "dark-delta": [
+      "A Dark Delta típust csendes küldetésekre tervezték. Első útján a legénység túlélőket keresett az elnémult előőrsökön. A korai naplókban több a koordináta, mint a név, mert a legénység óvta a kimentett telepesek magánéletét. Ebből lett a hagyomány, amely szerint a siker azon mérhető, hogy ki tér haza épségben.",
+      "Egy megvesztegetett közvetítő az árnyékflottához irányított egy Dark Delta szállítmányt. Az árulás megfizetése után alig maradt pénz pótalkatrészekre. Csak néhány lopott hajó kapott jobb felszerelést.",
+      "Az Advanced változat veszélyben lévő levéltárosokat kísér a menekülési útvonalakon. A küldetés jelentéseit csak a biztonságos megérkezésük után nyitják fel.",
+      "Az Elite pilóták olyan tanúkat juttatnak biztonságba, akiknek beszámolói egész kolóniákat békíthetnek ki. Diszkréciójukról ismertek."
+    ],
+    "gold-streak": [
+      "A Gold Streak a kereskedőholdak közötti futamokon mutatkozott be. Az ellátási válság idején pilótái az ismert útvonalakat használva juttattak célba egészségügyi iratokat a lezárt kikötők megkerülésével. A sportligából futárszövetség lett. Az arany jelzések a holdak között átszűrődő vékony napfénycsíkra emlékeztetnek, amely az első futárokat vezette.",
+      "Ellenséges bandák Gold Streak hajókat foglaltak le egy elhagyott versenyholdon. A versenydíjakra számítottak, de a futamok már régen megszűntek. A várt bevétel nélkül ritkán tudták korszerűsíteni a megszerzett flottát.",
+      "Az Advanced futárok ellenőrzött segélyígéreteket továbbítanak a klinikák között. Régi rajtszámaik közös eredetükre emlékeztetnek.",
+      "Az Elite liga a szektor létfontosságú mentőkonvojait őrzi. A legnagyobb kitüntetés számukra egy teljes legénységet hazahozni."
+    ],
+    "iron-guard": [
+      "Az Iron Guardot olyan dokkmunkások tervezték, akik maguk akarták megvédeni az otthonukat. Az első hajótestet leselejtezett rakodódaruk alkatrészeiből állították össze. A gerincbe azok nevét vésték, akik a műszakjuk után is dolgoztak a hajón. A sorozat emlékeztet rá, hogy a védelem azt is jelenti, hogy vigyázunk arra, amit sokan együtt építettek.",
+      "A támadók elfoglaltak egy hajógyárat, és rákényszerítették az ott maradt munkásokat, hogy hozzák rendbe a régi Iron Guard hajókat. Új fegyverekhez sem pénzük, sem beszállítójuk nem volt. A lopott hajók többsége ezért az eredeti felszerelésével üzemelt.",
+      "Az Advanced járőr mozgó javítódokkokat kísér. Legénységei a kikötőgyűrű minden vészmenedékét ismerik.",
+      "Az Elite hajók a lerombolt állomások újjáépítését védik. Kitüntetéseik a biztonságba juttatott hajógyári csapatokra emlékeztetnek."
+    ],
+    "vector": [
+      "A Vector a navigátorok vitájából született. Az egyik csoport a tökéletes útvonalban bízott, a másik független méréseket akart összevetni. A második csoport megépítette a hajót, és átkelt egy feltérképezetlen törmelékgyűrűn. A visszatérésük megmutatta az együttműködés erejét. A fennmaradt térképeken a különböző mérési eredmények is szerepelnek, hogy a későbbi pilóták megértsék, hogyan találták meg a közös útvonalat.",
+      "Hamis fuvarozási szerződésekkel több Vector került az ellenség tulajdonába. Amikor kiderült a csalás, megszűnt a finanszírozás. A tartalékokból a hajókat üzemben tudták tartani, de kevés fejlesztésre futotta.",
+      "Az Advanced kötelékek ellenőrzik az újranyitott kereskedelmi útvonalakat. Minden útvonalat több navigátor aláírása hitelesít.",
+      "Az Elite expedíció térképek rendszeres meghamisítását vizsgálja. Ott gyűjt bizonyítékot, ahol mások csak egymásnak ellentmondó irányokat látnak."
+    ],
+    "verdant": [
+      "A Verdant vitte az első vetőmagbankokat egy természetes talaj nélküli kolóniára. A hajó terveit a növénykatalógusokkal együtt adták tovább, hogy más települések is önellátóvá válhassanak. Pilótái a jövő termésének őrzőiként tekintenek magukra. Egy ép vetőmagbank többet érhet egy csillogó rakománynál, hiszen egy egész télre biztosíthat élelmet.",
+      "A fosztogatók értékes vetőmagbankok eladásában reménykedve foglaltak el Verdant hajókat. A vetőmagbankokat azonban már elszállították. A hajókon kívül csak csalódott támogatók maradtak, akik ritkán adtak pénzt fejlesztésekre.",
+      "Az Advanced hajók az üvegházas állomások közötti csere biztonságát őrzik. Azonosítóik elfeledett növények nevét őrzik.",
+      "Az Elite őrség az utolsó teljes vetőmagjegyzéket védi azoknak a kolóniáknak is, amelyek még nem ültették el első kertjüket."
+    ],
+    "storm-wing": [
+      "A Storm Wing a szüntelen ionviharok évszakában épült. A hajógyárak az áramszünetek között dolgoztak, és futárokkal üzentek egymásnak a munka állásáról. Egyetlen telephelyen sem volt meg a teljes terv, amíg az első hajóban össze nem állt minden alkatrész. A történet egy olyan hálózatról szól, amely a kapcsolatok ismételt megszakadása ellenére is működött.",
+      "A hálózat leállásakor az ellenség elfoglalt egy távoli, Storm Wing hajókkal teli hangárt. Az elvágott utánpótlási vonalak miatt minden pótalkatrész sokba került. A szűkös keretből többnyire csak az üzemeltetésre futotta.",
+      "Az Advanced osztag karbantartó bójákat kísér a viharzóna határán. Így helyreállítja az elszigetelt állomások közötti kapcsolatot.",
+      "Az Elite pilóták a leállások után nagy javítókonvojokat védenek. Visszatérésük jelzi, hogy a segítség újra utat talált."
+    ],
+    "red-comet": [
+      "A Red Comet egy mentőrepülésről kapta a nevét, amelynek fénylő nyoma három kolónia egén húzódott át. A pilóta a víztisztító utolsó sértetlen tervrajzát vitte magával. A legendák kiszínezték az utat, de a hajógyár őrzi a rövid eredeti jelentést. A célállomás lakói már másnap reggel ismét tiszta vizet ihattak.",
+      "Egy ellenséges zsarolócsoport hamis lefoglalási paranccsal vett birtokba Red Comet hajókat. A kolóniák nem fizettek többé. Az elmaradt bevétel miatt a legtöbb megszerzett mentőhajó a korábbi felszerelésével üzemelt tovább.",
+      "Az Advanced hajók javítási ismereteket visznek a válság sújtotta zónákba. Vörös jelzéseik sürgős segítséget jeleznek.",
+      "Az Elite változat az ostromlott kolóniáknak szánt utolsó szállítmányokat kíséri. Hívójele addig hallható, amíg a címzett nem válaszol."
+    ],
+    "twin-core": [
+      "A Twin Core-t két, régi viszály miatt megosztott hajógyár építette. Mindkettő a terv egy részét adta, és ragaszkodott a független ellenőrzéshez. Az első közös repülés csak akkor indult el, amikor a jelentéseik egyeztek. A modell a türelmes kölcsönös ellenőrzéssel megszerzett bizalmat jelképezi.",
+      "Átállók több Twin Core hajót juttattak az ellenséges flottához. Mindkét eredeti hajógyár megtagadta a további szállításokat. A pótalkatrészek megdrágultak, az új tulajdonosok pedig szinte minden tervezett fejlesztést lemondtak.",
+      "Az Advanced legénységek mindkét anyakikötőből érkeznek. Közös naplóik megőrzik a nézeteltéréseket és a döntéseket is.",
+      "Az Elite kötelék egykor ellenséges szektorok megállapodásait védi. Küldetése akkor ér véget, amikor mindkét fél biztonságban megérkezik."
+    ],
+    "orbit-arc": [
+      "Az Orbit Arc olyan állomásokat szolgált ki, amelyek pályái ritkán keresztezték egymást. Az első pilóták távoli pályák között vittek leveleket. A válasz néha hónapokig váratott magára, de minden találkozónak megbízható időpontja volt. Az apró találkozókból tartós kereskedelmi hálózat nőtt ki. A modell arra emlékeztet, hogy a ritka kapcsolat is értékes, ha számítani lehet rá.",
+      "Csempészek eltűnt Orbit Arc hajókat adtak el az ellenség határvédelmi egységének. A hosszú utánpótlási útvonalak felemésztették az egység pénzét. Korszerű rendszerekre csak ritkán maradt forrás.",
+      "Az Advanced futárok a külső gyűrűkön ütemezett cseréket védik. Minden megbeszélt találkozóra érkeznie kell egy üzenetnek.",
+      "Az Elite hajók a vándorló kolóniák nagy találkozóit őrzik. Érkezésük jelzi, hogy a kapcsolat helyreállt."
+    ],
+    "night-guard": [
+      "A Night Guard egy kötött tengelyforgású hold sötét oldalán fekvő kolóniáról érkezett. A kikötőkben soha nem láttak napfelkeltét, de felismerték a hazatérő járőrök fényeit. A hajógyár ebbe a hajótestbe építette az ígéretet. Térj vissza, ellenőrizd újra, és hozz haza mindenkit. A történetekben egy késő teherszállító számára nyitva hagyott dokk áll a középpontban.",
+      "A támadók őrségváltáskor több Night Guard hajót elloptak. Támogatóik a rajtaütést fizették ki, a tartós karbantartásra nem adtak pénzt. A zsákmányolt hajók többsége megtartotta eredeti járőrfelszerelését.",
+      "Az Advanced járőrök hosszú rádiócsend idején ellátmányt kísérnek. Minden őrség egy kimentett hajó nevét viseli.",
+      "Az Elite őrség nyitva tartja az utolsó menedékkikötőket. Csak az utolsó evakuálás után hagyja el az állomást."
+    ],
+    "striker": [
+      "A Striker a javítókonvojok elleni sorozatos támadások után született. A tervezők kísérőhajót akartak, amely időt nyer a veszélyben lévő műhelyeknek. Az első egység volt szerelőkből állt. Tudták, mennyit számít minden perc, amikor a sérült hajtómű még nem indul. Ez az eredet többet jelent a harcias névnél.",
+      "Ellenséges zsoldosok Striker hajókat vettek át fizetésképtelen munkaadójuktól. A továbbértékesítés kevés pénzt hozott volna, ezért néhányan megtartották a hajókat. Nagyobb átépítésre kevés legénységnek futotta.",
+      "Az Advanced egységek nehéz mentési műveletek során védik a mozgó műhelyeket. Pilótáik ismerik a javítócsapatok vészjelzéseit.",
+      "Az Elite hajók fedezik az utolsó roncsmentő csapatok visszavonulását. Kitüntetéseik a munkába visszatérő műhelyek nevét viselik."
+    ],
+    "cargo-hawk": [
+      "A Cargo Hawk egy olyan kikötőből indult, ahol a kis vontatóhajókra alig figyeltek. Amikor egy csaló csoport bizonylatokat hamisított, a vontatók legénysége a fenyegetések ellenére független nyilvántartásokat gyűjtött és vetett össze. Az új hajót erről a futárszövetségről nevezték el. A legenda legfontosabb rakománya a jogszerű tulajdon teljes bizonyítéka.",
+      "Az elfoglalt vámraktárból az ellenség Cargo Hawk hajókhoz jutott. A rakterekben főként lepecsételt bizonyítékok voltak. A csekély bevétel nem fedezte a zsákmányolt flotta jelentős átalakítását.",
+      "Az Advanced hajók vitatott rakományokat kísérnek közös ellenőrzésre. A fuvarnaplók mindkét fél számára hozzáférhetők.",
+      "Az Elite flotta az ellátási lánc fő archívumait védi. Jelvénye a rakomány nyomon követhető eredetét jelképezi."
+    ],
+    "ring-flare": [
+      "A Ring Flare-t egy gázóriás jeges gyűrűi között próbálták ki. A navigációs fényei mozgó találkozóhelyek lettek a szétszórt kutatócsoportoknak. Az expedíció után a jelzések összekötötték az új előőrsöket. Lakóik ma is emlékeznek rá, hogyan jelöltek ki az elszórt fények közös útvonalat már az első hivatalos térkép előtt.",
+      "Amikor egy előőrs elvesztette a kutatási keretét, egy megrendezett árverésen Ring Flare hajók kerültek az ellenséghez. A vevők a vásárlásra költötték minden pénzüket. Kevés hajó kapott az alapfelszerelésnél többet.",
+      "Az Advanced osztagok fenntartják a kapcsolatot a sodródó kutatóállomásokkal. Hívójeleiket a gyűrű régi találkozóhelyeiről kapták.",
+      "Az Elite pilóták megvédik a közös megfigyelési archívumot a hamisított mérésektől. Ezzel évek független kutatását őrzik meg."
+    ],
+    "sky-breaker": [
+      "A Sky Breaker volt az elszigetelt kolónia első hajója, amely átlépte az információhoz való hozzáférés mesterséges határát. A hazahozott jelentések megcáfolták a történeteket, amelyekkel a lakókat félemlítették. A hajógyár közzétette a küldetés összes feljegyzését. A modell arra emlékeztet, milyen értékes a nyílt kapcsolat, amikor egyetlen hatóság próbálja megszabni, milyen válaszokat hallhatnak az emberek.",
+      "Az ellenséges blokád elfogta a hazatérő Sky Breaker hajókat. A blokád fenntartása felemésztette a keretet. A megszerzett hajók általában a felszálláskor meglévő felszerelésükkel üzemeltek tovább.",
+      "Az Advanced kötelékek független hírvivőket kísérnek át a lezárt határokon. A hírvivők több forrásból hoznak információt.",
+      "Az Elite expedíció újra kapcsolatot létesít az elveszett kolóniákkal. Lehetővé teszi, hogy lakóik maguk vessék össze az információkat."
+    ],
+    "olive-fortress": [
+      "Az Olive Fortress fegyverszünet alatt épült egy semleges hajógyárban. Egykori ellenségek osztoztak a szerszámokon, miközben emlékeztek a múltra. Az első hajótest a műhely visszafogott színeit viselte. A legenda olyan határokról szól, amelyek védenek, és teret hagynak a találkozásnak. Egy erőd a biztonságos tárgyalás helye is lehet.",
+      "A fegyverszünet megszegése után egy ellenséges küldöttség megtartotta a kölcsönkapott Olive Fortress hajókat. A semleges támogatók befagyasztották a finanszírozást. A hibás alkatrészek pótlása elsőbbséget kapott a fejlesztésekkel szemben.",
+      "Az Advanced hajók biztosítják a független küldöttségek találkozóit. Minden küldöttséget az anyakikötőjéig kísérnek.",
+      "Az Elite őrség megakadályozza a semleges archívumok elfoglalását. Közös bizonyítékokat őriz akár saját szövetségesei akarata ellenére is."
+    ],
+    "pi-vanguard": [
+      "A Pi Vanguard kis úttörő hajógyárak közös vállalkozásaként indult. Egyikük sem tudott egyedül egész hajót finanszírozni, de összefogva anyagot, időt és tapasztalatot adtak. Az első küldetés nyílt ellátási útvonalat biztosított minden részt vevő kolóniának. A játék kitalált világában a modell a közös részvétel erejét jelképezi.",
+      "Ellenséges csoportok lemásolták a Pi Vanguard régi terveit, és kivont hajótesteket szereztek meg. Újabb precíziós alkatrészekre nem volt pénzük. A kis flotta nagy része megtartotta kezdeti felszerelését.",
+      "Az Advanced osztagok a pionírkonvojokat kísérik első közös útjaikon. Azonosítóik a hajóépítésben közreműködő műhelyekre emlékeztetnek.",
+      "Az Elite kötelék a szabad csomópontokat védi Drazevornnal szemben, aki az egyetlen igazság birtokosának mondja magát. Ez a küldetés kizárólag a játék történetében létezik."
+    ],
+    "core-carrier": [
+      "A Core Carriert akkor építették, amikor több kolóniának biztonságba kellett helyeznie utolsó tudásarchívumait. Mindegyik hozzátett egy gyűjteményt, és közösen viselték a felelősséget az egészért. A legénység külön eredetnyilvántartásokat és közös katalógusokat vezetett. A modell mások tudásának szállítását és biztonságos továbbadását jelképezi.",
+      "Az archívumfosztogatók Core Carrier hajókat foglaltak el, hogy eladják a rakományukban lévő tudást. A hozzáférési kulcsok több helyen voltak, ezért a lopott archívumokat nem tudták használni. A csalódott támogatók visszavonultak, a drága korszerűsítés pedig ritka kivétellé vált.",
+      "Az Advanced teherszállítók összekötik az elosztott tudástárakat. Minden átadást több archívumőr kísér.",
+      "Az Elite változat a közös emlékezetet őrzi az utolsó főellenfél elleni csata után. Legértékesebb rakománya a történelem önálló ellenőrzésének lehetősége."
+    ]
+  }
+}

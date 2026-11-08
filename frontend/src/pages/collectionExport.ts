@@ -11,6 +11,9 @@ import { loadShipArtwork } from './shipArtwork';
 export async function exportCollectionCard(card: CollectionCard, language: boolean | string, stars = 0): Promise<Blob> {
   const locale=typeof language==='boolean'?(language?'de':'en'):normalizeLocale(language)??'en', de=locale==='de';
   const t=(source:string)=>translate(locale,source), rtl=localeDirection(locale)==='rtl';
+  const fontFamily = locale === 'th' ? '"Noto Sans Thai", sans-serif'
+    : locale === 'zh' ? '"PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif'
+    : 'sans-serif';
   await document.fonts.ready;
   const [art, space, emblem] = await Promise.all([
     card.bossId ? loadBossArtwork(card.bossId, 1200) : loadShipArtwork(card.image, card.color),
@@ -22,8 +25,8 @@ export async function exportCollectionCard(card: CollectionCard, language: boole
   const ctx = canvas.getContext('2d');
   if (!ctx) throw new Error('Canvas unavailable');
   const wrap = (text: string, size: number, bold = false) => {
-    ctx.font = `${bold ? 'bold ' : ''}${size}px sans-serif`;
-    return wrapCardText(text, 1000, line => ctx.measureText(line).width);
+    ctx.font = `${bold ? 'bold ' : ''}${size}px ${fontFamily}`;
+    return wrapCardText(text, 1000, line => ctx.measureText(line).width, locale);
   };
   const title = wrap(card.name, 66, true), subtitle = wrap(card.subtitle, 30);
   const category = wrap(`${card.category.toUpperCase()}  ${'✦'.repeat(card.tier)}${card.bossId ? '  ' + '★'.repeat(Math.max(0, Math.min(3, stars))) : ''}`, 23, true);
@@ -60,7 +63,7 @@ export async function exportCollectionCard(card: CollectionCard, language: boole
   let y = 100;
   ctx.fillStyle = accent; ctx.font = 'bold 25px sans-serif'; ctx.fillText(`CRYPTOID EVOLUTION · ${card.serial}`, 100, y); y += 60;
   const paint = (lines: string[], size: number, advance: number, color: string, bold = false) => {
-    ctx.font = `${bold ? 'bold ' : ''}${size}px sans-serif`; ctx.fillStyle = color;
+    ctx.font = `${bold ? 'bold ' : ''}${size}px ${fontFamily}`; ctx.fillStyle = color;
     ctx.direction=rtl?'rtl':'ltr';ctx.textAlign=rtl?'right':'left';
     for (const line of lines) { ctx.fillText(line, rtl?1100:100, y); y += advance; }
   };
