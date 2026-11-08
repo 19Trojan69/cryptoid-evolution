@@ -10,7 +10,7 @@ const matches = (doc, query) => Object.entries(query).every(([path, expected]) =
   if (expected && typeof expected === 'object' && !(expected instanceof Date)) {
     if ('$exists' in expected) return (actual !== undefined) === expected.$exists;
     if ('$ne' in expected) return Array.isArray(actual) ? !actual.includes(expected.$ne) : actual !== expected.$ne;
-    if ('$in' in expected) return expected.$in.includes(actual);
+    if ('$in' in expected) return expected.$in.includes(actual ?? null);
     if ('$regex' in expected) return typeof actual === 'string' && new RegExp(expected.$regex, expected.$options || '').test(actual);
   }
   return expected === null ? actual == null : actual === expected;

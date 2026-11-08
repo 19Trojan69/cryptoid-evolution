@@ -4,16 +4,17 @@ import { isAdminMode } from "../adminAccess";
 import { rewardNetwork } from "../rewardNetwork";
 import { isSingleUseMissionPower, missionPowerOffers, usedMissionPowers, type MissionPowerActivation, type MissionPowerInventory } from "../missionPower";
 import type { PlayerSave } from "../playerSave";
+import { availablePowerOrder, consumePowerCharge, remainingPowerCharges, testnetPowerOrders } from "../powerStock";
 
 const playerKey = "playerByNetwork.testnet";
 const powerIds = missionPowerOffers.map(offer => offer.id);
-const paidPowers = (uid: string) => ({ user: uid, paid: true, payment_network: { $in: ["Pi Testnet", null] } });
+const paidPowers = (uid: string) => ({ user: uid, paid: true, ...testnetPowerOrders });
 
 async function readInventory(orders: Collection, uid: string, player: PlayerSave, session?: ClientSession): Promise<MissionPowerInventory> {
   const entries = await orders.find({ ...paidPowers(uid), product_id: { $in: powerIds }, consumed_at: null },
-    { session, projection: { _id: 0, product_id: 1 } }).toArray();
+    { session, projection: { _id: 0, product_id: 1, quantity: 1, power_model: 1, consumed_quantity: 1, cancelled: 1 } }).toArray();
   const stock = Object.fromEntries(missionPowerOffers.map(({ id, powerUp }) =>
-    [powerUp, entries.filter(order => order.product_id === id).length]));
+    [powerUp, entries.reduce((sum, order) => sum + (order.product_id === id ? remainingPowerCharges(order) : 0), 0)]));
   return { stock, pending: player.pendingPowerActivation ?? null, used: usedMissionPowers(player) };
 }
 
@@ -60,16 +61,18 @@ export default function mountMissionPowerEndpoints(router: Router) {
         const player = await currentPlayer(users, uid, runId, session);
         if (!player) return { status: 409, error: "run_replaced" };
         const paid = { ...paidPowers(uid), product_id: offer.id };
-        if (player.pendingPowerActivation || await orders.findOne({ ...paidPowers(uid), consumed_activation_id: requestId }, { session, projection: { _id: 1 } })) {
+        const receipt = `tap:${requestId}`;
+        if (player.pendingPowerActivation || await orders.findOne({
+          ...paidPowers(uid), $or: [{ consumed_activation_id: requestId }, { power_use_ids: receipt }],
+        }, { session, projection: { _id: 1 } })) {
           return { status: 200, inventory: await readInventory(orders, uid, player, session) };
         }
         if (isSingleUseMissionPower(offer.powerUp) && usedMissionPowers(player).includes(offer.powerUp)) {
           return { status: 409, error: "power_already_used" };
         }
-        const charge = await orders.findOneAndUpdate({ ...paid, consumed_at: null },
-          { $set: { consumed_at: new Date(), consumed_run_id: runId, consumed_activation_id: requestId } },
-          { session, sort: { created_at: 1, _id: 1 }, projection: { _id: 1 } });
+        const charge = await availablePowerOrder(orders, paid, session);
         if (!charge) return { status: 409, error: "power_stock_empty" };
+        if (!await consumePowerCharge(orders, charge, receipt, runId, session)) throw new Error("Power-up stock changed");
         const pending: MissionPowerActivation = { id: requestId, power: offer.powerUp };
         // Writing both documents in this transaction also serializes two devices
         // competing for different power-ups in the same live mission.

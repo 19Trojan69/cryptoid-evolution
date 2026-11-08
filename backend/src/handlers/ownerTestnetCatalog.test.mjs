@@ -11,6 +11,7 @@ const receipts = require('../../build/paymentReceipt.js');
 const get = (o, path) => path.split('.').reduce((v, k) => v?.[k], o);
 const set = (o, path, value) => { const keys = path.split('.'); const last = keys.pop(); for (const k of keys) o = o[k] ??= {}; o[last] = structuredClone(value); };
 const matches = (doc, query) => Object.entries(query).every(([path, expected]) => {
+  if (path === '$or') return expected.some(candidate => matches(doc, candidate));
   const actual = get(doc, path);
   if (expected && typeof expected === 'object' && !(expected instanceof Date)) {
     if ('$exists' in expected) return (actual !== undefined) === expected.$exists;
@@ -18,7 +19,7 @@ const matches = (doc, query) => Object.entries(query).every(([path, expected]) =
     if ('$in' in expected) return expected.$in.includes(actual ?? null);
     if ('$regex' in expected) return typeof actual === 'string' && new RegExp(expected.$regex, expected.$options || '').test(actual);
   }
-  return expected === null ? actual == null : actual === expected;
+  return expected === null ? actual == null : Array.isArray(actual) ? actual.includes(expected) : actual === expected;
 });
 function collection(docs) {
   const apply = (doc, update) => {
@@ -89,13 +90,13 @@ async function payment(h, productId, options = {}) {
 }
 const inventory = h => h.call('hangar', '/inventory', null, { method: 'GET' });
 
-test('mission power claims reserve one paid charge, survive a lost reply, and settle with the saved effect', async () => {
+test('mission power claims use one charge from a batch, survive a lost reply, and settle with the saved effect', async () => {
   const h = harness();
   await h.call('progress', '/me', null, { method: 'GET' });
   const started = await h.call('hangar', '/start', { action: 'new', version: h.profile().version, startKey: 'mission-power-start-01', rulesVersion: 2 });
   const runId = started.body.scoreRunId;
   const order = (id, product_id, extra = {}) => ({ _id: id, user: 'pilot-a', product_id, paid: true, ...extra });
-  h.orders.push(order('bomb-one', 'start_bomb'), order('bomb-two', 'start_bomb', { payment_network: 'Pi Testnet' }),
+  h.orders.push(order('bomb-one', 'start_bomb', { power_model: 1, quantity: 15, payment_network: 'Pi Testnet' }), order('bomb-two', 'start_bomb'),
     order('bomb-mainnet', 'start_bomb', { payment_network: 'Pi Network' }),
     order('shield-one', 'start_shield', { payment_network: 'Pi Testnet' }), order('unpaid', 'start_shield', { paid: false }));
   let previous = Promise.resolve(), ended = 0;
@@ -118,7 +119,7 @@ test('mission power claims reserve one paid charge, survive a lost reply, and se
   const stock = () => h.call('hangar', '/power', null, { method: 'GET', query: { runId } });
   const claim = (power, requestId, options) => h.call('hangar', '/power/activate', { runId, power, requestId }, options);
   const id = 'mission-bomb-claim-01';
-  assert.equal((await stock()).body.stock.bomb, 2);
+  assert.equal((await stock()).body.stock.bomb, 16);
   assert.equal((await claim('bomb', id, { network: 'mainnet' })).code, 403);
   const [first, retry, competing] = await Promise.all([
     claim('bomb', id), claim('bomb', id), claim('shield', 'mission-shield-claim-01'),
@@ -126,10 +127,11 @@ test('mission power claims reserve one paid charge, survive a lost reply, and se
   for (const response of [first, retry, competing]) {
     assert.equal(response.code, 200);
     assert.deepEqual(response.body.pending, { id, power: 'bomb' });
-    assert.equal(response.body.stock.bomb, 1);
+    assert.equal(response.body.stock.bomb, 15);
     assert.equal(response.body.stock.shield, 1);
   }
-  assert.equal(h.orders.filter(item => item.consumed_at).length, 1);
+  assert.equal(h.orders.filter(item => item.consumed_at).length, 0);
+  assert.equal(h.orders.find(item => item._id === 'bomb-one').consumed_quantity, 1);
   assert.equal(ended, 3);
   assert.deepEqual((await stock()).body.pending, { id, power: 'bomb' });
   const save = firstMissionSnapshot(3);
@@ -137,7 +139,7 @@ test('mission power claims reserve one paid charge, survive a lost reply, and se
   assert.equal(saved.code, 200);
   assert.deepEqual(h.profile().mission.snapshot.usedMissionPowers, ['bomb']);
   assert.equal((await stock()).body.pending, null);
-  assert.equal((await claim('bomb', id)).body.stock.bomb, 1);
+  assert.equal((await claim('bomb', id)).body.stock.bomb, 15);
   assert.equal((await claim('bomb', 'mission-bomb-claim-02')).body.error, 'power_already_used');
   const write = h.locals.userCollection.updateOne;
   h.locals.userCollection.updateOne = async (...args) => {
@@ -147,6 +149,34 @@ test('mission power claims reserve one paid charge, survive a lost reply, and se
   assert.equal((await claim('shield', 'mission-shield-claim-02')).code, 503);
   assert.equal((await stock()).body.stock.shield, 1);
   assert.equal((await stock()).body.pending, null);
+});
+
+test('one confirmed power-up payment credits the entered quantity once and mission start reserves one unit', async t => {
+  owner(t); const h = harness(); pi(t, h);
+  await h.call('progress', '/me', null, { method: 'GET' });
+  const metadata = { productId: 'start_shield', powerModel: 1, quantity: 15 };
+  const count = async () => (await inventory(h)).body.consumables.find(item => item.id === metadata.productId).count;
+  const wrong = await payment(h, metadata.productId, { id: 'wrong-total', payment: { amount: .08, metadata } });
+  assert.equal(wrong.code, 400);
+  assert.equal(await count(), 0);
+  const confirmed = await payment(h, metadata.productId, { id: 'shield-batch', payment: { amount: 1.2, metadata } });
+  assert.equal(confirmed.code, 200);
+  assert.equal(await count(), 15);
+  assert.equal(h.orders.length, 1);
+  assert.equal(h.orders[0].power_model, 1);
+  assert.equal((await h.call('payments', '/complete', { paymentId: 'shield-batch', txid: 'tx-shield-batch' })).code, 200);
+  assert.equal(await count(), 15);
+  assert.equal((await h.call('hangar', '/equip', { weapon: null, power: metadata.productId })).code, 200);
+  const start = { action: 'new', version: h.profile().version, startKey: 'power-batch-start-01', rulesVersion: 2 };
+  const result = await h.call('hangar', '/start', start);
+  assert.equal(result.body.powerUp, 'shield');
+  const retry = await h.call('hangar', '/start', start);
+  assert.equal(retry.body.scoreRunId, result.body.scoreRunId);
+  assert.equal(await count(), 14);
+  assert.equal(h.orders[0].consumed_quantity, 1);
+  assert.equal(h.orders[0].consumed_at, undefined);
+  const mainnet = await h.call('hangar', '/inventory', null, { method: 'GET', network: 'mainnet' });
+  assert.equal(mainnet.body.consumables.find(item => item.id === metadata.productId).count, 0);
 });
 
 test('catalog authorization requires the verified Testnet owner outside free preview', async t => {

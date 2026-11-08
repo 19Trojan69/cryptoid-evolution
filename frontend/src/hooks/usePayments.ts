@@ -6,6 +6,7 @@ type PaymentMetadata = {
   productId: string;
   quantity?: number;
   weaponModel?: 2;
+  powerModel?: 1;
 };
 
 type UsePaymentsArgs = {

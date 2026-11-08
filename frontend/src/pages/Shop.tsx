@@ -53,7 +53,7 @@ import { bossName } from './bossNames';
 import { useLocale } from "../i18n";
 import { requestGameFullscreen } from "./gameFullscreen";
 import { MAX_DIFFICULTY_LEVEL } from "./levelDifficulty";
-import { powerUpSymbols, type PowerUpType } from "./powerUps";
+import PowerPreview from "./PowerPreview";
 import { BOSS_STICKER_COUNT, CHAIN_MILESTONES, emptyRewardProgress, rankForLevel, readRewardProgress, REWARD_PROGRESS_KEY, rewardRank, type RewardProgress } from "./rewardProgress";
 
 type Offer = { id: string; kind: "weapon" | "power" | "armor" | "ship_upgrade"; name: string; description: string; pricePi: number; shipIndex?: number; stage?: 2 | 3 };
@@ -71,19 +71,7 @@ const shopTabs = [
   ["leaders", "Top 100", "#"],
 ] as const;
 
-const powerTypeForOffer = (offerId: string): PowerUpType => offerId.includes("shield") ? "shield" : offerId.includes("rapid") ? "rapid" : offerId.includes("bomb") ? "bomb" : offerId.includes("emp") ? "emp" : "overdrive";
 const adminFleet: ShipFleet = Object.fromEntries(playerSkins.map(skin => [skin.id, Object.fromEntries(playerColors.map(color => [color.id, 1]))])) as ShipFleet;
-
-const PowerPreview = ({ offerId }: { offerId: string }) => {
-  const { t } = useLocale();
-  const type = powerTypeForOffer(offerId);
-  return <div className={`offer-preview power-preview power-preview-${type}`} aria-hidden="true">
-    <span className="preview-grid" />
-    <span className="power-preview-orbit"><i>{powerUpSymbols[type]}</i></span>
-    <span className="power-preview-wave" />
-    <small>{t("Energy core")}</small>
-  </div>;
-};
 
 const Shop = () => {
   const navigate = useNavigate();
@@ -441,10 +429,14 @@ const Shop = () => {
     } catch { setLoadoutMessage('Could not save loadout. Please retry.'); }
   };
 
-  const buyTestPiOffer = (offer: { id: string; name?: string; pricePi: number }) => {
+  const buyTestPiOffer = (offer: { id: string; name?: string; pricePi: number }, batch?: { quantity: number; total: number }) => {
     if (!ownerTestnet || !catalogReady || isLoading) return;
     const owner = user?.uid;
-    void orderProduct(`Cryptoid ${offer.name || offer.id} · Test-Pi`, offer.pricePi, { productId: offer.id }, async () => {
+    const units = batch ? `${batch.quantity} × · ` : '';
+    void orderProduct(`Cryptoid ${offer.name || offer.id} · ${units}Test-Pi`, batch?.total ?? offer.pricePi, {
+      productId: offer.id,
+      ...(batch ? { quantity: batch.quantity, powerModel: 1 } : {}),
+    }, async () => {
       if (inventoryOwnerRef.current !== owner) return;
       await refreshInventory();
       setLoadoutMessage("purchase confirmed.");
@@ -683,7 +675,10 @@ const Shop = () => {
             const lockedWeapon = kind === "weapon" && !testnetWeaponEnabled;
             const powerPurchasable = kind === "power" && ownerTestnet && testPiPurchaseAllowed(offer, "Pi Testnet", true);
             return <article key={offer.id} className={`hangar-offer hangar-offer-${kind}${selected ? " hangar-offer-selected" : ""}`}>{kind === "weapon" ? <WeaponPreview offerId={offer.id} sprite={selectedShip().skin.sprite} color={selectedShip().color.id} /> : <PowerPreview offerId={offer.id} />}<h4>{t(offer.name)}</h4><p>{t(offer.description)}</p><span className="offer-purchase-price">{lockedWeapon || kind === "power" && !powerPurchasable ? <>{t("Planned price")}: {piPrice(offer.pricePi)}</> : piPrice(offer.pricePi, true)}</span><span className={lockedWeapon || kind === "power" && !powerPurchasable ? "mainnet-ready-badge" : undefined}>{lockedWeapon ? shipSaveNetwork === "testnet" ? t("MAINNET READY") : t("Currently locked") : kind === "weapon" ? t("45 seconds per charge") : powerPurchasable ? t("Buy with Test-Pi") : t("MAINNET READY")}</span><strong>{lockedWeapon ? t("Locked") : selected ? t("EQUIPPED") : owned ? kind === "power" ? `${count} ${t("AVAILABLE")}` : t("Owned — activate in game") : kind === "power" && !powerPurchasable ? t("Locked") : t("NOT OWNED")}</strong>{lockedWeapon && <p className="testnet-shop-notice">{shipSaveNetwork === "testnet" ? t("Available only as a weapon pickup on Testnet.") : t("Available only as a weapon pickup.")}</p>}<div>
-              {powerPurchasable && <TestPiPurchase price={offer.pricePi} disabled={isLoading || !catalogReady} pending={isLoading && activeProductId === offer.id} status={activeProductId === offer.id ? paymentStatus : undefined} diagnostic={activeProductId === offer.id ? paymentDiagnostic : undefined} onBuy={() => buyTestPiOffer(offer)} />}
+              {powerPurchasable && <WeaponPurchase id={offer.id} price={offer.pricePi} count={count} disabled={isLoading || !catalogReady}
+                pending={isLoading && activeProductId === offer.id} status={activeProductId === offer.id ? paymentStatus : undefined}
+                diagnostic={activeProductId === offer.id ? paymentDiagnostic : undefined}
+                onBuy={(quantity, total) => buyTestPiOffer(offer, { quantity, total })} />}
               {owned && kind === "power" ? <button className="button button-secondary" type="button" disabled={Boolean(selected)} onClick={() => equip(null, offer.id)}>{t(selected ? "Selected" : "Equip for next mission")}</button> : null}
               {kind === "weapon" && !lockedWeapon && <WeaponPurchase id={offer.id} price={offer.pricePi} count={inventory?.weaponStock?.[offer.id] || 0} pending={isLoading && activeProductId === offer.id} status={activeProductId === offer.id ? paymentStatus : undefined} diagnostic={activeProductId === offer.id ? paymentDiagnostic : undefined} disabled={adminMode || isLoading || !catalogReady} onBuy={(quantity, total) => { void orderProduct(`Cryptoid ${offer.name} · ${quantity} × 45s · Test-Pi`, total, { productId: offer.id, quantity, weaponModel: 2 }, async () => { setLoadoutMessage("purchase confirmed."); await refreshInventory(); }); }} />}
             </div></article>;

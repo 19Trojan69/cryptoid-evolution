@@ -889,7 +889,7 @@ html[data-motion="reduced"] .boss-debris-piece:nth-child(n+5) { display: none; }
 .power-preview-orbit { position: absolute; z-index: 3; top: 50%; left: 50%; display: grid; place-items: center; width: 66px; height: 66px; transform: translate(-50%, -50%); border: 1px solid var(--offer-color); border-radius: 50%; box-shadow: inset 0 0 18px color-mix(in srgb, var(--offer-color) 24%, transparent), 0 0 15px color-mix(in srgb, var(--offer-color) 38%, transparent); animation: power-core-float 1.7s ease-in-out infinite alternate; }
 .power-preview-orbit::before, .power-preview-orbit::after { position: absolute; inset: -8px; border: 1px dashed color-mix(in srgb, var(--offer-color) 65%, transparent); border-radius: 50%; content: ''; animation: power-core-spin 4.5s linear infinite; }
 .power-preview-orbit::after { inset: 8px -15px; animation-direction: reverse; animation-duration: 3.2s; }
-.power-preview-orbit i { display: grid; place-items: center; width: 42px; height: 42px; border-radius: 50%; background: radial-gradient(circle at 34% 27%, #fff, var(--offer-color) 25%, #152a4c 72%); color: #061324; font: 700 22px 'Space Grotesk', sans-serif; box-shadow: 0 0 15px var(--offer-color); }
+.power-preview-orbit i, .power-orb { display: grid; place-items: center; width: 42px; height: 42px; border-radius: 50%; background: radial-gradient(circle at 34% 27%, #fff, var(--offer-color) 25%, #152a4c 72%); color: #061324; font: 700 22px 'Space Grotesk', sans-serif; box-shadow: 0 0 15px var(--offer-color); }
 .power-preview-shield { --offer-color: #67e4ff; }
 .power-preview-rapid { --offer-color: #66edb8; }
 .power-preview-overdrive { --offer-color: #d783ff; }

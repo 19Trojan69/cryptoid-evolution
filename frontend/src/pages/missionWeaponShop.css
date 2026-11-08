@@ -99,8 +99,8 @@
 }
 .mission-shop-tabs button[aria-pressed="true"] { color: #ffe0a0; border-color: #b99555; background: #302b21; }
 .mission-power-offers { display: grid; gap: 8px; }
-.mission-power-offer { padding: 10px 12px; border: 1px solid #455b70; border-radius: 10px; background: #102235; }
+.mission-power-offers .mission-power-offer { display: block; padding: 10px 12px; border: 1px solid #455b70; border-radius: 10px; background: #102235; box-shadow: none; clip-path: none; }
+.mission-power-offer .power-preview { margin: -10px -12px 10px; border-width: 0 0 1px; }
 .mission-power-offer h3 { color: #f1d490; font: 700 15px/1.25 system-ui, sans-serif; margin: 0 0 4px; }
 .mission-power-offer p { color: #bfd1df; margin: 4px 0; }
 .mission-power-offer .weapon-purchase { margin: 8px 0 0; }
-.mission-power-offer .weapon-purchase button { min-height: 44px; white-space: normal; }

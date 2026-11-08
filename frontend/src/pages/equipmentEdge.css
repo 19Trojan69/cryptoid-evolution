@@ -141,22 +141,16 @@
   z-index: 5;
   bottom: max(8px, env(safe-area-inset-bottom));
   right: max(8px, env(safe-area-inset-right));
-  display: grid;
-  grid-template: repeat(2, 48px) / repeat(3, 48px);
-  gap: 4px;
-  direction: rtl;
+  display: flex;
+  flex-direction: row-reverse;
+  gap: 0;
   pointer-events: none;
 }
 .game-field .mission-power-dock-left {
   right: auto;
   left: max(8px, env(safe-area-inset-left));
-  direction: ltr;
+  flex-direction: row;
 }
-.mission-power-shortcut[data-power="shield"] { grid-area: 2 / 1; }
-.mission-power-shortcut[data-power="overdrive"] { grid-area: 2 / 2; }
-.mission-power-shortcut[data-power="rapid"] { grid-area: 2 / 3; }
-.mission-power-shortcut[data-power="bomb"] { grid-area: 1 / 1; }
-.mission-power-shortcut[data-power="emp"] { grid-area: 1 / 2; }
 .game-field button.mission-power-shortcut {
   box-sizing: border-box;
   position: relative;
@@ -166,6 +160,7 @@
   justify-content: center;
   width: 48px;
   height: 48px;
+  flex: 0 0 48px;
   margin: 0;
   padding: 2px;
   border: 1px solid color-mix(in srgb, currentColor 48%, transparent);
@@ -176,6 +171,7 @@
   pointer-events: auto;
   direction: ltr;
 }
+.mission-power-shortcut .power-orb { width: 23px; height: 23px; font-size: 15px; box-shadow: none; }
 .mission-power-shortcut small { font: 700 10px/1.1 system-ui, sans-serif; font-variant-numeric: tabular-nums; }
 .mission-power-shortcut .mission-power-count {
   position: absolute;

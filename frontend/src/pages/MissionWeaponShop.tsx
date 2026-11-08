@@ -5,7 +5,7 @@ import { usePayments } from '../hooks/usePayments';
 import { useLocale } from '../i18n';
 import type { ShipStage } from './shipEvolution';
 import WeaponPurchase from './WeaponPurchase';
-import TestPiPurchase from './TestPiPurchase';
+import PowerPreview from './PowerPreview';
 import WeaponPreview from './WeaponPreview';
 import WeaponTutorial from './WeaponTutorial';
 import ReloadConfirmation from './ReloadConfirmation';
@@ -16,7 +16,6 @@ import { shipSaveNetwork, selectedShip } from './shipFleet';
 import { hangarCatalog } from '../../../backend/src/hangarCatalog';
 import { isTestnetWeaponPurchaseEnabled, testPiPurchaseAllowed } from '../../../backend/src/paymentPolicy';
 import { missionPowerOffers, type MissionPowerInventory } from '../../../backend/src/missionPower';
-import { powerUpSymbols } from './powerUps';
 
 type Offer = { id: string; kind: string; name: string; description: string; pricePi: number; level?: number };
 type Props = { reloadLevel?: number; autoReload?: AutoReloadPreferences; onAutoReload?: (level: number, enabled: boolean) => void; authenticated: boolean; admin: boolean; timers: number[]; refreshInventory: (force?: boolean) => Promise<boolean>; onClose: () => void; stock?: Record<string, number>; activeLevel?: number; source?: string; pickupLevel?: number; pickupMs?: number; stage?: ShipStage; selectionBusy?: boolean; pendingLevel?: number; selectionError?: string; onSelect?: (level: number) => void; onPickup?: () => void;
@@ -147,16 +146,18 @@ export default function MissionWeaponShop({ reloadLevel, autoReload = {}, onAuto
       {missionPowerOffers.map(offer => {
         const count = (powerInventory?.stock[offer.powerUp] ?? 0) + Number(powerInventory?.pending?.power === offer.powerUp);
         const purchasable = shipSaveNetwork === 'testnet' && !admin && authenticated && testPiPurchaseAllowed(offer, 'Pi Testnet', ownerTestnet);
-        return <article className="mission-power-offer" key={offer.id}>
-          <h3><span className={`edge-action-${offer.powerUp}`} aria-hidden="true">{powerUpSymbols[offer.powerUp]}</span> {t(offer.name)}</h3>
+        return <article className="hangar-offer mission-power-offer" key={offer.id}>
+          <PowerPreview offerId={offer.id} />
+          <h3>{t(offer.name)}</h3>
           <p>{t(offer.description)}</p>
           <p className="mission-stock">{t('Charges')}: <b>{authenticated && !powerInventory ? '…' : count}</b></p>
-          {purchasable ? <TestPiPurchase price={offer.pricePi} repurchase={count > 0} singleCharge
+          {purchasable ? <WeaponPurchase id={offer.id} price={offer.pricePi} count={count} showStock={false}
             pending={isLoading && activeProductId === offer.id} disabled={!ready || !powerInventory || powerRefreshing || powerRefreshFailed || busy || !!pendingLevel}
             status={activeProductId === offer.id ? paymentStatus : undefined}
             diagnostic={activeProductId === offer.id ? paymentDiagnostic : undefined}
-            onBuy={() => {
-              void orderProduct(`Cryptoid ${offer.name} · 1 × · Test-Pi`, offer.pricePi, { productId: offer.id }, refreshPowerStock);
+            onBuy={(quantity, total) => {
+              void orderProduct(`Cryptoid ${offer.name} · ${quantity} × · Test-Pi`, total,
+                { productId: offer.id, quantity, powerModel: 1 }, refreshPowerStock);
             }} /> : <p className="mission-duration">{t('Purchases locked')}</p>}
         </article>;
       })}

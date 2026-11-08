@@ -1,10 +1,11 @@
 import { memo, useRef } from "react";
 import { useLocale } from "../i18n";
 import type { MissionPower, MissionPowerInventory } from "../../../backend/src/missionPower";
-import { powerUpNames, powerUpSymbols } from "./powerUps";
+import { powerUpNames } from "./powerUps";
+import { PowerOrb } from "./PowerPreview";
 import type { ControlHand } from "./controlPreferences";
 
-const slots = ["shield", "overdrive", "rapid", "bomb", "emp"] as const;
+const powerOrder = ["shield", "overdrive", "rapid", "bomb", "emp"] as const;
 type Props = {
   hand: ControlHand;
   inventory?: MissionPowerInventory;
@@ -59,7 +60,7 @@ function Shortcut({ power, count, seconds, busy, retry, disabled, onUse, t }: {
       tap.current = false;
       if (deliberate && !disabled) onUse(power);
     }}>
-    <span className="mission-power-symbol" aria-hidden="true">{powerUpSymbols[power]}</span>
+    <PowerOrb power={power} />
     {count > 0 && <small className="mission-power-count" aria-hidden="true">{count}</small>}
     {seconds > 0 ? <small aria-hidden="true">{seconds}s</small> : (busy || retry) && <small aria-hidden="true">{busy ? "…" : "↻"}</small>}
   </button>;
@@ -68,7 +69,7 @@ function Shortcut({ power, count, seconds, busy, retry, disabled, onUse, t }: {
 export default memo(function MissionPowerDock({ hand, inventory, queued, attempt, enabled, weaponsUseful, bombUseful, shield, overdrive, rapid, emp, onUse }: Props) {
   const { t } = useLocale();
   const remaining = { shield, overdrive, rapid, emp, bomb: 0 };
-  const buttons = slots.map(power => {
+  const buttons = powerOrder.map(power => {
     const reserved = inventory?.pending?.power === power;
     const legacy = queued === power;
     const count = (inventory?.stock[power] ?? 0) + Number(reserved) + Number(legacy);

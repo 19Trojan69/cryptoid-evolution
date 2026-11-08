@@ -3,8 +3,6 @@ import { useLocale } from '../i18n';
 
 type Props = {
   price: number;
-  repurchase?: boolean;
-  singleCharge?: boolean;
   disabled?: boolean;
   pending?: boolean;
   reason?: string;
@@ -13,12 +11,12 @@ type Props = {
   onBuy: () => void;
 };
 
-export default function TestPiPurchase({ price, repurchase, singleCharge, disabled, pending, reason, status, diagnostic, onBuy }: Props) {
+export default function TestPiPurchase({ price, disabled, pending, reason, status, diagnostic, onBuy }: Props) {
   const { t, locale } = useLocale();
   return <div className="weapon-purchase">
     <button className="button button-secondary" type="button" disabled={disabled || pending} aria-busy={pending || undefined} onClick={onBuy}>
       {pending && <span className="weapon-payment-spinner" aria-hidden="true" />}
-      {t(repurchase ? 'Buy again' : 'Buy with Test-Pi')} · {singleCharge && '1 × '}<PiPrice amount={price} locale={locale} testnet />
+      {t('Buy with Test-Pi')} · <PiPrice amount={price} locale={locale} testnet />
     </button>
     {reason && disabled && <small role="status">{t(reason)}</small>}
     {status && <p className="weapon-purchase-status" role="status">{t(status)}</p>}
