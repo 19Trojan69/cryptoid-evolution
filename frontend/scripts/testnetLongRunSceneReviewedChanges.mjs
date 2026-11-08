@@ -79,8 +79,17 @@ const finalExplosionReveal = {
   "after": "          if (gameOverTimerRef.current === null) {\n            const delay = Math.max(GAME_OVER_REVEAL_MS, soundRef.current?.playerDestructionRemainingMs ?? 0);\n            // An interrupted audio graph cannot leave the destroyed ship on screen indefinitely.\n            const deadline = performance.now() + delay + 1_000;\n            const reveal = () => {\n              gameOverTimerRef.current = null;\n              if (stateRef.current.status !== \"destroying\") return;\n              const remaining = Math.min(deadline - performance.now(), soundRef.current?.playerDestructionRemainingMs ?? 0);\n              if (remaining > 0) {\n                gameOverTimerRef.current = window.setTimeout(reveal, Math.ceil(remaining));\n                return;\n              }\n              stateRef.current.status = \"game-over\";\n              setGame({ ...stateRef.current, effects: [...stateRef.current.effects] });\n            };\n            gameOverTimerRef.current = window.setTimeout(reveal, Math.ceil(delay));\n          }\n"
 };
 
+const bonusHudChange = {
+  before: '          <GameHudStats hearts={game.hearts} heartsHit={game.effects.some(effect => effect.target === "player" && effect.kind === "player-crash")} levelLabel={levelLabel} shards={totalShards} score={game.score} block={hudBlock} bossNumber={hudBoss} locale={locale}/>\n',
+  after: '          <GameHudStats hearts={game.hearts} heartsHit={game.effects.some(effect => effect.target === "player" && effect.kind === "player-crash")} levelLabel={levelLabel} shards={totalShards} score={game.score} block={hudBlock} bossNumber={hudBoss} bonusRound={game.encounter === "bonus"} locale={locale}/>\n',
+};
+
 export function restoreTestnetLongRunSceneChanges(source) {
   source = restoreTestnetMissionPowerChanges(source);
+  if (source.includes(bonusHudChange.after)) {
+    if (source.split(bonusHudChange.after).length !== 2) throw Error('Expected one exact bonus HUD change');
+    source = source.replace(bonusHudChange.after, () => bonusHudChange.before);
+  }
   if (source.includes(finalExplosionReveal.after)) {
     if (source.split(finalExplosionReveal.after).length !== 2) throw Error('Expected one exact final explosion reveal change');
     source = source.replace(finalExplosionReveal.after, () => finalExplosionReveal.before);
