@@ -1,7 +1,9 @@
 import { pointsPerDock, withDockingSurvival } from "./galaxyArcadeDocking";
 import { arcadeLevelProgress, withArcadeDifficulty } from "./galaxyArcadeDifficulty";
 import { withArcadeGameplayReview } from "./galaxyArcadeGameplayReview";
-import { pointsPerVortexPass } from "./galaxyArcadeManeuvers";
+import { pointsPerBoostDodge, pointsPerVortexPass } from "./galaxyArcadeManeuvers";
+import { arcadeMedalRules, withArcadeMedals } from "./galaxyArcadeMedals";
+import { patternStartLevel, withArcadePatterns } from "./galaxyArcadePatterns";
 
 const levelStyles = `<style>
   #runLevel {
@@ -34,7 +36,7 @@ const survivalRules = `
     create(module, v, previous) {
       const section = previous ? previous.section + 1 : 1;
       const seed = previous ? Math.imul(section, 0x9E3779B1) + v * 197 : undefined;
-      const next = module.create(v, seed);
+      const next = module.create(v, seed, section);
       Object.assign(next, {
         section,
         challenge: C.levelProgress(section),
@@ -44,6 +46,8 @@ const survivalRules = `
         bankedScore: previous ? previous.bankedScore + previous.score : 0,
         bankedTime: previous ? previous.bankedTime + previous.elapsed : 0,
         cleared: previous ? previous.cleared + Number(previous.success) : 0,
+        medalBank: previous ? medalValue(previous) : 0,
+        medalTier: previous?.medalTier ?? 0,
       });
       if(previous) {
         next.rng = C.random(seed);
@@ -63,6 +67,7 @@ const survivalRules = `
       if(state.done) return;
       const hitsBefore = state.hits;
       module.update(state, dt, controls);
+      announceMedal(state);
       if(!state.done) return;
 
       const friendlyFireAlreadyCharged = selected.id === 'G05' && state.v === 3
@@ -124,7 +129,7 @@ const survivalGoals: Readonly<Record<string, string>> = {
 const survivalScoring: Readonly<Record<string, string>> = {
   "2-2": "10 pro überlebter Sekunde, 60 pro vollständig gemiedener Front und 100 je verbleibendem Leben bei Levelabschluss.",
   "2-3": `${pointsPerVortexPass} Punkte für jede vollständige Wirbelpassage. Der Einflug allein bringt noch keine Punkte.`,
-  "2-4": "10 pro überlebter Sekunde, 40 je ungenutztem Impuls und 100 je verbleibendem Leben bei Levelabschluss.",
+  "2-4": `10 pro überlebter Sekunde, ${pointsPerBoostDodge} je gelungenem Schub-Ausweichmanöver und 100 je verbleibendem Leben bei Levelabschluss.`,
   "2-5": "10 pro überlebter Sekunde, 60 pro sauber durchflogener Verengung und 100 je verbleibendem Leben bei Levelabschluss.",
   "4-1": "50 pro Ring und 25 zusätzlich für einen mittigen Durchflug.",
   "4-2": "50 pro Ring und 25 zusätzlich für einen mittigen Durchflug.",
@@ -139,28 +144,37 @@ export function withArcadeSurvival(html: string, game: number, variant: number) 
   const docking = game === 3;
   const mission = `${game}-${variant}`;
   const goal = survivalGoals[mission];
-  const sectionRule = docking
-    ? "Nach dem automatischen Ablegen beginnt ein neues Level an der nächsten Bucht. Jede Bucht verlangt mehr Präzision. Harte Karambolagen kosten ein Leben."
-    : game === 4
-      ? "Ein verpasster Ring kostet ein Leben. Nach der Ringroute folgt das nächste Level."
-      : "Mit jedem Abschnitt steigt das Level und die Aufgabe wird schwieriger. Treffer oder ein verfehltes Levelziel können ein Leben kosten.";
+  let sectionRule = "Mit jedem Abschnitt steigt das Level und die Aufgabe wird schwieriger. Treffer oder ein verfehltes Levelziel können ein Leben kosten.";
+  if (docking) {
+    sectionRule = "Sobald Position, Tempo und Winkel passen, halte eine Sekunde. Nach dem Ablegen folgt die nächste Bucht. Harte Karambolagen kosten ein Leben.";
+  } else if (game === 4) {
+    sectionRule = `Ein verpasster Ring kostet ein Leben. Ab Level ${patternStartLevel} wechseln sich Zickzack- und Pendelrouten ab.`;
+  } else if (game === 8) {
+    sectionRule += ` Ab Level ${patternStartLevel} greifen manche Wellen von beiden Seiten an. Die Warnung kündigt den Zangenangriff an.`;
+  }
   const scoring = docking
     ? `${pointsPerDock} Punkte pro erfolgreichem Andockmanöver.`
     : survivalScoring[mission];
+  let rulesVersion = "survival-levels-1";
+  if (game === 2 && (variant === 3 || variant === 5)) rulesVersion = "survival-maneuvers-1";
+  if (game === 2 && variant === 4) rulesVersion = "survival-boost-1";
+  if (game === 4 || game === 8) rulesVersion = "survival-patterns-1";
   const briefing = {
     ...(goal ? { goal } : {}),
     ...(scoring ? { scoring } : {}),
-    rulesVersion: game === 2 && (variant === 3 || variant === 5) ? "survival-maneuvers-1" : "survival-levels-1",
+    rulesVersion,
   };
 
   const levelDocument = docking ? withDockingSurvival(html) : withArcadeDifficulty(html, game);
-  let document = withArcadeGameplayReview(levelDocument, game)
+  const gameDocument = withArcadePatterns(withArcadeGameplayReview(levelDocument, game), game);
+  let document = withArcadeMedals(gameDocument, game)
     .replace("</head>", `${levelStyles}</head>`)
     .replace('<small id="roundId"></small>', '<small id="roundId" hidden></small><span id="runLevel" role="status"></span>')
     .replace('</canvas></section>', '</canvas><div id="levelBanner" aria-hidden="true" hidden></div></section>')
     .replace(
       "function intro(v){",
-      `${survivalRules}
+      `${arcadeMedalRules(game, variant)}
+      ${survivalRules}
       Object.assign(C.catalog[${game - 1}].variants[${variant - 1}], ${JSON.stringify(briefing)});
       function intro(v){`,
     )
