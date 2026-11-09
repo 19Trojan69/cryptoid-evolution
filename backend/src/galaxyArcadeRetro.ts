@@ -114,6 +114,47 @@ const pixelBackdrops = `  const themes = ${JSON.stringify(arcadeThemes)};
 
 `;
 
+const pixelImpacts = `  const impactPalette = { r: '#ee6534', y: '#ffb94f', w: '#fff2bc', s: '#6c5362' };
+  const impactSprites = [
+    [
+      '.....r.....', '....ryr....', '..r.ryr.r..', '...ryyyr...',
+      '.rryywyyrr.', 'ryyywwwyyyr', '.rryywyyrr.', '...ryyyr...',
+      '..r.ryr.r..', '....ryr....', '.....r.....',
+    ],
+    [
+      '..r.....r..', '.....r.....', '.r..ryr..r.', '...ryyyr...',
+      '..rywwyyr..', 'rryywyyyrrr', '..rrywyyr..', '...ryyrr...',
+      '.r..ryr..r.', '.....r.....', '..r.....r..',
+    ],
+    [
+      '..r.....r..', '.....s.....', 'r..s...s..r', '..s..s..s..',
+      '....s.s....', '.s.s...s.s.', '....s.s....', '..s..s..s..',
+      'r..s...s..r', '.....s.....', '..r.....r..',
+    ],
+  ].map(rows => {
+    const sprite = surface(11, 11);
+    const context = sprite.getContext('2d');
+    rows.forEach((row, y) => [...row].forEach((pixel, x) => {
+      if (pixel === '.') return;
+      context.fillStyle = impactPalette[pixel];
+      context.fillRect(x, y, 1, 1);
+    }));
+    return sprite;
+  });
+  const impactSizes = [32, 44, 52];
+  graphics.impact = function (context, impact) {
+    const age = 1 - impact.life / impact.total;
+    const frame = C.reduced ? 0 : Math.min(2, Math.floor(age * 3));
+    const size = impactSizes[frame];
+    context.save();
+    context.imageSmoothingEnabled = false;
+    context.globalAlpha *= frame === 2 ? 1 - age : 1;
+    context.drawImage(impactSprites[frame], impact.x - size / 2, impact.y - size / 2, size, size);
+    context.restore();
+  };
+
+`;
+
 export function withArcadeRetroStyle(html: string) {
   return html
     .replace("</head>", `${arcadeStyle}</head>`)
@@ -125,5 +166,30 @@ export function withArcadeRetroStyle(html: string) {
     .replace("graphics.background(pixels);", "graphics.background(pixels, game);")
     .replace("G.background(g);g.restore();g.save();", "G.background(g, 'G0'+number);g.restore();g.save();")
     .replace("C.mode='intro';const m=C.modules[selected.id];", "C.mode='intro';$('gameScreen').dataset.sector=selected.id;const m=C.modules[selected.id];")
-    .replace("C.retro.draw(ctx, C.session, dt, scale);", "C.retro.draw(ctx, C.session, dt, scale, selected?.id);");
+    .replace("C.retro.draw(ctx, C.session, dt, scale);", "C.retro.draw(ctx, C.session, dt, scale, selected?.id);")
+    .replace("  const drawShip = graphics.ship;", `${pixelImpacts}  const drawShip = graphics.ship;`)
+    .replace(
+      "    drawShip(context, state, pixelSprite(artwork), size);",
+      `    if (!C.reduced && state === C.session?.state && state.inv > 0 && Math.floor(state.inv * 5) % 2 === 0) {
+      context.globalAlpha *= .58;
+    }
+    drawShip(context, state, pixelSprite(artwork), size);`,
+    )
+    .replace(
+      /const age=1-p\.life\/p\.total;g\.save\(\);g\.translate\(p\.x,p\.y\);[^\n]+?(?=return true;\}\);C\.effects=)/,
+      "G.impact(g,p);",
+    )
+    .replace("C.burst(x,y,'#ffae93');C.tone(120,.17);", "C.tone(120,.17);")
+    .replace(
+      "if(C.session.state.done)finish();",
+      `if(C.session.state.done){
+        const state=C.session.state;
+        if(state.hits<(state.maxHits||3)||!C.impacts.length)finish();
+        break;
+      }`,
+    )
+    .replace(
+      "Karambolagen: kurze Explosion und sofort sichtbares Schiff. Der Schutzring zeigt 1,35 Sekunden Schonzeit.",
+      "Bei einem Treffer siehst du eine kurze Pixel-Explosion. Während der 1,35 Sekunden Blinkschutz kannst du weitersteuern und einsammeln.",
+    );
 }
