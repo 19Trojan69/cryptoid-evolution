@@ -11,7 +11,6 @@ export function withArcadeDifficulty(html: string, game: number) {
         .replace("s.shardClock=2.4", "s.shardClock=2.4*(1-.24*s.challenge)");
     case 2:
       return html
-        .replace(/s\.elapsed\*\.24/g, "s.elapsed*(.24+.20*s.challenge)")
         .replace("r:21,vy:155", "r:21,vy:155+50*s.challenge")
         .replace("speed=78+s.elapsed*.6", "speed=78+s.elapsed*.6+46*s.challenge")
         .replace("s.spawnClock=1.3+s.rng()*.3", "s.spawnClock=(1.3+s.rng()*.3)*(1-.23*s.challenge)");

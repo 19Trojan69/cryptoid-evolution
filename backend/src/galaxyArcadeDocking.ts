@@ -56,7 +56,7 @@ export function withDockingSurvival(html: string) {
    let a=C.inputVector(input);`,
     )
     .replace(
-      "if(s.v===4){if(input.impulse",
+      "if(s.v===4){if(input.impulse&&s.impulses>0&&(a.x||a.y)){s.vx+=a.x*32;s.vy+=a.y*32;s.impulses--;}}",
       `if(s.v===4){
    if(s.impulses===0) {
      s.impulseRecharge += dt;
@@ -65,13 +65,30 @@ export function withDockingSurvival(html: string) {
        s.impulseRecharge = 0;
      }
    }
-   if(input.impulse`,
+   const direction = Math.hypot(a.x, a.y);
+   if(input.impulse && s.impulses>0 && direction>0) {
+     s.vx += a.x / direction * 32;
+     s.vy += a.y / direction * 32;
+     s.impulses--;
+   }
+ }`,
     )
     .replace(
       "const inside=Math.abs(localX)<24&&Math.abs(localY)<24;",
       "const clearance=24-7*s.challenge,inside=Math.abs(localX)<clearance&&Math.abs(localY)<clearance;",
     )
     .replace("s.relativeSpeed<15&&s.angleError<.19", "s.relativeSpeed<15-4*s.challenge&&s.angleError<.19-.045*s.challenge")
+    .replace(
+      "s.hardContacts++;s.y+=35;s.vy=Math.abs(s.vy)*.2;s.vx*=.3;",
+      `s.hardContacts++;
+   const edge = localY > -68 ? -31 : -104;
+   const separation = edge - localY;
+   const away = Math.sign(separation) * 24;
+   s.x = C.clamp(s.x - Math.sin(t.angle) * separation, 36, 444);
+   s.y = C.clamp(s.y + Math.cos(t.angle) * separation, 50, 590);
+   s.vx = t.vx - Math.sin(t.angle) * away;
+   s.vy = t.vy + Math.cos(t.angle) * away;`,
+    )
     .replace(
       /if\(s\.dwell>=1\)\{s\.docks\+\+;[^\n]+/,
       `if(s.dwell>=1){

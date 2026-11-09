@@ -1,5 +1,7 @@
 import { pointsPerDock, withDockingSurvival } from "./galaxyArcadeDocking";
 import { arcadeLevelProgress, withArcadeDifficulty } from "./galaxyArcadeDifficulty";
+import { withArcadeGameplayReview } from "./galaxyArcadeGameplayReview";
+import { pointsPerVortexPass } from "./galaxyArcadeManeuvers";
 
 const levelStyles = `<style>
   #runLevel {
@@ -95,9 +97,11 @@ const survivalRules = `
     metrics(id, state) {
       const time = Math.floor(state.bankedTime + state.elapsed);
       const duration = Math.floor(time / 60) + ':' + String(time % 60).padStart(2, '0');
-      return [['Erreichtes Level', state.section],
+      const metrics = [['Erreichtes Level', state.section],
         [id === 'G03' ? 'Andockmanöver' : 'Level geschafft', id === 'G03' ? state.docks : state.cleared],
         ['Flugzeit', duration]];
+      if (id === 'G02' && state.v === 3) metrics.push(['Wirbelpassagen', this.score(state) / ${pointsPerVortexPass}]);
+      return metrics;
     },
   };
 `;
@@ -105,8 +109,11 @@ const survivalRules = `
 const survivalGoals: Readonly<Record<string, string>> = {
   "1-1": "Sammle Cyan-Shards für 10 und Gold-Shards für 25 Punkte. Weiche Hindernissen aus und überstehe möglichst viele Flugabschnitte.",
   "1-5": "Sammle mindestens 24 Shards in jedem Flugabschnitt. Weiche den angekündigten Schüssen der Fernpatrouillen aus.",
-  "3-4": "Pro Bucht stehen dir 24 Steuerimpulse zur Verfügung. Wenn sie aufgebraucht sind, lädt alle zwei Sekunden ein einzelner Impuls nach. Bremse und Drehung bleiben verfügbar.",
+  "2-3": "Fliege von außen durch die bewegliche Öffnung bis zur Insel und durch die Öffnung wieder ganz hinaus. Drei saubere Wirbelpassagen sichern das Level.",
+  "2-4": "Weiche Asteroiden und angekündigten Schüssen aus. Tippe auf Schub für einen kurzen, geschützten Sprint in deine zuletzt gesteuerte Richtung. Beim ersten Start aus dem Stand fliegst du nach oben. Du kannst während des Sprints weitersteuern.",
+  "3-4": "Ein kurzer Zug am Joystick oder ein neuer Tastendruck gibt einen vollen Steuerimpuls. Pro Bucht hast du 24 Impulse. Danach lädt bei leerem Vorrat alle zwei Sekunden ein Impuls nach.",
   "3-5": "Bediene die Andockbuchten nacheinander. Bremse, richte dein Schiff aus und halte es eine Sekunde stabil in der Bucht.",
+  "4-1": "Fliege durch die Öffnungen der 12 Energieringe. Die Öffnungen wechseln zwischen vier Flugbereichen.",
   "5-1": "Triff pro Abschnitt mindestens zehn unterschiedlich große Übungsziele.",
   "5-3": "Triff pro Abschnitt acht Feinde und verschone alle mit FREUND markierten Objekte. Jeder Freundtreffer kostet ein Leben.",
   "5-4": "Erziele mit zwölf Schüssen mindestens neun Treffer und 70 Prozent Präzision. Die Munition wird für den nächsten Abschnitt aufgefüllt.",
@@ -114,26 +121,40 @@ const survivalGoals: Readonly<Record<string, string>> = {
   "6-5": "Fange mit zwölf Abfangladungen pro Abschnitt mindestens zwölf Raketen ab. Nutze Explosionen zwischen zusammen fliegenden Raketen.",
 };
 
+const survivalScoring: Readonly<Record<string, string>> = {
+  "2-2": "10 pro überlebter Sekunde, 60 pro vollständig gemiedener Front und 100 je verbleibendem Leben bei Levelabschluss.",
+  "2-3": `${pointsPerVortexPass} Punkte für jede vollständige Wirbelpassage. Der Einflug allein bringt noch keine Punkte.`,
+  "2-4": "10 pro überlebter Sekunde, 40 je ungenutztem Impuls und 100 je verbleibendem Leben bei Levelabschluss.",
+  "2-5": "10 pro überlebter Sekunde, 60 pro sauber durchflogener Verengung und 100 je verbleibendem Leben bei Levelabschluss.",
+  "4-1": "50 pro Ring und 25 zusätzlich für einen mittigen Durchflug.",
+  "4-2": "50 pro Ring und 25 zusätzlich für einen mittigen Durchflug.",
+  "4-3": "80 pro offenem Ring und 25 zusätzlich für einen mittigen Durchflug.",
+  "4-4": "40 für das breite Tor oder 100 für das schmale Tor.",
+  "4-5": "50 pro Ring und bei mittigem Durchflug zusätzlich 25 mal die Länge der Präzisionsserie.",
+  "5-4": "50 pro Treffer + 150 Auftragsbonus. Zwölf Schüsse pro Abschnitt.",
+  "6-5": "40 pro Abfangziel + 150 Auftragsbonus. Zwölf Ladungen pro Abschnitt.",
+};
+
 export function withArcadeSurvival(html: string, game: number, variant: number) {
   const docking = game === 3;
-  const goal = survivalGoals[`${game}-${variant}`];
+  const mission = `${game}-${variant}`;
+  const goal = survivalGoals[mission];
   const sectionRule = docking
     ? "Nach dem automatischen Ablegen beginnt ein neues Level an der nächsten Bucht. Jede Bucht verlangt mehr Präzision. Harte Karambolagen kosten ein Leben."
-    : "Mit jedem Abschnitt steigt das Level und die Aufgabe wird schwieriger. Treffer oder ein verfehltes Levelziel können ein Leben kosten.";
+    : game === 4
+      ? "Ein verpasster Ring kostet ein Leben. Nach der Ringroute folgt das nächste Level."
+      : "Mit jedem Abschnitt steigt das Level und die Aufgabe wird schwieriger. Treffer oder ein verfehltes Levelziel können ein Leben kosten.";
   const scoring = docking
     ? `${pointsPerDock} Punkte pro erfolgreichem Andockmanöver.`
-    : game === 5 && variant === 4
-      ? "50 pro Treffer + 150 Auftragsbonus. Zwölf Schüsse pro Abschnitt."
-      : game === 6 && variant === 5
-        ? "40 pro Abfangziel + 150 Auftragsbonus. Zwölf Ladungen pro Abschnitt."
-        : undefined;
+    : survivalScoring[mission];
   const briefing = {
     ...(goal ? { goal } : {}),
     ...(scoring ? { scoring } : {}),
-    rulesVersion: "survival-levels-1",
+    rulesVersion: game === 2 && (variant === 3 || variant === 5) ? "survival-maneuvers-1" : "survival-levels-1",
   };
 
-  let document = (docking ? withDockingSurvival(html) : withArcadeDifficulty(html, game))
+  const levelDocument = docking ? withDockingSurvival(html) : withArcadeDifficulty(html, game);
+  let document = withArcadeGameplayReview(levelDocument, game)
     .replace("</head>", `${levelStyles}</head>`)
     .replace('<small id="roundId"></small>', '<small id="roundId" hidden></small><span id="runLevel" role="status"></span>')
     .replace('</canvas></section>', '</canvas><div id="levelBanner" aria-hidden="true" hidden></div></section>')

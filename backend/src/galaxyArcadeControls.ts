@@ -185,6 +185,34 @@ export function withArcadeTouchControls(html: string) {
     .replace(/\n function mode\(\)\{[\s\S]*?(?=\n pad\.addEventListener\('pointerdown',)/, "")
     .replace("||arrows||padPointer", "||horizontal||padPointer")
     .replace(/const b=pad\.getBoundingClientRect\(\);.*?(?=pad\.classList\.add\('active'\);)/, "")
+    .replace("const keys=new Set(),held=new Map(),pad=", "const keys=new Set(),held=new Map(),pending=new Set(),pad=")
+    .replace(/padImpulse=false/g, "padImpulse=null")
+    .replace("padSector=null;padImpulse=null;pad.classList", "padSector=null;pad.classList")
+    .replace("const clear=()=>{keys.clear();held.clear();", "const clear=()=>{keys.clear();held.clear();pending.clear();padImpulse=null;")
+    .replace("if(sector!==null&&sector!==padSector)padImpulse=true;", "if(sector!==null&&sector!==padSector)padImpulse={x:padX,y:padY};")
+    .replace("if(e.pointerId===padPointer)resetPad();", "if(e.pointerId===padPointer){if(type!=='pointerup')padImpulse=null;resetPad();}")
+    .replace(
+      "for(const b of controls.querySelectorAll('[data-control]')){",
+      `function notePress(dir) {
+        if(dir==='action') actionEdge=true;
+        else {
+          pending.add(dir);
+          if(['left','right','up','down'].includes(dir)) impulse=true;
+        }
+      }
+      for(const b of controls.querySelectorAll('[data-control]')){`,
+    )
+    .replace("if(dir==='action')actionEdge=true;else impulse=true;", "notePress(dir);")
+    .replace("if(!keys.has(map[key])){if(map[key]==='action')actionEdge=true;else impulse=true;}", "if(!keys.has(map[key]))notePress(map[key]);")
+    .replace("const down=d=>keys.has(d)||", "const down=d=>keys.has(d)||pending.has(d)||")
+    .replace(
+      "const result={x:digitalX||digitalY?digitalX:padX,y:digitalX||digitalY?digitalY:padY,",
+      `const analog=(padX||padY) ? {x:padX,y:padY} : padImpulse;
+        const result={x:digitalX||digitalY?digitalX:analog?.x||0,y:digitalX||digitalY?digitalY:analog?.y||0,`,
+    )
+    .replace("action:down('action'),actionEdge", "action:down('action')||actionEdge,actionEdge")
+    .replace("impulse:impulse||padImpulse", "impulse:impulse||!!padImpulse")
+    .replace("actionEdge=false;impulse=false;padImpulse=null;fireEdge=false;return result", "pending.clear();actionEdge=false;impulse=false;padImpulse=null;fireEdge=false;return result")
     .replace(/configure\(module\)\{[^}]+\}/, configureControls)
     .replace("input.configure(m);screen('gameScreen');resize();const action=m.action?.(v);", "input.configure(m,v);screen('gameScreen');resize();")
     .replace(/\$\('action'\)\.hidden=!action;.*?(?=\$\('pause'\)\.disabled=true;)/, "")
@@ -192,7 +220,7 @@ export function withArcadeTouchControls(html: string) {
     .replace("C.modules.G08={async ready()", "C.modules.G08={shieldVariant:3,async ready()")
     .replace("action:v=>v===3?'Schild halten':null", "action:()=> 'Feuer'")
     .replace("e:'turnRight'}", "e:'turnRight',Shift:'shield'}")
-    .replace("action:down('action'),actionEdge", "action:down('action'),shield:down('shield'),actionEdge")
+    .replace("action:down('action')||actionEdge,actionEdge", "action:down('action')||actionEdge,shield:down('shield'),actionEdge")
     .replace("!!input.action&&s.shield>0", "input.shield&&s.shield>0")
     .replace("s.fireClock<=0&&s.shots.length<16", "(input.fireEdge||input.actionEdge||input.action||input.pointHeld)&&s.fireClock<=0&&s.shots.length<16");
 
