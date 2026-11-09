@@ -247,7 +247,7 @@ test('actual ship flight only reflects a new adjacent confirmed stage and never 
     react:{useCallback:fn=>fn,useState:initial=>{const id=cursor++;return hooks[id]??(hooks[id]=[typeof initial==='function'?initial():initial,()=>{}]);},useRef:initial=>{const id=cursor++,target=refIndex++;return hooks[id]??(hooks[id]={current:target===0?scroll:target===1?ship:initial});},useEffect:(fn,deps)=>{const id=cursor++,before=hooks[id];if(!before||deps.some((value,i)=>value!==before.deps[i]))pending.push(()=>{before?.cleanup?.();hooks[id]={deps,cleanup:fn()};});}},
     'react-router-dom':{useLocation:()=>({state:null}),useNavigate:()=>()=>{}},
     '../components/BlockchainIcon':{default:()=>null},'./ShipPortrait':{default:()=>null},
-    './GalaxySector':{default:()=>null},'./GalaxyInfoDialog':{default:()=>null},
+    './GalaxySector':{default:()=>null},'./GalaxyInfoDialog':{default:()=>null},'./GalaxyArcadeAccess':{default:()=>null},
     './useGalaxyData':{default:()=>data},'./galaxyModel':model,'./displaySettings':{MOTION_STORAGE_KEY:'motion'},
     './shipFleet':{shipSaveNetwork:'testnet',playerSkins:[{id:'grey-scout',name:'Grey Scout',sprite:1}],allPlayerColors:[{id:'grey',name:'Grey'}]},
     './shipEvolution':{ownedShipStage:()=>1,shipEvolutionAsset:()=>'/existing.png'},

@@ -8,6 +8,8 @@ import { ownedShipStage, shipEvolutionAsset } from './shipEvolution';
 import useGalaxyData from './useGalaxyData';
 import GalaxySector from './GalaxySector';
 import GalaxyInfoDialog from './GalaxyInfoDialog';
+import GalaxyArcadeAccess from './GalaxyArcadeAccess';
+import type { GalaxyMiniGame } from './galaxyData';
 import { emptyGalaxyProgress, galaxyPoint, galaxyShipPoint, galaxyRegions, type GalaxySelection } from './galaxyModel';
 import { MOTION_STORAGE_KEY } from './displaySettings';
 import './galaxyMap.css';
@@ -20,11 +22,13 @@ export default function GalaxyMap() {
   const fromQuick = location.state?.fromQuick === true;
   const { snapshot, status } = useGalaxyData(typeof location.state?.owner === 'string' ? location.state.owner : undefined);
   const [selection, setSelection] = useState<GalaxySelection | null>(null);
+  const [previewGames, setPreviewGames] = useState<GalaxyMiniGame[]>();
+  const previewAccess = Boolean(location.search && new URLSearchParams(location.search).get('admin-test') === '1');
   const scroll = useRef<HTMLDivElement>(null), ship = useRef<HTMLDivElement>(null);
   const previousLevel = useRef<number | null>(null);
   const close = useCallback(() => setSelection(null), []);
   const progress = status === 'ready' ? snapshot.progress : emptyGalaxyProgress();
-  const miniGames = status === 'ready' ? snapshot.miniGames : undefined;
+  const miniGames = previewAccess && previewGames ? previewGames : status === 'ready' ? snapshot.miniGames : undefined;
   const miniGame = selection?.kind === 'mini' ? miniGames?.find(game => game.level === selection.level) : undefined;
   const point = galaxyShipPoint(progress.currentLevel);
   const skin = playerSkins.find(entry => entry.id === snapshot.skin) ?? playerSkins[0];
@@ -69,6 +73,7 @@ export default function GalaxyMap() {
       <div><p>CRYPTOID EVOLUTION</p><h1>{t('Galaxy map')}</h1></div>
       <span className="galaxy-preview-badge">{miniGames?.length ? t('Admin test · {count} playable', { count: miniGames.length }) : t('Preview · In development')}</span>
     </header>
+    {previewAccess && <GalaxyArcadeAccess onReady={setPreviewGames}/>}
     {status !== 'ready' && <p className="galaxy-data-status" role="status">{status === 'loading' ? t('Loading saved progress…') : t('Saved progress is unavailable. You can still explore; your data is unchanged.')}</p>}
     <div className="galaxy-scroll" ref={scroll} tabIndex={0} aria-label={t('Galaxy map')}>
       <div className="galaxy-map-world">

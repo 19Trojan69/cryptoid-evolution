@@ -1,5 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import { createRequire } from 'node:module';
 import { readFileSync } from 'node:fs';
 import { runInNewContext } from 'node:vm';
@@ -58,6 +59,41 @@ test('Galaxy Arcade is isolated to the enabled Testnet preview and requires a ve
   assert.deepEqual(allowed.body.stations.map(station => station.level), Array.from({ length: 40 }, (_, i) => (i + 1) * 5));
   assert.equal((await check(env, `${route}/205`, { token: 'owner' })).code, 404);
   assert.deepEqual(ownerChecks, ['Bearer other', 'Bearer owner', 'Bearer owner']);
+});
+
+test('a personal Galaxy test code grants only an expiring, server-signed preview session', async t => {
+  const code = '0123456789ABCDEF01234567';
+  const digest = createHash('sha256').update(code).digest('hex');
+  const key = 'ad'.repeat(32);
+  const env = { VERCEL_ENV: 'preview', VERCEL_PROJECT_PRODUCTION_URL: 'cryptoid-evolution-testnet.vercel.app', CRYPTOID_GALAXY_ARCADE_KEY: key, CRYPTOID_GALAXY_ARCADE_INVITATION: `${digest}:${Date.now() + 60_000}` };
+  t.mock.method(globalThis, 'fetch', async () => { throw Error('An arcade invitation must not contact Pi'); });
+  const check = async (path, headers = {}, method = 'GET', environment = env) => {
+    const gateway = createApiGateway(async () => { throw Error('An arcade invitation must not start a database'); }, () => environment);
+    const res = response();
+    await gateway({ url: `/api/index?path=${encodeURIComponent(path)}`, method, headers: { host: 'preview.vercel.app', ...headers } }, res);
+    return res;
+  };
+  const manifest = 'admin/galaxy-minigames', unlock = `${manifest}/access`;
+  const invited = { 'x-cryptoid-arcade-invitation': code.toLowerCase().match(/.{4}/g).join('-') };
+  const denied = await check(manifest);
+  assert.equal(denied.code, 401);
+  assert.equal(denied.body.previewAccess, true);
+  assert.equal((await check(`${manifest}/5`, invited)).code, 401);
+  assert.equal((await check(unlock, invited)).code, 405);
+  assert.equal((await check(unlock, { 'x-cryptoid-arcade-invitation': 'F'.repeat(24) }, 'POST')).code, 403);
+
+  const accepted = await check(unlock, invited, 'POST');
+  assert.equal(accepted.code, 200);
+  assert.equal(accepted.body.stations.length, 40);
+  assert.equal(accepted.headers['Cache-Control'], 'private, no-store');
+  const setCookie = accepted.headers['Set-Cookie'];
+  assert.match(setCookie, /^__Secure-cryptoid-arcade=[0-9a-f]{64}; Max-Age=[1-9]\d?; Path=\/api\/admin\/galaxy-minigames; HttpOnly; Secure; SameSite=Strict$/);
+  const [cookie] = setCookie.split(';');
+  assert.ok(!setCookie.includes(code));
+  assert.equal((await check(manifest, { cookie })).body.stations.length, 40);
+  assert.equal((await check(manifest, { cookie: `${cookie.slice(0, -1)}x` })).code, 401);
+  assert.equal((await check(unlock, invited, 'POST', { ...env, VERCEL_ENV: 'production' })).code, 404);
+  assert.equal((await check(manifest, { cookie }, 'GET', { ...env, CRYPTOID_GALAXY_ARCADE_INVITATION: `${digest}:${Date.now() - 1000}` })).code, 401);
 });
 
 test('real Vercel entry forwards the deletion guard without blocking an active Testnet login', async t => {

@@ -3,7 +3,7 @@ import { readRewardProgress, REWARD_PROGRESS_KEY } from './rewardProgress.ts';
 import type { AccountSave } from '../lib/accountSave.ts';
 
 type Getter = <T>(path: string, config?: { baseURL: string }) => Promise<{ data: T }>;
-type GalaxyMiniGame = { level: number; name: string };
+export type GalaxyMiniGame = { level: number; name: string };
 export type GalaxySnapshot = { progress: GalaxyProgress; skin: string; color: string; upgrades: string[]; owner: string | null; miniGames?: GalaxyMiniGame[] };
 export const emptyGalaxySnapshot = (): GalaxySnapshot => ({ progress: emptyGalaxyProgress(), skin: 'grey-scout', color: 'grey', upgrades: [], owner: null });
 

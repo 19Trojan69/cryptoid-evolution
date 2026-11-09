@@ -1,6 +1,10 @@
 /** V3 labels plus complete native map copy for all 19 currently selectable languages. */
 export const galaxyMapTranslations: Record<string, Record<string, string>> = {
   "en": {
+    "Personal test code": "Personal test code",
+    "Unlock mini-games": "Unlock mini-games",
+    "The test code is invalid or expired.": "The test code is invalid or expired.",
+    "Private test access is unavailable.": "Private test access is unavailable.",
     "Admin test · {count} playable": "Admin test · {count} playable",
     "Scores only count in this test round.": "Scores only count in this test round.",
     "Galaxy map": "GALAXY MAP",
@@ -38,6 +42,10 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Level not yet completed": "Level not yet completed"
   },
   "de": {
+    "Personal test code": "Persönlicher Testcode",
+    "Unlock mini-games": "Minispiele freischalten",
+    "The test code is invalid or expired.": "Der Testcode ist ungültig oder abgelaufen.",
+    "Private test access is unavailable.": "Der private Testzugang ist gerade nicht verfügbar.",
     "Admin test · {count} playable": "Admin-Test · {count} spielbar",
     "Scores only count in this test round.": "Punkte zählen nur in dieser Testrunde.",
     "Galaxy map": "GALAXIEKARTE",
@@ -75,6 +83,10 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Level not yet completed": "Level noch nicht abgeschlossen"
   },
   "es": {
+    "Personal test code": "Código personal de prueba",
+    "Unlock mini-games": "Desbloquear minijuegos",
+    "The test code is invalid or expired.": "El código de prueba no es válido o ha caducado.",
+    "Private test access is unavailable.": "El acceso privado de prueba no está disponible.",
     "Admin test · {count} playable": "Prueba de administrador · {count} disponibles",
     "Scores only count in this test round.": "Los puntos solo cuentan en esta ronda de prueba.",
     "Galaxy map": "MAPA GALÁCTICO",
@@ -112,6 +124,10 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Level not yet completed": "Nivel aún no completado"
   },
   "fr": {
+    "Personal test code": "Code de test personnel",
+    "Unlock mini-games": "Débloquer les mini-jeux",
+    "The test code is invalid or expired.": "Le code de test est invalide ou a expiré.",
+    "Private test access is unavailable.": "L’accès privé au test est indisponible.",
     "Admin test · {count} playable": "Test administrateur · {count} jouables",
     "Scores only count in this test round.": "Les points comptent uniquement dans cette partie de test.",
     "Galaxy map": "CARTE GALACTIQUE",
@@ -149,6 +165,10 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Level not yet completed": "Niveau pas encore terminé"
   },
   "pt": {
+    "Personal test code": "Código de teste pessoal",
+    "Unlock mini-games": "Desbloquear minijogos",
+    "The test code is invalid or expired.": "O código de teste é inválido ou expirou.",
+    "Private test access is unavailable.": "O acesso privado ao teste está indisponível.",
     "Admin test · {count} playable": "Teste de administrador · {count} jogáveis",
     "Scores only count in this test round.": "Os pontos contam apenas nesta ronda de teste.",
     "Galaxy map": "MAPA GALÁCTICO",
@@ -186,6 +206,10 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Level not yet completed": "Nível ainda não concluído"
   },
   "it": {
+    "Personal test code": "Codice di prova personale",
+    "Unlock mini-games": "Sblocca minigiochi",
+    "The test code is invalid or expired.": "Il codice di prova non è valido o è scaduto.",
+    "Private test access is unavailable.": "L’accesso privato alla prova non è disponibile.",
     "Admin test · {count} playable": "Test amministratore · {count} giocabili",
     "Scores only count in this test round.": "I punti contano solo in questo turno di prova.",
     "Galaxy map": "MAPPA GALATTICA",
@@ -223,6 +247,10 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Level not yet completed": "Livello non ancora completato"
   },
   "pl": {
+    "Personal test code": "Osobisty kod testowy",
+    "Unlock mini-games": "Odblokuj minigry",
+    "The test code is invalid or expired.": "Kod testowy jest nieprawidłowy lub wygasł.",
+    "Private test access is unavailable.": "Prywatny dostęp do testu jest niedostępny.",
     "Admin test · {count} playable": "Test administratora · {count} dostępnych",
     "Scores only count in this test round.": "Punkty liczą się tylko w tej rundzie testowej.",
     "Galaxy map": "MAPA GALAKTYKI",
@@ -260,6 +288,10 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Level not yet completed": "Poziom jeszcze nieukończony"
   },
   "tr": {
+    "Personal test code": "Kişisel test kodu",
+    "Unlock mini-games": "Mini oyunların kilidini aç",
+    "The test code is invalid or expired.": "Test kodu geçersiz veya süresi dolmuş.",
+    "Private test access is unavailable.": "Özel test erişimi kullanılamıyor.",
     "Admin test · {count} playable": "Yönetici testi · {count} oynanabilir",
     "Scores only count in this test round.": "Puanlar yalnızca bu test turunda geçerlidir.",
     "Galaxy map": "GALAKSİ HARİTASI",
@@ -297,6 +329,10 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Level not yet completed": "Seviye henüz tamamlanmadı"
   },
   "ru": {
+    "Personal test code": "Личный тестовый код",
+    "Unlock mini-games": "Открыть мини-игры",
+    "The test code is invalid or expired.": "Тестовый код недействителен или истёк.",
+    "Private test access is unavailable.": "Закрытый доступ к тесту недоступен.",
     "Admin test · {count} playable": "Тест администратора · доступно: {count}",
     "Scores only count in this test round.": "Очки учитываются только в этом пробном раунде.",
     "Galaxy map": "КАРТА ГАЛАКТИКИ",
@@ -334,6 +370,10 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Level not yet completed": "Уровень ещё не пройден"
   },
   "hr": {
+    "Personal test code": "Osobni testni kod",
+    "Unlock mini-games": "Otključaj miniigre",
+    "The test code is invalid or expired.": "Testni kod nije valjan ili je istekao.",
+    "Private test access is unavailable.": "Privatni pristup testu nije dostupan.",
     "Admin test · {count} playable": "Test za administratore · {count} dostupno",
     "Scores only count in this test round.": "Bodovi vrijede samo u ovoj probnoj rundi.",
     "Galaxy map": "GALAKTIČKA KARTA",
@@ -371,6 +411,10 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Level not yet completed": "Razina još nije završena"
   },
   "cs": {
+    "Personal test code": "Osobní testovací kód",
+    "Unlock mini-games": "Odemknout minihry",
+    "The test code is invalid or expired.": "Testovací kód je neplatný nebo vypršel.",
+    "Private test access is unavailable.": "Soukromý přístup k testu není dostupný.",
     "Admin test · {count} playable": "Test správce · {count} hratelných",
     "Scores only count in this test round.": "Body se počítají jen v tomto zkušebním kole.",
     "Galaxy map": "GALAKTICKÁ MAPA",
@@ -408,6 +452,10 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Level not yet completed": "Úroveň zatím nedokončena"
   },
   "sk": {
+    "Personal test code": "Osobný testovací kód",
+    "Unlock mini-games": "Odomknúť minihry",
+    "The test code is invalid or expired.": "Testovací kód je neplatný alebo vypršal.",
+    "Private test access is unavailable.": "Súkromný prístup k testu nie je dostupný.",
     "Admin test · {count} playable": "Test správcu · {count} hrateľných",
     "Scores only count in this test round.": "Body sa počítajú iba v tomto skúšobnom kole.",
     "Galaxy map": "GALAKTICKÁ MAPA",
@@ -445,6 +493,10 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Level not yet completed": "Úroveň zatiaľ nedokončená"
   },
   "hu": {
+    "Personal test code": "Személyes tesztkód",
+    "Unlock mini-games": "Minijátékok feloldása",
+    "The test code is invalid or expired.": "A tesztkód érvénytelen vagy lejárt.",
+    "Private test access is unavailable.": "A privát teszthozzáférés nem érhető el.",
     "Admin test · {count} playable": "Adminisztrátori teszt · {count} játszható",
     "Scores only count in this test round.": "A pontok csak ebben a tesztkörben számítanak.",
     "Galaxy map": "GALAXISTÉRKÉP",
@@ -482,6 +534,10 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Level not yet completed": "Pálya még nincs teljesítve"
   },
   "ro": {
+    "Personal test code": "Cod de test personal",
+    "Unlock mini-games": "Deblochează minijocurile",
+    "The test code is invalid or expired.": "Codul de test este nevalid sau a expirat.",
+    "Private test access is unavailable.": "Accesul privat la test nu este disponibil.",
     "Admin test · {count} playable": "Test administrator · {count} disponibile",
     "Scores only count in this test round.": "Punctele contează doar în această rundă de test.",
     "Galaxy map": "HARTA GALAXIEI",
@@ -519,6 +575,10 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Level not yet completed": "Nivel încă nefinalizat"
   },
   "sr": {
+    "Personal test code": "Лични тестни код",
+    "Unlock mini-games": "Откључај мини-игре",
+    "The test code is invalid or expired.": "Тестни код је неисправан или је истекао.",
+    "Private test access is unavailable.": "Приватни приступ тесту није доступан.",
     "Admin test · {count} playable": "Администраторски тест · доступно: {count}",
     "Scores only count in this test round.": "Поени важе само у овој пробној рунди.",
     "Galaxy map": "GALAKTIČKA MAPA",
@@ -556,6 +616,10 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Level not yet completed": "Ниво још није завршен"
   },
   "uk": {
+    "Personal test code": "Особистий тестовий код",
+    "Unlock mini-games": "Розблокувати мініігри",
+    "The test code is invalid or expired.": "Тестовий код недійсний або термін його дії минув.",
+    "Private test access is unavailable.": "Приватний доступ до тесту недоступний.",
     "Admin test · {count} playable": "Тест адміністратора · доступно: {count}",
     "Scores only count in this test round.": "Очки зараховуються лише в цьому пробному раунді.",
     "Galaxy map": "КАРТА ГАЛАКТИКИ",
@@ -593,6 +657,10 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Level not yet completed": "Рівень ще не пройдено"
   },
   "th": {
+    "Personal test code": "รหัสทดสอบส่วนตัว",
+    "Unlock mini-games": "ปลดล็อกมินิเกม",
+    "The test code is invalid or expired.": "รหัสทดสอบไม่ถูกต้องหรือหมดอายุแล้ว",
+    "Private test access is unavailable.": "ไม่สามารถเข้าถึงการทดสอบแบบส่วนตัวได้",
     "Admin test · {count} playable": "การทดสอบของผู้ดูแล · เล่นได้ {count} แบบ",
     "Scores only count in this test round.": "คะแนนนับเฉพาะในรอบทดสอบนี้",
     "Galaxy map": "แผนที่กาแล็กซี",
@@ -630,6 +698,10 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Level not yet completed": "ยังไม่ผ่านด่าน"
   },
   "zh": {
+    "Personal test code": "个人测试码",
+    "Unlock mini-games": "解锁迷你游戏",
+    "The test code is invalid or expired.": "测试码无效或已过期。",
+    "Private test access is unavailable.": "暂时无法访问私密测试。",
     "Admin test · {count} playable": "管理员测试 · {count} 个可玩",
     "Scores only count in this test round.": "积分仅在本轮测试中有效。",
     "Galaxy map": "星系地图",
@@ -667,6 +739,10 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Level not yet completed": "关卡尚未完成"
   },
   "vi": {
+    "Personal test code": "Mã thử nghiệm cá nhân",
+    "Unlock mini-games": "Mở khóa trò chơi nhỏ",
+    "The test code is invalid or expired.": "Mã thử nghiệm không hợp lệ hoặc đã hết hạn.",
+    "Private test access is unavailable.": "Hiện không thể truy cập thử nghiệm riêng tư.",
     "Admin test · {count} playable": "Thử nghiệm quản trị · {count} bản chơi được",
     "Scores only count in this test round.": "Điểm chỉ được tính trong lượt thử nghiệm này.",
     "Galaxy map": "BẢN ĐỒ THIÊN HÀ",
