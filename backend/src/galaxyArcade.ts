@@ -66,6 +66,14 @@ function stationDocument(index: number, key: string, musicKey: string | undefine
   if (!returnHref) return document.replace("</body></html>", `<script>${start};</script></body></html>`);
 
   return document
+    .replace(
+      '<button id="variants">Andere Variante</button><button id="resultBack">Zur Missionsauswahl</button>',
+      '<button id="resultBack">Zur Galaxiekarte</button>',
+    )
+    .replace(
+      "$('variants').onclick=()=>{closeDialog();showDetail(selected.number);};$('resultBack').onclick=backToCatalog;",
+      "$('resultBack').onclick=()=>document.querySelector('#galaxy-arcade-navigation a').click();",
+    )
     .replace("</head>", `${playStyles}</head>`)
     .replace("<body>", `<body>${returnBar(returnHref)}<p id="galaxy-arcade-startup" role="status">Minispiel wird geladen …</p>`)
     .replace("</body></html>", `<script>
