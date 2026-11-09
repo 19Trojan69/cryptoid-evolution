@@ -1,6 +1,7 @@
 import { createDecipheriv, createHash, createHmac, timingSafeEqual } from "node:crypto";
 import { gunzipSync } from "node:zlib";
 import type { Request, Response } from "express";
+import { withArcadeTouchControls } from "./galaxyArcadeControls";
 import { galaxyArcadeNames, galaxyArcadePayload } from "./galaxyArcadePayload";
 
 const stations = galaxyArcadeNames.map((name, index) => ({ level: (index + 1) * 5, name }));
@@ -54,7 +55,7 @@ function stationDocument(index: number, key: string, returnHref?: string) {
   const html = gunzipSync(Buffer.concat([decipher.update(payload.subarray(28)), decipher.final()])).toString("utf8");
   const game = Math.floor(index / 5) + 1;
   const variant = index % 5 + 1;
-  const document = html
+  const document = withArcadeTouchControls(html)
     .replace("<head>", `<head><meta http-equiv="Content-Security-Policy" content="${arcadePolicy}">`)
     // A frame queued before Start or Resume can carry an older timestamp.
     // Keep the round clock monotonic so the next frame uses the current baseline.
