@@ -7,10 +7,25 @@ const stations = galaxyArcadeNames.map((name, index) => ({ level: (index + 1) * 
 const previewLevels = stations.map(station => station.level);
 const arcadePolicy = "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob:; media-src data: blob:";
 const previewCookie = "__Secure-cryptoid-arcade";
+const playCookie = "__Secure-cryptoid-arcade-play";
+const playLifetime = 120;
 const hexDigest = /^[0-9a-f]{64}$/i;
 
 const sameDigest = (value: string | undefined, expected: string) =>
   typeof value === "string" && hexDigest.test(value) && timingSafeEqual(Buffer.from(value, "hex"), Buffer.from(expected, "hex"));
+
+const readCookie = (header: string | undefined, name: string) =>
+  header?.split(";").map(part => part.trim()).find(part => part.startsWith(`${name}=`))?.slice(name.length + 1);
+
+function playSignature(key: string, level: string, expires: string) {
+  const secret = createHmac("sha256", Buffer.from(key, "hex")).update("cryptoid-arcade-play-cookie-v1").digest();
+  return createHmac("sha256", secret).update(`${level}:${expires}`).digest("hex");
+}
+
+function canOpenPlayPage(cookie: string | undefined, level: string, key: string) {
+  const match = /^(\d{13})\.([a-f0-9]{64})$/.exec(cookie ?? "");
+  return !!match && Number(match[1]) > Date.now() && sameDigest(match[2], playSignature(key, level, match[1]));
+}
 
 function previewInvitation(config: string | undefined, key: string) {
   const match = /^([0-9a-f]{64}):(\d{13})$/.exec(config ?? "");
@@ -21,24 +36,64 @@ function previewInvitation(config: string | undefined, key: string) {
   return { digest: match[1], maxAge, session: createHmac("sha256", cookieKey).update(match[0]).digest("hex") };
 }
 
-function stationDocument(index: number, key: string) {
+const returnBar = (href: string) => `<nav id="galaxy-arcade-navigation"><a href="${href}">‹ Galaxiekarte</a></nav>`;
+const playStyles = `<style>
+  :root { --arcade-nav-height: calc(44px + env(safe-area-inset-top, 0px)); }
+  body { padding-top: var(--arcade-nav-height); }
+  #galaxy-arcade-navigation { position: fixed; inset: 0 0 auto; z-index: 20; box-sizing: border-box; height: var(--arcade-nav-height); display: flex; align-items: stretch; padding: env(safe-area-inset-top, 0px) 10px 0; background: #10192d; border-bottom: 1px solid #4c6078; }
+  #galaxy-arcade-navigation a { display: inline-flex; align-items: center; padding: 0 10px; color: #eaf0ff; text-decoration: none; font: 600 15px system-ui, sans-serif; }
+  #gameScreen { height: calc(100vh - var(--arcade-nav-height)); height: calc(100dvh - var(--arcade-nav-height)); }
+  #overlay { top: var(--arcade-nav-height); }
+  #galaxy-arcade-startup { position: fixed; inset: var(--arcade-nav-height) 0 0; z-index: 19; display: grid; place-items: center; padding: 16px; text-align: center; background: #081222; color: #eaf0ff; }
+</style>`;
+
+function stationDocument(index: number, key: string, returnHref?: string) {
   const payload = Buffer.from(galaxyArcadePayload, "base64");
   const decipher = createDecipheriv("aes-256-gcm", Buffer.from(key, "hex"), payload.subarray(0, 12));
   decipher.setAuthTag(payload.subarray(12, 28));
   const html = gunzipSync(Buffer.concat([decipher.update(payload.subarray(28)), decipher.final()])).toString("utf8");
   const game = Math.floor(index / 5) + 1;
   const variant = index % 5 + 1;
-  return html
+  const document = html
     .replace("<head>", `<head><meta http-equiv="Content-Security-Policy" content="${arcadePolicy}">`)
     // A frame queued before Start or Resume can carry an older timestamp.
     // Keep the round clock monotonic so the next frame uses the current baseline.
-    .replace("previous=now;if(C.mode==='running'", "previous=Math.max(previous,now);if(C.mode==='running'")
-    .replace("</body></html>", `<script>CE.app.showDetail(${game}).then(() => CE.app.intro(${variant}));</script></body></html>`);
+    .replace("previous=now;if(C.mode==='running'", "previous=Math.max(previous,now);if(C.mode==='running'");
+  const start = `CE.app.showDetail(${game}).then(() => CE.app.intro(${variant}))`;
+  if (!returnHref) return document.replace("</body></html>", `<script>${start};</script></body></html>`);
+
+  return document
+    .replace("</head>", `${playStyles}</head>`)
+    .replace("<body>", `<body>${returnBar(returnHref)}<p id="galaxy-arcade-startup" role="status">Minispiel wird geladen …</p>`)
+    .replace("</body></html>", `<script>
+      (() => {
+        const status = document.getElementById('galaxy-arcade-startup');
+        const failed = () => {
+          status.textContent = 'Das Minispiel konnte nicht gestartet werden. Kehre zur Galaxiekarte zurück und versuche es erneut.';
+          status.setAttribute('role', 'alert');
+        };
+        const timer = setTimeout(failed, 12000);
+        Promise.resolve().then(() => ${start}).then(() => status.remove()).catch(failed).finally(() => clearTimeout(timer));
+      })();
+    </script></body></html>`);
+}
+
+function sendPlayPage(res: Pick<Response, "setHeader" | "status" | "send">, code: number, html: string) {
+  res.setHeader("Content-Type", "text/html; charset=utf-8");
+  res.setHeader("Content-Security-Policy", `${arcadePolicy}; sandbox allow-scripts; base-uri 'none'; form-action 'none'; frame-ancestors 'none'`);
+  res.setHeader("X-Frame-Options", "DENY");
+  res.setHeader("X-Content-Type-Options", "nosniff");
+  res.setHeader("Referrer-Policy", "no-referrer");
+  return res.status(code).send(html);
+}
+
+function playError(returnHref: string, message: string) {
+  return `<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Cryptoid Evolution</title>${playStyles}</head><body>${returnBar(returnHref)}<p id="galaxy-arcade-startup" role="alert">${message}</p></body></html>`;
 }
 
 export async function serveGalaxyArcade(
   req: Pick<Request, "method" | "headers">,
-  res: Pick<Response, "setHeader" | "status" | "json">,
+  res: Pick<Response, "setHeader" | "status" | "json" | "send">,
   level: string | undefined,
   key: string | undefined,
   ownerEndpoint: URL,
@@ -60,13 +115,21 @@ export async function serveGalaxyArcade(
     return res.json({ stations });
   }
 
-  if (req.method !== "GET") return res.status(405).json({ error: "method_not_allowed" });
-  const cookie = req.headers.cookie?.split(";").map(part => part.trim()).find(part => part.startsWith(`${previewCookie}=`));
-  const previewSession = invitation && sameDigest(cookie?.slice(previewCookie.length + 1), invitation.session);
+  const playRoute = /^(\d+)\/(launch|play)$/.exec(level ?? "");
+  const launching = playRoute?.[2] === "launch";
+  const playPage = playRoute?.[2] === "play";
+  const stationLevel = playRoute?.[1] ?? level;
+  if (req.method !== (launching ? "POST" : "GET")) return res.status(405).json({ error: "method_not_allowed" });
+  const previewSession = invitation && sameDigest(readCookie(req.headers.cookie, previewCookie), invitation.session);
   const accessHint = level === undefined && invitation ? { previewAccess: true, previewLevels } : {};
+  const returnHref = `/galaxy?arcade-return=1${invitation ? "&amp;admin-test=1" : ""}`;
+
+  if (playRoute?.[2] === "play" && !previewSession && !canOpenPlayPage(readCookie(req.headers.cookie, playCookie), playRoute[1], key)) {
+    return sendPlayPage(res, 401, playError(returnHref, "Der private Minispielzugang ist abgelaufen. Öffne das Spiel erneut auf der Galaxiekarte."));
+  }
 
   try {
-    if (!previewSession) {
+    if (!playPage && !previewSession) {
       const authorization = req.headers.authorization;
       if (typeof authorization !== "string" || !/^Bearer\s+\S+$/i.test(authorization)) {
         return res.status(401).json({ error: "not_authenticated", ...accessHint });
@@ -85,11 +148,21 @@ export async function serveGalaxyArcade(
       if (!user?.uid || canAdmin !== true) return res.status(403).json({ error: "not_authorized", ...accessHint });
     }
 
-    if (level === undefined) return res.json({ stations });
-    const index = stations.findIndex(station => String(station.level) === level);
+    if (stationLevel === undefined) return res.json({ stations });
+    const index = stations.findIndex(station => String(station.level) === stationLevel);
     if (index === -1) return res.status(404).json({ error: "not_found" });
+    if (launching) {
+      if (!previewSession) {
+        const expires = String(Date.now() + playLifetime * 1000);
+        const token = `${expires}.${playSignature(key, stationLevel, expires)}`;
+        res.setHeader("Set-Cookie", `${playCookie}=${token}; Max-Age=${playLifetime}; Path=/api/admin/galaxy-minigames/${stationLevel}/play; HttpOnly; Secure; SameSite=Strict`);
+      }
+      return res.status(204).send("");
+    }
+    if (playPage) return sendPlayPage(res, 200, stationDocument(index, key, returnHref));
     return res.json({ html: stationDocument(index, key) });
   } catch {
+    if (playPage) return sendPlayPage(res, 503, playError(returnHref, "Das Minispiel ist gerade nicht verfügbar. Versuche es erneut über die Galaxiekarte."));
     return res.status(503).json({ error: "minigame_unavailable" });
   }
 }

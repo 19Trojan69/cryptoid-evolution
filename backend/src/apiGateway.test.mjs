@@ -98,6 +98,47 @@ test('a personal Galaxy test code grants only an expiring, server-signed preview
   assert.equal((await check(manifest, { cookie }, 'GET', { ...env, CRYPTOID_GALAXY_ARCADE_INVITATION: `${digest}:${Date.now() - 1000}` })).code, 401);
 });
 
+test('a Galaxy play page needs a verified launch or test session and stays isolated', async t => {
+  const env = { VERCEL_ENV: 'preview', VERCEL_PROJECT_PRODUCTION_URL: 'cryptoid-evolution-testnet.vercel.app', CRYPTOID_GALAXY_ARCADE_KEY: 'ab'.repeat(32) };
+  const calls = [];
+  t.mock.method(globalThis, 'fetch', async (_url, options) => {
+    const token = options.headers.authorization;
+    calls.push(token);
+    return Response.json({ user: { uid: token }, canAdmin: token === 'Bearer owner' });
+  });
+  const gateway = createApiGateway(async () => { throw Error('Arcade must not use the local database'); }, () => env);
+  const check = async (path, method = 'GET', headers = {}) => {
+    const res = response();
+    await gateway({ url: `/api/index?path=${encodeURIComponent(`admin/galaxy-minigames/${path}`)}`, method, headers: { host: 'preview.vercel.app', ...headers } }, res);
+    assert.equal(res.headers['Cache-Control'], 'private, no-store');
+    return res;
+  };
+  const blocked = await check('5/play');
+  assert.equal(blocked.code, 401);
+  assert.match(blocked.body, /Galaxiekarte/);
+  assert.equal(blocked.headers['Content-Type'], 'text/html; charset=utf-8');
+  assert.match(blocked.headers['Content-Security-Policy'], /sandbox allow-scripts.*frame-ancestors 'none'/);
+  assert.equal(blocked.headers['X-Frame-Options'], 'DENY');
+  assert.equal((await check('5/launch')).code, 405);
+  assert.equal((await check('5/launch', 'POST')).code, 401);
+  assert.equal((await check('5/launch', 'POST', { authorization: 'Bearer other' })).code, 403);
+
+  const launch = await check('5/launch', 'POST', { authorization: 'Bearer owner' });
+  assert.equal(launch.code, 204);
+  const setCookie = launch.headers['Set-Cookie'];
+  assert.match(setCookie, /^__Secure-cryptoid-arcade-play=\d{13}\.[0-9a-f]{64}; Max-Age=120; Path=\/api\/admin\/galaxy-minigames\/5\/play; HttpOnly; Secure; SameSite=Strict$/);
+  const [cookie] = setCookie.split(';');
+  // The fixture key accepts the launch but cannot decrypt the sealed real arcade.
+  const unavailable = await check('5/play', 'GET', { cookie });
+  assert.equal(unavailable.code, 503);
+  assert.match(unavailable.body, /Minispiel ist gerade nicht verfügbar/);
+  assert.equal((await check('10/play', 'GET', { cookie })).code, 401);
+  const expires = Number(cookie.split('=')[1].split('.')[0]);
+  t.mock.method(Date, 'now', () => expires);
+  assert.equal((await check('5/play', 'GET', { cookie })).code, 401);
+  assert.deepEqual(calls, ['Bearer other', 'Bearer owner']);
+});
+
 test('real Vercel entry forwards the deletion guard without blocking an active Testnet login', async t => {
   const keys = ['VERCEL_ENV', 'VERCEL_PROJECT_PRODUCTION_URL', 'CRYPTOID_TESTNET_ACCOUNT_DELETION'];
   const previous = keys.map(key => process.env[key]);

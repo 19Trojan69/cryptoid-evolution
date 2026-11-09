@@ -197,7 +197,7 @@ test('actual sector buttons have labels and independent level, boss, mini-game a
 
 test('dialogs preserve future-only mini-games and route trades into the supplied existing shop',()=>{
   const shop=[],Dialog=component('./GalaxyInfoDialog.tsx',{...locale,'./galaxyModel':model,'./GalaxyBossArt':{default:()=>null},'../lib/axiosClient':{axiosClient:{}}});
-  const props={progress:model.emptyGalaxyProgress(),onClose:()=>{},onCards:()=>{},onShop:value=>shop.push(value)};
+  const props={progress:model.emptyGalaxyProgress(),onLaunch:()=>{},onClose:()=>{},onCards:()=>{},onShop:value=>shop.push(value)};
   const mini=elements(Dialog({...props,selection:{kind:'mini',level:5}}));
   assert.equal(mini.filter(node=>node.type==='button').length,1);
   assert.match(text(mini.find(node=>node.type==='h2')),/Minispiel.*Entwicklung/);

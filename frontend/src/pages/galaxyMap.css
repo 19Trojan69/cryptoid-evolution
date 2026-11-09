@@ -14,52 +14,6 @@
 @keyframes galaxy-flight-pulse{to{stroke-dashoffset:-162}}@keyframes galaxy-orbit{to{transform:rotate(360deg)}}@keyframes galaxy-stars{to{opacity:.45}}@keyframes galaxy-planet-drift{50%{transform:translateY(8px) rotate(6deg)}}@keyframes galaxy-nebula{50%{transform:translateY(20px)}}@keyframes galaxy-engine{50%{transform:scaleY(.65);opacity:.7}}@keyframes galaxy-comet{0%,92%{opacity:0;transform:translate(0,0) rotate(-25deg)}94%{opacity:.8}99%,100%{opacity:0;transform:translate(700px,-250px) rotate(-25deg)}}
 .galaxy-sector[data-visible=false] *,.galaxy-sector[data-visible=false] *::after{animation-play-state:paused!important}html[data-motion=reduced] .galaxy-page *,html[data-motion=reduced] .galaxy-page *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}@media(prefers-reduced-motion:reduce){.galaxy-page *,.galaxy-page *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}@media(max-width:360px){.galaxy-toolbar{padding-left:10px;padding-right:10px;gap:5px 9px}.galaxy-toolbar .galaxy-back{padding:8px}.galaxy-toolbar h1{font-size:18px}.galaxy-boss strong{font-size:11px}.galaxy-mini strong{font-size:10px}.galaxy-intro{padding-left:18px;padding-right:18px}}
 
-.galaxy-arcade-dialog {
-  width: min(calc(100% - 12px), 940px);
-  height: calc(100vh - 12px);
-  height: calc(100dvh - 12px);
-  max-height: none;
-  overflow: hidden;
-}
-
-.galaxy-arcade-content {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-
-.galaxy-arcade-content header {
-  padding: env(safe-area-inset-top, 0px) 8px 0;
-  flex: none;
-  border-bottom: 1px solid #aa9fc94d;
-}
-
-.galaxy-arcade-content h2 {
-  font-size: clamp(13px, 3vw, 18px);
-  margin: 6px 0;
-  overflow-wrap: anywhere;
-}
-
-.galaxy-arcade-return {
-  min-height: 44px;
-  padding: 6px 8px;
-  flex: none;
-  white-space: nowrap;
-}
-
-.galaxy-arcade-frame {
-  flex: 1;
-  width: 100%;
-  min-height: 0;
-  border: 0;
-}
-
-.galaxy-arcade-status {
-  margin: auto;
-  padding: 16px;
-  text-align: center;
-}
-
 .galaxy-preview-access {
   padding: 8px 12px;
   color: #eaf0ff;

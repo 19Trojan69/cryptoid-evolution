@@ -17,6 +17,8 @@ import './galaxyArt.css';
 import { paceAnimation } from '../lib/cssFramePacing';
 import { requestGameFrame } from '../lib/frameScheduler';
 
+const arcadePositionKey = 'cryptoid_galaxy_arcade_position';
+
 export default function GalaxyMap() {
   const { t } = useLocale();
   const navigate = useNavigate(), location = useLocation();
@@ -26,10 +28,19 @@ export default function GalaxyMap() {
   const [previewGames, setPreviewGames] = useState<GalaxyMiniGame[]>();
   const [previewLevels, setPreviewLevels] = useState<number[]>([]);
   const [arcadeListOpen, setArcadeListOpen] = useState(false);
-  const previewAccess = Boolean(location.search && new URLSearchParams(location.search).get('admin-test') === '1');
+  const query = location.search ? new URLSearchParams(location.search) : undefined;
+  const previewAccess = query?.get('admin-test') === '1';
+  const returningFromArcade = query?.get('arcade-return') === '1';
   const scroll = useRef<HTMLDivElement>(null), ship = useRef<HTMLDivElement>(null);
   const previousLevel = useRef<number | null>(null);
   const close = useCallback(() => setSelection(null), []);
+  const launchArcade = useCallback((path: string) => {
+    try {
+      if (scroll.current) sessionStorage.setItem(arcadePositionKey, String(scroll.current.scrollTop));
+    } catch { /* Browser storage is optional for returning to the map. */ }
+    close();
+    window.location.assign(path);
+  }, [close]);
   const previewReady = useCallback((games: GalaxyMiniGame[], justUnlocked: boolean) => {
     setPreviewGames(games);
     if (justUnlocked) setArcadeListOpen(true);
@@ -53,18 +64,25 @@ export default function GalaxyMap() {
     element.scrollTo({ top: galaxyPoint(level).mapY - element.clientHeight * .55, behavior: smooth && !reduced() ? 'smooth' : 'instant' });
   };
   useEffect(() => {
-    // Always begin the first view at Level 1. No progress value is changed.
+    // Begin at Level 1 unless a game just returned to this map.
     const htmlOverflow = document.documentElement.style.overflow;
     const bodyOverflow = document.body.style.overflow;
     document.documentElement.style.overflow = 'hidden';
     document.body.style.overflow = 'hidden';
     const element = scroll.current;
-    if (element) element.scrollTop = galaxyPoint(1).mapY - element.clientHeight * .55;
+    let position: number | undefined;
+    if (returningFromArcade) {
+      try {
+        const saved = sessionStorage.getItem(arcadePositionKey);
+        if (saved !== null && Number.isFinite(Number(saved))) position = Number(saved);
+      } catch { /* Use the normal initial position. */ }
+    }
+    if (element) element.scrollTop = position ?? galaxyPoint(1).mapY - element.clientHeight * .55;
     return () => {
       document.documentElement.style.overflow = htmlOverflow;
       document.body.style.overflow = bodyOverflow;
     };
-  }, []);
+  }, [returningFromArcade]);
   useEffect(() => {
     if (status !== 'ready') return;
     const before = previousLevel.current;
@@ -110,6 +128,6 @@ export default function GalaxyMap() {
       </article>
     </div>
     <button type="button" className="galaxy-position" disabled={status !== 'ready'} onClick={() => goTo(progress.currentLevel)} title={status === 'ready' ? `${t('Level')} ${progress.currentLevel} · ${skin.name}` : undefined}><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="1.5"/><path d="M12 2v4m0 12v4M2 12h4m12 0h4"/></svg><span>{t('To my position')}</span></button>
-    {selection && <GalaxyInfoDialog key={`${selection.kind}:${selection.level}`} selection={selection} progress={progress} miniGameName={miniGame?.name} onEnterTestCode={lockedPortal ? enterTestCode : undefined} onClose={close} onShop={view => home({ openShopView: view })} onCards={() => home({ openCollection: true })}/>}
+    {selection && <GalaxyInfoDialog key={`${selection.kind}:${selection.level}`} selection={selection} progress={progress} miniGameName={miniGame?.name} onEnterTestCode={lockedPortal ? enterTestCode : undefined} onLaunch={launchArcade} onClose={close} onShop={view => home({ openShopView: view })} onCards={() => home({ openCollection: true })}/>}
   </main>;
 }
