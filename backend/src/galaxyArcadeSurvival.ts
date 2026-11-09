@@ -1,6 +1,33 @@
 import { pointsPerDock, withDockingSurvival } from "./galaxyArcadeDocking";
+import { arcadeLevelProgress, withArcadeDifficulty } from "./galaxyArcadeDifficulty";
+
+const levelStyles = `<style>
+  #runLevel {
+    color: var(--arcade-accent, #8af6d1);
+    font: 700 11px/1.25 var(--mono);
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+  #levelBanner {
+    position: absolute;
+    top: 11%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 6px 14px;
+    border: 2px solid var(--arcade-accent, #8af6d1);
+    background: #0b1427;
+    color: var(--arcade-accent, #8af6d1);
+    font: 800 clamp(17px, 5vmin, 26px)/1.2 var(--mono);
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+  body:not(.locked) #levelBanner { display: none; }
+</style>`;
 
 const survivalRules = `
+  ${arcadeLevelProgress}
   const survival = {
     create(module, v, previous) {
       const section = previous ? previous.section + 1 : 1;
@@ -8,6 +35,7 @@ const survivalRules = `
       const next = module.create(v, seed);
       Object.assign(next, {
         section,
+        challenge: C.levelProgress(section),
         maxHits: 3,
         hits: previous?.hits ?? 0,
         inv: previous?.inv ?? 0,
@@ -49,8 +77,17 @@ const survivalRules = `
         return;
       }
       session.state = this.create(module, state.v, state);
-      C.notice(state.success ? 'ABSCHNITT GESCHAFFT' : 'ABSCHNITTSZIEL VERFEHLT', 240, 140, state.success ? '#b7f8f2' : '#ffcaaf');
-      C.notice('ABSCHNITT ' + session.state.section, 240, 103);
+      C.notice(state.success ? 'LEVEL GESCHAFFT' : 'LEVELZIEL VERFEHLT', 240, 158, state.success ? '#b7f8f2' : '#ffcaaf');
+    },
+    showLevel(state) {
+      const label = 'Level ' + state.section;
+      const badge = $('runLevel');
+      const banner = $('levelBanner');
+      if (badge.textContent !== label) {
+        badge.textContent = label;
+        banner.textContent = label;
+      }
+      banner.hidden = C.mode !== 'running' || state.done || state.elapsed - (state.bayOpenedAt ?? 0) >= 1.6;
     },
     score(state) {
       return state.bankedScore + state.score;
@@ -58,7 +95,8 @@ const survivalRules = `
     metrics(id, state) {
       const time = Math.floor(state.bankedTime + state.elapsed);
       const duration = Math.floor(time / 60) + ':' + String(time % 60).padStart(2, '0');
-      return [[id === 'G03' ? 'Andockmanöver' : 'Abschnitte geschafft', id === 'G03' ? state.docks : state.cleared],
+      return [['Erreichtes Level', state.section],
+        [id === 'G03' ? 'Andockmanöver' : 'Level geschafft', id === 'G03' ? state.docks : state.cleared],
         ['Flugzeit', duration]];
     },
   };
@@ -80,8 +118,8 @@ export function withArcadeSurvival(html: string, game: number, variant: number) 
   const docking = game === 3;
   const goal = survivalGoals[`${game}-${variant}`];
   const sectionRule = docking
-    ? "Nach erfolgreichem Andocken legt das Schiff automatisch ab. Spätere Buchten bewegen und drehen sich. Harte Karambolagen kosten ein Leben."
-    : "Nach jedem Abschnitt folgt der nächste. Treffer oder ein verfehltes Abschnittsziel können ein Leben kosten.";
+    ? "Nach dem automatischen Ablegen beginnt ein neues Level an der nächsten Bucht. Jede Bucht verlangt mehr Präzision. Harte Karambolagen kosten ein Leben."
+    : "Mit jedem Abschnitt steigt das Level und die Aufgabe wird schwieriger. Treffer oder ein verfehltes Levelziel können ein Leben kosten.";
   const scoring = docking
     ? `${pointsPerDock} Punkte pro erfolgreichem Andockmanöver.`
     : game === 5 && variant === 4
@@ -92,10 +130,13 @@ export function withArcadeSurvival(html: string, game: number, variant: number) 
   const briefing = {
     ...(goal ? { goal } : {}),
     ...(scoring ? { scoring } : {}),
-    rulesVersion: "survival-1",
+    rulesVersion: "survival-levels-1",
   };
 
-  let document = (docking ? withDockingSurvival(html) : html)
+  let document = (docking ? withDockingSurvival(html) : withArcadeDifficulty(html, game))
+    .replace("</head>", `${levelStyles}</head>`)
+    .replace('<small id="roundId"></small>', '<small id="roundId" hidden></small><span id="runLevel" role="status"></span>')
+    .replace('</canvas></section>', '</canvas><div id="levelBanner" aria-hidden="true" hidden></div></section>')
     .replace(
       "function intro(v){",
       `${survivalRules}
@@ -117,28 +158,17 @@ export function withArcadeSurvival(html: string, game: number, variant: number) 
     .replace("Math.round(s.score)),recordKey=", "Math.round(survival.score(s))),recordKey=")
     .replace("s.score=score;let saved=true;", "let saved=true;")
     .replace("metrics=C.reviewRound?.(selected.id,s)||[];", "metrics=survival.metrics(selected.id,s);")
-    .replace("Bestwert dieser Variante", "Bestwert im Überlebensmodus")
+    .replace("Bestwert dieser Variante", "Bestwert im Levelmodus")
     .replace("'LETZTER ABSCHNITT'", "'SEKTORWECHSEL NAHT'")
     .replace("Flugprotokoll und Wertung", docking ? "Flugprotokoll und Wertung" : "Letzter Abschnitt und Wertung")
-    .replace("<small>RESTZEIT</small>", '<small id="timeLabel">ABSCHNITT</small>')
-    .replace("$('score').textContent=Math.max(0,Math.floor(s.score));", "$('score').textContent=Math.max(0,Math.floor(survival.score(s)));")
+    .replace("$('score').textContent=Math.max(0,Math.floor(s.score));", "survival.showLevel(s);$('score').textContent=Math.max(0,Math.floor(survival.score(s)));")
     .replace("$('healthLabel').textContent=C.session.module.healthLabel||'SCHUTZLADUNGEN';", "$('healthLabel').textContent='LEBEN';")
-    .replace("C.session.module.health?C.session.module.health(s):", "")
-    .replace(
-      "$('time').textContent=Math.ceil(s.time)+' s';",
-      docking
-        ? "$('timeLabel').textContent='ANDOCKBUCHT';$('time').textContent=s.docks+(s.releaseUntil?0:1);"
-        : "$('timeLabel').textContent='ABSCHNITT '+s.section;$('time').textContent=Math.ceil(s.time)+' s';",
-    );
+    .replace("C.session.module.health?C.session.module.health(s):", "");
   if (docking) {
-    document = document.replace("$('timeMeter').style.width=(s.time/60*100)+'%';", "$('timeMeter').style.width=(s.releaseUntil?100:s.dwell*100)+'%';");
-  }
-  if (game === 1 || game === 2) {
-    // Keep later sections demanding without making object speeds grow forever.
-    document = document.replace(
-      /s\.elapsed\*\.(?:65|6)(?=[,;])/g,
-      speed => `${speed}+Math.min(s.section-1,6)*7`,
-    );
+    document = document
+      .replace('<small>RESTZEIT</small><b id="time" class="cyan">60 s</b>', '<small>ANDOCKBUCHT</small><b id="time" class="cyan">1</b>')
+      .replace("$('time').textContent=Math.ceil(s.time)+' s';", "$('time').textContent=s.section;")
+      .replace("$('timeMeter').style.width=(s.time/60*100)+'%';", "$('timeMeter').style.width=(s.releaseUntil?100:s.dwell*100)+'%';");
   }
   if (game === 5 && variant === 3) {
     document = document.replace(
