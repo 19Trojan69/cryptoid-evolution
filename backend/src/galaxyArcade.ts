@@ -16,6 +16,9 @@ async function stationDocument(index: number, key: string) {
   const variant = index % 5 + 1;
   return html
     .replace("<head>", `<head><meta http-equiv="Content-Security-Policy" content="${arcadePolicy}">`)
+    // A frame queued before Start or Resume can carry an older timestamp.
+    // Keep the round clock monotonic so the next frame uses the current baseline.
+    .replace("previous=now;if(C.mode==='running'", "previous=Math.max(previous,now);if(C.mode==='running'")
     .replace("</body></html>", `<script>CE.app.showDetail(${game}).then(() => CE.app.intro(${variant}));</script></body></html>`);
 }
 
