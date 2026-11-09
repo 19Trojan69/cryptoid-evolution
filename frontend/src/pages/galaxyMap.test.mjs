@@ -254,6 +254,7 @@ test('actual ship flight only reflects a new adjacent confirmed stage and never 
     '../components/BlockchainIcon':{default:()=>null},'./ShipPortrait':{default:()=>null},
     './GalaxySector':{default:()=>null},'./GalaxyInfoDialog':{default:()=>null},'./GalaxyArcadeAccess':{default:()=>null},
     './useGalaxyData':{default:()=>data},'./galaxyModel':model,'./displaySettings':{MOTION_STORAGE_KEY:'motion'},
+    './controlPreferences':{readControlHand:()=> 'right'},
     './shipFleet':{shipSaveNetwork:'testnet',playerSkins:[{id:'grey-scout',name:'Grey Scout',sprite:1}],allPlayerColors:[{id:'grey',name:'Grey'}]},
     './shipEvolution':{ownedShipStage:()=>1,shipEvolutionAsset:()=>'/existing.png'},
   },{document:doc,localStorage:{getItem:()=>null},window:{matchMedia:()=>({matches:false})}});

@@ -12,6 +12,7 @@ import GalaxyArcadeAccess from './GalaxyArcadeAccess';
 import type { GalaxyMiniGame } from './galaxyData';
 import { emptyGalaxyProgress, galaxyPoint, galaxyShipPoint, galaxyRegions, type GalaxySelection } from './galaxyModel';
 import { MOTION_STORAGE_KEY } from './displaySettings';
+import { readControlHand } from './controlPreferences';
 import './galaxyMap.css';
 import './galaxyArt.css';
 import { paceAnimation } from '../lib/cssFramePacing';
@@ -39,7 +40,8 @@ export default function GalaxyMap() {
       if (scroll.current) sessionStorage.setItem(arcadePositionKey, String(scroll.current.scrollTop));
     } catch { /* Browser storage is optional for returning to the map. */ }
     close();
-    window.location.assign(path);
+    // The sandboxed arcade cannot read the main game's browser storage.
+    window.location.assign(`${path}#hand=${readControlHand()}`);
   }, [close]);
   const previewReady = useCallback((games: GalaxyMiniGame[], justUnlocked: boolean) => {
     setPreviewGames(games);
