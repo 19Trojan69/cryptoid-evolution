@@ -1,7 +1,7 @@
 import { hangarCatalog } from "./hangarCatalog";
 import { communityLocale, translateCommunity } from "./communityTranslation";
 import { testnetAccountDeletionEnabled } from './playerAdministration';
-import { serveGalaxyArcade } from "./galaxyArcade";
+import { serveGalaxyArcade, servePublicGalaxyArcade, galaxyArcadeStationIndex } from "./galaxyArcade";
 
 const productionBackendOrigin = "https://cryptoid-evolution.vercel.app";
 
@@ -17,6 +17,7 @@ type GatewayEnvironment = {
   CRYPTOID_GALAXY_ARCADE_KEY?: string;
   CRYPTOID_GALAXY_ARCADE_INVITATION?: string;
   CRYPTOID_GALAXY_ARCADE_MUSIC_KEY?: string;
+  CRYPTOID_TESTNET_GALAXY_ARCADE?: string;
 };
 
 const localTestnetEnabled = (env: GatewayEnvironment) =>
@@ -127,6 +128,7 @@ export const createApiGateway = (
     CRYPTOID_GALAXY_ARCADE_KEY: process.env.CRYPTOID_GALAXY_ARCADE_KEY,
     CRYPTOID_GALAXY_ARCADE_INVITATION: process.env.CRYPTOID_GALAXY_ARCADE_INVITATION,
     CRYPTOID_GALAXY_ARCADE_MUSIC_KEY: process.env.CRYPTOID_GALAXY_ARCADE_MUSIC_KEY,
+    CRYPTOID_TESTNET_GALAXY_ARCADE: process.env.CRYPTOID_TESTNET_GALAXY_ARCADE,
   }),
 ) => {
   let ready: Promise<Backend> | undefined;
@@ -146,6 +148,16 @@ export const createApiGateway = (
           env.CRYPTOID_GALAXY_ARCADE_INVITATION, env.CRYPTOID_GALAXY_ARCADE_MUSIC_KEY,
         );
       }
+      const publicArcade = /^galaxy-minigames(?:\/(.*))?$/.exec(path);
+      const arcadeRating = publicArcade && /^(\d+)\/rating$/.exec(publicArcade[1] ?? "");
+      if (publicArcade) {
+        const key = env.VERCEL_PROJECT_PRODUCTION_URL === "cryptoid-evolution-testnet.vercel.app"
+          && env.VERCEL_ENV === "production" && env.CRYPTOID_TESTNET_GALAXY_ARCADE === "1"
+          ? env.CRYPTOID_GALAXY_ARCADE_KEY : undefined;
+        if (!key || !/^[0-9a-f]{64}$/i.test(key)) return res.status(404).json({ error: "not_found" });
+        if (!arcadeRating) return servePublicGalaxyArcade(req, res, publicArcade[1], key, env.CRYPTOID_GALAXY_ARCADE_MUSIC_KEY, url.searchParams.get("lang"));
+        if (galaxyArcadeStationIndex(arcadeRating[1]) < 0) return res.status(404).json({ error: "not_found" });
+      }
       const powerRoute = path === "hangar/power" && req.method === "GET"
         || path === "hangar/power/activate" && req.method === "POST";
       const authenticatedLocal = localTestnet || /^Bearer\s+\S+$/i.test(req.headers?.authorization || "");
@@ -156,7 +168,7 @@ export const createApiGateway = (
         && authenticatedLocal;
       // Add only the new, network-scoped features locally. Existing Testnet
       // accounts/payments keep their established proxy; no Mainnet deployment.
-      const localFeature = powerRoute || testnetSave || testnet && (/^progress\/boss-summary\/(?:prepare|continue)$/.test(path)
+      const localFeature = powerRoute || testnetSave || !!arcadeRating || testnet && (/^progress\/boss-summary\/(?:prepare|continue)$/.test(path)
         || /^admin\/players(?:\/|$)/.test(path));
       // The public catalog must match this deployment's Shop, even while
       // account and payment requests use the established Pi service.
@@ -246,7 +258,7 @@ export const createApiGateway = (
         req.headers ??= {};
         req.headers["x-cryptoid-app-network"] = "testnet";
       }
-      if (testnetSave || powerRoute) req.testnetSave = true;
+      if (testnetSave || powerRoute || arcadeRating) req.testnetSave = true;
       ready ??= loadBackend().then(async (backend) => {
         await backend.start(false);
         return backend;

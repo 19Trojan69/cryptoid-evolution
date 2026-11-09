@@ -6,9 +6,13 @@ import { withArcadeTouchControls } from "./galaxyArcadeControls";
 import { galaxyArcadeNames, galaxyArcadePayload } from "./galaxyArcadePayload";
 import { withArcadeRetroStyle } from "./galaxyArcadeRetro";
 import { withArcadeSurvival } from "./galaxyArcadeSurvival";
+import { arcadeLocale, arcadeStationCopy, type ArcadeLocale } from "./galaxyArcadeCopy";
+import { arcadePanelLabels } from "./galaxyArcadeLanguages";
+import { withArcadePublicLocale } from "./galaxyArcadePublicLocale";
 
 const stations = galaxyArcadeNames.map((name, index) => ({ level: (index + 1) * 5, name }));
 const previewLevels = stations.map(station => station.level);
+export const galaxyArcadeStationIndex = (level?: string) => stations.findIndex(station => String(station.level) === level);
 const arcadePolicy = "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob:; media-src data: blob:";
 const previewCookie = "__Secure-cryptoid-arcade";
 const playCookie = "__Secure-cryptoid-arcade-play";
@@ -53,7 +57,7 @@ const playStyles = `<style>
   #galaxy-arcade-startup { position: fixed; inset: var(--arcade-nav-height) 0 0; z-index: 19; display: grid; place-items: center; padding: 16px; text-align: center; background: #081222; color: #eaf0ff; }
 </style>`;
 
-function stationDocument(index: number, key: string, musicKey: string | undefined, returnHref?: string) {
+function stationDocument(index: number, key: string, musicKey: string | undefined, returnHref?: string, locale?: ArcadeLocale) {
   const payload = Buffer.from(galaxyArcadePayload, "base64");
   const decipher = createDecipheriv("aes-256-gcm", Buffer.from(key, "hex"), payload.subarray(0, 12));
   decipher.setAuthTag(payload.subarray(12, 28));
@@ -69,7 +73,7 @@ function stationDocument(index: number, key: string, musicKey: string | undefine
   const start = `CE.app.showDetail(${game}).then(() => CE.app.intro(${variant}))`;
   if (!returnHref) return document.replace("</body></html>", `<script>${start};</script></body></html>`);
 
-  return document
+  const page = document
     .replace('<main id="selection" class="shell">', '<main id="selection" class="shell" hidden>')
     .replace('<button id="back" class="compact"', '<button id="back" class="compact" hidden')
     .replace("let detailToken=0;\n", "")
@@ -127,6 +131,7 @@ function stationDocument(index: number, key: string, musicKey: string | undefine
         Promise.resolve().then(() => CE.app.showDetail()).then(() => status.remove()).catch(failed).finally(() => clearTimeout(timer));
       })();
     </script></body></html>`);
+  return locale ? withArcadePublicLocale(page, locale, index, stations[index].name) : page;
 }
 
 function sendPlayPage(res: Pick<Response, "setHeader" | "status" | "send">, code: number, html: string) {
@@ -140,6 +145,34 @@ function sendPlayPage(res: Pick<Response, "setHeader" | "status" | "send">, code
 
 function playError(returnHref: string, message: string) {
   return `<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Cryptoid Evolution</title>${playStyles}</head><body>${returnBar(returnHref)}<p id="galaxy-arcade-startup" role="alert">${message}</p></body></html>`;
+}
+
+export function servePublicGalaxyArcade(
+  req: Pick<Request, "method">,
+  res: Pick<Response, "setHeader" | "status" | "json" | "send">,
+  path: string | undefined,
+  key: string,
+  musicKey: string | undefined,
+  language: string | null,
+) {
+  res.setHeader("Cache-Control", "no-store");
+  if (req.method !== "GET") return res.status(405).json({ error: "method_not_allowed" });
+  const locale = arcadeLocale(language);
+  if (path === undefined) {
+    return res.json({
+      labels: arcadePanelLabels(locale),
+      stations: stations.map((station, index) => ({ ...station, ...arcadeStationCopy(locale, index, station.name) })),
+    });
+  }
+  const match = /^(\d+)\/play$/.exec(path);
+  const index = galaxyArcadeStationIndex(match?.[1]);
+  if (index < 0) return res.status(404).json({ error: "not_found" });
+  const returnHref = "/galaxy?arcade-return=1";
+  try {
+    return sendPlayPage(res, 200, stationDocument(index, key, musicKey, returnHref, locale));
+  } catch {
+    return sendPlayPage(res, 503, withArcadePublicLocale(playError(returnHref, "Das Minispiel ist gerade nicht verfügbar. Versuche es erneut über die Galaxiekarte."), locale, index, stations[index].name));
+  }
 }
 
 export async function serveGalaxyArcade(
@@ -201,7 +234,7 @@ export async function serveGalaxyArcade(
     }
 
     if (stationLevel === undefined) return res.json({ stations });
-    const index = stations.findIndex(station => String(station.level) === stationLevel);
+    const index = galaxyArcadeStationIndex(stationLevel);
     if (index === -1) return res.status(404).json({ error: "not_found" });
     if (launching) {
       if (!previewSession) {

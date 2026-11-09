@@ -58,6 +58,7 @@
   ],
   "git": {
     "deploymentEnabled": {
+      "codex/testnet-galaxy-arcade-release-20261109": false,
       "codex/galaxy-admin-minigames-20261109": false,
       "codex/white-screen-startup-recovery-20261023": false,
       "codex/idle-display-resume-guard-20261023": false,

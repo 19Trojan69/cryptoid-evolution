@@ -1,4 +1,5 @@
 import mountFeedbackEndpoints from "./handlers/feedback";
+import mountGalaxyArcadeRatings, { galaxyArcadeRatingField } from "./handlers/galaxyArcadeRatings";
 import { deletedAccessToken, deletedProxyToken, testnetAccountDeletionEnabled } from './playerAdministration';
 import mountPilotEndpoints from "./handlers/pilots";
 import fs from "fs";
@@ -200,6 +201,10 @@ const feedbackRouter = express.Router();
 mountFeedbackEndpoints(feedbackRouter);
 app.use("/feedback", feedbackRouter);
 
+const arcadeRatingsRouter = express.Router();
+mountGalaxyArcadeRatings(arcadeRatingsRouter);
+app.use("/galaxy-minigames", arcadeRatingsRouter);
+
 const pilotRouter = express.Router();
 mountPilotEndpoints(pilotRouter);
 app.use("/pilots", pilotRouter);
@@ -242,6 +247,10 @@ export const start = async (listen = true): Promise<void> => {
     const db = client.db(dbName);
     app.locals.orderCollection = db.collection("orders");
     app.locals.userCollection = db.collection("users");
+    if (process.env.VERCEL_PROJECT_PRODUCTION_URL === "cryptoid-evolution-testnet.vercel.app"
+        && process.env.CRYPTOID_TESTNET_GALAXY_ARCADE === "1") {
+      await app.locals.userCollection.createIndex({ [`${galaxyArcadeRatingField}.$**`]: 1 });
+    }
     app.locals.database = db;
     app.locals.databaseClient = client;
     app.locals.sessionCollection = db.collection('user_sessions');

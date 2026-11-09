@@ -6,6 +6,7 @@ import { readFileSync } from 'node:fs';
 import { runInNewContext } from 'node:vm';
 const require = createRequire(import.meta.url);
 const { createApiGateway } = require('../build/apiGateway.js');
+const { arcadeLocales } = require('../build/galaxyArcadeCopy.js');
 const { hangarCatalog } = require('../build/hangarCatalog.js');
 const ts = require('typescript');
 
@@ -24,6 +25,46 @@ const backendFixture = () => {
     app(req, res) { calls.push({ url: req.url, network: req.headers['x-cryptoid-app-network'] }); return res.json({ ok: true }); },
   } };
 };
+
+test('the official Testnet Arcade serves localized public stations with a distinct rating route', async () => {
+  const env = {
+    VERCEL_ENV: 'production',
+    VERCEL_PROJECT_PRODUCTION_URL: 'cryptoid-evolution-testnet.vercel.app',
+    CRYPTOID_TESTNET_GALAXY_ARCADE: '1',
+    CRYPTOID_GALAXY_ARCADE_KEY: 'ac'.repeat(32),
+  };
+  const { calls, backend } = backendFixture();
+  const gateway = createApiGateway(async () => backend, () => env);
+  const check = async (path, locale = 'en') => {
+    const res = response();
+    await gateway({ method: 'GET', url: '/api/index?' + new URLSearchParams({ path, lang: locale }), headers: {} }, res);
+    return res;
+  };
+  const base = 'galaxy-minigames';
+  assert.equal(arcadeLocales.length, 19);
+  for (const locale of arcadeLocales) {
+    const { code, body } = await check(base, locale);
+    assert.equal(code, 200);
+    assert.equal(new Set(body.stations.map(station => station.name)).size, 40);
+    assert.ok(Object.values(body.labels).every(Boolean));
+    for (const [index, station] of body.stations.entries()) {
+      assert.equal(station.level, (index + 1) * 5);
+      assert.ok(station.description && station.scoring && station.medalLabel && station.rulesVersion);
+      assert.deepEqual(station.medalGoals, [...station.medalGoals].sort((a, b) => a - b));
+    }
+  }
+  assert.notEqual((await check(base, 'th')).body.stations[7].description, (await check(base, 'de')).body.stations[7].description);
+  assert.deepEqual((await check(base, 'zh-Hans')).body, (await check(base, 'zh')).body);
+  assert.equal((await check(base + '/205/rating')).code, 404);
+  assert.equal(calls.length, 0);
+  assert.equal((await check(base + '/5/rating')).code, 200);
+  assert.equal(calls.at(-1).network, 'testnet');
+  env.VERCEL_ENV = 'preview';
+  assert.equal((await check(base)).code, 404);
+  env.VERCEL_ENV = 'production';
+  env.VERCEL_PROJECT_PRODUCTION_URL = 'cryptoid-evolution.vercel.app';
+  assert.equal((await check(base)).code, 404);
+});
 
 test('Galaxy Arcade is isolated to the enabled Testnet preview and requires a verified Pi owner', async t => {
   const key = 'ab'.repeat(32);

@@ -2,10 +2,13 @@ import { useEffect, useRef, useState } from 'react';
 import { useLocale } from '../i18n';
 import { axiosClient } from '../lib/axiosClient';
 import GalaxyBossArt from './GalaxyBossArt';
+import GalaxyArcadePanel from './GalaxyArcadePanel';
+import type { ArcadeLabels, ArcadeRecord, ArcadeStation } from './galaxyArcadeRecords';
 import { galaxyBossState, galaxyPoint, type GalaxyProgress, type GalaxySelection } from './galaxyModel';
 
-type Props = { selection: GalaxySelection; progress: GalaxyProgress; miniGameName?: string; onEnterTestCode?: () => void; onLaunch: (path: string) => void; onClose: () => void; onShop: (view: 'shop' | 'hangar') => void; onCards: () => void };
-export default function GalaxyInfoDialog({ selection, progress, miniGameName, onEnterTestCode, onLaunch, onClose, onShop, onCards }: Props) {
+type Props = { selection: GalaxySelection; progress: GalaxyProgress; miniGameName?: string; onEnterTestCode?: () => void; onLaunch: (path: string) => void; onClose: () => void; onShop: (view: 'shop' | 'hangar') => void; onCards: () => void;
+  arcade?: { game: ArcadeStation; labels: ArcadeLabels; record: ArcadeRecord | null; owner: string | null; play: () => void } };
+export default function GalaxyInfoDialog({ selection, progress, miniGameName, arcade, onEnterTestCode, onLaunch, onClose, onShop, onCards }: Props) {
   const { t } = useLocale();
   const dialog = useRef<HTMLDialogElement>(null);
   const [launch, setLaunch] = useState<'idle' | 'loading' | 'error'>('idle');
@@ -35,7 +38,10 @@ export default function GalaxyInfoDialog({ selection, progress, miniGameName, on
     <div className="galaxy-dialog-content">
       <header><span>{t('Level')} {selection.level}</span><button className="galaxy-dialog-close" type="button" onClick={onClose} aria-label={t('Close')}>×</button></header>
       <h2 id="galaxy-dialog-title">{title}</h2>
-      {miniGameName ? <>
+      {arcade ? <>
+        <button type="button" className="galaxy-primary" onClick={arcade.play}>{t('Play')}</button>
+        <GalaxyArcadePanel key={arcade.owner ?? 'guest'} game={arcade.game} labels={arcade.labels} record={arcade.record} canRate={!!arcade.owner}/>
+      </> : miniGameName ? <>
         <div className="galaxy-dialog-portal" aria-hidden="true">✧</div>
         <p className="galaxy-note">{t('Scores only count in this test round.')}</p>
         {launch === 'error' && <p role="alert">{t('Private test access is unavailable.')}</p>}

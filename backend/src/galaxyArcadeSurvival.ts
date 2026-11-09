@@ -140,10 +140,21 @@ const survivalScoring: Readonly<Record<string, string>> = {
   "6-5": "40 pro Abfangziel + 150 Auftragsbonus. Zwölf Ladungen pro Abschnitt.",
 };
 
-export function withArcadeSurvival(html: string, game: number, variant: number) {
-  const docking = game === 3;
+export function arcadeSurvivalCopy(game: number, variant: number) {
   const mission = `${game}-${variant}`;
   const goal = survivalGoals[mission];
+  const scoring = game === 3
+    ? `${pointsPerDock} Punkte pro erfolgreichem Andockmanöver.`
+    : survivalScoring[mission];
+  let rulesVersion = "survival-levels-1";
+  if (game === 2 && (variant === 3 || variant === 5)) rulesVersion = "survival-maneuvers-1";
+  if (game === 2 && variant === 4) rulesVersion = "survival-boost-1";
+  if (game === 4 || game === 8) rulesVersion = "survival-patterns-1";
+  return { ...(goal ? { goal } : {}), ...(scoring ? { scoring } : {}), rulesVersion };
+}
+
+export function withArcadeSurvival(html: string, game: number, variant: number) {
+  const docking = game === 3;
   let sectionRule = "Mit jedem Abschnitt steigt das Level und die Aufgabe wird schwieriger. Treffer oder ein verfehltes Levelziel können ein Leben kosten.";
   if (docking) {
     sectionRule = "Sobald Position, Tempo und Winkel passen, halte eine Sekunde. Nach dem Ablegen folgt die nächste Bucht. Harte Karambolagen kosten ein Leben.";
@@ -152,18 +163,7 @@ export function withArcadeSurvival(html: string, game: number, variant: number) 
   } else if (game === 8) {
     sectionRule += ` Ab Level ${patternStartLevel} greifen manche Wellen von beiden Seiten an. Die Warnung kündigt den Zangenangriff an.`;
   }
-  const scoring = docking
-    ? `${pointsPerDock} Punkte pro erfolgreichem Andockmanöver.`
-    : survivalScoring[mission];
-  let rulesVersion = "survival-levels-1";
-  if (game === 2 && (variant === 3 || variant === 5)) rulesVersion = "survival-maneuvers-1";
-  if (game === 2 && variant === 4) rulesVersion = "survival-boost-1";
-  if (game === 4 || game === 8) rulesVersion = "survival-patterns-1";
-  const briefing = {
-    ...(goal ? { goal } : {}),
-    ...(scoring ? { scoring } : {}),
-    rulesVersion,
-  };
+  const briefing = arcadeSurvivalCopy(game, variant);
 
   const levelDocument = docking ? withDockingSurvival(html) : withArcadeDifficulty(html, game);
   const gameDocument = withArcadePatterns(withArcadeGameplayReview(levelDocument, game), game);

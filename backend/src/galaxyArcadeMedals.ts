@@ -78,9 +78,13 @@ const medalStyle = `<style>
   .medal-result { padding: 7px 9px; border: 1px solid #4a567f; }
 </style>`;
 
+export function arcadeMedalConfiguration(game: number, variant: number) {
+  return stationMedals[game - 1][variant - 1];
+}
+
 export function arcadeMedalRules(game: number, variant: number) {
   return `
-  const medal = ${JSON.stringify(stationMedals[game - 1][variant - 1])};
+  const medal = ${JSON.stringify(arcadeMedalConfiguration(game, variant))};
   const medalNames = ['Bronze', 'Silber', 'Gold'];
   function medalValue(s) {
     const completed = s.done && s.success;

@@ -10,6 +10,7 @@ import GalaxySector from './GalaxySector';
 import GalaxyInfoDialog from './GalaxyInfoDialog';
 import GalaxyArcadeAccess from './GalaxyArcadeAccess';
 import type { GalaxyMiniGame } from './galaxyData';
+import { claimArcadeResult, markArcadeLaunch, readArcadeRecord, type ArcadeStation, type PublicArcade } from './galaxyArcadeRecords';
 import { emptyGalaxyProgress, galaxyPoint, galaxyShipPoint, galaxyRegions, type GalaxySelection } from './galaxyModel';
 import { MOTION_STORAGE_KEY } from './displaySettings';
 import { readControlHand } from './controlPreferences';
@@ -21,12 +22,13 @@ import { requestGameFrame } from '../lib/frameScheduler';
 const arcadePositionKey = 'cryptoid_galaxy_arcade_position';
 
 export default function GalaxyMap() {
-  const { t } = useLocale();
+  const { t, locale } = useLocale();
   const navigate = useNavigate(), location = useLocation();
   const fromQuick = location.state?.fromQuick === true;
   const { snapshot, status } = useGalaxyData(typeof location.state?.owner === 'string' ? location.state.owner : undefined);
   const [selection, setSelection] = useState<GalaxySelection | null>(null);
   const [previewGames, setPreviewGames] = useState<GalaxyMiniGame[]>();
+  const [officialArcade, setOfficialArcade] = useState<PublicArcade>();
   const [previewLevels, setPreviewLevels] = useState<number[]>([]);
   const [arcadeListOpen, setArcadeListOpen] = useState(false);
   const query = location.search ? new URLSearchParams(location.search) : undefined;
@@ -43,6 +45,39 @@ export default function GalaxyMap() {
     // The sandboxed arcade cannot read the main game's browser storage.
     window.location.assign(`${path}#hand=${readControlHand()}`);
   }, [close]);
+  const launchOfficialArcade = (game: ArcadeStation) => {
+    const fragment = new URLSearchParams({ hand: readControlHand() });
+    try {
+      if (scroll.current) sessionStorage.setItem(arcadePositionKey, String(scroll.current.scrollTop));
+      const run = crypto.randomUUID();
+      markArcadeLaunch(sessionStorage, game, snapshot.owner, run);
+      fragment.set('arcade-run', run);
+    } catch { /* The minigame and its report still work without device storage. */ }
+    close();
+    window.location.assign(`/api/galaxy-minigames/${game.level}/play?lang=${encodeURIComponent(locale)}#${fragment}`);
+  };
+  useEffect(() => {
+    if (shipSaveNetwork !== 'testnet' || previewAccess) return;
+    const request = new AbortController();
+    void fetch(`/api/galaxy-minigames?lang=${locale}`, { credentials: 'omit', signal: request.signal })
+      .then(response => response.ok ? response.json() as Promise<PublicArcade> : undefined)
+      .then(data => {
+        if (!request.signal.aborted && Array.isArray(data?.stations) && data.labels) setOfficialArcade(data);
+      })
+      .catch(() => undefined);
+    return () => request.abort();
+  }, [locale, previewAccess]);
+  useEffect(() => {
+    if (!returningFromArcade || !location.hash || shipSaveNetwork !== 'testnet') return;
+    try {
+      const level = claimArcadeResult(location.hash, sessionStorage, localStorage);
+      if (level) setSelection({ kind: 'mini', level });
+    } catch {
+      // Browser storage can be disabled by the host WebView.
+    } finally {
+      window.history.replaceState(window.history.state, '', window.location.pathname + window.location.search);
+    }
+  }, [location.hash, returningFromArcade]);
   const previewReady = useCallback((games: GalaxyMiniGame[], justUnlocked: boolean) => {
     setPreviewGames(games);
     if (justUnlocked) setArcadeListOpen(true);
@@ -52,8 +87,9 @@ export default function GalaxyMap() {
     requestGameFrame(() => document.getElementById('galaxy-preview-code')?.focus({ preventScroll: true }));
   };
   const progress = status === 'ready' ? snapshot.progress : emptyGalaxyProgress();
-  const miniGames = previewAccess && previewGames ? previewGames : status === 'ready' ? snapshot.miniGames : undefined;
+  const miniGames = previewAccess && previewGames ? previewGames : officialArcade?.stations ?? (status === 'ready' ? snapshot.miniGames : undefined);
   const miniGame = selection?.kind === 'mini' ? miniGames?.find(game => game.level === selection.level) : undefined;
+  const officialGame = !previewAccess && selection?.kind === 'mini' ? officialArcade?.stations.find(game => game.level === selection.level) : undefined;
   const lockedPortal = previewAccess && selection?.kind === 'mini' && !miniGame && previewLevels.includes(selection.level);
   const point = galaxyShipPoint(progress.currentLevel);
   const skin = playerSkins.find(entry => entry.id === snapshot.skin) ?? playerSkins[0];
@@ -103,7 +139,7 @@ export default function GalaxyMap() {
     <header className="galaxy-toolbar">
       <button type="button" className="galaxy-back" onClick={() => home({ openQuickMenu: fromQuick })}><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m14 6-6 6 6 6M8 12h12"/></svg><span>{t('Back')}</span></button>
       <div><p>CRYPTOID EVOLUTION</p><h1>{t('Galaxy map')}</h1></div>
-      <span className="galaxy-preview-badge">{miniGames?.length ? t('Admin test · {count} playable', { count: miniGames.length }) : t(previewAccess && previewLevels.length ? 'Private mini-game test' : 'Preview · In development')}</span>
+      <span className="galaxy-preview-badge">{officialArcade && !previewAccess ? officialArcade.labels.playable.replace('{count}', String(officialArcade.stations.length)) : miniGames?.length ? t('Admin test · {count} playable', { count: miniGames.length }) : t(previewAccess && previewLevels.length ? 'Private mini-game test' : 'Preview · In development')}</span>
     </header>
     {previewAccess && <GalaxyArcadeAccess onReady={previewReady} onLocked={setPreviewLevels}/>}
     {miniGames?.length ? <details className="galaxy-arcade-picker" open={arcadeListOpen} onToggle={event => setArcadeListOpen(event.currentTarget.open)}>
@@ -122,14 +158,24 @@ export default function GalaxyMap() {
         </div>}
       </div>
       <article className="galaxy-intro">
-        <BlockchainIcon kind="galaxy"/><p className="galaxy-eyebrow">{t('500 levels · 50 bosses · 100 mini-games')}</p>
-        <h2>{`${t('Galaxy map')} · ${t('A glimpse of the future')}`}</h2>
-        <p>{t('Explore the planned galaxy map of Cryptoid Evolution today. Discover a journey through 500 levels, legendary bosses, mysterious star systems and upcoming mini-games.')}</p>
-        <p>{t('This interactive preview shows an expansion currently in development. More features, challenges and rewards will become available in future updates.')}</p>
-        <p className="galaxy-note">{t('Exploring the map does not start a mission or change your progress.')}</p>
+        <BlockchainIcon kind="galaxy"/>
+        {officialArcade && !previewAccess ? <>
+          <h2>{t('All mini-games')}</h2>
+          <p>{officialArcade.labels.playable.replace('{count}', officialArcade.stations.length.toLocaleString(locale))}</p>
+        </> : <>
+          <p className="galaxy-eyebrow">{t('500 levels · 50 bosses · 100 mini-games')}</p>
+          <h2>{`${t('Galaxy map')} · ${t('A glimpse of the future')}`}</h2>
+          <p>{t('Explore the planned galaxy map of Cryptoid Evolution today. Discover a journey through 500 levels, legendary bosses, mysterious star systems and upcoming mini-games.')}</p>
+          <p>{t('This interactive preview shows an expansion currently in development. More features, challenges and rewards will become available in future updates.')}</p>
+          <p className="galaxy-note">{t('Exploring the map does not start a mission or change your progress.')}</p>
+        </>}
       </article>
     </div>
     <button type="button" className="galaxy-position" disabled={status !== 'ready'} onClick={() => goTo(progress.currentLevel)} title={status === 'ready' ? `${t('Level')} ${progress.currentLevel} · ${skin.name}` : undefined}><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="1.5"/><path d="M12 2v4m0 12v4M2 12h4m12 0h4"/></svg><span>{t('To my position')}</span></button>
-    {selection && <GalaxyInfoDialog key={`${selection.kind}:${selection.level}`} selection={selection} progress={progress} miniGameName={miniGame?.name} onEnterTestCode={lockedPortal ? enterTestCode : undefined} onLaunch={launchArcade} onClose={close} onShop={view => home({ openShopView: view })} onCards={() => home({ openCollection: true })}/>}
+    {selection && <GalaxyInfoDialog key={`${selection.kind}:${selection.level}`} selection={selection} progress={progress} miniGameName={miniGame?.name}
+      arcade={officialGame && officialArcade ? { game: officialGame, labels: officialArcade.labels,
+        record: readArcadeRecord(officialGame, snapshot.owner), owner: snapshot.owner,
+        play: () => launchOfficialArcade(officialGame) } : undefined}
+      onEnterTestCode={lockedPortal ? enterTestCode : undefined} onLaunch={launchArcade} onClose={close} onShop={view => home({ openShopView: view })} onCards={() => home({ openCollection: true })}/>}
   </main>;
 }
