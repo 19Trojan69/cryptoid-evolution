@@ -52,8 +52,9 @@ const arcadeStyle = `<style>
 </style>`;
 
 const pixelBackdrops = `  const themes = ${JSON.stringify(arcadeThemes)};
-  // The playfield stays at 192 × 256. The static scenery uses twice as large pixels.
-  const backdrop = surface(world.width / 2, world.height / 2);
+  // Keep the scenery in a small pixel buffer, at 1.5× the original art grid.
+  const sceneryScale = 1.5;
+  const backdrop = surface(96 * sceneryScale, 128 * sceneryScale);
   const sky = backdrop.getContext('2d', { alpha: false });
   const dither = [0, .52, .72, .22];
   let paintedTheme;
@@ -61,14 +62,15 @@ const pixelBackdrops = `  const themes = ${JSON.stringify(arcadeThemes)};
   function paintBackdrop(theme) {
     if (paintedTheme === theme) return;
     paintedTheme = theme;
-    const [cx, cy, radius] = theme.planet;
-    const random = C.random(6974 + cx * 17 + cy);
+    const [x0, y0] = theme.planet;
+    const [cx, cy, radius] = theme.planet.map(value => Math.round(value * sceneryScale));
+    const random = C.random(6974 + x0 * 17 + y0);
     sky.fillStyle = theme.sky;
     sky.fillRect(0, 0, backdrop.width, backdrop.height);
     sky.fillStyle = theme.dust;
     for (let i = 0; i < 62; i++) {
       const y = Math.floor(random() * backdrop.height);
-      const x = Math.floor(y * .32 + random() * 19);
+      const x = Math.floor(y * .32 + random() * 19 * sceneryScale);
       sky.fillRect(x, y, i % 9 === 0 ? 3 : 1, 1);
     }
     for (let i = 0; i < 64; i++) {
@@ -116,7 +118,9 @@ export function withArcadeRetroStyle(html: string) {
   return html
     .replace("</head>", `${arcadeStyle}</head>`)
     .replace(/  function starfield\(\) \{[\s\S]*?(?=  function pixelSprite\()/, pixelBackdrops)
-    .replace("const scale = 38 / Math.max", "const scale = 32 / Math.max")
+    .replace("const pixelScale = 0.4;", "const pixelScale = 0.5;")
+    .replace("const scale = 38 / Math.max", "const scale = 48 / Math.max")
+    .replace("target.width = 225;\n      target.height = 90;", "target.width = 450;\n      target.height = 180;")
     .replace("function draw(context, session, dt, screenScale) {", "function draw(context, session, dt, screenScale, game) {")
     .replace("graphics.background(pixels);", "graphics.background(pixels, game);")
     .replace("G.background(g);g.restore();g.save();", "G.background(g, 'G0'+number);g.restore();g.save();")

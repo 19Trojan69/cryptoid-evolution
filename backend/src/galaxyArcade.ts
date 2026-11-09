@@ -47,6 +47,8 @@ const playStyles = `<style>
   #galaxy-arcade-navigation a { display: inline-flex; align-items: center; padding: 0 10px; color: #eaf0ff; text-decoration: none; font: 600 15px system-ui, sans-serif; }
   #gameScreen { height: calc(100vh - var(--arcade-nav-height)); height: calc(100dvh - var(--arcade-nav-height)); }
   #overlay { top: var(--arcade-nav-height); }
+  #dialog .station-preview { width: min(100%, 320px); height: auto; aspect-ratio: 5 / 2; justify-self: center; border: 1px solid #4c6078; }
+  @media (max-height: 620px) { #dialog .station-preview { display: none; } }
   #galaxy-arcade-startup { position: fixed; inset: var(--arcade-nav-height) 0 0; z-index: 19; display: grid; place-items: center; padding: 16px; text-align: center; background: #081222; color: #eaf0ff; }
 </style>`;
 
@@ -66,13 +68,49 @@ function stationDocument(index: number, key: string, musicKey: string | undefine
   if (!returnHref) return document.replace("</body></html>", `<script>${start};</script></body></html>`);
 
   return document
+    .replace('<main id="selection" class="shell">', '<main id="selection" class="shell" hidden>')
+    .replace('<button id="back" class="compact"', '<button id="back" class="compact" hidden')
+    .replace("let detailToken=0;\n", "")
+    .replace(
+      /async function showDetail\(n\)\{[\s\S]+?(?=\nfunction backToCatalog\(\))/,
+      `async function showDetail() {
+        const station = C.catalog[${game - 1}];
+        await C.loadModule(station.id);
+        selected = station;
+        intro(${variant});
+        const preview = $('stationPreview');
+        C.graphics.ready.then(() => C.graphics.ensureArt?.()).then(() => {
+          if (preview.isConnected) drawPreview(preview, station.number);
+        }).catch(() => { preview.hidden = true; });
+      }`,
+    )
+    .replace(
+      /function backToCatalog\(\)\{[^\n]*\}/,
+      `function backToCatalog() {
+        startToken++;
+        input.clear();
+        C.arcadeAudio.pause();
+        document.querySelector('#galaxy-arcade-navigation a').click();
+      }`,
+    )
+    .replace(
+      '<p class="briefing-goal">',
+      '<canvas id="stationPreview" class="art station-preview" width="450" height="180" role="img" aria-label="Missionsvorschau"></canvas><p class="briefing-goal">',
+    )
+    .replace('id="cancelIntro">Zur Variantenwahl', 'id="cancelIntro">Zur Galaxiekarte')
+    .replace("$('cancelIntro').onclick=()=>{closeDialog();showDetail(selected.number);};", "$('cancelIntro').onclick=backToCatalog;")
+    .replace(/(id="(?:pauseBack|loadBack)">)Zur Auswahl/g, "$1Zur Galaxiekarte")
     .replace(
       '<button id="variants">Andere Variante</button><button id="resultBack">Zur Missionsauswahl</button>',
       '<button id="resultBack">Zur Galaxiekarte</button>',
     )
     .replace(
-      "$('variants').onclick=()=>{closeDialog();showDetail(selected.number);};$('resultBack').onclick=backToCatalog;",
-      "$('resultBack').onclick=()=>document.querySelector('#galaxy-arcade-navigation a').click();",
+      "$('variants').onclick=()=>{closeDialog();showDetail(selected.number);};",
+      "",
+    )
+    .replace(
+      "C.graphics.ready.then(async()=>{await C.graphics.ensureArt?.();$('heroShip').src=C.retro.shipThumbnail(C.graphics.testShip);renderCatalog();}).catch(()=>{$('shipCaption').textContent='Originalgrafik konnte nicht geladen werden.';renderCatalog();});",
+      "C.graphics.ready.then(() => C.graphics.ensureArt?.()).catch(() => {});",
     )
     .replace("</head>", `${playStyles}</head>`)
     .replace("<body>", `<body>${returnBar(returnHref)}<p id="galaxy-arcade-startup" role="status">Minispiel wird geladen …</p>`)
@@ -84,7 +122,7 @@ function stationDocument(index: number, key: string, musicKey: string | undefine
           status.setAttribute('role', 'alert');
         };
         const timer = setTimeout(failed, 12000);
-        Promise.resolve().then(() => ${start}).then(() => status.remove()).catch(failed).finally(() => clearTimeout(timer));
+        Promise.resolve().then(() => CE.app.showDetail()).then(() => status.remove()).catch(failed).finally(() => clearTimeout(timer));
       })();
     </script></body></html>`);
 }
