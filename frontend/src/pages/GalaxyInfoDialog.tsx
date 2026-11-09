@@ -29,8 +29,8 @@ function GalaxyArcadeFrame({ level, name }: { level: number; name: string }) {
   </div>;
 }
 
-type Props = { selection: GalaxySelection; progress: GalaxyProgress; miniGameName?: string; onClose: () => void; onShop: (view: 'shop' | 'hangar') => void; onCards: () => void };
-export default function GalaxyInfoDialog({ selection, progress, miniGameName, onClose, onShop, onCards }: Props) {
+type Props = { selection: GalaxySelection; progress: GalaxyProgress; miniGameName?: string; onEnterTestCode?: () => void; onClose: () => void; onShop: (view: 'shop' | 'hangar') => void; onCards: () => void };
+export default function GalaxyInfoDialog({ selection, progress, miniGameName, onEnterTestCode, onClose, onShop, onCards }: Props) {
   const { t } = useLocale();
   const dialog = useRef<HTMLDialogElement>(null);
   const returnButton = useRef<HTMLButtonElement>(null);
@@ -46,7 +46,7 @@ export default function GalaxyInfoDialog({ selection, progress, miniGameName, on
   const station = galaxyPoint(selection.level);
   const boss = selection.kind === 'boss' ? station.boss : undefined;
   const state = boss ? galaxyBossState(progress, boss.id) : undefined;
-  const title = boss ? station.name : selection.kind === 'mini' ? miniGameName ?? `${t('Mini-game')} · ${t('In development')}` : selection.kind === 'trade' ? t('Trading station') : `${t('Level')} ${selection.level}`;
+  const title = boss ? station.name : selection.kind === 'mini' ? miniGameName ?? (onEnterTestCode ? t('Private mini-game test') : `${t('Mini-game')} · ${t('In development')}`) : selection.kind === 'trade' ? t('Trading station') : `${t('Level')} ${selection.level}`;
   const showArcade = playing && miniGameName;
   return <dialog ref={dialog} className={showArcade ? 'galaxy-dialog galaxy-arcade-dialog' : 'galaxy-dialog'} aria-labelledby="galaxy-dialog-title" onCancel={event => { event.preventDefault(); onClose(); }} onClick={event => { if (event.target === event.currentTarget) onClose(); }}>
     {showArcade ? <div className="galaxy-arcade-content">
@@ -59,6 +59,10 @@ export default function GalaxyInfoDialog({ selection, progress, miniGameName, on
         <div className="galaxy-dialog-portal" aria-hidden="true">✧</div>
         <p className="galaxy-note">{t('Scores only count in this test round.')}</p>
         <button type="button" className="galaxy-primary" onClick={() => setPlaying(true)}>{t('Play')}</button>
+      </> : onEnterTestCode ? <>
+        <div className="galaxy-dialog-portal" aria-hidden="true">✧</div>
+        <p className="galaxy-note">{t('Use your personal test code to unlock all available mini-games.')}</p>
+        <button type="button" className="galaxy-primary" onClick={onEnterTestCode}>{t('Enter test code')}</button>
       </> : selection.kind === 'mini' ? <>
         <div className="galaxy-dialog-portal" aria-hidden="true">✧</div>
         <p>{t('A new challenge awaits here. Play varied mini-games, collect medals and earn additional Shards. This feature will be available in a future expansion.')}</p>
@@ -79,7 +83,7 @@ export default function GalaxyInfoDialog({ selection, progress, miniGameName, on
         {station.boss && <button type="button" className="galaxy-secondary" onClick={onClose}>{t('Close')}</button>}
         <p>{t('Exploring the map does not start a mission or change your progress.')}</p>
       </>}
-      {!miniGameName && <p className="galaxy-dialog-footer">{t('Preview · In development')}</p>}
+      {!miniGameName && !onEnterTestCode && <p className="galaxy-dialog-footer">{t('Preview · In development')}</p>}
     </div>}
   </dialog>;
 }

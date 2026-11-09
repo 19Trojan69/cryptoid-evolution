@@ -4,6 +4,7 @@ import type { Request, Response } from "express";
 import { galaxyArcadeNames, galaxyArcadePayload } from "./galaxyArcadePayload";
 
 const stations = galaxyArcadeNames.map((name, index) => ({ level: (index + 1) * 5, name }));
+const previewLevels = stations.map(station => station.level);
 const arcadePolicy = "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob:; media-src data: blob:";
 const previewCookie = "__Secure-cryptoid-arcade";
 const hexDigest = /^[0-9a-f]{64}$/i;
@@ -62,7 +63,7 @@ export async function serveGalaxyArcade(
   if (req.method !== "GET") return res.status(405).json({ error: "method_not_allowed" });
   const cookie = req.headers.cookie?.split(";").map(part => part.trim()).find(part => part.startsWith(`${previewCookie}=`));
   const previewSession = invitation && sameDigest(cookie?.slice(previewCookie.length + 1), invitation.session);
-  const accessHint = level === undefined && invitation ? { previewAccess: true } : {};
+  const accessHint = level === undefined && invitation ? { previewAccess: true, previewLevels } : {};
 
   try {
     if (!previewSession) {

@@ -4,10 +4,12 @@ import { axiosClient } from '../lib/axiosClient';
 import type { GalaxyMiniGame } from './galaxyData';
 
 const arcadePath = '/admin/galaxy-minigames';
-type AccessResponse = { stations?: GalaxyMiniGame[]; previewAccess?: boolean };
+type AccessResponse = { stations?: GalaxyMiniGame[]; previewAccess?: boolean; previewLevels?: number[] };
 type AccessStatus = 'checking' | 'locked' | 'submitting' | 'invalid' | 'unavailable' | 'ready';
 
-export default function GalaxyArcadeAccess({ onReady }: { onReady: (stations: GalaxyMiniGame[]) => void }) {
+type Props = { onReady: (stations: GalaxyMiniGame[], justUnlocked: boolean) => void; onLocked: (levels: number[]) => void };
+
+export default function GalaxyArcadeAccess({ onReady, onLocked }: Props) {
   const { t } = useLocale();
   const [status, setStatus] = useState<AccessStatus>('checking');
   const [code, setCode] = useState('');
@@ -22,14 +24,15 @@ export default function GalaxyArcadeAccess({ onReady }: { onReady: (stations: Ga
     }).then(({ data }) => {
       if (controller.signal.aborted) return;
       if (Array.isArray(data?.stations)) {
-        onReady(data.stations);
+        onReady(data.stations, false);
         setStatus('ready');
       } else {
+        if (data?.previewAccess === true && Array.isArray(data.previewLevels)) onLocked(data.previewLevels);
         setStatus(data?.previewAccess === true ? 'locked' : 'unavailable');
       }
     }).catch(() => { if (!controller.signal.aborted) setStatus('unavailable'); });
     return () => controller.abort();
-  }, [onReady]);
+  }, [onReady, onLocked]);
 
   const unlock = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -47,7 +50,7 @@ export default function GalaxyArcadeAccess({ onReady }: { onReady: (stations: Ga
       if (signal.aborted) return;
       if (!Array.isArray(data?.stations)) { setStatus('invalid'); return; }
       setCode('');
-      onReady(data.stations);
+      onReady(data.stations, true);
       setStatus('ready');
     } catch {
       if (!signal.aborted) setStatus('unavailable');

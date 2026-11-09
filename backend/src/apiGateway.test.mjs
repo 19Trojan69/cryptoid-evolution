@@ -78,6 +78,8 @@ test('a personal Galaxy test code grants only an expiring, server-signed preview
   const denied = await check(manifest);
   assert.equal(denied.code, 401);
   assert.equal(denied.body.previewAccess, true);
+  assert.deepEqual(denied.body.previewLevels, Array.from({ length: 40 }, (_, index) => (index + 1) * 5));
+  assert.equal(denied.body.stations, undefined);
   assert.equal((await check(`${manifest}/5`, invited)).code, 401);
   assert.equal((await check(unlock, invited)).code, 405);
   assert.equal((await check(unlock, { 'x-cryptoid-arcade-invitation': 'F'.repeat(24) }, 'POST')).code, 403);

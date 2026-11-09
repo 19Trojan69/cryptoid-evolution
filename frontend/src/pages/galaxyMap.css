@@ -99,3 +99,48 @@
   color: #ffc5a8;
   font-size: 13px;
 }
+
+.galaxy-arcade-picker {
+  padding: 0 12px;
+  background: #10192d;
+  border-bottom: 1px solid #aa9fc94d;
+}
+
+.galaxy-arcade-picker summary {
+  min-height: 44px;
+  padding: 12px 0;
+  cursor: pointer;
+  color: var(--galaxy-gold);
+  font-weight: 700;
+}
+
+.galaxy-arcade-picker summary span {
+  margin-inline-start: 6px;
+  color: var(--galaxy-cyan);
+}
+
+.galaxy-arcade-picker ul {
+  max-height: min(36dvh, 300px);
+  margin: 0;
+  padding: 0 0 8px;
+  overflow: auto;
+  overscroll-behavior: contain;
+  list-style: none;
+}
+
+.galaxy-arcade-picker button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  min-height: 44px;
+  margin-bottom: 4px;
+  padding: 6px 10px;
+  text-align: start;
+}
+
+.galaxy-arcade-picker small {
+  flex: none;
+  color: #9eb8d5;
+}

@@ -1,6 +1,10 @@
 /** V3 labels plus complete native map copy for all 19 currently selectable languages. */
 export const galaxyMapTranslations: Record<string, Record<string, string>> = {
   "en": {
+    "Private mini-game test": "Private mini-game test",
+    "All mini-games": "All mini-games",
+    "Enter test code": "Enter test code",
+    "Use your personal test code to unlock all available mini-games.": "Use your personal test code to unlock all available mini-games.",
     "Personal test code": "Personal test code",
     "Unlock mini-games": "Unlock mini-games",
     "The test code is invalid or expired.": "The test code is invalid or expired.",
@@ -42,6 +46,10 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Level not yet completed": "Level not yet completed"
   },
   "de": {
+    "Private mini-game test": "Privater Minispieltest",
+    "All mini-games": "Alle Minispiele",
+    "Enter test code": "Testcode eingeben",
+    "Use your personal test code to unlock all available mini-games.": "Gib deinen persönlichen Testcode ein, um alle verfügbaren Minispiele freizuschalten.",
     "Personal test code": "Persönlicher Testcode",
     "Unlock mini-games": "Minispiele freischalten",
     "The test code is invalid or expired.": "Der Testcode ist ungültig oder abgelaufen.",
@@ -83,6 +91,10 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Level not yet completed": "Level noch nicht abgeschlossen"
   },
   "es": {
+    "Private mini-game test": "Prueba privada de minijuegos",
+    "All mini-games": "Todos los minijuegos",
+    "Enter test code": "Introducir código de prueba",
+    "Use your personal test code to unlock all available mini-games.": "Introduce tu código personal de prueba para desbloquear todos los minijuegos disponibles.",
     "Personal test code": "Código personal de prueba",
     "Unlock mini-games": "Desbloquear minijuegos",
     "The test code is invalid or expired.": "El código de prueba no es válido o ha caducado.",
@@ -124,6 +136,10 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Level not yet completed": "Nivel aún no completado"
   },
   "fr": {
+    "Private mini-game test": "Test privé des mini-jeux",
+    "All mini-games": "Tous les mini-jeux",
+    "Enter test code": "Saisir le code de test",
+    "Use your personal test code to unlock all available mini-games.": "Saisissez votre code de test personnel pour débloquer tous les mini-jeux disponibles.",
     "Personal test code": "Code de test personnel",
     "Unlock mini-games": "Débloquer les mini-jeux",
     "The test code is invalid or expired.": "Le code de test est invalide ou a expiré.",
@@ -165,6 +181,10 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Level not yet completed": "Niveau pas encore terminé"
   },
   "pt": {
+    "Private mini-game test": "Teste privado de minijogos",
+    "All mini-games": "Todos os minijogos",
+    "Enter test code": "Introduzir código de teste",
+    "Use your personal test code to unlock all available mini-games.": "Introduz o teu código de teste pessoal para desbloquear todos os minijogos disponíveis.",
     "Personal test code": "Código de teste pessoal",
     "Unlock mini-games": "Desbloquear minijogos",
     "The test code is invalid or expired.": "O código de teste é inválido ou expirou.",
@@ -206,6 +226,10 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Level not yet completed": "Nível ainda não concluído"
   },
   "it": {
+    "Private mini-game test": "Prova privata dei minigiochi",
+    "All mini-games": "Tutti i minigiochi",
+    "Enter test code": "Inserisci il codice di prova",
+    "Use your personal test code to unlock all available mini-games.": "Inserisci il tuo codice di prova personale per sbloccare tutti i minigiochi disponibili.",
     "Personal test code": "Codice di prova personale",
     "Unlock mini-games": "Sblocca minigiochi",
     "The test code is invalid or expired.": "Il codice di prova non è valido o è scaduto.",
@@ -247,6 +271,10 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Level not yet completed": "Livello non ancora completato"
   },
   "pl": {
+    "Private mini-game test": "Prywatny test minigier",
+    "All mini-games": "Wszystkie minigry",
+    "Enter test code": "Wpisz kod testowy",
+    "Use your personal test code to unlock all available mini-games.": "Wpisz swój osobisty kod testowy, aby odblokować wszystkie dostępne minigry.",
     "Personal test code": "Osobisty kod testowy",
     "Unlock mini-games": "Odblokuj minigry",
     "The test code is invalid or expired.": "Kod testowy jest nieprawidłowy lub wygasł.",
@@ -288,6 +316,10 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Level not yet completed": "Poziom jeszcze nieukończony"
   },
   "tr": {
+    "Private mini-game test": "Özel mini oyun testi",
+    "All mini-games": "Tüm mini oyunlar",
+    "Enter test code": "Test kodunu gir",
+    "Use your personal test code to unlock all available mini-games.": "Mevcut tüm mini oyunları açmak için kişisel test kodunu gir.",
     "Personal test code": "Kişisel test kodu",
     "Unlock mini-games": "Mini oyunların kilidini aç",
     "The test code is invalid or expired.": "Test kodu geçersiz veya süresi dolmuş.",
@@ -329,6 +361,10 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Level not yet completed": "Seviye henüz tamamlanmadı"
   },
   "ru": {
+    "Private mini-game test": "Закрытый тест мини-игр",
+    "All mini-games": "Все мини-игры",
+    "Enter test code": "Ввести тестовый код",
+    "Use your personal test code to unlock all available mini-games.": "Введите личный тестовый код, чтобы открыть все доступные мини-игры.",
     "Personal test code": "Личный тестовый код",
     "Unlock mini-games": "Открыть мини-игры",
     "The test code is invalid or expired.": "Тестовый код недействителен или истёк.",
@@ -370,6 +406,10 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Level not yet completed": "Уровень ещё не пройден"
   },
   "hr": {
+    "Private mini-game test": "Privatni test miniigara",
+    "All mini-games": "Sve miniigre",
+    "Enter test code": "Unesi testni kod",
+    "Use your personal test code to unlock all available mini-games.": "Unesi osobni testni kod za otključavanje svih dostupnih miniigara.",
     "Personal test code": "Osobni testni kod",
     "Unlock mini-games": "Otključaj miniigre",
     "The test code is invalid or expired.": "Testni kod nije valjan ili je istekao.",
@@ -411,6 +451,10 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Level not yet completed": "Razina još nije završena"
   },
   "cs": {
+    "Private mini-game test": "Soukromý test miniher",
+    "All mini-games": "Všechny minihry",
+    "Enter test code": "Zadat testovací kód",
+    "Use your personal test code to unlock all available mini-games.": "Zadejte svůj osobní testovací kód a odemkněte všechny dostupné minihry.",
     "Personal test code": "Osobní testovací kód",
     "Unlock mini-games": "Odemknout minihry",
     "The test code is invalid or expired.": "Testovací kód je neplatný nebo vypršel.",
@@ -452,6 +496,10 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Level not yet completed": "Úroveň zatím nedokončena"
   },
   "sk": {
+    "Private mini-game test": "Súkromný test minihier",
+    "All mini-games": "Všetky minihry",
+    "Enter test code": "Zadať testovací kód",
+    "Use your personal test code to unlock all available mini-games.": "Zadajte svoj osobný testovací kód a odomknite všetky dostupné minihry.",
     "Personal test code": "Osobný testovací kód",
     "Unlock mini-games": "Odomknúť minihry",
     "The test code is invalid or expired.": "Testovací kód je neplatný alebo vypršal.",
@@ -493,6 +541,10 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Level not yet completed": "Úroveň zatiaľ nedokončená"
   },
   "hu": {
+    "Private mini-game test": "Privát minijátékteszt",
+    "All mini-games": "Összes minijáték",
+    "Enter test code": "Tesztkód megadása",
+    "Use your personal test code to unlock all available mini-games.": "Add meg a személyes tesztkódodat az összes elérhető minijáték feloldásához.",
     "Personal test code": "Személyes tesztkód",
     "Unlock mini-games": "Minijátékok feloldása",
     "The test code is invalid or expired.": "A tesztkód érvénytelen vagy lejárt.",
@@ -534,6 +586,10 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Level not yet completed": "Pálya még nincs teljesítve"
   },
   "ro": {
+    "Private mini-game test": "Test privat pentru minijocuri",
+    "All mini-games": "Toate minijocurile",
+    "Enter test code": "Introdu codul de test",
+    "Use your personal test code to unlock all available mini-games.": "Introdu codul tău personal de test pentru a debloca toate minijocurile disponibile.",
     "Personal test code": "Cod de test personal",
     "Unlock mini-games": "Deblochează minijocurile",
     "The test code is invalid or expired.": "Codul de test este nevalid sau a expirat.",
@@ -575,6 +631,10 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Level not yet completed": "Nivel încă nefinalizat"
   },
   "sr": {
+    "Private mini-game test": "Приватни тест миниигара",
+    "All mini-games": "Све миниигре",
+    "Enter test code": "Унеси тестни код",
+    "Use your personal test code to unlock all available mini-games.": "Унеси лични тестни код да откључаш све доступне миниигре.",
     "Personal test code": "Лични тестни код",
     "Unlock mini-games": "Откључај мини-игре",
     "The test code is invalid or expired.": "Тестни код је неисправан или је истекао.",
@@ -616,6 +676,10 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Level not yet completed": "Ниво још није завршен"
   },
   "uk": {
+    "Private mini-game test": "Приватний тест мініігор",
+    "All mini-games": "Усі мініігри",
+    "Enter test code": "Ввести тестовий код",
+    "Use your personal test code to unlock all available mini-games.": "Введіть особистий тестовий код, щоб розблокувати всі доступні мініігри.",
     "Personal test code": "Особистий тестовий код",
     "Unlock mini-games": "Розблокувати мініігри",
     "The test code is invalid or expired.": "Тестовий код недійсний або термін його дії минув.",
@@ -657,6 +721,10 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Level not yet completed": "Рівень ще не пройдено"
   },
   "th": {
+    "Private mini-game test": "การทดสอบมินิเกมแบบส่วนตัว",
+    "All mini-games": "มินิเกมทั้งหมด",
+    "Enter test code": "กรอกรหัสทดสอบ",
+    "Use your personal test code to unlock all available mini-games.": "กรอกรหัสทดสอบส่วนตัวเพื่อปลดล็อกมินิเกมทั้งหมดที่เล่นได้",
     "Personal test code": "รหัสทดสอบส่วนตัว",
     "Unlock mini-games": "ปลดล็อกมินิเกม",
     "The test code is invalid or expired.": "รหัสทดสอบไม่ถูกต้องหรือหมดอายุแล้ว",
@@ -698,6 +766,10 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Level not yet completed": "ยังไม่ผ่านด่าน"
   },
   "zh": {
+    "Private mini-game test": "私密迷你游戏测试",
+    "All mini-games": "全部迷你游戏",
+    "Enter test code": "输入测试码",
+    "Use your personal test code to unlock all available mini-games.": "输入你的个人测试码即可解锁所有可玩的迷你游戏。",
     "Personal test code": "个人测试码",
     "Unlock mini-games": "解锁迷你游戏",
     "The test code is invalid or expired.": "测试码无效或已过期。",
@@ -739,6 +811,10 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Level not yet completed": "关卡尚未完成"
   },
   "vi": {
+    "Private mini-game test": "Thử nghiệm trò chơi nhỏ riêng tư",
+    "All mini-games": "Tất cả trò chơi nhỏ",
+    "Enter test code": "Nhập mã thử nghiệm",
+    "Use your personal test code to unlock all available mini-games.": "Nhập mã thử nghiệm cá nhân để mở khóa tất cả trò chơi nhỏ hiện có.",
     "Personal test code": "Mã thử nghiệm cá nhân",
     "Unlock mini-games": "Mở khóa trò chơi nhỏ",
     "The test code is invalid or expired.": "Mã thử nghiệm không hợp lệ hoặc đã hết hạn.",

@@ -206,6 +206,11 @@ test('dialogs preserve future-only mini-games and route trades into the supplied
   assert.equal(arcade.filter(node=>node.type==='button').length,2);
   assert.ok(arcade.some(node=>node.type==='button'&&node.props.className==='galaxy-primary'));
   assert.ok(arcade.every(node=>node.type!=='iframe'));
+  let enter=0;
+  const locked=elements(Dialog({...props,selection:{kind:'mini',level:5},onEnterTestCode:()=>enter++}));
+  assert.equal(text(locked.find(node=>node.type==='h2')),'Privater Minispieltest');
+  locked.find(node=>node.type==='button'&&text(node)==='Testcode eingeben').props.onClick();
+  assert.equal(enter,1);
   const trade=elements(Dialog({...props,selection:{kind:'trade',level:50}}));
   trade.filter(node=>node.type==='button'&&node.props.className!=='galaxy-dialog-close').forEach(node=>node.props.onClick());
   assert.deepEqual(shop,['shop','hangar']);
