@@ -1,6 +1,8 @@
 /** V3 labels plus complete native map copy for all 19 currently selectable languages. */
 export const galaxyMapTranslations: Record<string, Record<string, string>> = {
   "en": {
+    "Admin test · {count} playable": "Admin test · {count} playable",
+    "Scores only count in this test round.": "Scores only count in this test round.",
     "Galaxy map": "GALAXY MAP",
     "500 levels · 50 bosses · 100 mini-games": "500 levels · 50 bosses · 100 mini-games",
     "Mini-game": "Mini-game",
@@ -36,6 +38,8 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Level not yet completed": "Level not yet completed"
   },
   "de": {
+    "Admin test · {count} playable": "Admin-Test · {count} spielbar",
+    "Scores only count in this test round.": "Punkte zählen nur in dieser Testrunde.",
     "Galaxy map": "GALAXIEKARTE",
     "500 levels · 50 bosses · 100 mini-games": "500 Level · 50 Bosse · 100 Minispiele",
     "Mini-game": "Minispiel",
@@ -71,6 +75,8 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Level not yet completed": "Level noch nicht abgeschlossen"
   },
   "es": {
+    "Admin test · {count} playable": "Prueba de administrador · {count} disponibles",
+    "Scores only count in this test round.": "Los puntos solo cuentan en esta ronda de prueba.",
     "Galaxy map": "MAPA GALÁCTICO",
     "500 levels · 50 bosses · 100 mini-games": "500 niveles · 50 jefes · 100 minijuegos",
     "Mini-game": "Minijuego",
@@ -106,6 +112,8 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Level not yet completed": "Nivel aún no completado"
   },
   "fr": {
+    "Admin test · {count} playable": "Test administrateur · {count} jouables",
+    "Scores only count in this test round.": "Les points comptent uniquement dans cette partie de test.",
     "Galaxy map": "CARTE GALACTIQUE",
     "500 levels · 50 bosses · 100 mini-games": "500 niveaux · 50 boss · 100 mini-jeux",
     "Mini-game": "Mini-jeu",
@@ -141,6 +149,8 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Level not yet completed": "Niveau pas encore terminé"
   },
   "pt": {
+    "Admin test · {count} playable": "Teste de administrador · {count} jogáveis",
+    "Scores only count in this test round.": "Os pontos contam apenas nesta ronda de teste.",
     "Galaxy map": "MAPA GALÁCTICO",
     "500 levels · 50 bosses · 100 mini-games": "500 níveis · 50 chefes · 100 minijogos",
     "Mini-game": "Minijogo",
@@ -176,6 +186,8 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Level not yet completed": "Nível ainda não concluído"
   },
   "it": {
+    "Admin test · {count} playable": "Test amministratore · {count} giocabili",
+    "Scores only count in this test round.": "I punti contano solo in questo turno di prova.",
     "Galaxy map": "MAPPA GALATTICA",
     "500 levels · 50 bosses · 100 mini-games": "500 livelli · 50 boss · 100 minigiochi",
     "Mini-game": "Minigioco",
@@ -211,6 +223,8 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Level not yet completed": "Livello non ancora completato"
   },
   "pl": {
+    "Admin test · {count} playable": "Test administratora · {count} dostępnych",
+    "Scores only count in this test round.": "Punkty liczą się tylko w tej rundzie testowej.",
     "Galaxy map": "MAPA GALAKTYKI",
     "500 levels · 50 bosses · 100 mini-games": "500 poziomów · 50 bossów · 100 minigier",
     "Mini-game": "Minigra",
@@ -246,6 +260,8 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Level not yet completed": "Poziom jeszcze nieukończony"
   },
   "tr": {
+    "Admin test · {count} playable": "Yönetici testi · {count} oynanabilir",
+    "Scores only count in this test round.": "Puanlar yalnızca bu test turunda geçerlidir.",
     "Galaxy map": "GALAKSİ HARİTASI",
     "500 levels · 50 bosses · 100 mini-games": "500 bölüm · 50 patron · 100 mini oyun",
     "Mini-game": "Mini oyun",
@@ -281,6 +297,8 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Level not yet completed": "Seviye henüz tamamlanmadı"
   },
   "ru": {
+    "Admin test · {count} playable": "Тест администратора · доступно: {count}",
+    "Scores only count in this test round.": "Очки учитываются только в этом пробном раунде.",
     "Galaxy map": "КАРТА ГАЛАКТИКИ",
     "500 levels · 50 bosses · 100 mini-games": "500 уровней · 50 боссов · 100 мини-игр",
     "Mini-game": "Мини-игра",
@@ -316,6 +334,8 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Level not yet completed": "Уровень ещё не пройден"
   },
   "hr": {
+    "Admin test · {count} playable": "Test za administratore · {count} dostupno",
+    "Scores only count in this test round.": "Bodovi vrijede samo u ovoj probnoj rundi.",
     "Galaxy map": "GALAKTIČKA KARTA",
     "500 levels · 50 bosses · 100 mini-games": "500 razina · 50 šefova · 100 miniigara",
     "Mini-game": "Miniigra",
@@ -351,6 +371,8 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Level not yet completed": "Razina još nije završena"
   },
   "cs": {
+    "Admin test · {count} playable": "Test správce · {count} hratelných",
+    "Scores only count in this test round.": "Body se počítají jen v tomto zkušebním kole.",
     "Galaxy map": "GALAKTICKÁ MAPA",
     "500 levels · 50 bosses · 100 mini-games": "500 úrovní · 50 bossů · 100 miniher",
     "Mini-game": "Minihra",
@@ -386,6 +408,8 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Level not yet completed": "Úroveň zatím nedokončena"
   },
   "sk": {
+    "Admin test · {count} playable": "Test správcu · {count} hrateľných",
+    "Scores only count in this test round.": "Body sa počítajú iba v tomto skúšobnom kole.",
     "Galaxy map": "GALAKTICKÁ MAPA",
     "500 levels · 50 bosses · 100 mini-games": "500 úrovní · 50 bossov · 100 minihier",
     "Mini-game": "Minihra",
@@ -421,6 +445,8 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Level not yet completed": "Úroveň zatiaľ nedokončená"
   },
   "hu": {
+    "Admin test · {count} playable": "Adminisztrátori teszt · {count} játszható",
+    "Scores only count in this test round.": "A pontok csak ebben a tesztkörben számítanak.",
     "Galaxy map": "GALAXISTÉRKÉP",
     "500 levels · 50 bosses · 100 mini-games": "500 szint · 50 főellenség · 100 minijáték",
     "Mini-game": "Minijáték",
@@ -456,6 +482,8 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Level not yet completed": "Pálya még nincs teljesítve"
   },
   "ro": {
+    "Admin test · {count} playable": "Test administrator · {count} disponibile",
+    "Scores only count in this test round.": "Punctele contează doar în această rundă de test.",
     "Galaxy map": "HARTA GALAXIEI",
     "500 levels · 50 bosses · 100 mini-games": "500 de niveluri · 50 de șefi · 100 de minijocuri",
     "Mini-game": "Minijoc",
@@ -491,6 +519,8 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Level not yet completed": "Nivel încă nefinalizat"
   },
   "sr": {
+    "Admin test · {count} playable": "Администраторски тест · доступно: {count}",
+    "Scores only count in this test round.": "Поени важе само у овој пробној рунди.",
     "Galaxy map": "GALAKTIČKA MAPA",
     "500 levels · 50 bosses · 100 mini-games": "500 nivoa · 50 bosova · 100 mini-igara",
     "Mini-game": "Mini-igra",
@@ -526,6 +556,8 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Level not yet completed": "Ниво још није завршен"
   },
   "uk": {
+    "Admin test · {count} playable": "Тест адміністратора · доступно: {count}",
+    "Scores only count in this test round.": "Очки зараховуються лише в цьому пробному раунді.",
     "Galaxy map": "КАРТА ГАЛАКТИКИ",
     "500 levels · 50 bosses · 100 mini-games": "500 рівнів · 50 босів · 100 мініігор",
     "Mini-game": "Мінігра",
@@ -561,6 +593,8 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Level not yet completed": "Рівень ще не пройдено"
   },
   "th": {
+    "Admin test · {count} playable": "การทดสอบของผู้ดูแล · เล่นได้ {count} แบบ",
+    "Scores only count in this test round.": "คะแนนนับเฉพาะในรอบทดสอบนี้",
     "Galaxy map": "แผนที่กาแล็กซี",
     "500 levels · 50 bosses · 100 mini-games": "500 ด่าน · 50 บอส · 100 มินิเกม",
     "Mini-game": "มินิเกม",
@@ -596,6 +630,8 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Level not yet completed": "ยังไม่ผ่านด่าน"
   },
   "zh": {
+    "Admin test · {count} playable": "管理员测试 · {count} 个可玩",
+    "Scores only count in this test round.": "积分仅在本轮测试中有效。",
     "Galaxy map": "星系地图",
     "500 levels · 50 bosses · 100 mini-games": "500 关 · 50 位首领 · 100 个小游戏",
     "Mini-game": "小游戏",
@@ -631,6 +667,8 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Level not yet completed": "关卡尚未完成"
   },
   "vi": {
+    "Admin test · {count} playable": "Thử nghiệm quản trị · {count} bản chơi được",
+    "Scores only count in this test round.": "Điểm chỉ được tính trong lượt thử nghiệm này.",
     "Galaxy map": "BẢN ĐỒ THIÊN HÀ",
     "500 levels · 50 bosses · 100 mini-games": "500 màn · 50 trùm · 100 trò chơi nhỏ",
     "Mini-game": "Trò chơi nhỏ",

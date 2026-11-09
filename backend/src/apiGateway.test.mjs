@@ -24,6 +24,42 @@ const backendFixture = () => {
   } };
 };
 
+test('Galaxy Arcade is isolated to the enabled Testnet preview and requires a verified Pi owner', async t => {
+  const key = 'ab'.repeat(32);
+  const env = { VERCEL_ENV: 'preview', VERCEL_PROJECT_PRODUCTION_URL: 'cryptoid-evolution-testnet.vercel.app', CRYPTOID_GALAXY_ARCADE_KEY: key };
+  const ownerChecks = [];
+  t.mock.method(globalThis, 'fetch', async (url, options) => {
+    assert.equal(String(url), 'https://cryptoid-evolution.vercel.app/api/user/me');
+    assert.deepEqual(Object.keys(options.headers).sort(), ['authorization', 'x-cryptoid-app-network']);
+    assert.equal(options.headers['x-cryptoid-app-network'], 'testnet');
+    const token = options.headers.authorization;
+    ownerChecks.push(token);
+    return Response.json({ user: { uid: token }, canAdmin: token === 'Bearer owner' });
+  });
+  const check = async (environment, path, { token, method = 'GET' } = {}) => {
+    const gateway = createApiGateway(async () => { throw new Error('Arcade must not start a local database'); }, () => environment);
+    const res = response();
+    await gateway({ method, url: `/api/index?path=${encodeURIComponent(path)}`, headers: {
+      host: 'preview.vercel.app', 'x-cryptoid-admin-test': '1', cookie: 'connect.sid=stale', ...(token ? { authorization: `Bearer ${token}` } : {}),
+    } }, res);
+    assert.equal(res.headers['Cache-Control'], 'private, no-store');
+    return res;
+  };
+  const route = 'admin/galaxy-minigames';
+  assert.equal((await check({ ...env, VERCEL_ENV: 'production' }, `${route}/5`, { token: 'owner' })).code, 404);
+  assert.equal((await check({ ...env, VERCEL_PROJECT_PRODUCTION_URL: 'cryptoid-evolution.vercel.app' }, route, { token: 'owner' })).code, 404);
+  assert.equal((await check({ ...env, CRYPTOID_GALAXY_ARCADE_KEY: undefined }, route, { token: 'owner' })).code, 404);
+  assert.equal((await check(env, `${route}/5`)).code, 401);
+  assert.equal((await check(env, route, { method: 'POST', token: 'owner' })).code, 405);
+  assert.deepEqual(ownerChecks, []);
+  assert.equal((await check(env, `${route}/5`, { token: 'other' })).code, 403);
+  const allowed = await check(env, route, { token: 'owner' });
+  assert.equal(allowed.code, 200);
+  assert.deepEqual(allowed.body.stations.map(station => station.level), Array.from({ length: 40 }, (_, i) => (i + 1) * 5));
+  assert.equal((await check(env, `${route}/205`, { token: 'owner' })).code, 404);
+  assert.deepEqual(ownerChecks, ['Bearer other', 'Bearer owner', 'Bearer owner']);
+});
+
 test('real Vercel entry forwards the deletion guard without blocking an active Testnet login', async t => {
   const keys = ['VERCEL_ENV', 'VERCEL_PROJECT_PRODUCTION_URL', 'CRYPTOID_TESTNET_ACCOUNT_DELETION'];
   const previous = keys.map(key => process.env[key]);

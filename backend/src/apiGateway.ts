@@ -1,6 +1,7 @@
 import { hangarCatalog } from "./hangarCatalog";
 import { communityLocale, translateCommunity } from "./communityTranslation";
 import { testnetAccountDeletionEnabled } from './playerAdministration';
+import { serveGalaxyArcade } from "./galaxyArcade";
 
 const productionBackendOrigin = "https://cryptoid-evolution.vercel.app";
 
@@ -13,6 +14,7 @@ type GatewayEnvironment = {
   VERCEL_ENV?: string;
   VERCEL_PROJECT_PRODUCTION_URL?: string;
   CRYPTOID_TESTNET_BACKEND?: string;
+  CRYPTOID_GALAXY_ARCADE_KEY?: string;
 };
 
 const localTestnetEnabled = (env: GatewayEnvironment) =>
@@ -120,6 +122,7 @@ export const createApiGateway = (
     VERCEL_ENV: process.env.VERCEL_ENV,
     VERCEL_PROJECT_PRODUCTION_URL: process.env.VERCEL_PROJECT_PRODUCTION_URL,
     CRYPTOID_TESTNET_BACKEND: process.env.CRYPTOID_TESTNET_BACKEND,
+    CRYPTOID_GALAXY_ARCADE_KEY: process.env.CRYPTOID_GALAXY_ARCADE_KEY,
   }),
 ) => {
   let ready: Promise<Backend> | undefined;
@@ -131,6 +134,11 @@ export const createApiGateway = (
       const env = environment();
       const testnet = isTestnetDeployment(req, env);
       const localTestnet = localTestnetEnabled(env);
+      const arcade = /^admin\/galaxy-minigames(?:\/(.*))?$/.exec(path);
+      if (arcade) {
+        const key = testnet && env.VERCEL_ENV === "preview" ? env.CRYPTOID_GALAXY_ARCADE_KEY : undefined;
+        return await serveGalaxyArcade(req, res, arcade[1], key, new URL("/api/user/me", productionBackendOrigin));
+      }
       const powerRoute = path === "hangar/power" && req.method === "GET"
         || path === "hangar/power/activate" && req.method === "POST";
       const authenticatedLocal = localTestnet || /^Bearer\s+\S+$/i.test(req.headers?.authorization || "");

@@ -13,3 +13,49 @@
 .galaxy-dialog{position:fixed;width:min(calc(100% - 24px),520px);max-height:85vh;max-height:85dvh;border:1px solid #aa9fc980;border-radius:22px;padding:0;color:#eaf0ff;background:#0b142b;overflow:auto;overscroll-behavior:contain;box-shadow:0 20px 80px #000a}.galaxy-dialog::backdrop{background:#020516cc;backdrop-filter:blur(4px)}.galaxy-dialog-content{padding:20px 20px calc(env(safe-area-inset-bottom,0px) + 20px)}.galaxy-dialog header{display:flex;align-items:center;justify-content:space-between;gap:12px;color:#9eb8d5;font-size:12px}.galaxy-dialog h2{font-size:23px;color:var(--galaxy-gold);line-height:1.25;margin:12px 0 18px}.galaxy-dialog p{font-size:14px;line-height:1.6}.galaxy-dialog-close{width:44px;height:44px;font-size:26px!important}.galaxy-dialog-boss{height:160px;display:grid;place-items:center;background:radial-gradient(ellipse,#27354b,#081128);border-radius:18px;border:1px solid #c6a47650}.galaxy-dialog-portal,.galaxy-dialog-station{display:grid;place-items:center;margin:16px auto;width:80px;height:80px;border-radius:50%;color:#aafaff;background:radial-gradient(#105571,#09152d);border:1px solid #6eeffc;box-shadow:0 0 20px #1fbad04a;font-size:45px}.galaxy-dialog-station{color:#f6d598;border-color:#f6d598}.galaxy-primary,.galaxy-secondary{width:100%;min-height:44px;padding:10px 14px;margin:6px 0;font-weight:700}.galaxy-primary{color:var(--galaxy-gold)!important;border-color:#cab07580!important;background:linear-gradient(130deg,#443529,#171b31)!important}.galaxy-medals{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}.galaxy-medals span{display:flex;align-items:center;gap:5px;padding:8px 10px;border-radius:8px;border:1px solid #b58c6170;background:#181c30;font-size:12px}.galaxy-medals i{font-style:normal;color:#c39676}.galaxy-medals [data-medal='1'] i{color:#c8d4e9}.galaxy-medals [data-medal='2'] i{color:#f5d598}.galaxy-dialog-footer{color:#b0a1c4;font-size:11px!important;margin:18px 0 0}
 @keyframes galaxy-flight-pulse{to{stroke-dashoffset:-162}}@keyframes galaxy-orbit{to{transform:rotate(360deg)}}@keyframes galaxy-stars{to{opacity:.45}}@keyframes galaxy-planet-drift{50%{transform:translateY(8px) rotate(6deg)}}@keyframes galaxy-nebula{50%{transform:translateY(20px)}}@keyframes galaxy-engine{50%{transform:scaleY(.65);opacity:.7}}@keyframes galaxy-comet{0%,92%{opacity:0;transform:translate(0,0) rotate(-25deg)}94%{opacity:.8}99%,100%{opacity:0;transform:translate(700px,-250px) rotate(-25deg)}}
 .galaxy-sector[data-visible=false] *,.galaxy-sector[data-visible=false] *::after{animation-play-state:paused!important}html[data-motion=reduced] .galaxy-page *,html[data-motion=reduced] .galaxy-page *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}@media(prefers-reduced-motion:reduce){.galaxy-page *,.galaxy-page *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}@media(max-width:360px){.galaxy-toolbar{padding-left:10px;padding-right:10px;gap:5px 9px}.galaxy-toolbar .galaxy-back{padding:8px}.galaxy-toolbar h1{font-size:18px}.galaxy-boss strong{font-size:11px}.galaxy-mini strong{font-size:10px}.galaxy-intro{padding-left:18px;padding-right:18px}}
+
+.galaxy-arcade-dialog {
+  width: min(calc(100% - 12px), 940px);
+  height: calc(100vh - 12px);
+  height: calc(100dvh - 12px);
+  max-height: none;
+  overflow: hidden;
+}
+
+.galaxy-arcade-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.galaxy-arcade-content header {
+  padding: env(safe-area-inset-top, 0px) 8px 0;
+  flex: none;
+  border-bottom: 1px solid #aa9fc94d;
+}
+
+.galaxy-arcade-content h2 {
+  font-size: clamp(13px, 3vw, 18px);
+  margin: 6px 0;
+  overflow-wrap: anywhere;
+}
+
+.galaxy-arcade-return {
+  min-height: 44px;
+  padding: 6px 8px;
+  flex: none;
+  white-space: nowrap;
+}
+
+.galaxy-arcade-frame {
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+  border: 0;
+}
+
+.galaxy-arcade-status {
+  margin: auto;
+  padding: 16px;
+  text-align: center;
+}

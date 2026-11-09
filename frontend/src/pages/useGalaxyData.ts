@@ -18,7 +18,7 @@ export default function useGalaxyData(expectedOwner?: string) {
     let active = true;
     const rememberedAccount = expectedOwner || previousOwner.current || (localStorage.getItem('cryptoid_pi_session') === '1' ? '__signed_in__' : undefined);
     // The marker only forbids falling back to guest data; it is not a user identity.
-    void loadGalaxySnapshot(path => axiosClient.get(path), shipSaveNetwork, guestSnapshot, rememberedAccount === '__signed_in__' ? undefined : rememberedAccount)
+    void loadGalaxySnapshot((path, config) => axiosClient.get(path, config), shipSaveNetwork, guestSnapshot, rememberedAccount === '__signed_in__' ? undefined : rememberedAccount)
       .then(data => {
         if (!active) return;
         if (rememberedAccount && !data.owner) { setStatus('error'); return; }

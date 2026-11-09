@@ -111,6 +111,31 @@ test('network/server failures do not reinterpret old local records as an account
   assert.equal(guests,0);
 });
 
+test('only a verified Testnet owner asks the same-origin preview for playable stations',async()=>{
+  const calls=[], stations=[{level:5,name:'Klassischer Sammelflug'}];
+  const fixture=(network,canAdmin,available=true)=>async(path,options)=>{
+    calls.push([path,options]);
+    if(path==='/admin/galaxy-minigames'&&!available)throw {response:{status:404}};
+    return {data:{
+      '/user/me':{user:{uid:'qa'},canAdmin},
+      '/progress/me':{save:{skin:'grey-scout',color:'grey',highestSector:1}},
+      '/rewards/me':{network,progress:emptyRewardProgress()},
+      '/hangar/inventory':{},
+      '/admin/galaxy-minigames':{stations},
+    }[path]};
+  };
+  const owner=await loadGalaxySnapshot(fixture('testnet',true),'testnet',emptyGalaxySnapshot);
+  assert.equal(owner.progress.completedLevel,0);
+  assert.deepEqual(owner.miniGames,stations);
+  assert.deepEqual(calls.find(([path])=>path==='/admin/galaxy-minigames'),['/admin/galaxy-minigames',{baseURL:'/api'}]);
+  calls.length=0;
+  for (const [network,canAdmin] of [['testnet',false],['mainnet',true]]) {
+    assert.equal((await loadGalaxySnapshot(fixture(network,canAdmin),network,emptyGalaxySnapshot)).miniGames,undefined);
+  }
+  assert.ok(calls.every(([path])=>path!=='/admin/galaxy-minigames'));
+  assert.equal((await loadGalaxySnapshot(fixture('testnet',true,false),'testnet',emptyGalaxySnapshot)).miniGames,undefined);
+});
+
 function component(file,imports,globals={}) {
   const code=ts.transpileModule(readFileSync(new URL(file,import.meta.url),'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,jsx:ts.JsxEmit.ReactJSX}}).outputText;
   const exports={};vm.runInNewContext(code,{exports,require:name=>{
@@ -171,11 +196,16 @@ test('actual sector buttons have labels and independent level, boss, mini-game a
 });
 
 test('dialogs preserve future-only mini-games and route trades into the supplied existing shop',()=>{
-  const shop=[],Dialog=component('./GalaxyInfoDialog.tsx',{...locale,'./galaxyModel':model,'./GalaxyBossArt':{default:()=>null}});
+  const shop=[],Dialog=component('./GalaxyInfoDialog.tsx',{...locale,'./galaxyModel':model,'./GalaxyBossArt':{default:()=>null},'../lib/axiosClient':{axiosClient:{}}});
   const props={progress:model.emptyGalaxyProgress(),onClose:()=>{},onCards:()=>{},onShop:value=>shop.push(value)};
   const mini=elements(Dialog({...props,selection:{kind:'mini',level:5}}));
   assert.equal(mini.filter(node=>node.type==='button').length,1);
   assert.match(text(mini.find(node=>node.type==='h2')),/Minispiel.*Entwicklung/);
+  const arcade=elements(Dialog({...props,selection:{kind:'mini',level:5},miniGameName:'Klassischer Sammelflug'}));
+  assert.equal(text(arcade.find(node=>node.type==='h2')),'Klassischer Sammelflug');
+  assert.equal(arcade.filter(node=>node.type==='button').length,2);
+  assert.ok(arcade.some(node=>node.type==='button'&&node.props.className==='galaxy-primary'));
+  assert.ok(arcade.every(node=>node.type!=='iframe'));
   const trade=elements(Dialog({...props,selection:{kind:'trade',level:50}}));
   trade.filter(node=>node.type==='button'&&node.props.className!=='galaxy-dialog-close').forEach(node=>node.props.onClick());
   assert.deepEqual(shop,['shop','hangar']);
