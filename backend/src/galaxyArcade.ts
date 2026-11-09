@@ -1,13 +1,12 @@
 import { createDecipheriv } from "node:crypto";
 import { gunzipSync } from "node:zlib";
 import type { Request, Response } from "express";
-import { galaxyArcadeNames } from "./galaxyArcadePayload";
+import { galaxyArcadeNames, galaxyArcadePayload } from "./galaxyArcadePayload";
 
 const stations = galaxyArcadeNames.map((name, index) => ({ level: (index + 1) * 5, name }));
 const arcadePolicy = "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob:; media-src data: blob:";
 
-async function stationDocument(index: number, key: string) {
-  const { galaxyArcadePayload } = await import("./galaxyArcadePayload");
+function stationDocument(index: number, key: string) {
   const payload = Buffer.from(galaxyArcadePayload, "base64");
   const decipher = createDecipheriv("aes-256-gcm", Buffer.from(key, "hex"), payload.subarray(0, 12));
   decipher.setAuthTag(payload.subarray(12, 28));
@@ -55,7 +54,7 @@ export async function serveGalaxyArcade(
     if (level === undefined) return res.json({ stations });
     const index = stations.findIndex(station => String(station.level) === level);
     if (index === -1) return res.status(404).json({ error: "not_found" });
-    return res.json({ html: await stationDocument(index, key) });
+    return res.json({ html: stationDocument(index, key) });
   } catch {
     return res.status(503).json({ error: "minigame_unavailable" });
   }
