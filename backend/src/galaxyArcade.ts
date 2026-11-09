@@ -1,6 +1,7 @@
 import { createDecipheriv, createHash, createHmac, timingSafeEqual } from "node:crypto";
 import { gunzipSync } from "node:zlib";
 import type { Request, Response } from "express";
+import { withArcadeAudio } from "./galaxyArcadeAudio";
 import { withArcadeTouchControls } from "./galaxyArcadeControls";
 import { galaxyArcadeNames, galaxyArcadePayload } from "./galaxyArcadePayload";
 import { withArcadeRetroStyle } from "./galaxyArcadeRetro";
@@ -49,14 +50,14 @@ const playStyles = `<style>
   #galaxy-arcade-startup { position: fixed; inset: var(--arcade-nav-height) 0 0; z-index: 19; display: grid; place-items: center; padding: 16px; text-align: center; background: #081222; color: #eaf0ff; }
 </style>`;
 
-function stationDocument(index: number, key: string, returnHref?: string) {
+function stationDocument(index: number, key: string, musicKey: string | undefined, returnHref?: string) {
   const payload = Buffer.from(galaxyArcadePayload, "base64");
   const decipher = createDecipheriv("aes-256-gcm", Buffer.from(key, "hex"), payload.subarray(0, 12));
   decipher.setAuthTag(payload.subarray(12, 28));
   const html = gunzipSync(Buffer.concat([decipher.update(payload.subarray(28)), decipher.final()])).toString("utf8");
   const game = Math.floor(index / 5) + 1;
   const variant = index % 5 + 1;
-  const document = withArcadeRetroStyle(withArcadeTouchControls(html))
+  const document = withArcadeAudio(withArcadeRetroStyle(withArcadeTouchControls(html)), musicKey)
     .replace("<head>", `<head><meta http-equiv="Content-Security-Policy" content="${arcadePolicy}">`)
     // A frame queued before Start or Resume can carry an older timestamp.
     // Keep the round clock monotonic so the next frame uses the current baseline.
@@ -100,6 +101,7 @@ export async function serveGalaxyArcade(
   key: string | undefined,
   ownerEndpoint: URL,
   invitationConfig?: string,
+  musicKey?: string,
 ) {
   res.setHeader("Cache-Control", "private, no-store");
   if (!key || !hexDigest.test(key)) return res.status(404).json({ error: "not_found" });
@@ -161,8 +163,8 @@ export async function serveGalaxyArcade(
       }
       return res.status(204).send("");
     }
-    if (playPage) return sendPlayPage(res, 200, stationDocument(index, key, returnHref));
-    return res.json({ html: stationDocument(index, key) });
+    if (playPage) return sendPlayPage(res, 200, stationDocument(index, key, musicKey, returnHref));
+    return res.json({ html: stationDocument(index, key, musicKey) });
   } catch {
     if (playPage) return sendPlayPage(res, 503, playError(returnHref, "Das Minispiel ist gerade nicht verfügbar. Versuche es erneut über die Galaxiekarte."));
     return res.status(503).json({ error: "minigame_unavailable" });

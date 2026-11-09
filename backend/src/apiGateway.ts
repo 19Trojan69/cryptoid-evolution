@@ -16,6 +16,7 @@ type GatewayEnvironment = {
   CRYPTOID_TESTNET_BACKEND?: string;
   CRYPTOID_GALAXY_ARCADE_KEY?: string;
   CRYPTOID_GALAXY_ARCADE_INVITATION?: string;
+  CRYPTOID_GALAXY_ARCADE_MUSIC_KEY?: string;
 };
 
 const localTestnetEnabled = (env: GatewayEnvironment) =>
@@ -125,6 +126,7 @@ export const createApiGateway = (
     CRYPTOID_TESTNET_BACKEND: process.env.CRYPTOID_TESTNET_BACKEND,
     CRYPTOID_GALAXY_ARCADE_KEY: process.env.CRYPTOID_GALAXY_ARCADE_KEY,
     CRYPTOID_GALAXY_ARCADE_INVITATION: process.env.CRYPTOID_GALAXY_ARCADE_INVITATION,
+    CRYPTOID_GALAXY_ARCADE_MUSIC_KEY: process.env.CRYPTOID_GALAXY_ARCADE_MUSIC_KEY,
   }),
 ) => {
   let ready: Promise<Backend> | undefined;
@@ -139,7 +141,10 @@ export const createApiGateway = (
       const arcade = /^admin\/galaxy-minigames(?:\/(.*))?$/.exec(path);
       if (arcade) {
         const key = testnet && env.VERCEL_ENV === "preview" ? env.CRYPTOID_GALAXY_ARCADE_KEY : undefined;
-        return await serveGalaxyArcade(req, res, arcade[1], key, new URL("/api/user/me", productionBackendOrigin), env.CRYPTOID_GALAXY_ARCADE_INVITATION);
+        return await serveGalaxyArcade(
+          req, res, arcade[1], key, new URL("/api/user/me", productionBackendOrigin),
+          env.CRYPTOID_GALAXY_ARCADE_INVITATION, env.CRYPTOID_GALAXY_ARCADE_MUSIC_KEY,
+        );
       }
       const powerRoute = path === "hangar/power" && req.method === "GET"
         || path === "hangar/power/activate" && req.method === "POST";
