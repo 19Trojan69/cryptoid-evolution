@@ -5,6 +5,7 @@ import { withArcadeAudio } from "./galaxyArcadeAudio";
 import { withArcadeTouchControls } from "./galaxyArcadeControls";
 import { galaxyArcadeNames, galaxyArcadePayload } from "./galaxyArcadePayload";
 import { withArcadeRetroStyle } from "./galaxyArcadeRetro";
+import { withArcadeSurvival } from "./galaxyArcadeSurvival";
 
 const stations = galaxyArcadeNames.map((name, index) => ({ level: (index + 1) * 5, name }));
 const previewLevels = stations.map(station => station.level);
@@ -59,7 +60,8 @@ function stationDocument(index: number, key: string, musicKey: string | undefine
   const html = gunzipSync(Buffer.concat([decipher.update(payload.subarray(28)), decipher.final()])).toString("utf8");
   const game = Math.floor(index / 5) + 1;
   const variant = index % 5 + 1;
-  const document = withArcadeAudio(withArcadeRetroStyle(withArcadeTouchControls(html)), musicKey)
+  const mission = returnHref ? withArcadeSurvival(html, game, variant) : html;
+  const document = withArcadeAudio(withArcadeRetroStyle(withArcadeTouchControls(mission)), musicKey)
     .replace("<head>", `<head><meta http-equiv="Content-Security-Policy" content="${arcadePolicy}">`)
     // A frame queued before Start or Resume can carry an older timestamp.
     // Keep the round clock monotonic so the next frame uses the current baseline.
