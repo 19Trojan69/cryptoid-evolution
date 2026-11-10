@@ -1,7 +1,8 @@
 import { bossManifest } from './bossManifest.ts';
 import { bossName } from './bossNames.ts';
 import { bossCardAvailable } from './cardAvailability.ts';
-import type { RewardProgress } from './rewardProgress.ts';
+import type { GalaxyProgress } from '../../../backend/src/galaxyProgress.ts';
+export { emptyGalaxyProgress, galaxyProgress, type GalaxyProgress } from '../../../backend/src/galaxyProgress.ts';
 
 /** Map-only names: never replace the campaign's sector or chapter definitions. */
 export const galaxyRegions = [
@@ -53,29 +54,6 @@ export const galaxyRoute = (stations: readonly GalaxyStation[]) => {
   const last = stations[stations.length - 1];
   return `${path} C ${last.x} ${last.y + 70} 50 ${GALAXY_REGION_HEIGHT - 70} 50 ${GALAXY_REGION_HEIGHT}`;
 };
-
-const stage = (value: unknown) => typeof value === 'number' && Number.isSafeInteger(value) && value >= 1 && value <= 500 ? value : 1;
-export type GalaxyProgress = { currentLevel: number; completedLevel: number; bossWins: Readonly<Record<number, number>> };
-export const emptyGalaxyProgress = (): GalaxyProgress => ({ currentLevel: 1, completedLevel: 0, bossWins: {} });
-
-/** Derived read model only. highestSector is the next reached stage, not completion. */
-export function galaxyProgress(rewards: RewardProgress, highestSector = 1): GalaxyProgress {
-  let completed = Math.max(stage(highestSector) - 1, stage(rewards.highestLevel) - 1);
-  for (const [chapter, blocks] of Object.entries(rewards.linkedBlocks)) {
-    const id = Number(chapter);
-    if (Number.isInteger(id) && id >= 1 && id <= 50 && Number.isInteger(blocks) && blocks >= 1 && blocks <= 9) completed = Math.max(completed, (id - 1) * 10 + blocks);
-  }
-  const wins: Record<number, number> = {};
-  for (const [boss, count] of Object.entries(rewards.bossWins)) {
-    const id = Number(boss);
-    if (Number.isInteger(id) && id >= 1 && id <= 50 && Number.isSafeInteger(count) && count > 0) {
-      wins[id] = count;
-      completed = Math.max(completed, id * 10);
-    }
-  }
-  completed = Math.min(500, completed);
-  return { completedLevel: completed, currentLevel: Math.min(500, completed + 1), bossWins: wins };
-}
 
 export const galaxyBossState = (progress: GalaxyProgress, id: number) => {
   const defeated = Number.isInteger(id) && id >= 1 && id <= 50 && (progress.bossWins[id] ?? 0) > 0;

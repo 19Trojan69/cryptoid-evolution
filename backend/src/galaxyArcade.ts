@@ -66,6 +66,22 @@ function canOpenPlayPage(cookie: string | undefined, level: string, key: string)
   return !!match && Number(match[1]) > Date.now() && sameDigest(match[2], playSignature(key, level, match[1]));
 }
 
+export function publicArcadeTicket(key: string, level: string) {
+  const expires = String(Date.now() + playLifetime * 1000);
+  return `${expires}.${playSignature(key, `retro/${level}`, expires)}`;
+}
+
+export function publicArcadeCatalog(language: string | null, owner: string | null = null, reachedLevel = 0) {
+  const locale = arcadeLocale(language);
+  return {
+    owner,
+    levels: previewLevels,
+    labels: arcadePanelLabels(locale),
+    stations: stations.flatMap(({ level, name }, index) =>
+      level <= reachedLevel ? [{ level, ...arcadeStationCopy(locale, index, name) }] : []),
+  };
+}
+
 function previewInvitation(config: string | undefined, key: string) {
   const match = /^([0-9a-f]{64}):(\d{13})$/.exec(config ?? "");
   if (!match) return undefined;
@@ -201,21 +217,18 @@ function playError(returnHref: string, message: string) {
 }
 
 export function servePublicGalaxyArcade(
-  req: Pick<Request, "method">,
+  req: Pick<Request, "method" | "body">,
   res: Pick<Response, "setHeader" | "status" | "json" | "send">,
   path: string | undefined,
   key: string,
   musicKey: string | undefined,
   language: string | null,
 ) {
-  res.setHeader("Cache-Control", "no-store");
-  if (req.method !== "GET") return res.status(405).json({ error: "method_not_allowed" });
+  res.setHeader("Cache-Control", "private, no-store");
   const locale = arcadeLocale(language);
   if (path === undefined) {
-    return res.json({
-      labels: arcadePanelLabels(locale),
-      stations: stations.map((station, index) => ({ ...station, ...arcadeStationCopy(locale, index, station.name) })),
-    });
+    if (req.method !== "GET") return res.status(405).json({ error: "method_not_allowed" });
+    return res.json(publicArcadeCatalog(language));
   }
   const match = /^(\d+)\/(play|document|standalone)$/.exec(path);
   const index = galaxyArcadeStationIndex(match?.[1]);
@@ -223,6 +236,14 @@ export function servePublicGalaxyArcade(
   const embeddedDocument = match?.[2] === "document";
   const nonce = match?.[2] === "standalone" ? randomBytes(16).toString("base64") : undefined;
   const returnHref = "/galaxy?arcade-return=1";
+  // The play document is a normal same-tab form navigation. It only needs a
+  // short-lived ticket for this station, without relying on WebView cookies.
+  const ticket = req.method === "POST" && typeof req.body?.ticket === "string" ? req.body.ticket : undefined;
+  if (!canOpenPlayPage(ticket, `retro/${stations[index].level}`, key)) {
+    if (embeddedDocument) return res.status(403).json({ error: "level_locked" });
+    const locked = playError(returnHref, "Das Minispiel ist gerade nicht verfügbar. Versuche es erneut über die Galaxiekarte.");
+    return sendPlayPage(res, 403, withArcadePublicLocale(locked, locale, index, stations[index].name), "public", nonce);
+  }
   try {
     const html = stationDocument(index, key, musicKey, returnHref, locale, nonce);
     if (embeddedDocument) {

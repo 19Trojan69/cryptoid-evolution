@@ -3,15 +3,16 @@ import { useLocale } from '../i18n';
 import { axiosClient } from '../lib/axiosClient';
 import GalaxyBossArt from './GalaxyBossArt';
 import GalaxyArcadePanel from './GalaxyArcadePanel';
-import type { ArcadeLabels, ArcadeRecord, ArcadeStation } from './galaxyArcadeRecords';
+import { retroMiniGameName, type ArcadeLabels, type ArcadeRecord, type ArcadeStation } from './galaxyArcadeRecords';
 import { galaxyBossState, galaxyPoint, type GalaxyProgress, type GalaxySelection } from './galaxyModel';
 
-type Props = { selection: GalaxySelection; progress: GalaxyProgress; miniGameName?: string; onEnterTestCode?: () => void; onLaunch: (path: string) => void; onClose: () => void; onShop: (view: 'shop' | 'hangar') => void; onCards: () => void;
-  arcade?: { game: ArcadeStation; labels: ArcadeLabels; record: ArcadeRecord | null; owner: string | null; play: () => void } };
-export default function GalaxyInfoDialog({ selection, progress, miniGameName, arcade, onEnterTestCode, onLaunch, onClose, onShop, onCards }: Props) {
+type Props = { selection: GalaxySelection; progress: GalaxyProgress; miniGameName?: string; lockedRetro?: 'level' | 'sign-in'; onEnterTestCode?: () => void; onLaunch: (path: string) => void; onClose: () => void; onShop: (view: 'shop' | 'hangar') => void; onCards: () => void;
+  arcade?: { game: ArcadeStation; labels: ArcadeLabels; record: ArcadeRecord | null; owner: string | null; play: (game: ArcadeStation, ticket: string) => void } };
+export default function GalaxyInfoDialog({ selection, progress, miniGameName, lockedRetro, arcade, onEnterTestCode, onLaunch, onClose, onShop, onCards }: Props) {
   const { t } = useLocale();
   const dialog = useRef<HTMLDialogElement>(null);
   const [launch, setLaunch] = useState<'idle' | 'loading' | 'error'>('idle');
+  const game = arcade?.game, play = arcade?.play;
   useEffect(() => {
     const previous = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     const element = dialog.current;
@@ -20,32 +21,44 @@ export default function GalaxyInfoDialog({ selection, progress, miniGameName, ar
     return () => { element?.close(); previous?.focus({ preventScroll: true }); };
   }, []);
   useEffect(() => {
-    if (launch !== 'loading') return;
+    if (launch !== 'loading' || !miniGameName) return;
     const controller = new AbortController();
-    const path = `/admin/galaxy-minigames/${selection.level}`;
-    void axiosClient.post(`${path}/launch`, null, { baseURL: '/api', signal: controller.signal }).then(({ status }) => {
+    const path = `${game ? '' : '/admin'}/galaxy-minigames/${selection.level}`;
+    void axiosClient.post<{ ticket?: string }>(`${path}/launch`, null, { baseURL: '/api', signal: controller.signal }).then(({ status, data }) => {
       if (controller.signal.aborted) return;
+      if (game && play) {
+        const ticket = data?.ticket;
+        if (status !== 200 || typeof ticket !== 'string' || !/^\d{13}\.[a-f0-9]{64}$/.test(ticket)) throw new Error('Invalid arcade ticket');
+        play(game, ticket);
+        return;
+      }
       if (status !== 204) throw new Error('Invalid arcade launch response');
       onLaunch(`/api${path}/play`);
     }).catch(() => { if (!controller.signal.aborted) setLaunch('error'); });
     return () => controller.abort();
-  }, [launch, selection.level, onLaunch]);
+  }, [launch, selection.level, game, play, onLaunch, miniGameName]);
   const station = galaxyPoint(selection.level);
   const boss = selection.kind === 'boss' ? station.boss : undefined;
   const state = boss ? galaxyBossState(progress, boss.id) : undefined;
-  const title = boss ? station.name : selection.kind === 'mini' ? miniGameName ?? (onEnterTestCode ? t('Private mini-game test') : `${t('Mini-game')} · ${t('In development')}`) : selection.kind === 'trade' ? t('Trading station') : `${t('Level')} ${selection.level}`;
+  const title = boss ? station.name : selection.kind === 'mini' ? miniGameName ?? (lockedRetro ? retroMiniGameName : onEnterTestCode ? t('Private mini-game test') : `${t('Mini-game')} · ${t('In development')}`) : selection.kind === 'trade' ? t('Trading station') : `${t('Level')} ${selection.level}`;
+  const playLabel = t(launch === 'loading' ? 'Loading…' : launch === 'error' ? 'Retry' : 'Play');
   return <dialog ref={dialog} className="galaxy-dialog" aria-labelledby="galaxy-dialog-title" onCancel={event => { event.preventDefault(); onClose(); }} onClick={event => { if (event.target === event.currentTarget) onClose(); }}>
     <div className="galaxy-dialog-content">
-      <header><span>{t('Level')} {selection.level}</span><button className="galaxy-dialog-close" type="button" onClick={onClose} aria-label={t('Close')}>×</button></header>
+      <header><span>{miniGameName ? `${retroMiniGameName} · ` : ''}{t('Level')} {selection.level}</span><button className="galaxy-dialog-close" type="button" onClick={onClose} aria-label={t('Close')}>×</button></header>
       <h2 id="galaxy-dialog-title">{title}</h2>
       {arcade ? <>
-        <button type="button" className="galaxy-primary" onClick={arcade.play}>{t('Play')}</button>
+        {launch === 'error' && <p role="alert">{t('This page could not be loaded.')}</p>}
+        <button type="button" className="galaxy-primary" disabled={launch === 'loading'} onClick={() => setLaunch('loading')}>{playLabel}</button>
         <GalaxyArcadePanel key={arcade.owner ?? 'guest'} game={arcade.game} labels={arcade.labels} record={arcade.record} canRate={!!arcade.owner}/>
+      </> : lockedRetro ? <>
+        <div className="galaxy-dialog-portal" aria-hidden="true">✧</div>
+        <p className="galaxy-note">{t('Reach level {level} to unlock this game.', { level: selection.level })}</p>
+        {lockedRetro === 'sign-in' && <p>{t('Sign in with Pi')}</p>}
       </> : miniGameName ? <>
         <div className="galaxy-dialog-portal" aria-hidden="true">✧</div>
         <p className="galaxy-note">{t('Scores only count in this test round.')}</p>
         {launch === 'error' && <p role="alert">{t('Private test access is unavailable.')}</p>}
-        <button type="button" className="galaxy-primary" disabled={launch === 'loading'} onClick={() => setLaunch('loading')}>{t(launch === 'loading' ? 'Loading…' : launch === 'error' ? 'Retry' : 'Play')}</button>
+        <button type="button" className="galaxy-primary" disabled={launch === 'loading'} onClick={() => setLaunch('loading')}>{playLabel}</button>
       </> : onEnterTestCode ? <>
         <div className="galaxy-dialog-portal" aria-hidden="true">✧</div>
         <p className="galaxy-note">{t('Use your personal test code to unlock all available mini-games.')}</p>
@@ -70,7 +83,7 @@ export default function GalaxyInfoDialog({ selection, progress, miniGameName, ar
         {station.boss && <button type="button" className="galaxy-secondary" onClick={onClose}>{t('Close')}</button>}
         <p>{t('Exploring the map does not start a mission or change your progress.')}</p>
       </>}
-      {!miniGameName && !onEnterTestCode && <p className="galaxy-dialog-footer">{t('Preview · In development')}</p>}
+      {!miniGameName && !onEnterTestCode && !lockedRetro && <p className="galaxy-dialog-footer">{t('Preview · In development')}</p>}
     </div>
   </dialog>;
 }

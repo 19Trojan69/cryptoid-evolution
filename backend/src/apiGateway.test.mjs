@@ -7,6 +7,7 @@ import { runInNewContext } from 'node:vm';
 const require = createRequire(import.meta.url);
 const { createApiGateway } = require('../build/apiGateway.js');
 const { arcadeLocales } = require('../build/galaxyArcadeCopy.js');
+const { publicArcadeCatalog, publicArcadeTicket } = require('../build/galaxyArcade.js');
 const { hangarCatalog } = require('../build/hangarCatalog.js');
 const ts = require('typescript');
 
@@ -35,36 +36,48 @@ test('the official Testnet Arcade serves localized public stations with a distin
   };
   const { calls, backend } = backendFixture();
   const gateway = createApiGateway(async () => backend, () => env);
-  const check = async (path, locale = 'en') => {
+  const check = async (path, { locale = 'en', method = 'GET', body, headers = {} } = {}) => {
     const res = response();
-    await gateway({ method: 'GET', url: '/api/index?' + new URLSearchParams({ path, lang: locale }), headers: {} }, res);
+    await gateway({ method, body, url: '/api/index?' + new URLSearchParams({ path, lang: locale }), headers }, res);
     return res;
   };
   const base = 'galaxy-minigames';
   assert.equal(arcadeLocales.length, 19);
   for (const locale of arcadeLocales) {
-    const { code, body } = await check(base, locale);
+    const { code, body } = await check(base, { locale });
     assert.equal(code, 200);
-    assert.equal(new Set(body.stations.map(station => station.name)).size, 40);
+    assert.deepEqual(body.levels, Array.from({ length: 40 }, (_, i) => (i + 1) * 5));
+    assert.equal(body.owner, null);
+    assert.deepEqual(body.stations, []);
     assert.ok(Object.values(body.labels).every(Boolean));
-    for (const [index, station] of body.stations.entries()) {
+    const unlocked = publicArcadeCatalog(locale, 'pilot', 200);
+    assert.equal(new Set(unlocked.stations.map(station => station.name)).size, 40);
+    for (const [index, station] of unlocked.stations.entries()) {
       assert.equal(station.level, (index + 1) * 5);
       assert.ok(station.description && station.scoring && station.medalLabel && station.rulesVersion);
       assert.deepEqual(station.medalGoals, [...station.medalGoals].sort((a, b) => a - b));
     }
   }
-  assert.notEqual((await check(base, 'th')).body.stations[7].description, (await check(base, 'de')).body.stations[7].description);
-  assert.deepEqual((await check(base, 'zh-Hans')).body, (await check(base, 'zh')).body);
-  const playUnavailable = await check(base + '/5/play');
+  assert.notEqual(publicArcadeCatalog('th', 'pilot', 40).stations[7].description, publicArcadeCatalog('de', 'pilot', 40).stations[7].description);
+  assert.deepEqual((await check(base, { locale: 'zh-Hans' })).body, (await check(base, { locale: 'zh' })).body);
+  assert.equal((await check(base + '/5/launch', { method: 'POST' })).code, 401);
+  assert.equal((await check(base + '/5/launch')).code, 405);
+  assert.equal((await check(base + '/5/play')).code, 403);
+  assert.equal((await check(base + '/5/document')).code, 403);
+  assert.equal((await check(base + '/5/standalone')).code, 403);
+  const launch = { method: 'POST', body: { ticket: publicArcadeTicket(env.CRYPTOID_GALAXY_ARCADE_KEY, '5') } };
+  assert.equal((await check(base + '/10/standalone', launch)).code, 403);
+  assert.equal((await check(base + '/5/standalone', { body: launch.body })).code, 403);
+  const playUnavailable = await check(base + '/5/play', launch);
   assert.equal(playUnavailable.code, 503); // The fixture key does not decrypt the released assets.
   assert.match(playUnavailable.headers['Content-Security-Policy'], /sandbox allow-scripts;.*frame-ancestors 'self' https:\/\/cryptoidevo3025\.pinet\.com$/);
   assert.equal(playUnavailable.headers['X-Frame-Options'], undefined);
   assert.match(playUnavailable.body, /postMessage\(\{ type: 'cryptoid:arcade-error'/);
-  const documentUnavailable = await check(base + '/5/document');
+  const documentUnavailable = await check(base + '/5/document', launch);
   assert.equal(documentUnavailable.code, 503);
   assert.deepEqual(documentUnavailable.body, { error: 'arcade_unavailable' });
   assert.equal((await check(base + '/205/document')).code, 404);
-  const standaloneUnavailable = await check(base + '/5/standalone');
+  const standaloneUnavailable = await check(base + '/5/standalone', launch);
   assert.equal(standaloneUnavailable.code, 503);
   assert.equal(standaloneUnavailable.headers['Content-Type'], 'text/html; charset=utf-8');
   assert.match(standaloneUnavailable.headers['Content-Security-Policy'], /^default-src 'none'; script-src 'nonce-[A-Za-z0-9+/]{22}=='/);
@@ -74,6 +87,11 @@ test('the official Testnet Arcade serves localized public stations with a distin
   assert.equal((await check(base + '/205/standalone')).code, 404);
   assert.equal((await check(base + '/205/rating')).code, 404);
   assert.equal(calls.length, 0);
+  const headers = { authorization: 'Bearer pilot' };
+  assert.equal((await check(base, { headers })).code, 200);
+  assert.equal(calls.at(-1).network, 'testnet');
+  assert.equal((await check(base + '/5/launch', { method: 'POST', headers })).code, 200);
+  assert.equal(calls.at(-1).url, '/galaxy-minigames/5/launch?lang=en');
   assert.equal((await check(base + '/5/rating')).code, 200);
   assert.equal(calls.at(-1).network, 'testnet');
   env.VERCEL_ENV = 'preview';

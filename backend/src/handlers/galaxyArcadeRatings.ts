@@ -1,15 +1,10 @@
-import type { Router, Request } from "express";
+import type { Router } from "express";
 import { galaxyArcadeStationIndex } from "../galaxyArcade";
 import { rewardNetwork } from "../rewardNetwork";
+import { verifiedArcadeUser } from "./galaxyArcadeAccess";
 import "../types/session";
 
 export const galaxyArcadeRatingField = "testnetGalaxyArcadeRatings";
-
-function ratingUser(req: Request) {
-  const token = /^Bearer\s+(\S+)$/i.exec(req.get("authorization") ?? "")?.[1];
-  const user = req.session.currentUser;
-  return token && user?.uid && user.accessToken === token ? user : null;
-}
 
 export default function mountGalaxyArcadeRatings(router: Router) {
   router.all("/:level/rating", async (req, res) => {
@@ -21,7 +16,7 @@ export default function mountGalaxyArcadeRatings(router: Router) {
 
     const users = req.app.locals.userCollection;
     const field = `${galaxyArcadeRatingField}.${req.params.level}`;
-    const user = ratingUser(req);
+    const user = verifiedArcadeUser(req);
     try {
       if (req.method === "PUT") {
         if (!user) return res.status(401).json({ error: "not_authenticated" });

@@ -1,5 +1,8 @@
 import type { GalaxyMiniGame } from './galaxyData';
 
+export const retroMiniGamesName = 'Retro Mini Games';
+export const retroMiniGameName = 'Retro Mini Game';
+
 export type ArcadeLabels = {
   playable: string; rating: string; votes: string; ownRating: string; rate: string;
   signIn: string; ratingError: string; noRating: string; scoring: string; lastScore: string;
@@ -9,7 +12,7 @@ export type ArcadeStation = GalaxyMiniGame & {
   description: string; scoring: string; rulesVersion: string; medalLabel: string;
   medalGoals: [number, number, number];
 };
-export type PublicArcade = { stations: ArcadeStation[]; labels: ArcadeLabels };
+export type PublicArcade = { owner: string | null; levels: number[]; stations: ArcadeStation[]; labels: ArcadeLabels };
 type StorageReader = Pick<Storage, 'getItem' | 'setItem' | 'removeItem'>;
 type Launch = { run: string; level: number; rules: string; owner: string | null };
 export type ArcadeRecord = { last: number; best: number; medal: number };

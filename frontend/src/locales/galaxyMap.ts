@@ -2,7 +2,7 @@
 export const galaxyMapTranslations: Record<string, Record<string, string>> = {
   "en": {
     "Private mini-game test": "Private mini-game test",
-    "All mini-games": "All mini-games",
+    "Reach level {level} to unlock this game.": "Reach level {level} to unlock this game.",
     "Enter test code": "Enter test code",
     "Use your personal test code to unlock all available mini-games.": "Use your personal test code to unlock all available mini-games.",
     "Personal test code": "Personal test code",
@@ -47,7 +47,7 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
   },
   "de": {
     "Private mini-game test": "Privater Minispieltest",
-    "All mini-games": "Alle Minispiele",
+    "Reach level {level} to unlock this game.": "Erreiche Level {level}, um dieses Spiel freizuschalten.",
     "Enter test code": "Testcode eingeben",
     "Use your personal test code to unlock all available mini-games.": "Gib deinen persönlichen Testcode ein, um alle verfügbaren Minispiele freizuschalten.",
     "Personal test code": "Persönlicher Testcode",
@@ -92,7 +92,7 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
   },
   "es": {
     "Private mini-game test": "Prueba privada de minijuegos",
-    "All mini-games": "Todos los minijuegos",
+    "Reach level {level} to unlock this game.": "Llega al nivel {level} para desbloquear este juego.",
     "Enter test code": "Introducir código de prueba",
     "Use your personal test code to unlock all available mini-games.": "Introduce tu código personal de prueba para desbloquear todos los minijuegos disponibles.",
     "Personal test code": "Código personal de prueba",
@@ -137,7 +137,7 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
   },
   "fr": {
     "Private mini-game test": "Test privé des mini-jeux",
-    "All mini-games": "Tous les mini-jeux",
+    "Reach level {level} to unlock this game.": "Atteignez le niveau {level} pour débloquer ce jeu.",
     "Enter test code": "Saisir le code de test",
     "Use your personal test code to unlock all available mini-games.": "Saisissez votre code de test personnel pour débloquer tous les mini-jeux disponibles.",
     "Personal test code": "Code de test personnel",
@@ -182,7 +182,7 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
   },
   "pt": {
     "Private mini-game test": "Teste privado de minijogos",
-    "All mini-games": "Todos os minijogos",
+    "Reach level {level} to unlock this game.": "Chega ao nível {level} para desbloquear este jogo.",
     "Enter test code": "Introduzir código de teste",
     "Use your personal test code to unlock all available mini-games.": "Introduz o teu código de teste pessoal para desbloquear todos os minijogos disponíveis.",
     "Personal test code": "Código de teste pessoal",
@@ -227,7 +227,7 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
   },
   "it": {
     "Private mini-game test": "Prova privata dei minigiochi",
-    "All mini-games": "Tutti i minigiochi",
+    "Reach level {level} to unlock this game.": "Raggiungi il livello {level} per sbloccare questo gioco.",
     "Enter test code": "Inserisci il codice di prova",
     "Use your personal test code to unlock all available mini-games.": "Inserisci il tuo codice di prova personale per sbloccare tutti i minigiochi disponibili.",
     "Personal test code": "Codice di prova personale",
@@ -272,7 +272,7 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
   },
   "pl": {
     "Private mini-game test": "Prywatny test minigier",
-    "All mini-games": "Wszystkie minigry",
+    "Reach level {level} to unlock this game.": "Osiągnij poziom {level}, aby odblokować tę grę.",
     "Enter test code": "Wpisz kod testowy",
     "Use your personal test code to unlock all available mini-games.": "Wpisz swój osobisty kod testowy, aby odblokować wszystkie dostępne minigry.",
     "Personal test code": "Osobisty kod testowy",
@@ -317,7 +317,7 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
   },
   "tr": {
     "Private mini-game test": "Özel mini oyun testi",
-    "All mini-games": "Tüm mini oyunlar",
+    "Reach level {level} to unlock this game.": "Bu oyunun kilidini açmak için {level}. seviyeye ulaş.",
     "Enter test code": "Test kodunu gir",
     "Use your personal test code to unlock all available mini-games.": "Mevcut tüm mini oyunları açmak için kişisel test kodunu gir.",
     "Personal test code": "Kişisel test kodu",
@@ -362,7 +362,7 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
   },
   "ru": {
     "Private mini-game test": "Закрытый тест мини-игр",
-    "All mini-games": "Все мини-игры",
+    "Reach level {level} to unlock this game.": "Достигните уровня {level}, чтобы открыть эту игру.",
     "Enter test code": "Ввести тестовый код",
     "Use your personal test code to unlock all available mini-games.": "Введите личный тестовый код, чтобы открыть все доступные мини-игры.",
     "Personal test code": "Личный тестовый код",
@@ -407,7 +407,7 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
   },
   "hr": {
     "Private mini-game test": "Privatni test miniigara",
-    "All mini-games": "Sve miniigre",
+    "Reach level {level} to unlock this game.": "Dosegni razinu {level} za otključavanje ove igre.",
     "Enter test code": "Unesi testni kod",
     "Use your personal test code to unlock all available mini-games.": "Unesi osobni testni kod za otključavanje svih dostupnih miniigara.",
     "Personal test code": "Osobni testni kod",
@@ -452,7 +452,7 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
   },
   "cs": {
     "Private mini-game test": "Soukromý test miniher",
-    "All mini-games": "Všechny minihry",
+    "Reach level {level} to unlock this game.": "Dosáhni úrovně {level} a odemkni tuto hru.",
     "Enter test code": "Zadat testovací kód",
     "Use your personal test code to unlock all available mini-games.": "Zadejte svůj osobní testovací kód a odemkněte všechny dostupné minihry.",
     "Personal test code": "Osobní testovací kód",
@@ -497,7 +497,7 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
   },
   "sk": {
     "Private mini-game test": "Súkromný test minihier",
-    "All mini-games": "Všetky minihry",
+    "Reach level {level} to unlock this game.": "Dosiahni úroveň {level} a odomkni túto hru.",
     "Enter test code": "Zadať testovací kód",
     "Use your personal test code to unlock all available mini-games.": "Zadajte svoj osobný testovací kód a odomknite všetky dostupné minihry.",
     "Personal test code": "Osobný testovací kód",
@@ -542,7 +542,7 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
   },
   "hu": {
     "Private mini-game test": "Privát minijátékteszt",
-    "All mini-games": "Összes minijáték",
+    "Reach level {level} to unlock this game.": "Érd el a(z) {level}. szintet a játék feloldásához.",
     "Enter test code": "Tesztkód megadása",
     "Use your personal test code to unlock all available mini-games.": "Add meg a személyes tesztkódodat az összes elérhető minijáték feloldásához.",
     "Personal test code": "Személyes tesztkód",
@@ -587,7 +587,7 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
   },
   "ro": {
     "Private mini-game test": "Test privat pentru minijocuri",
-    "All mini-games": "Toate minijocurile",
+    "Reach level {level} to unlock this game.": "Atinge nivelul {level} pentru a debloca acest joc.",
     "Enter test code": "Introdu codul de test",
     "Use your personal test code to unlock all available mini-games.": "Introdu codul tău personal de test pentru a debloca toate minijocurile disponibile.",
     "Personal test code": "Cod de test personal",
@@ -632,7 +632,7 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
   },
   "sr": {
     "Private mini-game test": "Приватни тест миниигара",
-    "All mini-games": "Све миниигре",
+    "Reach level {level} to unlock this game.": "Достигни ниво {level} да откључаш ову игру.",
     "Enter test code": "Унеси тестни код",
     "Use your personal test code to unlock all available mini-games.": "Унеси лични тестни код да откључаш све доступне миниигре.",
     "Personal test code": "Лични тестни код",
@@ -677,7 +677,7 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
   },
   "uk": {
     "Private mini-game test": "Приватний тест мініігор",
-    "All mini-games": "Усі мініігри",
+    "Reach level {level} to unlock this game.": "Досягни рівня {level}, щоб розблокувати цю гру.",
     "Enter test code": "Ввести тестовий код",
     "Use your personal test code to unlock all available mini-games.": "Введіть особистий тестовий код, щоб розблокувати всі доступні мініігри.",
     "Personal test code": "Особистий тестовий код",
@@ -722,7 +722,7 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
   },
   "th": {
     "Private mini-game test": "การทดสอบมินิเกมแบบส่วนตัว",
-    "All mini-games": "มินิเกมทั้งหมด",
+    "Reach level {level} to unlock this game.": "ไปให้ถึงเลเวล {level} เพื่อปลดล็อกเกมนี้",
     "Enter test code": "กรอกรหัสทดสอบ",
     "Use your personal test code to unlock all available mini-games.": "กรอกรหัสทดสอบส่วนตัวเพื่อปลดล็อกมินิเกมทั้งหมดที่เล่นได้",
     "Personal test code": "รหัสทดสอบส่วนตัว",
@@ -767,7 +767,7 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
   },
   "zh": {
     "Private mini-game test": "私密迷你游戏测试",
-    "All mini-games": "全部迷你游戏",
+    "Reach level {level} to unlock this game.": "达到第 {level} 关即可解锁此游戏。",
     "Enter test code": "输入测试码",
     "Use your personal test code to unlock all available mini-games.": "输入你的个人测试码即可解锁所有可玩的迷你游戏。",
     "Personal test code": "个人测试码",
@@ -812,7 +812,7 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
   },
   "vi": {
     "Private mini-game test": "Thử nghiệm trò chơi nhỏ riêng tư",
-    "All mini-games": "Tất cả trò chơi nhỏ",
+    "Reach level {level} to unlock this game.": "Đạt cấp {level} để mở khóa trò chơi này.",
     "Enter test code": "Nhập mã thử nghiệm",
     "Use your personal test code to unlock all available mini-games.": "Nhập mã thử nghiệm cá nhân để mở khóa tất cả trò chơi nhỏ hiện có.",
     "Personal test code": "Mã thử nghiệm cá nhân",

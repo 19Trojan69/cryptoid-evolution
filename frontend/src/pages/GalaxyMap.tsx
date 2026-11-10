@@ -9,8 +9,9 @@ import useGalaxyData from './useGalaxyData';
 import GalaxySector from './GalaxySector';
 import GalaxyInfoDialog from './GalaxyInfoDialog';
 import GalaxyArcadeAccess from './GalaxyArcadeAccess';
+import { axiosClient } from '../lib/axiosClient';
 import type { GalaxyMiniGame } from './galaxyData';
-import { claimArcadeResult, markArcadeLaunch, readArcadeRecord, type ArcadeStation, type PublicArcade } from './galaxyArcadeRecords';
+import { claimArcadeResult, markArcadeLaunch, readArcadeRecord, retroMiniGameName, retroMiniGamesName, type ArcadeStation, type PublicArcade } from './galaxyArcadeRecords';
 import { emptyGalaxyProgress, galaxyPoint, galaxyShipPoint, galaxyRegions, type GalaxySelection } from './galaxyModel';
 import { MOTION_STORAGE_KEY } from './displaySettings';
 import { readControlHand } from './controlPreferences';
@@ -45,7 +46,7 @@ export default function GalaxyMap() {
     // The sandboxed arcade cannot read the main game's browser storage.
     window.location.assign(`${path}#hand=${readControlHand()}`);
   }, [close]);
-  const launchOfficialArcade = (game: ArcadeStation) => {
+  const launchOfficialArcade = useCallback((game: ArcadeStation, ticket: string) => {
     const fragment = new URLSearchParams({ hand: readControlHand() });
     try {
       if (scroll.current) sessionStorage.setItem(arcadePositionKey, String(scroll.current.scrollTop));
@@ -53,15 +54,24 @@ export default function GalaxyMap() {
       markArcadeLaunch(sessionStorage, game, snapshot.owner, run);
       fragment.set('arcade-run', run);
     } catch { /* The minigame and its report still work without device storage. */ }
-    window.location.assign(`/galaxy/arcade/${game.level}?lang=${encodeURIComponent(locale)}#${fragment}`);
-  };
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = `/galaxy/arcade/${game.level}?lang=${encodeURIComponent(locale)}#${fragment}`;
+    form.hidden = true;
+    const field = document.createElement('input');
+    field.type = 'hidden';
+    field.name = 'ticket';
+    field.value = ticket;
+    form.append(field);
+    document.body.append(form);
+    form.submit();
+  }, [locale, snapshot.owner]);
   useEffect(() => {
     if (shipSaveNetwork !== 'testnet' || previewAccess) return;
     const request = new AbortController();
-    void fetch(`/api/galaxy-minigames?lang=${locale}`, { credentials: 'omit', signal: request.signal })
-      .then(response => response.ok ? response.json() as Promise<PublicArcade> : undefined)
-      .then(data => {
-        if (!request.signal.aborted && Array.isArray(data?.stations) && data.labels) setOfficialArcade(data);
+    void axiosClient.get<PublicArcade>('/galaxy-minigames', { baseURL: '/api', params: { lang: locale }, signal: request.signal })
+      .then(({ data }) => {
+        if (!request.signal.aborted && Array.isArray(data?.levels) && Array.isArray(data?.stations) && data.labels) setOfficialArcade(data);
       })
       .catch(() => undefined);
     return () => request.abort();
@@ -86,9 +96,14 @@ export default function GalaxyMap() {
     requestGameFrame(() => document.getElementById('galaxy-preview-code')?.focus({ preventScroll: true }));
   };
   const progress = status === 'ready' ? snapshot.progress : emptyGalaxyProgress();
-  const miniGames = previewAccess && previewGames ? previewGames : officialArcade?.stations ?? (status === 'ready' ? snapshot.miniGames : undefined);
+  const retroLevels = !previewAccess ? officialArcade?.levels : undefined;
+  const unlocked = !previewAccess && status === 'ready' && officialArcade && officialArcade.owner === snapshot.owner ? officialArcade.stations : undefined;
+  const miniGames = retroLevels ? unlocked : previewGames ?? (status === 'ready' ? snapshot.miniGames : undefined);
+  const picker = retroLevels?.map(level => ({ level, name: unlocked?.find(game => game.level === level)?.name })) ?? miniGames;
   const miniGame = selection?.kind === 'mini' ? miniGames?.find(game => game.level === selection.level) : undefined;
-  const officialGame = !previewAccess && selection?.kind === 'mini' ? officialArcade?.stations.find(game => game.level === selection.level) : undefined;
+  const officialGame = selection?.kind === 'mini' ? unlocked?.find(game => game.level === selection.level) : undefined;
+  const lockedRetro = selection?.kind === 'mini' && retroLevels?.includes(selection.level) && !officialGame
+    ? status === 'ready' && !snapshot.owner ? 'sign-in' : 'level' : undefined;
   const lockedPortal = previewAccess && selection?.kind === 'mini' && !miniGame && previewLevels.includes(selection.level);
   const point = galaxyShipPoint(progress.currentLevel);
   const skin = playerSkins.find(entry => entry.id === snapshot.skin) ?? playerSkins[0];
@@ -138,20 +153,20 @@ export default function GalaxyMap() {
     <header className="galaxy-toolbar">
       <button type="button" className="galaxy-back" onClick={() => home({ openQuickMenu: fromQuick })}><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m14 6-6 6 6 6M8 12h12"/></svg><span>{t('Back')}</span></button>
       <div><p>CRYPTOID EVOLUTION</p><h1>{t('Galaxy map')}</h1></div>
-      <span className="galaxy-preview-badge">{officialArcade && !previewAccess ? officialArcade.labels.playable.replace('{count}', String(officialArcade.stations.length)) : miniGames?.length ? t('Admin test · {count} playable', { count: miniGames.length }) : t(previewAccess && previewLevels.length ? 'Private mini-game test' : 'Preview · In development')}</span>
+      <span className="galaxy-preview-badge">{officialArcade && !previewAccess ? officialArcade.labels.playable.replace('{count}', String(unlocked?.length ?? 0)) : miniGames?.length ? t('Admin test · {count} playable', { count: miniGames.length }) : t(previewAccess && previewLevels.length ? 'Private mini-game test' : 'Preview · In development')}</span>
     </header>
     {previewAccess && <GalaxyArcadeAccess onReady={previewReady} onLocked={setPreviewLevels}/>}
-    {miniGames?.length ? <details className="galaxy-arcade-picker" open={arcadeListOpen} onToggle={event => setArcadeListOpen(event.currentTarget.open)}>
-      <summary>{t('All mini-games')} <span>{miniGames.length}</span></summary>
-      <ul>{miniGames.map(game => <li key={game.level}><button type="button" onClick={() => {
+    {picker?.length ? <details className="galaxy-arcade-picker" open={arcadeListOpen} onToggle={event => setArcadeListOpen(event.currentTarget.open)}>
+      <summary>{retroMiniGamesName} <span>{picker.length}</span></summary>
+      <ul>{picker.map(game => <li key={game.level}><button type="button" onClick={() => {
         setArcadeListOpen(false);
         setSelection({ kind: 'mini', level: game.level });
-      }}><span>{game.name}</span><small>{t('Level')} {game.level}</small></button></li>)}</ul>
+      }}><span>{game.name ?? retroMiniGameName}</span><small>{t('Level')} {game.level}</small></button></li>)}</ul>
     </details> : null}
     {status !== 'ready' && <p className="galaxy-data-status" role="status">{status === 'loading' ? t('Loading saved progress…') : t('Saved progress is unavailable. You can still explore; your data is unchanged.')}</p>}
     <div className="galaxy-scroll" ref={scroll} tabIndex={0} aria-label={t('Galaxy map')}>
       <div className="galaxy-map-world">
-        {[...galaxyRegions.keys()].reverse().map(region => <GalaxySector key={region} region={region} progress={progress} onSelect={setSelection}/>)}
+        {[...galaxyRegions.keys()].reverse().map(region => <GalaxySector key={region} region={region} progress={progress} retroLevels={retroLevels} unlockedGames={unlocked} onSelect={setSelection}/>)}
         {status === 'ready' && <div ref={ship} className="galaxy-player" data-player-level={progress.currentLevel} data-player-port={point.port} style={{ '--player-x': `calc(${point.x}% + ${point.dx}px)`, '--player-y': `${point.mapY + point.dy}px` } as CSSProperties}>
           <ShipPortrait src={shipEvolutionAsset(skin.sprite, stage)} color={color.id} name={`${t('Your ship')} · ${skin.name}`}/><span aria-hidden="true" className="galaxy-engine"/><small>{t('Your ship')}</small>
         </div>}
@@ -159,8 +174,8 @@ export default function GalaxyMap() {
       <article className="galaxy-intro">
         <BlockchainIcon kind="galaxy"/>
         {officialArcade && !previewAccess ? <>
-          <h2>{t('All mini-games')}</h2>
-          <p>{officialArcade.labels.playable.replace('{count}', officialArcade.stations.length.toLocaleString(locale))}</p>
+          <h2>{retroMiniGamesName}</h2>
+          <p>{officialArcade.labels.playable.replace('{count}', (unlocked?.length ?? 0).toLocaleString(locale))}</p>
         </> : <>
           <p className="galaxy-eyebrow">{t('500 levels · 50 bosses · 100 mini-games')}</p>
           <h2>{`${t('Galaxy map')} · ${t('A glimpse of the future')}`}</h2>
@@ -171,10 +186,10 @@ export default function GalaxyMap() {
       </article>
     </div>
     <button type="button" className="galaxy-position" disabled={status !== 'ready'} onClick={() => goTo(progress.currentLevel)} title={status === 'ready' ? `${t('Level')} ${progress.currentLevel} · ${skin.name}` : undefined}><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="1.5"/><path d="M12 2v4m0 12v4M2 12h4m12 0h4"/></svg><span>{t('To my position')}</span></button>
-    {selection && <GalaxyInfoDialog key={`${selection.kind}:${selection.level}`} selection={selection} progress={progress} miniGameName={miniGame?.name}
+    {selection && <GalaxyInfoDialog key={`${selection.kind}:${selection.level}`} selection={selection} progress={progress} miniGameName={miniGame?.name} lockedRetro={lockedRetro}
       arcade={officialGame && officialArcade ? { game: officialGame, labels: officialArcade.labels,
         record: readArcadeRecord(officialGame, snapshot.owner), owner: snapshot.owner,
-        play: () => launchOfficialArcade(officialGame) } : undefined}
+        play: launchOfficialArcade } : undefined}
       onEnterTestCode={lockedPortal ? enterTestCode : undefined} onLaunch={launchArcade} onClose={close} onShop={view => home({ openShopView: view })} onCards={() => home({ openCollection: true })}/>}
   </main>;
 }

@@ -150,7 +150,7 @@ function component(file,imports,globals={}) {
 }
 const elements=tree=>{const result=[];const walk=node=>{if(!node||typeof node!=='object')return;if(node.type)result.push(node);for(const child of [node.props?.children].flat(Infinity))walk(child);};walk(tree);return result;};
 const text=node=>typeof node==='string'?node:typeof node==='number'?String(node):Array.isArray(node)?node.map(text).join(''):node?.props?text(node.props.children):'';
-const locale={'../i18n':{useLocale:()=>({t:source=>translate('de',source)})}};
+const locale={'../i18n':{useLocale:()=>({t:(source,params)=>translate('de',source,params)})}};
 
 test('every region has ten HD scene stretches and all shipped artwork URLs resolve',()=>{
   assert.equal(galaxyScenery.length,10);
@@ -183,7 +183,7 @@ test('actual scenery loads images only near the viewport and releases offscreen 
 });
 
 test('actual sector buttons have labels and independent level, boss, mini-game and trade callbacks',()=>{
-  const hits=[],Sector=component('./GalaxySector.tsx',{...locale,'./galaxyModel':model,'./GalaxyBackdrop':{default:()=>null},'./GalaxyBossArt':{default:()=>null},'../components/BlockchainIcon':{default:()=>null}});
+  const hits=[],Sector=component('./GalaxySector.tsx',{...locale,'./galaxyModel':model,'./galaxyArcadeRecords':arcadeRecords,'./GalaxyBackdrop':{default:()=>null},'./GalaxyBossArt':{default:()=>null},'../components/BlockchainIcon':{default:()=>null}});
   const nodes=model.galaxyRegions.flatMap((_,region)=>elements(Sector({region,progress:model.emptyGalaxyProgress(),onSelect:value=>hits.push(value)})));
   const buttons=nodes.filter(node=>node.type==='button');
   assert.equal(buttons.length,660);
@@ -194,10 +194,13 @@ test('actual sector buttons have labels and independent level, boss, mini-game a
   assert.equal(hits.filter(hit=>hit.kind==='trade').length,10);
   for(const button of buttons.filter(node=>node.props.className==='galaxy-mini')) assert.match(text(button),/Minispiel/);
   for(const kind of ['level','boss','mini'])assert.ok(hits.some(hit=>hit.kind===kind&&hit.level===10));
+  const retro=elements(Sector({region:0,progress:model.emptyGalaxyProgress(),onSelect:()=>{},retroLevels:[5,10],unlockedGames:[{level:5,name:'Klassischer Sammelflug'}]}));
+  assert.match(text(retro.find(node=>node.props['data-mini-level']===5)),/Retro Mini GameKlassischer Sammelflug/);
+  assert.equal(text(retro.find(node=>node.props['data-mini-level']===10)),'✧Retro Mini GameLevel 10');
 });
 
 test('dialogs preserve future-only mini-games and route trades into the supplied existing shop',()=>{
-  const shop=[],Dialog=component('./GalaxyInfoDialog.tsx',{...locale,'./galaxyModel':model,'./GalaxyBossArt':{default:()=>null},'./GalaxyArcadePanel':{default:()=>null},'../lib/axiosClient':{axiosClient:{}}});
+  const shop=[],Dialog=component('./GalaxyInfoDialog.tsx',{...locale,'./galaxyModel':model,'./galaxyArcadeRecords':arcadeRecords,'./GalaxyBossArt':{default:()=>null},'./GalaxyArcadePanel':{default:()=>null},'../lib/axiosClient':{axiosClient:{}}});
   const props={progress:model.emptyGalaxyProgress(),onLaunch:()=>{},onClose:()=>{},onCards:()=>{},onShop:value=>shop.push(value)};
   const mini=elements(Dialog({...props,selection:{kind:'mini',level:5}}));
   assert.equal(mini.filter(node=>node.type==='button').length,1);
@@ -207,6 +210,11 @@ test('dialogs preserve future-only mini-games and route trades into the supplied
   assert.equal(arcade.filter(node=>node.type==='button').length,2);
   assert.ok(arcade.some(node=>node.type==='button'&&node.props.className==='galaxy-primary'));
   assert.ok(arcade.every(node=>node.type!=='iframe'));
+  assert.match(text(arcade.find(node=>node.type==='header')),/Retro Mini Game · Level 5/);
+  const lockedRetro=elements(Dialog({...props,selection:{kind:'mini',level:90},lockedRetro:'level'}));
+  assert.equal(text(lockedRetro.find(node=>node.type==='h2')),'Retro Mini Game');
+  assert.ok(lockedRetro.some(node=>node.type==='p'&&text(node)==='Erreiche Level 90, um dieses Spiel freizuschalten.'));
+  assert.equal(lockedRetro.filter(node=>node.type==='button').length,1);
   let enter=0;
   const locked=elements(Dialog({...props,selection:{kind:'mini',level:5},onEnterTestCode:()=>enter++}));
   assert.equal(text(locked.find(node=>node.type==='h2')),'Privater Minispieltest');
@@ -255,12 +263,13 @@ test('actual ship flight only reflects a new adjacent confirmed stage and never 
     '../components/BlockchainIcon':{default:()=>null},'./ShipPortrait':{default:()=>null},
     './GalaxySector':{default:()=>null},'./GalaxyInfoDialog':{default:()=>null},'./GalaxyArcadeAccess':{default:()=>null},
     './galaxyArcadeRecords':arcadeRecords,
+    '../lib/axiosClient':{axiosClient:{get:async()=>({data:undefined})}},
     './useGalaxyData':{default:()=>data},'./galaxyModel':model,'./displaySettings':{MOTION_STORAGE_KEY:'motion'},
     './controlPreferences':{readControlHand:()=> 'right'},
     './shipFleet':{shipSaveNetwork:'testnet',playerSkins:[{id:'grey-scout',name:'Grey Scout',sprite:1}],allPlayerColors:[{id:'grey',name:'Grey'}]},
     './shipEvolution':{ownedShipStage:()=>1,shipEvolutionAsset:()=>'/existing.png'},
   },{document:doc,localStorage:{getItem:()=>null},window:{matchMedia:()=>({matches:false})},
-    AbortController,fetch:async()=>({ok:false})});
+    AbortController});
   const render=()=>{cursor=0;refIndex=0;const nodes=elements(Map());pending.splice(0).forEach(fn=>fn());return nodes;};
   let nodes=render();assert.equal(flights.length,0);assert.equal(JSON.stringify(data.snapshot),original);
   const player=nodes.find(node=>node.props.className==='galaxy-player');assert.equal(player.props['data-player-level'],11);

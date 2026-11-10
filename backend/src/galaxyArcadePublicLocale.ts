@@ -75,7 +75,7 @@ export function withArcadePublicLocale(page: string, locale: ArcadeLocale, index
     ["Minispiel wird geladen …", escapeMarkup(words.loading)],
     ["Das Minispiel ist gerade nicht verfügbar. Versuche es erneut über die Galaxiekarte.", escapeMarkup(words.unavailable)],
     ["Das Minispiel konnte nicht gestartet werden. Kehre zur Galaxiekarte zurück und versuche es erneut.", escapeMarkup(words.unavailable)],
-    ['<title>Cryptoid Evolution · Retro Arcade</title>', '<title>' + escapeMarkup(copy.name) + ' · Cryptoid Evolution</title>'],
+    ['<title>Cryptoid Evolution · Retro Arcade</title>', '<title>Retro Mini Game · ' + escapeMarkup(copy.name) + ' · Cryptoid Evolution</title>'],
     ['aria-label="Missionsvorschau"', 'aria-label="' + escapeMarkup(copy.name) + '"'],
     ['aria-label="Rundenstatus"', 'aria-label="' + escapeMarkup(words.report) + '"'],
     ['aria-label="Spielfeld"', 'aria-label="' + escapeMarkup(copy.name) + '"'],
@@ -168,7 +168,7 @@ export function withArcadePublicLocale(page: string, locale: ArcadeLocale, index
       escapeMarkup(words.controls) + '</b><small>' + (locale === "de" ? "\${m.controls}" : escapeMarkup(activeControls)) +
       '</small></div><details class="briefing-extra"><summary>' + escapeMarkup(words.scoring) +
       '</summary><small>' + escapeMarkup(copy.scoring) + '</small></details>')
-    .replace("MISSIONSBRIEFING ·", () => escapeMarkup(words.briefing) + " ·")
+    .replace("MISSIONSBRIEFING ·", "Retro Mini Game ·")
     .replace('id="startRound">Mission starten →', () => 'id="startRound">' + escapeMarkup(words.play) + " →")
     .replace(/(id="(?:cancelIntro|pauseBack|loadBack|resultBack)">)Zur Galaxiekarte/g, (_, before) => before + escapeMarkup(words.map))
     .replace(/<small class="quiet-note">Lokale Testmission[^<]*<\/small>/, '<small class="quiet-note">Testnet</small>')

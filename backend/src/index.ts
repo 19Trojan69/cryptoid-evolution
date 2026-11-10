@@ -1,5 +1,6 @@
 import mountFeedbackEndpoints from "./handlers/feedback";
 import mountGalaxyArcadeRatings, { galaxyArcadeRatingField } from "./handlers/galaxyArcadeRatings";
+import mountGalaxyArcadeAccess from "./handlers/galaxyArcadeAccess";
 import { deletedAccessToken, deletedProxyToken, testnetAccountDeletionEnabled } from './playerAdministration';
 import mountPilotEndpoints from "./handlers/pilots";
 import fs from "fs";
@@ -201,9 +202,10 @@ const feedbackRouter = express.Router();
 mountFeedbackEndpoints(feedbackRouter);
 app.use("/feedback", feedbackRouter);
 
-const arcadeRatingsRouter = express.Router();
-mountGalaxyArcadeRatings(arcadeRatingsRouter);
-app.use("/galaxy-minigames", arcadeRatingsRouter);
+const arcadeRouter = express.Router();
+mountGalaxyArcadeAccess(arcadeRouter);
+mountGalaxyArcadeRatings(arcadeRouter);
+app.use("/galaxy-minigames", arcadeRouter);
 
 const pilotRouter = express.Router();
 mountPilotEndpoints(pilotRouter);
