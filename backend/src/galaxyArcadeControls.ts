@@ -6,14 +6,6 @@ const controlsMarkup = `<div id="controls">
         <span class="pad-ring" aria-hidden="true"></span>
         <span class="pad-dot" aria-hidden="true"></span>
       </div>
-      <div id="steering" class="steering" role="group" aria-label="Seitlich fliegen" hidden>
-        <button type="button" data-control="left" aria-label="Nach links fliegen" aria-pressed="false">
-          <svg width="28" height="28" viewBox="0 0 20 20" aria-hidden="true" shape-rendering="crispEdges"><path fill="currentColor" d="M4 8h2V6h2V4h2v4h6v4h-6v4H8v-2H6v-2H4z"/></svg>
-        </button>
-        <button type="button" data-control="right" aria-label="Nach rechts fliegen" aria-pressed="false">
-          <svg width="28" height="28" viewBox="0 0 20 20" aria-hidden="true" shape-rendering="crispEdges"><path fill="currentColor" transform="translate(20 0) scale(-1 1)" d="M4 8h2V6h2V4h2v4h6v4h-6v4H8v-2H6v-2H4z"/></svg>
-        </button>
-      </div>
     </div>
     <div class="control-actions" hidden>
       <button type="button" id="action" class="action" data-control="action" aria-pressed="false" hidden></button>
@@ -38,14 +30,7 @@ const controlsStyle = `<style>
   }
   [data-movement] .control-deck { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
   [data-movement] .control-surface { grid-column: var(--movement-column); grid-row: 1; height: var(--control-height); }
-  [data-movement="arrows"]:not([data-actions]) .control-surface { grid-column: 1 / -1; }
-  [data-movement] #steering {
-    height: var(--control-height);
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    grid-template-rows: 1fr;
-    gap: 6px;
-  }
-  [data-movement] #steering button { display: grid; place-items: center; }
+  [data-movement="horizontal"]:not([data-actions]) .control-surface { grid-column: 1 / -1; }
   [data-movement] .touchpad {
     height: var(--control-height);
     background: radial-gradient(ellipse at 50% 42%, #263c5d, #131a32 76%);
@@ -66,6 +51,35 @@ const controlsStyle = `<style>
     border-radius: 50%;
     background: #407587;
   }
+  [data-movement="horizontal"] .touchpad:not(.active) { border-color: var(--arcade-border, #6b91a8); }
+  [data-movement="horizontal"] .pad-ring {
+    width: 116px;
+    max-width: calc(100% - 8px);
+    height: 12px;
+    border-radius: 3px;
+    box-shadow: inset 0 2px #081322;
+  }
+  [data-movement="horizontal"] .pad-dot {
+    left: clamp(24px, calc(50% + var(--pad-dx, 0px)), calc(100% - 24px));
+    width: 44px;
+    height: 42px;
+    transform: translate(-50%, -50%);
+    border-radius: 6px;
+    background: #24465b;
+    box-shadow: inset 0 -4px #102738;
+  }
+  [data-movement="horizontal"] .pad-dot::after {
+    content: '';
+    position: absolute;
+    inset: 50% auto auto 50%;
+    width: 14px;
+    height: 12px;
+    transform: translate(-50%, -50%);
+    background: repeating-linear-gradient(90deg, currentColor 0 2px, transparent 2px 6px);
+    color: #c7f5f5;
+  }
+  [data-movement="horizontal"] .touchpad.active .pad-dot { background: var(--arcade-accent, var(--cyan)); }
+  [data-movement="horizontal"] .touchpad.active .pad-dot::after { color: #102738; }
   [data-movement] .control-actions {
     grid-column: var(--action-column);
     grid-row: 1;
@@ -121,11 +135,17 @@ const controlsStyle = `<style>
       max-height: 32px;
     }
     #gameScreen[data-movement] #controls { grid-column: 1 / -1; pointer-events: none; }
-    [data-movement] .control-deck,
-    [data-movement="arrows"]:not([data-actions]) #steering {
+    [data-movement] .control-deck {
       grid-template-columns: repeat(2, var(--side-control-width));
       justify-content: space-between;
     }
+    #gameScreen[data-movement="horizontal"]:not([data-actions]) {
+      --control-height: 64px;
+      grid-template-rows: 44px minmax(80px, 1fr) auto var(--control-height);
+    }
+    #gameScreen[data-movement="horizontal"]:not([data-actions]) .stage { margin-inline: 0; }
+    #gameScreen[data-movement="horizontal"]:not([data-actions]) #controls { grid-row: 4; }
+    [data-movement="horizontal"]:not([data-actions]) .control-deck { grid-template-columns: minmax(0, 1fr); }
     [data-movement] .touchpad, [data-movement] #controls button { pointer-events: auto; }
   }
 </style>`;
@@ -133,9 +153,8 @@ const controlsStyle = `<style>
 const configureControls = `configure(module, variant) {
       clear();
       horizontal = !!module.horizontal;
-      pad.hidden = horizontal;
-      steering.hidden = !horizontal;
-      pad.setAttribute('aria-label', module.aiming ? 'Joystick zum Zielen' : 'Joystick zum Fliegen');
+      pad.hidden = false;
+      pad.setAttribute('aria-label', horizontal ? 'Ziehe den Stick nach links oder rechts.' : module.aiming ? 'Joystick zum Zielen' : 'Joystick zum Fliegen');
 
       const action = module.action?.(variant);
       const rotation = !!module.rotation;
@@ -152,19 +171,19 @@ const configureControls = `configure(module, variant) {
       const gameScreen = document.getElementById('gameScreen');
       const hand = (typeof arcadeLaunchOptions === 'undefined' ? new URLSearchParams(window.location.hash.slice(1)) : arcadeLaunchOptions).get('hand');
       gameScreen.dataset.controlHand = hand === 'left' ? 'left' : 'right';
-      gameScreen.dataset.movement = horizontal ? 'arrows' : 'joystick';
+      gameScreen.dataset.movement = horizontal ? 'horizontal' : 'joystick';
       gameScreen.toggleAttribute('data-actions', hasActions);
       gameScreen.toggleAttribute('data-rotation', rotation);
     }`;
 
 const briefingUpdates = [
-  ["Ziehe und halte auf der Steuerfläche unter dem Spiel. Du kannst auf Richtungstasten wechseln. Je nach Mission erscheint daneben ein eigener Aktionsbutton.", "Halte bei seitlichen Flügen die Pfeile. Ziehe den Joystick bei freier Bewegung und zum Zielen. Je nach Mission gibt es eigene Tasten für Feuer, Drehung oder andere Aktionen."],
+  ["Ziehe und halte auf der Steuerfläche unter dem Spiel. Du kannst auf Richtungstasten wechseln. Je nach Mission erscheint daneben ein eigener Aktionsbutton.", "Ziehe den Stick bei seitlichen Flügen nach links oder rechts. Bei freier Bewegung und zum Zielen kannst du den Joystick in alle Richtungen ziehen. Je nach Mission gibt es eigene Tasten für Feuer, Drehung oder andere Aktionen."],
   ["Mit den Fingern die Steuerfläche unter dem Spielfeld verwenden;", "Zum Fliegen oder Zielen die Touch-Steuerung verwenden;"],
-  ["Steuerfläche: seitlich ziehen und halten. Alternativ Haltepfeile, A/D oder Pfeiltasten. Finger bleiben unter dem Spielfeld.", "Halte den linken oder rechten Pfeil. Auf der Tastatur kannst du A/D oder die Pfeiltasten verwenden."],
+  ["Steuerfläche: seitlich ziehen und halten. Alternativ Haltepfeile, A/D oder Pfeiltasten. Finger bleiben unter dem Spielfeld.", "Ziehe den Stick nach links oder rechts und halte ihn in Flugrichtung. Auf der Tastatur kannst du A/D oder die Pfeiltasten verwenden."],
   ["Steuerfläche: in eine Richtung ziehen und halten. Alternativ Haltepfeile oder WASD/Pfeile. V04: Schub/Leertaste separat auslösen.", "Ziehe den Joystick in die gewünschte Flugrichtung. Alternativ kannst du WASD oder die Pfeiltasten nutzen. In Impulsantrieb löst du den Schub mit der Schubtaste oder der Leertaste aus."],
   ["Steuerfläche, Pfeile/WASD oder Haltebuttons geben Schub in Bildschirmrichtung.", "Ziehe den Joystick in die Flugrichtung oder verwende Pfeiltasten/WASD."],
   ["Bremse separat halten (Leertaste); mit ↶/↷ oder Q/E ausrichten.", "Halte oben für Linksdrehung oder unten für Rechtsdrehung. Bremse separat mit der Bremstaste. Auf der Tastatur drehst du mit Q/E und bremst mit der Leertaste."],
-  ["Steuerfläche: seitlich ziehen und halten, alternativ Haltepfeile oder A/D/Pfeile.", "Halte den linken oder rechten Pfeil. Alternativ kannst du A/D oder die Pfeiltasten nutzen."],
+  ["Steuerfläche: seitlich ziehen und halten, alternativ Haltepfeile oder A/D/Pfeile.", "Ziehe den Stick nach links oder rechts und halte ihn in Flugrichtung. Alternativ kannst du A/D oder die Pfeiltasten nutzen."],
   ["Fadenkreuz mit der Steuerfläche unter dem Spielfeld bewegen.", "Fadenkreuz mit dem Joystick bewegen."],
   ["Fadenkreuz mit der Steuerfläche bewegen und Abfangen separat auslösen.", "Fadenkreuz mit dem Joystick bewegen und Feuer antippen oder halten."],
   ["Steuerfläche: in die Richtung ziehen und halten, alternativ Haltepfeile/WASD.", "Ziehe den Joystick in die gewünschte Flugrichtung. Alternativ kannst du Pfeiltasten/WASD nutzen."],
@@ -180,16 +199,18 @@ export function withArcadeTouchControls(html: string) {
     .replace("</head>", `${controlsStyle}</head>`)
     .replace(/<div id="controls">[\s\S]*?(?=\s*<small class="game-note")/, controlsMarkup)
     .replace(",switcher=document.getElementById('controlSwitch')", "")
+    .replace(",steering=document.getElementById('steering')", "")
     .replace(",switchPointer=null,horizontal=false,arrows=C.storage.get('controls-mode',0)===1", ",horizontal=false")
     .replace("switchPointer=null;resetPad()", "resetPad()")
     .replace(/\n function mode\(\)\{[\s\S]*?(?=\n pad\.addEventListener\('pointerdown',)/, "")
-    .replace("||arrows||padPointer", "||horizontal||padPointer")
+    .replace("||arrows||padPointer", "||padPointer")
     .replace(/const b=pad\.getBoundingClientRect\(\);.*?(?=pad\.classList\.add\('active'\);)/, "")
     .replace("const keys=new Set(),held=new Map(),pad=", "const keys=new Set(),held=new Map(),pending=new Set(),pad=")
     .replace(/padImpulse=false/g, "padImpulse=null")
     .replace("padSector=null;padImpulse=null;pad.classList", "padSector=null;pad.classList")
     .replace("const clear=()=>{keys.clear();held.clear();", "const clear=()=>{keys.clear();held.clear();pending.clear();padImpulse=null;")
-    .replace("if(sector!==null&&sector!==padSector)padImpulse=true;", "if(sector!==null&&sector!==padSector)padImpulse={x:padX,y:padY};")
+    .replace("if(sector!==null&&sector!==padSector)padImpulse=true;", "if(!horizontal&&sector!==null&&sector!==padSector)padImpulse={x:padX,y:padY};")
+    .replace("(padX*21)+'px'", "(padX*(horizontal?34:21))+'px'")
     .replace("if(e.pointerId===padPointer)resetPad();", "if(e.pointerId===padPointer){if(type!=='pointerup')padImpulse=null;resetPad();}")
     .replace(
       "for(const b of controls.querySelectorAll('[data-control]')){",
@@ -205,6 +226,7 @@ export function withArcadeTouchControls(html: string) {
     .replace("if(dir==='action')actionEdge=true;else impulse=true;", "notePress(dir);")
     .replace("if(!keys.has(map[key])){if(map[key]==='action')actionEdge=true;else impulse=true;}", "if(!keys.has(map[key]))notePress(map[key]);")
     .replace("const down=d=>keys.has(d)||", "const down=d=>keys.has(d)||pending.has(d)||")
+    .replace("digitalY=+down('down')-+down('up')", "digitalY=horizontal?0:+down('down')-+down('up')")
     .replace(
       "const result={x:digitalX||digitalY?digitalX:padX,y:digitalX||digitalY?digitalY:padY,",
       `const analog=(padX||padY) ? {x:padX,y:padY} : padImpulse;

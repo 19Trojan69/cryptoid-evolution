@@ -48,7 +48,6 @@ const arcadeStyle = `<style>
   #gameScreen[data-sector] #timeMeter {
     background: repeating-linear-gradient(90deg, var(--arcade-accent) 0 8px, transparent 8px 10px);
   }
-  #gameScreen[data-sector] #steering button { border-color: var(--arcade-border); }
 </style>`;
 
 const pixelBackdrops = `  const themes = ${JSON.stringify(arcadeThemes)};

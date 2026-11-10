@@ -48,12 +48,12 @@ export function withArcadePublicLocale(page: string, locale: ArcadeLocale, index
   const variant = index % 5 + 1;
   const level = (index + 1) * 5;
   const [progression, boost, docking, phase, friendly] = hints[locale];
-  const arrows = game === 0 || game === 3;
+  const horizontal = game === 0 || game === 3;
   const aiming = game === 4 || game === 5;
   const shooting = aiming || game === 7;
   const activeControls = [
-    arrows ? words.arrows : aiming ? words.aim : words.move,
-    arrows ? "A / D · ← / →" : "W / A / S / D · ↑ / ← / ↓ / →",
+    horizontal ? words.horizontalStick : aiming ? words.aim : words.move,
+    horizontal ? "A / D · ← / →" : "W / A / S / D · ↑ / ← / ↓ / →",
     shooting ? words.fire + " · ␣" : "",
     game === 1 && variant === 4 ? words.boost + " · ␣" : "",
     game === 2 ? words.rotate + " ↶ / ↷ · Q / E · " + words.brake + " · ␣" : "",
@@ -80,9 +80,6 @@ export function withArcadePublicLocale(page: string, locale: ArcadeLocale, index
     ['aria-label="Rundenstatus"', 'aria-label="' + escapeMarkup(words.report) + '"'],
     ['aria-label="Spielfeld"', 'aria-label="' + escapeMarkup(copy.name) + '"'],
     ['aria-label="Aktive Mission. Zum Fliegen oder Zielen die Touch-Steuerung verwenden; Maus und Tastatur werden ebenfalls unterstützt."', 'aria-label="' + escapeMarkup(copy.name) + '"'],
-    ['aria-label="Seitlich fliegen"', 'aria-label="' + escapeMarkup(words.controls) + '"'],
-    ['aria-label="Nach links fliegen"', 'aria-label="' + escapeMarkup(words.left) + '"'],
-    ['aria-label="Nach rechts fliegen"', 'aria-label="' + escapeMarkup(words.right) + '"'],
     ['aria-label="Schiff drehen"', 'aria-label="' + escapeMarkup(words.rotate) + '"'],
     ['aria-label="Links drehen" aria-pressed="false">↶ Links', 'aria-label="' + escapeMarkup(words.left) + '" aria-pressed="false">↶ ' + escapeMarkup(words.left)],
     ['aria-label="Rechts drehen" aria-pressed="false">↷ Rechts', 'aria-label="' + escapeMarkup(words.right) + '" aria-pressed="false">↷ ' + escapeMarkup(words.right)],
@@ -209,6 +206,7 @@ export function withArcadePublicLocale(page: string, locale: ArcadeLocale, index
     .replace('aria-label="Testmedaille"', () => 'aria-label="' + escapeMarkup(words.medalGoals) + '"')
     .replace("actionButton.textContent = action || '';", () => "actionButton.textContent = action ? " +
       js(shooting ? words.fire : game === 1 ? words.boost : words.brake) + " : '';")
+    .replace("'Ziehe den Stick nach links oder rechts.'", () => js(words.horizontalStick))
     .replace("module.aiming ? 'Joystick zum Zielen' : 'Joystick zum Fliegen'", () => js(aiming ? words.aim : words.move))
     .replace(/\$\('gameEquipment'\)\.textContent=\x60[^\x60]+\x60;/, "$('gameEquipment').textContent=ship.name||ship.modelId;");
   if (isDock) {
