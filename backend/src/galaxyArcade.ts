@@ -134,10 +134,12 @@ function stationDocument(index: number, key: string, musicKey: string | undefine
   return locale ? withArcadePublicLocale(page, locale, index, stations[index].name) : page;
 }
 
-function sendPlayPage(res: Pick<Response, "setHeader" | "status" | "send">, code: number, html: string) {
+function sendPlayPage(res: Pick<Response, "setHeader" | "status" | "send">, code: number, html: string, access: "public" | "private" = "private") {
+  // PiNet embeds the Testnet app and its public missions in its own frame.
+  const ancestors = access === "public" ? "https://cryptoidevo3025.pinet.com" : "'none'";
   res.setHeader("Content-Type", "text/html; charset=utf-8");
-  res.setHeader("Content-Security-Policy", `${arcadePolicy}; sandbox allow-scripts; base-uri 'none'; form-action 'none'; frame-ancestors 'none'`);
-  res.setHeader("X-Frame-Options", "DENY");
+  res.setHeader("Content-Security-Policy", `${arcadePolicy}; sandbox allow-scripts; base-uri 'none'; form-action 'none'; frame-ancestors ${ancestors}`);
+  if (access === "private") res.setHeader("X-Frame-Options", "DENY");
   res.setHeader("X-Content-Type-Options", "nosniff");
   res.setHeader("Referrer-Policy", "no-referrer");
   return res.status(code).send(html);
@@ -169,9 +171,9 @@ export function servePublicGalaxyArcade(
   if (index < 0) return res.status(404).json({ error: "not_found" });
   const returnHref = "/galaxy?arcade-return=1";
   try {
-    return sendPlayPage(res, 200, stationDocument(index, key, musicKey, returnHref, locale));
+    return sendPlayPage(res, 200, stationDocument(index, key, musicKey, returnHref, locale), "public");
   } catch {
-    return sendPlayPage(res, 503, withArcadePublicLocale(playError(returnHref, "Das Minispiel ist gerade nicht verfügbar. Versuche es erneut über die Galaxiekarte."), locale, index, stations[index].name));
+    return sendPlayPage(res, 503, withArcadePublicLocale(playError(returnHref, "Das Minispiel ist gerade nicht verfügbar. Versuche es erneut über die Galaxiekarte."), locale, index, stations[index].name), "public");
   }
 }
 

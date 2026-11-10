@@ -55,6 +55,10 @@ test('the official Testnet Arcade serves localized public stations with a distin
   }
   assert.notEqual((await check(base, 'th')).body.stations[7].description, (await check(base, 'de')).body.stations[7].description);
   assert.deepEqual((await check(base, 'zh-Hans')).body, (await check(base, 'zh')).body);
+  const playUnavailable = await check(base + '/5/play');
+  assert.equal(playUnavailable.code, 503); // The fixture key does not decrypt the released assets.
+  assert.match(playUnavailable.headers['Content-Security-Policy'], /sandbox allow-scripts;.*frame-ancestors https:\/\/cryptoidevo3025\.pinet\.com$/);
+  assert.equal(playUnavailable.headers['X-Frame-Options'], undefined);
   assert.equal((await check(base + '/205/rating')).code, 404);
   assert.equal(calls.length, 0);
   assert.equal((await check(base + '/5/rating')).code, 200);
