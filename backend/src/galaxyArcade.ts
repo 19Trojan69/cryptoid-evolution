@@ -18,6 +18,7 @@ const previewCookie = "__Secure-cryptoid-arcade";
 const playCookie = "__Secure-cryptoid-arcade-play";
 const playLifetime = 120;
 const hexDigest = /^[0-9a-f]{64}$/i;
+const publicArcadeHost = "window.parent !== window && new URLSearchParams(location.hash.slice(1)).get('embed') === '1' ? window.parent : null";
 
 const sameDigest = (value: string | undefined, expected: string) =>
   typeof value === "string" && hexDigest.test(value) && timingSafeEqual(Buffer.from(value, "hex"), Buffer.from(expected, "hex"));
@@ -123,20 +124,33 @@ function stationDocument(index: number, key: string, musicKey: string | undefine
     .replace("</body></html>", `<script>
       (() => {
         const status = document.getElementById('galaxy-arcade-startup');
+        const host = ${locale ? publicArcadeHost : "null"};
+        const report = (type, hash) => host?.postMessage({ type, hash }, location.origin);
+        if (host) {
+          const link = document.querySelector('#galaxy-arcade-navigation a');
+          link.addEventListener('click', event => {
+            event.preventDefault();
+            report('cryptoid:arcade-exit', link.hash);
+          });
+        }
         const failed = () => {
           status.textContent = 'Das Minispiel konnte nicht gestartet werden. Kehre zur Galaxiekarte zurück und versuche es erneut.';
           status.setAttribute('role', 'alert');
+          report('cryptoid:arcade-error');
         };
         const timer = setTimeout(failed, 12000);
-        Promise.resolve().then(() => CE.app.showDetail()).then(() => status.remove()).catch(failed).finally(() => clearTimeout(timer));
+        Promise.resolve().then(() => CE.app.showDetail()).then(() => {
+          status.remove();
+          report('cryptoid:arcade-ready');
+        }).catch(failed).finally(() => clearTimeout(timer));
       })();
     </script></body></html>`);
   return locale ? withArcadePublicLocale(page, locale, index, stations[index].name) : page;
 }
 
 function sendPlayPage(res: Pick<Response, "setHeader" | "status" | "send">, code: number, html: string, access: "public" | "private" = "private") {
-  // PiNet embeds the Testnet app and its public missions in its own frame.
-  const ancestors = access === "public" ? "https://cryptoidevo3025.pinet.com" : "'none'";
+  // The in-app player can run directly or inside the official PiNet frame.
+  const ancestors = access === "public" ? "'self' https://cryptoidevo3025.pinet.com" : "'none'";
   res.setHeader("Content-Type", "text/html; charset=utf-8");
   res.setHeader("Content-Security-Policy", `${arcadePolicy}; sandbox allow-scripts; base-uri 'none'; form-action 'none'; frame-ancestors ${ancestors}`);
   if (access === "private") res.setHeader("X-Frame-Options", "DENY");
@@ -173,7 +187,9 @@ export function servePublicGalaxyArcade(
   try {
     return sendPlayPage(res, 200, stationDocument(index, key, musicKey, returnHref, locale), "public");
   } catch {
-    return sendPlayPage(res, 503, withArcadePublicLocale(playError(returnHref, "Das Minispiel ist gerade nicht verfügbar. Versuche es erneut über die Galaxiekarte."), locale, index, stations[index].name), "public");
+    const unavailable = playError(returnHref, "Das Minispiel ist gerade nicht verfügbar. Versuche es erneut über die Galaxiekarte.")
+      .replace("</body>", `<script>(${publicArcadeHost})?.postMessage({ type: 'cryptoid:arcade-error' }, location.origin);</script></body>`);
+    return sendPlayPage(res, 503, withArcadePublicLocale(unavailable, locale, index, stations[index].name), "public");
   }
 }
 

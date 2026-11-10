@@ -53,8 +53,7 @@ export default function GalaxyMap() {
       markArcadeLaunch(sessionStorage, game, snapshot.owner, run);
       fragment.set('arcade-run', run);
     } catch { /* The minigame and its report still work without device storage. */ }
-    close();
-    window.location.assign(`/api/galaxy-minigames/${game.level}/play?lang=${encodeURIComponent(locale)}#${fragment}`);
+    navigate({ pathname: `/galaxy/arcade/${game.level}`, hash: fragment.toString() });
   };
   useEffect(() => {
     if (shipSaveNetwork !== 'testnet' || previewAccess) return;

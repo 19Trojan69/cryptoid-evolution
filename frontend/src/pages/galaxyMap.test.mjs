@@ -5,6 +5,7 @@ import vm from 'node:vm';
 import ts from 'typescript';
 import * as jsx from 'react/jsx-runtime';
 import * as model from './galaxyModel.ts';
+import * as arcadeRecords from './galaxyArcadeRecords.ts';
 import { loadGalaxySnapshot, emptyGalaxySnapshot, readGalaxyGuestProgress } from './galaxyData.ts';
 import { emptyRewardProgress, REWARD_PROGRESS_KEY } from './rewardProgress.ts';
 import { bossManifest } from './bossManifest.ts';
@@ -196,7 +197,7 @@ test('actual sector buttons have labels and independent level, boss, mini-game a
 });
 
 test('dialogs preserve future-only mini-games and route trades into the supplied existing shop',()=>{
-  const shop=[],Dialog=component('./GalaxyInfoDialog.tsx',{...locale,'./galaxyModel':model,'./GalaxyBossArt':{default:()=>null},'../lib/axiosClient':{axiosClient:{}}});
+  const shop=[],Dialog=component('./GalaxyInfoDialog.tsx',{...locale,'./galaxyModel':model,'./GalaxyBossArt':{default:()=>null},'./GalaxyArcadePanel':{default:()=>null},'../lib/axiosClient':{axiosClient:{}}});
   const props={progress:model.emptyGalaxyProgress(),onLaunch:()=>{},onClose:()=>{},onCards:()=>{},onShop:value=>shop.push(value)};
   const mini=elements(Dialog({...props,selection:{kind:'mini',level:5}}));
   assert.equal(mini.filter(node=>node.type==='button').length,1);
@@ -253,11 +254,13 @@ test('actual ship flight only reflects a new adjacent confirmed stage and never 
     'react-router-dom':{useLocation:()=>({state:null}),useNavigate:()=>()=>{}},
     '../components/BlockchainIcon':{default:()=>null},'./ShipPortrait':{default:()=>null},
     './GalaxySector':{default:()=>null},'./GalaxyInfoDialog':{default:()=>null},'./GalaxyArcadeAccess':{default:()=>null},
+    './galaxyArcadeRecords':arcadeRecords,
     './useGalaxyData':{default:()=>data},'./galaxyModel':model,'./displaySettings':{MOTION_STORAGE_KEY:'motion'},
     './controlPreferences':{readControlHand:()=> 'right'},
     './shipFleet':{shipSaveNetwork:'testnet',playerSkins:[{id:'grey-scout',name:'Grey Scout',sprite:1}],allPlayerColors:[{id:'grey',name:'Grey'}]},
     './shipEvolution':{ownedShipStage:()=>1,shipEvolutionAsset:()=>'/existing.png'},
-  },{document:doc,localStorage:{getItem:()=>null},window:{matchMedia:()=>({matches:false})}});
+  },{document:doc,localStorage:{getItem:()=>null},window:{matchMedia:()=>({matches:false})},
+    AbortController,fetch:async()=>({ok:false})});
   const render=()=>{cursor=0;refIndex=0;const nodes=elements(Map());pending.splice(0).forEach(fn=>fn());return nodes;};
   let nodes=render();assert.equal(flights.length,0);assert.equal(JSON.stringify(data.snapshot),original);
   const player=nodes.find(node=>node.props.className==='galaxy-player');assert.equal(player.props['data-player-level'],11);

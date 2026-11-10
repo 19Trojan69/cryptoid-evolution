@@ -19,6 +19,9 @@ const recordKey = (level: number, rules: string, owner: string | null) =>
 const validScore = (value: unknown): value is number => typeof value === 'number'
   && Number.isSafeInteger(value) && value >= 0;
 
+export const isPublicArcadeLevel = (level: number) =>
+  Number.isInteger(level) && level >= 5 && level <= 200 && level % 5 === 0;
+
 export function readArcadeRecord(game: Pick<ArcadeStation, 'level' | 'rulesVersion'>, owner: string | null, storage?: Pick<Storage, 'getItem'>): ArcadeRecord | null {
   try {
     const record = JSON.parse((storage ?? window.localStorage).getItem(recordKey(game.level, game.rulesVersion, owner)) ?? 'null');
@@ -39,7 +42,7 @@ export function claimArcadeResult(hash: string, session: StorageReader, storage:
     const result = new URLSearchParams(hash.replace(/^#/, ''));
     if (!launch || result.get('arcade-run') !== launch.run || result.get('station') !== String(launch.level)
       || !/^[a-f0-9-]{36}$/.test(launch.run) || !/^[a-z0-9-]+$/.test(launch.rules)
-      || !Number.isInteger(launch.level) || launch.level < 5 || launch.level > 200 || launch.level % 5 !== 0
+      || !isPublicArcadeLevel(launch.level)
       || !/^(0|[1-9]\d*)$/.test(result.get('score') ?? '') || !/^(0|[1-9]\d*)$/.test(result.get('best') ?? '')
       || !/^[0-3]$/.test(result.get('medal') ?? '')) return null;
     const last = Number(result.get('score'));
