@@ -8,6 +8,39 @@ export function withArcadeGameplayReview(html: string, game: number) {
       return withArcadeManeuvers(html);
     case 4:
       return html
+        .replace("function open(s,o){return s.v!==3||((s.elapsed+o.phase)",
+          "function open(s,o,time=s.elapsed){return s.v!==3||((time+o.phase)")
+        .replace("C.tick(s,dt);C.move(s,input,dt,240,true);",
+          "const startX=s.x;C.tick(s,dt);C.move(s,input,dt,240,true);")
+        .replace(
+          "if(braking)s.brake=Math.max(0,s.brake-dt);else s.brake=Math.min(6,s.brake+dt*.25);",
+          `let approachSpeed = ringSpeed;
+           if (s.v === 3) {
+             const brakingSpeed = 55;
+             if (braking) {
+               s.brake = Math.max(0, s.brake - dt);
+               approachSpeed = brakingSpeed;
+             } else {
+               if (!input.action) s.brake = Math.min(6, s.brake + dt * .25);
+               const acceleration = (ringSpeed - brakingSpeed) / .3;
+               approachSpeed = Math.min(ringSpeed, (s.approachSpeed ?? ringSpeed) + acceleration * dt);
+             }
+             s.approachSpeed = approachSpeed;
+           }`,
+        )
+        .replace("o.y+=dt*(braking?55:ringSpeed);", "const previousY=o.y;o.y+=dt*approachSpeed;")
+        .replace(
+          "const dx=Math.abs(s.x-o.x);good=dx<o.r-28&&open(s,o);",
+          `let dx = Math.abs(s.x - o.x);
+           let opened = open(s, o);
+           if (s.v === 3 && o.y > previousY) {
+             // Judge the opening and the ship position when the ring crosses the flight line.
+             const fraction = C.clamp((s.y - previousY) / (o.y - previousY), 0, 1);
+             dx = Math.abs(startX + (s.x - startX) * fraction - o.x);
+             opened = open(s, o, s.elapsed - (1 - fraction) * dt);
+           }
+           good = dx < o.r - 28 && opened;`,
+        )
         .replace(
           "s.success=s.passed>=8;s.message=s.success?'Ringroute abgeschlossen.':'Mindestens acht Ringpassagen sind nötig.';",
           "s.success=s.resolved===12;s.message=s.success?'Ringroute abgeschlossen.':'Die Ringroute wurde nicht beendet.';",
