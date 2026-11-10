@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useLocale } from '../i18n';
-import { arcadeRankIds, arcadeStickerAlbumName, type ArcadeSticker } from '../../../backend/src/galaxyArcadeStickerSchema.ts';
+import { arcadeRankIds, arcadeStickerAlbumName, arcadeStickerNftPricePi, type ArcadeSticker } from '../../../backend/src/galaxyArcadeStickerSchema.ts';
 import { retroMiniGameName, type ArcadeLabels, type ArcadeStation } from './galaxyArcadeRecords';
 import { readArcadeStickers } from './galaxyArcadeStickers';
 
@@ -95,6 +95,10 @@ export default function GalaxyStickerAlbum({ owner, stations, stationCount, init
             </ul>
           </>}
         </>}
+      <aside className="galaxy-note galaxy-sticker-policy">
+        <p>{labels.freeInGame}</p>
+        <p>{labels.futureNft.replace('{price}', arcadeStickerNftPricePi.toLocaleString(locale))}</p>
+      </aside>
     </div>
   </dialog>;
 }

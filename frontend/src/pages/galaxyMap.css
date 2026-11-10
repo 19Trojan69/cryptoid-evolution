@@ -127,6 +127,9 @@
 .galaxy-sticker-dialog h2 { margin-bottom: .6rem; }
 .galaxy-sticker-dialog .galaxy-sticker-count { margin: 0; font-weight: 750; color: #a2f2df; }
 .galaxy-sticker-dialog .galaxy-note { margin-top: .25rem; }
+.galaxy-sticker-dialog .galaxy-sticker-policy { margin-block-start: .8rem; }
+.galaxy-sticker-policy p { margin: 0; }
+.galaxy-sticker-policy p + p { margin-block-start: .45rem; }
 .galaxy-sticker-picker { display: grid; gap: .35rem; margin: .85rem 0; color: #d3e0f6; font-size: .86rem; }
 .galaxy-sticker-picker select {
   width: 100%;

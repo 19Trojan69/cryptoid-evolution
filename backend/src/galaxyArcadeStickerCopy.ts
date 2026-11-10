@@ -48,9 +48,32 @@ const copy: Record<ArcadeLocale, StickerText> = {
   vi: ["Mục tiêu xếp hạng", "Sau Kim cương, điểm vẫn được tính vào kỷ lục cá nhân.", "Nhãn dán mới", "Không thể lưu nhãn dán trên thiết bị này.", "Album nhãn dán không khả dụng trên thiết bị này.", "Nhãn dán được lưu trên thiết bị này.", "Kết thúc lượt chơi từ hạng Đồng đỏ trở lên để nhận nhãn dán đầu tiên.", "Đã sưu tầm {count} / {total}"],
 };
 
+const albumPolicy: Record<ArcadeLocale, readonly [string, string]> = {
+  en: ["Every sticker can be earned for free and collected in the game.", "The NFT program opens later. A separate NFT edition of each sticker is planned for {price} Pi via a smart contract."],
+  de: ["Alle Sticker sind kostenlos erspielbar und gehören zu deiner Sammlung im Spiel.", "Das NFT-Programm startet später. Für jeden Sticker ist dann eine separate NFT-Ausgabe für {price} Pi per Smart Contract geplant."],
+  es: ["Todas las pegatinas se pueden ganar gratis y coleccionar en el juego.", "El programa NFT se abrirá más adelante. Está prevista una edición NFT de cada pegatina por {price} Pi mediante un contrato inteligente."],
+  fr: ["Tous les autocollants peuvent être gagnés gratuitement et collectionnés dans le jeu.", "Le programme NFT ouvrira plus tard. Une édition NFT de chaque autocollant est prévue au prix de {price} Pi via un contrat intelligent."],
+  pt: ["Todos os autocolantes podem ser ganhos gratuitamente e colecionados no jogo.", "O programa NFT abre mais tarde. Está prevista uma edição NFT de cada autocolante por {price} Pi através de um contrato inteligente."],
+  it: ["Tutti gli adesivi si possono ottenere gratis e collezionare nel gioco.", "Il programma NFT aprirà più avanti. È prevista un’edizione NFT di ogni adesivo a {price} Pi tramite uno smart contract."],
+  pl: ["Wszystkie naklejki można zdobywać bezpłatnie i kolekcjonować w grze.", "Program NFT ruszy później. Dla każdej naklejki planowana jest osobna edycja NFT za {price} Pi, dostępna przez inteligentny kontrakt."],
+  tr: ["Tüm çıkartmalar ücretsiz kazanılabilir ve oyun içinde biriktirilebilir.", "NFT programı daha sonra açılacak. Her çıkartma için akıllı sözleşme üzerinden {price} Pi karşılığında ayrı bir NFT sürümü planlanıyor."],
+  ru: ["Все наклейки можно бесплатно заработать и собирать в игре.", "Программа NFT откроется позже. Для каждой наклейки планируется отдельная NFT-версия за {price} Pi через смарт-контракт."],
+  hr: ["Sve naljepnice možeš osvojiti besplatno i skupljati u igri.", "NFT program otvorit će se kasnije. Za svaku je naljepnicu planirano posebno NFT izdanje za {price} Pi putem pametnog ugovora."],
+  cs: ["Všechny samolepky lze získat zdarma a sbírat ve hře.", "Program NFT se otevře později. Pro každou samolepku se plánuje samostatná edice NFT za {price} Pi prostřednictvím chytrého kontraktu."],
+  sk: ["Všetky nálepky môžeš získať zadarmo a zbierať v hre.", "Program NFT sa otvorí neskôr. Pre každú nálepku sa plánuje samostatná edícia NFT za {price} Pi prostredníctvom smart kontraktu."],
+  hu: ["Minden matrica ingyen megszerezhető és gyűjthető a játékban.", "Az NFT-program később indul. Minden matricához külön NFT-kiadás készül, amelynek tervezett ára okosszerződésen keresztül {price} Pi."],
+  ro: ["Toate abțibildurile pot fi câștigate gratuit și colecționate în joc.", "Programul NFT se va deschide mai târziu. Pentru fiecare abțibild este planificată o ediție NFT separată la {price} Pi, printr-un contract inteligent."],
+  sr: ["Све налепнице можеш бесплатно освојити и сакупљати у игри.", "NFT програм ће се отворити касније. За сваку налепницу планирано је засебно NFT издање за {price} Pi путем паметног уговора."],
+  uk: ["Усі наліпки можна безкоштовно заробляти й колекціонувати в грі.", "Програма NFT відкриється пізніше. Для кожної наліпки заплановано окреме NFT-видання за {price} Pi через смартконтракт."],
+  th: ["สติกเกอร์ทุกชิ้นเล่นเพื่อรับได้ฟรีและสะสมได้ในเกม", "โปรแกรม NFT จะเปิดในภายหลัง โดยมีแผนให้ซื้อ NFT แยกสำหรับสติกเกอร์แต่ละชิ้นในราคา {price} Pi ผ่านสมาร์ตคอนแทรกต์"],
+  zh: ["所有贴纸都可以免费赢取，并在游戏内收藏。", "NFT 计划将于日后开放。每款贴纸将有单独的 NFT 版本，计划通过智能合约以 {price} Pi 购买。"],
+  vi: ["Bạn có thể kiếm miễn phí và sưu tầm tất cả nhãn dán trong trò chơi.", "Chương trình NFT sẽ mở sau. Mỗi nhãn dán dự kiến có phiên bản NFT riêng với giá {price} Pi qua hợp đồng thông minh."],
+};
+
 export function arcadeStickerLabels(locale: ArcadeLocale) {
   const [goals, afterDiamond, earned, saveFailed, unavailable, device, empty, collected] = copy[locale];
-  return { ranks: names[locale], goals, afterDiamond, earned, saveFailed, unavailable, device, empty, collected };
+  const [freeInGame, futureNft] = albumPolicy[locale];
+  return { ranks: names[locale], goals, afterDiamond, earned, saveFailed, unavailable, device, empty, collected, freeInGame, futureNft };
 }
 
 export type ArcadeStickerLabels = ReturnType<typeof arcadeStickerLabels>;
