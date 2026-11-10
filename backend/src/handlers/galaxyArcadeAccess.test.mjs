@@ -5,7 +5,12 @@ import { test } from 'node:test';
 const require = createRequire(import.meta.url);
 const { default: mountGalaxyArcadeAccess } = require('../../build/handlers/galaxyArcadeAccess.js');
 const { servePublicGalaxyArcade } = require('../../build/galaxyArcade.js');
+const { arcadeEquipmentStartup, readArcadeFlightShip } = require('../../build/galaxyArcadeEquipment.js');
 const key = 'ac'.repeat(32);
+const flightShip = {
+  modelId: 'nova-wing', stage: 1, colorId: 'metallic-red', name: 'Nova Wing · Standard',
+  artwork: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIHWP4z8DwHwAFgAI/ScLbtAAAAABJRU5ErkJggg==',
+};
 
 const response = () => ({
   code: 200, headers: {},
@@ -50,7 +55,7 @@ test('Retro Mini Game names and launches require the reached Testnet level of th
   assert.match(ticket, /^\d{13}\.[a-f0-9]{64}$/);
   const document = (level, ticket, method = 'POST') => {
     const res = response();
-    servePublicGalaxyArcade({ method, body: { ticket } }, res, `${level}/standalone`, key, undefined, 'de');
+    servePublicGalaxyArcade({ method, body: { ticket, ship: JSON.stringify(flightShip) } }, res, `${level}/standalone`, key, undefined, 'de');
     return res;
   };
   assert.equal(document(5, ticket).code, 503); // The fixture has no key to the actual game assets.
@@ -67,4 +72,15 @@ test('Retro Mini Game names and launches require the reached Testnet level of th
   assert.equal((await check(launch, { level: '95' })).code, 403);
   assert.ok(reads.every(({ query, options }) => query.uid === 'pilot' &&
     Object.keys(options.projection).every(field => field.includes('.testnet'))));
+});
+
+test('arcade equipment accepts a bounded PNG and embeds the ship label as data', () => {
+  assert.deepEqual(readArcadeFlightShip(JSON.stringify(flightShip)), flightShip);
+  for (const invalid of [{ stage: 4 }, { modelId: 'unknown' }, { colorId: 'unknown' }, { artwork: 'https://example.com/ship.png' }])
+    assert.equal(readArcadeFlightShip(JSON.stringify({ ...flightShip, ...invalid })), null);
+  const oversized = Buffer.from(flightShip.artwork.split(',')[1], 'base64');
+  oversized.writeUInt32BE(49, 16);
+  assert.equal(readArcadeFlightShip(JSON.stringify({ ...flightShip, artwork: 'data:image/png;base64,' + oversized.toString('base64') })), null);
+  const name = 'Nova Wing </script><script>alert(1)</script>';
+  assert.doesNotMatch(arcadeEquipmentStartup({ ...flightShip, name }), /<\/script>/i);
 });

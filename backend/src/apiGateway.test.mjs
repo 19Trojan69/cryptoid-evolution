@@ -80,7 +80,14 @@ test('the official Testnet Arcade serves localized public stations with a distin
   assert.equal(documentUnavailable.code, 503);
   assert.deepEqual(documentUnavailable.body, { error: 'arcade_unavailable' });
   assert.equal((await check(base + '/205/document')).code, 404);
-  const standaloneUnavailable = await check(base + '/5/standalone', launch);
+  const missingShip = await check(base + '/5/standalone', launch);
+  assert.equal(missingShip.code, 400);
+  assert.match(missingShip.body, /role="alert">[^<]*AR-05/);
+  const ship = JSON.stringify({
+    modelId: 'nova-wing', stage: 1, colorId: 'metallic-red', name: 'Nova Wing · Standard',
+    artwork: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIHWP4z8DwHwAFgAI/ScLbtAAAAABJRU5ErkJggg==',
+  });
+  const standaloneUnavailable = await check(base + '/5/standalone', { ...launch, body: { ...launch.body, ship } });
   assert.equal(standaloneUnavailable.code, 503);
   assert.equal(standaloneUnavailable.headers['Content-Type'], 'text/html; charset=utf-8');
   assert.match(standaloneUnavailable.headers['Content-Security-Policy'], /^default-src 'none'; script-src 'nonce-[A-Za-z0-9+/]{22}=='/);

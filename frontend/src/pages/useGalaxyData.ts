@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { axiosClient } from '../lib/axiosClient';
 import { loadGalaxySnapshot, emptyGalaxySnapshot, readGalaxyGuestProgress } from './galaxyData';
-import { SHIP_COLOR_KEY, SHIP_SKIN_KEY, shipSaveNetwork, shipSaveNetworkForHost } from './shipFleet';
+import { selectedShip, shipSaveNetwork, shipSaveNetworkForHost } from './shipFleet';
 
 function guestSnapshot() {
   const progress = readGalaxyGuestProgress(localStorage, shipSaveNetwork, shipSaveNetworkForHost(window.location.hostname));
-  return { ...emptyGalaxySnapshot(), skin: localStorage.getItem(SHIP_SKIN_KEY) || 'grey-scout', color: localStorage.getItem(SHIP_COLOR_KEY) || 'grey', progress };
+  const { skin, color } = selectedShip();
+  return { ...emptyGalaxySnapshot(), skin: skin.id, color: color.id, progress };
 }
 
 export default function useGalaxyData(expectedOwner?: string) {

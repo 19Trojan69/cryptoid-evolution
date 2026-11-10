@@ -6,7 +6,7 @@ import ts from 'typescript';
 import * as jsx from 'react/jsx-runtime';
 import * as model from './galaxyModel.ts';
 import * as arcadeRecords from './galaxyArcadeRecords.ts';
-import { loadGalaxySnapshot, emptyGalaxySnapshot, readGalaxyGuestProgress } from './galaxyData.ts';
+import { loadGalaxyEquipment, loadGalaxySnapshot, emptyGalaxySnapshot, readGalaxyGuestProgress } from './galaxyData.ts';
 import { emptyRewardProgress, REWARD_PROGRESS_KEY } from './rewardProgress.ts';
 import { bossManifest } from './bossManifest.ts';
 import { bossName } from './bossNames.ts';
@@ -116,13 +116,13 @@ test('unauthenticated map remains available without invoking sign-in or any writ
 
 test('account snapshot uses only four GETs, actual wins and equipped ship inventory',async()=>{
   const calls=[],rewards={...emptyRewardProgress(),bossWins:{1:2},highestLevel:11};
-  const responses={'/user/me':{user:{uid:'qa'}},'/progress/me':{save:{skin:'nova-wing',color:'blue',highestSector:18}},'/rewards/me':{network:'testnet',progress:rewards},'/hangar/inventory':{ownedShipUpgrades:['ship_0_stage2']}};
+  const responses={'/user/me':{user:{uid:'qa'}},'/progress/me':{save:{skin:'nova-wing',color:'metallic-blue',shipStage:1,highestSector:18}},'/rewards/me':{network:'testnet',progress:rewards},'/hangar/inventory':{ownedShipUpgrades:['ship_01_stage_2','ship_01_stage_3']}};
   const before=JSON.stringify(responses),get=async path=>{calls.push(path);return {data:responses[path]};};
   const snapshot=await loadGalaxySnapshot(get,'testnet',()=>{throw Error('No guest fallback');},'qa');
   assert.deepEqual(calls.sort(),Object.keys(responses).sort());
   assert.equal(snapshot.progress.currentLevel,18); assert.deepEqual(snapshot.progress.bossWins,{1:2});
-  assert.equal(snapshot.skin,'nova-wing'); assert.equal(snapshot.color,'blue');
-  assert.deepEqual(snapshot.upgrades,['ship_0_stage2']); assert.equal(JSON.stringify(responses),before);
+  assert.equal(snapshot.skin,'nova-wing'); assert.equal(snapshot.color,'metallic-blue'); assert.equal(snapshot.shipStage,1);
+  assert.deepEqual(snapshot.upgrades,['ship_01_stage_2','ship_01_stage_3']); assert.equal(JSON.stringify(responses),before);
   await assert.rejects(loadGalaxySnapshot(get,'mainnet',emptyGalaxySnapshot,'qa'),/network mismatch/);
   await assert.rejects(loadGalaxySnapshot(get,'testnet',emptyGalaxySnapshot,'different'),/Account changed/);
 });
@@ -284,12 +284,13 @@ test('actual ship flight only reflects a new adjacent confirmed stage and never 
     '../components/BlockchainIcon':{default:()=>null},'./ShipPortrait':{default:()=>null},
     './GalaxySector':{default:()=>null},'./GalaxyInfoDialog':{default:()=>null},'./GalaxyArcadeAccess':{default:()=>null},
     './GalaxyStickerAlbum':{default:()=>null},
+    './galaxyData':{loadGalaxyEquipment},'./galaxyArcadeEquipment':{prepareArcadeFlightShip:()=>{}},
     './galaxyArcadeRecords':arcadeRecords,
     '../lib/axiosClient':{axiosClient:{get:async()=>({data:undefined})}},
     './useGalaxyData':{default:()=>data},'./galaxyModel':model,'./displaySettings':{MOTION_STORAGE_KEY:'motion'},
     './controlPreferences':{readControlHand:()=> 'right'},
     './shipFleet':{shipSaveNetwork:'testnet',playerSkins:[{id:'grey-scout',name:'Grey Scout',sprite:1}],allPlayerColors:[{id:'grey',name:'Grey'}]},
-    './shipEvolution':{ownedShipStage:()=>1,shipEvolutionAsset:()=>'/existing.png'},
+    './shipEvolution':{selectedShipStage:()=>1,shipEvolutionAsset:()=>'/existing.png'},
   },{document:doc,localStorage:{getItem:()=>null},window:{matchMedia:()=>({matches:false})},
     AbortController});
   const render=()=>{cursor=0;refIndex=0;const nodes=elements(Map());pending.splice(0).forEach(fn=>fn());return nodes;};

@@ -3,16 +3,17 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useLocale } from '../i18n';
 import BlockchainIcon from '../components/BlockchainIcon';
 import ShipPortrait from './ShipPortrait';
-import { allPlayerColors, playerSkins, shipSaveNetwork } from './shipFleet';
-import { ownedShipStage, shipEvolutionAsset } from './shipEvolution';
+import { ADMIN_MODE_KEY, ADMIN_SHIP_STAGE_KEY, allPlayerColors, playerSkins, selectedShip, shipSaveNetwork } from './shipFleet';
+import { selectedShipStage, shipEvolutionAsset, type ShipStage } from './shipEvolution';
 import useGalaxyData from './useGalaxyData';
 import GalaxySector from './GalaxySector';
-import GalaxyInfoDialog from './GalaxyInfoDialog';
+import GalaxyInfoDialog, { type GalaxyArcadeLaunch } from './GalaxyInfoDialog';
 import GalaxyArcadeAccess from './GalaxyArcadeAccess';
 import GalaxyStickerAlbum from './GalaxyStickerAlbum';
 import { axiosClient } from '../lib/axiosClient';
-import type { GalaxyMiniGame } from './galaxyData';
-import { arcadeStickerAlbumName, claimArcadeResult, markArcadeLaunch, readArcadeRecord, retroMiniGameName, retroMiniGamesName, type ArcadeStation, type PublicArcade } from './galaxyArcadeRecords';
+import { loadGalaxyEquipment, type GalaxyEquipment, type GalaxyMiniGame } from './galaxyData';
+import { prepareArcadeFlightShip } from './galaxyArcadeEquipment';
+import { arcadeStickerAlbumName, claimArcadeResult, markArcadeLaunch, readArcadeRecord, retroMiniGameName, retroMiniGamesName, type PublicArcade } from './galaxyArcadeRecords';
 import { emptyGalaxyProgress, galaxyPoint, galaxyShipPoint, galaxyRegions, type GalaxySelection } from './galaxyModel';
 import { MOTION_STORAGE_KEY } from './displaySettings';
 import { readControlHand } from './controlPreferences';
@@ -45,34 +46,51 @@ export default function GalaxyMap() {
     setArcadeListOpen(false);
     setAlbum({ level });
   };
-  const launchArcade = useCallback((path: string) => {
-    try {
-      if (scroll.current) sessionStorage.setItem(arcadePositionKey, String(scroll.current.scrollTop));
-    } catch { /* Browser storage is optional for returning to the map. */ }
-    close();
-    // The sandboxed arcade cannot read the main game's browser storage.
-    window.location.assign(`${path}#hand=${readControlHand()}`);
-  }, [close]);
-  const launchOfficialArcade = useCallback((game: ArcadeStation, ticket: string) => {
+  const launchArcade = useCallback(async (target: GalaxyArcadeLaunch, signal: AbortSignal) => {
+    let previewStage: ShipStage | undefined;
+    if ('path' in target && sessionStorage.getItem(ADMIN_MODE_KEY) === '1') {
+      const stage = Number(sessionStorage.getItem(ADMIN_SHIP_STAGE_KEY));
+      previewStage = stage === 2 || stage === 3 ? stage : 1;
+    }
+    if (status !== 'ready' && previewStage === undefined) throw new Error('Galaxy equipment is unavailable');
+    let equipment: GalaxyEquipment;
+    if (snapshot.owner && previewStage === undefined) {
+      // Re-read the Hangar selection at launch, including changes made in another tab.
+      ({ equipment } = await loadGalaxyEquipment((path, config) => axiosClient.get(path, { ...config, signal })));
+    } else {
+      const { skin, color } = selectedShip();
+      equipment = { skin: skin.id, color: color.id, upgrades: [] };
+    }
+    if (signal.aborted) return;
+    const flightShip = await prepareArcadeFlightShip(equipment, t, previewStage);
+    if (signal.aborted) return;
+
+    const fields: Record<string, string> = { ship: JSON.stringify(flightShip) };
     const fragment = new URLSearchParams({ hand: readControlHand() });
+    const path = 'game' in target ? `/galaxy/arcade/${target.game.level}?lang=${encodeURIComponent(locale)}` : target.path;
+    if ('ticket' in target) fields.ticket = target.ticket;
     try {
       if (scroll.current) sessionStorage.setItem(arcadePositionKey, String(scroll.current.scrollTop));
-      const run = crypto.randomUUID();
-      markArcadeLaunch(sessionStorage, game, snapshot.owner, run);
-      fragment.set('arcade-run', run);
+      if ('game' in target) {
+        const run = crypto.randomUUID();
+        markArcadeLaunch(sessionStorage, target.game, snapshot.owner, run);
+        fragment.set('arcade-run', run);
+      }
     } catch { /* The minigame and its report still work without device storage. */ }
     const form = document.createElement('form');
     form.method = 'POST';
-    form.action = `/galaxy/arcade/${game.level}?lang=${encodeURIComponent(locale)}#${fragment}`;
+    form.action = `${path}#${fragment}`;
     form.hidden = true;
-    const field = document.createElement('input');
-    field.type = 'hidden';
-    field.name = 'ticket';
-    field.value = ticket;
-    form.append(field);
+    for (const [name, value] of Object.entries(fields)) {
+      const field = document.createElement('input');
+      field.type = 'hidden';
+      field.name = name;
+      field.value = value;
+      form.append(field);
+    }
     document.body.append(form);
     form.submit();
-  }, [locale, snapshot.owner]);
+  }, [locale, snapshot.owner, status, t]);
   useEffect(() => {
     if (shipSaveNetwork !== 'testnet' || previewAccess) return;
     const request = new AbortController();
@@ -115,7 +133,7 @@ export default function GalaxyMap() {
   const point = galaxyShipPoint(progress.currentLevel);
   const skin = playerSkins.find(entry => entry.id === snapshot.skin) ?? playerSkins[0];
   const color = allPlayerColors.find(entry => entry.id === snapshot.color) ?? allPlayerColors.find(entry => entry.id === 'grey')!;
-  const stage = ownedShipStage(skin.sprite, snapshot.upgrades);
+  const stage = selectedShipStage(skin.sprite, snapshot.upgrades, snapshot.shipStage);
   const reduced = () => document.documentElement.dataset.motion === 'reduced' || localStorage.getItem(MOTION_STORAGE_KEY) === '1' || window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const goTo = (level: number, smooth = true) => {
     const element = scroll.current;
@@ -203,7 +221,7 @@ export default function GalaxyMap() {
     {selection && <GalaxyInfoDialog key={`${selection.kind}:${selection.level}`} selection={selection} progress={progress} miniGameName={miniGame?.name} lockedRetro={lockedRetro}
       arcade={officialGame && officialArcade ? { game: officialGame, labels: officialArcade.labels,
         record: readArcadeRecord(officialGame, snapshot.owner), owner: snapshot.owner,
-        play: launchOfficialArcade, openAlbum: () => openAlbum(officialGame.level) } : undefined}
+        openAlbum: () => openAlbum(officialGame.level) } : undefined}
       onEnterTestCode={lockedPortal ? enterTestCode : undefined} onLaunch={launchArcade} onClose={close} onShop={view => home({ openShopView: view })} onCards={() => home({ openCollection: true })}/>}
     {album && officialArcade && unlocked && <GalaxyStickerAlbum key={snapshot.owner ?? 'guest'} owner={snapshot.owner}
       stations={unlocked} stationCount={officialArcade.levels.length} initialLevel={album.level}
