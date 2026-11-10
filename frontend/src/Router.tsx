@@ -1,18 +1,12 @@
 import { createBrowserRouter } from "react-router-dom";
 import PiSignInCallback from "./pages/PiSignInCallback.tsx";
 import LegalPage from "./pages/LegalPage.tsx";
-import GalaxyArcadePlayer from "./pages/GalaxyArcadePlayer";
 import RouteRecovery, { AdminRouteRecovery } from "./RouteRecovery";
 
 export const router = createBrowserRouter([
   {
     path: "/galaxy",
     lazy: async () => ({ Component: (await import("./pages/GalaxyMap")).default }),
-    errorElement: <RouteRecovery />,
-  },
-  {
-    path: "/galaxy/arcade/:level",
-    element: <GalaxyArcadePlayer />,
     errorElement: <RouteRecovery />,
   },
   {

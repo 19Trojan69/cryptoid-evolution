@@ -1,4 +1,4 @@
-import { createDecipheriv, createHash, createHmac, timingSafeEqual } from "node:crypto";
+import { createDecipheriv, createHash, createHmac, randomBytes, timingSafeEqual } from "node:crypto";
 import { gunzipSync } from "node:zlib";
 import type { Request, Response } from "express";
 import { withArcadeAudio } from "./galaxyArcadeAudio";
@@ -28,6 +28,27 @@ const publicArcadeStartup = `
     arcadeHost?.postMessage({ type, hash }, arcadeHostOrigin);
   }
 `;
+const standaloneArcadeStartup = `
+  const arcadeLaunchOptions = new URLSearchParams(location.hash.slice(1));
+  const arcadeScriptNonce = document.currentScript.nonce;
+`;
+
+function standaloneDocument(html: string, nonce: string) {
+  const storage = /^C\.storage=\{memory:Object\.create\(null\),available:null,.*\};$/m;
+  if (!storage.test(html)) throw new Error("Arcade session storage was not found");
+  return html
+    .replace(/<script>/g, `<script nonce="${nonce}">`)
+    // Only the game's own embedded templates are executable on this page.
+    .replace(/\b(\w+)\.textContent=\w+\.textContent;(?=document\.head\.appendChild\(\1\))/g,
+      (assignment, script) => `${assignment}${script}.nonce=arcadeScriptNonce;`)
+    // Retain the old sandbox's round-local storage. The map owns per-player records.
+    .replace(storage, `C.storage = {
+      memory: Object.create(null),
+      available: false,
+      get(key, fallback = 0) { return this.memory[key] ?? fallback; },
+      set(key, value) { this.memory[key] = value; return false; },
+    };`);
+}
 
 const sameDigest = (value: string | undefined, expected: string) =>
   typeof value === "string" && hexDigest.test(value) && timingSafeEqual(Buffer.from(value, "hex"), Buffer.from(expected, "hex"));
@@ -67,7 +88,7 @@ const playStyles = `<style>
   #galaxy-arcade-startup { position: fixed; inset: var(--arcade-nav-height) 0 0; z-index: 19; display: grid; place-items: center; padding: 16px; text-align: center; background: #081222; color: #eaf0ff; }
 </style>`;
 
-function stationDocument(index: number, key: string, musicKey: string | undefined, returnHref?: string, locale?: ArcadeLocale) {
+function stationDocument(index: number, key: string, musicKey: string | undefined, returnHref?: string, locale?: ArcadeLocale, nonce?: string) {
   const payload = Buffer.from(galaxyArcadePayload, "base64");
   const decipher = createDecipheriv("aes-256-gcm", Buffer.from(key, "hex"), payload.subarray(0, 12));
   decipher.setAuthTag(payload.subarray(12, 28));
@@ -75,7 +96,9 @@ function stationDocument(index: number, key: string, musicKey: string | undefine
   const game = Math.floor(index / 5) + 1;
   const variant = index % 5 + 1;
   const mission = returnHref ? withArcadeSurvival(html, game, variant) : html;
-  const publicStartup = locale ? `<script>${publicArcadeStartup}</script>` : "";
+  const embedded = locale && !nonce;
+  const startup = nonce ? standaloneArcadeStartup : locale ? publicArcadeStartup : "";
+  const publicStartup = startup ? `<script>${startup}</script>` : "";
   const document = withArcadeAudio(withArcadeRetroStyle(withArcadeTouchControls(mission)), musicKey)
     .replace("<head>", `<head><meta http-equiv="Content-Security-Policy" content="${arcadePolicy}">${publicStartup}`)
     // A frame queued before Start or Resume can carry an older timestamp.
@@ -130,12 +153,12 @@ function stationDocument(index: number, key: string, musicKey: string | undefine
       "C.graphics.ready.then(() => C.graphics.ensureArt?.()).catch(() => {});",
     )
     .replace("</head>", `${playStyles}</head>`)
-    .replace("<body>", `<body>${returnBar(returnHref)}<p id="galaxy-arcade-startup" role="status">Minispiel wird geladen …</p>${locale ? "<script>reportArcadeHost('cryptoid:arcade-boot');</script>" : ""}`)
+    .replace("<body>", `<body>${returnBar(returnHref)}<p id="galaxy-arcade-startup" role="status">Minispiel wird geladen …</p>${embedded ? "<script>reportArcadeHost('cryptoid:arcade-boot');</script>" : ""}`)
     .replace("</body></html>", `<script>
       (() => {
         const status = document.getElementById('galaxy-arcade-startup');
-        const host = ${locale ? "arcadeHost" : "null"};
-        const report = ${locale ? "reportArcadeHost" : "() => {}"};
+        const host = ${embedded ? "arcadeHost" : "null"};
+        const report = ${embedded ? "reportArcadeHost" : "() => {}"};
         if (host) {
           const link = document.querySelector('#galaxy-arcade-navigation a');
           link.addEventListener('click', event => {
@@ -144,7 +167,7 @@ function stationDocument(index: number, key: string, musicKey: string | undefine
           });
         }
         const failed = () => {
-          status.textContent = 'Das Minispiel konnte nicht gestartet werden. Kehre zur Galaxiekarte zurück und versuche es erneut.';
+          status.textContent = 'Das Minispiel konnte nicht gestartet werden. Kehre zur Galaxiekarte zurück und versuche es erneut.${nonce ? " · AR-04" : ""}';
           status.setAttribute('role', 'alert');
           report('cryptoid:arcade-error');
         };
@@ -155,14 +178,18 @@ function stationDocument(index: number, key: string, musicKey: string | undefine
         }).catch(failed).finally(() => clearTimeout(timer));
       })();
     </script></body></html>`);
-  return locale ? withArcadePublicLocale(page, locale, index, stations[index].name) : page;
+  const localized = locale ? withArcadePublicLocale(page, locale, index, stations[index].name) : page;
+  return nonce ? standaloneDocument(localized, nonce) : localized;
 }
 
-function sendPlayPage(res: Pick<Response, "setHeader" | "status" | "send">, code: number, html: string, access: "public" | "private" = "private") {
-  // The in-app player can run directly or inside the official PiNet frame.
+function sendPlayPage(res: Pick<Response, "setHeader" | "status" | "send">, code: number, html: string, access: "public" | "private" = "private", nonce?: string) {
   const ancestors = access === "public" ? "'self' https://cryptoidevo3025.pinet.com" : "'none'";
+  // The standalone public document uses the app's normal origin and frame.
+  // Only nonce-tagged code can run and the policy permits no network connections.
+  const policy = nonce ? arcadePolicy.replace("script-src 'unsafe-inline'", `script-src 'nonce-${nonce}'`)
+    : `${arcadePolicy}; sandbox allow-scripts; frame-ancestors ${ancestors}`;
   res.setHeader("Content-Type", "text/html; charset=utf-8");
-  res.setHeader("Content-Security-Policy", `${arcadePolicy}; sandbox allow-scripts; frame-ancestors ${ancestors}`);
+  res.setHeader("Content-Security-Policy", policy);
   if (access === "private") res.setHeader("X-Frame-Options", "DENY");
   res.setHeader("X-Content-Type-Options", "nosniff");
   res.setHeader("Referrer-Policy", "no-referrer");
@@ -190,23 +217,25 @@ export function servePublicGalaxyArcade(
       stations: stations.map((station, index) => ({ ...station, ...arcadeStationCopy(locale, index, station.name) })),
     });
   }
-  const match = /^(\d+)\/(play|document)$/.exec(path);
+  const match = /^(\d+)\/(play|document|standalone)$/.exec(path);
   const index = galaxyArcadeStationIndex(match?.[1]);
   if (index < 0) return res.status(404).json({ error: "not_found" });
   const embeddedDocument = match?.[2] === "document";
+  const nonce = match?.[2] === "standalone" ? randomBytes(16).toString("base64") : undefined;
   const returnHref = "/galaxy?arcade-return=1";
   try {
-    const html = stationDocument(index, key, musicKey, returnHref, locale);
+    const html = stationDocument(index, key, musicKey, returnHref, locale, nonce);
     if (embeddedDocument) {
       console.info("Galaxy arcade document prepared", stations[index].level);
       return res.json({ document: html });
     }
-    return sendPlayPage(res, 200, html, "public");
+    return sendPlayPage(res, 200, html, "public", nonce);
   } catch {
     if (embeddedDocument) return res.status(503).json({ error: "arcade_unavailable" });
-    const unavailable = playError(returnHref, "Das Minispiel ist gerade nicht verfügbar. Versuche es erneut über die Galaxiekarte.")
+    const message = "Das Minispiel ist gerade nicht verfügbar. Versuche es erneut über die Galaxiekarte.";
+    const unavailable = nonce ? playError(returnHref, `${message} · AR-02`) : playError(returnHref, message)
       .replace("</body>", `<script>(${publicArcadeHost})?.postMessage({ type: 'cryptoid:arcade-error' }, location.origin);</script></body>`);
-    return sendPlayPage(res, 503, withArcadePublicLocale(unavailable, locale, index, stations[index].name), "public");
+    return sendPlayPage(res, 503, withArcadePublicLocale(unavailable, locale, index, stations[index].name), "public", nonce);
   }
 }
 

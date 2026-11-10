@@ -48,6 +48,10 @@
   },
   "rewrites": [
     {
+      "source": "/galaxy/arcade/:level",
+      "destination": "/api/index?path=galaxy-minigames/:level/standalone"
+    },
+    {
       "source": "/api/:path*",
       "destination": "/api/index?path=:path*"
     },

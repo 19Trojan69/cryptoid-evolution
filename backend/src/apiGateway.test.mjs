@@ -64,16 +64,26 @@ test('the official Testnet Arcade serves localized public stations with a distin
   assert.equal(documentUnavailable.code, 503);
   assert.deepEqual(documentUnavailable.body, { error: 'arcade_unavailable' });
   assert.equal((await check(base + '/205/document')).code, 404);
+  const standaloneUnavailable = await check(base + '/5/standalone');
+  assert.equal(standaloneUnavailable.code, 503);
+  assert.equal(standaloneUnavailable.headers['Content-Type'], 'text/html; charset=utf-8');
+  assert.match(standaloneUnavailable.headers['Content-Security-Policy'], /^default-src 'none'; script-src 'nonce-[A-Za-z0-9+/]{22}=='/);
+  assert.doesNotMatch(standaloneUnavailable.headers['Content-Security-Policy'], /sandbox|frame-ancestors/);
+  assert.match(standaloneUnavailable.body, /href="\/galaxy\?arcade-return=1"/);
+  assert.match(standaloneUnavailable.body, /role="alert">[^<]*AR-02/);
+  assert.equal((await check(base + '/205/standalone')).code, 404);
   assert.equal((await check(base + '/205/rating')).code, 404);
   assert.equal(calls.length, 0);
   assert.equal((await check(base + '/5/rating')).code, 200);
   assert.equal(calls.at(-1).network, 'testnet');
   env.VERCEL_ENV = 'preview';
   assert.equal((await check(base)).code, 404);
+  assert.equal((await check(base + '/5/standalone')).code, 404);
   env.VERCEL_ENV = 'production';
   env.VERCEL_PROJECT_PRODUCTION_URL = 'cryptoid-evolution.vercel.app';
   assert.equal((await check(base)).code, 404);
   assert.equal((await check(base + '/5/document')).code, 404);
+  assert.equal((await check(base + '/5/standalone')).code, 404);
 });
 
 test('Galaxy Arcade is isolated to the enabled Testnet preview and requires a verified Pi owner', async t => {
