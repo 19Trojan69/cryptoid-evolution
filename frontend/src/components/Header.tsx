@@ -3,6 +3,7 @@ import { useLocale } from "../i18n";
 import type { User } from "../types/pi.ts";
 import { Link } from "react-router-dom";
 import BlockchainIcon from "./BlockchainIcon";
+import LoadingStripes from "./LoadingStripes";
 import WolfLogo from "./WolfLogo";
 
 interface HeaderProps {
@@ -51,7 +52,10 @@ const Header = ({ user, serviceRank, onSignIn, onSignOut, onSendTestNotification
             )}
           </>
         ) : authPending || isLoading ? (
-          <span className="header-auth-status" role="status">{t("Signing in…")}</span>
+          <div className="header-auth-status" role="status">
+            <span>{t("Signing in…").replace(/\s*…$/, "")}</span>
+            <LoadingStripes />
+          </div>
         ) : (
           <button className="header-action header-signin" onClick={onSignIn}>{t('Sign in with Pi')}</button>
         )}

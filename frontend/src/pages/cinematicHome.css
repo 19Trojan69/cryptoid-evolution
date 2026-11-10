@@ -24,6 +24,9 @@
 .cinematic-home > .site-header .quick-access-trigger .blockchain-icon {width:100%; height:100%;}
 .cinematic-home > .site-header .quick-access-trigger b {font-size:12px; line-height:1.3; white-space:normal; overflow-wrap:anywhere;}
 .cinematic-home > .site-header .user-section {width:100%; min-width:0; justify-content:flex-end;}
+.cinematic-home > .site-header .header-auth-status {flex-direction:column; gap:5px; overflow-wrap:anywhere;}
+.cinematic-home > .site-header .header-auth-status .launch-status {margin:0;}
+.cinematic-home > .site-header .header-auth-status .launch-status i {width:5px; height:5px; border-radius:50%;}
 .cinematic-home > .site-header .header-account {cursor:pointer; display:flex; align-items:center; gap:6px;}
 .cinematic-home > .site-header .header-account .blockchain-icon {width:22px; height:25px; flex:none;}
 .cinematic-home > .site-header .header-account-copy small {display:block; font-size:10px; line-height:1.3; color:#b9d8e5; white-space:normal;}
@@ -34,7 +37,7 @@
 .cinematic-home > .site-header .header-profile-label i {font-size:16px; flex:none;}
 .cinematic-home > .site-header :is(button,a)::before,
 .cinematic-home > .site-header :is(button,a)::after {animation:none;}
-.cinematic-home > .site-header *,
+.cinematic-home > .site-header :not(.header-auth-status .launch-status > i),
 .cinematic-home > .site-header *::before,
 .cinematic-home > .site-header *::after {animation:none !important;}
 
