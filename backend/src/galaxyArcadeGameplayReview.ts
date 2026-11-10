@@ -39,7 +39,14 @@ export function withArcadeGameplayReview(html: string, game: number) {
              dx = Math.abs(startX + (s.x - startX) * fraction - o.x);
              opened = open(s, o, s.elapsed - (1 - fraction) * dt);
            }
-           good = dx < o.r - 28 && opened;`,
+           const hullClearance = 28;
+           // The 14px rim stroke extends 7px past the ring radius.
+           if (s.v === 3 && dx >= o.r + 7 + hullClearance) {
+             s.missed++;
+             s.combo = 0;
+             continue;
+           }
+           good = dx < o.r - hullClearance && opened;`,
         )
         .replace(
           "s.success=s.passed>=8;s.message=s.success?'Ringroute abgeschlossen.':'Mindestens acht Ringpassagen sind nötig.';",

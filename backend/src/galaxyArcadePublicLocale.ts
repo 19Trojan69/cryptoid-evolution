@@ -1,26 +1,26 @@
 import { arcadeStationCopy, arcadeTerms } from "./galaxyArcadeCopy";
 import { arcadeWords, type ArcadeLocale } from "./galaxyArcadeLanguages";
 
-const hints: Record<ArcadeLocale, readonly [string, string, string, string, string]> = {
-  en: ["Each section raises the level and difficulty.", "Use Boost to dash in the last direction you steered.", "Brake, turn, and hold still in the bay for one second.", "Fly through only when the gate is open.", "Avoid friendly targets. Each friendly hit costs a life."],
-  de: ["Mit jedem Abschnitt steigen Level und Schwierigkeit.", "Mit Schub sprintest du in die zuletzt gesteuerte Richtung.", "Bremse, richte das Schiff aus und halte es eine Sekunde in der Bucht.", "Fliege nur durch, wenn das Tor offen ist.", "Verschone Verbündete. Jeder Freundtreffer kostet ein Leben."],
-  es: ["Con cada tramo suben el nivel y la dificultad.", "Usa el impulso para acelerar en la última dirección elegida.", "Frena, gira y mantén la posición un segundo en la bahía.", "Atraviesa solo cuando la puerta esté abierta.", "Evita a los aliados. Cada impacto aliado cuesta una vida."],
-  fr: ["Chaque section augmente le niveau et la difficulté.", "Utilisez l’impulsion pour accélérer dans la dernière direction choisie.", "Freinez, tournez et maintenez la position une seconde dans la baie.", "Passez seulement quand la porte est ouverte.", "Épargnez les alliés. Chaque tir allié coûte une vie."],
-  pt: ["Cada secção aumenta o nível e a dificuldade.", "Usa o impulso para acelerar na última direção escolhida.", "Trava, roda e mantém a posição um segundo na baía.", "Passa apenas quando a porta estiver aberta.", "Evita os aliados. Cada acerto num aliado custa uma vida."],
-  it: ["Ogni sezione aumenta il livello e la difficoltà.", "Usa la spinta per scattare nell’ultima direzione scelta.", "Frena, ruota e resta fermo nella baia per un secondo.", "Passa solo quando il varco è aperto.", "Evita gli alleati. Ogni colpo su un alleato costa una vita."],
-  pl: ["Każdy odcinek podnosi poziom i trudność.", "Użyj przyspieszenia, by wykonać zryw w ostatnim kierunku ruchu.", "Zahamuj, obróć się i utrzymaj pozycję w zatoce przez sekundę.", "Przelatuj tylko wtedy, gdy brama jest otwarta.", "Omijaj sojuszników. Każde trafienie sojusznika kosztuje życie."],
-  tr: ["Her bölümde seviye ve zorluk artar.", "Son yöneldiğin tarafa atılmak için itkiyi kullan.", "Frenle, dön ve yuvada bir saniye konumunu koru.", "Yalnızca geçit açıkken geç.", "Dost hedeflerden kaçın. Her dost isabeti bir can götürür."],
-  ru: ["С каждым участком растут уровень и сложность.", "Ускоряйся в последнем выбранном направлении.", "Затормози, развернись и удерживай положение в отсеке одну секунду.", "Пролетай, только когда ворота открыты.", "Не задевай союзников. Каждое попадание по союзнику стоит жизни."],
-  hr: ["Svaka dionica povećava razinu i težinu.", "Potiskom ubrzaj u zadnjem smjeru kretanja.", "Zakoči, okreni se i zadrži položaj u pristaništu jednu sekundu.", "Proleti samo dok je prolaz otvoren.", "Poštedi saveznike. Svaki pogodak saveznika košta jedan život."],
-  cs: ["Každý úsek zvyšuje úroveň i obtížnost.", "Zrychli v posledním směru letu.", "Zabrzdi, otoč se a vydrž v doku jednu sekundu.", "Proleť, jen když je brána otevřená.", "Vyhýbej se spojencům. Každý zásah spojence stojí život."],
-  sk: ["Každý úsek zvyšuje úroveň aj obtiažnosť.", "Zrýchli v poslednom smere letu.", "Zabrzdi, otoč sa a vydrž v doku jednu sekundu.", "Preleť, len keď je brána otvorená.", "Vyhýbaj sa spojencom. Každý zásah spojenca stojí život."],
-  hu: ["Minden szakasz növeli a szintet és a nehézséget.", "Gyorsíts az utoljára választott irányba.", "Fékezz, fordulj és tartsd a helyzeted a dokkban egy másodpercig.", "Csak nyitott kapun repülj át.", "Kíméld a szövetségeseket. Minden szövetséges találat egy életbe kerül."],
-  ro: ["Fiecare sector mărește nivelul și dificultatea.", "Folosește propulsia pentru a accelera în ultima direcție aleasă.", "Frânează, rotește nava și menține poziția în doc timp de o secundă.", "Treci numai când poarta este deschisă.", "Evită aliații. Fiecare aliat lovit te costă o viață."],
-  sr: ["Свака деоница повећава ниво и тежину.", "Користи потисак да убрзаш у последњем смеру кретања.", "Закочи, окрени се и задржи положај у доку једну секунду.", "Пролети само када је пролаз отворен.", "Поштеди савезнике. Сваки погодак савезника кошта један живот."],
-  uk: ["З кожною ділянкою зростають рівень і складність.", "Прискорюйся в останньому вибраному напрямку.", "Загальмуй, розвернись і утримуй позицію у відсіку одну секунду.", "Пролітай, лише коли прохід відкритий.", "Бережи союзників. Кожне влучання в союзника коштує життя."],
-  th: ["ทุกช่วงใหม่จะเพิ่มระดับและความยาก", "กดเร่งเพื่อพุ่งไปในทิศที่บังคับล่าสุด", "เบรก หมุนยาน แล้วค้างในช่องเทียบยานหนึ่งวินาที", "บินผ่านเมื่อช่องเปิดเท่านั้น", "หลีกเลี่ยงฝ่ายเดียวกัน ยิงโดนหนึ่งครั้งเสียหนึ่งชีวิต"],
-  zh: ["每进入一个新航段，关卡和难度都会提升。", "按加速键向最近一次操纵的方向冲刺。", "制动并调整朝向，在对接舱内保持一秒。", "只在通道开放时穿过。", "避开友军目标。每次误击都会损失一条生命。"],
-  vi: ["Mỗi chặng mới tăng cấp độ và độ khó.", "Dùng tăng tốc để lao theo hướng vừa điều khiển.", "Phanh, xoay và giữ yên trong khoang ghép nối một giây.", "Chỉ bay qua khi cổng mở.", "Tránh bắn đồng minh. Mỗi phát trúng đồng minh mất một mạng."],
+const hints: Record<ArcadeLocale, readonly [string, string, string, string]> = {
+  en: ["Each section raises the level and difficulty.", "Use Boost to dash in the last direction you steered.", "Brake, turn, and hold still in the bay for one second.", "Avoid friendly targets. Each friendly hit costs a life."],
+  de: ["Mit jedem Abschnitt steigen Level und Schwierigkeit.", "Mit Schub sprintest du in die zuletzt gesteuerte Richtung.", "Bremse, richte das Schiff aus und halte es eine Sekunde in der Bucht.", "Verschone Verbündete. Jeder Freundtreffer kostet ein Leben."],
+  es: ["Con cada tramo suben el nivel y la dificultad.", "Usa el impulso para acelerar en la última dirección elegida.", "Frena, gira y mantén la posición un segundo en la bahía.", "Evita a los aliados. Cada impacto aliado cuesta una vida."],
+  fr: ["Chaque section augmente le niveau et la difficulté.", "Utilisez l’impulsion pour accélérer dans la dernière direction choisie.", "Freinez, tournez et maintenez la position une seconde dans la baie.", "Épargnez les alliés. Chaque tir allié coûte une vie."],
+  pt: ["Cada secção aumenta o nível e a dificuldade.", "Usa o impulso para acelerar na última direção escolhida.", "Trava, roda e mantém a posição um segundo na baía.", "Evita os aliados. Cada acerto num aliado custa uma vida."],
+  it: ["Ogni sezione aumenta il livello e la difficoltà.", "Usa la spinta per scattare nell’ultima direzione scelta.", "Frena, ruota e resta fermo nella baia per un secondo.", "Evita gli alleati. Ogni colpo su un alleato costa una vita."],
+  pl: ["Każdy odcinek podnosi poziom i trudność.", "Użyj przyspieszenia, by wykonać zryw w ostatnim kierunku ruchu.", "Zahamuj, obróć się i utrzymaj pozycję w zatoce przez sekundę.", "Omijaj sojuszników. Każde trafienie sojusznika kosztuje życie."],
+  tr: ["Her bölümde seviye ve zorluk artar.", "Son yöneldiğin tarafa atılmak için itkiyi kullan.", "Frenle, dön ve yuvada bir saniye konumunu koru.", "Dost hedeflerden kaçın. Her dost isabeti bir can götürür."],
+  ru: ["С каждым участком растут уровень и сложность.", "Ускоряйся в последнем выбранном направлении.", "Затормози, развернись и удерживай положение в отсеке одну секунду.", "Не задевай союзников. Каждое попадание по союзнику стоит жизни."],
+  hr: ["Svaka dionica povećava razinu i težinu.", "Potiskom ubrzaj u zadnjem smjeru kretanja.", "Zakoči, okreni se i zadrži položaj u pristaništu jednu sekundu.", "Poštedi saveznike. Svaki pogodak saveznika košta jedan život."],
+  cs: ["Každý úsek zvyšuje úroveň i obtížnost.", "Zrychli v posledním směru letu.", "Zabrzdi, otoč se a vydrž v doku jednu sekundu.", "Vyhýbej se spojencům. Každý zásah spojence stojí život."],
+  sk: ["Každý úsek zvyšuje úroveň aj obtiažnosť.", "Zrýchli v poslednom smere letu.", "Zabrzdi, otoč sa a vydrž v doku jednu sekundu.", "Vyhýbaj sa spojencom. Každý zásah spojenca stojí život."],
+  hu: ["Minden szakasz növeli a szintet és a nehézséget.", "Gyorsíts az utoljára választott irányba.", "Fékezz, fordulj és tartsd a helyzeted a dokkban egy másodpercig.", "Kíméld a szövetségeseket. Minden szövetséges találat egy életbe kerül."],
+  ro: ["Fiecare sector mărește nivelul și dificultatea.", "Folosește propulsia pentru a accelera în ultima direcție aleasă.", "Frânează, rotește nava și menține poziția în doc timp de o secundă.", "Evită aliații. Fiecare aliat lovit te costă o viață."],
+  sr: ["Свака деоница повећава ниво и тежину.", "Користи потисак да убрзаш у последњем смеру кретања.", "Закочи, окрени се и задржи положај у доку једну секунду.", "Поштеди савезнике. Сваки погодак савезника кошта један живот."],
+  uk: ["З кожною ділянкою зростають рівень і складність.", "Прискорюйся в останньому вибраному напрямку.", "Загальмуй, розвернись і утримуй позицію у відсіку одну секунду.", "Бережи союзників. Кожне влучання в союзника коштує життя."],
+  th: ["ทุกช่วงใหม่จะเพิ่มระดับและความยาก", "กดเร่งเพื่อพุ่งไปในทิศที่บังคับล่าสุด", "เบรก หมุนยาน แล้วค้างในช่องเทียบยานหนึ่งวินาที", "หลีกเลี่ยงฝ่ายเดียวกัน ยิงโดนหนึ่งครั้งเสียหนึ่งชีวิต"],
+  zh: ["每进入一个新航段，关卡和难度都会提升。", "按加速键向最近一次操纵的方向冲刺。", "制动并调整朝向，在对接舱内保持一秒。", "避开友军目标。每次误击都会损失一条生命。"],
+  vi: ["Mỗi chặng mới tăng cấp độ và độ khó.", "Dùng tăng tốc để lao theo hướng vừa điều khiển.", "Phanh, xoay và giữ yên trong khoang ghép nối một giây.", "Tránh bắn đồng minh. Mỗi phát trúng đồng minh mất một mạng."],
 };
 
 const escapeMarkup = (value: string) => value.replace(/[&<>"']/g, char =>
@@ -47,7 +47,7 @@ export function withArcadePublicLocale(page: string, locale: ArcadeLocale, index
   const game = Math.floor(index / 5);
   const variant = index % 5 + 1;
   const level = (index + 1) * 5;
-  const [progression, boost, docking, phase, friendly] = hints[locale];
+  const [progression, boost, docking, friendly] = hints[locale];
   const horizontal = game === 0 || game === 3;
   const aiming = game === 4 || game === 5;
   const shooting = aiming || game === 7;
@@ -61,7 +61,7 @@ export function withArcadePublicLocale(page: string, locale: ArcadeLocale, index
     game === 7 && variant === 3 ? words.shield + " · ⇧" : "",
   ].filter(Boolean).join(" ");
   const detail = locale === "de" ? "" : game === 1 && variant === 4 ? boost
-    : game === 2 ? docking : game === 3 && variant === 3 ? phase : game === 4 && variant === 3 ? friendly : "";
+    : game === 2 ? docking : game === 4 && variant === 3 ? friendly : "";
   const mapLink = "‹ " + words.map;
   const sound = terms.sound;
   const medalNames = [words.bronze, words.silver, words.gold];

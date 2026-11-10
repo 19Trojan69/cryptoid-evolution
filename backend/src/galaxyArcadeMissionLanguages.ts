@@ -1,4 +1,5 @@
 import type { ArcadeLocale } from "./galaxyArcadeLanguages";
+import { germanMissionCopy } from "./galaxyArcadeGermanCopy";
 
 // Rows follow the station order on the map, five variants per game.
 const titles: Record<Exclude<ArcadeLocale, "de">, readonly string[]> = {
@@ -254,8 +255,30 @@ const details: Record<Exclude<ArcadeLocale, "de">, string> = {
   vi: "Thu thập các Shard được đánh số theo thứ tự từ 1 đến 4.|Bay vào vùng từ trường đã đánh dấu khi vùng này hoạt động.|Thu hồi lõi vàng giữa hai tảng đá.|Bay vào hành lang an toàn đã đánh dấu trước khi đợt thiên thạch tới.|Di chuyển theo vùng an toàn khi vùng này đổi bên.|Bám theo khoang đang xoay và chỉnh góc cho khớp.|Bắn trúng lõi phát sáng khi giáp mở.|Để các mồi nhử đã đánh dấu bay qua.|Oxy giảm trong không gian và ngừng giảm khi đã lên tàu.|Giữ khiên để chặn đạn ở gần.",
 };
 
+const phaseRingInstructions: Record<Exclude<ArcadeLocale, "de">, string> = {
+  en: "Fly through open rings to score. You can safely fly around them.",
+  es: "Atraviesa los anillos abiertos para ganar puntos. Puedes rodearlos con seguridad.",
+  fr: "Traversez les anneaux ouverts pour marquer des points. Vous pouvez les contourner sans danger.",
+  pt: "Atravessa os anéis abertos para ganhar pontos. Podes contorná-los em segurança.",
+  it: "Attraversa gli anelli aperti per fare punti. Puoi aggirarli in sicurezza.",
+  pl: "Przelatuj przez otwarte pierścienie, aby zdobywać punkty. Możesz je bezpiecznie ominąć.",
+  tr: "Puan kazanmak için açık halkalardan geç. Halkaların etrafından güvenle uçabilirsin.",
+  ru: "Пролетайте через открытые кольца, чтобы набрать очки. Кольца можно безопасно облететь.",
+  hr: "Proleti kroz otvorene prstenove za bodove. Možeš ih sigurno zaobići.",
+  cs: "Prolétej otevřenými kruhy a získávej body. Můžeš je bezpečně obletět.",
+  sk: "Prelietaj otvorenými kruhmi a získavaj body. Môžeš ich bezpečne obletieť.",
+  hu: "A nyitott gyűrűkön átrepülve pontokat szerezhetsz. A gyűrűket biztonságosan megkerülheted.",
+  ro: "Treci prin inelele deschise pentru a câștiga puncte. Le poți ocoli în siguranță.",
+  sr: "Пролети кроз отворене прстенове за бодове. Можеш их безбедно заобићи.",
+  uk: "Пролітай крізь відкриті кільця, щоб набирати очки. Кільця можна безпечно облетіти.",
+  th: "บินผ่านวงแหวนที่เปิดเพื่อรับคะแนน คุณสามารถบินอ้อมวงแหวนได้อย่างปลอดภัย",
+  zh: "穿过开启的环门可获得分数。也可以安全地绕过环门。",
+  vi: "Bay qua các vòng đang mở để ghi điểm. Bạn có thể bay vòng qua chúng một cách an toàn.",
+};
+
 export function localizedMissionInstruction(locale: ArcadeLocale, game: number, variant: number) {
   if (game === 1 && variant === 2) return vortexInstructions[locale];
+  if (game === 3 && variant === 2) return locale === "de" ? germanMissionCopy[game][variant][0] : phaseRingInstructions[locale];
   const base = instructions[locale].split("|")[game];
   const detailIndex = detailedVariants.indexOf(`${game}-${variant}`);
   return locale !== "de" && detailIndex >= 0 ? `${base} ${details[locale].split("|")[detailIndex]}` : base;

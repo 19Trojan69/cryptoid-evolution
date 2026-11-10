@@ -159,7 +159,8 @@ export function withArcadeSurvival(html: string, game: number, variant: number) 
   if (docking) {
     sectionRule = "Sobald Position, Tempo und Winkel passen, halte eine Sekunde. Nach dem Ablegen folgt die nächste Bucht. Harte Karambolagen kosten ein Leben.";
   } else if (game === 4) {
-    sectionRule = `Ein verpasster Ring kostet ein Leben. Ab Level ${patternStartLevel} wechseln sich Zickzack- und Pendelrouten ab.`;
+    const risk = variant === 3 ? "Ein Treffer am Ringrand oder am geschlossenen Tor kostet ein Leben." : "Ein verpasster Ring kostet ein Leben.";
+    sectionRule = `${risk} Ab Level ${patternStartLevel} wechseln sich Zickzack- und Pendelrouten ab.`;
   } else if (game === 8) {
     sectionRule += ` Ab Level ${patternStartLevel} greifen manche Wellen von beiden Seiten an. Die Warnung kündigt den Zangenangriff an.`;
   }

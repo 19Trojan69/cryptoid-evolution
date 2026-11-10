@@ -24,7 +24,7 @@ export const germanMissionCopy = [
   [
     ["Fliege durch die Öffnungen von 12 Energieringen. Die Öffnungen wechseln zwischen vier Flugbereichen. Mindestens acht Durchflüge ergeben einen Erfolg.","50 je Ring; 25 zusätzlich für mittigen Durchflug."],
     ["Die weit verteilten Ringöffnungen wandern zusätzlich seitlich. Beobachte ihre Bewegung und passe deine Fluglinie an.","50 je Ring + 25 für mittige Passage; mindestens acht von zwölf."],
-    ["Fliege durch die Öffnung, wenn das Tor OFFEN meldet. Bremse den Anflug mit der Aktionstaste.","80 je aktive Passage; mindestens acht von zwölf."],
+    ["Fliege für Punkte durch offene Ringe. Bremse, um den richtigen Moment abzupassen. Außen kannst du sicher vorbeifliegen.","80 je aktive Passage; mindestens acht von zwölf."],
     ["Wähle pro Ring eine breite sichere oder eine schmale, wertvollere Öffnung. Beide Flugwege wechseln ihre Position; Stehenbleiben reicht nicht.","Sichere Route 40 · schmale Route 100; mindestens acht von zwölf."],
     ["Mittige Durchflüge entlang einer wechselnden Route bauen eine Serie auf. Randtreffer oder ein verpasster Ring unterbrechen sie.","50 je Ring + 25 × aktuelle Präzisionsserie; mindestens acht von zwölf."],
   ],
