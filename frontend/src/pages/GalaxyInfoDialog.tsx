@@ -3,11 +3,12 @@ import { useLocale } from '../i18n';
 import { axiosClient } from '../lib/axiosClient';
 import GalaxyBossArt from './GalaxyBossArt';
 import GalaxyArcadePanel from './GalaxyArcadePanel';
-import { retroMiniGameName, type ArcadeLabels, type ArcadeRecord, type ArcadeStation } from './galaxyArcadeRecords';
+import { arcadeStickerAlbumName, retroMiniGameName, type ArcadeLabels, type ArcadeRecord, type ArcadeStation } from './galaxyArcadeRecords';
 import { galaxyBossState, galaxyPoint, type GalaxyProgress, type GalaxySelection } from './galaxyModel';
 
 type Props = { selection: GalaxySelection; progress: GalaxyProgress; miniGameName?: string; lockedRetro?: 'level' | 'sign-in'; onEnterTestCode?: () => void; onLaunch: (path: string) => void; onClose: () => void; onShop: (view: 'shop' | 'hangar') => void; onCards: () => void;
-  arcade?: { game: ArcadeStation; labels: ArcadeLabels; record: ArcadeRecord | null; owner: string | null; play: (game: ArcadeStation, ticket: string) => void } };
+  arcade?: { game: ArcadeStation; labels: ArcadeLabels; record: ArcadeRecord | null; owner: string | null;
+    play: (game: ArcadeStation, ticket: string) => void; openAlbum: () => void } };
 export default function GalaxyInfoDialog({ selection, progress, miniGameName, lockedRetro, arcade, onEnterTestCode, onLaunch, onClose, onShop, onCards }: Props) {
   const { t } = useLocale();
   const dialog = useRef<HTMLDialogElement>(null);
@@ -50,6 +51,7 @@ export default function GalaxyInfoDialog({ selection, progress, miniGameName, lo
         {launch === 'error' && <p role="alert">{t('This page could not be loaded.')}</p>}
         <button type="button" className="galaxy-primary" disabled={launch === 'loading'} onClick={() => setLaunch('loading')}>{playLabel}</button>
         <GalaxyArcadePanel key={arcade.owner ?? 'guest'} game={arcade.game} labels={arcade.labels} record={arcade.record} canRate={!!arcade.owner}/>
+        <button type="button" className="galaxy-secondary" aria-haspopup="dialog" onClick={arcade.openAlbum}>{arcadeStickerAlbumName}</button>
       </> : lockedRetro ? <>
         <div className="galaxy-dialog-portal" aria-hidden="true">✧</div>
         <p className="galaxy-note">{t('Reach level {level} to unlock this game.', { level: selection.level })}</p>

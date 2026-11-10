@@ -51,11 +51,14 @@ test('the official Testnet Arcade serves localized public stations with a distin
     assert.deepEqual(body.stations, []);
     assert.ok(Object.values(body.labels).every(Boolean));
     const unlocked = publicArcadeCatalog(locale, 'pilot', 200);
+    assert.equal(new Set(unlocked.labels.stickers.ranks).size, 6);
+    assert.ok(Object.values(unlocked.labels.stickers).every(Boolean));
     assert.equal(new Set(unlocked.stations.map(station => station.name)).size, 40);
     for (const [index, station] of unlocked.stations.entries()) {
       assert.equal(station.level, (index + 1) * 5);
       assert.ok(station.description && station.scoring && station.medalLabel && station.rulesVersion);
-      assert.deepEqual(station.medalGoals, [...station.medalGoals].sort((a, b) => a - b));
+      assert.equal(station.medalGoals.length, 6);
+      assert.ok(station.medalGoals.every((goal, tier, goals) => Number.isInteger(goal) && goal > (goals[tier - 1] ?? 0)));
     }
   }
   assert.notEqual(publicArcadeCatalog('th', 'pilot', 40).stations[7].description, publicArcadeCatalog('de', 'pilot', 40).stations[7].description);

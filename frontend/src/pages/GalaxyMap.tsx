@@ -9,9 +9,10 @@ import useGalaxyData from './useGalaxyData';
 import GalaxySector from './GalaxySector';
 import GalaxyInfoDialog from './GalaxyInfoDialog';
 import GalaxyArcadeAccess from './GalaxyArcadeAccess';
+import GalaxyStickerAlbum from './GalaxyStickerAlbum';
 import { axiosClient } from '../lib/axiosClient';
 import type { GalaxyMiniGame } from './galaxyData';
-import { claimArcadeResult, markArcadeLaunch, readArcadeRecord, retroMiniGameName, retroMiniGamesName, type ArcadeStation, type PublicArcade } from './galaxyArcadeRecords';
+import { arcadeStickerAlbumName, claimArcadeResult, markArcadeLaunch, readArcadeRecord, retroMiniGameName, retroMiniGamesName, type ArcadeStation, type PublicArcade } from './galaxyArcadeRecords';
 import { emptyGalaxyProgress, galaxyPoint, galaxyShipPoint, galaxyRegions, type GalaxySelection } from './galaxyModel';
 import { MOTION_STORAGE_KEY } from './displaySettings';
 import { readControlHand } from './controlPreferences';
@@ -32,12 +33,18 @@ export default function GalaxyMap() {
   const [officialArcade, setOfficialArcade] = useState<PublicArcade>();
   const [previewLevels, setPreviewLevels] = useState<number[]>([]);
   const [arcadeListOpen, setArcadeListOpen] = useState(false);
+  const [album, setAlbum] = useState<{ level?: number } | null>(null);
   const query = location.search ? new URLSearchParams(location.search) : undefined;
   const previewAccess = query?.get('admin-test') === '1';
   const returningFromArcade = query?.get('arcade-return') === '1';
   const scroll = useRef<HTMLDivElement>(null), ship = useRef<HTMLDivElement>(null);
   const previousLevel = useRef<number | null>(null);
   const close = useCallback(() => setSelection(null), []);
+  const openAlbum = (level?: number) => {
+    setSelection(null);
+    setArcadeListOpen(false);
+    setAlbum({ level });
+  };
   const launchArcade = useCallback((path: string) => {
     try {
       if (scroll.current) sessionStorage.setItem(arcadePositionKey, String(scroll.current.scrollTop));
@@ -156,13 +163,20 @@ export default function GalaxyMap() {
       <span className="galaxy-preview-badge">{officialArcade && !previewAccess ? officialArcade.labels.playable.replace('{count}', String(unlocked?.length ?? 0)) : miniGames?.length ? t('Admin test · {count} playable', { count: miniGames.length }) : t(previewAccess && previewLevels.length ? 'Private mini-game test' : 'Preview · In development')}</span>
     </header>
     {previewAccess && <GalaxyArcadeAccess onReady={previewReady} onLocked={setPreviewLevels}/>}
-    {picker?.length ? <details className="galaxy-arcade-picker" open={arcadeListOpen} onToggle={event => setArcadeListOpen(event.currentTarget.open)}>
-      <summary>{retroMiniGamesName} <span>{picker.length}</span></summary>
-      <ul>{picker.map(game => <li key={game.level}><button type="button" onClick={() => {
-        setArcadeListOpen(false);
-        setSelection({ kind: 'mini', level: game.level });
-      }}><span>{game.name ?? retroMiniGameName}</span><small>{t('Level')} {game.level}</small></button></li>)}</ul>
-    </details> : null}
+    {picker?.length ? <div className="galaxy-arcade-menu">
+      <details className="galaxy-arcade-picker" open={arcadeListOpen} onToggle={event => setArcadeListOpen(event.currentTarget.open)}>
+        <summary>{retroMiniGamesName} <span>{picker.length}</span></summary>
+        <ul>{picker.map(game => <li key={game.level}><button type="button" onClick={() => {
+          setArcadeListOpen(false);
+          setSelection({ kind: 'mini', level: game.level });
+        }}><span>{game.name ?? retroMiniGameName}</span><small>{t('Level')} {game.level}</small></button></li>)}</ul>
+      </details>
+      {retroLevels && officialArcade && <button type="button" className="galaxy-sticker-entry" aria-haspopup="dialog"
+        disabled={!unlocked} onClick={() => openAlbum()}>
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 4h16v16H4zM9 4v16m4-10 2-2 2 2-2 2z"/></svg>
+        <span>{arcadeStickerAlbumName}</span>
+      </button>}
+    </div> : null}
     {status !== 'ready' && <p className="galaxy-data-status" role="status">{status === 'loading' ? t('Loading saved progress…') : t('Saved progress is unavailable. You can still explore; your data is unchanged.')}</p>}
     <div className="galaxy-scroll" ref={scroll} tabIndex={0} aria-label={t('Galaxy map')}>
       <div className="galaxy-map-world">
@@ -189,7 +203,10 @@ export default function GalaxyMap() {
     {selection && <GalaxyInfoDialog key={`${selection.kind}:${selection.level}`} selection={selection} progress={progress} miniGameName={miniGame?.name} lockedRetro={lockedRetro}
       arcade={officialGame && officialArcade ? { game: officialGame, labels: officialArcade.labels,
         record: readArcadeRecord(officialGame, snapshot.owner), owner: snapshot.owner,
-        play: launchOfficialArcade } : undefined}
+        play: launchOfficialArcade, openAlbum: () => openAlbum(officialGame.level) } : undefined}
       onEnterTestCode={lockedPortal ? enterTestCode : undefined} onLaunch={launchArcade} onClose={close} onShop={view => home({ openShopView: view })} onCards={() => home({ openCollection: true })}/>}
+    {album && officialArcade && unlocked && <GalaxyStickerAlbum key={snapshot.owner ?? 'guest'} owner={snapshot.owner}
+      stations={unlocked} stationCount={officialArcade.levels.length} initialLevel={album.level}
+      labels={officialArcade.labels.stickers} onClose={() => setAlbum(null)}/>}
   </main>;
 }

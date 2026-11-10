@@ -9,6 +9,7 @@ import { withArcadeSurvival } from "./galaxyArcadeSurvival";
 import { arcadeLocale, arcadeStationCopy, type ArcadeLocale } from "./galaxyArcadeCopy";
 import { arcadePanelLabels } from "./galaxyArcadeLanguages";
 import { withArcadePublicLocale } from "./galaxyArcadePublicLocale";
+import { arcadeStickerLabels } from "./galaxyArcadeStickerCopy";
 
 const stations = galaxyArcadeNames.map((name, index) => ({ level: (index + 1) * 5, name }));
 const previewLevels = stations.map(station => station.level);
@@ -76,7 +77,7 @@ export function publicArcadeCatalog(language: string | null, owner: string | nul
   return {
     owner,
     levels: previewLevels,
-    labels: arcadePanelLabels(locale),
+    labels: { ...arcadePanelLabels(locale), stickers: arcadeStickerLabels(locale) },
     stations: stations.flatMap(({ level, name }, index) =>
       level <= reachedLevel ? [{ level, ...arcadeStationCopy(locale, index, name) }] : []),
   };

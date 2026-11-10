@@ -62,6 +62,7 @@
   ],
   "git": {
     "deploymentEnabled": {
+      "codex/retro-sticker-album-20261110": false,
       "codex/testnet-galaxy-arcade-release-20261109": false,
       "codex/galaxy-admin-minigames-20261109": false,
       "codex/white-screen-startup-recovery-20261023": false,

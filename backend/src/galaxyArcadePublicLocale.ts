@@ -1,5 +1,8 @@
 import { arcadeStationCopy, arcadeTerms } from "./galaxyArcadeCopy";
 import { arcadeWords, type ArcadeLocale } from "./galaxyArcadeLanguages";
+import { arcadeStickerAwardScript } from "./galaxyArcadeStickerAward";
+import { arcadeStickerLabels } from "./galaxyArcadeStickerCopy";
+import { arcadeRunId } from "./galaxyArcadeStickerSchema";
 
 const hints: Record<ArcadeLocale, readonly [string, string, string, string]> = {
   en: ["Each section raises the level and difficulty.", "Use Boost to dash in the last direction you steered.", "Brake, turn, and hold still in the bay for one second.", "Avoid friendly targets. Each friendly hit costs a life."],
@@ -64,7 +67,7 @@ export function withArcadePublicLocale(page: string, locale: ArcadeLocale, index
     : game === 2 ? docking : game === 4 && variant === 3 ? friendly : "";
   const mapLink = "‹ " + words.map;
   const sound = terms.sound;
-  const medalNames = [words.bronze, words.silver, words.gold];
+  const stickerWords = arcadeStickerLabels(locale);
   const mapTarget = "#galaxy-arcade-navigation a";
   const isDock = game === 2;
   const goalText = [copy.description, detail, progression, words.keepFlying].filter(Boolean).join(" ");
@@ -128,14 +131,18 @@ export function withArcadePublicLocale(page: string, locale: ArcadeLocale, index
     const w = ${js(words)};
     const arcCopy = ${js(copy)};
     const vocab = ${js(terms)};
+    const stickerWords = ${js(stickerWords)};
     const scoreFormat = new Intl.NumberFormat(${js(locale)});
     const returnLink = document.querySelector(${js(mapTarget)});
     const runId = arcadeLaunchOptions.get('arcade-run');
-    let bestMedal = 0;
+    ${arcadeStickerAwardScript(level)}
+    let bestRank = 0;
     function sendResult(score, best, tier) {
-      if (!/^[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}$/.test(runId || '') || !Number.isSafeInteger(score) || !Number.isSafeInteger(best)) return;
-      bestMedal = Math.max(bestMedal, tier);
-      returnLink.hash = new URLSearchParams({ 'arcade-run': runId, station: ${level}, score, best, medal: bestMedal }).toString();
+      if (${arcadeRunId}.test(runId || '') && Number.isSafeInteger(score) && Number.isSafeInteger(best)) {
+        bestRank = Math.max(bestRank, tier);
+        returnLink.hash = new URLSearchParams({ 'arcade-run': runId, station: ${level}, score, best, rank: bestRank }).toString();
+      }
+      reportArcadeStickers(tier);
     }
     `;
   const canvasScript = locale === "de" ? "" : `
@@ -184,7 +191,8 @@ export function withArcadePublicLocale(page: string, locale: ArcadeLocale, index
     .replace("\${s.success?'Mission geschafft':'Versuch beendet'}", () => escapeMarkup(words.runFinished))
     .replace("score.toLocaleString('de-DE')", "scoreFormat.format(score)")
     .replace("<small>Punkte</small>", () => "<small>" + escapeMarkup(words.score) + "</small>")
-    .replace("$('resultMessage').textContent=s.message;", "sendResult(score,best,medalTier(medalValue(s)));$('resultMessage').hidden=true;")
+    .replace('<p id="resultMessage"></p>', '<p id="resultMessage" role="status" hidden></p>')
+    .replace("$('resultMessage').textContent=s.message;", "sendResult(score,best,medalTier(medalValue(s)));")
     .replace(/<small class="best-note">[\s\S]*?(?=<details class="briefing-extra">)/, "")
     .replace(/<summary>(?:Letzter Abschnitt und Wertung|Flugprotokoll und Wertung)<\/summary>/,
       () => '<summary>' + escapeMarkup(words.scoring) + '</summary>')
@@ -198,12 +206,12 @@ export function withArcadePublicLocale(page: string, locale: ArcadeLocale, index
     .replace("'Wirbelpassagen'", "vocab.vortex")
     .replace("$('healthLabel').textContent='LEBEN';", "$('healthLabel').textContent=w.lives;")
     .replace(/const medal = [^\n]+;/, line => line.replace(/"label":"(?:\\.|[^"\\])*"/, () => '"label":' + js(copy.medalLabel)))
-    .replace("const medalNames = ['Bronze', 'Silber', 'Gold'];", () => "const medalNames = " + js(medalNames) + ";")
+    .replace(/const medalNames = [^\n]+;/, "const medalNames = stickerWords.ranks;")
     .replace(/ \+ ' ERREICHT'/, " + ' ✓'")
     .replace(/ \+ ' erreicht'/, " + ' ✓'")
-    .replace("Medaillenziel offen", () => escapeMarkup(words.medalGoals))
-    .replace("Medaillenziele · Testmodus", () => escapeMarkup(words.medalGoals))
-    .replace('aria-label="Testmedaille"', () => 'aria-label="' + escapeMarkup(words.medalGoals) + '"')
+    .replace(/Rangziele/g, () => escapeMarkup(stickerWords.goals))
+    .replace('class="medal-goals">\x27+content+\x27</div>', () =>
+      'class="medal-goals">\x27+content+\x27<p>' + escapeMarkup(stickerWords.afterDiamond) + '</p></div>')
     .replace("actionButton.textContent = action || '';", () => "actionButton.textContent = action ? " +
       js(shooting ? words.fire : game === 1 ? words.boost : words.brake) + " : '';")
     .replace("'Ziehe den Stick nach links oder rechts.'", () => js(words.horizontalStick))

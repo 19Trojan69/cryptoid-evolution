@@ -37,7 +37,8 @@ export default function GalaxyArcadePanel({ game, labels, record, canRate }: Pro
       if (!signal.aborted) setPending(false);
     }
   };
-  const medalNames = [t('Bronze'), t('Silver'), t('Gold')];
+  const rank = record?.rank ?? 0;
+  const { stickers } = labels;
   const number = (value: number) => value.toLocaleString(locale, { maximumFractionDigits: 1 });
 
   return <div className="galaxy-arcade-panel">
@@ -48,10 +49,11 @@ export default function GalaxyArcadePanel({ game, labels, record, canRate }: Pro
     </dl>
     <p className="galaxy-note">{record ? labels.localNote : labels.noScore}</p>
     <details><summary>{labels.scoring}</summary><p>{game.scoring}</p></details>
-    <details><summary>{labels.medalGoals}</summary><p>{game.medalLabel}</p>
-      <div className="galaxy-medals">{game.medalGoals.map((goal, index) => <span key={index} data-medal={index} data-earned={(record?.medal ?? 0) > index}>
-        {medalNames[index]} {number(goal)}{(record?.medal ?? 0) > index ? ' ✓' : ''}
+    <details><summary>{stickers.goals}{rank ? ` · ${stickers.ranks[rank - 1]}` : ''}</summary><p>{game.medalLabel}</p>
+      <div className="galaxy-medals">{game.medalGoals.map((goal, index) => <span key={goal} data-arcade-rank={index + 1} data-earned={rank > index}>
+        {stickers.ranks[index]} {number(goal)}{rank > index ? ' ✓' : ''}
       </span>)}</div>
+      <p className="galaxy-note">{stickers.afterDiamond}</p>
     </details>
     <section className="galaxy-arcade-rating" aria-label={labels.rating}>
       <strong>{labels.rating}</strong>

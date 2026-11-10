@@ -43,6 +43,27 @@ test('saved reached stage is not counted as a completed level or a boss win', ()
   assert.equal(JSON.stringify(rewards),before);
 });
 
+test('six arcade ranks retain legacy best scores without treating a legacy medal as a sticker rank', () => {
+  const memory = (values = []) => {
+    const data = new Map(values);
+    return { getItem: key => data.get(key) ?? null, setItem: (key, value) => data.set(key, value), removeItem: key => data.delete(key) };
+  };
+  const game = { level: 60, rulesVersion: 'survival-levels-1' };
+  const owner = 'pilot';
+  const storage = memory([['cryptoid_testnet_arcade_score:' + JSON.stringify([60, game.rulesVersion, owner]),
+    JSON.stringify({ last: 1200, best: 7200, medal: 3 })]]);
+  const session = memory();
+  const run = '12345678-1234-1234-1234-123456789abc';
+  assert.deepEqual(arcadeRecords.readArcadeRecord(game, owner, storage), { last: 1200, best: 7200, rank: 0 });
+  arcadeRecords.markArcadeLaunch(session, game, owner, run);
+  const result = '#arcade-run=' + run + '&station=60&score=3600&best=4000';
+  assert.equal(arcadeRecords.claimArcadeResult(result + '&rank=7', session, storage), null);
+  assert.equal(arcadeRecords.claimArcadeResult(result + '&rank=6', session, storage), 60);
+  assert.deepEqual(arcadeRecords.readArcadeRecord(game, owner, storage), { last: 3600, best: 7200, rank: 6 });
+  assert.equal(arcadeRecords.readArcadeRecord(game, 'another-pilot', storage), null);
+  assert.equal(arcadeRecords.claimArcadeResult(result + '&rank=6', session, storage), null);
+});
+
 test('confirmed block and boss records yield retroactive eligibility without bypassing card releases', () => {
   const rewards=emptyRewardProgress(); rewards.linkedBlocks[18]=9; rewards.bossWins[18]=1;
   const progress=model.galaxyProgress(rewards);
@@ -262,6 +283,7 @@ test('actual ship flight only reflects a new adjacent confirmed stage and never 
     'react-router-dom':{useLocation:()=>({state:null}),useNavigate:()=>()=>{}},
     '../components/BlockchainIcon':{default:()=>null},'./ShipPortrait':{default:()=>null},
     './GalaxySector':{default:()=>null},'./GalaxyInfoDialog':{default:()=>null},'./GalaxyArcadeAccess':{default:()=>null},
+    './GalaxyStickerAlbum':{default:()=>null},
     './galaxyArcadeRecords':arcadeRecords,
     '../lib/axiosClient':{axiosClient:{get:async()=>({data:undefined})}},
     './useGalaxyData':{default:()=>data},'./galaxyModel':model,'./displaySettings':{MOTION_STORAGE_KEY:'motion'},
