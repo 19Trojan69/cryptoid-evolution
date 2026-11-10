@@ -13,12 +13,21 @@ import { withArcadePublicLocale } from "./galaxyArcadePublicLocale";
 const stations = galaxyArcadeNames.map((name, index) => ({ level: (index + 1) * 5, name }));
 const previewLevels = stations.map(station => station.level);
 export const galaxyArcadeStationIndex = (level?: string) => stations.findIndex(station => String(station.level) === level);
-const arcadePolicy = "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob:; media-src data: blob:";
+const arcadePolicy = "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob:; media-src data: blob:; base-uri 'none'; form-action 'none'";
 const previewCookie = "__Secure-cryptoid-arcade";
 const playCookie = "__Secure-cryptoid-arcade-play";
 const playLifetime = 120;
 const hexDigest = /^[0-9a-f]{64}$/i;
 const publicArcadeHost = "window.parent !== window && new URLSearchParams(location.hash.slice(1)).get('embed') === '1' ? window.parent : null";
+const publicArcadeStartup = `
+  const arcadeLaunchMeta = document.querySelector('meta[name="cryptoid-arcade-launch"]');
+  const arcadeLaunchOptions = new URLSearchParams(arcadeLaunchMeta ? decodeURIComponent(arcadeLaunchMeta.content) : location.hash.slice(1));
+  const arcadeHost = window.parent !== window && arcadeLaunchOptions.get('embed') === '1' ? window.parent : null;
+  const arcadeHostOrigin = arcadeLaunchMeta ? arcadeLaunchOptions.get('parent-origin') : location.origin;
+  function reportArcadeHost(type, hash) {
+    arcadeHost?.postMessage({ type, hash }, arcadeHostOrigin);
+  }
+`;
 
 const sameDigest = (value: string | undefined, expected: string) =>
   typeof value === "string" && hexDigest.test(value) && timingSafeEqual(Buffer.from(value, "hex"), Buffer.from(expected, "hex"));
@@ -66,8 +75,9 @@ function stationDocument(index: number, key: string, musicKey: string | undefine
   const game = Math.floor(index / 5) + 1;
   const variant = index % 5 + 1;
   const mission = returnHref ? withArcadeSurvival(html, game, variant) : html;
+  const publicStartup = locale ? `<script>${publicArcadeStartup}</script>` : "";
   const document = withArcadeAudio(withArcadeRetroStyle(withArcadeTouchControls(mission)), musicKey)
-    .replace("<head>", `<head><meta http-equiv="Content-Security-Policy" content="${arcadePolicy}">`)
+    .replace("<head>", `<head><meta http-equiv="Content-Security-Policy" content="${arcadePolicy}">${publicStartup}`)
     // A frame queued before Start or Resume can carry an older timestamp.
     // Keep the round clock monotonic so the next frame uses the current baseline.
     .replace("previous=now;if(C.mode==='running'", "previous=Math.max(previous,now);if(C.mode==='running'");
@@ -120,12 +130,12 @@ function stationDocument(index: number, key: string, musicKey: string | undefine
       "C.graphics.ready.then(() => C.graphics.ensureArt?.()).catch(() => {});",
     )
     .replace("</head>", `${playStyles}</head>`)
-    .replace("<body>", `<body>${returnBar(returnHref)}<p id="galaxy-arcade-startup" role="status">Minispiel wird geladen …</p>`)
+    .replace("<body>", `<body>${returnBar(returnHref)}<p id="galaxy-arcade-startup" role="status">Minispiel wird geladen …</p>${locale ? "<script>reportArcadeHost('cryptoid:arcade-boot');</script>" : ""}`)
     .replace("</body></html>", `<script>
       (() => {
         const status = document.getElementById('galaxy-arcade-startup');
-        const host = ${locale ? publicArcadeHost : "null"};
-        const report = (type, hash) => host?.postMessage({ type, hash }, location.origin);
+        const host = ${locale ? "arcadeHost" : "null"};
+        const report = ${locale ? "reportArcadeHost" : "() => {}"};
         if (host) {
           const link = document.querySelector('#galaxy-arcade-navigation a');
           link.addEventListener('click', event => {
@@ -152,7 +162,7 @@ function sendPlayPage(res: Pick<Response, "setHeader" | "status" | "send">, code
   // The in-app player can run directly or inside the official PiNet frame.
   const ancestors = access === "public" ? "'self' https://cryptoidevo3025.pinet.com" : "'none'";
   res.setHeader("Content-Type", "text/html; charset=utf-8");
-  res.setHeader("Content-Security-Policy", `${arcadePolicy}; sandbox allow-scripts; base-uri 'none'; form-action 'none'; frame-ancestors ${ancestors}`);
+  res.setHeader("Content-Security-Policy", `${arcadePolicy}; sandbox allow-scripts; frame-ancestors ${ancestors}`);
   if (access === "private") res.setHeader("X-Frame-Options", "DENY");
   res.setHeader("X-Content-Type-Options", "nosniff");
   res.setHeader("Referrer-Policy", "no-referrer");
@@ -180,13 +190,20 @@ export function servePublicGalaxyArcade(
       stations: stations.map((station, index) => ({ ...station, ...arcadeStationCopy(locale, index, station.name) })),
     });
   }
-  const match = /^(\d+)\/play$/.exec(path);
+  const match = /^(\d+)\/(play|document)$/.exec(path);
   const index = galaxyArcadeStationIndex(match?.[1]);
   if (index < 0) return res.status(404).json({ error: "not_found" });
+  const embeddedDocument = match?.[2] === "document";
   const returnHref = "/galaxy?arcade-return=1";
   try {
-    return sendPlayPage(res, 200, stationDocument(index, key, musicKey, returnHref, locale), "public");
+    const html = stationDocument(index, key, musicKey, returnHref, locale);
+    if (embeddedDocument) {
+      console.info("Galaxy arcade document prepared", stations[index].level);
+      return res.json({ document: html });
+    }
+    return sendPlayPage(res, 200, html, "public");
   } catch {
+    if (embeddedDocument) return res.status(503).json({ error: "arcade_unavailable" });
     const unavailable = playError(returnHref, "Das Minispiel ist gerade nicht verfügbar. Versuche es erneut über die Galaxiekarte.")
       .replace("</body>", `<script>(${publicArcadeHost})?.postMessage({ type: 'cryptoid:arcade-error' }, location.origin);</script></body>`);
     return sendPlayPage(res, 503, withArcadePublicLocale(unavailable, locale, index, stations[index].name), "public");

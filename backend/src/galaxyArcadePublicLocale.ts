@@ -133,7 +133,7 @@ export function withArcadePublicLocale(page: string, locale: ArcadeLocale, index
     const vocab = ${js(terms)};
     const scoreFormat = new Intl.NumberFormat(${js(locale)});
     const returnLink = document.querySelector(${js(mapTarget)});
-    const runId = new URLSearchParams(window.location.hash.slice(1)).get('arcade-run');
+    const runId = arcadeLaunchOptions.get('arcade-run');
     let bestMedal = 0;
     function sendResult(score, best, tier) {
       if (!/^[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}$/.test(runId || '') || !Number.isSafeInteger(score) || !Number.isSafeInteger(best)) return;

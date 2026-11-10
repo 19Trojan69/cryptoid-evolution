@@ -150,7 +150,7 @@ const configureControls = `configure(module, variant) {
       controls.querySelector('.control-actions').hidden = !hasActions;
 
       const gameScreen = document.getElementById('gameScreen');
-      const hand = new URLSearchParams(window.location.hash.slice(1)).get('hand');
+      const hand = (typeof arcadeLaunchOptions === 'undefined' ? new URLSearchParams(window.location.hash.slice(1)) : arcadeLaunchOptions).get('hand');
       gameScreen.dataset.controlHand = hand === 'left' ? 'left' : 'right';
       gameScreen.dataset.movement = horizontal ? 'arrows' : 'joystick';
       gameScreen.toggleAttribute('data-actions', hasActions);

@@ -60,6 +60,10 @@ test('the official Testnet Arcade serves localized public stations with a distin
   assert.match(playUnavailable.headers['Content-Security-Policy'], /sandbox allow-scripts;.*frame-ancestors 'self' https:\/\/cryptoidevo3025\.pinet\.com$/);
   assert.equal(playUnavailable.headers['X-Frame-Options'], undefined);
   assert.match(playUnavailable.body, /postMessage\(\{ type: 'cryptoid:arcade-error'/);
+  const documentUnavailable = await check(base + '/5/document');
+  assert.equal(documentUnavailable.code, 503);
+  assert.deepEqual(documentUnavailable.body, { error: 'arcade_unavailable' });
+  assert.equal((await check(base + '/205/document')).code, 404);
   assert.equal((await check(base + '/205/rating')).code, 404);
   assert.equal(calls.length, 0);
   assert.equal((await check(base + '/5/rating')).code, 200);
@@ -69,6 +73,7 @@ test('the official Testnet Arcade serves localized public stations with a distin
   env.VERCEL_ENV = 'production';
   env.VERCEL_PROJECT_PRODUCTION_URL = 'cryptoid-evolution.vercel.app';
   assert.equal((await check(base)).code, 404);
+  assert.equal((await check(base + '/5/document')).code, 404);
 });
 
 test('Galaxy Arcade is isolated to the enabled Testnet preview and requires a verified Pi owner', async t => {
