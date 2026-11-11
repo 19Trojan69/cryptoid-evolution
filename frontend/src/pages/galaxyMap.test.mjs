@@ -6,6 +6,7 @@ import ts from 'typescript';
 import * as jsx from 'react/jsx-runtime';
 import * as model from './galaxyModel.ts';
 import * as arcadeRecords from './galaxyArcadeRecords.ts';
+import { arcadeStickerMotifs } from './arcadeStickerMotifs.ts';
 import { loadGalaxyEquipment, loadGalaxySnapshot, emptyGalaxySnapshot, readGalaxyGuestProgress } from './galaxyData.ts';
 import { emptyRewardProgress, REWARD_PROGRESS_KEY } from './rewardProgress.ts';
 import { bossManifest } from './bossManifest.ts';
@@ -41,6 +42,12 @@ test('saved reached stage is not counted as a completed level or a boss win', ()
   assert.equal(model.eligibleMiniStations(progress.completedLevel).length,35);
   assert.equal(model.galaxyBossState(progress,18).defeated,false);
   assert.equal(JSON.stringify(rewards),before);
+});
+
+test('each Retro Mini Game station has a distinct sticker motif', () => {
+  const levels = Object.keys(arcadeStickerMotifs).map(Number);
+  assert.deepEqual(levels, Array.from({ length: 40 }, (_, index) => (index + 1) * 5));
+  assert.equal(new Set(Object.values(arcadeStickerMotifs).map(motif => motif.shape)).size, levels.length);
 });
 
 test('six arcade ranks retain legacy best scores without treating a legacy medal as a sticker rank', () => {

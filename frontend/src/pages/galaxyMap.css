@@ -168,15 +168,101 @@
 [data-arcade-rank="5"] { --arcade-rank-color: #b7ddd8; }
 [data-arcade-rank="6"] { --arcade-rank-color: #98edff; }
 .galaxy-sticker-grid [data-earned="true"] {
-  border-color: var(--arcade-rank-color);
-  background: radial-gradient(ellipse at 50% 20%, #283957, #121a2c 73%);
+  border-color: color-mix(in srgb, var(--arcade-rank-color) 54%, #35445f);
+  background: linear-gradient(150deg, #19273e, #111a2d);
   color: var(--arcade-rank-color);
 }
-.galaxy-sticker-art { display: grid; place-items: center; height: clamp(52px, 18vw, 86px); }
-.galaxy-sticker-art > * { grid-area: 1/1; }
-.galaxy-sticker-art svg { width: 79%; height: 92%; fill: none; stroke: currentColor; stroke-width: 1.2; opacity: .4; }
-.galaxy-sticker-grid [data-earned="true"] svg { opacity: .55; }
-.galaxy-sticker-art img { width: 85%; height: 85%; object-fit: contain; image-rendering: pixelated; filter: drop-shadow(0 3px 2px #000); }
+.galaxy-sticker-grid [data-arcade-rank="1"] {
+  --sticker-cut: polygon(11% 0, 89% 0, 100% 14%, 100% 86%, 89% 100%, 11% 100%, 0 86%, 0 14%);
+  --sticker-rim: linear-gradient(140deg, #ffe3c0, #cc835e 27%, #703727 55%, #df9468 79%, #8f492e);
+  --sticker-finish: repeating-linear-gradient(154deg, #ffe6bf10 0 1px, transparent 1px 5px);
+}
+.galaxy-sticker-grid [data-arcade-rank="2"] {
+  --sticker-cut: polygon(17% 0, 83% 0, 83% 12%, 100% 12%, 100% 88%, 83% 88%, 83% 100%, 17% 100%, 17% 88%, 0 88%, 0 12%, 17% 12%);
+  --sticker-rim: linear-gradient(125deg, #fff2bf, #bd994a 29%, #66552b 52%, #dec481 74%, #997736);
+  --sticker-finish: linear-gradient(0deg, #ead08a2b, transparent 30%, transparent 71%, #ead08a2b);
+}
+.galaxy-sticker-grid [data-arcade-rank="3"] {
+  --sticker-cut: polygon(12% 0, 88% 0, 100% 14%, 95% 70%, 50% 100%, 5% 70%, 0 14%);
+  --sticker-rim: linear-gradient(140deg, #f8faff, #acbdd1 28%, #556582 52%, #dfecf8 77%, #8294ae);
+  --sticker-finish: linear-gradient(145deg, transparent 32%, #dce5f327 32% 49%, transparent 49%);
+}
+.galaxy-sticker-grid [data-arcade-rank="4"] {
+  --sticker-cut: polygon(27% 0, 73% 0, 100% 25%, 100% 75%, 73% 100%, 27% 100%, 0 75%, 0 25%);
+  --sticker-rim: linear-gradient(138deg, #fffcce, #ffda6e 25%, #ad6c21 53%, #ffe8a1 74%, #cc8d35);
+  --sticker-finish: repeating-conic-gradient(from 12deg at 33% 32%, #ffd36c20 0deg 12deg, transparent 12deg 36deg);
+}
+.galaxy-sticker-grid [data-arcade-rank="5"] {
+  --sticker-cut: polygon(20% 0, 80% 0, 100% 18%, 92% 61%, 76% 61%, 76% 78%, 50% 100%, 24% 78%, 24% 61%, 8% 61%, 0 18%);
+  --sticker-rim: linear-gradient(142deg, #edfff8, #b3ded9 23%, #376165 53%, #d7f5e6 74%, #719d9c);
+  --sticker-finish: linear-gradient(161deg, transparent 23%, #b7ddd825 23% 34%, transparent 34% 63%, #b7ddd825 63% 75%, transparent 75%);
+}
+.galaxy-sticker-grid [data-arcade-rank="6"] {
+  --sticker-cut: polygon(22% 0, 78% 0, 100% 24%, 91% 62%, 50% 100%, 9% 62%, 0 24%);
+  --sticker-rim: linear-gradient(145deg, #f2feff, #77e8ff 20%, #9e87e5 44%, #79d7fc 60%, #c1fff7 76%, #7397d4);
+  --sticker-finish: linear-gradient(134deg, #7fe7ff3b 0 23%, transparent 23% 54%, #af91ff39 54% 69%, transparent 69%),
+    linear-gradient(38deg, transparent 34%, #b4ffed2d 34% 49%, transparent 49%);
+}
+.galaxy-sticker-art {
+  position: relative;
+  isolation: isolate;
+  justify-self: center;
+  width: min(100%, 106px);
+  height: clamp(56px, 21vw, 90px);
+  --sticker-scene-ink: #91a2be;
+}
+.galaxy-sticker-art::before,
+.galaxy-sticker-print { position: absolute; clip-path: var(--sticker-cut); }
+.galaxy-sticker-art::before { content: ''; inset: 0; background: #546582; }
+.galaxy-sticker-print { inset: 3px; overflow: hidden; background: #10192d; }
+.galaxy-sticker-grid [data-earned="true"] .galaxy-sticker-art {
+  --sticker-scene-ink: var(--sticker-scene-color, #9edcfb);
+}
+.galaxy-sticker-grid [data-earned="true"] .galaxy-sticker-art::before { background: var(--sticker-rim); }
+.galaxy-sticker-grid [data-earned="true"] .galaxy-sticker-print {
+  background:
+    var(--sticker-finish),
+    radial-gradient(circle at 21% 32%, color-mix(in srgb, var(--sticker-scene-ink) 30%, transparent), transparent 68%),
+    linear-gradient(145deg, #15213a, #080e20 85%);
+}
+.galaxy-sticker-motif {
+  position: absolute;
+  top: 6%;
+  left: 8%;
+  width: 84%;
+  height: 84%;
+  color: var(--sticker-scene-ink);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: .54;
+}
+.galaxy-sticker-grid [data-earned="true"] .galaxy-sticker-motif {
+  left: 4%;
+  width: 83%;
+  height: 81%;
+  opacity: 1;
+}
+.galaxy-sticker-motif-shape {
+  fill: color-mix(in srgb, currentColor 24%, transparent);
+  fill-rule: evenodd;
+  stroke: currentColor;
+  stroke-width: 2.2;
+}
+.galaxy-sticker-motif-details {
+  fill: none;
+  stroke: color-mix(in srgb, currentColor 55%, #eef8ff);
+  stroke-width: 1.55;
+}
+.galaxy-sticker-ship {
+  position: absolute;
+  right: 6%;
+  bottom: 5%;
+  width: 55%;
+  height: 59%;
+  object-fit: contain;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 1px 2px #030813) drop-shadow(0 0 3px #030813);
+}
 .galaxy-sticker-grid strong { font-size: clamp(.74rem, 3.2vw, .98rem); }
 .galaxy-sticker-grid small { color: #c3cfe4; font-size: .68rem; }
 .galaxy-arcade-menu .galaxy-sticker-entry:focus-visible, .galaxy-sticker-picker select:focus-visible { outline: 2px solid #9aeeff; outline-offset: 2px; }

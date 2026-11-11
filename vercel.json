@@ -62,6 +62,7 @@
   ],
   "git": {
     "deploymentEnabled": {
+      "codex/retro-sticker-motifs-20261111": false,
       "codex/retro-sticker-ranks-20261111": false,
       "codex/pi-login-loading-animation-20261110": false,
       "codex/testnet-galaxy-arcade-release-20261109": false,
