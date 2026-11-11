@@ -75,13 +75,15 @@ export default function GalaxyStickerAlbum({ owner, stations, stationCount, init
                 const shipName = sticker?.shipName.split(' · ')[0];
                 return <li key={arcadeRankIds[index]} data-arcade-rank={index + 1} data-earned={!!sticker}>
                   <div className="galaxy-sticker-art" aria-hidden="true">
-                    <div className="galaxy-sticker-print">
-                      {motif && <svg className="galaxy-sticker-motif" viewBox="0 0 64 56" focusable="false">
-                        <path className="galaxy-sticker-motif-shape" d={motif.shape}/>
-                        <path className="galaxy-sticker-motif-details" d={motif.details}/>
-                      </svg>}
-                    </div>
-                    {sticker && <img className="galaxy-sticker-ship" src={sticker.image} alt="" draggable={false}/>}
+                    {sticker ? <>
+                      <div className="galaxy-sticker-print">
+                        {motif && <svg className="galaxy-sticker-motif" viewBox="0 0 64 56" focusable="false">
+                          <path className="galaxy-sticker-motif-shape" d={motif.shape}/>
+                          <path className="galaxy-sticker-motif-details" d={motif.details}/>
+                        </svg>}
+                      </div>
+                      <img className="galaxy-sticker-ship" src={sticker.image} alt="" draggable={false}/>
+                    </> : <span className="galaxy-sticker-lock"/>}
                   </div>
                   <strong>{name}</strong>
                   <small title={sticker?.shipName}>{shipName || t('Locked')}</small>

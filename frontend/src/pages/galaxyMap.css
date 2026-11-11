@@ -206,20 +206,43 @@
 .galaxy-sticker-art {
   position: relative;
   isolation: isolate;
+  display: grid;
+  place-items: center;
   justify-self: center;
   width: min(100%, 106px);
   height: clamp(56px, 21vw, 90px);
-  --sticker-scene-ink: #91a2be;
+  --sticker-scene-ink: var(--sticker-scene-color, #9edcfb);
+}
+.galaxy-sticker-lock {
+  position: relative;
+  width: 21px;
+  height: 16px;
+  margin-top: 8px;
+  border: 2px solid #8393af;
+  border-radius: 4px;
+}
+.galaxy-sticker-lock::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 100%;
+  transform: translateX(-50%);
+  width: 11px;
+  height: 9px;
+  border: 2px solid #8393af;
+  border-bottom: 0;
+  border-radius: 7px 7px 0 0;
 }
 .galaxy-sticker-art::before,
 .galaxy-sticker-print { position: absolute; clip-path: var(--sticker-cut); }
-.galaxy-sticker-art::before { content: ''; inset: 0; background: #546582; }
-.galaxy-sticker-print { inset: 3px; overflow: hidden; background: #10192d; }
-.galaxy-sticker-grid [data-earned="true"] .galaxy-sticker-art {
-  --sticker-scene-ink: var(--sticker-scene-color, #9edcfb);
+.galaxy-sticker-grid [data-earned="true"] .galaxy-sticker-art::before {
+  content: '';
+  inset: 0;
+  background: var(--sticker-rim);
 }
-.galaxy-sticker-grid [data-earned="true"] .galaxy-sticker-art::before { background: var(--sticker-rim); }
-.galaxy-sticker-grid [data-earned="true"] .galaxy-sticker-print {
+.galaxy-sticker-print {
+  inset: 3px;
+  overflow: hidden;
   background:
     var(--sticker-finish),
     radial-gradient(circle at 21% 32%, color-mix(in srgb, var(--sticker-scene-ink) 30%, transparent), transparent 68%),
@@ -228,19 +251,12 @@
 .galaxy-sticker-motif {
   position: absolute;
   top: 6%;
-  left: 8%;
-  width: 84%;
-  height: 84%;
-  color: var(--sticker-scene-ink);
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  opacity: .54;
-}
-.galaxy-sticker-grid [data-earned="true"] .galaxy-sticker-motif {
   left: 4%;
   width: 83%;
   height: 81%;
-  opacity: 1;
+  color: var(--sticker-scene-ink);
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 .galaxy-sticker-motif-shape {
   fill: color-mix(in srgb, currentColor 24%, transparent);
