@@ -31,3 +31,7 @@ export type ArcadeSticker = {
   colorId: string;
   image: string;
 };
+
+export type ArcadeStickerBackup = Pick<ArcadeSticker, 'level' | 'rank' | 'modelId' | 'stage' | 'colorId'>;
+
+export const arcadeStickerSlot = ({ level, rank }: Pick<ArcadeSticker, 'level' | 'rank'>) => `${level}_${rank}`;

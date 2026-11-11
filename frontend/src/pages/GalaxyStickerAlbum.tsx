@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import { useLocale } from '../i18n';
-import { arcadeRankIds, arcadeStickerAlbumName, type ArcadeSticker } from '../../../backend/src/galaxyArcadeStickerSchema.ts';
+import { arcadeRankIds, arcadeStickerAlbumName } from '../../../backend/src/galaxyArcadeStickerSchema.ts';
 import { retroMiniGameName, type ArcadeLabels, type ArcadeStation } from './galaxyArcadeRecords';
-import { readArcadeStickers } from './galaxyArcadeStickers';
+import { syncArcadeStickerAlbum, type ArcadeStickerAlbum } from './galaxyArcadeStickers';
 import { arcadeStickerMotifs } from './arcadeStickerMotifs';
 
 type Props = {
@@ -18,7 +18,7 @@ export default function GalaxyStickerAlbum({ owner, stations, stationCount, init
   const { t, locale } = useLocale();
   const dialog = useRef<HTMLDialogElement>(null);
   const close = useRef<HTMLButtonElement>(null);
-  const [result, setResult] = useState<ArcadeSticker[] | 'error' | null>(null);
+  const [result, setResult] = useState<ArcadeStickerAlbum | 'error' | null>(null);
   const [chosen, setChosen] = useState(initialLevel);
 
   useEffect(() => {
@@ -31,17 +31,17 @@ export default function GalaxyStickerAlbum({ owner, stations, stationCount, init
 
   useEffect(() => {
     if (!owner) return;
-    let active = true;
-    void readArcadeStickers(owner).then(stickers => {
-      if (active) setResult(stickers);
+    const request = new AbortController();
+    void syncArcadeStickerAlbum(owner, stations, request.signal).then(album => {
+      if (!request.signal.aborted) setResult(album);
     }, () => {
-      if (active) setResult('error');
+      if (!request.signal.aborted) setResult('error');
     });
-    return () => { active = false; };
-  }, [owner]);
+    return () => request.abort();
+  }, [owner, stations]);
 
   const visibleLevels = new Set(stations.map(station => station.level));
-  const stickers = Array.isArray(result) ? result.filter(sticker => visibleLevels.has(sticker.level)) : [];
+  const stickers = result && result !== 'error' ? result.stickers.filter(sticker => visibleLevels.has(sticker.level)) : [];
   const level = chosen ?? stickers[0]?.level ?? stations[0]?.level;
   const station = stations.find(game => game.level === level) ?? stations[0];
   const count = labels.collected.replace('{count}', stickers.length.toLocaleString(locale))
@@ -57,7 +57,7 @@ export default function GalaxyStickerAlbum({ owner, stations, stationCount, init
       {!owner ? <p>{t('Sign in with Pi')}</p> : result === null ? <p role="status">{t('Loading…')}</p>
         : result === 'error' ? <p role="alert">{labels.unavailable}</p> : <>
           <p className="galaxy-sticker-count">{count}</p>
-          <p className="galaxy-note">{labels.device}</p>
+          {!result.savedToAccount && <p className="galaxy-note">{labels.device}</p>}
           {stickers.length === 0 && <p>{labels.empty}</p>}
           {station && <>
             <label className="galaxy-sticker-picker">

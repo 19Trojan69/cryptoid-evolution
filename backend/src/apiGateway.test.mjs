@@ -98,6 +98,8 @@ test('the official Testnet Arcade serves localized public stations with a distin
   assert.match(standaloneUnavailable.body, /role="alert">[^<]*AR-02/);
   assert.equal((await check(base + '/205/standalone')).code, 404);
   assert.equal((await check(base + '/205/rating')).code, 404);
+  assert.equal((await check(base + '/stickers')).code, 401);
+  assert.equal((await check(base + '/stickers', { method: 'DELETE' })).code, 405);
   assert.equal(calls.length, 0);
   const headers = { authorization: 'Bearer pilot' };
   assert.equal((await check(base, { headers })).code, 200);
@@ -106,14 +108,22 @@ test('the official Testnet Arcade serves localized public stations with a distin
   assert.equal(calls.at(-1).url, '/galaxy-minigames/5/launch?lang=en');
   assert.equal((await check(base + '/5/rating')).code, 200);
   assert.equal(calls.at(-1).network, 'testnet');
+  for (const method of ['GET', 'PUT']) {
+    const result = await check(base + '/stickers', { method, headers });
+    assert.equal(result.code, 200);
+    assert.equal(result.headers['Cache-Control'], 'private, no-store');
+    assert.deepEqual(calls.at(-1), { url: '/galaxy-minigames/stickers?lang=en', network: 'testnet' });
+  }
   env.VERCEL_ENV = 'preview';
   assert.equal((await check(base)).code, 404);
   assert.equal((await check(base + '/5/standalone')).code, 404);
+  assert.equal((await check(base + '/stickers', { headers })).code, 404);
   env.VERCEL_ENV = 'production';
   env.VERCEL_PROJECT_PRODUCTION_URL = 'cryptoid-evolution.vercel.app';
   assert.equal((await check(base)).code, 404);
   assert.equal((await check(base + '/5/document')).code, 404);
   assert.equal((await check(base + '/5/standalone')).code, 404);
+  assert.equal((await check(base + '/stickers', { method: 'PUT', headers })).code, 404);
 });
 
 test('Galaxy Arcade is isolated to the enabled Testnet preview and requires a verified Pi owner', async t => {

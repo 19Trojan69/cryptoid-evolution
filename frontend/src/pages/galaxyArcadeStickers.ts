@@ -1,10 +1,17 @@
 import {
-  arcadeRankIds, arcadeStickerImage, arcadeStickerStore,
-  type ArcadeSticker,
+  arcadeRankIds, arcadeStickerImage, arcadeStickerSlot, arcadeStickerStore,
+  type ArcadeSticker, type ArcadeStickerBackup,
 } from '../../../backend/src/galaxyArcadeStickerSchema.ts';
+import { axiosClient } from '../lib/axiosClient';
 import { isPublicArcadeLevel } from './galaxyArcadeRecords';
+import { shipEvolutionAsset } from './shipEvolution';
+import { allPlayerColors, playerSkins } from './shipFleet';
+import { staticHullAsset } from './staticHullAssets';
 
-export function readArcadeStickers(owner: string): Promise<ArcadeSticker[]> {
+type StickerArtwork = Omit<ArcadeSticker, 'owner'>;
+export type ArcadeStickerAlbum = { stickers: StickerArtwork[]; savedToAccount: boolean };
+
+function readArcadeStickers(owner: string): Promise<ArcadeSticker[]> {
   const { database, version, store, keyPath } = arcadeStickerStore;
   return new Promise((resolve, reject) => {
     const open = indexedDB.open(database, version);
@@ -27,8 +34,56 @@ export function readArcadeStickers(owner: string): Promise<ArcadeSticker[]> {
         resolve(request.result.filter((sticker: ArcadeSticker) => sticker?.owner === owner
           && isPublicArcadeLevel(sticker.level) && Number.isInteger(sticker.rank) && sticker.rank >= 1
           && sticker.rank <= arcadeRankIds.length && typeof sticker.shipName === 'string'
+          && playerSkins.some(skin => skin.id === sticker.modelId)
+          && allPlayerColors.some(color => color.id === sticker.colorId) && [1, 2, 3].includes(sticker.stage)
           && typeof sticker.image === 'string' && arcadeStickerImage.test(sticker.image)));
       };
     };
   });
+}
+
+const backupRoute = '/galaxy-minigames/stickers';
+
+async function requestAccountAlbum(owner: string, signal: AbortSignal, stickers?: ArcadeStickerBackup[]) {
+  const options = { baseURL: '/api', signal, timeout: 8_000 };
+  type Response = { owner: string; stickers: ArcadeStickerBackup[] };
+  const { data } = stickers
+    ? await axiosClient.put<Response>(backupRoute, { owner, stickers }, options)
+    : await axiosClient.get<Response>(backupRoute, options);
+  if (data?.owner !== owner || !Array.isArray(data.stickers)) throw new Error('Unexpected arcade sticker album');
+  return data.stickers;
+}
+
+export async function syncArcadeStickerAlbum(owner: string, stations: readonly { level: number }[], signal: AbortSignal): Promise<ArcadeStickerAlbum> {
+  const [device, account] = await Promise.allSettled([readArcadeStickers(owner), requestAccountAlbum(owner, signal)]);
+  const levels = new Set(stations.map(station => station.level));
+  const local = device.status === 'fulfilled' ? device.value.filter(sticker => levels.has(sticker.level)) : [];
+  if (account.status === 'rejected') {
+    if (local.length === 0) throw account.reason;
+    return { stickers: local, savedToAccount: false };
+  }
+
+  let saved = account.value;
+  const savedSlots = new Set(saved.map(arcadeStickerSlot));
+  const missing = local.filter(sticker => !savedSlots.has(arcadeStickerSlot(sticker)))
+    .map(({ level, rank, modelId, stage, colorId }) => ({ level, rank, modelId, stage, colorId }));
+  let savedToAccount = true;
+  if (missing.length > 0) {
+    try { saved = await requestAccountAlbum(owner, signal, missing); }
+    catch { savedToAccount = false; }
+  }
+
+  const bySlot = new Map<string, StickerArtwork>(local.map(sticker => [arcadeStickerSlot(sticker), sticker]));
+  for (const sticker of saved) {
+    if (!levels.has(sticker.level)) continue;
+    const slot = arcadeStickerSlot(sticker);
+    const original = bySlot.get(slot);
+    if (original?.modelId === sticker.modelId && original.stage === sticker.stage && original.colorId === sticker.colorId) continue;
+    const skin = playerSkins.find(entry => entry.id === sticker.modelId);
+    const color = allPlayerColors.find(entry => entry.id === sticker.colorId);
+    if (!skin || !color) continue;
+    const image = staticHullAsset(skin.sprite, color.id, sticker.stage)?.url ?? shipEvolutionAsset(skin.sprite, sticker.stage);
+    bySlot.set(slot, { ...sticker, shipName: skin.name, image });
+  }
+  return { stickers: [...bySlot.values()].sort((a, b) => a.level - b.level || a.rank - b.rank), savedToAccount };
 }

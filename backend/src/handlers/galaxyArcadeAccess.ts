@@ -11,7 +11,7 @@ export function verifiedArcadeUser(req: Request) {
   return token && user?.uid && user.accessToken === token ? user : null;
 }
 
-async function reachedLevel(req: Request, uid: string) {
+export async function reachedArcadeLevel(req: Request, uid: string) {
   const account = await req.app.locals.userCollection.findOne({ uid }, { projection: {
     "playerByNetwork.testnet.highestSector": 1, "rewardsByNetwork.testnet": 1,
   } });
@@ -30,7 +30,7 @@ export default function mountGalaxyArcadeAccess(router: Router, key = process.en
     const language = typeof req.query.lang === "string" ? req.query.lang : null;
     const user = verifiedArcadeUser(req);
     try {
-      const level = user ? await reachedLevel(req, user.uid) : 0;
+      const level = user ? await reachedArcadeLevel(req, user.uid) : 0;
       return res.json(publicArcadeCatalog(language, user?.uid ?? null, level));
     } catch {
       return res.status(503).json({ error: "progress_unavailable" });
@@ -45,7 +45,7 @@ export default function mountGalaxyArcadeAccess(router: Router, key = process.en
     const user = verifiedArcadeUser(req);
     if (!user) return res.status(401).json({ error: "not_authenticated" });
     try {
-      if (await reachedLevel(req, user.uid) < Number(level)) return res.status(403).json({ error: "level_locked" });
+      if (await reachedArcadeLevel(req, user.uid) < Number(level)) return res.status(403).json({ error: "level_locked" });
       return res.json({ ticket: publicArcadeTicket(key, level) });
     } catch {
       return res.status(503).json({ error: "progress_unavailable" });

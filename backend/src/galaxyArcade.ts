@@ -15,6 +15,7 @@ import type { ArcadeFlightShip } from "./galaxyArcadeStickerSchema";
 
 const stations = galaxyArcadeNames.map((name, index) => ({ level: (index + 1) * 5, name }));
 const previewLevels = stations.map(station => station.level);
+export const galaxyArcadeStationCount = stations.length;
 export const galaxyArcadeStationIndex = (level?: string) => stations.findIndex(station => String(station.level) === level);
 const arcadePolicy = "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob:; media-src data: blob:; base-uri 'none'; form-action 'none'";
 const previewCookie = "__Secure-cryptoid-arcade";

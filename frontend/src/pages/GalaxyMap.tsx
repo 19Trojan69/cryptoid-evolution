@@ -14,6 +14,7 @@ import { axiosClient } from '../lib/axiosClient';
 import { loadGalaxyEquipment, type GalaxyEquipment, type GalaxyMiniGame } from './galaxyData';
 import { prepareArcadeFlightShip } from './galaxyArcadeEquipment';
 import { arcadeStickerAlbumName, claimArcadeResult, markArcadeLaunch, readArcadeRecord, retroMiniGameName, retroMiniGamesName, type PublicArcade } from './galaxyArcadeRecords';
+import { syncArcadeStickerAlbum } from './galaxyArcadeStickers';
 import { emptyGalaxyProgress, galaxyPoint, galaxyShipPoint, galaxyRegions, type GalaxySelection } from './galaxyModel';
 import { MOTION_STORAGE_KEY } from './displaySettings';
 import { readControlHand } from './controlPreferences';
@@ -123,6 +124,12 @@ export default function GalaxyMap() {
   const progress = status === 'ready' ? snapshot.progress : emptyGalaxyProgress();
   const retroLevels = !previewAccess ? officialArcade?.levels : undefined;
   const unlocked = !previewAccess && status === 'ready' && officialArcade && officialArcade.owner === snapshot.owner ? officialArcade.stations : undefined;
+  useEffect(() => {
+    if (!returningFromArcade || !unlocked?.length || !snapshot.owner) return;
+    const request = new AbortController();
+    void syncArcadeStickerAlbum(snapshot.owner, unlocked, request.signal).catch(() => undefined);
+    return () => request.abort();
+  }, [returningFromArcade, snapshot.owner, unlocked]);
   const miniGames = retroLevels ? unlocked : previewGames ?? (status === 'ready' ? snapshot.miniGames : undefined);
   const picker = retroLevels?.map(level => ({ level, name: unlocked?.find(game => game.level === level)?.name })) ?? miniGames;
   const miniGame = selection?.kind === 'mini' ? miniGames?.find(game => game.level === selection.level) : undefined;

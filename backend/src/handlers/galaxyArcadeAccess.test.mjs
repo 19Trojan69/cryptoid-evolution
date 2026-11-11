@@ -5,6 +5,7 @@ import { runInNewContext } from 'node:vm';
 
 const require = createRequire(import.meta.url);
 const { default: mountGalaxyArcadeAccess } = require('../../build/handlers/galaxyArcadeAccess.js');
+const { default: mountGalaxyArcadeStickerBackup } = require('../../build/handlers/galaxyArcadeStickerBackup.js');
 const { servePublicGalaxyArcade } = require('../../build/galaxyArcade.js');
 const { arcadeEquipmentStartup, readArcadeFlightShip } = require('../../build/galaxyArcadeEquipment.js');
 const { withArcadePublicLocale } = require('../../build/galaxyArcadePublicLocale.js');
@@ -85,6 +86,68 @@ test('arcade equipment accepts a bounded PNG and embeds the ship label as data',
   assert.equal(readArcadeFlightShip(JSON.stringify({ ...flightShip, artwork: 'data:image/png;base64,' + oversized.toString('base64') })), null);
   const name = 'Nova Wing </script><script>alert(1)</script>';
   assert.doesNotMatch(arcadeEquipmentStartup({ ...flightShip, name }), /<\/script>/i);
+});
+
+test('Retro Sticker backups survive a fresh session and preserve the first ship per verified account and rank', async () => {
+  let handler;
+  mountGalaxyArcadeStickerBackup({ all(path, fn) { assert.equal(path, '/stickers'); handler = fn; } });
+  const pilot = { _id: 'first', uid: 'pilot', accessToken: 'pilot-token', playerByNetwork: { testnet: { highestSector: 5 } } };
+  const other = { _id: 'second', uid: 'other', accessToken: 'other-token', playerByNetwork: { testnet: { highestSector: 5 } } };
+  const accounts = new Map([pilot, other].map(account => [account.uid, { ...account }]));
+  const matches = ({ uid, _id }) => {
+    const account = accounts.get(uid);
+    return account && (_id === undefined || account._id === _id) ? account : null;
+  };
+  const users = {
+    async findOne(query) { return matches(query); },
+    async findOneAndUpdate(query, pipeline, options) {
+      assert.equal(options.returnDocument, 'after');
+      assert.ok(!options.upsert);
+      const account = matches(query);
+      if (!account) return null;
+      const slots = account.testnetRetroStickerBackup ??= {};
+      for (const [path, expression] of Object.entries(pipeline[0].$set)) {
+        const [field, slot] = path.split('.');
+        assert.equal(field, 'testnetRetroStickerBackup');
+        const [existing, { $literal: sticker }] = expression.$ifNull;
+        assert.equal(existing, '$' + path);
+        slots[slot] ??= sticker;
+      }
+      return account;
+    },
+  };
+  const check = async ({ user = pilot, token = user.accessToken, network = 'testnet', body, method = body ? 'PUT' : 'GET' } = {}) => {
+    const req = {
+      method, body, testnetSave: true,
+      get: name => name === 'authorization' ? `Bearer ${token}` : network,
+      session: { currentUser: { ...user } }, app: { locals: { userCollection: users } },
+    };
+    const res = response();
+    await handler(req, res);
+    assert.equal(res.headers['Cache-Control'], 'private, no-store');
+    return res;
+  };
+  const stickers = Array.from({ length: 6 }, (_, index) => ({ level: 5, rank: index + 1, modelId: 'grey-scout', stage: 1, colorId: 'grey' }));
+  const upload = { owner: pilot.uid, stickers };
+  assert.deepEqual((await check()).body, { owner: pilot.uid, stickers: [] });
+  assert.equal((await check({ body: upload, token: other.accessToken })).code, 401);
+  assert.equal((await check({ body: upload, network: 'mainnet' })).code, 404);
+  assert.equal((await check({ body: upload, user: other })).code, 403);
+  for (const bad of [{ rank: 7 }, { level: 6 }, { colorId: '$foreign' }, { modelId: 'invalid' }, { stage: 4 }])
+    assert.equal((await check({ body: { ...upload, stickers: [{ ...stickers[0], ...bad }] } })).code, 400);
+  assert.equal((await check({ body: { ...upload, stickers: [stickers[0], stickers[0]] } })).code, 400);
+  assert.equal((await check({ body: { ...upload, stickers: [{ ...stickers[0], level: 10 }] } })).code, 403);
+  assert.deepEqual((await check()).body.stickers, []);
+
+  const saved = await check({ body: upload });
+  assert.deepEqual(saved.body.stickers, stickers);
+  const differentShip = { ...stickers[0], modelId: 'nova-wing', stage: 2, colorId: 'silver' };
+  assert.equal((await check({ body: { ...upload, stickers: [differentShip] } })).code, 200);
+  assert.deepEqual((await check()).body.stickers, stickers);
+  assert.deepEqual((await check({ user: other })).body.stickers, []);
+  accounts.set(pilot.uid, { ...pilot, _id: 'replacement' });
+  assert.equal((await check({ body: upload })).code, 410);
+  assert.equal(accounts.get(pilot.uid).testnetRetroStickerBackup, undefined);
 });
 
 test('localized rank names initialize before the arcade controls', () => {

@@ -150,6 +150,7 @@ export const createApiGateway = (
       }
       const publicArcade = /^galaxy-minigames(?:\/(.*))?$/.exec(path);
       const arcadeRating = publicArcade && /^(\d+)\/rating$/.exec(publicArcade[1] ?? "");
+      const arcadeStickerBackup = publicArcade?.[1] === "stickers";
       let arcadeProgress = false;
       if (publicArcade) {
         const key = env.VERCEL_PROJECT_PRODUCTION_URL === "cryptoid-evolution-testnet.vercel.app"
@@ -164,7 +165,13 @@ export const createApiGateway = (
           arcadeProgress = /^Bearer\s+\S+$/i.test(req.headers?.authorization || "");
           if (launch && !arcadeProgress) return res.status(401).json({ error: "not_authenticated" });
         }
-        if (!arcadeRating && !arcadeProgress)
+        if (arcadeStickerBackup) {
+          res.setHeader("Cache-Control", "private, no-store");
+          if (req.method !== "GET" && req.method !== "PUT") return res.status(405).json({ error: "method_not_allowed" });
+          if (!/^Bearer\s+\S+$/i.test(req.headers?.authorization || ""))
+            return res.status(401).json({ error: "not_authenticated" });
+        }
+        if (!arcadeRating && !arcadeProgress && !arcadeStickerBackup)
           return servePublicGalaxyArcade(req, res, publicArcade[1], key, env.CRYPTOID_GALAXY_ARCADE_MUSIC_KEY, url.searchParams.get("lang"));
       }
       const powerRoute = path === "hangar/power" && req.method === "GET"
@@ -177,7 +184,7 @@ export const createApiGateway = (
         && authenticatedLocal;
       // Add only the new, network-scoped features locally. Existing Testnet
       // accounts/payments keep their established proxy; no Mainnet deployment.
-      const localFeature = powerRoute || testnetSave || !!arcadeRating || arcadeProgress || testnet && (/^progress\/boss-summary\/(?:prepare|continue)$/.test(path)
+      const localFeature = powerRoute || testnetSave || !!arcadeRating || arcadeProgress || arcadeStickerBackup || testnet && (/^progress\/boss-summary\/(?:prepare|continue)$/.test(path)
         || /^admin\/players(?:\/|$)/.test(path));
       // The public catalog must match this deployment's Shop, even while
       // account and payment requests use the established Pi service.
@@ -267,7 +274,7 @@ export const createApiGateway = (
         req.headers ??= {};
         req.headers["x-cryptoid-app-network"] = "testnet";
       }
-      if (testnetSave || powerRoute || arcadeRating || arcadeProgress) req.testnetSave = true;
+      if (testnetSave || powerRoute || arcadeRating || arcadeProgress || arcadeStickerBackup) req.testnetSave = true;
       ready ??= loadBackend().then(async (backend) => {
         await backend.start(false);
         return backend;

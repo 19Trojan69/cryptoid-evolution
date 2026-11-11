@@ -293,6 +293,7 @@ test('actual ship flight only reflects a new adjacent confirmed stage and never 
     './GalaxyStickerAlbum':{default:()=>null},
     './galaxyData':{loadGalaxyEquipment},'./galaxyArcadeEquipment':{prepareArcadeFlightShip:()=>{}},
     './galaxyArcadeRecords':arcadeRecords,
+    './galaxyArcadeStickers':{syncArcadeStickerAlbum:async()=>{}},
     '../lib/axiosClient':{axiosClient:{get:async()=>({data:undefined})}},
     './useGalaxyData':{default:()=>data},'./galaxyModel':model,'./displaySettings':{MOTION_STORAGE_KEY:'motion'},
     './controlPreferences':{readControlHand:()=> 'right'},
