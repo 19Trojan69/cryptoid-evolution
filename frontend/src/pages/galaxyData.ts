@@ -4,8 +4,19 @@ import type { AccountSave } from '../lib/accountSave.ts';
 
 type Getter = <T>(path: string, config?: { baseURL: string }) => Promise<{ data: T }>;
 export type GalaxyMiniGame = { level: number; name: string };
-export type GalaxySnapshot = { progress: GalaxyProgress; skin: string; color: string; upgrades: string[]; owner: string | null; miniGames?: GalaxyMiniGame[] };
+export type GalaxyEquipment = Pick<AccountSave, 'skin' | 'color' | 'shipStage'> & { upgrades: string[] };
+export type GalaxySnapshot = GalaxyEquipment & { progress: GalaxyProgress; owner: string | null; miniGames?: GalaxyMiniGame[] };
 export const emptyGalaxySnapshot = (): GalaxySnapshot => ({ progress: emptyGalaxyProgress(), skin: 'grey-scout', color: 'grey', upgrades: [], owner: null });
+
+export async function loadGalaxyEquipment(get: Getter) {
+  const [save, inventory] = await Promise.all([
+    get<{ save: AccountSave }>('/progress/me'),
+    get<{ ownedShipUpgrades?: string[] }>('/hangar/inventory'),
+  ]);
+  const { skin, color, shipStage, highestSector } = save.data.save;
+  const equipment: GalaxyEquipment = { skin, color, shipStage, upgrades: inventory.data.ownedShipUpgrades ?? [] };
+  return { equipment, highestSector };
+}
 
 /** Existing guest records are origin-local. A runtime network override must not
  * reuse legacy records from a different origin network. No migration or writes. */
@@ -35,13 +46,12 @@ export async function loadGalaxySnapshot(get: Getter, network: 'mainnet' | 'test
       .then(({ data }) => Array.isArray(data?.stations) ? data.stations : undefined)
       .catch(() => undefined)
     : undefined;
-  const [save, rewards, inventory, miniGames] = await Promise.all([
-    get<{ save: AccountSave }>('/progress/me'),
+  const [{ equipment, highestSector }, rewards, miniGames] = await Promise.all([
+    loadGalaxyEquipment(get),
     get<{ network: string; progress: unknown }>('/rewards/me'),
-    get<{ ownedShipUpgrades?: string[] }>('/hangar/inventory'),
     arcade,
   ]);
   if (rewards.data.network !== network) throw new Error('Progress network mismatch');
   const progress = readRewardProgress(JSON.stringify(rewards.data.progress));
-  return { owner: uid, skin: save.data.save.skin, color: save.data.save.color, upgrades: inventory.data.ownedShipUpgrades ?? [], progress: galaxyProgress(progress, save.data.save.highestSector), miniGames };
+  return { owner: uid, ...equipment, progress: galaxyProgress(progress, highestSector), miniGames };
 }

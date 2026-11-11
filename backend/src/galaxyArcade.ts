@@ -9,6 +9,9 @@ import { withArcadeSurvival } from "./galaxyArcadeSurvival";
 import { arcadeLocale, arcadeStationCopy, type ArcadeLocale } from "./galaxyArcadeCopy";
 import { arcadePanelLabels } from "./galaxyArcadeLanguages";
 import { withArcadePublicLocale } from "./galaxyArcadePublicLocale";
+import { arcadeStickerLabels } from "./galaxyArcadeStickerCopy";
+import { arcadeEquipmentStartup, readArcadeFlightShip } from "./galaxyArcadeEquipment";
+import type { ArcadeFlightShip } from "./galaxyArcadeStickerSchema";
 
 const stations = galaxyArcadeNames.map((name, index) => ({ level: (index + 1) * 5, name }));
 const previewLevels = stations.map(station => station.level);
@@ -76,7 +79,7 @@ export function publicArcadeCatalog(language: string | null, owner: string | nul
   return {
     owner,
     levels: previewLevels,
-    labels: arcadePanelLabels(locale),
+    labels: { ...arcadePanelLabels(locale), stickers: arcadeStickerLabels(locale) },
     stations: stations.flatMap(({ level, name }, index) =>
       level <= reachedLevel ? [{ level, ...arcadeStationCopy(locale, index, name) }] : []),
   };
@@ -104,7 +107,10 @@ const playStyles = `<style>
   #galaxy-arcade-startup { position: fixed; inset: var(--arcade-nav-height) 0 0; z-index: 19; display: grid; place-items: center; padding: 16px; text-align: center; background: #081222; color: #eaf0ff; }
 </style>`;
 
-function stationDocument(index: number, key: string, musicKey: string | undefined, returnHref?: string, locale?: ArcadeLocale, nonce?: string) {
+function stationDocument(index: number, key: string, musicKey: string | undefined, options: {
+  returnHref?: string; locale?: ArcadeLocale; nonce?: string; ship?: ArcadeFlightShip | null;
+} = {}) {
+  const { returnHref, locale, nonce, ship = null } = options;
   const payload = Buffer.from(galaxyArcadePayload, "base64");
   const decipher = createDecipheriv("aes-256-gcm", Buffer.from(key, "hex"), payload.subarray(0, 12));
   decipher.setAuthTag(payload.subarray(12, 28));
@@ -170,7 +176,7 @@ function stationDocument(index: number, key: string, musicKey: string | undefine
     )
     .replace("</head>", `${playStyles}</head>`)
     .replace("<body>", `<body>${returnBar(returnHref)}<p id="galaxy-arcade-startup" role="status">Minispiel wird geladen …</p>${embedded ? "<script>reportArcadeHost('cryptoid:arcade-boot');</script>" : ""}`)
-    .replace("</body></html>", `<script>
+    .replace("</body></html>", () => `<script>
       (() => {
         const status = document.getElementById('galaxy-arcade-startup');
         const host = ${embedded ? "arcadeHost" : "null"};
@@ -188,13 +194,16 @@ function stationDocument(index: number, key: string, musicKey: string | undefine
           report('cryptoid:arcade-error');
         };
         const timer = setTimeout(failed, 12000);
-        Promise.resolve().then(() => CE.app.showDetail()).then(() => {
+        Promise.resolve().then(async () => {
+          ${arcadeEquipmentStartup(ship)}
+          return CE.app.showDetail();
+        }).then(() => {
           status.remove();
           report('cryptoid:arcade-ready');
         }).catch(failed).finally(() => clearTimeout(timer));
       })();
     </script></body></html>`);
-  const localized = locale ? withArcadePublicLocale(page, locale, index, stations[index].name) : page;
+  const localized = locale ? withArcadePublicLocale(page, locale, index, stations[index].name, Boolean(nonce && ship)) : page;
   return nonce ? standaloneDocument(localized, nonce) : localized;
 }
 
@@ -244,8 +253,14 @@ export function servePublicGalaxyArcade(
     const locked = playError(returnHref, "Das Minispiel ist gerade nicht verfügbar. Versuche es erneut über die Galaxiekarte.");
     return sendPlayPage(res, 403, withArcadePublicLocale(locked, locale, index, stations[index].name), "public", nonce);
   }
+  const ship = readArcadeFlightShip(req.body?.ship);
+  if (!ship && req.body?.ship !== undefined) {
+    if (embeddedDocument) return res.status(400).json({ error: "invalid_ship" });
+    const invalid = playError(returnHref, "Das Minispiel ist gerade nicht verfügbar. Versuche es erneut über die Galaxiekarte. · AR-05");
+    return sendPlayPage(res, 400, withArcadePublicLocale(invalid, locale, index, stations[index].name), "public", nonce);
+  }
   try {
-    const html = stationDocument(index, key, musicKey, returnHref, locale, nonce);
+    const html = stationDocument(index, key, musicKey, { returnHref, locale, nonce, ship });
     if (embeddedDocument) {
       console.info("Galaxy arcade document prepared", stations[index].level);
       return res.json({ document: html });
@@ -261,7 +276,7 @@ export function servePublicGalaxyArcade(
 }
 
 export async function serveGalaxyArcade(
-  req: Pick<Request, "method" | "headers">,
+  req: Pick<Request, "method" | "headers" | "body">,
   res: Pick<Response, "setHeader" | "status" | "json" | "send">,
   level: string | undefined,
   key: string | undefined,
@@ -289,7 +304,8 @@ export async function serveGalaxyArcade(
   const launching = playRoute?.[2] === "launch";
   const playPage = playRoute?.[2] === "play";
   const stationLevel = playRoute?.[1] ?? level;
-  if (req.method !== (launching ? "POST" : "GET")) return res.status(405).json({ error: "method_not_allowed" });
+  if (req.method !== (launching ? "POST" : "GET") && !(playPage && req.method === "POST"))
+    return res.status(405).json({ error: "method_not_allowed" });
   const previewSession = invitation && sameDigest(readCookie(req.headers.cookie, previewCookie), invitation.session);
   const accessHint = level === undefined && invitation ? { previewAccess: true, previewLevels } : {};
   const returnHref = `/galaxy?arcade-return=1${invitation ? "&amp;admin-test=1" : ""}`;
@@ -329,7 +345,12 @@ export async function serveGalaxyArcade(
       }
       return res.status(204).send("");
     }
-    if (playPage) return sendPlayPage(res, 200, stationDocument(index, key, musicKey, returnHref));
+    if (playPage) {
+      const ship = req.method === "POST" ? readArcadeFlightShip(req.body?.ship) : null;
+      if (req.method === "POST" && !ship)
+        return sendPlayPage(res, 400, playError(returnHref, "Das Minispiel ist gerade nicht verfügbar. Versuche es erneut über die Galaxiekarte. · AR-05"));
+      return sendPlayPage(res, 200, stationDocument(index, key, musicKey, { returnHref, ship }));
+    }
     return res.json({ html: stationDocument(index, key, musicKey) });
   } catch {
     if (playPage) return sendPlayPage(res, 503, playError(returnHref, "Das Minispiel ist gerade nicht verfügbar. Versuche es erneut über die Galaxiekarte."));

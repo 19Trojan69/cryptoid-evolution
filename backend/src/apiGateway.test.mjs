@@ -51,11 +51,14 @@ test('the official Testnet Arcade serves localized public stations with a distin
     assert.deepEqual(body.stations, []);
     assert.ok(Object.values(body.labels).every(Boolean));
     const unlocked = publicArcadeCatalog(locale, 'pilot', 200);
+    assert.equal(new Set(unlocked.labels.stickers.ranks).size, 6);
+    assert.ok(Object.values(unlocked.labels.stickers).every(Boolean));
     assert.equal(new Set(unlocked.stations.map(station => station.name)).size, 40);
     for (const [index, station] of unlocked.stations.entries()) {
       assert.equal(station.level, (index + 1) * 5);
       assert.ok(station.description && station.scoring && station.medalLabel && station.rulesVersion);
-      assert.deepEqual(station.medalGoals, [...station.medalGoals].sort((a, b) => a - b));
+      assert.equal(station.medalGoals.length, 6);
+      assert.ok(station.medalGoals.every((goal, tier, goals) => Number.isInteger(goal) && goal > (goals[tier - 1] ?? 0)));
     }
   }
   assert.notEqual(publicArcadeCatalog('th', 'pilot', 40).stations[7].description, publicArcadeCatalog('de', 'pilot', 40).stations[7].description);
@@ -77,7 +80,16 @@ test('the official Testnet Arcade serves localized public stations with a distin
   assert.equal(documentUnavailable.code, 503);
   assert.deepEqual(documentUnavailable.body, { error: 'arcade_unavailable' });
   assert.equal((await check(base + '/205/document')).code, 404);
-  const standaloneUnavailable = await check(base + '/5/standalone', launch);
+  const missingShip = await check(base + '/5/standalone', launch);
+  assert.equal(missingShip.code, 503); // A previous client may launch without a ship snapshot.
+  const invalidShip = await check(base + '/5/standalone', { ...launch, body: { ...launch.body, ship: '{}' } });
+  assert.equal(invalidShip.code, 400);
+  assert.match(invalidShip.body, /role="alert">[^<]*AR-05/);
+  const ship = JSON.stringify({
+    modelId: 'nova-wing', stage: 1, colorId: 'metallic-red', name: 'Nova Wing · Standard',
+    artwork: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIHWP4z8DwHwAFgAI/ScLbtAAAAABJRU5ErkJggg==',
+  });
+  const standaloneUnavailable = await check(base + '/5/standalone', { ...launch, body: { ...launch.body, ship } });
   assert.equal(standaloneUnavailable.code, 503);
   assert.equal(standaloneUnavailable.headers['Content-Type'], 'text/html; charset=utf-8');
   assert.match(standaloneUnavailable.headers['Content-Security-Policy'], /^default-src 'none'; script-src 'nonce-[A-Za-z0-9+/]{22}=='/);

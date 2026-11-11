@@ -3,16 +3,17 @@ import { useLocale } from '../i18n';
 import { axiosClient } from '../lib/axiosClient';
 import GalaxyBossArt from './GalaxyBossArt';
 import GalaxyArcadePanel from './GalaxyArcadePanel';
-import { retroMiniGameName, type ArcadeLabels, type ArcadeRecord, type ArcadeStation } from './galaxyArcadeRecords';
+import { arcadeStickerAlbumName, retroMiniGameName, type ArcadeLabels, type ArcadeRecord, type ArcadeStation } from './galaxyArcadeRecords';
 import { galaxyBossState, galaxyPoint, type GalaxyProgress, type GalaxySelection } from './galaxyModel';
 
-type Props = { selection: GalaxySelection; progress: GalaxyProgress; miniGameName?: string; lockedRetro?: 'level' | 'sign-in'; onEnterTestCode?: () => void; onLaunch: (path: string) => void; onClose: () => void; onShop: (view: 'shop' | 'hangar') => void; onCards: () => void;
-  arcade?: { game: ArcadeStation; labels: ArcadeLabels; record: ArcadeRecord | null; owner: string | null; play: (game: ArcadeStation, ticket: string) => void } };
+export type GalaxyArcadeLaunch = { game: ArcadeStation; ticket: string } | { path: string };
+type Props = { selection: GalaxySelection; progress: GalaxyProgress; miniGameName?: string; lockedRetro?: 'level' | 'sign-in'; onEnterTestCode?: () => void; onLaunch: (target: GalaxyArcadeLaunch, signal: AbortSignal) => Promise<void>; onClose: () => void; onShop: (view: 'shop' | 'hangar') => void; onCards: () => void;
+  arcade?: { game: ArcadeStation; labels: ArcadeLabels; record: ArcadeRecord | null; owner: string | null; openAlbum: () => void } };
 export default function GalaxyInfoDialog({ selection, progress, miniGameName, lockedRetro, arcade, onEnterTestCode, onLaunch, onClose, onShop, onCards }: Props) {
   const { t } = useLocale();
   const dialog = useRef<HTMLDialogElement>(null);
   const [launch, setLaunch] = useState<'idle' | 'loading' | 'error'>('idle');
-  const game = arcade?.game, play = arcade?.play;
+  const game = arcade?.game;
   useEffect(() => {
     const previous = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     const element = dialog.current;
@@ -26,17 +27,16 @@ export default function GalaxyInfoDialog({ selection, progress, miniGameName, lo
     const path = `${game ? '' : '/admin'}/galaxy-minigames/${selection.level}`;
     void axiosClient.post<{ ticket?: string }>(`${path}/launch`, null, { baseURL: '/api', signal: controller.signal }).then(({ status, data }) => {
       if (controller.signal.aborted) return;
-      if (game && play) {
+      if (game) {
         const ticket = data?.ticket;
         if (status !== 200 || typeof ticket !== 'string' || !/^\d{13}\.[a-f0-9]{64}$/.test(ticket)) throw new Error('Invalid arcade ticket');
-        play(game, ticket);
-        return;
+        return onLaunch({ game, ticket }, controller.signal);
       }
       if (status !== 204) throw new Error('Invalid arcade launch response');
-      onLaunch(`/api${path}/play`);
+      return onLaunch({ path: `/api${path}/play` }, controller.signal);
     }).catch(() => { if (!controller.signal.aborted) setLaunch('error'); });
     return () => controller.abort();
-  }, [launch, selection.level, game, play, onLaunch, miniGameName]);
+  }, [launch, selection.level, game, onLaunch, miniGameName]);
   const station = galaxyPoint(selection.level);
   const boss = selection.kind === 'boss' ? station.boss : undefined;
   const state = boss ? galaxyBossState(progress, boss.id) : undefined;
@@ -50,6 +50,7 @@ export default function GalaxyInfoDialog({ selection, progress, miniGameName, lo
         {launch === 'error' && <p role="alert">{t('This page could not be loaded.')}</p>}
         <button type="button" className="galaxy-primary" disabled={launch === 'loading'} onClick={() => setLaunch('loading')}>{playLabel}</button>
         <GalaxyArcadePanel key={arcade.owner ?? 'guest'} game={arcade.game} labels={arcade.labels} record={arcade.record} canRate={!!arcade.owner}/>
+        <button type="button" className="galaxy-secondary" aria-haspopup="dialog" onClick={arcade.openAlbum}>{arcadeStickerAlbumName}</button>
       </> : lockedRetro ? <>
         <div className="galaxy-dialog-portal" aria-hidden="true">✧</div>
         <p className="galaxy-note">{t('Reach level {level} to unlock this game.', { level: selection.level })}</p>
