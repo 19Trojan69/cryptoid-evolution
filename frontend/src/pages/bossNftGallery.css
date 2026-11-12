@@ -90,6 +90,25 @@
   background: #080d17;
 }
 
+.boss-nft-card-details {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 1px solid #536187;
+  border-radius: 0.65rem;
+  background: #171b33;
+  color: #e4e4ff;
+  font: inherit;
+  font-weight: 650;
+  text-align: center;
+  cursor: pointer;
+}
+
+.boss-nft-card-details span {
+  display: block;
+  padding: 0.55rem 0.7rem;
+}
+
 .boss-nft-state {
   margin-block-start: 1.25rem;
   padding: 1.1rem;

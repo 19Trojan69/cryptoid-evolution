@@ -2,10 +2,13 @@ import { useEffect, useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { isAxiosError } from "axios";
 import { useAuth } from "../hooks/useAuth";
+import useModalNavigation from "../hooks/useModalNavigation";
 import { useLocale } from "../i18n";
 import { axiosClient } from "../lib/axiosClient";
 import { nftGalleryCopy, type BossNftGalleryCopy } from "../locales/bossNftGallery";
+import { getVarnethHoloDetailCopy } from "../locales/varnethHoloDetail";
 import { bossName } from "./bossNames";
+import VarnethHoloDetail from "./VarnethHoloDetail";
 import "./bossNftGallery.css";
 
 type Edition = "victory" | "holo";
@@ -23,7 +26,12 @@ function GalleryCards({ edition, page, copy, retryLabel, onRetry, onPage, sessio
   connectLabel: string;
   onSignIn: () => void;
 }) {
+  const { locale } = useLocale();
   const [result, setResult] = useState<Page | "error" | "denied" | "expired" | null>(null);
+  const [detailOpen, setDetailOpen] = useState(false);
+  const closeDetail = () => setDetailOpen(false);
+  useModalNavigation(detailOpen ? "varneth-holo-detail" : null, closeDetail);
+
   useEffect(() => {
     const request = new AbortController();
     void axiosClient.get<Page>("/admin/boss-nfts", { params: { edition, page }, signal: request.signal })
@@ -55,18 +63,31 @@ function GalleryCards({ edition, page, copy, retryLabel, onRetry, onPage, sessio
 
   const pageCount = Math.ceil(result.total / result.pageSize);
   const editionName = edition === "victory" ? "Victory Edition" : "Holo Edition";
+  const varneth = edition === "holo" ? result.cards.find(card => card.id === 1) : undefined;
+  const details = getVarnethHoloDetailCopy(locale).details;
+  const imageUrl = (card: Preview) => "data:image/webp;base64," + card.webp;
+  const imageDescription = (card: Preview) => bossName(card.id) + " · " + editionName + ". " + card.story;
   return <>
     <ul className="boss-nft-grid">
-      {result.cards.map(card => <li key={card.id}>
-        <img src={"data:image/webp;base64," + card.webp} width={540} height={720}
-          decoding="async" loading="lazy" alt={bossName(card.id) + " · " + editionName + ". " + card.story} />
-      </li>)}
+      {result.cards.map(card => {
+        const image = <img src={imageUrl(card)} width={540} height={720}
+          decoding="async" loading="lazy" alt={imageDescription(card)} />;
+        return <li key={card.id}>
+          {card === varneth ? <button type="button" className="boss-nft-card-details" aria-haspopup="dialog"
+            aria-label={bossName(card.id) + " · " + details} onClick={() => setDetailOpen(true)}>
+            {image}
+            <span>{details}</span>
+          </button> : image}
+        </li>;
+      })}
     </ul>
     {(pageCount > 1 || page > 1) && <div className="boss-nft-pagination">
       <button type="button" onClick={() => onPage(page - 1)} disabled={page <= 1}>{copy.previous}</button>
       <span>{page} / {pageCount}</span>
       <button type="button" onClick={() => onPage(page + 1)} disabled={page >= pageCount}>{copy.next}</button>
     </div>}
+    {detailOpen && varneth && <VarnethHoloDetail name={bossName(varneth.id)} editionName={editionName}
+      imageUrl={imageUrl(varneth)} imageDescription={imageDescription(varneth)} onClose={closeDetail} />}
   </>;
 }
 

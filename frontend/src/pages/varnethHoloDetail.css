@@ -1,0 +1,150 @@
+.varneth-holo-detail {
+  box-sizing: border-box;
+  width: min(calc(100% - 1rem), 31rem);
+  max-height: calc(100svh - 1rem);
+  max-height: calc(100dvh - 1rem);
+  padding: 0;
+  border: 1px solid #55577e;
+  border-radius: 1.45rem;
+  background: radial-gradient(ellipse at top left, #272345, #111425 62%);
+  color: #f5f2ff;
+  box-shadow: 0 1.25rem 4rem #080716a3;
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+
+.varneth-holo-detail::backdrop {
+  background: #080b18bf;
+}
+
+.varneth-holo-panel {
+  display: grid;
+  gap: 0.9rem;
+  padding: clamp(0.9rem, 3.5vw, 1.4rem);
+}
+
+.varneth-holo-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  gap: 1rem;
+}
+
+.varneth-holo-header p {
+  margin: 0 0 0.2rem;
+  color: #c9bcff;
+  font-size: 0.87rem;
+  font-weight: 650;
+}
+
+.varneth-holo-header h2 {
+  margin: 0;
+  font-size: clamp(1.65rem, 7vw, 2.3rem);
+  line-height: 1.06;
+}
+
+.varneth-holo-close {
+  display: grid;
+  place-items: center;
+  flex: 0 0 44px;
+  min-height: 44px;
+  padding: 0;
+  border: 1px solid #535775;
+  border-radius: 50%;
+  background: #141529;
+  color: inherit;
+  font: inherit;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.varneth-holo-close:focus-visible {
+  outline: 2px solid #abe6ff;
+  outline-offset: 3px;
+}
+
+.varneth-holo-art {
+  display: block;
+  width: min(100%, 17rem);
+  height: auto;
+  aspect-ratio: 3 / 4;
+  margin-inline: auto;
+  border-radius: 0.7rem;
+  background: #080d17;
+}
+
+.varneth-holo-progress div {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.2rem 0.65rem;
+  margin-block-end: 0.5rem;
+  color: #c7c6df;
+  font-size: 0.9rem;
+}
+
+.varneth-holo-progress strong {
+  color: #f5f2ff;
+  font-size: 1.05rem;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.varneth-holo-progress progress {
+  display: block;
+  appearance: none;
+  width: 100%;
+  height: 0.45rem;
+  border: 0;
+  border-radius: 1rem;
+  overflow: hidden;
+  background: #383753;
+  color: #ae9aff;
+}
+
+.varneth-holo-progress progress::-webkit-progress-bar { background: #383753; }
+.varneth-holo-progress progress::-webkit-progress-value { background: linear-gradient(90deg, #86e2ff, #bc9aff); }
+.varneth-holo-progress progress::-moz-progress-bar { background: linear-gradient(90deg, #86e2ff, #bc9aff); }
+
+.varneth-holo-status {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0;
+  padding: 0.7rem 0.85rem;
+  border: 1px solid #50466c;
+  border-radius: 0.7rem;
+  background: #2a2441;
+  font-weight: 650;
+}
+
+.varneth-holo-status::before {
+  content: "";
+  flex: 0 0 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: #cdb2ff;
+}
+
+.varneth-holo-facts {
+  margin: 0;
+  padding-inline: 0.85rem;
+  border: 1px solid #373c59;
+  border-radius: 0.8rem;
+  background: #111327;
+  font-size: 0.9rem;
+}
+
+.varneth-holo-facts div {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+  gap: 0.65rem;
+  padding-block: 0.62rem;
+  overflow-wrap: anywhere;
+}
+
+.varneth-holo-facts div + div { border-top: 1px solid #32354c; }
+.varneth-holo-facts dt { color: #c7c6df; }
+.varneth-holo-facts dd { margin: 0; text-align: end; font-weight: 650; }

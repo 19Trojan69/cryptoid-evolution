@@ -7,6 +7,7 @@ import { formatLives } from './locales/quantities.ts';
 import { languages, hasTranslation, translate, resolveLocale } from './i18n.ts';
 import { completeLanguages } from './locales/config.ts';
 import { bossNftGalleryCopy } from './locales/bossNftGallery.ts';
+import { varnethHoloDetailCopy } from './locales/varnethHoloDetail.ts';
 import { hangarCatalog } from '../../backend/src/hangarCatalog.ts';
 
 const sourceRoot = path.dirname(new URL(import.meta.url).pathname);
@@ -132,13 +133,14 @@ test('the picker includes the original 17 languages plus Chinese and Vietnamese'
   assert.equal(resolveLocale(['th-TH', 'zh-Hans-CN']), 'th');
 });
 
-test('the owner NFT gallery has complete copy for every selectable language', () => {
-  assert.deepEqual(Object.keys(bossNftGalleryCopy).sort(), Object.keys(languages).sort());
-  const english = bossNftGalleryCopy.en;
-  for (const [locale, copy] of Object.entries(bossNftGalleryCopy)) {
-    assert.deepEqual(Object.keys(copy), Object.keys(english));
-    assert.ok(Object.values(copy).every(text => text.trim().length > 0), locale);
-    if (locale !== 'en') assert.notEqual(copy.title, english.title, locale);
+test('the owner NFT gallery and its Varneth pilot have complete copy for every selectable language', () => {
+  for (const catalog of [bossNftGalleryCopy, varnethHoloDetailCopy]) {
+    assert.deepEqual(Object.keys(catalog).sort(), Object.keys(languages).sort());
+    for (const [locale, copy] of Object.entries(catalog)) {
+      assert.deepEqual(Object.keys(copy), Object.keys(catalog.en));
+      assert.ok(Object.values(copy).every(text => text.trim().length > 0), locale);
+      if (locale !== 'en') assert.notDeepEqual(copy, catalog.en, locale);
+    }
   }
   assert.equal(bossNftGalleryCopy.de.title, 'NFT-Bosse');
   assert.equal(bossNftGalleryCopy.de.free, 'Frei erspielbare NFTs');
