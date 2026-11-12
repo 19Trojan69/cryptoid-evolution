@@ -30,7 +30,7 @@ const template = node => {
   if (ts.isTemplateExpression(node)) return node.head.text + node.templateSpans.map((span, index) => `{value${index}}${span.literal.text}`).join('');
   return null;
 };
-const properNames = new Set(['Cryptoid', 'Evolution', 'CRYPTOID EVOLUTION', 'Cryptoid Evolution – Trojan Wolf Games', 'Trojan Wolf Games', 'Pi', 'Mainnet', 'Testnet', 'Test', '· Testnet-Beta 0.11']);
+const properNames = new Set(['Cryptoid', 'Evolution', 'CRYPTOID EVOLUTION', 'Cryptoid Evolution – Trojan Wolf Games', 'Trojan Wolf Games', 'Pi', 'Mainnet', 'Testnet', 'Test', '· Testnet-Beta 0.11', 'NFTs']);
 const missionFiles = new Set([
   'GamePage.tsx', 'GameRoute.tsx', 'GameAccessGate.tsx', 'GameHudStats.tsx', 'GameSceneBoundary.tsx',
   'LevelCompletion.tsx', 'BossIntermission.tsx', 'BossHealthView.tsx', 'BossWeaponsView.tsx',

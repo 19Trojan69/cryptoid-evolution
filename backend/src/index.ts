@@ -22,6 +22,7 @@ import mountRewardEndpoints from "./handlers/rewards";
 import platformAPIClient from "./services/platformAPIClient";
 import mountAdminEndpoints from "./handlers/admin";
 import { restoreAdminPreview } from "./adminAccess";
+import { BOSS_NFT_ART_COLLECTION } from "./bossNftGallery";
 import { collectUsage } from "./handlers/usage";
 import mountProgressEndpoints from "./handlers/progress";
 
@@ -251,6 +252,7 @@ export const start = async (listen = true): Promise<void> => {
     const db = client.db(dbName);
     app.locals.orderCollection = db.collection("orders");
     app.locals.userCollection = db.collection("users");
+    app.locals.bossNftPreviewCollection = db.collection(BOSS_NFT_ART_COLLECTION);
     if (process.env.VERCEL_PROJECT_PRODUCTION_URL === "cryptoid-evolution-testnet.vercel.app"
         && process.env.CRYPTOID_TESTNET_GALAXY_ARCADE === "1") {
       await app.locals.userCollection.createIndex({ [`${galaxyArcadeRatingField}.$**`]: 1 });

@@ -1,0 +1,121 @@
+.boss-nft-page {
+  width: min(100%, 76rem);
+  min-height: 100svh;
+  margin-inline: auto;
+  padding: max(1rem, env(safe-area-inset-top)) clamp(1rem, 4vw, 2.5rem) 2.5rem;
+  box-sizing: border-box;
+  color: #eef5ff;
+}
+
+.boss-nft-header {
+  padding-block: 0.25rem 1.4rem;
+}
+
+.boss-nft-home {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 44px;
+  color: #b9dcfc;
+  font-weight: 650;
+  text-decoration: none;
+}
+
+.boss-nft-header h1 {
+  margin: 0.55rem 0 0.32rem;
+  font-size: clamp(2rem, 7vw, 3.4rem);
+  line-height: 1.12;
+}
+
+.boss-nft-header p,
+.boss-nft-state {
+  margin: 0;
+  color: #b6c7de;
+}
+
+.boss-nft-editions,
+.boss-nft-pagination {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+.boss-nft-editions button,
+.boss-nft-pagination button,
+.boss-nft-state button {
+  min-height: 44px;
+  padding: 0.5rem 0.7rem;
+  border: 1px solid #344b65;
+  border-radius: 0.65rem;
+  background: #101a29;
+  color: inherit;
+  font: inherit;
+  font-weight: 650;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+
+.boss-nft-editions button[aria-pressed="true"] {
+  border-color: #c28e55;
+  background: #2d211a;
+  color: #ffe2b5;
+}
+
+.boss-nft-editions button:nth-child(2)[aria-pressed="true"] {
+  border-color: #7eafdf;
+  background: #162842;
+  color: #d7eeff;
+}
+
+.boss-nft-page :focus-visible {
+  outline: 2px solid #a9e6ff;
+  outline-offset: 3px;
+}
+
+.boss-nft-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(0.65rem, 2vw, 1.3rem);
+  list-style: none;
+  margin: 1.25rem 0 0;
+  padding: 0;
+}
+
+.boss-nft-grid img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 4;
+  border-radius: 0.6rem;
+  background: #080d17;
+}
+
+.boss-nft-state {
+  margin-block-start: 1.25rem;
+  padding: 1.1rem;
+  border: 1px solid #29384e;
+  border-radius: 0.7rem;
+  background: #101825;
+}
+
+.boss-nft-state p { margin-block: 0 0.7rem; }
+
+.boss-nft-pagination {
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  text-align: center;
+  margin-block-start: 1.2rem;
+}
+
+.boss-nft-pagination button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+@media (max-width: 850px) {
+  .boss-nft-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 540px) {
+  .boss-nft-grid { grid-template-columns: minmax(0, 1fr); }
+}

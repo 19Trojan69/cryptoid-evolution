@@ -182,9 +182,10 @@ export const createApiGateway = (
       const testnetSave = testnet && req.method === "POST"
         && /^(?:rewards\/event|progress\/checkpoint|leaderboard\/score)$/.test(path)
         && authenticatedLocal;
+      const bossNftGallery = testnet && path === "admin/boss-nfts";
       // Add only the new, network-scoped features locally. Existing Testnet
       // accounts/payments keep their established proxy; no Mainnet deployment.
-      const localFeature = powerRoute || testnetSave || !!arcadeRating || arcadeProgress || arcadeStickerBackup || testnet && (/^progress\/boss-summary\/(?:prepare|continue)$/.test(path)
+      const localFeature = powerRoute || testnetSave || bossNftGallery || !!arcadeRating || arcadeProgress || arcadeStickerBackup || testnet && (/^progress\/boss-summary\/(?:prepare|continue)$/.test(path)
         || /^admin\/players(?:\/|$)/.test(path));
       // The public catalog must match this deployment's Shop, even while
       // account and payment requests use the established Pi service.
@@ -274,7 +275,7 @@ export const createApiGateway = (
         req.headers ??= {};
         req.headers["x-cryptoid-app-network"] = "testnet";
       }
-      if (testnetSave || powerRoute || arcadeRating || arcadeProgress || arcadeStickerBackup) req.testnetSave = true;
+      if (testnetSave || bossNftGallery || powerRoute || arcadeRating || arcadeProgress || arcadeStickerBackup) req.testnetSave = true;
       ready ??= loadBackend().then(async (backend) => {
         await backend.start(false);
         return backend;

@@ -31,6 +31,7 @@ import AdminUsage from "./AdminUsage";
 import AdminPlayers from './AdminPlayers';
 import { paymentEvidenceLinks } from "./paymentEvidenceLinks";
 import { useAdminLocale } from "../adminLocale";
+import { nftGalleryCopy } from "../locales/bossNftGallery";
 import { readOwnerStabilityReport, exportOwnerFullSession, type StabilityReport } from './stabilityReport.mjs';
 import { fullSessionFileName, fullSessionText, fullSessionTextPart, shareableFullSessionFile, type FullSessionText } from './fullSessionTransfer.ts';
 import { installReloadDiagnostics } from './reloadDiagnostics';
@@ -350,7 +351,7 @@ function OwnerStabilityReport() {
 }
 
 export default function AdminPage() {
-  const { t } = useAdminLocale();
+  const { t, locale } = useAdminLocale();
   const auth = useAuth();
   const navigate = useNavigate();
   const [params, setParams] = useSearchParams();
@@ -782,6 +783,9 @@ export default function AdminPage() {
           )}
           {(view === "ships" || view === "levels") && (
             <>
+              {view === "levels" && <section className="admin-panel">
+                <Link className="admin-button" to="/admin/nft-bosses">{nftGalleryCopy(locale).title}</Link>
+              </section>}
               <section className="admin-panel admin-test-selection">
                 <div className="admin-selected-hull">
                   <div className="admin-hull" role="img" aria-label={`${selectedSkin.name} · ${t(stageNames[stage - 1])}`}><ShipPreview sprite={selectedSkin.sprite} stage={stage} color={colorId} /></div>

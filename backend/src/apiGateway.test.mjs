@@ -463,6 +463,27 @@ test('official Testnet keeps legacy cookie-only progress writes on the existing 
   assert.equal(proxied.length,9);
 });
 
+test('only the NFT gallery uses the new local Testnet route', async t => {
+  const proxy = t.mock.method(globalThis, 'fetch', async () => Response.json({}));
+  const { backend, calls } = backendFixture();
+  const gateway = createApiGateway(async () => backend, () => ({
+    VERCEL_ENV: 'production', VERCEL_PROJECT_PRODUCTION_URL: 'cryptoid-evolution-testnet.vercel.app',
+  }));
+  const gallery = {
+    method: 'GET', url: '/api/index?path=admin/boss-nfts&edition=holo&page=2',
+    headers: { 'x-cryptoid-app-network': 'mainnet' },
+  };
+  const galleryReply = response();
+  await gateway(gallery, galleryReply);
+  assert.equal(galleryReply.headers['x-cryptoid-backend'], 'testnet-local');
+  assert.equal(gallery.testnetSave, true);
+  assert.deepEqual(calls.at(-1), { url: '/admin/boss-nfts?edition=holo&page=2', network: 'testnet' });
+  const neighborReply = response();
+  await gateway({ method: 'GET', url: '/api/index?path=admin/status', headers: {} }, neighborReply);
+  assert.equal(neighborReply.headers['x-cryptoid-backend'], 'production-proxy');
+  assert.equal(proxy.mock.callCount(), 1);
+});
+
 test('verified-session save routes are local only on the Testnet project', async t => {
   const forwarded = [];
   t.mock.method(globalThis, 'fetch', async url => { forwarded.push(String(url)); return Response.json({}); });

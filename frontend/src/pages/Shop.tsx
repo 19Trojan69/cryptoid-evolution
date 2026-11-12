@@ -17,7 +17,7 @@ import { applySavedDisplaySettings, type SettingsSection } from './displaySettin
 import { useCallback, useEffect, useRef, useState } from "react";
 import QuickAccessMenu, { type QuickAction } from "../components/QuickAccessMenu";
 import type { GuideTopic } from "./GameGuide";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import PiPrice from "../components/PiPrice";
 import SignIn from "../components/SignIn";
@@ -535,6 +535,9 @@ const Shop = () => {
         onShop={() => openQuickAction("shop")}
         onCareer={() => openQuickAction("progress")}
         onCards={() => setCollectionOpen(true)}
+        nftLink={authReady && isAuthenticated && canAdmin && !isAuthLoading
+          ? <Link className="cinematic-nft-link" to="/admin/nft-bosses">NFTs</Link>
+          : undefined}
         onGalaxy={() => navigate("/galaxy", { state: { owner: user?.uid } })}
         onCommunity={() => openQuickAction("feedback")}
         onTerms={() => setTermsOpen(true)}

@@ -16,6 +16,7 @@ import { platformAPIClientForRequest } from "../services/platformAPIClient";
 import { rewardNetwork } from "../rewardNetwork";
 import { bestRunField, careerField } from "../scoreRules";
 import { mountAdminPlayerEndpoints } from '../playerAdministration';
+import { mountBossNftGallery } from "../bossNftGallery";
 
 const networks = ["all", "mainnet", "testnet", "unknown"] as const;
 const statuses = ["all", "confirmed", "pending", "cancelled"] as const;
@@ -36,6 +37,7 @@ export default function mountAdminEndpoints(router: Router) {
   // Authenticate every admin route independently of the optional gameplay mode.
   router.use(requireOwner);
   mountAdminPlayerEndpoints(router);
+  mountBossNftGallery(router);
 
   router.get("/usage", async (req, res) => {
     const days = Number(req.query.days || 7);

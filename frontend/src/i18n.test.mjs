@@ -6,6 +6,7 @@ import ts from 'typescript';
 import { formatLives } from './locales/quantities.ts';
 import { languages, hasTranslation, translate, resolveLocale } from './i18n.ts';
 import { completeLanguages } from './locales/config.ts';
+import { bossNftGalleryCopy } from './locales/bossNftGallery.ts';
 import { hangarCatalog } from '../../backend/src/hangarCatalog.ts';
 
 const sourceRoot = path.dirname(new URL(import.meta.url).pathname);
@@ -40,7 +41,7 @@ function discover(dir) {
       const recordRaw = (text) => {
         const value = text.trim();
         if (!/[A-Za-zÄÖÜäöüß]{2}/.test(value)) return;
-        if (['Cryptoid', 'Evolution', 'CRYPTOID EVOLUTION', 'Cryptoid Evolution – Trojan Wolf Games', 'Trojan Wolf Games', 'Pi', 'Test', '· Testnet-Beta 0.11'].includes(value)) return;
+        if (['Cryptoid', 'Evolution', 'CRYPTOID EVOLUTION', 'Cryptoid Evolution – Trojan Wolf Games', 'Trojan Wolf Games', 'Pi', 'Test', '· Testnet-Beta 0.11', 'NFTs'].includes(value)) return;
         rawUiTexts.push(`${entry.name}: ${value}`);
       };
       if (ts.isJsxText(node)) recordRaw(node.text);
@@ -129,6 +130,19 @@ test('the picker includes the original 17 languages plus Chinese and Vietnamese'
   assert.deepEqual(Object.keys(languages), ['en', 'de', 'es', 'fr', 'pt', 'it', 'pl', 'tr', 'ru', 'hr', 'cs', 'sk', 'hu', 'ro', 'sr', 'uk', 'th', 'zh', 'vi']);
   assert.equal(translate('th', 'Play'), 'เล่น');
   assert.equal(resolveLocale(['th-TH', 'zh-Hans-CN']), 'th');
+});
+
+test('the owner NFT gallery has complete copy for every selectable language', () => {
+  assert.deepEqual(Object.keys(bossNftGalleryCopy).sort(), Object.keys(languages).sort());
+  const english = bossNftGalleryCopy.en;
+  for (const [locale, copy] of Object.entries(bossNftGalleryCopy)) {
+    assert.deepEqual(Object.keys(copy), Object.keys(english));
+    assert.ok(Object.values(copy).every(text => text.trim().length > 0), locale);
+    if (locale !== 'en') assert.notEqual(copy.title, english.title, locale);
+  }
+  assert.equal(bossNftGalleryCopy.de.title, 'NFT-Bosse');
+  assert.equal(bossNftGalleryCopy.de.free, 'Frei erspielbare NFTs');
+  assert.equal(bossNftGalleryCopy.de.buyable, 'Kaufbare NFTs');
 });
 
 test('remaining lives use the correct singular and plural forms', () => {

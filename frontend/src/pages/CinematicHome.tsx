@@ -11,10 +11,11 @@ type Props = {
   paused: boolean; busy: boolean; rankName?: string; musicEnabled: boolean; musicLabel: string;
   onPlay: () => void; onShop: () => void; onCareer: () => void; onCards: () => void; onCommunity: () => void;
   onTerms: () => void; onSound: () => void; onGalaxy?: () => void;
+  nftLink?: ReactNode;
   children?: ReactNode;
 };
 
-export default function CinematicHome({paused,busy,rankName,musicEnabled,musicLabel,onPlay,onShop,onCareer,onCards,onCommunity,onTerms,onSound,onGalaxy,children}: Props) {
+export default function CinematicHome({paused,busy,rankName,musicEnabled,musicLabel,onPlay,onShop,onCareer,onCards,onCommunity,onTerms,onSound,onGalaxy,nftLink,children}: Props) {
   const {t}=useLocale();
   const autoFullscreenTried=useRef(false);
   useEffect(()=>{
@@ -71,6 +72,7 @@ export default function CinematicHome({paused,busy,rankName,musicEnabled,musicLa
       <div className="cinematic-shortcuts">
         <button className="cinematic-cards" type="button" disabled={busy} onClick={onCards}><BlockchainIcon kind="collection"/><span>{t("Card collection")}</span><i aria-hidden="true">→</i></button>
         <button className="cinematic-community" type="button" onClick={onCommunity}><BlockchainIcon kind="feedback"/><span>{t("Community")}</span><i aria-hidden="true">→</i></button>
+        {nftLink}
       </div>
       {onGalaxy && <button className="cinematic-galaxy" type="button" onClick={onGalaxy}><BlockchainIcon kind="galaxy"/><span><strong>{t("Galaxy map")}</strong><small>{t("Discover the future of Cryptoid Evolution")}</small><b>{t("Open interactive preview")} · {t("Preview · In development")}</b></span><i aria-hidden="true">→</i></button>}
     </div>
