@@ -15,12 +15,23 @@
   font-weight: 700;
 }
 
-.nft-preview-grid {
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 10rem), 1fr));
+.boss-nft-grid.nft-preview-grid {
+  --nft-preview-gap: clamp(0.65rem, 2vw, 1.3rem);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--nft-preview-gap);
 }
 
-.nft-preview-grid li {
-  max-width: 17rem;
+.nft-preview-grid > li {
+  flex: none;
+  width: min(100%, 540px);
+}
+
+@media (min-width: 52rem) {
+  .nft-preview-grid > li:not(:only-child) {
+    width: min(540px, calc((100% - var(--nft-preview-gap)) / 2));
+  }
 }
 
 .nft-preview-tile {
@@ -167,7 +178,7 @@
 }
 
 .nft-preview-figure {
-  width: min(100%, 20rem);
+  width: min(100%, 540px);
   margin: 0 auto 1rem;
 }
 
