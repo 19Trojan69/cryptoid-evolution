@@ -4,6 +4,11 @@ import { turretHeatStep, paintTurretHeat } from './bossTurretHeat.ts';
 
 type CanvasFactory = (width:number,height:number)=>HTMLCanvasElement;
 const bases=new WeakMap<HTMLCanvasElement,{id:number;width:number;height:number;layer:HTMLCanvasElement;heated:Map<string,HTMLCanvasElement>}>();
+// Mount Y increases toward the bow. Paint the rear mounts last so their
+// elevated barrels stay visible above the front turrets when they cross.
+const gunPaintOrder = bossWeapons.map(guns =>
+  guns.map((_, index) => index).sort((a, b) => guns[b].sourceY - guns[a].sourceY || a - b),
+);
 // The destination already owns copied socket/scar pixels after its final draw.
 // Release only source layers; a later redraw rebuilds them if needed.
 export const releaseBossWeaponSources = (canvas: HTMLCanvasElement) => {
@@ -30,6 +35,7 @@ export const drawBossWeapons=(canvas:HTMLCanvasElement,boss:SectorBoss,image:Can
  const c=canvas.getContext('2d');if(!c)return false;
  const size=weaponCanvasSize(boss),sx=canvas.width/size.width,sy=canvas.height/size.height,scale=boss.width/boss.config.sourceWidth;
  const guns=bossWeapons[boss.config.id-1];
+ const paintOrder=gunPaintOrder[boss.config.id-1];
  let cached=bases.get(canvas);
  if(!cached||cached.id!==boss.config.id||cached.width!==canvas.width||cached.height!==canvas.height){
   if (cached) {
@@ -55,7 +61,8 @@ export const drawBossWeapons=(canvas:HTMLCanvasElement,boss:SectorBoss,image:Can
   }finally{if(!retained)layer.width=layer.height=0;}
  }
  c.setTransform(1,0,0,1,0,0);c.clearRect(0,0,canvas.width,canvas.height);c.drawImage(cached.layer,0,0);c.setTransform(sx,0,0,sy,0,0);
- for(let i=0;i<guns.length;i++){
+ for(let layer=0;layer<paintOrder.length;layer++){
+  const i=paintOrder[layer];
   const g=guns[i],state=boss.turrets[i],x=size.padX+g.sourceX/boss.config.sourceWidth*boss.width,y=size.padY+g.sourceY/boss.config.sourceHeight*boss.height;
   if(state.health<=0){
    for (const [key, hot] of cached.heated) if (key.startsWith(`${i}:`)) { hot.width = hot.height = 0; cached.heated.delete(key); }

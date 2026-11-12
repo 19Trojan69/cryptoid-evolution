@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { createSectorBoss, moveSectorBoss } from './sectorBoss.ts';
 import { advanceBossTurrets } from './bossTurrets.ts';
 import { bossWeapons } from './bossWeapons.ts';
+import { drawBossWeapons } from './bossWeaponRenderer.ts';
 import { generateBossSound } from './bossWeaponSound.ts';
 
 test('all 392 stations and every barrel fire after alignment under the phone projectile cap',()=>{
@@ -32,6 +33,39 @@ test('entry, pause, death and loss of alignment prevent firing including queued 
  boss.health=0;assert.equal(advanceBossTurrets(boss,{x:.5,y:.88},390,760,80,8,0).shots.length,0);
  boss.health=100;for(const g of boss.turrets){g.pendingTotal=4;g.pendingIndex=1;g.pendingAt=0;}
  assert.equal(advanceBossTurrets(boss,{x:0,y:0},390,760,20,8,0).shots.length,0);
+});
+
+test('rear turrets paint over front turrets using the same cached canvas', () => {
+  const boss = createSectorBoss(180, 390, 90, 760);
+  const guns = bossWeapons[boss.config.id - 1];
+  assert.ok(guns[0].sourceY < guns[4].sourceY && guns[0].muzzle > guns[4].muzzle);
+  const spriteIndices = new Map(guns.map(({ sprite }, index) => [
+    [sprite.x, sprite.y, sprite.width, sprite.height].join(':'), index,
+  ]));
+  const atlas = {};
+  const painted = [];
+  const ctx = new Proxy({
+    drawImage(image, x, y, width, height) {
+      if (image !== atlas) return;
+      const index = spriteIndices.get([x, y, width, height].join(':'));
+      if (index !== undefined) painted.push(index);
+    },
+  }, { get: (target, key) => key in target ? target[key] : () => {} });
+  let surfaces = 0;
+  const make = (width, height) => {
+    surfaces++;
+    return { width, height, getContext: () => ctx };
+  };
+  const canvas = make(600, 500);
+  assert.equal(drawBossWeapons(canvas, boss, atlas, false, make), true);
+  assert.deepEqual(painted, [4, 5, 0, 1, 2, 3]);
+  assert.equal(surfaces, 2);
+
+  boss.turrets[4].health = 0;
+  painted.length = 0;
+  assert.equal(drawBossWeapons(canvas, boss, atlas, true, make), true);
+  assert.deepEqual(painted, [5, 0, 1, 2, 3]);
+  assert.equal(surfaces, 2);
 });
 
 test('all eighteen caliber sound buffers are finite, bounded and distinct',()=>{
