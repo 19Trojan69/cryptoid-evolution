@@ -41,7 +41,8 @@ export const drawBossWeapons=(canvas:HTMLCanvasElement,boss:SectorBoss,image:Can
   // fractional draw onto a tight rectangle can change antialias rounding.
   let right=canvas.width,bottom=canvas.height;
   if(boundedSockets){right=bottom=0;for(const g of guns){
-   const x=size.padX+g.sourceX/boss.config.sourceWidth*boss.width,y=size.padY+g.sourceY/boss.config.sourceHeight*boss.height;
+   const x = size.padX + (g.socketAnchor?.x ?? g.sourceX) / boss.config.sourceWidth * boss.width;
+   const y = size.padY + (g.socketAnchor?.y ?? g.sourceY) / boss.config.sourceHeight * boss.height;
    right=Math.max(right,(x+g.socket.width*scale/4)*sx);bottom=Math.max(bottom,(y+g.socket.height*scale/4)*sy);
   }
   right=Math.min(canvas.width,Math.ceil(right)+2);bottom=Math.min(canvas.height,Math.ceil(bottom)+2);
@@ -50,7 +51,11 @@ export const drawBossWeapons=(canvas:HTMLCanvasElement,boss:SectorBoss,image:Can
   try{
    const base=layer.getContext('2d');if(!base)return false;
    base.setTransform(sx,0,0,sy,0,0);
-   for(const g of guns){const x=size.padX+g.sourceX/boss.config.sourceWidth*boss.width,y=size.padY+g.sourceY/boss.config.sourceHeight*boss.height;tile(base,image,g.socket,x-g.socket.width*scale/4,y-g.socket.height*scale/4,scale);}
+   for (const g of guns) {
+    const x = size.padX + (g.socketAnchor?.x ?? g.sourceX) / boss.config.sourceWidth * boss.width;
+    const y = size.padY + (g.socketAnchor?.y ?? g.sourceY) / boss.config.sourceHeight * boss.height;
+    tile(base, image, g.socket, x - g.socket.width * scale / 4, y - g.socket.height * scale / 4, scale);
+   }
    cached={id:boss.config.id,width:canvas.width,height:canvas.height,layer,heated:new Map()};bases.set(canvas,cached);retained=true;
   }finally{if(!retained)layer.width=layer.height=0;}
  }
@@ -88,7 +93,12 @@ export const drawBossWeapons=(canvas:HTMLCanvasElement,boss:SectorBoss,image:Can
   const r=g.halfWidth*scale;c.fillStyle=state.lock>=160?'#c8f0db':'#d5934f';c.beginPath();c.ellipse(x-r*.45,y-r*.31,Math.max(.7,1.5*scale),Math.max(.5,scale),0,0,Math.PI*2);c.fill();
   if(!frozen&&age>=0&&age<.08){
    c.save();c.translate(x,y);c.rotate(state.a);c.globalAlpha=1-age/.08;c.fillStyle=g.shotColor;
-   for(const b of state.firedBarrels){c.beginPath();c.ellipse(g.barrels[b]*scale,(g.muzzle-g.recoil)*scale,Math.max(1.5,g.visualShotWidth*scale*1.4),Math.max(3,g.visualShotWidth*scale*2.4),0,0,Math.PI*2);c.fill();}c.restore();
+   for (const barrel of state.firedBarrels) {
+    c.beginPath();
+    c.ellipse(g.barrels[barrel] * scale, g.muzzle * scale - recoil, Math.max(1.5, g.visualShotWidth * scale * 1.4), Math.max(3, g.visualShotWidth * scale * 2.4), 0, 0, Math.PI * 2);
+    c.fill();
+   }
+   c.restore();
   }
  }
  return true;

@@ -1,5 +1,6 @@
 import type { BossCoreState } from './bossCore.ts';
 import { createBossTurrets, type BossTurretState } from './bossTurrets.ts';
+import { bossWeapons } from './bossWeapons.ts';
 import { levelDifficulty } from "./levelDifficulty.ts";
 import { SECTIONS_PER_SECTOR, sectionInSector, sectorForSection } from "./sectorManager.ts";
 import { bossForLevel, type BossConfig } from "./bossManifest.ts";
@@ -30,6 +31,11 @@ export const createSectorBoss = (sector: number, width: number, visibleTop = 0, 
 };
 
 export const moveSectorBoss = (boss: SectorBoss, delta: number, width: number, height: number): SectorBoss => {
+  if (boss.elapsed < BOSS_ENTRY_MS) {
+    // Use the current entry pose when a checkpoint predates the artwork update.
+    const guns = bossWeapons[boss.config.id - 1];
+    boss.turrets.forEach((turret, index) => { turret.a = guns[index].base; });
+  }
   const elapsed = boss.elapsed + delta;
   const entry = Math.min(1, elapsed / BOSS_ENTRY_MS);
   const freeX = Math.max(0, (width - boss.width) / 2 - 12);

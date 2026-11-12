@@ -1,26 +1,53 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createSectorBoss, moveSectorBoss } from './sectorBoss.ts';
-import { advanceBossTurrets } from './bossTurrets.ts';
+import { advanceBossTurrets, gunMuzzle } from './bossTurrets.ts';
 import { bossWeapons } from './bossWeapons.ts';
 import { generateBossSound } from './bossWeaponSound.ts';
+import { enemyShotLimit } from './enemyFire.ts';
 
-test('all 392 stations and every barrel fire after alignment under the phone projectile cap',()=>{
- let total=0;
- for(let id=1;id<=50;id++){
-  let boss=createSectorBoss(id*10,390,90,760),active=[],next=0;
-  const fired=bossWeapons[id-1].map(()=>new Set());
-  for(let t=0;t<180000;t+=20){
-   boss=moveSectorBoss(boss,20,390,760);
-   active=active.map(s=>({...s,x:s.x+s.vx*20,y:s.y+s.vy*20})).filter(s=>s.y<780&&s.y>0&&s.x>-30&&s.x<420);
-   const out=advanceBossTurrets(boss,{x:.5,y:.88},390,760,20,3-active.length,next);next+=out.shots.length;active.push(...out.shots);
-   assert.ok(active.length<=3);
-   for(const e of out.events){assert.ok(e.error<.035);assert.ok(e.lock>=160);for(const b of boss.turrets[e.gunIndex].firedBarrels)fired[e.gunIndex].add(b);}
-   for(const s of out.shots)assert.ok(Number.isFinite(s.x+s.y+s.vx+s.vy+s.radius));
+test('all 392 stations fire from every muzzle under the existing phone projectile budget', () => {
+  const width = 390, height = 760, step = 20;
+  let stationCount = 0, muzzleCount = 0;
+  for (let id = 1; id <= 50; id++) {
+    const level = id * 10, guns = bossWeapons[id - 1];
+    let boss = createSectorBoss(level, width, 90, height), active = [], nextId = 0;
+    const fired = guns.map(() => new Set());
+    for (const turret of boss.turrets) assert.ok(Math.abs(turret.a) < Math.PI / 2, `boss ${id} entry aim`);
+    for (let time = 0; time < 180_000; time += step) {
+      boss = moveSectorBoss(boss, step, width, height);
+      active = active.map(shot => ({ ...shot, x: shot.x + shot.vx * step, y: shot.y + shot.vy * step }))
+        .filter(shot => shot.y < height + 20 && shot.y > 0 && shot.x > -30 && shot.x < width + 30);
+      const cap = enemyShotLimit(width, time, level);
+      const { shots, events } = advanceBossTurrets(boss, { x: .5, y: .88 }, width, height, step, cap - active.length, nextId);
+      nextId += shots.length;
+      active.push(...shots);
+      assert.ok(active.length <= cap);
+      let shotIndex = 0;
+      for (const event of events) {
+        assert.ok(event.error < .035 && event.lock >= 160);
+        const gun = guns[event.gunIndex], turret = boss.turrets[event.gunIndex];
+        assert.equal(turret.firedBarrels.length, event.barrels);
+        assert.equal(new Set(turret.firedBarrels).size, event.barrels);
+        for (const barrel of turret.firedBarrels) {
+          fired[event.gunIndex].add(barrel);
+          const shot = shots[shotIndex++];
+          const muzzle = gunMuzzle(boss, gun, turret, barrel, gun.recoil);
+          assert.equal(shot.sourceGun, event.gunIndex);
+          assert.deepEqual({ x: shot.x, y: shot.y }, muzzle);
+          assert.ok(Number.isFinite(shot.x + shot.y + shot.vx + shot.vy + shot.radius));
+        }
+      }
+      assert.equal(shotIndex, shots.length);
+    }
+    fired.forEach((barrels, index) => {
+      assert.equal(barrels.size, guns[index].barrels.length, `boss ${id} station ${index}`);
+      muzzleCount += barrels.size;
+    });
+    stationCount += fired.length;
   }
-  fired.forEach((barrels,i)=>assert.equal(barrels.size,bossWeapons[id-1][i].barrels.length,`boss ${id} station ${i}`));total+=fired.length;
- }
- assert.equal(total,392);
+  assert.equal(stationCount, 392);
+  assert.equal(muzzleCount, 718);
 });
 
 test('entry, pause, death and loss of alignment prevent firing including queued salvos',()=>{
