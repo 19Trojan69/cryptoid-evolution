@@ -1,0 +1,325 @@
+.nft-preview-page .boss-nft-header {
+  max-width: 42rem;
+}
+
+.nft-preview-network {
+  display: block;
+  width: fit-content;
+  margin-top: 0.85rem;
+  padding: 0.28rem 0.65rem;
+  border: 1px solid #355674;
+  border-radius: 999px;
+  background: #112437;
+  color: #bde4fa;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.nft-preview-grid {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 10rem), 1fr));
+}
+
+.nft-preview-grid li {
+  max-width: 17rem;
+}
+
+.nft-preview-tile {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 0;
+  border: 1px solid #29394f;
+  border-radius: 0.8rem;
+  background: #111b2b;
+  color: #eef5ff;
+  text-align: start;
+  overflow: hidden;
+  cursor: pointer;
+  font: inherit;
+}
+
+.nft-preview-tile:hover {
+  border-color: #88bddf;
+}
+
+.nft-preview-tile img {
+  border-radius: 0;
+}
+
+.nft-preview-tile > span {
+  display: grid;
+  align-content: center;
+  gap: 0.2rem;
+  min-height: 3rem;
+  padding: 0.55rem 0.75rem;
+}
+
+.nft-preview-tile small {
+  color: #a8d8f2;
+}
+
+.nft-preview-summary summary {
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.nft-preview-summary dl,
+.nft-preview-summary p {
+  margin: 0.7rem 0 0;
+}
+
+.nft-preview-summary dl > div {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.35rem 0;
+}
+
+.nft-preview-detail {
+  --accent: #f4c783;
+  --accent-border: #9b7547;
+  --sheet-edge: #513f36;
+  --sheet-top: #33231d;
+  width: min(36rem, calc(100% - 1rem));
+  max-width: none;
+  max-height: calc(100dvh - 1.1rem - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+  margin: auto;
+  padding: 0;
+  overflow: hidden;
+  color: #f1f6ff;
+  border: 1px solid var(--sheet-edge);
+  border-radius: 1.25rem;
+  background: radial-gradient(ellipse at 10% 0%, var(--sheet-top), #151725 61%, #111521);
+  box-shadow: 0 22px 78px #000a;
+  overscroll-behavior: contain;
+}
+
+.nft-preview-detail-holo {
+  --accent: #b5e5ff;
+  --accent-border: #668bb4;
+  --sheet-edge: #3d476f;
+  --sheet-top: #262452;
+}
+
+.nft-preview-detail::backdrop {
+  background: #050b19be;
+}
+
+.nft-preview-panel {
+  display: flex;
+  flex-direction: column;
+  max-height: inherit;
+}
+
+.nft-preview-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 1rem clamp(0.9rem, 4vw, 1.45rem) 0.6rem;
+}
+
+.nft-preview-edition {
+  display: inline-block;
+  padding: 0.3rem 0.62rem;
+  border: 1px solid var(--accent-border);
+  border-radius: 999px;
+  color: var(--accent);
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+.nft-preview-heading h2 {
+  margin: 0.45rem 0 0;
+  font-size: clamp(1.7rem, 7vw, 2.2rem);
+  line-height: 1.07;
+}
+
+.nft-preview-close {
+  display: grid;
+  flex: 0 0 44px;
+  height: 44px;
+  place-items: center;
+  padding: 0;
+  color: inherit;
+  font: 1.75rem/1 system-ui, sans-serif;
+  border: 1px solid #54607c;
+  border-radius: 50%;
+  background: #101728;
+  cursor: pointer;
+}
+
+.nft-preview-detail :focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.nft-preview-content {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 0 clamp(0.9rem, 4vw, 1.45rem) 1.05rem;
+  scrollbar-width: thin;
+}
+
+.nft-preview-story {
+  margin: 0.15rem 0 0.8rem;
+  color: #cbd1e0;
+  line-height: 1.4;
+}
+
+.nft-preview-figure {
+  width: min(100%, 20rem);
+  margin: 0 auto 1rem;
+}
+
+.nft-preview-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 4;
+  border-radius: 0.7rem;
+  background: #0a101d;
+  box-shadow: 0 8px 24px #04071080;
+}
+
+.nft-preview-figure figcaption {
+  margin-top: 0.45rem;
+  color: #b5c1d6;
+  font-size: 0.75rem;
+  text-align: center;
+}
+
+.nft-preview-progress > div,
+.nft-preview-price {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.65rem;
+}
+
+.nft-preview-progress > div {
+  margin-bottom: 0.45rem;
+  font-size: 0.9rem;
+}
+
+.nft-preview-progress span,
+.nft-preview-price span {
+  color: #c0ccde;
+}
+
+.nft-preview-progress progress {
+  display: block;
+  width: 100%;
+  height: 0.45rem;
+  appearance: none;
+  border: 0;
+  border-radius: 999px;
+  background: #ffffff26;
+  color: var(--accent);
+}
+
+.nft-preview-progress progress::-webkit-progress-bar {
+  border-radius: inherit;
+  background: #ffffff26;
+}
+
+.nft-preview-progress progress::-webkit-progress-value {
+  border-radius: inherit;
+  background: var(--accent);
+}
+
+.nft-preview-progress p {
+  margin: 0.4rem 0 0;
+  color: #c0ccde;
+  font-size: 0.8rem;
+}
+
+.nft-preview-status {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin: 0.85rem 0;
+  padding: 0.6rem 0.7rem;
+  border: 1px solid var(--sheet-edge);
+  border-radius: 0.65rem;
+  background: #ffffff0b;
+  font-weight: 650;
+}
+
+.nft-preview-status::before {
+  flex: 0 0 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--accent);
+  content: "";
+}
+
+.nft-preview-facts {
+  margin: 0;
+  padding: 0.1rem 0.7rem;
+  border: 1px solid var(--sheet-edge);
+  border-radius: 0.65rem;
+  background: #0a101dc4;
+  font-size: 0.87rem;
+}
+
+.nft-preview-facts > div {
+  display: grid;
+  grid-template-columns: 1fr 1.35fr;
+  gap: 0.6rem;
+  padding: 0.65rem 0;
+}
+
+.nft-preview-facts > div + div {
+  border-top: 1px solid #ffffff18;
+}
+
+.nft-preview-facts dt {
+  color: #c0ccde;
+}
+
+.nft-preview-facts dd {
+  margin: 0;
+  text-align: end;
+  font-weight: 650;
+}
+
+.nft-preview-action {
+  padding: 0.7rem clamp(0.9rem, 4vw, 1.45rem) 0.85rem;
+  border-top: 1px solid var(--sheet-edge);
+  background: #101728;
+}
+
+.nft-preview-price strong {
+  color: var(--accent);
+  font-size: 1.18rem;
+  white-space: nowrap;
+}
+
+.nft-preview-interest {
+  width: 100%;
+  min-height: 44px;
+  margin-top: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #b9e9ff;
+  border-radius: 0.65rem;
+  background: #b5e5ff;
+  color: #101728;
+  font: inherit;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.nft-preview-interest:disabled {
+  opacity: 0.65;
+  cursor: wait;
+}
+
+.nft-preview-action p {
+  margin: 0.45rem 0 0;
+  color: #c0ccde;
+  font-size: 0.76rem;
+}
+
+.nft-preview-action [role="alert"] {
+  color: #ffc6b7;
+}

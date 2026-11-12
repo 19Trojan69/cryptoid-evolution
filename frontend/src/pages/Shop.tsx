@@ -535,7 +535,9 @@ const Shop = () => {
         onShop={() => openQuickAction("shop")}
         onCareer={() => openQuickAction("progress")}
         onCards={() => setCollectionOpen(true)}
-        nftLink={authReady && isAuthenticated && canAdmin && !isAuthLoading
+        nftLink={shipSaveNetwork === "testnet"
+          ? <Link className="cinematic-nft-link" to="/nft-bosses">NFTs</Link>
+          : authReady && isAuthenticated && canAdmin && !isAuthLoading
           ? <Link className="cinematic-nft-link" to="/admin/nft-bosses">NFTs</Link>
           : undefined}
         onGalaxy={() => navigate("/galaxy", { state: { owner: user?.uid } })}

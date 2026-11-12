@@ -62,6 +62,7 @@
   ],
   "git": {
     "deploymentEnabled": {
+      "codex/testnet-boss-nft-preview-20261112": false,
       "codex/admin-boss-nft-gallery-20261112": false,
       "codex/retro-sticker-account-save-20261111": false,
       "codex/retro-sticker-motifs-20261111": false,

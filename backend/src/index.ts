@@ -23,6 +23,7 @@ import platformAPIClient from "./services/platformAPIClient";
 import mountAdminEndpoints from "./handlers/admin";
 import { restoreAdminPreview } from "./adminAccess";
 import { BOSS_NFT_ART_COLLECTION } from "./bossNftGallery";
+import mountBossNftPreview from "./handlers/bossNftPreview";
 import { collectUsage } from "./handlers/usage";
 import mountProgressEndpoints from "./handlers/progress";
 
@@ -228,6 +229,10 @@ app.use("/leaderboard", leaderboardRouter);
 const rewardsRouter = express.Router();
 mountRewardEndpoints(rewardsRouter);
 app.use("/rewards", rewardsRouter);
+
+const bossNftPreviewRouter = express.Router();
+mountBossNftPreview(bossNftPreviewRouter);
+app.use("/boss-nft-preview", bossNftPreviewRouter);
 
 // User endpoints (e.g signin, signout) under /user:
 const userRouter = express.Router();
