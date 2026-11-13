@@ -69,6 +69,15 @@ test('the first visible RAF excludes the observed hidden interval', () => {
   const h = harness(); h.visible(false); h.frame(); h.advance(60_000);
   h.visible(true); h.frame(); assert.deepEqual(h.faults, []); assert.equal(h.frames.size, 1); h.stop();
 });
+test('a visibility event can disarm the watchdog before any hidden frame or timer runs', () => {
+  const h = harness();
+  h.visible(false); h.stop.wake(); h.advance(60_000);
+  h.visible(true); h.frame();
+  assert.deepEqual(h.faults, []);
+  h.advance(GAME_STALL_MS + 1); h.check();
+  assert.equal(h.faults[0][0], 'loop-stall');
+  h.stop();
+});
 test('an initially loading loop starts its foreground heartbeat on first observation of play', () => {
   for (const next of ['frame', 'check']) {
     const h = harness(() => {}, () => {}, { active: false });

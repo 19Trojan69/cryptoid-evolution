@@ -16,7 +16,7 @@ function digest(text) {
 }
 test('only the reviewed menu and summary-placement changes depart from the published game', () => {
   assert.equal(digest(source), published);
-  const changed = source.replace("stateRef.current.status = 'paused';", "stateRef.current.status = 'playing';");
+  const changed = source.replace("if (state.status === 'playing') {\n        state.status = 'paused';", "if (state.status === 'playing') {\n        state.status = 'playing';");
   assert.notEqual(changed,source);
   assert.notEqual(digest(changed),published,'genuine interruption pauses remain unchanged');
 });

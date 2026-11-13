@@ -113,32 +113,110 @@ test('a genuine technical pause keeps full Resume steps even when a timed weapon
  assert.deepEqual(h.events,['effects','music','controls','countdown:3']);
 });
 
-test('losing focus only clears controls, while going into the background still pauses and saves', async () => {
+function lifecycleHost(status = 'playing') {
   const h = host();
-  const window = new EventTarget();
+  let now = 1_000;
+  let nextTimer = 0;
+  const timers = new Map();
+  const window = Object.assign(new EventTarget(), {
+    setTimeout: (callback, delay) => {
+      timers.set(++nextTimer, { callback, at: now + delay });
+      return nextTimer;
+    },
+    clearTimeout: id => timers.delete(id),
+  });
   const document = Object.assign(new EventTarget(), { visibilityState: 'visible' });
-  const state = { status: 'playing', effects: [] };
+  const state = { status, effects: [{ startedAt: 700 }] };
   Object.assign(h.context, {
-    window, document, stateRef: { current: state }, backgroundHiddenAtRef: { current: 0 },
-    lastFrameRef: { current: 0 }, slowFramesRef: { current: 0 },
+    window, document, stateRef: { current: state }, backgroundHiddenAtRef: { current: null },
+    Date: { now: () => now }, performance: { now: () => now },
+    lastFrameRef: { current: 990 }, slowFramesRef: { current: 5 },
+    wakeGameLoopRef: { current: () => h.events.push('wake') },
     soundRef: { current: { setPaused: paused => h.events.push('sound:' + paused) } },
     musicRef: { current: { pause: () => h.events.push('music paused') } },
     saveCombatRef: { current: async () => h.events.push('save') },
+    retryAudioRef: { current: () => h.events.push('retry audio') },
     setGame: game => h.events.push(game.status),
   });
   const dispose = evaluate(windowLifecycle, h.context)();
-  window.dispatchEvent(new Event('blur'));
+  return { ...h, state, timers, dispose,
+    emit: name => window.dispatchEvent(new Event(name)),
+    visibility: value => { document.visibilityState = value; document.dispatchEvent(new Event('visibilitychange')); },
+    advance(ms, runTimers = true) {
+      now += ms;
+      if (!runTimers) return;
+      for (const [id, { callback, at }] of timers) {
+        if (at <= now) { timers.delete(id); callback(); }
+      }
+    },
+  };
+}
+
+test('focus loss clears controls and a brief hidden interval keeps the mission playing', () => {
+  const h = lifecycleHost();
+  h.emit('blur');
   assert.deepEqual(h.events, ['controls']);
-  assert.equal(state.status, 'playing');
+  h.visibility('hidden');
+  h.advance(100);
+  h.visibility('hidden');
+  assert.equal(h.timers.size, 1);
+  h.advance(899);
+  assert.equal(h.state.status, 'playing');
+  h.visibility('visible');
+  assert.equal(h.state.status, 'playing');
+  assert.equal(h.state.effects[0].startedAt, 1709);
+  assert.equal(h.context.lastFrameRef.current, 0);
+  assert.equal(h.context.slowFramesRef.current, 0);
+  assert.equal(h.timers.size, 0);
+  assert.deepEqual(h.events, ['controls', 'controls', 'wake', 'save', 'music paused', 'retry audio']);
+  h.dispose();
+});
 
-  document.visibilityState = 'hidden';
-  document.dispatchEvent(new Event('visibilitychange'));
-  assert.deepEqual(h.events, ['controls', 'save', 'sound:true', 'music paused', 'paused', 'controls']);
-  document.visibilityState = 'visible';
-  document.dispatchEvent(new Event('visibilitychange'));
-  assert.equal(state.status, 'paused');
+test('a sustained background pauses once and still pauses if the browser suspends timers', () => {
+  for (const runTimers of [true, false]) {
+    const h = lifecycleHost();
+    h.visibility('hidden');
+    h.advance(1_000, runTimers);
+    assert.equal(h.state.status, runTimers ? 'paused' : 'playing');
+    h.visibility('visible');
+    h.emit('pageshow');
+    assert.equal(h.state.status, 'paused');
+    assert.equal(h.timers.size, 0);
+    assert.deepEqual(h.events, ['controls', 'wake', 'save', 'music paused', 'sound:true', 'paused']);
+    h.dispose();
+  }
+});
 
-  dispose();
-  window.dispatchEvent(new Event('blur'));
-  assert.equal(h.events.length, 6);
+test('pagehide saves promptly and shares the visibility interval without duplicate saves', () => {
+  for (const duration of [120, 1_100]) {
+    const h = lifecycleHost();
+    h.emit('pagehide');
+    assert.deepEqual(h.events, ['controls', 'wake', 'save', 'music paused']);
+    h.visibility('hidden');
+    h.advance(duration, false);
+    h.visibility('visible');
+    assert.equal(h.timers.size, 0);
+    assert.equal(h.events.filter(event => event === 'save').length, 1);
+    assert.equal(h.state.status, duration < 1_000 ? 'playing' : 'paused');
+    h.dispose();
+  }
+});
+
+test('a manually paused mission stays paused and unmount cancels any pending background timer', () => {
+  const paused = lifecycleHost('paused');
+  paused.visibility('hidden');
+  paused.advance(1_500);
+  paused.visibility('visible');
+  assert.equal(paused.state.status, 'paused');
+  assert.deepEqual(paused.events, ['controls', 'wake']);
+  paused.dispose();
+
+  const playing = lifecycleHost();
+  playing.visibility('hidden');
+  playing.dispose();
+  playing.advance(1_500);
+  playing.emit('blur');
+  assert.equal(playing.state.status, 'playing');
+  assert.equal(playing.timers.size, 0);
+  assert.deepEqual(playing.events, ['controls', 'wake', 'save', 'music paused']);
 });

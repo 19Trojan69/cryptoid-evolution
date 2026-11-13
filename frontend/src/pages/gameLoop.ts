@@ -92,7 +92,9 @@ export function startGuardedGameLoop(options: LoopOptions) {
       generation++;
       return;
     }
-    if (!monitoring) { heartbeat = options.now(); monitoring = options.active() && options.visible(); }
+    const active = options.active() && options.visible();
+    if (!monitoring || !active) heartbeat = options.now();
+    monitoring = active;
     schedule();
   } });
 }

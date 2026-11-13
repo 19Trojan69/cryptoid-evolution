@@ -62,6 +62,7 @@
   ],
   "git": {
     "deploymentEnabled": {
+      "codex/facebook-in-app-pause-20261113": false,
       "codex/master-elite-edition-20261113": false,
       "codex/nft-overview-20261113": false,
       "codex/ship-livery-inheritance-20261113": false,

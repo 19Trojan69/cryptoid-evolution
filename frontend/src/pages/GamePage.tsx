@@ -464,7 +464,7 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
   const sceneRenderStarted = performanceProbeRef.current?.sceneRenderBegin();
   const lastSessionSceneRef = useRef('');
   useLayoutEffect(() => { performanceProbeRef.current?.sceneCommitted(sceneRenderStarted); });
-  const backgroundHiddenAtRef = useRef(0);
+  const backgroundHiddenAtRef = useRef<number | null>(null);
   const spawnTimerRef = useRef(0);
   const sectionElapsedRef = useRef(0);
   const clearTimerRef = useRef(0);
@@ -1199,7 +1199,8 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
     };
     track.audio.addEventListener("ended", finishVictoryMusic);
     const resume = () => {
-      if (document.visibilityState === "hidden" || (backgroundHiddenAtRef.current && Date.now() - backgroundHiddenAtRef.current > 1_000) || !["playing", "game-over", "victory"].includes(stateRef.current.status)) return;
+      if (document.visibilityState === "hidden" || backgroundHiddenAtRef.current !== null
+        || !["playing", "game-over", "victory"].includes(stateRef.current.status)) return;
       void track.play();
     };
     document.addEventListener("pointerdown", resume, true);
@@ -1523,58 +1524,92 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
       keysRef.current.add(event.code);
     };
     const keyUp = (event: KeyboardEvent) => keysRef.current.delete(event.code);
+    const backgroundPauseMs = 1_000;
+    let backgroundPauseTimer: number | undefined;
+    let backgroundCheckpointRequested = false;
+    const clearBackgroundPauseTimer = () => {
+      window.clearTimeout(backgroundPauseTimer);
+      backgroundPauseTimer = undefined;
+    };
+    const saveBackgroundCheckpoint = () => {
+      if (backgroundCheckpointRequested) return;
+      backgroundCheckpointRequested = true;
+      void saveCombatRef.current().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried."));
+    };
+    const pauseForBackground = () => {
+      const state = stateRef.current;
+      if (state.status !== "playing") return;
+      saveBackgroundCheckpoint();
+      state.status = "paused";
+      soundRef.current?.setPaused(true);
+      setGame({ ...state });
+    };
+    const startBackgroundPause = () => {
+      if (backgroundHiddenAtRef.current !== null) return;
+      backgroundHiddenAtRef.current = Date.now();
+      backgroundCheckpointRequested = false;
+      clearControls();
+      wakeGameLoopRef.current?.();
+      if (stateRef.current.status !== "playing") return;
+      saveBackgroundCheckpoint();
+      musicRef.current?.pause();
+      // The simulation already stops while hidden. Allow short visibility changes
+      // without opening the pause menu.
+      backgroundPauseTimer = window.setTimeout(() => {
+        backgroundPauseTimer = undefined;
+        if (document.visibilityState === "hidden") pauseForBackground();
+      }, backgroundPauseMs);
+    };
     const pauseAfterBackground = () => {
       if (document.visibilityState === "hidden") {
-        if (stateRef.current.status === "playing") void saveCombatRef.current().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried."));
-        if (!backgroundHiddenAtRef.current) backgroundHiddenAtRef.current = Date.now();
-        if (stateRef.current.status === 'playing') {
-          stateRef.current.status = 'paused';
-          soundRef.current?.setPaused(true);
-          musicRef.current?.pause();
-          setGame({ ...stateRef.current });
-        }
-        clearControls();
+        startBackgroundPause();
         return;
       }
-      if (backgroundHiddenAtRef.current && Date.now() - backgroundHiddenAtRef.current > 1_000 && stateRef.current.status === "playing") {
-        stateRef.current.status = "paused"; clearControls();
-        void saveCombatRef.current().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried."));
-        soundRef.current?.setPaused(true);
-        musicRef.current?.pause();
-        setGame({ ...stateRef.current });
-      }
-      // Background tabs can stop RAF entirely. Keep effect ages aligned with
-      // paused CSS animations before resetting the simulation frame clock.
-      if (stateRef.current.status === 'paused' && lastFrameRef.current > 0) {
+      const hiddenAt = backgroundHiddenAtRef.current;
+      if (hiddenAt === null) return;
+      clearBackgroundPauseTimer();
+      // A suspended browser may deliver the return before its timer can run.
+      if (Date.now() - hiddenAt >= backgroundPauseMs) pauseForBackground();
+      const { status, effects } = stateRef.current;
+      if ((status === "playing" || status === "paused") && lastFrameRef.current > 0) {
         const unpaintedPause = Math.max(0, performance.now() - lastFrameRef.current);
-        for (const effect of stateRef.current.effects) effect.startedAt += unpaintedPause;
+        for (const effect of effects) effect.startedAt += unpaintedPause;
       }
-      backgroundHiddenAtRef.current = 0;
+      backgroundHiddenAtRef.current = null;
       lastFrameRef.current = 0;
       slowFramesRef.current = 0;
     };
-    const markPageHidden = () => {
-      if (stateRef.current.status === "playing") void saveCombatRef.current().catch(() => {});
-      if (!backgroundHiddenAtRef.current) backgroundHiddenAtRef.current = Date.now();
-      clearControls();
-    };
     window.addEventListener("keydown", keyDown);
     const resumeAudio = () => {
-      if (document.visibilityState === "hidden" || (backgroundHiddenAtRef.current && Date.now() - backgroundHiddenAtRef.current > 1_000) || stateRef.current.status !== "playing") return;
+      if (document.visibilityState === "hidden" || backgroundHiddenAtRef.current !== null || stateRef.current.status !== "playing") return;
       retryAudioRef.current();
     };
     document.addEventListener("pointerup", resumeAudio, true);
     document.addEventListener("touchend", resumeAudio, true);
-    document.addEventListener("visibilitychange", resumeAudio);
     document.addEventListener("visibilitychange", pauseAfterBackground);
-    window.addEventListener("pagehide", markPageHidden);
-    window.addEventListener("pageshow", resumeAudio);
+    document.addEventListener("visibilitychange", resumeAudio);
+    window.addEventListener("pagehide", startBackgroundPause);
     window.addEventListener("pageshow", pauseAfterBackground);
+    window.addEventListener("pageshow", resumeAudio);
     window.addEventListener("focus", resumeAudio);
     window.addEventListener("keyup", keyUp);
     // A visible game can lose window focus when the browser shows its controls.
     window.addEventListener("blur", clearControls);
-    return () => { window.removeEventListener("keydown", keyDown); window.removeEventListener("keyup", keyUp); window.removeEventListener("blur", clearControls); document.removeEventListener("pointerup", resumeAudio, true); document.removeEventListener("touchend", resumeAudio, true); document.removeEventListener("visibilitychange", resumeAudio); document.removeEventListener("visibilitychange", pauseAfterBackground); window.removeEventListener("pagehide", markPageHidden); window.removeEventListener("pageshow", resumeAudio); window.removeEventListener("pageshow", pauseAfterBackground); window.removeEventListener("focus", resumeAudio); };
+    return () => {
+      clearBackgroundPauseTimer();
+      backgroundHiddenAtRef.current = null;
+      window.removeEventListener("keydown", keyDown);
+      window.removeEventListener("keyup", keyUp);
+      window.removeEventListener("blur", clearControls);
+      document.removeEventListener("pointerup", resumeAudio, true);
+      document.removeEventListener("touchend", resumeAudio, true);
+      document.removeEventListener("visibilitychange", pauseAfterBackground);
+      document.removeEventListener("visibilitychange", resumeAudio);
+      window.removeEventListener("pagehide", startBackgroundPause);
+      window.removeEventListener("pageshow", pauseAfterBackground);
+      window.removeEventListener("pageshow", resumeAudio);
+      window.removeEventListener("focus", resumeAudio);
+    };
   }, [clearControls]);
 
   useEffect(() => {

@@ -55,6 +55,6 @@ test('only the reviewed unused copies change; direct presentation, UI consumers,
   assert.ok(source.indexOf('projectilesRef.current?.present(stateRef.current);', source.indexOf('const step =')) < source.indexOf(after));
   const changed = source.replace('effects: [...current.effects]', 'effects: current.effects');
   assert.throws(() => restoreProjectileSnapshotGameChange(changed), /one exact/);
-  const changedPause = source.replace("stateRef.current.status = 'paused';", "stateRef.current.status = 'playing';");
+  const changedPause = source.replace("if (state.status === 'playing') {\n        state.status = 'paused';", "if (state.status === 'playing') {\n        state.status = 'playing';");
   assert.notEqual(createHash('sha256').update(restoreProjectileSnapshotGameChange(changedPause)).digest('hex'), 'aa98bc74c430c87211d081c71ea1ea720aecf7c64a10809b234268ce0f33fd51');
 });
