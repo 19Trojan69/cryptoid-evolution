@@ -99,6 +99,10 @@ export function restoreTestnetMissionPowerChanges(source) {
   const liveryOffset = '  const shipVisualOffset = useShipVisualOffset(shipSelection.skin.sprite, shipStage, shipSelection.color.id);';
   const standardOffset = '  const shipVisualOffset = useShipVisualOffset(shipSelection.skin.sprite, shipStage);';
   if (source.split(liveryOffset).length === 2) source = source.replace(liveryOffset, standardOffset);
+  const playerShipClass = "${game.status === \"paused\" && weaponCountdown === null ? \" player-ship-dialog-hidden\" : \"\"}";
+  const legacyPaintClass = "${shipSelection.color.id === \"grey\" || shipSelection.color.id === \"white\" ? ` player-ship-${shipSelection.color.id}` : \"\"}";
+  const fixedPaintAnchor = playerShipClass + "${game.purchasedShieldMs";
+  if (source.split(fixedPaintAnchor).length === 2) source = source.replace(fixedPaintAnchor, () => playerShipClass + legacyPaintClass + "${game.purchasedShieldMs");
   const reviewed = source.includes("START_POWER_DURATION_MS") ? [...durationChanges, ...changes] : changes;
   for (const { before, after } of reviewed) {
     if (source.split(after).length !== 2) throw Error('Expected one exact Testnet mission power change');

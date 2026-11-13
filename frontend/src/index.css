@@ -538,9 +538,6 @@ html[data-motion="reduced"] .hull-reflection { display: none; }
    a second height transition on each scene/frame manufactures animations and
    layout work continuously; retain the flame artwork, glow and motion response. */
 .game-field .cryptoid .exhaust, .game-field .player-ship .player-engine { transition: none; }
-.player-ship-grey .fleet-sprite { filter: grayscale(1) brightness(1.12); }
-.player-ship-white .fleet-sprite { filter: grayscale(1) brightness(1.55); }
-.player-ship-grey .player-engine, .player-ship-white .player-engine { background: linear-gradient(#fff, #9eafc5 45%, transparent); }
 .player-ship.player-ship-hurt { opacity: .68; filter: drop-shadow(0 0 17px #ff7083); }
 .player-ship.player-ship-shielded { filter: drop-shadow(0 0 16px #8feeff); }
 .player-ship-respawn { animation: player-respawn 1.35s ease-out both; }

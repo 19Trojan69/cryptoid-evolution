@@ -782,7 +782,7 @@ export default function AdminPage() {
               </section>}
               <section className="admin-panel admin-test-selection">
                 <div className="admin-selected-hull">
-                  <div className="admin-hull" role="img" aria-label={`${selectedSkin.name} · ${t(stageNames[stage - 1])}`}><ShipPreview sprite={selectedSkin.sprite} stage={stage} color={colorId} /></div>
+                  <div className="admin-hull" role="img" aria-label={`${selectedSkin.name} · ${t(stageNames[stage - 1])}`}><ShipPreview sprite={selectedSkin.sprite} stage={stage} color={shipFactoryPaint(selectedSkin.id).id} /></div>
                   <strong>{selectedSkin.name}</strong>
                   <span>{t(stageNames[stage - 1])}</span>
                 </div>
