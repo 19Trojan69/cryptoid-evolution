@@ -54,7 +54,8 @@
 .cinematic-copy h1 span {display:block; color:inherit;}
 .cinematic-copy h1 span+span {color:#33e4e9;}
 .cinematic-copy h1::after {display:block; width:72px; height:1px; margin-top:15px; background:linear-gradient(90deg,#eed6a6,transparent); content:'';}
-.cinematic-tagline {margin:14px 0 0; max-width:82%; color:#f3d79b; font-size:clamp(19px,5.2vw,29px); line-height:1.15; font-weight:700; letter-spacing:0; text-shadow:0 1px 5px #020c17;}
+.cinematic-tagline {position:relative; isolation:isolate; width:fit-content; margin:14px 0 0; max-width:82%; color:#f3d79b; font-size:clamp(19px,5.2vw,29px); line-height:1.15; font-weight:700; letter-spacing:0; text-shadow:0 2px 6px #020c17;}
+.cinematic-tagline::before {content:''; position:absolute; z-index:-1; inset:-15px -30px; background:radial-gradient(ellipse, #020d1adc 15%, #020d1a9c 53%, transparent 74%);}
 .cinematic-tagline > span {display:block; margin-top:3px; color:#f3f5f7; font-size:.9em; font-weight:500;}
 .cinematic-home .cinematic-footer {order:4;}
 .cinematic-actions {position:relative; z-index:3; display:grid; gap:16px; padding-top:8px;}

@@ -585,7 +585,7 @@ const Shop = () => {
 
       {shopView && <div className="shop-overlay" role="dialog" aria-modal="true" aria-label={t('Shop and hangar')}>
         <div className="shop-modal">
-        <div className="shop-modal-header"><button className="text-button menu-return" type="button" onClick={returnToMenu}>← {t("Back to quick access")}</button><strong>{t(shopTabs.find(([view]) => view === shopView)?.[1] ?? "Shop / Hangar")}</strong><button className="close-button" type="button" onClick={() => setShopView(null)} aria-label={t('Close shop')}>×</button></div>
+        <div className="shop-modal-header"><button className="text-button menu-return" type="button" onClick={returnToMenu} aria-label={t("Back to quick access")}>← {t("Back")}</button><strong>{t(shopTabs.find(([view]) => view === shopView)?.[1] ?? "Shop / Hangar")}</strong><button className="close-button" type="button" onClick={() => setShopView(null)} aria-label={t('Close shop')}>×</button></div>
         {(["hangar", "shop", "weapons", "powers"] as const).some(view => view === shopView) && <nav className="shop-category-nav" aria-label={t("Shop")}>
           {([["shop", "Ships"], ["weapons", "Weapons"], ["powers", "Power-ups"]] as const).map(([view, label]) => <button key={view} type="button" aria-current={view === shopView ? "page" : undefined} onClick={() => openQuickAction(view)}>{t(label)}</button>)}
         </nav>}
@@ -651,22 +651,24 @@ const Shop = () => {
 
       {(shopView === "hangar" || shopView === "shop") && <section className={`ship-selector ship-selector-${shopView}`} aria-labelledby="hangar-heading">
         {shipSaveNetwork === "testnet" && <p className="ship-mainnet-notice" role="note">{t("Advanced and Elite upgrades will be available in the Mainnet app. The corresponding NFT is included.")}</p>}
-        {user && !adminMode && <div className="hangar-message" role="status">
+        <div className="ship-panel-heading"><h2 id="hangar-heading">{t(shopView === "hangar" ? "Your fleet" : "Available ships")}</h2><strong className="shard-balance">◆ {number(displayedShards)} <small>{t("Shards")}</small></strong></div>
+        <div className="fleet-toolbar">
+          <label>{t("Find a ship")}<input type="search" value={shipQuery} placeholder={t("Search ship name")} onChange={event => { setShipQuery(event.target.value); setShopTarget(null); }} /></label>
+          <div className="fleet-filters" role="group" aria-label={t("Available ships")}>{(["all", "owned", "available"] as const).map(filter => <button type="button" key={filter} aria-pressed={shipFilter === filter} onClick={() => { setShipFilter(filter); setShopTarget(null); }}>{t(filter === "all" ? "All ships" : filter === "owned" ? "Owned ships" : "Available with Shards")}</button>)}</div>
+          {(shipQuery || shipFilter !== "all") && <button className="fleet-reset" type="button" onClick={() => { setShipQuery(""); setShipFilter("all"); }}>{t("Reset filters")}</button>}
+          <p role="status">{number(shipSearchOptions.length)} · {t("Available ships")}</p>
+        </div>
+        <div className="fleet-notes">
+          <details className="ship-earnings"><summary>{t("Shards & purchase rules")}</summary><p className="testnet-shop-notice" role="note">{t(shipSaveNetwork === "testnet" ? "Testnet progress stays separate from Mainnet." : "Mainnet progress stays separate from Testnet.")}</p><p>{shipSaveNetwork === "testnet" ? t("TESTNET SHARDS: Earn and spend Shards on available Standard ships here for testing. Shards and ship purchases do not transfer to Mainnet; there you start from zero.") : t("MAINNET SHARDS: Shards and ship purchases start from zero here. Testnet balances and ships are separate.")}</p><p>{t("The ship shop offers {hulls} Standard models. Grey Scout is the free starter.", { hulls: standardModelsAvailable })}</p><p>{t("At level 1, defeats earn Shards by enemy class: light 2, medium 4–5, elite 6, heavy 8, boss 16. Rewards grow with level. Bonus targets earn 1 each, plus a completion reward that grows with level. The HUD shows your previous Shard balance plus this mission's earnings.")}</p></details>
+          {user && !adminMode && <details className="fleet-account-save" open={account?.version === 0 && !account.legacyImported || undefined}>
+            <summary>{t("Account save")}</summary><div className="hangar-message" role="status">
           {account ? <>{t("Account inventory saved")} · {new Date(account.updatedAt).toLocaleString(locale)}. {account.mission && <>{t("Resume available at section {section} ({phase}).", { section: account.mission.sector, phase: t(account.mission.phase === "normal" ? "Block" : account.mission.phase === "boss" ? "Boss" : "Bonus round") })}</>}</> : t("Loading account save…")}
           {account && account.version === 0 && !account.legacyImported && <div>
             <p>{t("You can import local Shards and Standard ships once, before your first account game. Pi purchases and records are excluded. Otherwise, local items stay on this device.")}</p>
             <label><input type="checkbox" checked={importConfirmed} onChange={e => setImportConfirmed(e.target.checked)} />{t("Assign this local inventory to my Pi account.")}</label>
             <button type="button" className="button button-secondary" disabled={!importConfirmed || accountBusy} onClick={() => { void accountCommand({ action: "import", confirm: true, ...localInventory() }); }}>{t("Import local inventory once")}</button>
           </div>}
-        </div>}
-        <div className="ship-panel-heading"><div><p className="eyebrow">{t(shopView === "hangar" ? "YOUR HANGAR" : "SHIP SHOP")}</p><h2 id="hangar-heading">{t(shopView === "hangar" ? "Your fleet" : "Available ships")}</h2></div><strong className="shard-balance">◆ {displayedShards} <small>{t("Shards")}</small></strong></div>
-        <p className="testnet-shop-notice" role="note">{t(shipSaveNetwork === "testnet" ? "Testnet progress stays separate from Mainnet." : "Mainnet progress stays separate from Testnet.")}</p>
-        <details className="ship-earnings"><summary>{t("Shards & purchase rules")}</summary><p>{shipSaveNetwork === "testnet" ? t("TESTNET SHARDS: Earn and spend Shards on available Standard ships here for testing. Shards and ship purchases do not transfer to Mainnet; there you start from zero.") : t("MAINNET SHARDS: Shards and ship purchases start from zero here. Testnet balances and ships are separate.")}</p><p>{t("The ship shop offers {hulls} Standard models. Grey Scout is the free starter.", { hulls: standardModelsAvailable })}</p><p>{t("At level 1, defeats earn Shards by enemy class: light 2, medium 4–5, elite 6, heavy 8, boss 16. Rewards grow with level. Bonus targets earn 1 each, plus a completion reward that grows with level. The HUD shows your previous Shard balance plus this mission's earnings.")}</p></details>
-        <div className="fleet-toolbar">
-          <label>{t("Find a ship")}<input type="search" value={shipQuery} placeholder={t("Search ship name")} onChange={event => { setShipQuery(event.target.value); setShopTarget(null); }} /></label>
-          <div className="fleet-filters" role="group" aria-label={t("Available ships")}>{(["all", "owned", "available"] as const).map(filter => <button type="button" key={filter} aria-pressed={shipFilter === filter} onClick={() => { setShipFilter(filter); setShopTarget(null); }}>{t(filter === "all" ? "All ships" : filter === "owned" ? "Owned ships" : "Available with Shards")}</button>)}</div>
-          {(shipQuery || shipFilter !== "all") && <button className="fleet-reset" type="button" onClick={() => { setShipQuery(""); setShipFilter("all"); }}>{t("Reset filters")}</button>}
-          <p role="status">{number(shipSearchOptions.length)} · {t("Available ships")}</p>
+          </div></details>}
         </div>
         {!shipSearchOptions.length && <p role="status">{t("No ships match these filters.")}</p>}
         <div className="fleet-scroll-list">

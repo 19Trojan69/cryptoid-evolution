@@ -15,6 +15,7 @@ import { localeAliases, localeCatalog } from "./locales/catalog.ts";
 import { missionUiTranslations } from "./locales/missionUi.ts";
 import { collectionUiTranslations } from "./locales/collectionUi.ts";
 import { playerMenuTranslations } from "./locales/playerMenus.ts";
+import { missionEditionTranslations } from "./locales/missionEdition.ts";
 
 for (const [locale, entries] of Object.entries(ownerTestnetTranslations)) Object.assign(localeCatalog[locale] ??= {}, entries);
 for (const [locale, entries] of Object.entries(completionRecoveryTranslations)) Object.assign(localeCatalog[locale] ??= {}, entries);
@@ -30,6 +31,7 @@ for (const [locale, entries] of Object.entries(shipAttributeTranslations)) Objec
 for (const [locale, entries] of Object.entries(shipBalanceTranslations)) Object.assign(localeCatalog[locale] ??= {}, entries);
 for (const [locale, entries] of Object.entries(missionUiTranslations)) Object.assign(localeCatalog[locale] ??= {}, entries);
 for (const [locale, entries] of Object.entries(collectionUiTranslations)) Object.assign(localeCatalog[locale] ??= {}, entries);
+for (const [locale, entries] of Object.entries(missionEditionTranslations)) Object.assign(localeCatalog[locale] ??= {}, entries);
 for (const [locale, entries] of Object.entries(playerMenuTranslations)) {
   for (const [source, translated] of Object.entries(entries)) localeCatalog[locale][source] ??= translated;
 }

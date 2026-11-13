@@ -15,16 +15,25 @@ test('the quiet beat begins only after the last effect and cannot accumulate thr
 for(const reduced of [false,true])test(`completion has no reading/reveal delay with reduced motion ${reduced}`,()=>{
   let continued=0;
   const h=componentHost('src/pages/LevelCompletion.tsx','LevelCompletion',{
-    summary:{stage:10,score:100,shards:12,destroyed:10,hearts:3,combos:2},name:'GENESIS BELT',headline:'LEVEL 1 COMPLETE',bonusHits:12,bonusResult:'+18 SHARDS',bonusPoints:3000,bonusHeart:true,
+    summary:{stage:10,score:100,shards:12,destroyed:10,hearts:3,combos:2},name:'GENESIS BELT',headline:'LEVEL 1 COMPLETE',bonusHits:12,bonus:{shards:18,points:3000,powerUps:['shield']},chainShards:6,bonusHeart:true,saveDestination:'account',deviceSaved:false,
     prepared:true,saving:false,failed:false,continuing:false,onRetry(){},onContinue(){continued++;},
   },{
-    BlockchainProgress:()=>null,BLOCKS_PER_CHAIN:9,useLocale:()=>({t:s=>s,locale:'en'}),canContinueLevelCompletion,
+    BlockchainProgress:()=>null,BLOCKS_PER_CHAIN:9,BONUS_TARGET_COUNT:12,useLocale:()=>({t:s=>s,locale:'en'}),canContinueLevelCompletion,
     HTMLElement:class{},document:{activeElement:null},
     window:{matchMedia:()=>({matches:reduced}),setInterval(){throw Error('No completion timer');}},
   });
   const button=h.nodes().find(n=>n.type==='button'&&n.props.children.includes('Continue game'));
   assert.equal(button.props.disabled,false);assert.equal(continued,0);
   assert.ok(!h.nodes().some(n=>String(n.props?.children).includes('Continue available')));
+  const status = () => h.nodes().find(n => n.props?.className === 'level-completion-status');
+  assert.deepEqual(status().props.children,['Game saved.']);
+  h.update({saveDestination:'device',deviceSaved:true});
+  assert.deepEqual(status().props.children,['Shards saved on this device.']);
+  h.update({deviceSaved:false});
+  assert.deepEqual(status().props.children,['Shards could not be saved on this device.']);
+  assert.equal(status().props.role,'alert');
+  h.update({saveDestination:'test'});
+  assert.deepEqual(status().props.children,['Test run · rewards are not saved.']);
   button.props.onClick();assert.equal(continued,1);h.unmount();
 });
 

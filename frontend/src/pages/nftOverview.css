@@ -1,6 +1,16 @@
 .nft-overview .boss-nft-header {
+  border-bottom: 1px solid #a49ac344;
+  background: radial-gradient(ellipse at 12% 60%, #4d336c40, transparent 63%);
   padding-bottom: 1.1rem;
 }
+
+.nft-overview-title { display: flex; align-items: center; gap: .8rem; margin-block: .9rem .4rem; }
+.nft-overview-title .blockchain-icon { width: 40px; height: 40px; flex: none; color: #d6b7fb; }
+.nft-overview .nft-overview-title h1 { margin: 0; font-family: 'Oxanium', sans-serif; }
+.nft-catalog-size { display: flex; align-items: baseline; flex-wrap: wrap; gap: .35rem 1rem; margin-top: .9rem; color: #d7bdf8; }
+.nft-catalog-size b { color: #fff0d1; font: 750 clamp(16px, 4.6vw, 24px)/1.4 'Oxanium', sans-serif; }
+.nft-progress-note { display: flex; align-items: center; flex-wrap: wrap; gap: .5rem .8rem; margin: .8rem 0; color: #cadcec; font-size: .875rem; }
+.nft-overview .nft-progress-note button { min-height: 44px; border-radius: 8px; padding: .4rem .85rem; border: 1px solid #a582c8; background: #2c2446; color: #f5eaff; }
 
 .nft-overview .nft-overview-notice {
   width: fit-content;
@@ -33,19 +43,23 @@
 }
 
 .nft-overview-edition {
-  border: 1px solid #36506a;
-  border-radius: 0.7rem;
-  background: #101d2d;
+  --edition-accent: #9eddec;
+  position: relative;
+  display: grid;
+  gap: .22rem;
+  padding: .8rem 2rem .8rem .9rem;
+  border: 1px solid #4c657c;
+  border-inline-start: 2px solid var(--edition-accent);
+  border-radius: .7rem;
+  background: linear-gradient(115deg, color-mix(in srgb, var(--edition-accent) 12%, #111c2b), #0b1a2b 70%);
   color: #eef5ff;
   text-decoration: none;
 }
-
-.nft-overview-edition {
-  position: relative;
-  display: grid;
-  gap: 0.2rem;
-  padding: 0.7rem 2.25rem 0.7rem 0.85rem;
-}
+.nft-overview-edition[data-edition='victory'] { --edition-accent: #f3dda8; }
+.nft-overview-edition[data-edition='holo'] { --edition-accent: #d3aafa; }
+.nft-overview-edition[data-edition='advanced'] { --edition-accent: #8ce6e4; }
+.nft-overview-edition[data-edition='elite'] { --edition-accent: #f2ca76; }
+.nft-overview-edition > strong { color: var(--edition-accent); font: 750 1.05rem/1.3 'Oxanium', sans-serif; }
 
 a.nft-overview-edition::after {
   position: absolute;
@@ -67,6 +81,12 @@ a.nft-overview-edition::after {
 .nft-overview-edition span {
   font-size: 0.88rem;
 }
+.nft-overview-edition p { font-size: .85rem; line-height: 1.45; }
+.nft-edition-progress { display: grid; gap: .24rem; margin-top: .35rem; }
+.nft-edition-progress span { font-size: .8rem; }
+.nft-edition-progress strong { color: var(--edition-accent); }
+.nft-edition-progress progress { width: 100%; height: 6px; accent-color: var(--edition-accent); }
+.nft-overview :is(a,button):focus-visible { outline: 2px solid #e3c4ff; outline-offset: 3px; }
 
 .nft-overview-terms {
   margin: 0.8rem 0 1rem;

@@ -9,7 +9,7 @@ export type NetworkState = { time: number; actors: NetworkActor[]; visits: numbe
 
 // Coordinates belong to the bundled artwork, not the viewport. The same scaled
 // wrapper holds the image and both network layers, so the sphere cannot drift.
-export const HOME_ART = { width: 862, height: 904, cx: 608, cy: 696, radius: 353 };
+export const HOME_ART = { width: 862, height: 904, cx: 594, cy: 684, radius: 349 };
 const normalize = ([x, y, z]: Vector): Vector => {
   const length = Math.hypot(x, y, z);
   return [x / length, y / length, z / length];

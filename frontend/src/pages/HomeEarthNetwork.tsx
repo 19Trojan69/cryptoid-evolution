@@ -4,8 +4,8 @@ import { advanceHomeNetwork, createHomeNetwork, HOME_ART, makeHomeNetworkMesh, p
 
 const mesh = makeHomeNetworkMesh();
 const foreground = [
-  "M118 537 157 550 216 562 316 553 342 548 329 583 357 601 367 637 345 671 330 693 339 721 319 738 282 720 253 696 213 676 169 674 115 681 121 644 133 626 119 597 111 566Z",
-  "M703 627 744 642 785 656 803 681 838 711 805 746 772 724 738 706 704 676 695 650Z",
+  "M64 610 111 568 174 558 205 544 231 543 253 546 302 531 362 514 347 564 354 584 358 612 406 687 407 711 378 711 331 692 286 712 267 726 246 709 194 728 154 738 161 707 176 677 146 675 146 649 157 620 113 650 92 648 105 621Z",
+  "M706 628 730 633 767 650 792 650 807 663 801 675 785 681 774 716 753 710 722 686 702 660Z",
 ];
 const meshPaths = mesh.paths.map(edge => ({d:"M"+edge.points.map(point=>point.map(value=>value.toFixed(1)).join(" ")).join("L"),depth:edge.depth}));
 const round = (ctx: CanvasRenderingContext2D, x: number,y: number,r: number,color: string | CanvasGradient) => {

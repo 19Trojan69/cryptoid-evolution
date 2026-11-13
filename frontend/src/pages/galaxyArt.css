@@ -16,17 +16,22 @@
   z-index: -1;
   background: linear-gradient(90deg, #02061620, transparent 28%, #0308191c 50%, transparent 72%, #02061620);
 }
-.galaxy-backdrop { position: absolute; inset: 0; z-index: -3; overflow: hidden; pointer-events: none; }
+.galaxy-backdrop {
+  --galaxy-blend: 168px;
+  position: absolute; inset: 0; z-index: -3; overflow: hidden; pointer-events: none;
+}
 .galaxy-art-scene {
   position: absolute; left: 0; right: 0;
-  mask-image: linear-gradient(transparent, #000 15%, #000 85%, transparent);
-  -webkit-mask-image: linear-gradient(transparent, #000 15%, #000 85%, transparent);
 }
 .galaxy-art-scene img {
-  display: block; width: 100%; height: 100%; object-fit: cover;
-  object-position: 50% 28%; opacity: .96; user-select: none;
+  position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover;
+  object-position: 50% 28%; user-select: none;
 }
-.galaxy-art-scene[data-scene='singularity'] img { object-position: 66% 15%; }
+.galaxy-art-scene .galaxy-art-fade-in {
+  -webkit-mask-image: linear-gradient(transparent, #0002 35px, #0008 84px, #000d 133px, #000 var(--galaxy-blend));
+  mask-image: linear-gradient(transparent, #0002 35px, #0008 84px, #000d 133px, #000 var(--galaxy-blend));
+}
+.galaxy-art-scene img[data-scene='singularity'] { object-position: 66% 15%; }
 .galaxy-region-heading {
   left: 12px; right: 12px; top: 14px;
   background: linear-gradient(100deg, #070d22e6, #07102499, transparent);
@@ -60,7 +65,8 @@
   border-color: #f2d39c !important;
 }
 .galaxy-level[aria-current=step] {
-  outline-color: #f9dda1; box-shadow: 0 0 25px #ebc57865;
+  outline-color: #f9dda1; background: #25251e !important; color: #fff1c9 !important;
+  border-color: #f4dba6 !important; box-shadow: 0 0 0 7px #f2d39c2e, 0 0 25px #ebc57865;
 }
 .galaxy-mini-orbit {
   background: radial-gradient(ellipse at center, #69e9f520, #020e1f 65%);
@@ -75,6 +81,8 @@
   color: #c5ffff; letter-spacing: .7px; box-shadow: 0 3px 12px #0009;
 }
 .galaxy-mini small, .galaxy-boss small { text-shadow: 0 1px 4px #000, 0 0 6px #000; }
+.galaxy-mini[data-next-retro] .galaxy-mini-orbit { border-color: #e0ffff; box-shadow: 0 0 0 5px #c1ffff42, 0 0 24px #3bb9ca65; }
+.galaxy-mini[data-next-retro] strong { border-color: #bafcff; color: #efffff; }
 .galaxy-boss-frame {
   border-color: #d7b8929c; border-radius: 8px;
   background: #060c1fe6;
@@ -110,6 +118,7 @@
   text-align: left; box-shadow: inset 0 1px #ffe6bf16, 0 4px 20px #0008;
 }
 .galaxy-position span { overflow-wrap: anywhere; }
+.galaxy-position strong { display: block; color: #fff0ca; font-weight: 750; }
 .galaxy-page .galaxy-position:hover { border-color: #f3d5a9; background: #142037f5; }
 .galaxy-data-status { flex-shrink: 0; margin: 0; padding: 8px 16px; color: #c5cfdf; background: #091226e8; font-size: 12px; line-height: 1.4; }
 .galaxy-scroll { padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 72px); }
@@ -117,6 +126,6 @@
 
 @media (min-width: 701px) {
   .galaxy-art-scene img { object-position: 50% 20%; }
-  .galaxy-art-scene[data-scene='singularity'] img { object-position: 65% 12%; }
+  .galaxy-art-scene img[data-scene='singularity'] { object-position: 65% 12%; }
 }
 @media (max-width: 360px) { .galaxy-mini strong { letter-spacing: .2px; } }

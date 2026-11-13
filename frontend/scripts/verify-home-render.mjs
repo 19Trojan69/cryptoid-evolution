@@ -13,7 +13,7 @@ import * as model from '../src/pages/homeNetworkModel.ts';
 const require=createRequire(import.meta.url);
 const {createCanvas,loadImage,Path2D}=require(process.env.CODEX_PRIMARY_RUNTIME_NODE_MODULES+'/@napi-rs/canvas');
 const output=process.argv[2]||path.resolve('../doc/home-review');mkdirSync(output,{recursive:true});
-const art=await loadImage('public/home/cinematic-earth-fleet.webp');
+const art=await loadImage('public/home/cinematic-vanguard-elite.webp');
 let seed=42;
 const random=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/2**32;};
 const rendererModel={...model,createHomeNetwork:mesh=>model.createHomeNetwork(mesh,random),advanceHomeNetwork:(state,mesh,dt)=>model.advanceHomeNetwork(state,mesh,dt,random)};

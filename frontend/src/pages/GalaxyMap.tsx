@@ -126,6 +126,7 @@ export default function GalaxyMap() {
   const progress = status === 'ready' ? snapshot.progress : emptyGalaxyProgress();
   const retroLevels = !previewAccess ? officialArcade?.levels : undefined;
   const unlocked = !previewAccess && status === 'ready' && officialArcade && officialArcade.owner === snapshot.owner ? officialArcade.stations : undefined;
+  const nextRetroLevel = (unlocked?.find(game => game.level >= progress.currentLevel) ?? unlocked?.at(-1))?.level;
   useEffect(() => {
     if (!returningFromArcade || !unlocked?.length || !snapshot.owner) return;
     const request = new AbortController();
@@ -207,7 +208,7 @@ export default function GalaxyMap() {
     {status !== 'ready' && <p className="galaxy-data-status" role="status">{status === 'loading' ? t('Loading saved progress…') : t('Saved progress is unavailable. You can still explore; your data is unchanged.')}</p>}
     <div className="galaxy-scroll" ref={scroll} tabIndex={0} aria-label={t('Galaxy map')}>
       <div className="galaxy-map-world">
-        {[...galaxyRegions.keys()].reverse().map(region => <GalaxySector key={region} region={region} progress={progress} retroLevels={retroLevels} unlockedGames={unlocked} onSelect={setSelection}/>)}
+        {[...galaxyRegions.keys()].reverse().map(region => <GalaxySector key={region} region={region} progress={progress} retroLevels={retroLevels} unlockedGames={unlocked} nextRetroLevel={nextRetroLevel} onSelect={setSelection}/>)}
         {status === 'ready' && <div ref={ship} className="galaxy-player" data-player-level={progress.currentLevel} data-player-port={point.port} style={{ '--player-x': `calc(${point.x}% + ${point.dx}px)`, '--player-y': `${point.mapY + point.dy}px` } as CSSProperties}>
           <ShipPortrait src={shipEvolutionAsset(skin.sprite, stage, color.id)} name={`${t('Your ship')} · ${skin.name}`}/><span aria-hidden="true" className="galaxy-engine"/><small>{t('Your ship')}</small>
         </div>}
@@ -226,7 +227,7 @@ export default function GalaxyMap() {
         </>}
       </article>
     </div>
-    <button type="button" className="galaxy-position" disabled={status !== 'ready'} onClick={() => goTo(progress.currentLevel)} title={status === 'ready' ? `${t('Campaign stage')} ${progress.currentLevel} · ${skin.name}` : undefined}><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="1.5"/><path d="M12 2v4m0 12v4M2 12h4m12 0h4"/></svg><span>{t('To my position')}</span></button>
+    <button type="button" className="galaxy-position" disabled={status !== 'ready'} onClick={() => goTo(progress.currentLevel)} title={status === 'ready' ? `${t('Campaign stage')} ${progress.currentLevel} · ${skin.name}` : undefined}><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="1.5"/><path d="M12 2v4m0 12v4M2 12h4m12 0h4"/></svg><span>{t('To my position')}{status === 'ready' && <strong>{t('Campaign stage')} {progress.currentLevel.toLocaleString(locale)}</strong>}</span></button>
     {selection && <GalaxyInfoDialog key={`${selection.kind}:${selection.level}`} selection={selection} progress={progress} miniGameName={miniGame?.name} lockedRetro={lockedRetro}
       arcade={officialGame && officialArcade ? { game: officialGame, labels: officialArcade.labels,
         record: readArcadeRecord(officialGame, snapshot.owner), owner: snapshot.owner,

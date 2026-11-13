@@ -11,8 +11,8 @@ const summary={stage:10,score:100,shards:12,destroyed:10,hearts:3,combos:2};
 const translate=(s,p={})=>s.replace(/\{(\w+)\}/g,(_,k)=>String(p[k]));
 test('the real completion has no countdown and permits an immediate prepared click only',()=>{
  let continued=0;const doc={activeElement:null};
- const h=componentHost('src/pages/LevelCompletion.tsx','LevelCompletion',{summary,name:"GENESIS BELT",headline:"LEVEL 1 COMPLETE",bonusHits:12,bonusResult:"+18 SHARDS",bonusPoints:3000,bonusHeart:true,prepared:false,saving:true,failed:false,continuing:false,onRetry(){},onContinue(){continued++;}}, {
-  BlockchainProgress:()=>null,BLOCKS_PER_CHAIN:9,useLocale:()=>({t:translate,locale:'en'}),canContinueLevelCompletion,
+ const h=componentHost('src/pages/LevelCompletion.tsx','LevelCompletion',{summary,name:"GENESIS BELT",headline:"LEVEL 1 COMPLETE",bonusHits:12,bonus:{shards:18,points:3000,powerUps:['shield']},chainShards:6,bonusHeart:true,saveDestination:'account',deviceSaved:false,prepared:false,saving:true,failed:false,continuing:false,onRetry(){},onContinue(){continued++;}}, {
+  BlockchainProgress:()=>null,BLOCKS_PER_CHAIN:9,BONUS_TARGET_COUNT:12,useLocale:()=>({t:translate,locale:'en'}),canContinueLevelCompletion,
   HTMLElement:class{},document:doc,window:{setInterval(){throw Error('No completion timer is allowed');}},
  });
  const button=()=>h.nodes().find(n=>n.type==='button'&&n.props.children.includes('Continue game'));

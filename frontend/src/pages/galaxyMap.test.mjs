@@ -307,7 +307,9 @@ test('actual ship flight only reflects a new adjacent confirmed stage and never 
   const render=()=>{cursor=0;refIndex=0;const nodes=elements(Map());pending.splice(0).forEach(fn=>fn());return nodes;};
   let nodes=render();assert.equal(flights.length,0);assert.equal(JSON.stringify(data.snapshot),original);
   const player=nodes.find(node=>node.props.className==='galaxy-player');assert.equal(player.props['data-player-level'],11);
-  nodes.find(node=>node.type==='button'&&text(node)==='Zu meiner Position').props.onClick();
+  const position=nodes.find(node=>node.props.className==='galaxy-position');
+  assert.match(text(position),/Zu meiner Position.*11/);
+  position.props.onClick();
   assert.equal(scrollCalls[0].top,model.galaxyPoint(11).mapY-385);
   data={...data,snapshot:{...data.snapshot,progress:{...data.snapshot.progress,currentLevel:12,completedLevel:11}}};
   render();assert.equal(flights.length,1);assert.equal(flights[0].options.duration,850);

@@ -6,13 +6,14 @@ import { rewardNetwork } from "../rewardNetwork";
 import { emptyPlayerSave, type PlayerSave } from "../playerSave";
 import { ownedShipStage, type ShipStage } from "../shipLoadout";
 import { SHIP_NFT_PREVIEW_PAGE_SIZE as pageSize } from "../nftPreviewLimits";
+import { readRewardProgress } from "../rewardRules";
 import {
   confirmedMainnetShipUpgrades, ownsShipNftHull, shipNftCatalog, shipNftMainnetEnabled, shipNftStatus,
   SHIP_NFT_ART_REVISION, type ShipNftOrder,
 } from "../shipNftEligibility";
 import "../types/session";
 
-type PreviewAccount = { uid: string; playerByNetwork?: {
+type PreviewAccount = { uid: string; rewardsByNetwork?: { testnet?: unknown }; playerByNetwork?: {
   mainnet?: Pick<PlayerSave, "fleet" | "legacyImported" | "standardShipAcquisitions">;
   testnet?: Pick<PlayerSave, "fleet">;
 } };
@@ -89,30 +90,43 @@ async function packagedPreview(card: CatalogCard) {
   return image.toString("base64");
 }
 
+async function unlockedTestnetShips(cards: readonly CatalogCard[], save: Pick<PlayerSave, "fleet">,
+  orders: Collection<ShipNftOrder>, uid: string) {
+  const owned = cards.filter(card => ownsShipNftHull(card.shipId, save));
+  const products = [...new Set(owned.flatMap(card => [card.productId, card.requiresProductId]
+    .filter((id): id is string => id !== null)))];
+  const upgrades = products.length ? (await orders.find({
+    user: uid, product_id: { $in: products }, paid: true,
+    cancelled: { $ne: true }, payment_network: "Pi Testnet",
+  }, { projection: { product_id: 1 } }).toArray()).map(order => order.product_id) : [];
+  return owned.filter(card => ownedShipStage(card.sprite, upgrades) >= card.stage);
+}
+
 export function mountTestnetShipNftPreview(router: Router, readArtwork = packagedPreview) {
-  router.get("/", async (req, res) => {
+  router.get(["/", "/progress"], async (req, res) => {
     res.setHeader("Cache-Control", "private, no-store");
     if (!req.testnetSave || rewardNetwork(req) !== "testnet") return res.status(404).json({ error: "not_found" });
     const user = verifiedUser(req);
     if (!user) return res.status(401).json({ error: "not_authenticated" });
-    const selection = galleryPage(req.query);
+    const progress = req.path === "/progress" || req.path === "/progress/";
+    const selection = progress ? { cards: shipNftCatalog, total: shipNftCatalog.length } : galleryPage(req.query);
     if (!selection) return res.status(400).json({ error: "invalid_gallery_filter" });
 
     try {
       const users: Collection<PreviewAccount> = req.app.locals.userCollection;
       const account = await users.findOne({ _id: user._id, uid: user.uid }, {
-        projection: { "playerByNetwork.testnet.fleet": 1 },
+        projection: { "playerByNetwork.testnet.fleet": 1, ...(progress && { "rewardsByNetwork.testnet.bossWins": 1 }) },
       });
       if (!account) return res.status(410).json({ error: "account_deleted" });
       const save = account.playerByNetwork?.testnet ?? emptyPlayerSave();
-      const owned = selection.cards.filter(card => ownsShipNftHull(card.shipId, save));
-      const products = owned.flatMap(card => [card.productId, card.requiresProductId].filter((id): id is string => id !== null));
       const orders: Collection<ShipNftOrder> = req.app.locals.orderCollection;
-      const upgrades = products.length ? (await orders.find({
-        user: user.uid, product_id: { $in: products }, paid: true,
-        cancelled: { $ne: true }, payment_network: "Pi Testnet",
-      }, { projection: { product_id: 1 } }).toArray()).map(order => order.product_id) : [];
-      const cards = await Promise.all(owned.filter(card => ownedShipStage(card.sprite, upgrades) >= card.stage).map(async card => ({
+      const unlocked = await unlockedTestnetShips(selection.cards, save, orders, user.uid);
+      if (progress) {
+        const wins = readRewardProgress(JSON.stringify(account.rewardsByNetwork?.testnet ?? {})).bossWins;
+        return res.json({ owner: user.uid, boss: Object.keys(wins).length,
+          ships: [1, 2, 3].map(stage => unlocked.filter(card => card.stage === stage).length) });
+      }
+      const cards = await Promise.all(unlocked.map(async card => ({
         id: card.id, name: card.name, maxSupply: card.maxSupply, status: "eligible" as const,
         story: card.story, livery: card.livery, webp: await readArtwork(card),
       })));

@@ -110,7 +110,8 @@ test("the API is closed until launch and refuses Testnet even on the Mainnet pro
 test("Testnet uses the verified player's saved fleet and reveals only paid matching upgrades", async () => {
   let read;
   mountTestnetShipNftPreview({ get(_path, handler) { read = handler; } });
-  const account = { playerByNetwork: { mainnet: { fleet: { "solar-lance": { grey: 1 } } } } };
+  const account = { playerByNetwork: { mainnet: { fleet: { "solar-lance": { grey: 1 } } } },
+    rewardsByNetwork: { mainnet: { bossWins: { 1: 2, 2: 1, 3: 1 } }, testnet: { bossWins: { 2: 3, 17: 1 } } } };
   const orderChecks = [];
   const upgrades = ["ship_02_stage_2"];
   const locals = {
@@ -127,8 +128,8 @@ test("Testnet uses the verified player's saved fleet and reveals only paid match
       return { async toArray() { return upgrades.filter(id => filter.product_id.$in.includes(id)).map(product_id => ({ product_id })); } };
     } },
   };
-  const request = async ({ network = "testnet", token = user.accessToken, stage = "1", page = "1" } = {}) => {
-    const req = { testnetSave: true, query: { stage, page }, session: { currentUser: user, adminMode: true }, app: { locals },
+  const request = async ({ network = "testnet", token = user.accessToken, stage = "1", page = "1", path = "/" } = {}) => {
+    const req = { path, testnetSave: true, query: { stage, page }, session: { currentUser: user, adminMode: true }, app: { locals },
       get(name) { return { "x-cryptoid-app-network": network, authorization: `Bearer ${token}` }[name]; } };
     const res = response();
     await read(req, res);
@@ -153,6 +154,12 @@ test("Testnet uses the verified player's saved fleet and reveals only paid match
   const vanguard = (await request({ page: "4" })).body.cards[0];
   assert.equal(vanguard.id, "pi-vanguard-standard");
   assert.equal(vanguard.livery, "Metallic Edition");
+  upgrades.push("ship_19_stage_3"); // An Elite receipt alone cannot skip Advanced.
+  const progress = await request({ path: "/progress" });
+  assert.equal(progress.headers["Cache-Control"], "private, no-store");
+  assert.deepEqual(progress.body, { owner: user.uid, boss: 2, ships: [2, 1, 1] });
+  assert.equal((await request({ path: "/progress", token: "other-account" })).code, 401);
+  assert.equal((await request({ path: "/progress", network: "mainnet" })).code, 404);
 });
 
 test("Standard requires saved Mainnet ownership and handles imported and older confirmed hulls", async () => {

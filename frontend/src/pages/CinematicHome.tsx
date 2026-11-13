@@ -52,7 +52,7 @@ export default function CinematicHome({paused,busy,rankName,musicEnabled,musicLa
   return <section className="cinematic-home-content" aria-labelledby="cinematic-home-title">
     <div className="cinematic-scene">
       <div className="cinematic-art" aria-hidden="true">
-        <img src="/home/cinematic-earth-fleet.webp" width={1225} height={1284} alt="" draggable={false} fetchPriority="high" decoding="async"/>
+        <img src="/home/cinematic-vanguard-elite.webp" width={1225} height={1284} alt="" draggable={false} fetchPriority="high" decoding="async"/>
         <HomeEarthNetwork paused={paused}/>
       </div>
       <div className="cinematic-copy">
