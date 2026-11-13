@@ -1,4 +1,5 @@
 import type { ShipStage } from '../../../backend/src/shipLoadout.ts';
+import { shipLiveryAssetPath } from '../../../backend/src/shipLivery.ts';
 export type { ShipStage } from '../../../backend/src/shipLoadout.ts';
 export { ownedShipStage, selectedShipStage } from '../../../backend/src/shipLoadout.ts';
 
@@ -14,5 +15,4 @@ export const powerUpPickupRadius = (stage: ShipStage) => 34 * (1 + stagePickupRa
 export const projectileImpact: (guard: number, shielded: boolean) => { guard: number; damage: number; blockedByHull: boolean } = () =>
   ({ guard: 0, damage: 1, blockedByHull: false });
 
-export const shipEvolutionAsset = (index: number, stage: ShipStage) =>
-  `/ships/evolution/ship_${String(index + 1).padStart(2, "0")}_stage_${stage}.png`;
+export const shipEvolutionAsset = (index: number, stage: ShipStage, color?: string) => `/${shipLiveryAssetPath(index, stage, color)}`;

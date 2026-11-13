@@ -5,6 +5,7 @@ import HullDamage from "./HullDamage";
 import { addPersistentHullFire, hullFireAtImpact, spriteFireSites, type HullFire } from "./hullFires";
 import { allPlayerColors, playerColors, playerSkins, shipNozzleStyles, type PlayerColorId } from "./shipFleet";
 import { shipEvolutionAsset, type ShipStage } from "./shipEvolution";
+import { isVanguardMetallic } from '../../../backend/src/shipLivery.ts';
 import { explosionDiameter, fragmentFlight } from "./shipRealism";
 
 const DURATION = 14, SHOT_COUNT = 24;
@@ -144,9 +145,9 @@ export default function HomeCombatPreview({ defender, paused = false }: { defend
   return <div ref={root} className="home-combat-preview home-combat-cinematic" data-paused={paused} role="img" aria-hidden="true">
     {actors.map((actor, i) => <span key={`${scene}-${i}`} ref={node => { ships.current[i] = node; }} className={`home-cinematic-ship home-cinematic-ship-${i}`} style={{ "--combat-glow": allPlayerColors.find(color => color.id === actor.color)?.glow } as CSSProperties} aria-hidden="true">
       <span className="home-cinematic-body"><PaintedShip className="home-cinematic-underside" {...actor} />
-        {shipNozzleStyles(actor.sprite).map((style, j) => <i key={j} className="home-combat-engine" style={style} />)}
+        {shipNozzleStyles(actor.sprite, false, isVanguardMetallic(actor.sprite, actor.color) ? actor.stage : 1, actor.color).map((style, j) => <i key={j} className="home-combat-engine" style={style} />)}
         <PaintedShip className="home-combat-hull" {...actor} /><PaintedShip className="home-cinematic-reflection" {...actor} />
-        <HullDamage sites={combatDamage.scene === scene ? combatDamage.sites[i] : undefined} hit={combatDamage.scene === scene ? combatDamage.hits[i] : undefined} maskImage={`url('${shipEvolutionAsset(actor.sprite, actor.stage)}')`} />
+        <HullDamage sites={combatDamage.scene === scene ? combatDamage.sites[i] : undefined} hit={combatDamage.scene === scene ? combatDamage.hits[i] : undefined} maskImage={`url('${shipEvolutionAsset(actor.sprite, actor.stage, actor.color)}')`} />
       </span>
     </span>)}
     {Array.from({ length: SHOT_COUNT }, (_, i) => <i key={i} ref={node => { bolts.current[i] = node; }} className="home-cinematic-shot" aria-hidden="true" />)}

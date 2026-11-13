@@ -8,6 +8,7 @@ import { allPlayerColors, playerSkins } from '../src/pages/shipFleet.ts';
 import { paintShipMaterial } from '../src/pages/shipMaterial.ts';
 import { namedShipAccent } from '../src/pages/shipIdentityColor.ts';
 import { shipEvolutionAsset } from '../src/pages/shipEvolution.ts';
+import { hasBakedLivery, isVanguardMetallic, vanguardMetallic } from '../../backend/src/shipLivery.ts';
 
 const require = createRequire(import.meta.url);
 const canvasPackage = '@napi-rs/canvas';
@@ -21,19 +22,24 @@ export async function buildPaintedHulls({ check = false } = {}) {
   for (const name of ['shipMaterial.ts', 'shipTint.ts', 'shipIdentityColor.ts', 'shipFleet.ts', 'shipEvolution.ts']) {
     hash.update(await readFile(new URL(`src/pages/${name}`, frontendRoot)));
   }
+  hash.update(await readFile(new URL('../backend/src/shipLivery.ts', frontendRoot)));
   const sources = [];
   for (let sprite = 0; sprite < playerSkins.length; sprite++) for (const stage of [1, 2, 3]) {
     const url = shipEvolutionAsset(sprite, stage);
     const data = await readFile(new URL(`public${url}`, frontendRoot));
     hash.update(data);
-    sources.push({ sprite, stage, data });
+    const specialUrl = shipEvolutionAsset(sprite, stage, vanguardMetallic.id);
+    const special = specialUrl === url ? undefined : await readFile(new URL(`public${specialUrl}`, frontendRoot));
+    if (special) hash.update(special);
+    sources.push({ sprite, stage, data, special });
   }
   const revision = hash.digest('hex').slice(0, 20);
   const destination = new URL(`public/ships/painted/${revision}/`, frontendRoot);
   if (!check) await mkdir(destination, { recursive: true });
   const encodedBytes = [];
   let totalBytes = 0;
-  for (const { sprite, stage, data } of sources) {
+  let variants = 0;
+  for (const { sprite, stage, data, special } of sources) {
     const image = await loadImage(data);
     const canvas = createCanvas(image.width, image.height);
     try {
@@ -41,6 +47,14 @@ export async function buildPaintedHulls({ check = false } = {}) {
       context.drawImage(image, 0, 0);
       const original = context.getImageData(0, 0, image.width, image.height);
       for (const color of allPlayerColors) {
+        if (hasBakedLivery(sprite, color.id)) {
+          encodedBytes.push(isVanguardMetallic(sprite, color.id) ? special.length : data.length);
+          continue;
+        }
+        if (color.id === vanguardMetallic.id) {
+          encodedBytes.push(0);
+          continue;
+        }
         const pixels = context.createImageData(image.width, image.height);
         pixels.data.set(original.data);
         const target = [1, 3, 5].map(offset => parseInt(color.glow.slice(offset, offset + 2), 16));
@@ -54,6 +68,7 @@ export async function buildPaintedHulls({ check = false } = {}) {
         } else await writeFile(output, png);
         encodedBytes.push(png.length);
         totalBytes += png.length;
+        variants++;
       }
     } finally { canvas.width = canvas.height = 0; }
   }
@@ -87,7 +102,7 @@ export async function buildPaintedHulls({ check = false } = {}) {
       }
     }
   }
-  return { revision, variants: encodedBytes.length, totalBytes, dimensions: 'original', canvasVersion };
+  return { revision, variants, totalBytes, dimensions: 'original', canvasVersion };
 }
 
 if (process.argv[1] && pathToFileURL(process.argv[1]).href === import.meta.url) {

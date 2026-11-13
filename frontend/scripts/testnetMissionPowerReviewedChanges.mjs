@@ -96,6 +96,9 @@ const durationChanges = [
 
 export function restoreTestnetMissionPowerChanges(source) {
   if (!source.includes("import MissionPowerDock from './MissionPowerDock';")) return source;
+  const liveryOffset = '  const shipVisualOffset = useShipVisualOffset(shipSelection.skin.sprite, shipStage, shipSelection.color.id);';
+  const standardOffset = '  const shipVisualOffset = useShipVisualOffset(shipSelection.skin.sprite, shipStage);';
+  if (source.split(liveryOffset).length === 2) source = source.replace(liveryOffset, standardOffset);
   const reviewed = source.includes("START_POWER_DURATION_MS") ? [...durationChanges, ...changes] : changes;
   for (const { before, after } of reviewed) {
     if (source.split(after).length !== 2) throw Error('Expected one exact Testnet mission power change');

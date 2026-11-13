@@ -58,7 +58,7 @@ export default function mountShipNftPreview(router: Router, enabled = shipNftMai
         if (summary.status !== "eligible") return summary;
         const webp = artById.get(artworkId(card.id));
         if (typeof webp !== "string" || !webp.startsWith("UklGR") || webp.length > 140_000) throw new Error("Artwork unavailable");
-        return { ...summary, story: card.story, webp };
+        return { ...summary, story: card.story, livery: card.livery, webp };
       }) });
     } catch {
       return res.status(503).json({ error: "gallery_unavailable" });

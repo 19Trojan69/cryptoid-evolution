@@ -8,7 +8,7 @@ import { createPortal } from 'react-dom';
 import { useLocale } from '../i18n';
 import { localInventory, loadAccountSave } from '../lib/accountSave';
 import { axiosClient } from '../lib/axiosClient';
-import { playerSkins, allPlayerColors, type PlayerColorId, type ShipFleet } from './shipFleet';
+import { playerSkins, allPlayerColors, shipFactoryPaint, shipPaintAvailable, type PlayerSkinId, type ShipFleet } from './shipFleet';
 import { guestCollectionHulls, ownedCollectionHulls } from './collectionOwnership';
 import { shipEvolutionAsset, type ShipStage } from './shipEvolution';
 import { bossManifest } from './bossManifest';
@@ -45,12 +45,15 @@ export default function Collection({uid,onClose}:{uid?:string;onClose:()=>void})
  const ownerTestnet='testnetCatalogAccess' in visibleOwnership&&visibleOwnership.testnetCatalogAccess===true;
  const categories=[say('Bosse','Bosses'),t('STANDARD'),t('ADVANCED'),t('ELITE')];
  const entries=category===0?bossManifest.map(b=>({key:`boss-${b.id}`,name:bossName(b.id),image:b.image,available:bossCardAvailable(b.id,ownerTestnet),unlocked:bossCardAvailable(b.id,ownerTestnet)&&(visibleOwnership.wins[b.id]||0)>0,tier:Math.ceil(b.id/10),serial:`B-${String(b.id).padStart(2,'0')}`,make:(pack?:CollectionLore)=>bossCard(b.id,locale,pack),boss:b.id})):playerSkins.map(ship=>({key:`${ship.id}-${category}`,name:ship.name,image:shipEvolutionAsset(ship.sprite,category as ShipStage),available:shipCardAvailable(ship.sprite,category as ShipStage,ownerTestnet),unlocked:shipCardAvailable(ship.sprite,category as ShipStage,ownerTestnet)&&playerCardUnlocked(ship.id,ship.sprite,category as ShipStage,visibleOwnership.used,visibleOwnership.upgrades),tier:category,serial:`P-${String(ship.sprite+1).padStart(2,'0')}/${category}`,make:(pack?:CollectionLore)=>shipCard(ship.id,category as ShipStage,locale,pack),boss:0}));
- const cardPaint = (id:string) => id === visibleOwnership.skin ? allPlayerColors.find(color => color.id === visibleOwnership.color)?.id : Object.keys(visibleOwnership.fleet[id as keyof ShipFleet] || {})[0] as PlayerColorId | undefined;
+ const cardPaint = (id: PlayerSkinId) => {
+  const paint = id === visibleOwnership.skin ? visibleOwnership.color : Object.keys(visibleOwnership.fleet[id] ?? {})[0];
+  return allPlayerColors.find(color => color.id === paint && shipPaintAvailable(id, color.id))?.id ?? shipFactoryPaint(id).id;
+ };
  const selectedIndex=entries.findIndex(entry=>entry.key===selectedKey);
  const activeEntry=selectedIndex>=0?entries[selectedIndex]:null;
  const cardLanguage = useCollectionLore(locale, activeEntry?.unlocked === true);
  const selected=activeEntry?.unlocked && !cardLanguage.pending && !cardLanguage.failed ? activeEntry.make(cardLanguage.lore) : null;
- if (selected && !selected.bossId) selected.color = cardPaint(selected.key.replace(/-\d$/, ""));
+ if (selected && !selected.bossId) selected.color = cardPaint(selected.key.replace(/-\d$/, "") as PlayerSkinId);
  const moveCard=(direction:number)=>{
   const next=selectedIndex+direction;
   if(activeEntry&&next>=0&&next<entries.length)setSelected(entries[next].key);
@@ -68,7 +71,7 @@ export default function Collection({uid,onClose}:{uid?:string;onClose:()=>void})
      <p className="collection-count">{entries.filter(e=>e.unlocked).length}/{entries.length} {say('FREIGESCHALTET','UNLOCKED')}</p>
      <div className="collection-grid">{entries.map(entry=><button type="button" key={entry.key} className={`collection-tile tier-${entry.tier} ${entry.unlocked?'':'is-locked'}`} aria-label={`${entry.name} · ${entry.unlocked?say('Karte öffnen','Open card'):entry.available?say('GESPERRT','LOCKED'):say('MAINNET READY','MAINNET READY')}`} data-background-state={entry.unlocked?(cardBackgroundAsset(entry.key).image?'unique':'pending'):'locked'} style={entry.unlocked?{backgroundImage:`linear-gradient(180deg,rgba(5,12,24,.2),rgba(5,12,24,.93)),url("${collectionBackground(entry.key)}")`}:undefined} onClick={()=>{gridPosition.current={category,owner:uid,top:scroller.current?.scrollTop??0};setSelected(entry.key);}}>
       <span className="collection-serial"><img className="faction-emblem" src={factionEmblem(entry.key)} alt=""/>{entry.serial} <span>{'✦'.repeat(entry.tier)}</span></span>
-      <div className="collection-art">{entry.boss?<BossPortrait id={entry.boss} silhouette={!entry.unlocked}/>:<ShipPortrait src={entry.image} name={entry.name} color={cardPaint(entry.key.replace(/-\d$/, ""))} silhouette={!entry.unlocked}/>}</div>
+      <div className="collection-art">{entry.boss?<BossPortrait id={entry.boss} silhouette={!entry.unlocked}/>:<ShipPortrait src={entry.image} name={entry.name} color={cardPaint(entry.key.replace(/-\d$/, "") as PlayerSkinId)} silhouette={!entry.unlocked}/>}</div>
       <strong>{entry.name}</strong><small className={!entry.unlocked && !entry.available ? "mainnet-ready-badge" : undefined}>{entry.unlocked?say('Karte öffnen','Open card'):!entry.available?say('MAINNET READY','MAINNET READY'):say('GESPERRT','LOCKED')}</small>
      </button>)}</div></>}
    </>:selected?<>{imageOpen&&download&&<figure className="card-save-preview"><img src={download} alt={selected.name}/><figcaption>{t("Hold the image to save it, or use your browser’s image menu.")}</figcaption></figure>}<CollectionCardView card={selected} stars={selected.bossId ? visibleOwnership.wins[selected.bossId] || 0 : 0}/></>:activeEntry.unlocked?<CollectionLoreStatus {...cardLanguage} />:<article className="collection-card collection-locked-detail">

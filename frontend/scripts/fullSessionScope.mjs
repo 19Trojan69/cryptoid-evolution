@@ -94,6 +94,21 @@ function structure(node) {
     children.length ? null : node.kind === ts.SyntaxKind.Block ? '{}' : node.text ?? node.getText(), children];
 }
 export function canonicalScopeSource(source, path, strip = false) {
+  if (strip && path === 'src/pages/paintedShip.ts') {
+    const liveryChanges = [
+      ['shipEvolutionAsset(hull.sprite, stage, hull.color)', 'shipEvolutionAsset(hull.sprite, stage)'],
+      ['export const useShipVisualOffset = (index: number, stage: ShipStage, color?: PlayerColorId): CSSProperties => {\n  const url = shipEvolutionAsset(index, stage, color);',
+        'export const useShipVisualOffset = (index: number, stage: ShipStage): CSSProperties => {\n  const url = shipEvolutionAsset(index, stage);'],
+      ['useHullSourceReady(prepared ? undefined : shipEvolutionAsset(index, stage, colorId))',
+        'useHullSourceReady(prepared ? undefined : shipEvolutionAsset(index, stage))'],
+      ['backgroundImage: `url(${shipEvolutionAsset(index, stage, colorId)})`, "--ship-surface-mask": `url(${shipEvolutionAsset(index, stage, colorId)})`',
+        'backgroundImage: `url(${shipEvolutionAsset(index, stage)})`, "--ship-surface-mask": `url(${shipEvolutionAsset(index, stage)})`'],
+    ];
+    for (const [after, before] of liveryChanges) {
+      assert.equal(source.split(after).length, 2, 'one exact source change for the selected ship livery');
+      source = source.replace(after, before);
+    }
+  }
   if (strip) source = restoreHullPrefetchChanges(source, path);
   if (strip && path === 'src/lib/accountSave.ts') {
     source = restoreShipSelectionAccountChanges(source);

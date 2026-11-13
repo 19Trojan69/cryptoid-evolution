@@ -18,7 +18,7 @@ let serial = 0;
 // or image object is never sent to the owner recorder. Ordinary play is inert.
 export function hullSourceJob(url: string): HullObservation | undefined {
   if (!sessionDiagnosticsActive()) return;
-  const source = /^\/ships\/evolution\/ship_(\d{2})_stage_([1-3])\.png$/.exec(url);
+  const source = /^\/ships\/evolution\/(?:liveries\/)?ship_(\d{2})_stage_([1-3])(?:_metallic)?\.png$/.exec(url);
   const sprite = source ? Number(source[1]) - 1 : -1;
   return { imageJob: ++serial, ...(sprite >= 0 && sprite < 20 ? { sprite, hullStage: Number(source![2]) } : {}) };
 }

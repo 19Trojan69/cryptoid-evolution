@@ -5,11 +5,13 @@ import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {createCanvas,loadImage} from '@napi-rs/canvas';
 import {shipOverlayGeometry} from './shipOverlayGeometry.ts';
+import {shipEvolutionAsset} from './shipEvolution.ts';
 import {shipHullStyle,shipNozzleStyles} from './shipFleet.ts';
+import {vanguardMetallic} from '../../../backend/src/shipLivery.ts';
 
 for(let sprite=0;sprite<20;sprite++)test(`original hull ${sprite}: visible bounds and drive outlets agree at every evolution stage`,async()=>{
  for(const stage of [1,2,3]){
-  const image=await loadImage(new URL(`../../public/ships/evolution/ship_${String(sprite+1).padStart(2,'0')}_stage_${stage}.png`,import.meta.url).pathname);
+  const image=await loadImage(new URL(`../../public${shipEvolutionAsset(sprite,stage)}`,import.meta.url).pathname);
   const c=createCanvas(image.width,image.height),ctx=c.getContext('2d');ctx.drawImage(image,0,0);
   const pixels=ctx.getImageData(0,0,image.width,image.height).data,{bounds,nozzles}=shipOverlayGeometry(sprite,stage);
   let left=image.width,top=image.height,right=0,bottom=0;
@@ -31,6 +33,25 @@ test('all plume profiles share the same palette and keep mirrored outlet geometr
  const palettes=new Set();
  for(let i=0;i<20;i++)for(const stage of [1,2,3])for(const style of shipNozzleStyles(i,false,stage))palettes.add([style['--flame-core'],style['--flame-mid'],style['--flame-tail'],style['--flame-glow']].join('|'));
  assert.equal(palettes.size,1);
+});
+
+test('the Pi Vanguard Metallic Edition uses its own stage geometry and engine outlets', async () => {
+ for (const stage of [1, 2, 3]) {
+  const img = await loadImage(new URL(`../../public/ships/evolution/ship_19_stage_${stage}_metallic.png`, import.meta.url).pathname);
+  const canvas = createCanvas(img.width, img.height), context = canvas.getContext('2d');
+  context.drawImage(img, 0, 0);
+  const { data } = context.getImageData(0, 0, img.width, img.height);
+  const { bounds, nozzles } = shipOverlayGeometry(18, stage, vanguardMetallic.id);
+  let left = img.width, top = img.height, right = 0, bottom = 0;
+  for (let y = 0; y < img.height; y++) for (let x = 0; x < img.width; x++) if (data[(y * img.width + x) * 4 + 3] > 64) {
+   left = Math.min(left, x); top = Math.min(top, y); right = Math.max(right, x + 1); bottom = Math.max(bottom, y + 1);
+  }
+  [left, top, right, bottom].forEach((n, i) => assert.ok(Math.abs(n / 282 * 100 - bounds[i]) < .001));
+  for (const [x, y] of nozzles) {
+   const px = Math.round(x / 100 * img.width), py = Math.round(y / 100 * img.height);
+   assert.ok(data[(py * img.width + px) * 4 + 3] > 128, `Stage ${stage} engine position ${px},${py}`);
+  }
+ }
 });
 
 test('reviewed reactor indicators and restored game controller retain their exact source',()=>{

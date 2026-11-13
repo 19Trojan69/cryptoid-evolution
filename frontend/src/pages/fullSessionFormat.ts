@@ -2,6 +2,7 @@ import { cleanTimingCapture } from './timingReport.mjs';
 import { technicalContext, reloadKinds } from './technicalReportContext.mjs';
 import type { SessionSignal } from '../lib/sessionDiagnosticEvents';
 import { HULL_DIAGNOSTIC_STEPS } from './hullPreparationDiagnostics.ts';
+import { paintedHullColors } from '../generated/paintedHullManifest.ts';
 import { REQUEST_DIAGNOSTIC_CODES, providerRequestId } from '../lib/requestDiagnosticCodes.ts';
 
 export const FULL_SESSION_DB = 'cryptoid_owner_full_session_v1';
@@ -46,7 +47,7 @@ export function cleanFullData(kind: FullRecordKind, input: unknown): Record<stri
   for (const [key, allowed] of Object.entries(enumKeys)) if (typeof value[key] === 'string' && allowed.includes(value[key])) result[key] = value[key];
   for (const key of ['request', 'durationMs', 'httpStatus', 'depth', 'requested', 'prepared', 'level', 'weaponLevel',
     'paidWeaponMs', 'pickupWeaponMs', 'readinessFailures']) if (numeric(value[key], 1e9)) result[key] = value[key];
-  for (const [key, min, max] of [['imageJob', 1, 1e9], ['sprite', 0, 19], ['hullStage', 1, 3], ['paintIndex', 0, 28]] as const)
+  for (const [key, min, max] of [['imageJob', 1, 1e9], ['sprite', 0, 19], ['hullStage', 1, 3], ['paintIndex', 0, paintedHullColors.length - 1]] as const)
     if (numeric(value[key], max) && Number.isSafeInteger(value[key]) && value[key] >= min) result[key] = value[key];
   for (const key of ['success', 'persisted', 'online']) if (typeof value[key] === 'boolean') result[key] = value[key];
   return result;

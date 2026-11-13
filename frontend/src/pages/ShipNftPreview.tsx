@@ -8,6 +8,7 @@ import { axiosClient } from "../lib/axiosClient";
 import { nftGalleryCopy } from "../locales/bossNftGallery";
 import { shipNftCopy } from "../locales/shipNft";
 import { shipNftEditions } from "../../../backend/src/shipNftCatalog";
+import { vanguardMetallic } from '../../../backend/src/shipLivery.ts';
 import type { ShipStage } from "./shipEvolution";
 import { shipNftMainnetVisible } from "./shipNftVisibility";
 import "./bossNftGallery.css";
@@ -15,7 +16,7 @@ import "./bossNftPreview.css";
 import "./shipNftPreview.css";
 
 type LockedStatus = "needs-hull" | "needs-hull-proof" | "needs-advanced" | "needs-purchase";
-type Card = { id: string; name: string } & ({ status: LockedStatus } | { status: "eligible"; story: string; webp: string });
+type Card = { id: string; name: string } & ({ status: LockedStatus } | { status: "eligible"; story: string; livery?: string; webp: string });
 type EligibleCard = Extract<Card, { status: "eligible" }>;
 type Page = { owner: string; total: number; pageSize: number; cards: Card[] };
 const cardImage = (card: EligibleCard) => `data:image/webp;base64,${card.webp}`;
@@ -48,7 +49,7 @@ function CardDetail({ card, stage, close }: { card: EligibleCard; stage: ShipSta
         <p className="nft-preview-story" lang="en">{card.story}</p>
         <figure className="nft-preview-figure">
           <img src={cardImage(card)} width={540} height={720} alt={`${card.name} · ${editionName(stage)}`} />
-          <figcaption>{copy.livery}</figcaption>
+          <figcaption>{card.livery === vanguardMetallic.name ? vanguardMetallic.name : copy.livery}</figcaption>
         </figure>
         <p className="nft-preview-status">{copy.ready}</p>
       </div>
@@ -125,7 +126,6 @@ function MainnetShipNftPreview() {
     <header className="boss-nft-header">
       <Link className="boss-nft-home" to="/"><span aria-hidden="true">←</span> {t("Home")}</Link>
       <h1>{copy.title}</h1>
-      <p>{copy.livery}</p>
       {user && canAdmin && <Link className="boss-nft-home" to="/admin/nft-bosses">{gallery.title}</Link>}
     </header>
     {!authReady || isLoading ? <p className="boss-nft-state" role="status">{gallery.loading}</p>

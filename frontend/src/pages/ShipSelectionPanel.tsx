@@ -3,8 +3,9 @@ import type { CSSProperties } from "react";
 import ShipPreview from "./ShipPreview";
 import PiPrice from "../components/PiPrice";
 import TestPiPurchase from './TestPiPurchase';
-import { allPlayerColors, fleetCount, playerColors, standardShipPrice, type ShipFleet } from "./shipFleet";
+import { allPlayerColors, canEquipShipPaint, fleetCount, playerColors, shipFactoryPaint, shipPaintAvailable, standardShipPrice, type ShipFleet } from "./shipFleet";
 import { stagePickupRadiusBonus, type ShipStage } from "./shipEvolution";
+import { originalLivery } from '../../../backend/src/shipLivery.ts';
 import { shipNftEditions } from "../../../backend/src/shipNftCatalog";
 import { shipNftCopy } from "../locales/shipNft";
 import { shipNftMainnetVisible } from "./shipNftVisibility";
@@ -63,9 +64,13 @@ export default function ShipSelectionPanel({
   const nftCopy = shipNftCopy(locale);
   const nftPurchaseNote = stage > 1 ? nftCopy.upgrade : skin.price === 0 ? nftCopy.starter : nftCopy.standard;
   const advancedOffer = offerFor(2);
-  const colors = allPlayerColors.filter(item => view === "shop"
-    ? playerColors.some(available => available.id === item.id) || fleetCount(fleet, skin.id, item.id) > 0
-    : fleetCount(fleet, skin.id, item.id) > 0);
+  const factoryPaint = shipFactoryPaint(skin.id);
+  const paintName = (paint: Color) => paint.id === originalLivery.id ? nftCopy.livery : t(paint.name);
+  const ownsPaint = (paint: Color) => canEquipShipPaint(fleet, skin.id, paint.id);
+  const paintStatus = (paint: Color) => t(ownsPaint(paint) ? "Color owned" : "Color not owned");
+  const paintCount = fleetCount(fleet, skin.id, color.id);
+  const colors = allPlayerColors.filter(item => shipPaintAvailable(skin.id, item.id) && (ownsPaint(item)
+    || view === 'shop' && (item.id === originalLivery.id || item.id === factoryPaint.id || playerColors.some(available => available.id === item.id))));
   const description = stage === 1 ? t("Single fire. No free enemy projectile hits. An active shield protects against shots and ship collisions.") : t(offerFor(stage)?.description ?? "");
   const stageOwned = hullCount > 0 && ownedStage >= stage;
   const locked = stage === 1 ? !standardAvailable : !stageOwned && !testnetCatalogAccess;
@@ -82,7 +87,7 @@ export default function ShipSelectionPanel({
       : t("Balanced shot strength and firing cadence.");
 
   const equipped = selectedSkinId === skin.id && selectedColorId === color.id && stage === selectedStage && selectionConfirmed;
-  const canEquip = Boolean(adminPreview || hullCount > 0 && fleetCount(fleet, skin.id, color.id) > 0 && stage <= ownedStage);
+  const canEquip = Boolean(adminPreview || ownsPaint(color) && stage <= ownedStage);
 
   return <div className="ship-one-screen ship-compact-configuration" data-stage={stage}>
     <div className="ship-version-tabs" role="group" aria-label={t("Three ship stages")}>
@@ -97,7 +102,7 @@ export default function ShipSelectionPanel({
         <h3>{skin.name} <small>· {t(stageLabel(stage))}</small></h3>
         <strong className="ship-stage-status" data-owned={stageOwned}>{status}{stage === 1 && hullCount > 0 ? ` ×${hullCount}` : ""}</strong>
       </div>
-      <div className="ship-one-art-wrap" role="img" aria-label={skin.name + " · " + t(color.name) + " · " + t(stageLabel(stage))}>
+      <div className="ship-one-art-wrap" role="img" aria-label={skin.name + " · " + paintName(color) + " · " + t(stageLabel(stage))}>
         <span className="ship-one-art-frame">
           <span className="ship-one-art">
             <ShipPreview sprite={skin.sprite} color={color.id} stage={stage} />
@@ -105,11 +110,11 @@ export default function ShipSelectionPanel({
         </span>
       </div>
       <div className="ship-one-colors">
-        <div className="ship-one-colors-heading"><h4>{t("Color variants")}</h4><span>{t(color.name)} · {t(fleetCount(fleet, skin.id, color.id) ? "Color owned" : "Color not owned")}{fleetCount(fleet, skin.id, color.id) ? " ×" + fleetCount(fleet, skin.id, color.id) : ""}</span></div>
+        <div className="ship-one-colors-heading"><h4>{t("Color variants")}</h4><span>{paintName(color)} · {paintStatus(color)}{paintCount ? " ×" + paintCount : ""}</span></div>
         <div className="ship-color-dots" role="group" aria-label={t("Ship paint")}>
           {colors.map(item => <button key={item.id} type="button" aria-pressed={color.id === item.id}
-            aria-label={t(item.name) + " · " + t(fleetCount(fleet, skin.id, item.id) ? "Color owned" : "Color not owned")}
-            title={t(item.name)} data-owned={fleetCount(fleet, skin.id, item.id) > 0} style={{ "--paint": item.glow } as CSSProperties} onClick={() => onColorChange(item)}><span aria-hidden="true">{color.id === item.id ? "✓" : ""}</span></button>)}
+            aria-label={paintName(item) + " · " + paintStatus(item)}
+            title={paintName(item)} data-paint={item.id} data-owned={ownsPaint(item)} style={{ "--paint": item.glow } as CSSProperties} onClick={() => onColorChange(item)}><span aria-hidden="true">{color.id === item.id ? "✓" : ""}</span></button>)}
         </div>
       </div>
       <div className="ship-configuration-summary">
@@ -119,11 +124,11 @@ export default function ShipSelectionPanel({
             ? `◆ ${shardPrice} ${t("Shards")}`
             : focusedOffer ? <>{!testnetCatalogAccess && `${t("Planned price")}: `}{piPrice(focusedOffer.pricePi)}</> : t("Price unavailable")}</span>
           {shipNftMainnetVisible && (stage === 1 || focusedOffer) && <small className="ship-nft-purchase-note">
-            <strong>{`${skin.name} ${shipNftEditions[stage - 1]} NFT`}</strong> · {nftCopy.livery}. {nftPurchaseNote} {nftCopy.account}
+            <strong>{`${skin.name} ${shipNftEditions[stage - 1]} NFT`}</strong> · {paintName(factoryPaint)}. {nftPurchaseNote} {nftCopy.account}
           </small>}
           {stage === 1 ? <>
-            <small>{t(color.name)}{skin.price === 0 ? " · " + t("Starter issued free; price is for an additional ship.") : ""}</small>
-            <button className="button button-secondary ship-shard-button" type="button" onClick={onBuyStandard} aria-label={`${t(hullCount ? "Buy another ship" : "Buy ship")} · ${skin.name} · ${t(color.name)} · ${shardPrice} ${t("Shards")}`} aria-busy={purchaseBusy || undefined} disabled={adminPreview || purchaseBusy || !standardAvailable || shards < price}>
+            <small>{paintName(color)}{skin.price === 0 ? " · " + t("Starter issued free; price is for an additional ship.") : ""}</small>
+            <button className="button button-secondary ship-shard-button" type="button" onClick={onBuyStandard} aria-label={`${t(hullCount ? "Buy another ship" : "Buy ship")} · ${skin.name} · ${paintName(color)} · ${shardPrice} ${t("Shards")}`} aria-busy={purchaseBusy || undefined} disabled={adminPreview || purchaseBusy || !standardAvailable || shards < price}>
               {t(hullCount ? "Buy another ship" : "Buy ship")}
             </button>
             {standardAvailable && shards < price && <small className="ship-shortfall">◆ {(price - shards).toLocaleString(locale)} {t("more Shards needed")}</small>}

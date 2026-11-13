@@ -6,6 +6,9 @@ import { axiosClient } from "../lib/axiosClient";
 import {
   playerSkins,
   playerColors,
+  allPlayerColors,
+  shipFactoryPaint,
+  shipPaintAvailable,
   ADMIN_MODE_KEY,
   ADMIN_TEST_CONFIG_KEY,
   ADMIN_SHIP_SKIN_KEY,
@@ -360,8 +363,12 @@ export default function AdminPage() {
     () => playerSkins.find(skin => skin.id === sessionStorage.getItem(ADMIN_SHIP_SKIN_KEY))?.id || playerSkins[0].id
   );
   const [colorId, setColorId] = useState<PlayerColorId>(
-    () => playerColors.find(color => color.id === sessionStorage.getItem(ADMIN_SHIP_COLOR_KEY))?.id || "silver"
+    () => allPlayerColors.find(color => color.id === sessionStorage.getItem(ADMIN_SHIP_COLOR_KEY) && shipPaintAvailable(skinId, color.id))?.id ?? shipFactoryPaint(skinId).id
   );
+  const selectSkin = (skin: PlayerSkinId) => {
+    setSkinId(skin);
+    setColorId(shipFactoryPaint(skin).id);
+  };
   const [stage, setStage] = useState<ShipStage>(() => {
     const value = Number(sessionStorage.getItem(ADMIN_SHIP_STAGE_KEY));
     return value === 2 || value === 3 ? value : 1;
@@ -796,7 +803,7 @@ export default function AdminPage() {
                   <h2>{t("Testauswahl")}</h2>
                   <div className="admin-field-grid">
                     <label>
-                      {t("Raumschiff")} <select aria-label={t("Raumschiff")} value={skinId} onChange={event => setSkinId(event.target.value as PlayerSkinId)}>
+                      {t("Raumschiff")} <select aria-label={t("Raumschiff")} value={skinId} onChange={event => selectSkin(event.target.value as PlayerSkinId)}>
                         {playerSkins.map(skin => (
                           <option key={skin.id} value={skin.id}>
                             {skin.name}
@@ -837,7 +844,7 @@ export default function AdminPage() {
                   </div>
                   <fieldset className="admin-colors">
                     <legend>{t("Schiffsfarbe")}</legend>
-                    {playerColors.map(color => (
+                    {[shipFactoryPaint(skinId), ...playerColors].map(color => (
                       <button
                         key={color.id}
                         type="button"
@@ -865,9 +872,9 @@ export default function AdminPage() {
                         key={skin.id}
                         className={skin.id === skinId ? "selected" : ""}
                         aria-pressed={skin.id === skinId}
-                        onClick={() => setSkinId(skin.id)}
+                        onClick={() => selectSkin(skin.id)}
                       >
-                        <ShipPreview sprite={skin.sprite} stage={stage} color={colorId} />
+                        <ShipPreview sprite={skin.sprite} stage={stage} color={shipPaintAvailable(skin.id, colorId) ? colorId : shipFactoryPaint(skin.id).id} />
                         <strong>{skin.name}</strong>
                         <span>{t(stageNames[stage - 1])}</span>
                       </button>

@@ -8,7 +8,7 @@ export default function ShipPreview({ sprite, color, stage }: { sprite: number; 
   const { t } = useLocale();
   const root = useRef<HTMLSpanElement>(null);
   const [visible, setVisible] = useState(() => typeof IntersectionObserver === "undefined");
-  const asset = shipEvolutionAsset(sprite, stage);
+  const asset = shipEvolutionAsset(sprite, stage, color);
   useEffect(() => {
     if (typeof IntersectionObserver === "undefined") return;
     const observer = new IntersectionObserver(entries => {

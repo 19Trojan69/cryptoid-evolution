@@ -3,6 +3,8 @@ import type { ShipStage } from './shipEvolution';
 import { RELEASED_STANDARD_SHIPS } from './cardAvailability.ts';
 import type { CSSProperties } from "react";
 import type { CryptoidClass } from "./cryptoidRoster";
+import { originalLivery, shipPaintMatchesHull as shipPaintAvailable, vanguardMetallic } from '../../../backend/src/shipLivery.ts';
+export { shipPaintAvailable };
 
 export const FLEET_IMAGE = "/ships/cryptoid-fleet.png";
 export type ShipSaveNetwork = "testnet" | "mainnet";
@@ -104,14 +106,20 @@ export const playerColors = [
   { id: "pink", name: "Pink", glow: "#ce80aa", rgb: [206, 128, 170] },
 ] as const;
 
-export const allPlayerColors = [...playerColors, ...legacyColors.filter(color => !playerColors.some(current => current.id === color.id))] as const;
+const metalColors = [...playerColors, ...legacyColors.filter(color => !playerColors.some(current => current.id === color.id))] as const;
+export const allPlayerColors = [...metalColors, originalLivery, vanguardMetallic] as const;
 
 export type PlayerSkinId = (typeof playerSkins)[number]["id"];
 export type PlayerColorId = (typeof allPlayerColors)[number]["id"];
 export type ShipFleet = Partial<Record<PlayerSkinId, Partial<Record<PlayerColorId, number>>>>;
 
+export const shipFactoryPaint = (skin: PlayerSkinId) => skin === 'pi-vanguard' ? vanguardMetallic : originalLivery;
+
 export const fleetCount = (fleet: ShipFleet, skin: PlayerSkinId, color?: PlayerColorId) =>
   color ? fleet[skin]?.[color] ?? 0 : Object.values(fleet[skin] ?? {}).reduce((sum, count) => sum + (count ?? 0), 0);
+
+export const canEquipShipPaint = (fleet: ShipFleet, skin: PlayerSkinId, color: PlayerColorId) =>
+  shipPaintAvailable(skin, color) && fleetCount(fleet, skin, color === originalLivery.id ? undefined : color) > 0;
 
 export const repaintStarter = (fleet: ShipFleet, color: PlayerColorId): ShipFleet => {
   if (fleetCount(fleet, "grey-scout", color)) return fleet;
@@ -133,7 +141,7 @@ export const readShipFleet = (raw: string | null, oldOwned: string | null, oldCo
         const restored = Object.fromEntries(playerSkins.flatMap(skin => {
           const variants = Object.fromEntries(allPlayerColors.flatMap(color => {
             const value = (input[skin.id] as Record<string, unknown> | undefined)?.[color.id];
-            return typeof value === "number" && Number.isSafeInteger(value) && value > 0 ? [[color.id, value]] : [];
+            return shipPaintAvailable(skin.id, color.id) && typeof value === "number" && Number.isSafeInteger(value) && value > 0 ? [[color.id, value]] : [];
           }));
           return Object.keys(variants).length ? [[skin.id, variants]] : [];
         })) as ShipFleet;
@@ -154,7 +162,7 @@ export const readShipFleet = (raw: string | null, oldOwned: string | null, oldCo
 export const buyShipVariant = (skinId: PlayerSkinId, colorId: PlayerColorId, fleet: ShipFleet, balance: number) => {
   const skin = playerSkins.find(item => item.id === skinId);
   const price = skin ? standardShipPrice(skin) : undefined;
-  if (!skin || !testnetStandardHullAvailable(skinId) || price === undefined || !allPlayerColors.some(color => color.id === colorId) || !Number.isSafeInteger(balance) || balance < price) return null;
+  if (!skin || !testnetStandardHullAvailable(skinId) || price === undefined || !shipPaintAvailable(skinId, colorId) || !allPlayerColors.some(color => color.id === colorId) || !Number.isSafeInteger(balance) || balance < price) return null;
   const count = fleetCount(fleet, skinId, colorId);
   if (!Number.isSafeInteger(count) || count >= Number.MAX_SAFE_INTEGER) return null;
   return { fleet: { ...fleet, [skinId]: { ...fleet[skinId], [colorId]: count + 1 } }, balance: balance - price };
@@ -183,7 +191,7 @@ export const savedShipColors = (raw: string | null): Partial<Record<PlayerSkinId
     if (!saved || typeof saved !== "object" || Array.isArray(saved)) return {};
     return Object.fromEntries(playerSkins.flatMap(skin => {
       const color = allPlayerColors.find(item => item.id === (saved as Record<string, unknown>)[skin.id]);
-      return color ? [[skin.id, color.id]] : [];
+      return color && shipPaintAvailable(skin.id, color.id) ? [[skin.id, color.id]] : [];
     })) as Partial<Record<PlayerSkinId, PlayerColorId>>;
   } catch { return {}; }
 };
@@ -213,11 +221,17 @@ export const buySkin = (id: PlayerSkinId, owned: readonly PlayerSkinId[], balanc
 export const selectedShip = () => {
   const adminPreview = sessionStorage.getItem(ADMIN_MODE_KEY) === "1";
   const stored = playerSkins.find(item => item.id === (adminPreview ? sessionStorage.getItem(ADMIN_SHIP_SKIN_KEY) : localStorage.getItem(SHIP_SKIN_KEY)));
-  if (adminPreview) return { skin: stored ?? playerSkins[0], color: allPlayerColors.find(item => item.id === sessionStorage.getItem(ADMIN_SHIP_COLOR_KEY)) ?? playerColors[0] };
+  if (adminPreview) {
+    const skin = stored ?? playerSkins[0];
+    const color = allPlayerColors.find(item => item.id === sessionStorage.getItem(ADMIN_SHIP_COLOR_KEY) && shipPaintAvailable(skin.id, item.id));
+    return { skin, color: color ?? shipFactoryPaint(skin.id) };
+  }
   const fleet = readShipFleet(localStorage.getItem(SHIP_FLEET_KEY), localStorage.getItem(SHIP_OWNED_KEY), localStorage.getItem(SHIP_COLORS_KEY));
   const skin = stored && fleetCount(fleet, stored.id) ? stored : playerSkins[0];
   const savedColor = colorForSkin(skin.id, savedShipColors(localStorage.getItem(SHIP_COLORS_KEY)), localStorage.getItem(SHIP_COLOR_KEY), skin.id);
-  const color = fleetCount(fleet, skin.id, savedColor.id) || skin.price === 0 && localStorage.getItem(SHIP_FLEET_KEY) === null ? savedColor : allPlayerColors.find(item => fleetCount(fleet, skin.id, item.id)) ?? legacyColors[0];
+  const legacyStarter = skin.price === 0 && localStorage.getItem(SHIP_FLEET_KEY) === null && shipPaintAvailable(skin.id, savedColor.id);
+  const color = canEquipShipPaint(fleet, skin.id, savedColor.id) || legacyStarter
+    ? savedColor : allPlayerColors.find(item => fleetCount(fleet, skin.id, item.id)) ?? shipFactoryPaint(skin.id);
   return { skin, color };
 };
 
@@ -249,7 +263,7 @@ export const enemyAppearance = (sector: number, index: number) => {
   // A three-flight block can contain 18 different hulls. Preserve the original
   // first twelve paints and extend its palette without repeating a color.
   const used = Array.from({ length: Math.min(index, enemyColors.length) }, (_, i) => enemyColors[((Math.max(1, sector) - 1) * 5 + i * 7) % enemyColors.length]);
-  const extras = allPlayerColors.map(c => c.id).filter(color => !used.includes(color));
+  const extras = metalColors.map(c => c.id).filter(color => !used.includes(color));
   return {
     sprite: playerSkins[(((Math.max(1, sector) - 1) * 6 + index) * 7) % playerSkins.length].sprite,
     color: index < enemyColors.length ? enemyColors[((Math.max(1, sector) - 1) * 5 + index * 7) % enemyColors.length] : extras[(index - enemyColors.length) % extras.length],
@@ -332,8 +346,8 @@ const nozzleStyle = ([x, y, width, tone]: NozzleProfile, facesPlayer = false): C
   } as CSSProperties;
 };
 
-export const shipNozzleStyles = (index: number, facesPlayer = false, stage: ShipStage = 1): CSSProperties[] =>
-  shipOverlayGeometry(index, stage).nozzles.map(([x, y, width]) => nozzleStyle([x, y, width, 'plasma'], facesPlayer));
+export const shipNozzleStyles = (index: number, facesPlayer = false, stage: ShipStage = 1, color?: PlayerColorId): CSSProperties[] =>
+  shipOverlayGeometry(index, stage, color).nozzles.map(([x, y, width]) => nozzleStyle([x, y, width, 'plasma'], facesPlayer));
 
 export const bossNozzleStyles = (): CSSProperties[] =>
   bossNozzleProfile.map(nozzle => nozzleStyle(nozzle));

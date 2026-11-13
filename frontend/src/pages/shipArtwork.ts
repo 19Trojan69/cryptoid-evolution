@@ -1,6 +1,8 @@
 import { allPlayerColors, type PlayerColorId } from './shipFleet';
 import { paintShipMaterial } from './shipMaterial';
-import { namedShipAccent, namedShipColor } from './shipIdentityColor';
+import { namedShipAccent } from './shipIdentityColor';
+import { hasBakedLivery, originalLivery, vanguardMetallic } from '../../../backend/src/shipLivery.ts';
+import { shipEvolutionAsset, type ShipStage } from './shipEvolution';
 import { loadCardImage } from './bossArtwork';
 
 const cache = new Map<string, Promise<HTMLCanvasElement>>();
@@ -8,10 +10,14 @@ const cache = new Map<string, Promise<HTMLCanvasElement>>();
 const pending = new Map<string, Promise<HTMLCanvasElement>>();
 /** Centre the visible hull, ignoring near-transparent encoding specks outside it. */
 export function loadShipArtwork(src: string, color?: PlayerColorId): Promise<HTMLCanvasElement> {
-  const key = `${src}:${color ?? "identity"}`;
+  const hull = /^\/ships\/evolution\/(?:liveries\/)?ship_(\d+)_stage_([1-3])(?:_metallic)?\.png$/.exec(src);
+  const sprite = hull ? Number(hull[1]) - 1 : -1;
+  const livery = color ?? (src.endsWith('_metallic.png') ? vanguardMetallic.id : originalLivery.id);
+  const imagePath = hull ? shipEvolutionAsset(sprite, Number(hull[2]) as ShipStage, livery) : src;
+  const key = `${imagePath}:${livery}`;
   const existing = pending.get(key) ?? cache.get(key);
   if (existing) return existing;
-  const task = loadCardImage(src).then(image => {
+  const task = loadCardImage(imagePath).then(image => {
     const source = document.createElement('canvas');
     let output: HTMLCanvasElement | undefined;
     let retained = false;
@@ -22,9 +28,7 @@ export function loadShipArtwork(src: string, color?: PlayerColorId): Promise<HTM
     context.drawImage(image, 0, 0);
     const pixels = context.getImageData(0, 0, source.width, source.height);
     const { data } = pixels;
-    const sprite = Number(src.match(/ship_(\d+)_stage/)?.[1]) - 1;
-    const identity = color ?? namedShipColor(sprite);
-    const paintHex = allPlayerColors.find(color => color.id === identity)?.glow;
+    const paintHex = hasBakedLivery(sprite, livery) ? undefined : allPlayerColors.find(paint => paint.id === livery)?.glow;
     if (paintHex) { paintShipMaterial(data, source.width, source.height, [1,3,5].map(offset => parseInt(paintHex.slice(offset, offset+2),16)), namedShipAccent(sprite)); context.putImageData(pixels, 0, 0); }
     let left = source.width, top = source.height, right = -1, bottom = -1;
     for (let y = 0; y < source.height; y++) for (let x = 0; x < source.width; x++) {

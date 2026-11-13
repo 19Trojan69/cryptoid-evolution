@@ -2,8 +2,11 @@ import type { CombatCheckpoint } from "./combatCheckpoint";
 import type { BossIntermission } from './bossIntermission';
 import type { MissionPowerActivation, SingleUseMissionPower } from "./missionPower";
 import { MAX_MISSION_HEARTS, cappedSnapshot, maxMissionHearts } from "./lifeRules";
+import { originalLivery, shipPaintMatchesHull, vanguardMetallic } from './shipLivery';
 export const standardShips = ["grey-scout", "nova-wing", "solar-lance", "dark-delta", "gold-streak", "iron-guard", "vector", "verdant", "storm-wing", "red-comet", "twin-core", "orbit-arc", "night-guard", "striker", "cargo-hawk", "ring-flare", "sky-breaker", "olive-fortress", "pi-vanguard", "core-carrier"];
-export const shipColors = ["silver", "gold", "anthracite", "bronze", "copper", "metallic-blue", "metallic-red", "metallic-green", "pink", "grey", "violet", "cyan", "rose", "amber", "ruby", "scarlet", "coral", "orange", "lemon", "lime", "emerald", "mint", "teal", "ice", "azure", "cobalt", "indigo", "magenta", "white"];
+export const shipColors = ["silver", "gold", "anthracite", "bronze", "copper", "metallic-blue", "metallic-red", "metallic-green", "pink", "grey", "violet", "cyan", "rose", "amber", "ruby", "scarlet", "coral", "orange", "lemon", "lime", "emerald", "mint", "teal", "ice", "azure", "cobalt", "indigo", "magenta", "white", originalLivery.id, vanguardMetallic.id];
+export const shipPaintAvailable = (skin: string, color: unknown): color is string =>
+  typeof color === 'string' && shipColors.includes(color) && shipPaintMatchesHull(skin, color);
 export type Fleet = Record<string, Record<string, number>>;
 export type Snapshot = { usedMissionPowers?: SingleUseMissionPower[]; projectileGuard?: number; damageCount?: number; comboTotal?: number; score: number; shards: number; destroyed: number; hearts: number; weaponSource: "standard" | "paid" | "pickup"; paidWeaponLevel: number; paidWeaponMs: number; pickupWeaponLevel: number; pickupWeaponMs: number; weaponTimers: number[]; shieldCharges: number; shieldMs: number; purchasedShieldMs: number; shieldActive: boolean; overdriveMs: number; overdriveTotalMs: number; rapidFireMs: number; rapidFireTotalMs: number; empMs: number };
 export type Mission = { damageAtStart?: number; destroyedAtStart?: number; bossIntermission?: BossIntermission; rulesVersion?: 1 | 2; combat?: CombatCheckpoint; sector: number; phase: "normal" | "boss" | "bonus"; snapshot: Snapshot; savedAt: string };
@@ -17,7 +20,11 @@ export const publicSave = (s: PlayerSave) => ({ cardReveals: s.cardReveals || []
 export const shipPrice = (skin: string, ownerTestnet = false) => { const index = standardShips.indexOf(skin); return index < 0 || index >= (ownerTestnet === true ? standardShips.length : 10) ? null : index <= 1 ? 150 : 150 + (index - 1) * 250; };
 export const shipForSprite = (sprite: number) => standardShips[sprite === 0 ? 1 : sprite === 1 ? 0 : sprite];
 export const spriteForShip = (skin: string) => { const index = standardShips.indexOf(skin); return index >= 0 && index < 2 ? 1 - index : index; };
-export const validSelection = (s: PlayerSave, skin: unknown, color: unknown) => typeof skin === "string" && typeof color === "string" && (s.fleet[skin]?.[color] ?? 0) > 0;
+export function validSelection(s: Pick<PlayerSave, 'fleet'>, skin: unknown, color: unknown) {
+  if (typeof skin !== 'string' || !standardShips.includes(skin) || !shipPaintAvailable(skin, color)) return false;
+  const hull = s.fleet[skin];
+  return color === originalLivery.id ? Object.values(hull ?? {}).some(count => count > 0) : (hull?.[color] ?? 0) > 0;
+}
 const integer = (value: unknown, max: number) => typeof value === "number" && Number.isSafeInteger(value) && value >= 0 && value <= max;
 export function readSnapshot(input: unknown): Snapshot | null {
   if (!input || typeof input !== "object" || Array.isArray(input)) return null;
@@ -45,14 +52,16 @@ export function legacyInventory(body: any) {
   const fleet: Fleet = {};
   for (const skin of standardShips) {
     for (const color of shipColors) {
+      if (!shipPaintAvailable(skin, color)) continue;
       const count = body.fleet[skin]?.[color];
       if (count !== undefined && !integer(count, 1000)) return null;
       if (count > 0) { fleet[skin] ??= {}; fleet[skin][color] = count; }
     }
   }
   if (!Object.values(fleet["grey-scout"] || {}).some(n => n > 0)) fleet["grey-scout"] = { grey: 1 };
-  const skin = validSelection({ fleet } as PlayerSave, body.skin, body.color) ? body.skin : "grey-scout";
-  const color = skin === body.skin ? body.color : Object.keys(fleet["grey-scout"])[0];
-  return { balance: body.balance, fleet, skin, color };
+  const selection = validSelection({ fleet }, body.skin, body.color)
+    ? { skin: body.skin, color: body.color }
+    : { skin: "grey-scout", color: Object.keys(fleet["grey-scout"])[0] };
+  return { balance: body.balance, fleet, ...selection };
 }
 

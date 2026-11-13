@@ -1,5 +1,5 @@
 import { arcadeShipArtworkSize, arcadeStickerImage, type ArcadeFlightShip } from "./galaxyArcadeStickerSchema";
-import { shipColors, standardShips } from "./playerSave";
+import { shipPaintAvailable, standardShips } from "./playerSave";
 
 const pngSignature = Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]);
 const pngPrefix = "data:image/png;base64,";
@@ -10,7 +10,7 @@ export function readArcadeFlightShip(raw: unknown): ArcadeFlightShip | null {
     const { modelId, stage, colorId, name, artwork } = JSON.parse(raw) as Partial<ArcadeFlightShip>;
     if (typeof modelId !== "string" || !standardShips.includes(modelId)
       || (stage !== 1 && stage !== 2 && stage !== 3)
-      || typeof colorId !== "string" || !shipColors.includes(colorId)
+      || !shipPaintAvailable(modelId, colorId)
       || typeof name !== "string" || !name.trim() || name.length > 160
       || typeof artwork !== "string" || !arcadeStickerImage.test(artwork)) return null;
 

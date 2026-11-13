@@ -10,7 +10,7 @@ test("each ship points to its own progression and an orphan Elite cannot be equi
     assert.equal(ownedShipStage(index, [elite]), 1);
     assert.equal(ownedShipStage(index, [advanced]), 2);
     assert.equal(ownedShipStage(index, [advanced, elite]), 3);
-    assert.equal(shipEvolutionAsset(index, 3), `/ships/evolution/${elite}.png`);
+    assert.equal(shipEvolutionAsset(index, 3), `/ships/evolution/liveries/${elite}.png`);
   }
 });
 

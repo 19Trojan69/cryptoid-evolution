@@ -2,7 +2,7 @@ import type { Router } from "express";
 import type { Collection, Document } from "mongodb";
 import { galaxyArcadeStationCount, galaxyArcadeStationIndex } from "../galaxyArcade";
 import { arcadeRankIds, arcadeStickerSlot, type ArcadeStickerBackup } from "../galaxyArcadeStickerSchema";
-import { shipColors, standardShips } from "../playerSave";
+import { shipPaintAvailable, standardShips } from "../playerSave";
 import { rewardNetwork } from "../rewardNetwork";
 import { reachedArcadeLevel, verifiedArcadeUser } from "./galaxyArcadeAccess";
 
@@ -16,7 +16,7 @@ function readSticker(raw: unknown): ArcadeStickerBackup | null {
     || typeof rank !== "number" || !Number.isInteger(rank) || rank < 1 || rank > arcadeRankIds.length
     || typeof modelId !== "string" || !standardShips.includes(modelId)
     || (stage !== 1 && stage !== 2 && stage !== 3)
-    || typeof colorId !== "string" || !shipColors.includes(colorId)) return null;
+    || !shipPaintAvailable(modelId, colorId)) return null;
   return { level, rank, modelId, stage, colorId };
 }
 

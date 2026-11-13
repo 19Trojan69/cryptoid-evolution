@@ -1,4 +1,5 @@
 import type { ShipStage } from './shipEvolution';
+import { isVanguardMetallic } from '../../../backend/src/shipLivery.ts';
 
 // Static measurements of the unchanged original PNGs. No game-time image scan,
 // canvas, request or timer is needed to align a bar or an engine outlet.
@@ -25,5 +26,12 @@ const frames = [
   [{"bounds":[4.61,0.0,80.851,62.766],"nozzles":[[38,62.189,7],[51,61.834,7]]},{"bounds":[1.418,0.0,84.043,67.73],"nozzles":[[38,66.799,7],[51,66.799,7]]},{"bounds":[0.0,0.0,86.17,69.858],"nozzles":[[38,68.926,7],[51,69.281,7]]}]
 ] as const;
 
-export const shipOverlayGeometry = (index: number, stage: ShipStage = 1) =>
-  frames[index]?.[stage - 1] ?? frames[0][0];
+// Outlet positions from the approved Metallic Edition's three sprites.
+const vanguardMetallicFrames = [
+  { bounds: [7.801, .355, 75.177, 66.312], nozzles: [[22.34, 50, 3.5], [61.348, 50, 3.5]] },
+  { bounds: [4.61, 1.064, 79.078, 71.631], nozzles: [[20.922, 54.255, 3.5], [63.475, 54.255, 3.5]] },
+  { bounds: [.709, .355, 82.624, 73.759], nozzles: [[18.794, 57.447, 3.5], [65.248, 57.447, 3.5]] },
+] as const;
+
+export const shipOverlayGeometry = (index: number, stage: ShipStage = 1, color?: string) =>
+  (isVanguardMetallic(index, color) ? vanguardMetallicFrames : frames[index])?.[stage - 1] ?? frames[0][0];

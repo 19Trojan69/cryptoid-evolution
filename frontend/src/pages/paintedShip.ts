@@ -79,7 +79,7 @@ export const preloadHullSources = (urls: readonly string[], hulls: readonly Prep
   // Every planned variant sharing a source must be ready before skipping it.
   const prepared = new Map<string, boolean>();
   for (const hull of hulls) {
-    const stage = hull.stage ?? 1, url = shipEvolutionAsset(hull.sprite, stage);
+    const stage = hull.stage ?? 1, url = shipEvolutionAsset(hull.sprite, stage, hull.color);
     const ready = Boolean(cache.get(`${hull.sprite}:${stage}:${hull.color}`));
     prepared.set(url, (prepared.get(url) ?? true) && ready);
   }
@@ -104,8 +104,8 @@ export const useHullSourceReady = (url: string | undefined) => {
 
 // Apply this to the owner of a .ship-visual, including any future shielded ship.
 // The whole visual moves together, so the engine exhaust stays on its nozzles.
-export const useShipVisualOffset = (index: number, stage: ShipStage): CSSProperties => {
-  const url = shipEvolutionAsset(index, stage);
+export const useShipVisualOffset = (index: number, stage: ShipStage, color?: PlayerColorId): CSSProperties => {
+  const url = shipEvolutionAsset(index, stage, color);
   const [readyUrl, setReadyUrl] = useState<string | null>(null);
   useEffect(() => {
     // The offset metadata outlives the evictable original Image. Re-entry only
@@ -213,7 +213,7 @@ export const retainPreparedHulls = (hulls: readonly PreparedHull[], keepReady: r
 export const usePreparedHullReady = (index: number, colorId: PlayerColorId, stage: ShipStage = 1) => {
   const prepared = cache.get(`${index}:${stage}:${colorId}`);
   // A decoded prepared hull is ready even if its raw-source LRU entry was evicted.
-  const sourceReady = useHullSourceReady(prepared ? undefined : shipEvolutionAsset(index, stage));
+  const sourceReady = useHullSourceReady(prepared ? undefined : shipEvolutionAsset(index, stage, colorId));
   return !!prepared || sourceReady;
 };
 
@@ -231,7 +231,7 @@ export const usePaintedShipStyle = (index: number, colorId: PlayerColorId, stage
   const painted = cache.get(key) === url ? url : cache.get(key);
   return painted
     ? { backgroundImage: `url(${painted})`, "--ship-surface-mask": `url(${painted})`, backgroundPosition: "center", backgroundSize: "100% 100%", filter: "none" } as CSSProperties
-    : { backgroundImage: `url(${shipEvolutionAsset(index, stage)})`, "--ship-surface-mask": `url(${shipEvolutionAsset(index, stage)})`, backgroundPosition: "center", backgroundSize: "100% 100%", filter: "none" } as CSSProperties;
+    : { backgroundImage: `url(${shipEvolutionAsset(index, stage, colorId)})`, "--ship-surface-mask": `url(${shipEvolutionAsset(index, stage, colorId)})`, backgroundPosition: "center", backgroundSize: "100% 100%", filter: "none" } as CSSProperties;
 };
 
 export const paintedShipResourceStats = () => ({ painted: cache.size, estimatedBytes: cache.bytes, sources: sourceImages.size, pending: pendingPaints.size, retained: cache.retainedEntries, retainCount: cache.retainCount, sourceRetained: sourceImages.retainedEntries, sourceRetainCount: sourceImages.retainCount, ...preparationProbe });

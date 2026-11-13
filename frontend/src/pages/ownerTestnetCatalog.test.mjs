@@ -13,6 +13,7 @@ import * as evolution from './shipEvolution.ts';
 import * as attributes from './shipAttributes.ts';
 import { hangarCatalog } from '../../../backend/src/hangarCatalog.ts';
 import { shipNftEditions } from '../../../backend/src/shipNftCatalog.ts';
+import * as liveries from '../../../backend/src/shipLivery.ts';
 import { shipNftCopy } from '../locales/shipNft.ts';
 import { testPiPurchaseAllowed, isTestnetWeaponPurchaseEnabled } from '../../../backend/src/paymentPolicy.ts';
 import { availableShipCards } from './cardRevealRules.ts';
@@ -25,7 +26,7 @@ function component(file, extra = {}) {
  const source = readFileSync(new URL(file, import.meta.url),'utf8');
  const code = ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,jsx:ts.JsxEmit.ReactJSX}}).outputText;
  const exports = {};
- const modules = {'react/jsx-runtime':jsx,'./ShipPreview':{default:()=>null},'../components/PiPrice':{default:Price},'../i18n':{useLocale:()=>({locale:'en',t:s=>s})},'./ownerTestnetCatalog':availability,'./shipFleet':fleet,'./shipEvolution':evolution,'./shipAttributes':attributes,'../../../backend/src/shipNftCatalog':{shipNftEditions},'../locales/shipNft':{shipNftCopy},'./shipNftVisibility':{shipNftMainnetVisible:false},...extra};
+ const modules = {'react/jsx-runtime':jsx,'./ShipPreview':{default:()=>null},'../components/PiPrice':{default:Price},'../i18n':{useLocale:()=>({locale:'en',t:s=>s})},'./ownerTestnetCatalog':availability,'./shipFleet':fleet,'./shipEvolution':evolution,'./shipAttributes':attributes,'../../../backend/src/shipNftCatalog':{shipNftEditions},'../../../backend/src/shipLivery.ts':liveries,'../locales/shipNft':{shipNftCopy},'./shipNftVisibility':{shipNftMainnetVisible:false},...extra};
  vm.runInNewContext(code,{exports,require:name=>{if(!modules[name])throw Error(`Unstubbed ${name}`);return modules[name];}});
  return exports.default;
 }

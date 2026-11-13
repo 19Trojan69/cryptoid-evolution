@@ -5,7 +5,8 @@ import {
 import { axiosClient } from '../lib/axiosClient';
 import { isPublicArcadeLevel } from './galaxyArcadeRecords';
 import { shipEvolutionAsset } from './shipEvolution';
-import { allPlayerColors, playerSkins } from './shipFleet';
+import { allPlayerColors, playerSkins, shipPaintAvailable } from './shipFleet';
+import { isVanguardMetallic } from '../../../backend/src/shipLivery.ts';
 import { staticHullAsset } from './staticHullAssets';
 
 type StickerArtwork = Omit<ArcadeSticker, 'owner'> & { fallbackImage?: string };
@@ -14,12 +15,13 @@ export type ArcadeStickerAlbum = { stickers: StickerArtwork[]; savedToAccount: b
 function stickerArtwork(sticker: ArcadeStickerBackup, local?: ArcadeSticker): StickerArtwork | undefined {
   const skin = playerSkins.find(entry => entry.id === sticker.modelId);
   const color = allPlayerColors.find(entry => entry.id === sticker.colorId);
-  if (!skin || !color) return;
-  const fallback = local?.image ?? shipEvolutionAsset(skin.sprite, sticker.stage);
+  if (!skin || !color || !shipPaintAvailable(skin.id, color.id)) return;
+  const fallback = local?.image ?? shipEvolutionAsset(skin.sprite, sticker.stage, color.id);
   return {
     ...sticker,
     shipName: local?.shipName ?? skin.name,
-    image: (sticker.stage === 1 ? local?.image : undefined) ?? staticHullAsset(skin.sprite, color.id, sticker.stage)?.url ?? fallback,
+    image: (sticker.stage === 1 && !isVanguardMetallic(skin.sprite, color.id) ? local?.image : undefined)
+      ?? staticHullAsset(skin.sprite, color.id, sticker.stage)?.url ?? fallback,
     fallbackImage: local?.image,
   };
 }

@@ -16,12 +16,12 @@ type Props = {
 // Position, bank, flame length and lighting still inherit the live CSS variables
 // from the existing moving owner. Only unchanged React construction is skipped.
 export default memo(function GameShipVisual({ sprite, color, stage = 1, variant, sites, hit }: Props) {
-  const maskImage = `url('${shipEvolutionAsset(sprite, stage)}')`;
+  const maskImage = `url('${shipEvolutionAsset(sprite, stage, color)}')`;
   const className = variant === "player" ? "player-engine" : "exhaust";
   return (
     <div className="ship-visual">
       <PaintedShip className="fleet-sprite" sprite={sprite} color={color} stage={stage} />
-      {shipNozzleStyles(sprite, false, stage).map((style, index) => (
+      {shipNozzleStyles(sprite, false, stage, color).map((style, index) => (
         <span key={`${className}-${index}`} className={`${className} ship-thruster`} style={style} />
       ))}
       {variant !== "bonus" && (

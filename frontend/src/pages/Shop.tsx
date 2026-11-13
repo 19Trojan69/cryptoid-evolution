@@ -27,8 +27,9 @@ import { accountSelection, loadAccountSave, localInventory, mutateAccountInvento
 import { usePayments } from "../hooks/usePayments";
 import { axiosClient } from "../lib/axiosClient.ts";
 import { BEST_SCORE_KEY, HIGHEST_SECTOR_KEY, TOTAL_DESTROYED_KEY } from "../lib/localRecordKeys";
-import { allPlayerColors, buyShipVariant, fleetCount, playerColors, playerSkins, readShipFleet, savedShipColors, selectedShip, shardBalance, shipSaveNetwork, ADMIN_SHIP_COLOR_KEY, ADMIN_SHIP_SKIN_KEY, ADMIN_SHIP_STAGE_KEY, ADMIN_START_SECTOR_KEY, SHARD_BALANCE_KEY, SHIP_COLOR_KEY, SHIP_COLORS_KEY, SHIP_FLEET_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY, type ShipFleet } from "./shipFleet";
+import { allPlayerColors, buyShipVariant, canEquipShipPaint, fleetCount, playerColors, playerSkins, readShipFleet, savedShipColors, selectedShip, shardBalance, shipSaveNetwork, ADMIN_SHIP_COLOR_KEY, ADMIN_SHIP_SKIN_KEY, ADMIN_SHIP_STAGE_KEY, ADMIN_START_SECTOR_KEY, SHARD_BALANCE_KEY, SHIP_COLOR_KEY, SHIP_COLORS_KEY, SHIP_FLEET_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY, type ShipFleet } from "./shipFleet";
 import { ownedShipStage, selectedShipStage, type ShipStage } from "./shipEvolution";
+import { originalLivery, vanguardMetallic } from '../../../backend/src/shipLivery.ts';
 
 import FleetShipPanel from "./FleetShipPanel";
 import "./shopPurchase.css";
@@ -72,7 +73,10 @@ const shopTabs = [
   ["leaders", "Top 100", "#"],
 ] as const;
 
-const adminFleet: ShipFleet = Object.fromEntries(playerSkins.map(skin => [skin.id, Object.fromEntries(playerColors.map(color => [color.id, 1]))])) as ShipFleet;
+const adminFleet: ShipFleet = Object.fromEntries(playerSkins.map(skin => [skin.id, {
+  ...Object.fromEntries(playerColors.map(color => [color.id, 1])), [originalLivery.id]: 1,
+  ...(skin.id === 'pi-vanguard' ? { [vanguardMetallic.id]: 1 } : {}),
+}])) as ShipFleet;
 
 const Shop = () => {
   const navigate = useNavigate();
@@ -354,8 +358,7 @@ const Shop = () => {
     setHangarMessage({ ship: previewSkin.name, color: previewColor.name, status: "Owned", count: fleetCount(purchase.fleet, previewSkin.id, previewColor.id) });
   };
   const equipShip = (skin: typeof playerSkins[number], color: typeof allPlayerColors[number], stage: ShipStage) => {
-    // Only a variant already in the fleet can become the active ship.
-    if (!fleetCount(visibleFleet, skin.id, color.id)) return;
+    if (!canEquipShipPaint(visibleFleet, skin.id, color.id)) return;
     if (adminMode) {
       sessionStorage.setItem(ADMIN_SHIP_SKIN_KEY, skin.id);
       sessionStorage.setItem(ADMIN_SHIP_COLOR_KEY, color.id);

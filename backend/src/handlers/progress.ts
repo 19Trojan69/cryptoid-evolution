@@ -11,7 +11,7 @@ import { rewardNetwork } from "../rewardNetwork";
 import { shipNftMainnetEnabled } from "../shipNftEligibility";
 import { canUseOwnerTestnetCatalog, isAdminMode, ownerTestnetOrderScope } from "../adminAccess";
 import { MAX_MISSION_HEARTS, maxMissionHearts } from "../lifeRules";
-import { emptyPlayerSave, firstMissionSnapshot, readSnapshot, legacyInventory, publicSave, shipColors, shipPrice, validSelection, standardShips, spriteForShip, type PlayerSave } from "../playerSave";
+import { emptyPlayerSave, firstMissionSnapshot, readSnapshot, legacyInventory, publicSave, shipPaintAvailable, shipPrice, validSelection, standardShips, spriteForShip, type PlayerSave } from "../playerSave";
 
 export async function loadPlayerSave(users: any, uid: string, network: string): Promise<PlayerSave> {
   const key = `playerByNetwork.${network}`;
@@ -197,7 +197,7 @@ export default function mountProgressEndpoints(router: Router) {
         fields = { skin, color, shipStage: stage ?? selectedShipStage(sprite, ids, skin === save.skin ? save.shipStage : undefined) };
       } else {
         const price = shipPrice(skin, await canUseOwnerTestnetCatalog(req));
-        if (price === null || !shipColors.includes(color)) return res.status(400).json({ error: "invalid_ship" });
+        if (price === null || !shipPaintAvailable(skin, color)) return res.status(400).json({ error: "invalid_ship" });
         if (save.balance < price) return res.status(403).json({ error: "not_enough_shards" });
         fields = { balance: save.balance - price, totalShardsSpent: (save.totalShardsSpent || 0) + price, fleet: { ...save.fleet, [skin]: { ...save.fleet[skin], [color]: (save.fleet[skin]?.[color] || 0) + 1 } } };
         if (network === "mainnet" && shipNftMainnetEnabled() && !save.standardShipAcquisitions?.[skin]) {

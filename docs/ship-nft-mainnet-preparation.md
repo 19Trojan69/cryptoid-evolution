@@ -1,6 +1,6 @@
 # Cryptoid Evolution ship NFTs
 
-The original-livery collection contains 20 player hulls in three editions. In revision `standard-livery-20261113`, the Advanced and Elite artwork carries each hull's Standard livery and uses the same ship sprites as the game. The downloadable bundle includes all 60 full-size cards, 60 matching WebP previews, English stories in the individual metadata files and a manifest with SHA-256 hashes. The metadata image references are relative to the extracted bundle. Assign immutable hosted image and metadata URIs when preparing the contract. Edition supply is open.
+The collection contains 20 player hulls in three editions. In revision `fleet-liveries-20261113`, the Advanced and Elite artwork carries each hull's Standard livery. The Pi Vanguard cards use the approved gold and violet Metallic Edition. The Shop starts with those same liveries for all three stages and retains the chosen paint when switching stages. The downloadable bundle includes all 60 full-size cards, 60 matching WebP previews, English stories in the individual metadata files and a manifest with SHA-256 hashes. The metadata image references are relative to the extracted bundle. Assign immutable hosted image and metadata URIs when preparing the contract. Edition supply is open.
 
 | Edition | Mainnet trigger |
 | --- | --- |
@@ -10,7 +10,7 @@ The original-livery collection contains 20 player hulls in three editions. In re
 
 ## Prepared application behavior
 
-The Shop has edition-specific copy next to the ship price and connects a Pi account before a Standard purchase in the released Mainnet shop. The NFT gallery uses the same original-livery artwork as the downloadable bundle. It loads at most five cards per request and returns the artwork for cards with an eligible Mainnet account state. The detail sheet describes eligibility. A future confirmed issue record must drive the issued state.
+The Shop has edition-specific copy next to the ship price and connects a Pi account before a Standard purchase in the released Mainnet shop. The NFT gallery uses the same artwork as the downloadable bundle. It loads at most five cards per request and returns the artwork for cards with an eligible Mainnet account state. The detail sheet describes eligibility. A future confirmed issue record must drive the issued state.
 
 Payment eligibility uses the stored Pi network, payment ID, product ID, account UID, matching amount, transaction ID and completion time. Admin preview data and Testnet activity confer zero Mainnet eligibility. Verified pre-existing Mainnet ship receipts with all these fields qualify for the prepared view. Standard eligibility uses the account's server-managed Mainnet hull ownership. Imported inventory requires a separate recorded Shard purchase, except for the account-issued Grey Scout. An account whose historical import mixed verified and imported hulls may need an audit before launch to identify older purchases. No automatic migration or retroactive mint runs here.
 

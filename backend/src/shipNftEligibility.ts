@@ -2,8 +2,9 @@ import { hangarCatalog } from "./hangarCatalog";
 import { shipColors, spriteForShip, standardShips, type PlayerSave } from "./playerSave";
 import { ownedShipStage, type ShipStage } from "./shipLoadout";
 import { shipNftEditions, shipNftLivery, shipNftStories } from "./shipNftCatalog";
+import { shipLiveryAssetPath, vanguardMetallic } from './shipLivery';
 
-export const SHIP_NFT_ART_REVISION = "standard-livery-20261113";
+export const SHIP_NFT_ART_REVISION = "fleet-liveries-20261113";
 export const SHIP_NFT_ART_COLLECTION = "shipNftPreviewArtwork";
 
 export const shipNftMainnetEnabled = () =>
@@ -18,17 +19,18 @@ export const shipNftCatalog = standardShips.flatMap(shipId => {
   const sprite = spriteForShip(shipId);
   const name = shipId.split("-").map(word => word[0].toUpperCase() + word.slice(1)).join(" ");
   const stories = shipNftStories[shipId as keyof typeof shipNftStories];
+  const metallic = shipId === 'pi-vanguard';
   return shipNftEditions.map((edition, index) => {
     const stage = (index + 1) as ShipStage;
     const number = String(sprite + 1).padStart(2, "0");
     const key = edition.toLowerCase();
     const offer = shipNftOffers.find(item => item.shipIndex === sprite && item.stage === stage);
     return {
-      id: `${shipId}-${key}`, shipId, sprite, name, stage, edition, livery: shipNftLivery,
+      id: `${shipId}-${key}`, shipId, sprite, name, stage, edition, livery: metallic ? vanguardMetallic.name : shipNftLivery,
       story: stories[index], productId: offer?.id ?? null, upgradePricePi: offer?.pricePi ?? null,
       requiresProductId: stage === 3 ? `ship_${number}_stage_2` : null,
       acquisition: stage > 1 ? "confirmed_ship_upgrade" : shipId === "grey-scout" ? "starter" : "shard_hull",
-      spritePath: `ships/evolution/ship_${number}_stage_${stage}.png`,
+      spritePath: shipLiveryAssetPath(sprite, stage, metallic ? vanguardMetallic.id : undefined),
       backgroundPath: `cards/space/unique/${key}-${number}.webp`,
     };
   });

@@ -8,6 +8,7 @@ import { preparedHullPlan } from '../src/pages/hullSourcePlan.ts';
 import { paintedHullBytes, paintedHullColors } from '../src/generated/paintedHullManifest.ts';
 import { staticHullHost, until } from './staticHullHost.mjs';
 import { Host } from './canvasHookHost.mjs';
+import { hasBakedLivery, originalLivery, vanguardMetallic } from '../../backend/src/shipLivery.ts';
 
 const publicRoot = new URL('../public/', import.meta.url).pathname;
 const selected = { sprite: 0, color: 'gold', stage: 1 };
@@ -19,13 +20,16 @@ const prepare = async (f, hull = selected) => {
 
 test('all current and saved legacy colours, twenty hulls and three stages have generated PNGs', () => {
   assert.deepEqual(paintedHullColors, allPlayerColors.map(c => c.id));
-  assert.equal(paintedHullBytes.length, 1740);
+  assert.equal(paintedHullBytes.length, playerSkins.length * 3 * allPlayerColors.length);
   const urls = new Set();
   for (let sprite = 0; sprite < playerSkins.length; sprite++) for (const stage of [1, 2, 3]) for (const color of allPlayerColors) {
     const asset = staticHullAsset(sprite, color.id, stage);
+    if (sprite !== 18 && color.id === vanguardMetallic.id) { assert.equal(asset, undefined); continue; }
     assert.ok(asset); assert.equal(fs.statSync(publicRoot + asset.url.slice(1)).size, asset.bytes); urls.add(asset.url);
   }
-  assert.equal(urls.size, 1740);
+  assert.equal(urls.size, 1740 + playerSkins.length * 3 + 3);
+  assert.equal(staticHullAsset(0, originalLivery.id, 3).url, '/ships/evolution/liveries/ship_01_stage_3.png');
+  assert.equal(staticHullAsset(18, vanguardMetallic.id, 3).url, '/ships/evolution/ship_19_stage_3_metallic.png');
   for (const args of [[-1, 'gold', 1], [20, 'gold', 1], [0.5, 'gold', 1], [0, 'missing', 1], [0, 'gold', 0], [0, 'gold', 4]]) {
     assert.equal(staticHullAsset(...args), undefined);
   }
@@ -35,6 +39,7 @@ test('all 1740 static PNGs equal the actual preceding runtime encoder output byt
   const f = await staticHullHost({ before: true });
   let compared = 0;
   for (let sprite = 0; sprite < playerSkins.length; sprite++) for (const stage of [1, 2, 3]) for (const color of allPlayerColors) {
+    if (hasBakedLivery(sprite, color.id) || color.id === vanguardMetallic.id) continue;
     const hull = { sprite, stage, color: color.id }, { plan } = await prepare(f, hull);
     const asset = staticHullAsset(sprite, color.id, stage), actual = fs.readFileSync(publicRoot + asset.url.slice(1));
     assert.ok(f.png().equals(actual), `native encoder pixels/PNG differ for ${sprite}:${stage}:${color.id}`);

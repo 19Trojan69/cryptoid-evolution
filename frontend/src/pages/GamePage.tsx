@@ -574,7 +574,7 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
   const saveQueueRef = useRef<ReturnType<typeof createSaveQueue> | null>(null);
   const saveQueueReadyRef = useRef(false);
   const [shipStage, setShipStage] = useState<ShipStage>(1);
-  const shipVisualOffset = useShipVisualOffset(shipSelection.skin.sprite, shipStage);
+  const shipVisualOffset = useShipVisualOffset(shipSelection.skin.sprite, shipStage, shipSelection.color.id);
   const shipStageRef = useRef<ShipStage>(1);
   const recordsSavedRef = useRef(false);
   const scoreRunRef = useRef<string | null>(null);

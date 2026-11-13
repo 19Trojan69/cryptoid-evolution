@@ -61,6 +61,18 @@ test('invalid stages, unowned paint and stale versions never change the confirme
  assert.equal(h.profile().shipStage,1);
 });
 
+test('existing hulls can equip their original livery at an owned stage without buying again',async()=>{
+ const h=await prepared();upgrades(h);h.profile().fleet['grey-scout']={silver:1};
+ const before=structuredClone(h.profile().fleet);
+ const selected=await choose(h,3,{color:'original'});
+ assert.equal(selected.code,200);
+ assert.equal(selected.body.save.color,'original');
+ assert.equal(selected.body.save.shipStage,3);
+ assert.deepEqual(selected.body.save.fleet,before);
+ assert.equal((await choose(h,3,{color:'vanguard-metallic'})).code,403);
+ assert.equal((await choose(h,1,{skin:'nova-wing',color:'original'})).code,403);
+});
+
 test('legacy accounts preserve highest-owned gameplay until an explicit stage is confirmed',async()=>{
  const h=await prepared();upgrades(h);delete h.profile().shipStage;
  const started=await h.call('hangar','/start',{action:'new',version:0,startKey:'legacy-stage-preserved-key',rulesVersion:2});
