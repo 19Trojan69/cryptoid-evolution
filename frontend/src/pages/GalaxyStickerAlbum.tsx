@@ -64,7 +64,7 @@ export default function GalaxyStickerAlbum({ owner, stations, stationCount, init
               <span>{retroMiniGameName}</span>
               <select value={station.level} onChange={event => setChosen(Number(event.currentTarget.value))}>
                 {stations.map(game => <option key={game.level} value={game.level}>
-                  {game.name} · {t('Level')} {game.level}
+                  {game.name} · {t('Campaign stage')} {game.level}
                 </option>)}
               </select>
             </label>

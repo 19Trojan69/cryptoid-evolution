@@ -78,6 +78,8 @@ const Shop = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { locale, t } = useLocale();
+  const entryPanel = location.state?.openCollection === true || location.state?.openQuickMenu === true
+    || location.state?.openShopView === "shop" || location.state?.openShopView === "hangar";
   const number = (value: number) => new Intl.NumberFormat(locale).format(value);
   const {
     user, canAdmin, adminMode, setAdminPreview, isAuthenticated, showSignIn, signIn, signOut,
@@ -90,6 +92,7 @@ const Shop = () => {
   const [quickGroup, setQuickGroup] = useState<string | null>(() => location.state?.openQuickMenu ? "mission" : null);
   const [settingsSection, setSettingsSection] = useState<SettingsSection | undefined>();
   const [guideTopic, setGuideTopic] = useState<GuideTopic>("controls");
+  const [guideFromSystem, setGuideFromSystem] = useState(false);
   const [quickTarget, setQuickTarget] = useState<string | null>(null);
   const closeQuickMenu = useCallback(() => setQuickGroup(null), []);
   const [shopView, setShopView] = useState<"hangar" | "shop" | "weapons" | "powers" | "progress" | "rewards" | "leaders" | null>(() => location.state?.openShopView === "shop" ? "shop" : location.state?.openShopView === "hangar" ? "hangar" : null);
@@ -101,6 +104,10 @@ const Shop = () => {
   const [collectionOpen, setCollectionOpen] = useState(() => location.state?.openCollection === true);
   const [selectedBoss, setSelectedBoss] = useState<number | null>(null);
   const returnToMenu = () => { setShopView(null); setSystemMenuOpen(false); setActivePanel(null); setTermsOpen(false); setQuickTarget(null); setQuickGroup("mission"); };
+  const closeGuide = () => {
+    if (guideFromSystem) { setActivePanel(null); setSystemMenuOpen(true); }
+    else returnToMenu();
+  };
   const [leaders, setLeaders] = useState<Leader[]>([]);
   const [leaderRules, setLeaderRules] = useState<"career" | 1 | 2>("career");
   const [leaderPage, setLeaderPage] = useState(0);
@@ -298,6 +305,7 @@ const Shop = () => {
   const [loadoutMessage, setLoadoutMessage] = useState("");
   const [shipQuery, setShipQuery] = useState("");
   const [shipFilter, setShipFilter] = useState<"all" | "owned" | "available">("all");
+  const standardModelsAvailable = playerSkins.filter(skin => standardHullAvailable(skin.id, shipNftMainnetVisible)).length;
   const shipSearchOptions = playerSkins.filter(skin => {
     const owned = fleetCount(visibleFleet, skin.id) > 0;
     return (shopView === "shop" || owned) && skin.name.toLocaleLowerCase(locale).includes(shipQuery.trim().toLocaleLowerCase(locale)) &&
@@ -459,12 +467,13 @@ const Shop = () => {
     return () => cancelGameFrame(frame);
   }, [shopView, quickTarget, rewardStatus]);
 
+  const nftPreviewPath = shipSaveNetwork === "testnet" ? "/nft-bosses" : shipNftMainnetVisible ? "/nft-ships" : undefined;
   const openQuickAction = (action: QuickAction) => {
     closeQuickMenu();
     setQuickTarget(null);
     if (action === "galaxy") { navigate("/galaxy", { state: { fromQuick: true, owner: user?.uid } }); return; }
     const guides: Partial<Record<QuickAction, GuideTopic>> = { overview: "overview", visuals: "visuals", "guide-controls": "controls", route: "route", combat: "survival", boosts: "boosts", earnings: "earnings", collection: "collection" };
-    if (guides[action]) { setGuideTopic(guides[action]); setActivePanel("how"); return; }
+    if (guides[action]) { setGuideFromSystem(false); setGuideTopic(guides[action]); setActivePanel("how"); return; }
     const settings: Partial<Record<QuickAction, SettingsSection>> = { language: "language", controls: "controls", audio: "audio", display: "display", vibration: "display" };
     if (settings[action]) { setSettingsSection(settings[action]); setSystemMenuOpen(true); return; }
     const fleetViews: Partial<Record<QuickAction, NonNullable<typeof shopView>>> = { hangar: "hangar", shop: "shop", upgrades: "shop", weapons: "weapons", armor: "weapons", powers: "powers", progress: "progress", rewards: "rewards", leaders: "leaders", ranks: "rewards", bosses: "rewards", medals: "rewards", chains: "rewards" };
@@ -489,13 +498,23 @@ const Shop = () => {
 
   const homePaused = Boolean(newCards.length || collectionOpen || shopView || systemMenuOpen || activePanel || termsOpen || quickGroup || showSignIn || feedbackOpen || pilotOpen !== null);
   const modalLayer = pilotOpen !== null ? "profile" : collectionOpen ? "collection" : newCards.length ? "card" : showSignIn ? "signin" : feedbackOpen ? "feedback" : termsOpen ? "terms" : activePanel ? "guide" : systemMenuOpen ? "settings" : shopView ? shopView : quickGroup ? "quick" : null;
-  useModalNavigation(modalLayer, () => {
+  useEffect(() => {
+    if (!entryPanel) return;
+    // The panel is already open. Consume the link's state before guarding Back.
+    const state = { ...location.state };
+    delete state.openCollection;
+    delete state.openQuickMenu;
+    delete state.openShopView;
+    void navigate(location.pathname + location.search + location.hash, { replace: true, state, preventScrollReset: true });
+  }, [entryPanel, location, navigate]);
+  useModalNavigation(entryPanel ? null : modalLayer, () => {
     if (pilotOpen !== null) setPilotOpen(null);
     else if (collectionOpen) setCollectionOpen(false);
     else if (newCards.length) setNewCards(cards => cards.slice(1));
     else if (showSignIn) closeSignIn();
     else if (feedbackOpen) setFeedbackOpen(false);
     else if (termsOpen) setTermsOpen(false);
+    else if (activePanel === "how") closeGuide();
     else if (activePanel) setActivePanel(null);
     else if (systemMenuOpen) setSystemMenuOpen(false);
     else if (shopView) setShopView(null);
@@ -504,7 +523,7 @@ const Shop = () => {
   return (
     <main data-shop-area={shopView ?? "home"} className="app-shell landing-shell cinematic-home" data-home-paused={homePaused} onPointerDownCapture={primeCardSound}>
       {newCards[0] && <CardReveal key={user?.uid ?? "guest"} reward={newCards[0]} remaining={newCards.length} onContinue={()=>{setNewCards(cards=>cards.slice(1));}}/>}
-      {collectionOpen && <Collection key={user?.uid ?? "guest"} uid={user?.uid} onClose={() => setCollectionOpen(false)} />}
+      {collectionOpen && <Collection key={user?.uid ?? "guest"} uid={user?.uid} onClose={() => setCollectionOpen(false)} nftPreviewPath={nftPreviewPath} />}
       <Header
         user={user}
         onOpenProfile={() => openQuickAction("profile")}
@@ -535,10 +554,8 @@ const Shop = () => {
         onShop={() => openQuickAction("shop")}
         onCareer={() => openQuickAction("progress")}
         onCards={() => setCollectionOpen(true)}
-        nftLink={shipSaveNetwork === "testnet"
-          ? <Link className="cinematic-nft-link" to="/nft-bosses">NFTs</Link>
-          : shipNftMainnetVisible
-          ? <Link className="cinematic-nft-link" to="/nft-ships">NFTs</Link>
+        nftLink={nftPreviewPath
+          ? <Link className="cinematic-nft-link" to={nftPreviewPath}>{t("NFTs")}</Link>
           : authReady && isAuthenticated && canAdmin && !isAuthLoading
           ? <Link className="cinematic-nft-link" to="/admin/nft-bosses">NFTs</Link>
           : undefined}
@@ -559,7 +576,7 @@ const Shop = () => {
           <button className="text-button menu-return" type="button" onClick={returnToMenu}>← {t("Back to quick access")}</button>
           <button className="close-button" type="button" onClick={() => setSystemMenuOpen(false)} aria-label={t('Close menu')}>×</button>
           <p className="eyebrow">{t('SYSTEM / SETTINGS')}</p>
-          <div className="system-menu-title-row"><h2 id="system-menu-title">{t('System menu')}</h2><button className="system-guide-link" type="button" onClick={() => { setSystemMenuOpen(false); setGuideTopic("controls"); setActivePanel('how'); }}><span aria-hidden="true">?</span>{t('Game guide')}</button></div>
+          <div className="system-menu-title-row"><h2 id="system-menu-title">{t('System menu')}</h2><button className="system-guide-link" type="button" onClick={() => { setSystemMenuOpen(false); setGuideFromSystem(true); setGuideTopic("controls"); setActivePanel('how'); }}><span aria-hidden="true">?</span>{t('Game guide')}</button></div>
           <SystemSettings key={settingsSection ?? "overview"} compactMobile idPrefix="home" initialSection={settingsSection} musicVolume={musicVolume} effectsVolume={effectsVolume} changeMusicVolume={changeMusicVolume} changeEffectsVolume={changeEffectsVolume} />
         </section>
       </div>}
@@ -581,9 +598,9 @@ const Shop = () => {
         {(!user || (rewardStatus === "ready" && rewardOwner === user.uid)) && <>
         <article className="status-card reward-collection">
           <div className="card-heading"><span>{t("RANK & COLLECTION")}</span><span className="card-icon">✦</span></div>
-          <div className="reward-rank-current"><ServiceBadge name={rankForLevel(rewardProgress.highestLevel).name} size="large"/><div><small>{t("Current service rank")} · {t("Level")} {rewardProgress.highestLevel}/500</small><h3>{t(rewardRank(rewardProgress))}</h3></div></div>
+          <div className="reward-rank-current"><ServiceBadge name={rankForLevel(rewardProgress.highestLevel).name} size="large"/><div><small>{t("Current service rank")} · {t("Campaign stage")} {rewardProgress.highestLevel}/500</small><h3>{t(rewardRank(rewardProgress))}</h3></div></div>
           <p>{Object.keys(rewardProgress.bossWins).filter(id=>bossCardAvailable(Number(id), ownerTestnet)).length}/{BOSS_STICKER_COUNT} {t("Boss stickers")} · {rewardProgress.completedChains.length} {t("Chains")} · {rewardProgress.perfectBonuses} {t("Perfect bonus rounds")}</p>
-          <div id="reward-ranks" className="reward-rank-path" aria-label={t("Service ranks")}>{[1, 11, 51, 101, 201, 301, 401, 500].map(level => { const tier = rankForLevel(level); return <span key={level} className={rewardProgress.highestLevel >= level ? "earned" : ""}><ServiceBadge name={tier.name} size="medium" locked={rewardProgress.highestLevel < level}/><small>{t(tier.name)}<br />{t("Level")} {level}</small></span>; })}</div>
+          <div id="reward-ranks" className="reward-rank-path" aria-label={t("Service ranks")}>{[1, 11, 51, 101, 201, 301, 401, 500].map(level => { const tier = rankForLevel(level); return <span key={level} className={rewardProgress.highestLevel >= level ? "earned" : ""}><ServiceBadge name={tier.name} size="medium" locked={rewardProgress.highestLevel < level}/><small>{t(tier.name)}<br />{t("Campaign stage")} {level}</small></span>; })}</div>
           <h4>{t("Linked Blocks")} · {t("Level")} {latestRewardLevel}</h4>
           <div className="reward-blocks" aria-label={t("Linked Blocks")}>{Array.from({ length: 9 }, (_, index) => <span key={index} className={index < (rewardProgress.linkedBlocks?.[latestRewardLevel] ?? 0) ? "earned" : ""}>{index + 1}</span>)}</div>
           <div id="reward-chains" className="reward-milestones" aria-label={t("Chain milestones")}>{CHAIN_MILESTONES.map(target => <span key={target} className={rewardProgress.completedChains.length >= target ? "earned" : ""} title={`${target} ${t("Chains")}`}>◆ {target}</span>)}</div>
@@ -642,7 +659,7 @@ const Shop = () => {
         <div className="ship-panel-heading"><div><p className="eyebrow">{t(shopView === "hangar" ? "YOUR HANGAR" : "SHIP SHOP")}</p><h2 id="hangar-heading">{t(shopView === "hangar" ? "Your fleet" : "Available ships")}</h2></div><strong className="shard-balance">◆ {displayedShards} <small>{t("Shards")}</small></strong></div>
         {ownerTestnet && <p className="testnet-shop-notice" role="note">{t('Admin Testnet: earn Shards for all 20 ships. Paid items use Test-Pi only.')}</p>}
         <p className="testnet-shop-notice" role="note">{t(shipSaveNetwork === "testnet" ? "Testnet progress stays separate from Mainnet." : "Mainnet progress stays separate from Testnet.")}</p>
-        <details className="ship-earnings"><summary>{t("Shards & purchase rules")}</summary><p>{shipSaveNetwork === "testnet" ? t("TESTNET SHARDS: Earn and spend Shards on available Standard ships here for testing. Shards and ship purchases do not transfer to Mainnet; there you start from zero.") : t("MAINNET SHARDS: Shards and ship purchases start from zero here. Testnet balances and ships are separate.")}</p><p>{ownerTestnet ? t("Admin Testnet: earn Shards for all 20 ships. Paid items use Test-Pi only.") : shipSaveNetwork === "testnet" ? t("Testnet: Grey Scout is free; nine Standard hulls cost Shards. Other hulls are locked until Mainnet.") : t("Grey Scout is free; nine Standard hulls cost Shards. Other hulls are currently locked.")}</p><p>{t("At level 1, defeats earn Shards by enemy class: light 2, medium 4–5, elite 6, heavy 8, boss 16. Rewards grow with level. Bonus targets earn 1 each, plus a completion reward that grows with level. The HUD shows your previous Shard balance plus this mission's earnings.")}</p></details>
+        <details className="ship-earnings"><summary>{t("Shards & purchase rules")}</summary><p>{shipSaveNetwork === "testnet" ? t("TESTNET SHARDS: Earn and spend Shards on available Standard ships here for testing. Shards and ship purchases do not transfer to Mainnet; there you start from zero.") : t("MAINNET SHARDS: Shards and ship purchases start from zero here. Testnet balances and ships are separate.")}</p><p>{t("The ship shop offers {hulls} Standard models. Grey Scout is the free starter.", { hulls: standardModelsAvailable })}</p><p>{t("At level 1, defeats earn Shards by enemy class: light 2, medium 4–5, elite 6, heavy 8, boss 16. Rewards grow with level. Bonus targets earn 1 each, plus a completion reward that grows with level. The HUD shows your previous Shard balance plus this mission's earnings.")}</p></details>
         <div className="fleet-toolbar">
           <label>{t("Find a ship")}<input type="search" value={shipQuery} placeholder={t("Search ship name")} onChange={event => { setShipQuery(event.target.value); setShopTarget(null); }} /></label>
           <div className="fleet-filters" role="group" aria-label={t("Available ships")}>{(["all", "owned", "available"] as const).map(filter => <button type="button" key={filter} aria-pressed={shipFilter === filter} onClick={() => { setShipFilter(filter); setShopTarget(null); }}>{t(filter === "all" ? "All ships" : filter === "owned" ? "Owned ships" : "Available with Shards")}</button>)}</div>
@@ -670,9 +687,11 @@ const Shop = () => {
 
       {(shopView === "weapons" || shopView === "powers") && <section className="upgrade-section" aria-labelledby="upgrade-heading">
         <div className="section-heading"><div><p className="eyebrow">{t('POWER LAB')}</p><h2 id="upgrade-heading">{t('Weapons and start power-ups')}</h2></div><span className="section-line" /></div>
-        <p className="testnet-shop-notice">{ownerTestnet ? t('Admin Testnet: earn Shards for all 20 ships. Paid items use Test-Pi only.') : shipSaveNetwork === "testnet" ? t("Testnet: Twin Laser and Rapid Twin can be bought with Test-Pi. Triple Laser and Plasma purchases are locked.") : t("Pi purchases are currently locked. Collect weapon upgrades in game.")}</p>
-        {shopView === "weapons" && <p>{shipSaveNetwork === "testnet" ? t("45 seconds per charge") : t("The single laser is free. Collect other weapons as power-ups during the mission.")}</p>}
-        {shopView === "weapons" && <WeaponTutorial />}
+        {shopView === "weapons" ? <>
+          <p className="testnet-shop-notice">{ownerTestnet ? t('Admin Testnet: earn Shards for all 20 ships. Paid items use Test-Pi only.') : shipSaveNetwork === "testnet" ? t("Testnet: Twin Laser and Rapid Twin can be bought with Test-Pi. Triple Laser and Plasma purchases are locked.") : t("Pi purchases are currently locked. Collect weapon upgrades in game.")}</p>
+          <p>{shipSaveNetwork === "testnet" ? t("45 seconds per charge") : t("The single laser is free. Collect other weapons as power-ups during the mission.")}</p>
+          <WeaponTutorial />
+        </> : <p>{t("Fly through glowing drops to collect boosts that activate immediately.")}</p>}
         {([shopView === "weapons" ? "weapon" : "power"] as const).map(kind => <div key={kind} className="hangar-offers"><h3>{t(kind === "weapon" ? "Time-limited weapons" : "One-mission start bonuses")}</h3><div className="hangar-offer-grid">
           {offers.filter(offer => offer.kind === kind).map(offer => {
             const count = inventory?.consumables.find(item => item.id === offer.id)?.count ?? 0;
@@ -707,7 +726,6 @@ const Shop = () => {
             </article>;
           })}
         </div></div>}
-        {inventory?.equippedWeapon && <p className="testnet-shop-notice">{t("An older weapon selection is saved but no longer activates automatically. Every mission starts with the single laser.")}</p>}
         {inventory?.selectedPower && <button className="text-button" type="button" onClick={() => equip(inventory.equippedWeapon, null)}>{t('Save bonus for a later mission')}</button>}
         {paymentDiagnostic && !activeProductId && <p className="testnet-shop-notice" role="alert"><strong>{t("Payment diagnostics:")}</strong> {t("Payment could not be confirmed. Check your account and retry.")}</p>}
         {loadoutMessage && <p role="status">{t(loadoutMessage)}</p>}
@@ -716,7 +734,14 @@ const Shop = () => {
         </div>
       </div>}
 
-      {activePanel === "how" && <GameGuide initialTopic={guideTopic} backLabel="Back to quick access" onClose={returnToMenu} />}
+      {activePanel === "how" && <GameGuide initialTopic={guideTopic} backLabel={guideFromSystem ? "Back to system" : "Back to quick access"}
+        onClose={closeGuide} nftPreviewAvailable={Boolean(nftPreviewPath)} ownerTestnet={ownerTestnet} standardModelsAvailable={standardModelsAvailable}
+        onNavigate={destination => {
+          setActivePanel(null);
+          if (destination === "cards") setCollectionOpen(true);
+          else if (destination === "nfts") { if (nftPreviewPath) navigate(nftPreviewPath); }
+          else openQuickAction(destination);
+        }} />}
       {activePanel === "progress" && <div className="info-panel" role="dialog" aria-modal="true" aria-labelledby="info-title">
         <div className="info-panel-content">
           <button className="text-button menu-return" type="button" onClick={returnToMenu}>← {t("Back to quick access")}</button>

@@ -22,6 +22,8 @@ import './galaxyMap.css';
 import './galaxyArt.css';
 import { paceAnimation } from '../lib/cssFramePacing';
 import { requestGameFrame } from '../lib/frameScheduler';
+import { MAX_DIFFICULTY_LEVEL } from './levelDifficulty';
+import { BOSS_STICKER_COUNT } from '../../../backend/src/rewardRules';
 
 const arcadePositionKey = 'cryptoid_galaxy_arcade_position';
 
@@ -194,7 +196,7 @@ export default function GalaxyMap() {
         <ul>{picker.map(game => <li key={game.level}><button type="button" onClick={() => {
           setArcadeListOpen(false);
           setSelection({ kind: 'mini', level: game.level });
-        }}><span>{game.name ?? retroMiniGameName}</span><small>{t('Level')} {game.level}</small></button></li>)}</ul>
+        }}><span>{game.name ?? retroMiniGameName}</span><small>{t('Campaign stage')} {game.level}</small></button></li>)}</ul>
       </details>
       {retroLevels && officialArcade && <button type="button" className="galaxy-sticker-entry" aria-haspopup="dialog"
         disabled={!unlocked} onClick={() => openAlbum()}>
@@ -214,17 +216,17 @@ export default function GalaxyMap() {
         <BlockchainIcon kind="galaxy"/>
         {officialArcade && !previewAccess ? <>
           <h2>{retroMiniGamesName}</h2>
-          <p>{officialArcade.labels.playable.replace('{count}', (unlocked?.length ?? 0).toLocaleString(locale))}</p>
+          <p>{t('{count} Retro Mini Games on Testnet. Each station unlocks when you reach its stage.', { count: officialArcade.levels.length.toLocaleString(locale) })}</p>
         </> : <>
-          <p className="galaxy-eyebrow">{t('500 levels · 50 bosses · 100 mini-games')}</p>
+          <p className="galaxy-eyebrow">{t('{stages} campaign stages · {bosses} bosses', { stages: MAX_DIFFICULTY_LEVEL, bosses: BOSS_STICKER_COUNT })}</p>
           <h2>{`${t('Galaxy map')} · ${t('A glimpse of the future')}`}</h2>
-          <p>{t('Explore the planned galaxy map of Cryptoid Evolution today. Discover a journey through 500 levels, legendary bosses, mysterious star systems and upcoming mini-games.')}</p>
+          <p>{t('Explore the route and discover the boss stations. The map marks planned mini-game stations.')}</p>
           <p>{t('This interactive preview shows an expansion currently in development. More features, challenges and rewards will become available in future updates.')}</p>
           <p className="galaxy-note">{t('Exploring the map does not start a mission or change your progress.')}</p>
         </>}
       </article>
     </div>
-    <button type="button" className="galaxy-position" disabled={status !== 'ready'} onClick={() => goTo(progress.currentLevel)} title={status === 'ready' ? `${t('Level')} ${progress.currentLevel} · ${skin.name}` : undefined}><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="1.5"/><path d="M12 2v4m0 12v4M2 12h4m12 0h4"/></svg><span>{t('To my position')}</span></button>
+    <button type="button" className="galaxy-position" disabled={status !== 'ready'} onClick={() => goTo(progress.currentLevel)} title={status === 'ready' ? `${t('Campaign stage')} ${progress.currentLevel} · ${skin.name}` : undefined}><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="1.5"/><path d="M12 2v4m0 12v4M2 12h4m12 0h4"/></svg><span>{t('To my position')}</span></button>
     {selection && <GalaxyInfoDialog key={`${selection.kind}:${selection.level}`} selection={selection} progress={progress} miniGameName={miniGame?.name} lockedRetro={lockedRetro}
       arcade={officialGame && officialArcade ? { game: officialGame, labels: officialArcade.labels,
         record: readArcadeRecord(officialGame, snapshot.owner), owner: snapshot.owner,

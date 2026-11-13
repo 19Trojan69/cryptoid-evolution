@@ -42,8 +42,8 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Loading saved progress…": "Loading saved progress…",
     "Saved progress is unavailable. You can still explore; your data is unchanged.": "Saved progress is unavailable. You can still explore; your data is unchanged.",
     "Refresh progress": "Refresh progress",
-    "Completed level": "Completed level",
-    "Level not yet completed": "Level not yet completed"
+    "Stage completed": "Stage completed",
+    "Stage not yet completed": "Stage not yet completed"
   },
   "de": {
     "Private mini-game test": "Privater Minispieltest",
@@ -87,8 +87,8 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Loading saved progress…": "Gespeicherter Fortschritt wird geladen …",
     "Saved progress is unavailable. You can still explore; your data is unchanged.": "Gespeicherter Fortschritt nicht verfügbar. Du kannst die Karte trotzdem erkunden; deine Daten bleiben unverändert.",
     "Refresh progress": "Fortschritt aktualisieren",
-    "Completed level": "Level abgeschlossen",
-    "Level not yet completed": "Level noch nicht abgeschlossen"
+    "Stage completed": "Abschnitt abgeschlossen",
+    "Stage not yet completed": "Abschnitt noch nicht abgeschlossen"
   },
   "es": {
     "Private mini-game test": "Prueba privada de minijuegos",
@@ -132,8 +132,8 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Loading saved progress…": "Cargando progreso guardado…",
     "Saved progress is unavailable. You can still explore; your data is unchanged.": "El progreso guardado no está disponible. Puedes explorar el mapa; tus datos no cambian.",
     "Refresh progress": "Actualizar progreso",
-    "Completed level": "Nivel completado",
-    "Level not yet completed": "Nivel aún no completado"
+    "Stage completed": "Etapa completada",
+    "Stage not yet completed": "Etapa aún no completada"
   },
   "fr": {
     "Private mini-game test": "Test privé des mini-jeux",
@@ -177,8 +177,8 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Loading saved progress…": "Chargement de la progression…",
     "Saved progress is unavailable. You can still explore; your data is unchanged.": "Progression enregistrée indisponible. Vous pouvez explorer la carte ; vos données restent inchangées.",
     "Refresh progress": "Actualiser la progression",
-    "Completed level": "Niveau terminé",
-    "Level not yet completed": "Niveau pas encore terminé"
+    "Stage completed": "Étape terminée",
+    "Stage not yet completed": "Étape pas encore terminée"
   },
   "pt": {
     "Private mini-game test": "Teste privado de minijogos",
@@ -222,8 +222,8 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Loading saved progress…": "Carregando progresso salvo…",
     "Saved progress is unavailable. You can still explore; your data is unchanged.": "Progresso salvo indisponível. Você pode explorar o mapa; seus dados permanecem iguais.",
     "Refresh progress": "Atualizar progresso",
-    "Completed level": "Nível concluído",
-    "Level not yet completed": "Nível ainda não concluído"
+    "Stage completed": "Etapa concluída",
+    "Stage not yet completed": "Etapa ainda não concluída"
   },
   "it": {
     "Private mini-game test": "Prova privata dei minigiochi",
@@ -267,8 +267,8 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Loading saved progress…": "Caricamento dei progressi salvati…",
     "Saved progress is unavailable. You can still explore; your data is unchanged.": "Progressi salvati non disponibili. Puoi esplorare la mappa; i tuoi dati restano invariati.",
     "Refresh progress": "Aggiorna progressi",
-    "Completed level": "Livello completato",
-    "Level not yet completed": "Livello non ancora completato"
+    "Stage completed": "Tappa completata",
+    "Stage not yet completed": "Tappa non ancora completata"
   },
   "pl": {
     "Private mini-game test": "Prywatny test minigier",
@@ -312,8 +312,8 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Loading saved progress…": "Wczytywanie zapisanych postępów…",
     "Saved progress is unavailable. You can still explore; your data is unchanged.": "Zapisane postępy są niedostępne. Możesz przeglądać mapę; twoje dane pozostają bez zmian.",
     "Refresh progress": "Odśwież postępy",
-    "Completed level": "Poziom ukończony",
-    "Level not yet completed": "Poziom jeszcze nieukończony"
+    "Stage completed": "Etap ukończony",
+    "Stage not yet completed": "Etap jeszcze nieukończony"
   },
   "tr": {
     "Private mini-game test": "Özel mini oyun testi",
@@ -357,8 +357,8 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Loading saved progress…": "Kayıtlı ilerleme yükleniyor…",
     "Saved progress is unavailable. You can still explore; your data is unchanged.": "Kayıtlı ilerleme kullanılamıyor. Haritayı keşfedebilirsin; verilerin değişmez.",
     "Refresh progress": "İlerlemeyi yenile",
-    "Completed level": "Seviye tamamlandı",
-    "Level not yet completed": "Seviye henüz tamamlanmadı"
+    "Stage completed": "Aşama tamamlandı",
+    "Stage not yet completed": "Aşama henüz tamamlanmadı"
   },
   "ru": {
     "Private mini-game test": "Закрытый тест мини-игр",
@@ -402,8 +402,8 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Loading saved progress…": "Загрузка сохранённого прогресса…",
     "Saved progress is unavailable. You can still explore; your data is unchanged.": "Сохранённый прогресс недоступен. Вы можете исследовать карту; ваши данные не меняются.",
     "Refresh progress": "Обновить прогресс",
-    "Completed level": "Уровень пройден",
-    "Level not yet completed": "Уровень ещё не пройден"
+    "Stage completed": "Этап пройден",
+    "Stage not yet completed": "Этап ещё не пройден"
   },
   "hr": {
     "Private mini-game test": "Privatni test miniigara",
@@ -447,8 +447,8 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Loading saved progress…": "Učitavanje spremljenog napretka…",
     "Saved progress is unavailable. You can still explore; your data is unchanged.": "Spremljeni napredak nije dostupan. Možeš istraživati kartu; tvoji podaci ostaju isti.",
     "Refresh progress": "Osvježi napredak",
-    "Completed level": "Razina završena",
-    "Level not yet completed": "Razina još nije završena"
+    "Stage completed": "Etapa završena",
+    "Stage not yet completed": "Etapa još nije završena"
   },
   "cs": {
     "Private mini-game test": "Soukromý test miniher",
@@ -492,8 +492,8 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Loading saved progress…": "Načítání uloženého postupu…",
     "Saved progress is unavailable. You can still explore; your data is unchanged.": "Uložený postup není dostupný. Mapu můžeš prozkoumat; tvoje data se nezmění.",
     "Refresh progress": "Obnovit postup",
-    "Completed level": "Úroveň dokončena",
-    "Level not yet completed": "Úroveň zatím nedokončena"
+    "Stage completed": "Etapa dokončena",
+    "Stage not yet completed": "Etapa zatím nedokončena"
   },
   "sk": {
     "Private mini-game test": "Súkromný test minihier",
@@ -537,8 +537,8 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Loading saved progress…": "Načítavanie uloženého postupu…",
     "Saved progress is unavailable. You can still explore; your data is unchanged.": "Uložený postup nie je dostupný. Mapu môžeš preskúmať; tvoje údaje sa nezmenia.",
     "Refresh progress": "Obnoviť postup",
-    "Completed level": "Úroveň dokončená",
-    "Level not yet completed": "Úroveň zatiaľ nedokončená"
+    "Stage completed": "Etapa dokončená",
+    "Stage not yet completed": "Etapa zatiaľ nedokončená"
   },
   "hu": {
     "Private mini-game test": "Privát minijátékteszt",
@@ -582,8 +582,8 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Loading saved progress…": "Mentett előrehaladás betöltése…",
     "Saved progress is unavailable. You can still explore; your data is unchanged.": "A mentett előrehaladás nem érhető el. Böngészheted a térképet; adataid változatlanok.",
     "Refresh progress": "Előrehaladás frissítése",
-    "Completed level": "Pálya teljesítve",
-    "Level not yet completed": "Pálya még nincs teljesítve"
+    "Stage completed": "Szakasz teljesítve",
+    "Stage not yet completed": "A szakasz még nincs teljesítve"
   },
   "ro": {
     "Private mini-game test": "Test privat pentru minijocuri",
@@ -627,8 +627,8 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Loading saved progress…": "Se încarcă progresul salvat…",
     "Saved progress is unavailable. You can still explore; your data is unchanged.": "Progresul salvat nu este disponibil. Poți explora harta; datele tale rămân neschimbate.",
     "Refresh progress": "Actualizează progresul",
-    "Completed level": "Nivel finalizat",
-    "Level not yet completed": "Nivel încă nefinalizat"
+    "Stage completed": "Etapă finalizată",
+    "Stage not yet completed": "Etapă încă nefinalizată"
   },
   "sr": {
     "Private mini-game test": "Приватни тест миниигара",
@@ -672,8 +672,8 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Loading saved progress…": "Учитавање сачуваног напретка…",
     "Saved progress is unavailable. You can still explore; your data is unchanged.": "Сачувани напредак није доступан. Можеш да истражујеш мапу; твоји подаци остају исти.",
     "Refresh progress": "Освежи напредак",
-    "Completed level": "Ниво завршен",
-    "Level not yet completed": "Ниво још није завршен"
+    "Stage completed": "Етапа завршена",
+    "Stage not yet completed": "Етапа још није завршена"
   },
   "uk": {
     "Private mini-game test": "Приватний тест мініігор",
@@ -717,8 +717,8 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Loading saved progress…": "Завантаження збереженого прогресу…",
     "Saved progress is unavailable. You can still explore; your data is unchanged.": "Збережений прогрес недоступний. Ви можете досліджувати карту; ваші дані не змінюються.",
     "Refresh progress": "Оновити прогрес",
-    "Completed level": "Рівень пройдено",
-    "Level not yet completed": "Рівень ще не пройдено"
+    "Stage completed": "Етап пройдено",
+    "Stage not yet completed": "Етап ще не пройдено"
   },
   "th": {
     "Private mini-game test": "การทดสอบมินิเกมแบบส่วนตัว",
@@ -762,8 +762,8 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Loading saved progress…": "กำลังโหลดความคืบหน้าที่บันทึกไว้…",
     "Saved progress is unavailable. You can still explore; your data is unchanged.": "ไม่สามารถโหลดความคืบหน้าได้ คุณยังสำรวจแผนที่ได้ โดยข้อมูลของคุณไม่เปลี่ยนแปลง",
     "Refresh progress": "รีเฟรชความคืบหน้า",
-    "Completed level": "ผ่านด่านแล้ว",
-    "Level not yet completed": "ยังไม่ผ่านด่าน"
+    "Stage completed": "ผ่านช่วงนี้แล้ว",
+    "Stage not yet completed": "ยังไม่ผ่านช่วงนี้"
   },
   "zh": {
     "Private mini-game test": "私密迷你游戏测试",
@@ -807,8 +807,8 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Loading saved progress…": "正在加载已保存的进度…",
     "Saved progress is unavailable. You can still explore; your data is unchanged.": "已保存的进度暂不可用。你仍可探索地图，数据不会改变。",
     "Refresh progress": "刷新进度",
-    "Completed level": "关卡已完成",
-    "Level not yet completed": "关卡尚未完成"
+    "Stage completed": "阶段已完成",
+    "Stage not yet completed": "阶段尚未完成"
   },
   "vi": {
     "Private mini-game test": "Thử nghiệm trò chơi nhỏ riêng tư",
@@ -852,7 +852,7 @@ export const galaxyMapTranslations: Record<string, Record<string, string>> = {
     "Loading saved progress…": "Đang tải tiến trình đã lưu…",
     "Saved progress is unavailable. You can still explore; your data is unchanged.": "Tiến trình đã lưu hiện không khả dụng. Bạn vẫn có thể khám phá; dữ liệu không thay đổi.",
     "Refresh progress": "Làm mới tiến trình",
-    "Completed level": "Đã hoàn thành màn",
-    "Level not yet completed": "Chưa hoàn thành màn"
+    "Stage completed": "Đã hoàn thành chặng",
+    "Stage not yet completed": "Chưa hoàn thành chặng"
   }
 };

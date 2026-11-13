@@ -6,6 +6,8 @@ import ts from 'typescript';
 import * as jsx from 'react/jsx-runtime';
 import {translate,languages} from '../i18n.ts';
 import * as model from './homeNetworkModel.ts';
+import { MAX_DIFFICULTY_LEVEL } from './levelDifficulty.ts';
+import { BOSS_STICKER_COUNT } from '../../../backend/src/rewardRules.ts';
 
 // Execute the actual TSX without a browser. Host integrations remain stubs;
 // these checks do not claim Pi authentication or a real mobile browser test.
@@ -16,6 +18,8 @@ function component(file,imports,globals={}) {
     if(name==='../lib/frameScheduler')return {requestGameFrame:globals.requestAnimationFrame,cancelGameFrame:globals.cancelAnimationFrame};
     if(name==='react'&&!imports.react)return {useRef:value=>({current:value}),useEffect:()=>{},useState:value=>[typeof value==='function'?value():value,()=>{}]};
     if(name==='./gameFullscreen'&&!imports[name])return {isGameFullscreen:()=>false};
+    if(name==='./levelDifficulty'&&!imports[name])return {MAX_DIFFICULTY_LEVEL};
+    if(name==='../../../backend/src/rewardRules'&&!imports[name])return {BOSS_STICKER_COUNT};
     if(name.endsWith('.css'))return {};
     assert.ok(name in imports,`Unmapped dependency: ${name}`);return imports[name];
   },...globals});return exports.default;
@@ -121,7 +125,7 @@ test('home actions reach the existing game, ship shop, career, cards, feedback a
   imports['../hooks/useAuth']={useAuth:()=>({user,authReady:true,isLoading:false,adminMode:false,requireAuth:()=>authRequests++})};
   imports['../hooks/usePayments']={usePayments:()=>({isLoading:false})};
   const skin={id:'ship-01',sprite:1,name:'Scout'},color={id:'silver',name:'Silver'};
-  Object.assign(imports['./shipFleet'],{shipSaveNetwork:'mainnet',playerSkins:[skin],playerColors:[color],allPlayerColors:[color],selectedShip:()=>({skin,color}),readShipFleet:()=>({}),fleetCount:()=>1,shardBalance:()=>150});
+  Object.assign(imports['./shipFleet'],{shipSaveNetwork:'mainnet',playerSkins:[skin],playerColors:[color],allPlayerColors:[color],selectedShip:()=>({skin,color}),readShipFleet:()=>({}),fleetCount:()=>1,shardBalance:()=>150,standardHullAvailable:()=>true});
   Object.assign(imports['./rewardProgress'],{emptyRewardProgress:()=>({highestLevel:1,linkedBlocks:{},completedChains:[],bossWins:{},bonusMedals:{}}),rankForLevel:()=>({name:'Rookie'}),CHAIN_MILESTONES:[]});
   imports['../../../backend/src/hangarCatalog']={hangarCatalog:[]};
   imports['./shipNftVisibility']={shipNftMainnetVisible:false};

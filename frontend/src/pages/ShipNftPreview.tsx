@@ -131,6 +131,9 @@ function MainnetShipNftPreview() {
     <header className="boss-nft-header">
       <Link className="boss-nft-home" to="/"><span aria-hidden="true">←</span> {t("Home")}</Link>
       <h1>{copy.title}</h1>
+      <p>{t("NFT issuance is planned for Mainnet. In-game collection cards can be saved as images.")}</p>
+      <Link className="boss-nft-home" to="/" state={{ openShopView: "shop" }}>{t("Ship shop")}</Link>
+      <Link className="boss-nft-home" to="/" state={{ openCollection: true }}>{t("Card collection")}</Link>
       {user && canAdmin && <Link className="boss-nft-home" to="/admin/nft-bosses">{gallery.title}</Link>}
     </header>
     {!authReady || isLoading ? <p className="boss-nft-state" role="status">{gallery.loading}</p>

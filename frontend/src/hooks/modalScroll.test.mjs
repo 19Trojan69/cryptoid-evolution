@@ -4,6 +4,8 @@ import { readFileSync } from 'node:fs';
 import vm from 'node:vm';
 import ts from 'typescript';
 import * as jsx from 'react/jsx-runtime';
+import { MAX_DIFFICULTY_LEVEL } from '../pages/levelDifficulty.ts';
+import { BOSS_STICKER_COUNT } from '../../../backend/src/rewardRules.ts';
 
 test('closing quick access releases its route lock and restores the previous page overflow', () => {
   for (const original of ['', 'auto', 'scroll']) {
@@ -40,6 +42,9 @@ test('closing quick access releases its route lock and restores the previous pag
           };
           if (name === '../i18n') return { useLocale: () => ({ t: value => value }) };
           if (name === './BlockchainIcon') return { default: () => null };
+          if (name === '../pages/levelDifficulty') return { MAX_DIFFICULTY_LEVEL };
+          if (name === '../../../backend/src/rewardRules') return { BOSS_STICKER_COUNT };
+          if (name === '../lib/frameScheduler') return { requestGameFrame: () => 1, cancelGameFrame() {} };
           throw new Error(`Unexpected import: ${name}`);
         },
       });

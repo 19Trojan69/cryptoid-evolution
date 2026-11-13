@@ -8,16 +8,12 @@ import { axiosClient } from "../lib/axiosClient";
 import { nftGalleryCopy } from "../locales/bossNftGallery";
 import { bossNftPreviewCopy } from "../locales/bossNftPreview";
 import { bossName } from "./bossNames";
+import { bossNftEditions } from "./bossNftEditions";
 import { shipSaveNetwork } from "./shipFleet";
 import "./bossNftGallery.css";
 import "./bossNftPreview.css";
 
-const editions = {
-  victory: { name: "Victory Edition", supply: 31415 },
-  holo: { name: "Holo Edition", supply: 3141 },
-} as const;
-const holoPricePi = 14.9;
-type Edition = keyof typeof editions;
+type Edition = keyof typeof bossNftEditions;
 type Card = {
   id: number;
   story: string;
@@ -45,8 +41,8 @@ function CardDetail({ card, edition, saving, saveError, onInterest, onClose }: {
   const progressId = useId();
   const interestNoteId = useId();
   const number = new Intl.NumberFormat(locale).format;
-  const price = new Intl.NumberFormat(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(holoPricePi);
-  const { name, supply } = editions[edition];
+  const price = new Intl.NumberFormat(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(bossNftEditions.holo.pricePi);
+  const { name, supply } = bossNftEditions[edition];
   const holo = edition === "holo";
   const status = holo && card.interested ? copy.interested : card.defeated ? t("Boss defeated") : copy.reached;
 
@@ -86,7 +82,8 @@ function CardDetail({ card, edition, saving, saveError, onInterest, onClose }: {
           <p className="nft-preview-status" role="status">{status}</p>
           <dl className="nft-preview-facts">
             <div><dt>{copy.supply}</dt><dd>{number(supply)}</dd></div>
-            <div><dt>{t("Level")}</dt><dd>{number(card.id * 10)}</dd></div>
+            <div><dt>{t("Level")}</dt><dd>{number(card.id)}</dd></div>
+            <div><dt>{t("Campaign stage")}</dt><dd>{number(card.id * 10)}</dd></div>
             <div><dt>{copy.availability}</dt><dd>{holo ? copy.holo : copy.victory}</dd></div>
           </dl>
         </div>
@@ -195,7 +192,7 @@ function PreviewCards({ uid, edition, page, onPage, onRetry, onSignIn }: {
     {summary}
     <ul className="boss-nft-grid nft-preview-grid">
       {result.cards.map(card => <li key={card.id}>
-        <button className="nft-preview-tile" type="button" aria-label={`${bossName(card.id)} · ${editions[edition].name}`}
+        <button className="nft-preview-tile" type="button" aria-label={`${bossName(card.id)} · ${bossNftEditions[edition].name}`}
           onClick={() => { setSelected(card.id); setSaveError(false); }}>
           <img src={cardImage(card)} width={540} height={720} decoding="async" loading="lazy" alt="" />
           <span><strong>{bossName(card.id)}</strong>{card.interested && <small>{copy.interested}</small>}</span>
@@ -226,6 +223,7 @@ function TestnetBossNftPreview() {
   return <main className="boss-nft-page nft-preview-page">
     <header className="boss-nft-header">
       <Link className="boss-nft-home" to="/"><span aria-hidden="true">←</span> {t("Home")}</Link>
+      <Link className="boss-nft-home" to="/" state={{ openCollection: true }}>{t("Card collection")}</Link>
       <span className="nft-preview-network">{copy.preview}</span>
       <h1>{gallery.title}</h1>
       <p>{copy.intro}</p>
@@ -238,7 +236,7 @@ function TestnetBossNftPreview() {
       </div> : <>
         <div className="boss-nft-editions" role="group" aria-label={gallery.title}>
           {(["victory", "holo"] as const).map(edition => <button key={edition} type="button" aria-pressed={view.edition === edition}
-            onClick={() => setView({ edition, page: 1 })}>{editions[edition].name}</button>)}
+            onClick={() => setView({ edition, page: 1 })}>{bossNftEditions[edition].name}</button>)}
         </div>
         <PreviewCards key={`${user.uid}/${view.edition}/${view.page}/${attempt}`} uid={user.uid} {...view}
           onPage={page => setView(previous => ({ ...previous, page }))} onRetry={retry} onSignIn={connect} />

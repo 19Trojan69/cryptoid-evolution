@@ -6,6 +6,8 @@ import HomeEarthNetwork from "./HomeEarthNetwork";
 import "./cinematicHome.css";
 import "./galaxyEntry.css";
 import { isGameFullscreen, requestGameFullscreen } from "./gameFullscreen";
+import { MAX_DIFFICULTY_LEVEL } from "./levelDifficulty";
+import { BOSS_STICKER_COUNT } from "../../../backend/src/rewardRules";
 
 type Props = {
   paused: boolean; busy: boolean; rankName?: string; musicEnabled: boolean; musicLabel: string;
@@ -74,7 +76,7 @@ export default function CinematicHome({paused,busy,rankName,musicEnabled,musicLa
         <button className="cinematic-community" type="button" onClick={onCommunity}><BlockchainIcon kind="feedback"/><span>{t("Community")}</span><i aria-hidden="true">→</i></button>
         {nftLink}
       </div>
-      {onGalaxy && <button className="cinematic-galaxy" type="button" onClick={onGalaxy}><BlockchainIcon kind="galaxy"/><span><strong>{t("Galaxy map")}</strong><small>{t("Discover the future of Cryptoid Evolution")}</small><b>{t("Open interactive preview")} · {t("Preview · In development")}</b></span><i aria-hidden="true">→</i></button>}
+      {onGalaxy && <button className="cinematic-galaxy" type="button" onClick={onGalaxy}><BlockchainIcon kind="galaxy"/><span><strong>{t("Galaxy map")}</strong><small>{t("{stages} campaign stages · {bosses} bosses", { stages: MAX_DIFFICULTY_LEVEL, bosses: BOSS_STICKER_COUNT })}</small></span><i aria-hidden="true">→</i></button>}
     </div>
     <footer className="cinematic-footer">
       <button className="cinematic-terms" type="button" onClick={onTerms}>{t("Terms of service")}</button>

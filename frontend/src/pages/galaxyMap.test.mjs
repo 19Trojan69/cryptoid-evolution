@@ -14,6 +14,8 @@ import { bossName } from './bossNames.ts';
 import { translate, languages } from '../i18n.ts';
 import { galaxyMapTranslations } from '../locales/galaxyMap.ts';
 import { galaxyScenery, galaxySceneryAsset } from './galaxyScenery.ts';
+import { MAX_DIFFICULTY_LEVEL } from './levelDifficulty.ts';
+import { BOSS_STICKER_COUNT } from '../../../backend/src/rewardRules.ts';
 
 test('500 unique levels ascend from the bottom across ten regions with exact port counts', () => {
   const stations = model.galaxyStations.flat();
@@ -224,7 +226,7 @@ test('actual sector buttons have labels and independent level, boss, mini-game a
   for(const kind of ['level','boss','mini'])assert.ok(hits.some(hit=>hit.kind===kind&&hit.level===10));
   const retro=elements(Sector({region:0,progress:model.emptyGalaxyProgress(),onSelect:()=>{},retroLevels:[5,10],unlockedGames:[{level:5,name:'Klassischer Sammelflug'}]}));
   assert.match(text(retro.find(node=>node.props['data-mini-level']===5)),/Retro Mini GameKlassischer Sammelflug/);
-  assert.equal(text(retro.find(node=>node.props['data-mini-level']===10)),'✧Retro Mini GameLevel 10');
+  assert.equal(text(retro.find(node=>node.props['data-mini-level']===10)),'✧Retro Mini GameKampagnenabschnitt 10');
 });
 
 test('dialogs preserve future-only mini-games and route trades into the supplied existing shop',()=>{
@@ -238,10 +240,10 @@ test('dialogs preserve future-only mini-games and route trades into the supplied
   assert.equal(arcade.filter(node=>node.type==='button').length,2);
   assert.ok(arcade.some(node=>node.type==='button'&&node.props.className==='galaxy-primary'));
   assert.ok(arcade.every(node=>node.type!=='iframe'));
-  assert.match(text(arcade.find(node=>node.type==='header')),/Retro Mini Game · Level 5/);
+  assert.match(text(arcade.find(node=>node.type==='header')),/Retro Mini Game · Kampagnenabschnitt 5/);
   const lockedRetro=elements(Dialog({...props,selection:{kind:'mini',level:90},lockedRetro:'level'}));
   assert.equal(text(lockedRetro.find(node=>node.type==='h2')),'Retro Mini Game');
-  assert.ok(lockedRetro.some(node=>node.type==='p'&&text(node)==='Erreiche Level 90, um dieses Spiel freizuschalten.'));
+  assert.ok(lockedRetro.some(node=>node.type==='p'&&text(node)==='Erreiche Kampagnenabschnitt 90, um dieses Spiel freizuschalten.'));
   assert.equal(lockedRetro.filter(node=>node.type==='button').length,1);
   let enter=0;
   const locked=elements(Dialog({...props,selection:{kind:'mini',level:5},onEnterTestCode:()=>enter++}));
@@ -253,15 +255,15 @@ test('dialogs preserve future-only mini-games and route trades into the supplied
   assert.deepEqual(shop,['shop','hangar']);
 });
 
-test('both native navigation entries use real callbacks and Quick access exposes the preview status',()=>{
+test('both native navigation entries show campaign stages and bosses and open the map',()=>{
   let opened=0;
-  const Home=component('./CinematicHome.tsx',{...locale,'../components/ServiceBadge':{default:()=>null},'../components/BlockchainIcon':{default:()=>null},'./HomeEarthNetwork':{default:()=>null},'./gameFullscreen':{isGameFullscreen:()=>false}});
+  const Home=component('./CinematicHome.tsx',{...locale,'./levelDifficulty':{MAX_DIFFICULTY_LEVEL},'../../../backend/src/rewardRules':{BOSS_STICKER_COUNT},'../components/ServiceBadge':{default:()=>null},'../components/BlockchainIcon':{default:()=>null},'./HomeEarthNetwork':{default:()=>null},'./gameFullscreen':{isGameFullscreen:()=>false}});
   const entry=elements(Home({onGalaxy:()=>opened++,paused:false,busy:false})).find(node=>node.type==='button'&&node.props.className==='cinematic-galaxy');
-  assert.ok(entry);entry.props.onClick();assert.equal(opened,1);
-  const actions=[],Quick=component('../components/QuickAccessMenu.tsx',{...locale,'./BlockchainIcon':{default:()=>null}});
+  assert.ok(entry);assert.match(text(entry),/500 Kampagnenabschnitte · 50 Bosse/);entry.props.onClick();assert.equal(opened,1);
+  const actions=[],Quick=component('../components/QuickAccessMenu.tsx',{...locale,'../pages/levelDifficulty':{MAX_DIFFICULTY_LEVEL},'../../../backend/src/rewardRules':{BOSS_STICKER_COUNT},'./BlockchainIcon':{default:()=>null}});
   const menu=elements(Quick({onClose:()=>{},onAction:value=>actions.push(value),signedIn:false,canAdmin:false}));
   const quick=menu.find(node=>node.type==='button'&&text(node).includes('500'));
-  assert.ok(quick);assert.match(text(quick),/Vorschau/);quick.props.onClick();assert.deepEqual(actions,['galaxy']);
+  assert.ok(quick);assert.match(text(quick),/500 Kampagnenabschnitte · 50 Bosse/);quick.props.onClick();assert.deepEqual(actions,['galaxy']);
 });
 
 test('all 19 selectable languages translate every new map string and retain their existing language choice',()=>{
@@ -286,6 +288,7 @@ test('actual ship flight only reflects a new adjacent confirmed stage and never 
   const doc={documentElement:{dataset:{motion:'standard'},style:{overflow:'auto'}},body:{style:{overflow:''}}};
   const Map=component('./GalaxyMap.tsx',{
     ...locale,
+    './levelDifficulty':{MAX_DIFFICULTY_LEVEL},'../../../backend/src/rewardRules':{BOSS_STICKER_COUNT},
     react:{useCallback:fn=>fn,useState:initial=>{const id=cursor++;return hooks[id]??(hooks[id]=[typeof initial==='function'?initial():initial,()=>{}]);},useRef:initial=>{const id=cursor++,target=refIndex++;return hooks[id]??(hooks[id]={current:target===0?scroll:target===1?ship:initial});},useEffect:(fn,deps)=>{const id=cursor++,before=hooks[id];if(!before||deps.some((value,i)=>value!==before.deps[i]))pending.push(()=>{before?.cleanup?.();hooks[id]={deps,cleanup:fn()};});}},
     'react-router-dom':{useLocation:()=>({state:null}),useNavigate:()=>()=>{}},
     '../components/BlockchainIcon':{default:()=>null},'./ShipPortrait':{default:()=>null},

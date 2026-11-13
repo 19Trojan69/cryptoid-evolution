@@ -367,7 +367,7 @@ for (const locale of Object.keys(languageLabels) as Locale[]) {
   legacyCatalog[locale]!["MISSION FAILED"] = failedMissionTranslations[locale] ?? "MISSION FAILED";
 }
 // Currency and product names remain the same in every language.
-const sharedNames = new Set(["Shards", "Shard", "Cryptoids", "Cryptoid", "Cryptoid Evolution", "Pi", "Test-Pi", "Testnet", "Mainnet", "Top 100", "Overdrive"]);
+const sharedNames = new Set(["Shards", "Shard", "Cryptoids", "Cryptoid", "Cryptoid Evolution", "Pi", "Test-Pi", "Testnet", "Mainnet", "NFTs", "Top 100", "Overdrive"]);
 const localizedValue = (locale: Locale, source: string, seen = new Set<string>()): string | undefined => {
   if (sharedNames.has(source)) return source;
   const explicit = localeCatalog[locale]?.[source] ?? legacyCatalog[locale]?.[source];

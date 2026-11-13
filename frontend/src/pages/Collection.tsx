@@ -5,6 +5,7 @@ import { bossCardAvailable, shipCardAvailable } from './cardAvailability';
 import CollectionCardView from './CollectionCardView';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { Link } from 'react-router-dom';
 import { useLocale } from '../i18n';
 import { loadAccountSave } from '../lib/accountSave';
 import { axiosClient } from '../lib/axiosClient';
@@ -23,7 +24,7 @@ import './collection.css';
 import './shopPurchase.css';
 
 type Ownership={testnetCatalogAccess?:boolean;owner:string;used:string[];upgrades:string[];wins:Record<string,number>};
-export default function Collection({uid,onClose}:{uid?:string;onClose:()=>void}){
+export default function Collection({uid,onClose,nftPreviewPath}:{uid?:string;onClose:()=>void;nftPreviewPath?:string}){
  const {locale,t}=useLocale(),de=locale.startsWith('de'),say=(a:string,b:string)=>de?a:t(b);
  const [category,setCategory]=useState(0),[selectedKey,setSelected]=useState<string|null>(null);
  const [ownership,setOwnership]=useState<Ownership>({owner:'',used:[],upgrades:[],wins:{}}),[status,setStatus]=useState('loading'),[retry,setRetry]=useState(0);
@@ -62,6 +63,7 @@ export default function Collection({uid,onClose}:{uid?:string;onClose:()=>void})
     <div className="collection-tabs" role="group" aria-label={say('Kategorien','Categories')}>{categories.map((name,index)=><button type="button" key={name} aria-pressed={category===index} onClick={()=>{gridPosition.current={category:index,owner:uid,top:0};setCategory(index);}}>{name}</button>)}</div>
     <p className="collection-rule">{category===0&&ownerTestnet?t('Defeat each boss to unlock its card.'):category===0?say('Die ersten drei Bosskarten sind freischaltbar. Besiege den jeweiligen Boss. Weitere Karten bleiben bis zur Freigabe als Silhouetten sichtbar.','The first three boss cards can be unlocked by defeating their boss. Other cards remain silhouettes until release.'):category===1?t('New ship cards appear once after acquisition. Owned cards stay in your collection.'):say('Die Karte wird durch den Kauf dieser Aufrüstung freigeschaltet. Elite setzt Advanced voraus.','Purchase this upgrade to unlock its card. Elite requires Advanced.')}</p>
     {!uid&&<p className="collection-rule">{t('Guest ship cards are stored on this device. Sign in to view your account collection.')}</p>}
+    {nftPreviewPath&&<Link className="collection-download" to={nftPreviewPath}>NFTs</Link>}
     {status==='loading'?<p role="status">{say('Sammlung wird geladen …','Loading collection …')}</p>:status==='error'?<div role="alert"><p>{say('Die Sammlung konnte nicht geladen werden.','Could not load your collection.')}</p><button type="button" onClick={()=>setRetry(n=>n+1)}>{say('Erneut versuchen','Retry')}</button></div>:<>
      <p className="collection-count">{entries.filter(e=>e.unlocked).length}/{entries.length} {say('FREIGESCHALTET','UNLOCKED')}</p>
      <div className="collection-grid">{entries.map(entry=><button type="button" key={entry.key} className={`collection-tile tier-${entry.tier} ${entry.unlocked?'':'is-locked'}`} aria-label={`${entry.name} · ${entry.unlocked?say('Karte öffnen','Open card'):entry.available?say('GESPERRT','LOCKED'):say('MAINNET READY','MAINNET READY')}`} data-background-state={entry.unlocked?(cardBackgroundAsset(entry.key).image?'unique':'pending'):'locked'} style={entry.unlocked?{backgroundImage:`linear-gradient(180deg,rgba(5,12,24,.2),rgba(5,12,24,.93)),url("${collectionBackground(entry.key)}")`}:undefined} onClick={()=>{gridPosition.current={category,owner:uid,top:scroller.current?.scrollTop??0};setSelected(entry.key);}}>

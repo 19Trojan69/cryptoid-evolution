@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import BossPortrait from "./BossPortrait";
 import ShipPortrait from "./ShipPortrait";
 import { bossName } from "./bossNames";
@@ -6,7 +6,14 @@ import WeaponTutorial from "./WeaponTutorial";
 import BossPhaseGuide from './BossPhaseGuide';
 import { useLocale } from "../i18n";
 import { shipEvolutionAsset } from "./shipEvolution";
-import { START_POWER_DURATION_MS } from "../../../backend/src/hangarCatalog";
+import { shipSaveNetwork } from "./shipFleet";
+import { bossNftEditions } from "./bossNftEditions";
+import { MAX_DIFFICULTY_LEVEL } from "./levelDifficulty";
+import { RELEASED_BOSS_CARDS } from "./cardAvailability";
+import { hangarCatalog, START_POWER_DURATION_MS } from "../../../backend/src/hangarCatalog";
+import { MAX_CHARGE_QUANTITY } from "../../../backend/src/chargePurchase";
+import { BOSS_STICKER_COUNT } from "../../../backend/src/rewardRules";
+import { shipNftMaxSupply } from "../../../backend/src/shipNftCatalog";
 
 const powerSeconds = {
   shield: START_POWER_DURATION_MS.shield / 1_000,
@@ -18,12 +25,12 @@ const topics = [
   {
     id: "overview", label: "Game description", title: "Defend Earth. Evolve your fleet.",
     intro: "Cryptoid Evolution is an arcade space shooter. Pilot your ship, defeat formations and bosses, collect boosts and build your fleet.",
-    details: ["Each level has nine visible Blocks, then a boss fight and a bonus round.", "Your ship fires automatically. Move to dodge and line up your shots.", "Between levels, the summary shows bonus rewards, battle statistics and save status. Choose Continue game once saving is confirmed.", "Boss hearts restore one lost heart up to your armor limit. At full hearts, collecting one grants 50 Shards instead.", "Open Rewards to see linked Blocks, boss stickers, stars, chain milestones, bonus medals and your current service rank."],
+    details: ["Each level has nine visible Blocks, then a boss fight and a bonus round.", "The campaign has {levels} levels. The Galaxy map numbers the {stages} campaign stages in order.", "Your ship fires automatically. Move to dodge and line up your shots.", "Between levels, the summary shows bonus rewards, battle statistics and save status. Choose Continue game once saving is confirmed.", "Boss hearts restore one lost heart up to your armor limit. At full hearts, collecting one grants 50 Shards instead.", "Open Rewards to see linked Blocks, boss stickers, stars, chain milestones, bonus medals and your current service rank."],
   },
   {
     id: "visuals", label: "Illustrated guide", title: "Ships at a glance",
     intro: "Recognize your ship stages and the boss hulls before your mission.",
-    details: ["Standard, Advanced and Elite share the same ship design, with increasingly reinforced parts.", "Bosses have their own silhouettes, weapon turrets and engine positions. Their appearance differs from the normal ships."],
+    details: ["Standard, Advanced and Elite share the same ship design, with increasingly reinforced parts.", "Each ship keeps its livery across all three editions. Pi Vanguard has a gold and violet Metallic Edition.", "Bosses have their own silhouettes, weapon turrets and engine positions. Their appearance differs from the normal ships."],
   },
   {
     id: "controls", label: "Controls", title: "Move and fire",
@@ -53,7 +60,7 @@ const topics = [
       "Avoid enemy ships and projectiles. An active shield absorbs an impact; otherwise a collision or an unguarded projectile can cost a heart.",
       "Ship stages do not absorb hits. Active shields protect separately; armor determines your maximum hearts. The larger pickup radius applies only to normal power-ups, not boss hearts or bonus targets.",
       "Enemy hulls have different strengths. Even the first boss needs sustained fire; bosses attack faster as their hull weakens.",
-      "Destroy the turrets first. When the reactor opens, aim at the reactor and dodge its pulses.",
+      "Destroy all turrets first. After the reactor opens, shoot it directly. Each reactor hit deals double damage.",
       "Escort waves return during the reactor phase. From Boss 5 onward, the next wave enters as soon as the previous one is cleared.",
       "Damaged turrets glow intense orange before exploding.",
     ],
@@ -88,7 +95,7 @@ const topics = [
     id: "collection", label: "Collection & ranks", title: "Collect bosses and milestones",
     intro: "Open Rewards to see linked Blocks, boss stickers, stars, chain milestones, bonus medals and your current service rank.",
     details: [
-      "There are 50 boss stickers. The first win against a boss unlocks its sticker; repeat wins raise it to two and then three stars.",
+      "Defeat a boss to earn its sticker when the card is released. Two and three wins earn two and three stars.",
       "Your service rank rises with completed difficulty stages up to stage 500. The newest rank replaces the previous one beside your name and appears in the Top 100.",
       "Complete chains in different levels to earn milestones at 1, 3, 10, 25 and 50 chains. The best bonus medal for each level is shown in your collection.",
       "Testnet Rewards are for testing only and will not transfer to Mainnet. Mainnet Rewards start from zero and then stay saved permanently to your account.",
@@ -96,13 +103,18 @@ const topics = [
     ],
   },
   {
-    id: "hangar", label: "Hangar & Testnet", title: "Expand your fleet",
+    id: "hangar", label: "Shop & hangar", title: "Expand your fleet",
     intro: "Grey Scout is free. Use earned Shards for available Standard ships.",
+    details: ["The ship shop offers {hulls} Standard models. Grey Scout is the free starter."],
+  },
+  {
+    id: "nfts", label: "NFTs", title: "NFTs",
+    intro: "NFT issuance is planned for Mainnet. In-game collection cards can be saved as images.",
     details: [
-      "On Testnet, ten Standard hulls are available, including the free Grey Scout. Verified owner access opens all 20 hulls for Shards.",
-      "With a connected Pi account, regular Testnet pilots can buy Twin Laser and Rapid Twin charges with Test-Pi. Verified owner access also opens Triple Laser, Plasma, start power-ups, armor and ship upgrades.",
-      "For weapon and power-up charges, choose 1, 5 or 10, or enter a quantity before confirming the Test-Pi payment.",
-      "Shards and collectible rewards have no Pi or cash value.",
+      "Per boss, the Victory Edition has {victory} copies and is free after a confirmed win. The Holo Edition has {holo} copies at a planned price of {price} Pi each.",
+      "Each confirmed Mainnet ship acquisition or upgrade includes the NFT for that edition. Elite requires Advanced.",
+      "Planned ship upgrade prices are {advancedPrice} Pi for Advanced and {elitePrice} Pi for Elite.",
+      "Each ship model has up to {standard} Standard, {advanced} Advanced and {elite} Elite NFTs.",
     ],
   },
   {
@@ -117,24 +129,42 @@ const topics = [
 ] as const;
 
 export type GuideTopic = (typeof topics)[number]["id"];
-type GameGuideProps = { onClose: () => void; initialTopic?: GuideTopic; backLabel?: string };
+const destinationLabels = {
+  shop: "Ship shop", hangar: "Your fleet", weapons: "Weapons", powers: "Power-ups",
+  rewards: "Rewards", cards: "Card collection", galaxy: "Galaxy map", nfts: "NFTs", progress: "Progress",
+} as const;
+type Destination = keyof typeof destinationLabels;
+const related: Partial<Record<GuideTopic, readonly Destination[]>> = {
+  overview: ["shop", "cards", "galaxy", "nfts"], visuals: ["hangar", "cards"],
+  boosts: ["weapons", "powers"], earnings: ["rewards"], collection: ["cards", "rewards", "nfts"],
+  hangar: ["shop", "hangar"], nfts: ["nfts", "shop"], features: ["progress", "galaxy"],
+};
+const advancedOffer = hangarCatalog.find(offer => offer.kind === "ship_upgrade" && offer.stage === 2)!;
+const eliteOffer = hangarCatalog.find(offer => offer.kind === "ship_upgrade" && offer.stage === 3)!;
+type GameGuideProps = {
+  onClose: () => void; initialTopic: GuideTopic; backLabel: string;
+  onNavigate: (destination: Destination) => void; nftPreviewAvailable: boolean; ownerTestnet: boolean; standardModelsAvailable: number;
+};
 
-const GameGuide = ({ onClose, initialTopic = "controls", backLabel = "Back to system" }: GameGuideProps) => {
-  const { t } = useLocale();
+const GameGuide = ({ onClose, initialTopic, backLabel, onNavigate, nftPreviewAvailable, ownerTestnet, standardModelsAvailable }: GameGuideProps) => {
+  const { locale, t } = useLocale();
   const [selected, setSelected] = useState<GuideTopic>(initialTopic);
   const topic = topics.find(item => item.id === selected) ?? topics[0];
-  useEffect(() => {
-    const closeOnEscape = (event: KeyboardEvent) => { if (event.key === "Escape") onClose(); };
-    window.addEventListener("keydown", closeOnEscape);
-    return () => window.removeEventListener("keydown", closeOnEscape);
-  }, [onClose]);
+  const destinations = (related[topic.id] ?? []).filter(destination => destination !== "nfts" || nftPreviewAvailable);
+  const number = new Intl.NumberFormat(locale).format;
+  const pi = new Intl.NumberFormat(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format;
+  const values = {
+    ...powerSeconds, levels: BOSS_STICKER_COUNT, stages: MAX_DIFFICULTY_LEVEL,
+    hulls: standardModelsAvailable,
+    victory: number(bossNftEditions.victory.supply), holo: number(bossNftEditions.holo.supply),
+    price: pi(bossNftEditions.holo.pricePi), advancedPrice: pi(advancedOffer.pricePi), elitePrice: pi(eliteOffer.pricePi),
+    standard: number(shipNftMaxSupply.Standard), advanced: number(shipNftMaxSupply.Advanced), elite: number(shipNftMaxSupply.Elite),
+  };
 
   return <div className="info-panel" role="dialog" aria-modal="true" aria-labelledby="info-title">
     <div className="info-panel-content guide-panel-content">
       <button className="close-button" type="button" onClick={onClose} aria-label={t(backLabel)}>×</button>
-      <p className="eyebrow">{t("FIELD GUIDE")}</p>
       <h2 id="info-title">{t("How to Play")}</h2>
-      <p className="guide-lead">{t("Choose a topic to learn the current rules before your mission.")}</p>
       <label className="guide-topic-picker">
         <span>{t("Guide topics")}</span>
         <select value={selected} onChange={event => setSelected(event.target.value as GuideTopic)}>
@@ -147,10 +177,21 @@ const GameGuide = ({ onClose, initialTopic = "controls", backLabel = "Back to sy
       <section className="guide-detail" aria-live="polite" aria-labelledby="guide-section-title" key={topic.id}>
         <h3 id="guide-section-title">{t(topic.title)}</h3>
         <p>{t(topic.intro)}</p>
+        {destinations.length > 0 && <nav className="guide-related" aria-label={t("Game navigation")}>
+          {destinations.map(destination => <button key={destination} className="button button-secondary" type="button" onClick={() => onNavigate(destination)}>{t(destinationLabels[destination])}</button>)}
+        </nav>}
         {topic.id === "visuals" && <div className="guide-ship-gallery">{([1, 2, 3] as const).map(stage => <figure key={stage}><ShipPortrait src={shipEvolutionAsset(0, stage)} name={t(stage === 1 ? "Standard ship" : stage === 2 ? "Advanced ship" : "Elite ship")} /><figcaption>{t(stage === 1 ? "STANDARD" : stage === 2 ? "ADVANCED" : "ELITE")}</figcaption></figure>)}<figure className="guide-boss-example"><BossPortrait id={1} /><figcaption>#01 · {bossName(1)}</figcaption></figure></div>}
         {(topic.id === "boosts" || topic.id === "controls") && <WeaponTutorial />}
         {topic.id === "survival" && <BossPhaseGuide />}
-        <ul>{topic.details.map(detail => <li key={detail}>{t(detail, powerSeconds)}</li>)}</ul>
+        <ul>
+          {topic.id === "collection" && !ownerTestnet && <li>{t("The first {count} boss cards are available to unlock.", { count: RELEASED_BOSS_CARDS })}</li>}
+          {topic.details.map(detail => <li key={detail}>{t(detail, values)}</li>)}
+          {topic.id === "hangar" && shipSaveNetwork === "testnet" && <>
+            <li>{t("With a connected Pi account, regular Testnet pilots can buy Twin Laser and Rapid Twin charges with Test-Pi. Verified owner access also opens Triple Laser, Plasma, start power-ups, armor and ship upgrades.")}</li>
+            <li>{t("Choose 1, 5 or 10 charges, or enter a quantity from 1 to {max} before confirming a Test-Pi purchase.", { max: MAX_CHARGE_QUANTITY })}</li>
+          </>}
+          {topic.id === "nfts" && shipSaveNetwork === "testnet" && <li>{t("Boss NFT previews appear when you reach the boss. You can register interest in its Holo Edition.")}</li>}
+        </ul>
       </section>
       <button className="button button-secondary guide-back" type="button" onClick={onClose}><span className="guide-back-arrow" aria-hidden="true">←</span>{t(backLabel)}</button>
     </div>
