@@ -8,7 +8,7 @@ import { shipEvolutionAsset } from './shipEvolution';
 import { allPlayerColors, playerSkins } from './shipFleet';
 import { staticHullAsset } from './staticHullAssets';
 
-type StickerArtwork = Omit<ArcadeSticker, 'owner'>;
+type StickerArtwork = Omit<ArcadeSticker, 'owner'> & { fallbackImage?: string };
 export type ArcadeStickerAlbum = { stickers: StickerArtwork[]; savedToAccount: boolean };
 
 function stickerArtwork(sticker: ArcadeStickerBackup, local?: ArcadeSticker): StickerArtwork | undefined {
@@ -20,6 +20,7 @@ function stickerArtwork(sticker: ArcadeStickerBackup, local?: ArcadeSticker): St
     ...sticker,
     shipName: local?.shipName ?? skin.name,
     image: (sticker.stage === 1 ? local?.image : undefined) ?? staticHullAsset(skin.sprite, color.id, sticker.stage)?.url ?? fallback,
+    fallbackImage: local?.image,
   };
 }
 

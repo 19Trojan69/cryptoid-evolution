@@ -82,7 +82,10 @@ export default function GalaxyStickerAlbum({ owner, stations, stationCount, init
                           <path className="galaxy-sticker-motif-details" d={motif.details}/>
                         </svg>}
                       </div>
-                      <img className="galaxy-sticker-ship" src={sticker.image} alt="" draggable={false}/>
+                      <img className="galaxy-sticker-ship" src={sticker.image} alt="" draggable={false} onError={({ currentTarget }) => {
+                        const cachedImage = sticker.fallbackImage;
+                        if (cachedImage && currentTarget.getAttribute('src') !== cachedImage) currentTarget.src = cachedImage;
+                      }}/>
                     </> : <span className="galaxy-sticker-lock"/>}
                   </div>
                   <strong>{name}</strong>
