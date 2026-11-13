@@ -1,24 +1,21 @@
 import type { Request, Router } from "express";
 import type { Collection } from "mongodb";
 import { canAdmin } from "../adminAccess";
-import { galaxyProgress } from "../galaxyProgress";
+import { BOSS_NFT_PREVIEW_PAGE_SIZE as pageSize } from "../nftPreviewLimits";
 import { rewardNetwork } from "../rewardNetwork";
 import { BOSS_STICKER_COUNT, readRewardProgress } from "../rewardRules";
 import "../types/session";
 
 export const BOSS_NFT_PREVIEW_ART_REVISION = "weapon-clearance-20261112";
 const interestField = "testnetBossHoloInterest";
-const pageSize = 6;
 const maxPage = Math.ceil(BOSS_STICKER_COUNT / pageSize);
 const progressProjection = {
-  "playerByNetwork.testnet.highestSector": 1,
-  "rewardsByNetwork.testnet": 1,
+  "rewardsByNetwork.testnet.bossWins": 1,
   [interestField]: 1,
 };
 
 type PreviewAccount = {
   uid: string;
-  playerByNetwork?: { testnet?: { highestSector?: number } };
   rewardsByNetwork?: { testnet?: unknown };
   testnetBossHoloInterest?: number[];
 };
@@ -29,11 +26,8 @@ function verifiedUser(req: Request) {
   return token && user?.uid && user.accessToken === token ? user : null;
 }
 
-function reachedBosses(account: PreviewAccount) {
-  const rewards = readRewardProgress(JSON.stringify(account.rewardsByNetwork?.testnet ?? {}));
-  const progress = galaxyProgress(rewards, account.playerByNetwork?.testnet?.highestSector);
-  return { total: Math.floor(progress.currentLevel / 10), wins: progress.bossWins };
-}
+const confirmedWins = (account: PreviewAccount) =>
+  readRewardProgress(JSON.stringify(account.rewardsByNetwork?.testnet ?? {})).bossWins;
 
 export default function mountBossNftPreview(router: Router) {
   router.use((req, res, next) => {
@@ -56,9 +50,10 @@ export default function mountBossNftPreview(router: Router) {
       const users: Collection<PreviewAccount> = req.app.locals.userCollection;
       const account = await users.findOne({ _id: user._id, uid: user.uid }, { projection: progressProjection });
       if (!account) return res.status(410).json({ error: "account_deleted" });
-      const { total, wins } = reachedBosses(account);
+      const wins = confirmedWins(account);
       const offset = (page - 1) * pageSize;
-      const bossIds = Array.from({ length: Math.max(0, Math.min(pageSize, total - offset)) }, (_, index) => offset + index + 1);
+      const bossIds = Array.from({ length: Math.min(pageSize, BOSS_STICKER_COUNT - offset) }, (_, index) => offset + index + 1)
+        .filter(id => Boolean(wins[id]));
       const canSeeCounts = edition === "holo" && await canAdmin(req);
       const interestSummary = canSeeCounts ? await users.aggregate<{ id: number; count: number }>([
         { $match: { [interestField]: { $exists: true } } },
@@ -67,7 +62,7 @@ export default function mountBossNftPreview(router: Router) {
         { $sort: { _id: 1 } },
         { $project: { _id: 0, id: "$_id", count: 1 } },
       ]).toArray() : undefined;
-      const response = { owner: user.uid, total, pageSize, ...(interestSummary && { interestSummary }) };
+      const response = { owner: user.uid, total: Object.keys(wins).length, pageSize, ...(interestSummary && { interestSummary }) };
       if (!bossIds.length) return res.json({ ...response, cards: [] });
 
       const artIds = bossIds.map(id => `${BOSS_NFT_PREVIEW_ART_REVISION}:${edition}:${id}`);
@@ -84,7 +79,7 @@ export default function mountBossNftPreview(router: Router) {
             !art.webp.startsWith("UklGR") || art.webp.length > 100_000)
           throw new Error("Gallery artwork unavailable");
         return {
-          id, story: art.story, webp: art.webp, defeated: Boolean(wins[id]),
+          id, story: art.story, webp: art.webp, defeated: true,
           interested: edition === "holo" && interested.includes(id),
         };
       });
@@ -107,7 +102,7 @@ export default function mountBossNftPreview(router: Router) {
       const accountKey = { _id: user._id, uid: user.uid };
       const account = await users.findOne(accountKey, { projection: progressProjection });
       if (!account) return res.status(410).json({ error: "account_deleted" });
-      if (id > reachedBosses(account).total) return res.status(403).json({ error: "boss_not_reached" });
+      if (!confirmedWins(account)[id]) return res.status(403).json({ error: "boss_not_defeated" });
 
       const result = await users.updateOne(accountKey, interested
         ? { $addToSet: { [interestField]: id } }

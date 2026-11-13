@@ -1,7 +1,16 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { supportedLanguages, normalizeLocale, resolveLocale, localeDirection, documentLanguage } from './config.ts';
-import { createLanguagePreferences, LANGUAGE_STORAGE_KEY } from './preferences.ts';
+import { createLanguagePreferences, deviceLanguages, LANGUAGE_STORAGE_KEY } from './preferences.ts';
+
+test('the primary device language is preferred even if the browser list starts with English', t => {
+  const navigator = globalThis.navigator;
+  t.mock.getter(navigator, 'language', () => 'th-TH');
+  t.mock.getter(navigator, 'languages', () => ['en-US', 'de-AT']);
+  assert.deepEqual(deviceLanguages(), ['th-TH', 'en-US', 'de-AT']);
+  assert.equal(resolveLocale(deviceLanguages()), 'th');
+  assert.equal(resolveLocale(deviceLanguages(), 'de'), 'de');
+});
 
 test('original languages and Chinese/Vietnamese resolve device tags and manual choices', () => {
   assert.equal(Object.keys(supportedLanguages).length, 19);

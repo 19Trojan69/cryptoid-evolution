@@ -1,6 +1,5 @@
 import ShipPreview from "./ShipPreview";
 import PiPrice from "../components/PiPrice";
-import TestPiPurchase from './TestPiPurchase';
 import { fleetCount, shipFactoryPaint, standardHullAvailable, standardShipPrice, type ShipFleet } from "./shipFleet";
 import { stagePickupRadiusBonus, type ShipStage } from "./shipEvolution";
 import { vanguardMetallic } from '../../../backend/src/shipLivery.ts';
@@ -10,7 +9,7 @@ import { shipNftMainnetVisible } from "./shipNftVisibility";
 import { attributesForHull, shipBaseFirepower } from "./shipAttributes";
 
 type Skin = typeof import("./shipFleet").playerSkins[number];
-export type ShipUpgradeOffer = { id: string; description: string; pricePi: number; shipIndex?: number; stage?: 2 | 3 };
+type ShipUpgradeOffer = { description: string; pricePi: number; shipIndex?: number; stage?: 2 | 3 };
 
 type Props = {
   view: "shop" | "hangar";
@@ -22,11 +21,6 @@ type Props = {
   locale: string;
   offers: ShipUpgradeOffer[];
   adminPreview?: boolean;
-  testnetCatalogAccess?: boolean;
-  upgradePending?: boolean;
-  upgradeStatus?: string;
-  upgradeDiagnostic?: string;
-  onBuyUpgrade?: (offer: ShipUpgradeOffer) => void;
   purchaseBusy?: boolean;
   message: string;
   selectedSkinId: string;
@@ -39,11 +33,11 @@ type Props = {
   onOpenShop: (stage: ShipStage) => void;
 };
 
-const stageLabel = (stage: ShipStage) => stage === 1 ? "STANDARD" : stage === 2 ? "ADVANCED" : "ELITE";
+const stageLabel = (stage: ShipStage) => shipNftEditions[stage - 1].toUpperCase();
 
 export default function ShipSelectionPanel({
   view, skin, focusStage, ownedStage, fleet, shards, locale, offers,
-  adminPreview, testnetCatalogAccess = false, upgradePending, upgradeStatus, upgradeDiagnostic, onBuyUpgrade,
+  adminPreview,
   purchaseBusy, message, selectedSkinId, selectedStage = 1, selectionConfirmed = true, t, onStageChange,
   onBuyStandard, onEquipPreview, onOpenShop,
 }: Props) {
@@ -51,7 +45,7 @@ export default function ShipSelectionPanel({
   const stage = focusStage;
   const price = standardShipPrice(skin);
   const shardPrice = price.toLocaleString(locale);
-  const piPrice = (amount: number) => <PiPrice amount={amount} locale={locale} testnet={testnetCatalogAccess} />;
+  const piPrice = (amount: number) => <PiPrice amount={amount} locale={locale} />;
   const standardAvailable = standardHullAvailable(skin.id, shipNftMainnetVisible);
   const offerFor = (level: ShipStage) => offers.find(offer => offer.shipIndex === skin.sprite && offer.stage === level);
   const focusedOffer = offerFor(stage);
@@ -60,9 +54,9 @@ export default function ShipSelectionPanel({
   const advancedOffer = offerFor(2);
   const factoryPaint = shipFactoryPaint(skin.id);
   const metallic = factoryPaint.id === vanguardMetallic.id;
-  const description = stage === 1 ? t("Single fire. No free enemy projectile hits. An active shield protects against shots and ship collisions.") : t(offerFor(stage)?.description ?? "");
+  const description = stage === 1 ? t("Single fire. No free enemy projectile hits. An active shield protects against shots and ship collisions.") : t(focusedOffer?.description ?? "");
   const stageOwned = hullCount > 0 && ownedStage >= stage;
-  const locked = stage === 1 ? !standardAvailable : !stageOwned && !testnetCatalogAccess;
+  const locked = stage === 1 ? !standardAvailable : !stageOwned;
   const status = stageOwned ? t("Stage owned") : t("Stage not owned");
   const attributes = attributesForHull(skin.id);
   const firepower = shipBaseFirepower(skin.id, stage);
@@ -82,16 +76,16 @@ export default function ShipSelectionPanel({
     <div className="ship-version-tabs" role="group" aria-label={t("Three ship stages")}>
       {([1, 2, 3] as const).map(level => <button key={level} type="button" aria-pressed={stage === level}
         data-owned={Boolean(hullCount && ownedStage >= level)} onClick={() => onStageChange(level)}>
-        <strong>{t(stageLabel(level))}</strong>
+        <strong>{stageLabel(level)}</strong>
         <small>{hullCount && ownedStage >= level ? t("Owned") : level === 1 ? `◆ ${shardPrice}` : offerFor(level) ? piPrice(offerFor(level)!.pricePi) : t("Price unavailable")}</small>
       </button>)}
     </div>
     <div className="ship-one-hero">
       <div className="ship-one-info">
-        <h3>{skin.name} <small>· {t(stageLabel(stage))}{metallic && ` · ${factoryPaint.name}`}</small></h3>
+        <h3>{skin.name} <small>· {stageLabel(stage)}{metallic && ` · ${factoryPaint.name}`}</small></h3>
         <strong className="ship-stage-status" data-owned={stageOwned}>{status}{stage === 1 && hullCount > 0 ? ` ×${hullCount}` : ""}</strong>
       </div>
-      <div className="ship-one-art-wrap" role="img" aria-label={`${skin.name} · ${t(stageLabel(stage))}${metallic ? ` · ${factoryPaint.name}` : ''}`}>
+      <div className="ship-one-art-wrap" role="img" aria-label={`${skin.name} · ${stageLabel(stage)}${metallic ? ` · ${factoryPaint.name}` : ''}`}>
         <span className="ship-one-art-frame">
           <span className="ship-one-art">
             <ShipPreview sprite={skin.sprite} color={factoryPaint.id} stage={stage} />
@@ -103,7 +97,7 @@ export default function ShipSelectionPanel({
           {locked && <p className="ship-lock-notice"><strong>{t("Purchases locked")}</strong> · <span className="mainnet-ready-badge">{t("MAINNET READY")}</span></p>}
           <span className="ship-purchase-price">{stage === 1
             ? `◆ ${shardPrice} ${t("Shards")}`
-            : focusedOffer ? <>{!testnetCatalogAccess && `${t("Planned price")}: `}{piPrice(focusedOffer.pricePi)}</> : t("Price unavailable")}</span>
+            : focusedOffer ? <>{t("Planned price")} · {piPrice(focusedOffer.pricePi)}</> : t("Price unavailable")}</span>
           {shipNftMainnetVisible && (stage === 1 || focusedOffer) && <small className="ship-nft-purchase-note">
             <strong>{`${skin.name} ${shipNftEditions[stage - 1]} NFT`}</strong> · {metallic ? factoryPaint.name : nftCopy.livery}. {nftPurchaseNote} {nftCopy.account}
           </small>}
@@ -114,12 +108,7 @@ export default function ShipSelectionPanel({
             </button>
             {standardAvailable && shards < price && <small className="ship-shortfall">◆ {(price - shards).toLocaleString(locale)} {t("more Shards needed")}</small>}
           </> : <>
-            {!stageOwned && (testnetCatalogAccess && focusedOffer && onBuyUpgrade
-              ? <TestPiPurchase price={focusedOffer.pricePi} disabled={purchaseBusy || !hullCount || stage === 3 && ownedStage < 2}
-                  pending={upgradePending} status={upgradeStatus} diagnostic={upgradeDiagnostic}
-                  reason={!hullCount ? 'Buy the Standard ship first.' : stage === 3 && ownedStage < 2 ? 'Requires Stage 2' : undefined}
-                  onBuy={() => onBuyUpgrade(focusedOffer)} />
-              : <button className="button button-secondary" type="button" disabled>{t("Purchases locked")}</button>)}
+            {!stageOwned && <button className="button button-secondary" type="button" disabled>{t("Purchases locked")}</button>}
             {stage === 3 && advancedOffer && focusedOffer && <small>{t("Requires Stage 2")} · {t("Total with Advanced")}: {piPrice(advancedOffer.pricePi + focusedOffer.pricePi)}</small>}
           </>}
         </div>}
@@ -149,8 +138,8 @@ export default function ShipSelectionPanel({
         ? <button className="button button-secondary" type="button" onClick={() => onEquipPreview(stage)}>{t("Equip for next mission")}</button>
         : <>
           {canEquip && <button className="button button-secondary ship-equip-button" type="button" onClick={() => onEquipPreview(stage)} disabled={equipped || purchaseBusy}>{t(equipped ? "EQUIPPED" : "Select")}</button>}
-          {view === "hangar" && ownedStage < 3 && <button className="button button-secondary ship-upgrade-button" type="button" onClick={() => onOpenShop(stage > ownedStage ? stage : ownedStage < 2 ? 2 : 3)}>{t("Shop")} · {t(stageLabel(stage > ownedStage ? stage : ownedStage < 2 ? 2 : 3))} ›</button>}
-          {view === "hangar" && !canEquip && stage <= ownedStage && <button className="ship-standard-return" type="button" onClick={() => onStageChange(ownedStage)}>{t(stageLabel(ownedStage))} ›</button>}
+          {view === "hangar" && ownedStage < 3 && <button className="button button-secondary ship-upgrade-button" type="button" onClick={() => onOpenShop(stage > ownedStage ? stage : ownedStage < 2 ? 2 : 3)}>{t("Shop")} · {stageLabel(stage > ownedStage ? stage : ownedStage < 2 ? 2 : 3)} ›</button>}
+          {view === "hangar" && !canEquip && stage <= ownedStage && <button className="ship-standard-return" type="button" onClick={() => onStageChange(ownedStage)}>{stageLabel(ownedStage)} ›</button>}
         </>}
     </div>}
     {message && <p className="hangar-message" role="status">{message}</p>}

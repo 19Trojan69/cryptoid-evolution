@@ -1,6 +1,6 @@
 import { useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { Link, Navigate } from "react-router-dom";
+import { Link, Navigate, useSearchParams } from "react-router-dom";
 import { isAxiosError } from "axios";
 import { useAuth } from "../hooks/useAuth";
 import { useLocale } from "../i18n";
@@ -10,6 +10,9 @@ import { bossNftPreviewCopy } from "../locales/bossNftPreview";
 import { bossName } from "./bossNames";
 import { bossNftEditions } from "./bossNftEditions";
 import { shipSaveNetwork } from "./shipFleet";
+import { BOSS_NFT_PREVIEW_PAGE_SIZE as pageSize } from "../../../backend/src/nftPreviewLimits";
+import { BOSS_STICKER_COUNT } from "../../../backend/src/rewardRules";
+import NftCardCover from "./NftCardCover";
 import "./bossNftGallery.css";
 import "./bossNftPreview.css";
 
@@ -25,6 +28,7 @@ type InterestCount = { id: number; count: number };
 type Page = { owner: string; total: number; pageSize: number; cards: Card[]; interestSummary?: InterestCount[] };
 type Interest = { owner: string; id: number; interested: boolean; changed: boolean };
 const cardImage = (card: Card) => "data:image/webp;base64," + card.webp;
+const pageCount = Math.ceil(BOSS_STICKER_COUNT / pageSize);
 
 function CardDetail({ card, edition, saving, saveError, onInterest, onClose }: {
   card: Card;
@@ -44,7 +48,7 @@ function CardDetail({ card, edition, saving, saveError, onInterest, onClose }: {
   const price = new Intl.NumberFormat(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(bossNftEditions.holo.pricePi);
   const { name, supply } = bossNftEditions[edition];
   const holo = edition === "holo";
-  const status = holo && card.interested ? copy.interested : card.defeated ? t("Boss defeated") : copy.reached;
+  const status = holo && card.interested ? copy.interested : t("Boss defeated");
 
   useEffect(() => {
     const dialog = dialogRef.current;
@@ -113,16 +117,39 @@ function InterestSummary({ summary }: { summary: InterestCount[] }) {
   </details>;
 }
 
-function PreviewCards({ uid, edition, page, onPage, onRetry, onSignIn }: {
+function BossCardSlots({ cards = [], edition, page, onOpen }: {
+  cards?: readonly Card[];
+  edition: Edition;
+  page: number;
+  onOpen?: (id: number) => void;
+}) {
+  const { locale, t } = useLocale();
+  const copy = bossNftPreviewCopy(locale);
+  const number = new Intl.NumberFormat(locale, { minimumIntegerDigits: 2, useGrouping: false }).format;
+  const start = (page - 1) * pageSize;
+  const ids = Array.from({ length: Math.min(pageSize, BOSS_STICKER_COUNT - start) }, (_, index) => start + index + 1);
+  return <ul className="boss-nft-grid nft-preview-grid">
+    {ids.map(id => {
+      const card = cards.find(entry => entry.id === id && entry.defeated);
+      return <li key={id}>
+        {card && onOpen ? <button className="nft-preview-tile" type="button"
+          aria-label={`${bossName(id)} · ${bossNftEditions[edition].name}`} aria-haspopup="dialog" onClick={() => onOpen(id)}>
+          <img src={cardImage(card)} width={540} height={720} decoding="async" loading="lazy" alt="" />
+          <span><strong>{bossName(id)}</strong>{card.interested && <small>{copy.interested}</small>}</span>
+        </button> : <NftCardCover number={number(id)} label={t("Locked")} />}
+      </li>;
+    })}
+  </ul>;
+}
+
+function PreviewCards({ uid, edition, page, onRetry, onSignIn }: {
   uid: string;
   edition: Edition;
   page: number;
-  onPage: (page: number) => void;
   onRetry: () => void;
   onSignIn: () => void;
 }) {
   const { locale, t } = useLocale();
-  const copy = bossNftPreviewCopy(locale);
   const gallery = nftGalleryCopy(locale);
   const [result, setResult] = useState<Page | "error" | "expired" | null>(null);
   const [selected, setSelected] = useState<number | null>(null);
@@ -135,7 +162,7 @@ function PreviewCards({ uid, edition, page, onPage, onRetry, onSignIn }: {
       .then(({ data }) => {
         if (request.signal.aborted) return;
         setResult(data?.owner === uid && Number.isSafeInteger(data.total) && data.total >= 0 &&
-          Number.isSafeInteger(data.pageSize) && data.pageSize > 0 && Array.isArray(data.cards) ? data : "error");
+          data.pageSize === pageSize && Array.isArray(data.cards) ? data : "error");
       })
       .catch(error => {
         if (request.signal.aborted) return;
@@ -144,20 +171,17 @@ function PreviewCards({ uid, edition, page, onPage, onRetry, onSignIn }: {
     return () => request.abort();
   }, [uid, edition, page]);
 
-  if (!result) return <p className="boss-nft-state" role="status">{gallery.loading}</p>;
-  if (result === "expired") return <div className="boss-nft-state" role="alert">
+  const covered = <BossCardSlots edition={edition} page={page} />;
+  if (!result) return <><p className="boss-nft-state" role="status">{gallery.loading}</p>{covered}</>;
+  if (result === "expired") return <><div className="boss-nft-state" role="alert">
     <p>{t("Pi session expired. Sign in again.")}</p>
     <button type="button" onClick={onSignIn}>{t("Connect Pi")}</button>
-  </div>;
-  if (result === "error") return <div className="boss-nft-state" role="alert">
+  </div>{covered}</>;
+  if (result === "error") return <><div className="boss-nft-state" role="alert">
     <p>{gallery.error}</p>
     <button type="button" onClick={onRetry}>{t("Try again")}</button>
-  </div>;
-  const summary = result.interestSummary && <InterestSummary summary={result.interestSummary} />;
-  if (!result.total) return <>{summary}<p className="boss-nft-state" role="status">{copy.empty}</p></>;
-
-  const pageCount = Math.ceil(result.total / result.pageSize);
-  const activeCard = result.cards.find(card => card.id === selected);
+  </div>{covered}</>;
+  const activeCard = result.cards.find(card => card.id === selected && card.defeated);
   const setInterest = async (card: Card) => {
     if (saving || edition !== "holo") return;
     const interested = !card.interested;
@@ -189,21 +213,8 @@ function PreviewCards({ uid, edition, page, onPage, onRetry, onSignIn }: {
   };
 
   return <>
-    {summary}
-    <ul className="boss-nft-grid nft-preview-grid">
-      {result.cards.map(card => <li key={card.id}>
-        <button className="nft-preview-tile" type="button" aria-label={`${bossName(card.id)} · ${bossNftEditions[edition].name}`}
-          onClick={() => { setSelected(card.id); setSaveError(false); }}>
-          <img src={cardImage(card)} width={540} height={720} decoding="async" loading="lazy" alt="" />
-          <span><strong>{bossName(card.id)}</strong>{card.interested && <small>{copy.interested}</small>}</span>
-        </button>
-      </li>)}
-    </ul>
-    {(pageCount > 1 || page > 1) && <nav className="boss-nft-pagination" aria-label={gallery.title}>
-      <button type="button" onClick={() => onPage(page - 1)} disabled={page <= 1}>{gallery.previous}</button>
-      <span>{page} / {pageCount}</span>
-      <button type="button" onClick={() => onPage(page + 1)} disabled={page >= pageCount}>{gallery.next}</button>
-    </nav>}
+    {result.interestSummary && <InterestSummary summary={result.interestSummary} />}
+    <BossCardSlots cards={result.cards} edition={edition} page={page} onOpen={id => { setSelected(id); setSaveError(false); }} />
     {activeCard && <CardDetail card={activeCard} edition={edition} saving={saving} saveError={saveError}
       onInterest={() => void setInterest(activeCard)} onClose={() => setSelected(null)} />}
   </>;
@@ -214,33 +225,57 @@ function TestnetBossNftPreview() {
   const { locale, t } = useLocale();
   const copy = bossNftPreviewCopy(locale);
   const gallery = nftGalleryCopy(locale);
-  const [view, setView] = useState<{ edition: Edition; page: number }>({ edition: "victory", page: 1 });
+  const [search, setSearch] = useSearchParams();
+  const edition: Edition = search.get("edition") === "holo" ? "holo" : "victory";
+  const requestedPage = Number(search.get("page"));
+  const page = Number.isInteger(requestedPage) && requestedPage >= 1 && requestedPage <= pageCount ? requestedPage : 1;
   const [attempt, setAttempt] = useState(0);
   const retry = () => setAttempt(value => value + 1);
   const connect = () => { void signIn().then(retry); };
   const busy = !authReady || isLoading;
+  const number = new Intl.NumberFormat(locale).format;
+  const navigateCards = (nextEdition: Edition, nextPage: number) => {
+    const query: Record<string, string> = {};
+    if (nextEdition === "holo") query.edition = "holo";
+    if (nextPage > 1) query.page = String(nextPage);
+    setSearch(query);
+  };
+
+  useEffect(() => { window.scrollTo(0, 0); }, [edition, page]);
 
   return <main className="boss-nft-page nft-preview-page">
     <header className="boss-nft-header">
-      <Link className="boss-nft-home" to="/"><span aria-hidden="true">←</span> {t("Home")}</Link>
-      <Link className="boss-nft-home" to="/" state={{ openCollection: true }}>{t("Card collection")}</Link>
+      <nav className="nft-page-links" aria-label={t("Game navigation")}>
+        <Link className="boss-nft-home" to="/nfts"><span aria-hidden="true">←</span> {t("NFT overview")}</Link>
+        <Link className="boss-nft-home" to="/">{t("Home")}</Link>
+        <Link className="boss-nft-home" to="/" state={{ openCollection: true }}>{t("Card collection")}</Link>
+      </nav>
       <span className="nft-preview-network">{copy.preview}</span>
       <h1>{gallery.title}</h1>
-      <p>{copy.intro}</p>
+      <p className="nft-unlock-notice">{t("All NFT card slots are visible. Artwork appears once you unlock the card.")}</p>
+      <p>{t("Defeat a boss to reveal both of its NFT cards.")} {t("NFT issuance and sales are planned for the Mainnet app.")}</p>
     </header>
-    {busy ? <p className="boss-nft-state" role="status">{gallery.loading}</p>
-      : !user ? <div className="boss-nft-state">
-        <p>{copy.signIn}</p>
-        {authError && <p role="alert">{t(authError)}</p>}
-        <button type="button" onClick={connect}>{t("Connect Pi")}</button>
-      </div> : <>
-        <div className="boss-nft-editions" role="group" aria-label={gallery.title}>
-          {(["victory", "holo"] as const).map(edition => <button key={edition} type="button" aria-pressed={view.edition === edition}
-            onClick={() => setView({ edition, page: 1 })}>{bossNftEditions[edition].name}</button>)}
-        </div>
-        <PreviewCards key={`${user.uid}/${view.edition}/${view.page}/${attempt}`} uid={user.uid} {...view}
-          onPage={page => setView(previous => ({ ...previous, page }))} onRetry={retry} onSignIn={connect} />
+    <div className="boss-nft-editions" role="group" aria-label={gallery.title}>
+      {(["victory", "holo"] as const).map(tab => <button key={tab} type="button" aria-pressed={edition === tab}
+        onClick={() => navigateCards(tab, 1)}>{bossNftEditions[tab].name}</button>)}
+    </div>
+    <p className="nft-card-count">{t("{count} card designs", { count: number(BOSS_STICKER_COUNT) })}</p>
+    {!busy && user
+      ? <PreviewCards key={`${user.uid}/${edition}/${page}/${attempt}`} uid={user.uid}
+        edition={edition} page={page} onRetry={retry} onSignIn={connect} />
+      : <>
+        {busy ? <p className="boss-nft-state" role="status">{gallery.loading}</p> : <div className="boss-nft-state">
+          <p>{t("Connect your Pi account to see your unlocked NFTs.")}</p>
+          {authError && <p role="alert">{t(authError)}</p>}
+          <button type="button" onClick={connect}>{t("Connect Pi")}</button>
+        </div>}
+        <BossCardSlots edition={edition} page={page} />
       </>}
+    <nav className="boss-nft-pagination" aria-label={gallery.title}>
+      <button type="button" onClick={() => navigateCards(edition, page - 1)} disabled={page <= 1}>{gallery.previous}</button>
+      <span>{number(page)} / {number(pageCount)}</span>
+      <button type="button" onClick={() => navigateCards(edition, page + 1)} disabled={page >= pageCount}>{gallery.next}</button>
+    </nav>
   </main>;
 }
 

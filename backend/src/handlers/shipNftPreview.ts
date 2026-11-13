@@ -1,34 +1,51 @@
+import { readFile } from "node:fs/promises";
+import { join } from "node:path";
 import type { Collection } from "mongodb";
-import type { Router } from "express";
+import type { Request, Router } from "express";
 import { rewardNetwork } from "../rewardNetwork";
-import type { PlayerSave } from "../playerSave";
-import type { ShipStage } from "../shipLoadout";
+import { emptyPlayerSave, type PlayerSave } from "../playerSave";
+import { ownedShipStage, type ShipStage } from "../shipLoadout";
+import { SHIP_NFT_PREVIEW_PAGE_SIZE as pageSize } from "../nftPreviewLimits";
 import {
-  confirmedMainnetShipUpgrades, shipNftCatalog, shipNftMainnetEnabled, shipNftStatus,
+  confirmedMainnetShipUpgrades, ownsShipNftHull, shipNftCatalog, shipNftMainnetEnabled, shipNftStatus,
   SHIP_NFT_ART_REVISION, type ShipNftOrder,
 } from "../shipNftEligibility";
 import "../types/session";
 
-const pageSize = 5;
-type PreviewAccount = { uid: string; playerByNetwork?: { mainnet?: Pick<PlayerSave, "fleet" | "legacyImported" | "standardShipAcquisitions"> } };
+type PreviewAccount = { uid: string; playerByNetwork?: {
+  mainnet?: Pick<PlayerSave, "fleet" | "legacyImported" | "standardShipAcquisitions">;
+  testnet?: Pick<PlayerSave, "fleet">;
+} };
 type Artwork = { _id: string; webp: string };
+type CatalogCard = typeof shipNftCatalog[number];
+
+function verifiedUser(req: Request) {
+  const token = /^Bearer\s+(\S+)$/i.exec(req.get("authorization") ?? "")?.[1];
+  const user = req.session.currentUser;
+  return token && user?.uid && token === user.accessToken ? user : null;
+}
+
+function galleryPage(query: Request["query"]) {
+  const rawStage = query.stage ?? "1";
+  const stage = typeof rawStage === "string" && /^[1-3]$/.test(rawStage) ? Number(rawStage) as ShipStage : 0;
+  const rawPage = query.page ?? "1";
+  const page = typeof rawPage === "string" && /^[1-9][0-9]*$/.test(rawPage) ? Number(rawPage) : 0;
+  const cards = shipNftCatalog.filter(card => card.stage === stage);
+  if (page < 1 || page > Math.ceil(cards.length / pageSize)) return null;
+  const start = (page - 1) * pageSize;
+  return { cards: cards.slice(start, start + pageSize), total: cards.length };
+}
 
 export default function mountShipNftPreview(router: Router, enabled = shipNftMainnetEnabled) {
   router.get("/", async (req, res) => {
     res.setHeader("Cache-Control", "private, no-store");
     if (!enabled() || rewardNetwork(req) !== "mainnet") return res.status(404).json({ error: "not_found" });
-    const token = /^Bearer\s+(\S+)$/i.exec(req.get("authorization") ?? "")?.[1];
-    const user = req.session.currentUser;
-    if (!token || !user?.uid || token !== user.accessToken) return res.status(401).json({ error: "not_authenticated" });
+    const user = verifiedUser(req);
+    if (!user) return res.status(401).json({ error: "not_authenticated" });
 
-    const rawStage = req.query.stage ?? "1";
-    const stage = typeof rawStage === "string" && /^[1-3]$/.test(rawStage) ? Number(rawStage) as ShipStage : 0;
-    const rawPage = req.query.page ?? "1";
-    const page = typeof rawPage === "string" && /^[1-9][0-9]*$/.test(rawPage) ? Number(rawPage) : 0;
-    const cards = shipNftCatalog.filter(card => card.stage === stage);
-    if (page < 1 || page > Math.ceil(cards.length / pageSize)) {
-      return res.status(400).json({ error: "invalid_gallery_filter" });
-    }
+    const selection = galleryPage(req.query);
+    if (!selection) return res.status(400).json({ error: "invalid_gallery_filter" });
+    const { cards: selected, total } = selection;
 
     try {
       const users: Collection<PreviewAccount> = req.app.locals.userCollection;
@@ -36,8 +53,6 @@ export default function mountShipNftPreview(router: Router, enabled = shipNftMai
         projection: { "playerByNetwork.mainnet.fleet": 1, "playerByNetwork.mainnet.legacyImported": 1, "playerByNetwork.mainnet.standardShipAcquisitions": 1 },
       });
       if (!account) return res.status(410).json({ error: "account_deleted" });
-      const start = (page - 1) * pageSize;
-      const selected = cards.slice(start, start + pageSize);
       const ids = selected.flatMap(card => [card.productId, card.requiresProductId].filter((id): id is string => id !== null));
       const orders: Collection<ShipNftOrder> = req.app.locals.orderCollection;
       const confirmed = ids.length === 0 ? [] : confirmedMainnetShipUpgrades(user.uid, await orders.find({
@@ -53,13 +68,55 @@ export default function mountShipNftPreview(router: Router, enabled = shipNftMai
       const artwork: Collection<Artwork> = req.app.locals.shipNftPreviewCollection;
       const artRows = eligibleArt.length ? await artwork.find({ _id: { $in: eligibleArt } }, { projection: { webp: 1 } }).toArray() : [];
       const artById = new Map(artRows.map(art => [art._id, art.webp]));
-      return res.json({ owner: user.uid, total: cards.length, pageSize, cards: selected.map((card, index) => {
+      return res.json({ owner: user.uid, total, pageSize, cards: selected.map((card, index) => {
         const summary = { id: card.id, name: card.name, maxSupply: card.maxSupply, status: statuses[index] };
         if (summary.status !== "eligible") return summary;
         const webp = artById.get(artworkId(card.id));
         if (typeof webp !== "string" || !webp.startsWith("UklGR") || webp.length > 140_000) throw new Error("Artwork unavailable");
         return { ...summary, story: card.story, livery: card.livery, webp };
       }) });
+    } catch {
+      return res.status(503).json({ error: "gallery_unavailable" });
+    }
+  });
+}
+
+async function packagedPreview(card: CatalogCard) {
+  const base = process.env.VERCEL
+    ? join(process.cwd(), "backend", "ship-nft-previews")
+    : join(__dirname, "../../ship-nft-previews");
+  const image = await readFile(join(base, SHIP_NFT_ART_REVISION, card.edition.toLowerCase(), `${card.shipId}.webp`));
+  return image.toString("base64");
+}
+
+export function mountTestnetShipNftPreview(router: Router, readArtwork = packagedPreview) {
+  router.get("/", async (req, res) => {
+    res.setHeader("Cache-Control", "private, no-store");
+    if (!req.testnetSave || rewardNetwork(req) !== "testnet") return res.status(404).json({ error: "not_found" });
+    const user = verifiedUser(req);
+    if (!user) return res.status(401).json({ error: "not_authenticated" });
+    const selection = galleryPage(req.query);
+    if (!selection) return res.status(400).json({ error: "invalid_gallery_filter" });
+
+    try {
+      const users: Collection<PreviewAccount> = req.app.locals.userCollection;
+      const account = await users.findOne({ _id: user._id, uid: user.uid }, {
+        projection: { "playerByNetwork.testnet.fleet": 1 },
+      });
+      if (!account) return res.status(410).json({ error: "account_deleted" });
+      const save = account.playerByNetwork?.testnet ?? emptyPlayerSave();
+      const owned = selection.cards.filter(card => ownsShipNftHull(card.shipId, save));
+      const products = owned.flatMap(card => [card.productId, card.requiresProductId].filter((id): id is string => id !== null));
+      const orders: Collection<ShipNftOrder> = req.app.locals.orderCollection;
+      const upgrades = products.length ? (await orders.find({
+        user: user.uid, product_id: { $in: products }, paid: true,
+        cancelled: { $ne: true }, payment_network: "Pi Testnet",
+      }, { projection: { product_id: 1 } }).toArray()).map(order => order.product_id) : [];
+      const cards = await Promise.all(owned.filter(card => ownedShipStage(card.sprite, upgrades) >= card.stage).map(async card => ({
+        id: card.id, name: card.name, maxSupply: card.maxSupply, status: "eligible" as const,
+        story: card.story, livery: card.livery, webp: await readArtwork(card),
+      })));
+      return res.json({ owner: user.uid, total: selection.total, pageSize, cards });
     } catch {
       return res.status(503).json({ error: "gallery_unavailable" });
     }

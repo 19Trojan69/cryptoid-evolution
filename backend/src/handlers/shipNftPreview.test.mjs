@@ -4,7 +4,7 @@ import test from "node:test";
 
 const require = createRequire(import.meta.url);
 const { createApiGateway } = require("../../build/apiGateway.js");
-const { default: mountShipNftPreview } = require("../../build/handlers/shipNftPreview.js");
+const { default: mountShipNftPreview, mountTestnetShipNftPreview } = require("../../build/handlers/shipNftPreview.js");
 const { default: mountProgressEndpoints } = require("../../build/handlers/progress.js");
 const { emptyPlayerSave } = require("../../build/playerSave.js");
 const { confirmedMainnetShipUpgrades, shipNftCatalog, SHIP_NFT_ART_REVISION } = require("../../build/shipNftEligibility.js");
@@ -105,6 +105,54 @@ test("the API is closed until launch and refuses Testnet even on the Mainnet pro
     assert.equal(res.code, 404);
   }
   assert.equal(backendStarted, false);
+});
+
+test("Testnet uses the verified player's saved fleet and reveals only paid matching upgrades", async () => {
+  let read;
+  mountTestnetShipNftPreview({ get(_path, handler) { read = handler; } });
+  const account = { playerByNetwork: { mainnet: { fleet: { "solar-lance": { grey: 1 } } } } };
+  const orderChecks = [];
+  const upgrades = ["ship_02_stage_2"];
+  const locals = {
+    userCollection: { async findOne(filter) {
+      assert.deepEqual(filter, { uid: user.uid, _id: user._id });
+      return account;
+    } },
+    orderCollection: { find(filter) {
+      assert.equal(filter.user, user.uid);
+      assert.equal(filter.payment_network, "Pi Testnet");
+      assert.equal(filter.paid, true);
+      assert.deepEqual(filter.cancelled, { $ne: true });
+      orderChecks.push(filter.product_id.$in);
+      return { async toArray() { return upgrades.filter(id => filter.product_id.$in.includes(id)).map(product_id => ({ product_id })); } };
+    } },
+  };
+  const request = async ({ network = "testnet", token = user.accessToken, stage = "1", page = "1" } = {}) => {
+    const req = { testnetSave: true, query: { stage, page }, session: { currentUser: user, adminMode: true }, app: { locals },
+      get(name) { return { "x-cryptoid-app-network": network, authorization: `Bearer ${token}` }[name]; } };
+    const res = response();
+    await read(req, res);
+    return res;
+  };
+  assert.equal((await request({ network: "mainnet" })).code, 404);
+  assert.equal((await request({ token: "other-account" })).code, 401);
+  assert.equal((await request({ page: "5" })).code, 400);
+  const starter = await request();
+  assert.equal(starter.headers["Cache-Control"], "private, no-store");
+  assert.equal(starter.body.total, 20);
+  assert.equal(starter.body.cards.length, 1);
+  assert.equal(starter.body.cards[0].id, "grey-scout-standard");
+  assert.equal(starter.body.cards[0].maxSupply, 99_999);
+  assert.ok(starter.body.cards[0].webp.startsWith("UklGR"));
+  assert.deepEqual(orderChecks, []);
+  account.playerByNetwork.testnet = { fleet: { "grey-scout": { grey: 1 }, "pi-vanguard": { grey: 1 } } };
+  assert.deepEqual((await request({ stage: "2" })).body.cards.map(card => card.id), ["grey-scout-advanced"]);
+  assert.deepEqual((await request({ stage: "3" })).body.cards, []);
+  upgrades.push("ship_02_stage_3");
+  assert.deepEqual((await request({ stage: "3" })).body.cards.map(card => card.id), ["grey-scout-elite"]);
+  const vanguard = (await request({ page: "4" })).body.cards[0];
+  assert.equal(vanguard.id, "pi-vanguard-standard");
+  assert.equal(vanguard.livery, "Metallic Edition");
 });
 
 test("Standard requires saved Mainnet ownership and handles imported and older confirmed hulls", async () => {

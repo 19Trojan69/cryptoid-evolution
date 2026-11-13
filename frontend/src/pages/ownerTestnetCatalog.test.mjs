@@ -57,20 +57,17 @@ test('all Standard hulls in the prepared Mainnet catalog keep their original Sha
  assert.equal(fleet.standardHullAvailable('core-carrier'),false);
 });
 
-test('Advanced and Elite checkout keeps base hull, prerequisite, busy and confirmed ownership gates',()=>{
- let offerId;
- const base={...defaults(),testnetCatalogAccess:true,onBuyUpgrade:offer=>{offerId=offer.id;}};
- const purchase=props=>nodes(Panel({...base,...props})).find(n=>n.type===Purchase);
- assert.equal(Boolean(purchase({focusStage:2}).props.disabled),false);
- purchase({focusStage:2}).props.onBuy();assert.equal(offerId,'ship_02_stage_2');
- assert.equal(Boolean(purchase({focusStage:2,fleet:{}}).props.disabled),true);
- assert.equal(Boolean(purchase({focusStage:3,ownedStage:1}).props.disabled),true);
- assert.equal(Boolean(purchase({focusStage:3,ownedStage:2}).props.disabled),false);
- assert.equal(Boolean(purchase({focusStage:3,ownedStage:2,purchaseBusy:true}).props.disabled),true);
- assert.equal(purchase({focusStage:2,ownedStage:2}),undefined);
- assert.equal(purchase({focusStage:3,testnetCatalogAccess:false}),undefined);
- const html=renderToStaticMarkup(jsx.jsx(Panel,{...base,focusStage:2}));
- assert.match(html,/Buy with Test-Pi/);assert.doesNotMatch(html,/MAINNET READY/);
+test('Advanced and Elite list planned Pi prices and keep checkout locked',()=>{
+ for (const [stage, price] of [[2, 9.9], [3, 19.9]]) {
+  const props = { ...defaults(), focusStage: stage, ownedStage: stage - 1 };
+  const tree = nodes(Panel(props));
+  assert.equal(tree.some(node => node.type === Purchase), false);
+  assert.equal(tree.find(node => node.type === 'button' && node.props.children === 'Purchases locked')?.props.disabled, true);
+  assert.ok(tree.some(node => node.type === Price && node.props.amount === price && !node.props.testnet));
+  const html = renderToStaticMarkup(jsx.jsx(Panel, props));
+  assert.match(html, /Planned price/);
+  assert.doesNotMatch(html, /Test-Pi/);
+ }
 });
 
 test('expanded collection still requires an acquired hull and its actually bought stage',()=>{

@@ -1,0 +1,78 @@
+.nft-overview .boss-nft-header {
+  padding-bottom: 1.1rem;
+}
+
+.nft-overview .nft-overview-notice {
+  width: fit-content;
+  margin-top: 0.85rem;
+  padding: 0.65rem 0.85rem;
+  border: 1px solid #b38b4d;
+  border-radius: 0.5rem;
+  background: #2d2419;
+  color: #ffe6b2;
+  font-weight: 700;
+}
+
+.nft-overview-groups {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr));
+  gap: 1.4rem;
+}
+
+.nft-overview-groups h2 {
+  margin: 0 0 0.65rem;
+  font-size: 1.3rem;
+}
+
+.nft-overview-groups ul {
+  display: grid;
+  gap: 0.65rem;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.nft-overview-edition {
+  border: 1px solid #36506a;
+  border-radius: 0.7rem;
+  background: #101d2d;
+  color: #eef5ff;
+  text-decoration: none;
+}
+
+.nft-overview-edition {
+  position: relative;
+  display: grid;
+  gap: 0.2rem;
+  padding: 0.7rem 2.25rem 0.7rem 0.85rem;
+}
+
+a.nft-overview-edition::after {
+  position: absolute;
+  inset-inline-end: 0.8rem;
+  top: 50%;
+  transform: translateY(-50%);
+  content: "›" / "";
+  color: #b9dcfc;
+  font-size: 1.4rem;
+}
+
+.nft-overview-edition span,
+.nft-overview-edition p,
+.nft-overview-terms {
+  margin: 0;
+  color: #c3d4e7;
+}
+
+.nft-overview-edition span {
+  font-size: 0.88rem;
+}
+
+.nft-overview-terms {
+  margin: 0.8rem 0 1rem;
+}
+
+.nft-overview a:hover {
+  border-color: #b38b4d;
+  color: #ffe6b2;
+}

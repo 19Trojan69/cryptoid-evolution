@@ -1,6 +1,7 @@
 export const shipNftEditions = ["Standard", "Advanced", "Elite"] as const;
 export const shipNftMaxSupply = { Standard: 99_999, Advanced: 31_415, Elite: 3_141 } as const;
 export const shipNftLivery = "Original Livery";
+export const SHIP_NFT_ART_REVISION = "fleet-liveries-20261113";
 
 // The three entries follow the ship's Standard, Advanced and Elite stages.
 // These are the English stories printed on the cards and used in their metadata.

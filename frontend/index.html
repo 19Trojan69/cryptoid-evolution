@@ -72,7 +72,7 @@
           window.clearTimeout(timer);
           let stored;
           try { stored = window.localStorage.getItem("cryptoid_language"); } catch { /* Storage is optional. */ }
-          const devices = navigator.languages?.length ? navigator.languages : [navigator.language];
+          const devices = [navigator.language, ...(navigator.languages ?? [])];
           const locale = normalize(stored) || devices.map(normalize).find(Boolean) || "en";
           const language = Object.hasOwn(copy, locale) ? locale : "en";
           const text = copy[language];

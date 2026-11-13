@@ -32,5 +32,6 @@ export const createLanguagePreferences = (getStorage: () => LanguageStorage | un
 export const languagePreferences = createLanguagePreferences(() => typeof window === 'undefined' ? undefined : window.localStorage);
 export const deviceLanguages = (): readonly string[] => {
   if (typeof navigator === 'undefined') return [];
-  return navigator.languages?.length ? navigator.languages : navigator.language ? [navigator.language] : [];
+  const { language, languages = [] } = navigator;
+  return language && language !== languages[0] ? [language, ...languages] : languages;
 };

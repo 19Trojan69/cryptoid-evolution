@@ -1,0 +1,2 @@
+export const BOSS_NFT_PREVIEW_PAGE_SIZE = 6;
+export const SHIP_NFT_PREVIEW_PAGE_SIZE = 5;

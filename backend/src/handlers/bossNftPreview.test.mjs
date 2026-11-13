@@ -91,8 +91,8 @@ test("only the Testnet deployment routes authenticated NFT preview requests loca
   assert.deepEqual(calls, [{ path: "/boss-nft-preview?edition=holo", network: "testnet", authorizedNetwork: true }]);
 });
 
-test("neither a mismatched token nor Mainnet progress exposes artwork before Testnet boss entry", async () => {
-  const f = fixture({ playerByNetwork: { testnet: { highestSector: 9 }, mainnet: { highestSector: 500 } },
+test("neither a mismatched token nor reaching a boss exposes artwork without a confirmed Testnet win", async () => {
+  const f = fixture({ playerByNetwork: { testnet: { highestSector: 500 }, mainnet: { highestSector: 500 } },
     rewardsByNetwork: { mainnet: { bossWins: { 1: 1 } } } });
   assert.equal((await f.request({ token: "another-token" })).code, 401);
   assert.equal((await f.request({ testnetSave: false })).code, 404);
@@ -100,31 +100,31 @@ test("neither a mismatched token nor Mainnet progress exposes artwork before Tes
   assert.deepEqual(f.artLookups, []);
 });
 
-test("both editions unlock exactly at each of the 50 boss stages and wins remain distinct", async () => {
+test("a confirmed win reveals each boss in its numbered slot in both editions", async () => {
   const account = { playerByNetwork: { testnet: { highestSector: 1 } }, rewardsByNetwork: { testnet: {} } };
   const f = fixture(account);
   for (let id = 1; id <= 50; id++) {
     const page = String(Math.ceil(id / 6));
     for (const edition of ["victory", "holo"]) {
-      account.playerByNetwork.testnet.highestSector = id * 10 - 1;
-      assert.equal((await f.request({ query: { edition, page } })).body.total, id - 1);
       account.playerByNetwork.testnet.highestSector = id * 10;
+      account.rewardsByNetwork.testnet.bossWins = {};
+      assert.deepEqual((await f.request({ query: { edition, page } })).body.cards, []);
+      account.rewardsByNetwork.testnet.bossWins = { [id]: 1 };
       const { body, headers } = await f.request({ query: { edition, page } });
       assert.equal(headers["Cache-Control"], "private, no-store");
-      assert.equal(body.total, id);
-      assert.deepEqual(body.cards.at(-1), { id, story: "Boss story", webp: "UklGRpreview", defeated: false, interested: false });
-      assert.ok(body.cards.every(card => card.id <= id));
-      assert.equal(f.artLookups.at(-1).at(-1), `${BOSS_NFT_PREVIEW_ART_REVISION}:${edition}:${id}`);
+      assert.equal(body.total, 1);
+      assert.deepEqual(body.cards, [{ id, story: "Boss story", webp: "UklGRpreview", defeated: true, interested: false }]);
+      assert.deepEqual(f.artLookups.at(-1), [`${BOSS_NFT_PREVIEW_ART_REVISION}:${edition}:${id}`]);
     }
   }
   account.playerByNetwork.testnet.highestSector = 1;
   account.rewardsByNetwork.testnet = { linkedBlocks: { 2: 9 }, bossWins: { 1: 1 } };
   const legacy = await f.request();
-  assert.deepEqual(legacy.body.cards.map(card => [card.id, card.defeated]), [[1, true], [2, false]]);
+  assert.deepEqual(legacy.body.cards.map(card => [card.id, card.defeated]), [[1, true]]);
 });
 
-test("Holo interest can be retried or withdrawn by the reached boss's authenticated player", async () => {
-  const f = fixture({ playerByNetwork: { testnet: { highestSector: 10 } } });
+test("Holo interest can be retried or withdrawn after a confirmed win", async () => {
+  const f = fixture({ playerByNetwork: { testnet: { highestSector: 20 } }, rewardsByNetwork: { testnet: { bossWins: { 1: 1 } } } });
   const put = (id, interested, owner = "pilot") => f.request({ id, body: { owner, interested } });
   assert.equal((await put("2", true)).code, 403);
   assert.equal((await put("51", true)).code, 400);

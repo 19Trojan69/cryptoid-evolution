@@ -24,7 +24,7 @@ import mountAdminEndpoints from "./handlers/admin";
 import { restoreAdminPreview } from "./adminAccess";
 import { BOSS_NFT_ART_COLLECTION } from "./bossNftGallery";
 import mountBossNftPreview from "./handlers/bossNftPreview";
-import mountShipNftPreview from "./handlers/shipNftPreview";
+import mountShipNftPreview, { mountTestnetShipNftPreview } from "./handlers/shipNftPreview";
 import { SHIP_NFT_ART_COLLECTION } from "./shipNftEligibility";
 import { collectUsage } from "./handlers/usage";
 import mountProgressEndpoints from "./handlers/progress";
@@ -240,6 +240,10 @@ app.use("/boss-nft-preview", bossNftPreviewRouter);
 const shipNftPreviewRouter = express.Router();
 mountShipNftPreview(shipNftPreviewRouter);
 app.use("/ship-nft-preview", shipNftPreviewRouter);
+
+const testnetShipNftPreviewRouter = express.Router();
+mountTestnetShipNftPreview(testnetShipNftPreviewRouter);
+app.use("/testnet-ship-nft-preview", testnetShipNftPreviewRouter);
 
 // User endpoints (e.g signin, signout) under /user:
 const userRouter = express.Router();

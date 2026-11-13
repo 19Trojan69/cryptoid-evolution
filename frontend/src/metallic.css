@@ -29,6 +29,7 @@
 .language-picker header button { background:transparent;color:#f1ddcb;border:0;font-size:28px;min-width:44px;min-height:44px; }
 .language-picker input { width:100%;box-sizing:border-box;padding:14px;margin:4px 0 12px;border:1px solid #9a785f;border-radius:10px;background:#11131c;color:#f1e9e4;font:inherit; }
 .language-picker-options { display:grid;gap:6px;max-height:65dvh;overflow-y:auto; }
+.language-picker-device { width: 100%; margin-bottom: 0.4rem; }
 .language-picker-row { display:grid;grid-template-columns:36px minmax(0,1fr) 24px;align-items:center;text-align:left;gap:10px;min-height:54px;padding:12px;border:1px solid #5c5554;border-radius:10px;background:linear-gradient(125deg,#313139,#1c1c25);color:#e8e5ed;font:inherit;cursor:pointer; }
 .language-picker-row>span { font-size:24px; }
 .language-picker-row[aria-pressed="true"] { border:2px solid #d0a17d;background:#49362d;color:#fff0df; }

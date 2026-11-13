@@ -32,13 +32,18 @@ const text=node=>typeof node==='string'?node:typeof node==='number'?String(node)
 test('every home button invokes its actual supplied action and the actual rank is shown',()=>{
   const hits=[],callbacks=Object.fromEntries(['Play','Shop','Career','Cards','Community','Terms','Sound'].map(name=>['on'+name,()=>hits.push(name)]));
   const Home=component('./CinematicHome.tsx',{'../i18n':{useLocale:()=>({t:source=>translate('de',source)})},'../components/ServiceBadge':{default:()=>null},'../components/BlockchainIcon':{default:()=>null},'./HomeEarthNetwork':{default:()=>null}});
-  const nodes=elements(Home({...callbacks,paused:false,busy:false,signedIn:true,rankName:'Admiral',musicEnabled:true,musicLabel:'Ton ausschalten'}));
+  const nftLink=jsx.jsx('a',{href:'/nfts',children:'NFTs'});
+  const nodes=elements(Home({...callbacks,paused:false,busy:false,signedIn:true,rankName:'Admiral',musicEnabled:true,musicLabel:'Ton ausschalten',nftLink}));
   const buttons=nodes.filter(node=>node.type==='button');assert.equal(buttons.length,7);
   assert.ok(!nodes.some(node=>node.props.className==='cinematic-profile'));
   for(const button of buttons){assert.equal(button.props.type,'button');button.props.onClick();}
   assert.deepEqual(hits.sort(),['Play','Shop','Career','Cards','Community','Terms','Sound'].sort());
   assert.ok(nodes.some(node=>node.props.name==='Admiral'));
   assert.ok(nodes.some(node=>node.props.className==='cinematic-career-copy'&&text(node).includes('Admiral')));
+  const actions=[nodes.find(node=>node.props.className==='cinematic-actions').props.children].flat(Infinity);
+  assert.equal(actions[0].props.className,'cinematic-launch-actions');
+  assert.equal(actions[1],nftLink);
+  assert.equal(actions[2].props.className,'cinematic-career');
   const busy=elements(Home({...callbacks,busy:true,musicEnabled:false,musicLabel:'Ton einschalten'}));
   assert.equal(busy.find(node=>node.props.className==='cinematic-play').props.disabled,true);
   assert.equal(busy.find(node=>node.props.className==='cinematic-shop').props.disabled,true);
@@ -129,6 +134,7 @@ test('home actions reach the existing game, ship shop, career, cards, feedback a
   Object.assign(imports['./rewardProgress'],{emptyRewardProgress:()=>({highestLevel:1,linkedBlocks:{},completedChains:[],bossWins:{},bonusMedals:{}}),rankForLevel:()=>({name:'Rookie'}),CHAIN_MILESTONES:[]});
   imports['../../../backend/src/hangarCatalog']={hangarCatalog:[]};
   imports['./shipNftVisibility']={shipNftMainnetVisible:false};
+  imports['../components/BlockchainIcon']={default:()=>null};
   imports['./musicPreferences']={readMusicVolume:()=>50,readEffectsVolume:()=>50,MUSIC_STORAGE_KEY:'music'};
   imports['./gameFullscreen']={requestGameFullscreen:()=>fullscreen++,toggleGameFullscreen:()=>fullscreen++};
   const componentTypes=['./CinematicHome','./FeedbackHub','./PilotProfile','./Collection','../components/Header','../components/TermsDialog','./CareerDashboard','../components/QuickAccessMenu'];
@@ -151,9 +157,12 @@ test('home actions reach the existing game, ship shop, career, cards, feedback a
   assert.equal(storage.size,1); // No player, payment, reward or inventory writes.
   assert.equal(home.props.nftLink,undefined);
   imports['./shipNftVisibility'].shipNftMainnetVisible=true;
-  assert.equal(find(render(),'./CinematicHome').props.nftLink.props.to,'/nft-ships');
+  assert.equal(find(render(),'./CinematicHome').props.nftLink.props.to,'/nfts');
   imports['./shipFleet'].shipSaveNetwork='testnet';
-  assert.equal(find(render(),'./CinematicHome').props.nftLink.props.to,'/nft-bosses');
+  nodes=render();home=find(nodes,'./CinematicHome');
+  assert.equal(home.props.nftLink.props.to,'/nfts');
+  home.props.onCards();
+  assert.equal(find(render(),'./Collection').props.nftPreviewPath,'/nfts');
 });
 
 test('animation stops for hidden pages, dialogs and reduced motion, and releases all listeners',()=>{

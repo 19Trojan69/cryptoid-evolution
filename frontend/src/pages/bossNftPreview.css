@@ -69,6 +69,50 @@
   color: #a8d8f2;
 }
 
+.nft-card-cover {
+  overflow: hidden;
+  border: 1px solid #29394f;
+  border-radius: 0.8rem;
+  background: #111b2b;
+  color: #c3d4e7;
+}
+
+.nft-card-cover-art {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 3 / 4;
+  background:
+    radial-gradient(ellipse, #2d3959, transparent 75%),
+    repeating-linear-gradient(135deg, #151e31 0 9px, #18233a 9px 10px);
+  color: #9aabcb;
+  font-size: clamp(2.25rem, 8vw, 4.5rem);
+}
+
+.nft-card-cover > span {
+  display: grid;
+  align-content: center;
+  gap: 0.2rem;
+  min-height: 3rem;
+  padding: 0.55rem 0.75rem;
+}
+
+.boss-nft-header .nft-unlock-notice {
+  margin-top: 0.85rem;
+  margin-bottom: 0.35rem;
+  color: #e9e1ff;
+  font-weight: 700;
+}
+
+.nft-card-count {
+  margin: 0.85rem 0 0.3rem;
+  font-weight: 700;
+}
+
+.nft-card-terms {
+  margin: 0;
+  color: #c3d4e7;
+}
+
 .nft-preview-summary summary {
   cursor: pointer;
   font-weight: 700;

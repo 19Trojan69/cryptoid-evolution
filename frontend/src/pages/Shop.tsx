@@ -18,6 +18,7 @@ import QuickAccessMenu, { type QuickAction } from "../components/QuickAccessMenu
 import type { GuideTopic } from "./GameGuide";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
+import BlockchainIcon from "../components/BlockchainIcon";
 import PiPrice from "../components/PiPrice";
 import SignIn from "../components/SignIn";
 
@@ -467,7 +468,8 @@ const Shop = () => {
     return () => cancelGameFrame(frame);
   }, [shopView, quickTarget, rewardStatus]);
 
-  const nftPreviewPath = shipSaveNetwork === "testnet" ? "/nft-bosses" : shipNftMainnetVisible ? "/nft-ships" : undefined;
+  const nftPreviewPath = shipSaveNetwork === "testnet" || shipNftMainnetVisible ? "/nfts" : undefined;
+  const homeNftPath = nftPreviewPath ?? (authReady && isAuthenticated && canAdmin && !isAuthLoading ? "/admin/nft-bosses" : undefined);
   const openQuickAction = (action: QuickAction) => {
     closeQuickMenu();
     setQuickTarget(null);
@@ -554,11 +556,11 @@ const Shop = () => {
         onShop={() => openQuickAction("shop")}
         onCareer={() => openQuickAction("progress")}
         onCards={() => setCollectionOpen(true)}
-        nftLink={nftPreviewPath
-          ? <Link className="cinematic-nft-link" to={nftPreviewPath}>{t("NFTs")}</Link>
-          : authReady && isAuthenticated && canAdmin && !isAuthLoading
-          ? <Link className="cinematic-nft-link" to="/admin/nft-bosses">NFTs</Link>
-          : undefined}
+        nftLink={homeNftPath && <Link className="cinematic-nft-link" to={homeNftPath}>
+          <BlockchainIcon kind="collection" />
+          <span>{t("NFTs")}</span>
+          <span className="cinematic-nft-arrow" aria-hidden="true">→</span>
+        </Link>}
         onGalaxy={() => navigate("/galaxy", { state: { owner: user?.uid } })}
         onCommunity={() => openQuickAction("feedback")}
         onTerms={() => setTermsOpen(true)}
@@ -648,6 +650,7 @@ const Shop = () => {
       </section>}
 
       {(shopView === "hangar" || shopView === "shop") && <section className={`ship-selector ship-selector-${shopView}`} aria-labelledby="hangar-heading">
+        {shipSaveNetwork === "testnet" && <p className="ship-mainnet-notice" role="note">{t("Advanced and Elite upgrades will be available in the Mainnet app. The corresponding NFT is included.")}</p>}
         {user && !adminMode && <div className="hangar-message" role="status">
           {account ? <>{t("Account inventory saved")} · {new Date(account.updatedAt).toLocaleString(locale)}. {account.mission && <>{t("Resume available at section {section} ({phase}).", { section: account.mission.sector, phase: t(account.mission.phase === "normal" ? "Block" : account.mission.phase === "boss" ? "Boss" : "Bonus round") })}</>}</> : t("Loading account save…")}
           {account && account.version === 0 && !account.legacyImported && <div>
@@ -657,7 +660,6 @@ const Shop = () => {
           </div>}
         </div>}
         <div className="ship-panel-heading"><div><p className="eyebrow">{t(shopView === "hangar" ? "YOUR HANGAR" : "SHIP SHOP")}</p><h2 id="hangar-heading">{t(shopView === "hangar" ? "Your fleet" : "Available ships")}</h2></div><strong className="shard-balance">◆ {displayedShards} <small>{t("Shards")}</small></strong></div>
-        {ownerTestnet && <p className="testnet-shop-notice" role="note">{t('Admin Testnet: earn Shards for all 20 ships. Paid items use Test-Pi only.')}</p>}
         <p className="testnet-shop-notice" role="note">{t(shipSaveNetwork === "testnet" ? "Testnet progress stays separate from Mainnet." : "Mainnet progress stays separate from Testnet.")}</p>
         <details className="ship-earnings"><summary>{t("Shards & purchase rules")}</summary><p>{shipSaveNetwork === "testnet" ? t("TESTNET SHARDS: Earn and spend Shards on available Standard ships here for testing. Shards and ship purchases do not transfer to Mainnet; there you start from zero.") : t("MAINNET SHARDS: Shards and ship purchases start from zero here. Testnet balances and ships are separate.")}</p><p>{t("The ship shop offers {hulls} Standard models. Grey Scout is the free starter.", { hulls: standardModelsAvailable })}</p><p>{t("At level 1, defeats earn Shards by enemy class: light 2, medium 4–5, elite 6, heavy 8, boss 16. Rewards grow with level. Bonus targets earn 1 each, plus a completion reward that grows with level. The HUD shows your previous Shard balance plus this mission's earnings.")}</p></details>
         <div className="fleet-toolbar">
@@ -669,15 +671,12 @@ const Shop = () => {
         {!shipSearchOptions.length && <p role="status">{t("No ships match these filters.")}</p>}
         <div className="fleet-scroll-list">
           {shipSearchOptions.map(skin => <article id={`fleet-${skin.id}`} key={`${shopView}:${skin.id}`} className="fleet-list-entry">
-            <FleetShipPanel view={shopView} skin={skin} ownedStage={ownedShipStage(skin.sprite, inventory?.ownedShipUpgrades)} fleet={visibleFleet} shards={displayedShards} locale={locale} adminPreview={adminMode} testnetCatalogAccess={ownerTestnet}
+            <FleetShipPanel view={shopView} skin={skin} ownedStage={ownedShipStage(skin.sprite, inventory?.ownedShipUpgrades)} fleet={visibleFleet} shards={displayedShards} locale={locale} adminPreview={adminMode}
               offers={offers.filter(offer => offer.kind === "ship_upgrade")} selectedSkinId={selected.skin.id} selectedStage={selectedShipStage(selected.skin.sprite, inventory?.ownedShipUpgrades, account?.shipStage)} selectionConfirmed={!user || adminMode || account?.shipStage !== undefined}
               message={typeof hangarMessage === "object" && hangarMessage.ship === skin.name ? hangarMessageText : ""} t={t}
               requestedStage={shopTarget?.skin === skin.id ? shopTarget.stage : undefined}
               purchaseBusy={accountBusy || isLoading || !catalogReady || Boolean(user && !account)}
-              upgradePending={isLoading && Boolean(activeProductId?.startsWith(`ship_${String(skin.sprite + 1).padStart(2, "0")}_`))}
-              upgradeStatus={activeProductId?.startsWith(`ship_${String(skin.sprite + 1).padStart(2, "0")}_`) ? paymentStatus : undefined}
-              upgradeDiagnostic={activeProductId?.startsWith(`ship_${String(skin.sprite + 1).padStart(2, "0")}_`) ? paymentDiagnostic : undefined}
-              onBuyUpgrade={buyTestPiOffer} onBuy={() => purchaseStandard(skin)}
+              onBuy={() => purchaseStandard(skin)}
               onEquip={stage => equipShip(skin, stage)}
               onStage={stage => { if (adminMode) sessionStorage.setItem(ADMIN_SHIP_STAGE_KEY, String(stage)); }}
               onUpgrade={stage => { setShipQuery(""); setShipFilter("all"); setShopTarget({ skin: skin.id, stage }); setShopView("shop"); }} />

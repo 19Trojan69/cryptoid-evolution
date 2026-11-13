@@ -67,6 +67,7 @@ export default function CinematicHome({paused,busy,rankName,musicEnabled,musicLa
         <button className="cinematic-play" type="button" disabled={busy} onClick={onPlay}>{t("Play")}<span aria-hidden="true">→</span></button>
         <button className="cinematic-shop" type="button" disabled={busy} onClick={onShop}>{t("Shop")}</button>
       </div>
+      {nftLink}
       <button className="cinematic-career" type="button" onClick={onCareer}>
         {rankName?<ServiceBadge name={rankName} size="large"/>:<BlockchainIcon kind="career"/>}
         <span className="cinematic-career-copy"><strong>{t("Your career")}</strong><span>{rankName?t(rankName):t("Service rank & progress")}</span><b>{t("View progress")} <i aria-hidden="true">→</i></b></span>
@@ -74,7 +75,6 @@ export default function CinematicHome({paused,busy,rankName,musicEnabled,musicLa
       <div className="cinematic-shortcuts">
         <button className="cinematic-cards" type="button" disabled={busy} onClick={onCards}><BlockchainIcon kind="collection"/><span>{t("Card collection")}</span><i aria-hidden="true">→</i></button>
         <button className="cinematic-community" type="button" onClick={onCommunity}><BlockchainIcon kind="feedback"/><span>{t("Community")}</span><i aria-hidden="true">→</i></button>
-        {nftLink}
       </div>
       {onGalaxy && <button className="cinematic-galaxy" type="button" onClick={onGalaxy}><BlockchainIcon kind="galaxy"/><span><strong>{t("Galaxy map")}</strong><small>{t("{stages} campaign stages · {bosses} bosses", { stages: MAX_DIFFICULTY_LEVEL, bosses: BOSS_STICKER_COUNT })}</small></span><i aria-hidden="true">→</i></button>}
     </div>

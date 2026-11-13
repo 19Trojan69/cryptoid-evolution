@@ -13,7 +13,7 @@ import { RELEASED_BOSS_CARDS } from "./cardAvailability";
 import { hangarCatalog, START_POWER_DURATION_MS } from "../../../backend/src/hangarCatalog";
 import { MAX_CHARGE_QUANTITY } from "../../../backend/src/chargePurchase";
 import { BOSS_STICKER_COUNT } from "../../../backend/src/rewardRules";
-import { shipNftMaxSupply } from "../../../backend/src/shipNftCatalog";
+import { shipNftEditions, shipNftMaxSupply } from "../../../backend/src/shipNftCatalog";
 
 const powerSeconds = {
   shield: START_POWER_DURATION_MS.shield / 1_000,
@@ -105,7 +105,10 @@ const topics = [
   {
     id: "hangar", label: "Shop & hangar", title: "Expand your fleet",
     intro: "Grey Scout is free. Use earned Shards for available Standard ships.",
-    details: ["The ship shop offers {hulls} Standard models. Grey Scout is the free starter."],
+    details: [
+      "The ship shop offers {hulls} Standard models. Grey Scout is the free starter.",
+      "Advanced and Elite upgrades will be available in the Mainnet app. The corresponding NFT is included.",
+    ],
   },
   {
     id: "nfts", label: "NFTs", title: "NFTs",
@@ -180,17 +183,17 @@ const GameGuide = ({ onClose, initialTopic, backLabel, onNavigate, nftPreviewAva
         {destinations.length > 0 && <nav className="guide-related" aria-label={t("Game navigation")}>
           {destinations.map(destination => <button key={destination} className="button button-secondary" type="button" onClick={() => onNavigate(destination)}>{t(destinationLabels[destination])}</button>)}
         </nav>}
-        {topic.id === "visuals" && <div className="guide-ship-gallery">{([1, 2, 3] as const).map(stage => <figure key={stage}><ShipPortrait src={shipEvolutionAsset(0, stage)} name={t(stage === 1 ? "Standard ship" : stage === 2 ? "Advanced ship" : "Elite ship")} /><figcaption>{t(stage === 1 ? "STANDARD" : stage === 2 ? "ADVANCED" : "ELITE")}</figcaption></figure>)}<figure className="guide-boss-example"><BossPortrait id={1} /><figcaption>#01 · {bossName(1)}</figcaption></figure></div>}
+        {topic.id === "visuals" && <div className="guide-ship-gallery">{([1, 2, 3] as const).map(stage => <figure key={stage}><ShipPortrait src={shipEvolutionAsset(0, stage)} name={t(stage === 1 ? "Standard ship" : stage === 2 ? "Advanced ship" : "Elite ship")} /><figcaption>{shipNftEditions[stage - 1]}</figcaption></figure>)}<figure className="guide-boss-example"><BossPortrait id={1} /><figcaption>#01 · {bossName(1)}</figcaption></figure></div>}
         {(topic.id === "boosts" || topic.id === "controls") && <WeaponTutorial />}
         {topic.id === "survival" && <BossPhaseGuide />}
         <ul>
           {topic.id === "collection" && !ownerTestnet && <li>{t("The first {count} boss cards are available to unlock.", { count: RELEASED_BOSS_CARDS })}</li>}
           {topic.details.map(detail => <li key={detail}>{t(detail, values)}</li>)}
           {topic.id === "hangar" && shipSaveNetwork === "testnet" && <>
-            <li>{t("With a connected Pi account, regular Testnet pilots can buy Twin Laser and Rapid Twin charges with Test-Pi. Verified owner access also opens Triple Laser, Plasma, start power-ups, armor and ship upgrades.")}</li>
+            <li>{t("With a connected Pi account, Testnet pilots can buy Twin Laser and Rapid Twin charges with Test-Pi. Verified owner access also opens Triple Laser, Plasma, start power-ups and armor.")}</li>
             <li>{t("Choose 1, 5 or 10 charges, or enter a quantity from 1 to {max} before confirming a Test-Pi purchase.", { max: MAX_CHARGE_QUANTITY })}</li>
           </>}
-          {topic.id === "nfts" && shipSaveNetwork === "testnet" && <li>{t("Boss NFT previews appear when you reach the boss. You can register interest in its Holo Edition.")}</li>}
+          {topic.id === "nfts" && shipSaveNetwork === "testnet" && <li>{t("Defeat a boss to reveal both of its NFT cards.")}</li>}
         </ul>
       </section>
       <button className="button button-secondary guide-back" type="button" onClick={onClose}><span className="guide-back-arrow" aria-hidden="true">←</span>{t(backLabel)}</button>

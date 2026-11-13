@@ -33,6 +33,7 @@ import { package5Translations } from './package5.ts';
 import { audioAuditTranslations } from './audioAudit.ts';
 import { fullSessionTranslations } from './fullSession.ts';
 import { gameGuideTranslations } from './gameGuide.ts';
+import { nftOverviewTranslations } from './nftOverview.ts';
 // Shared localization catalog. Rows are kept explicit for coverage and placeholder checks.
 export const localeAliases: Record<string, string | string[]> = {
   "A short breather.": "MISSION PAUSED",
@@ -5624,6 +5625,7 @@ Object.assign(localeCatalog.de ??= {}, germanLoreCompletionTranslations);
 Object.assign(localeCatalog.es ??= {}, spanishLoreCompletionTranslations);
 
 for (const [locale, entries] of Object.entries(gameGuideTranslations)) Object.assign(localeCatalog[locale] ??= {}, entries);
+for (const [locale, entries] of Object.entries(nftOverviewTranslations)) Object.assign(localeCatalog[locale] ??= {}, entries);
 
 // Community controls; authored content is translated separately by the service.
 const communityKeys = ['Automatically translated','Show translation','Show original','Translation unavailable. Original shown.','Write a review','New contribution','Show less','Read more','Manage contribution'];

@@ -1392,6 +1392,7 @@ html[data-motion="reduced"] .landing-shell .hero-actions .home-play-button { ani
 .landing-shell .upgrade-section .section-line { background: linear-gradient(90deg, #ffad7b, transparent); }
 .landing-shell .progress-card .progress-row strong, .landing-shell .streak-number { color: #ffe0a3; font: 800 clamp(22px, 4vw, 40px) 'Oxanium', sans-serif; }
 .testnet-shop-notice, .ship-lock-notice { display: block; margin: 10px 0; padding: 8px 11px; border: 1px solid #e7b9698c; border-radius: 7px; background: #49341d6b; color: #ffe1a2; font: 700 13px/1.4 'Rajdhani', sans-serif; }
+.landing-shell .ship-selector > .ship-mainnet-notice { margin: 0 0 1rem; padding: 0.7rem 0.85rem; border: 1px solid #b38b4d; border-radius: 0.5rem; background: #2d2419; color: #ffe6b2; font-weight: 700; }
 .reward-collection { grid-column: 1 / -1; }
 .reward-network-notice { grid-column: 1 / -1; margin: 0 0 12px; padding: 12px 15px; border: 1px solid #d3a65f; border-left: 4px solid #f4ce86; border-radius: 7px; background: #62482c70; color: #ffe8bc; font-weight: 700; line-height: 1.45; }
 .rewards-dashboard .reward-account { grid-column: 1 / -1; margin: 0 0 10px; color: #a8e8e5; font-weight: 700; }

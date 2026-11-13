@@ -20,6 +20,11 @@ export const router = createBrowserRouter([
     errorElement: <AdminRouteRecovery />,
   },
   {
+    path: "/nfts",
+    lazy: async () => ({ Component: (await import("./pages/NftOverview")).default }),
+    errorElement: <RouteRecovery />,
+  },
+  {
     path: "/nft-bosses",
     lazy: async () => ({ Component: (await import("./pages/BossNftPreview")).default }),
     errorElement: <RouteRecovery />,

@@ -4,7 +4,7 @@ import { ownedShipStage, type ShipStage } from "./shipLoadout";
 import { shipNftEditions, shipNftLivery, shipNftMaxSupply, shipNftStories } from "./shipNftCatalog";
 import { shipLiveryAssetPath, vanguardMetallic } from './shipLivery';
 
-export const SHIP_NFT_ART_REVISION = "fleet-liveries-20261113";
+export { SHIP_NFT_ART_REVISION } from "./shipNftCatalog";
 export const SHIP_NFT_ART_COLLECTION = "shipNftPreviewArtwork";
 
 export const shipNftMainnetEnabled = () =>
@@ -67,11 +67,7 @@ export function confirmedMainnetShipUpgrades(uid: string, orders: readonly ShipN
 }
 
 export function shipNftStatus(card: typeof shipNftCatalog[number], save: MainnetSave | undefined, confirmedUpgrades: readonly string[]) {
-  const ownedHull = shipColors.some(color => {
-    const count = save?.fleet?.[card.shipId]?.[color];
-    return typeof count === "number" && Number.isSafeInteger(count) && count > 0;
-  });
-  if (!ownedHull) return "needs-hull";
+  if (!ownsShipNftHull(card.shipId, save)) return "needs-hull";
   if (card.stage === 1) {
     // A non-imported save only gains hulls through server-side Shard purchases.
     // In imported saves, use the explicit receipt so a browser import alone cannot grant a card.
@@ -81,4 +77,11 @@ export function shipNftStatus(card: typeof shipNftCatalog[number], save: Mainnet
   const stage = ownedShipStage(card.sprite, confirmedUpgrades);
   if (card.stage === 3 && stage < 2) return "needs-advanced";
   return stage >= card.stage ? "eligible" : "needs-purchase";
+}
+
+export function ownsShipNftHull(shipId: string, save: Pick<PlayerSave, "fleet"> | undefined) {
+  return shipColors.some(color => {
+    const count = save?.fleet?.[shipId]?.[color];
+    return typeof count === "number" && Number.isSafeInteger(count) && count > 0;
+  });
 }

@@ -172,15 +172,24 @@ const missionEntries = new Set(entries.filter(entry => entry.files.some(file => 
 const missionMissing = Object.fromEntries(Object.entries(coverage).map(([locale, row]) => [locale, row.missing.filter(id => missionEntries.has(id))]));
 const collectionEntries = new Set(entries.filter(entry => entry.files.some(file => collectionFiles.has(path.basename(file)))).map(entry => entry.id));
 const collectionMissing = Object.fromEntries(Object.entries(coverage).map(([locale, row]) => [locale, row.missing.filter(id => collectionEntries.has(id))]));
+const playerMenuFiles = new Set([
+  'Shop.tsx', 'ShipSelectionPanel.tsx', 'ShipPreview.tsx', 'NftOverview.tsx', 'BossNftPreview.tsx',
+  'ShipNftPreview.tsx', 'PilotProfile.tsx', 'CareerDashboard.tsx', 'AvatarCropper.tsx',
+  'FeedbackHub.tsx', 'FeedbackDescription.tsx', 'CommunityText.tsx', 'Header.tsx', 'QuickAccessMenu.tsx',
+]);
+const playerMenuEntries = new Set(entries.filter(entry => entry.files.some(file => playerMenuFiles.has(path.basename(file)))).map(entry => entry.id));
+const playerMenuMissing = Object.fromEntries(Object.entries(coverage).map(([locale, row]) => [locale, row.missing.filter(id => playerMenuEntries.has(id))]));
 // Missing entries reference IDs above rather than duplicating long stories for every language.
 const report = {
   schemaVersion: 2, staticCopyOnly: true, entries, unwrapped, coverage, completeLanguages,
   missionCoverage: { required: missionEntries.size, missing: missionMissing },
   collectionCoverage: { required: collectionEntries.size, missing: collectionMissing },
+  playerMenuCoverage: { required: playerMenuEntries.size, missing: playerMenuMissing },
   releaseReady: unwrapped.length === 0
     && completeLanguages.every(code => coverage[code]?.missing.length === 0)
     && Object.values(missionMissing).every(missing => missing.length === 0)
     && Object.values(collectionMissing).every(missing => missing.length === 0)
+    && Object.values(playerMenuMissing).every(missing => missing.length === 0)
     && Object.values(coverage).every(locale => locale.invalidPlaceholders.length === 0),
 };
 if (process.argv.includes('--json')) process.stdout.write(JSON.stringify(report, null, 2) + '\n');
@@ -194,6 +203,10 @@ else {
   console.log(`Collection cards: ${collectionEntries.size} texts checked in ${Object.keys(coverage).length} languages.`);
   for (const [code, missing] of Object.entries(collectionMissing)) {
     if (missing.length) console.log(`${code} missing card texts: ${missing.map(id => entries[id].source).join(' | ')}`);
+  }
+  console.log(`Player menus: ${playerMenuEntries.size} texts checked in ${Object.keys(coverage).length} languages.`);
+  for (const [code, missing] of Object.entries(playerMenuMissing)) {
+    if (missing.length) console.log(`${code} missing menu texts: ${missing.map(id => entries[id].source).join(' | ')}`);
   }
   console.log(`Complete language gate: ${completeLanguages.join(', ')}; release ready: ${report.releaseReady}`);
 }
