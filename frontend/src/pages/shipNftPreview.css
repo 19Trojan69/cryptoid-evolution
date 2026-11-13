@@ -1,0 +1,47 @@
+.ship-nft-page .ship-nft-editions {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.ship-nft-detail[data-stage="1"],
+.ship-nft-editions button[data-stage="1"] {
+  --accent: #d7e5f1;
+  --accent-border: #637c91;
+  --sheet-edge: #415569;
+  --sheet-top: #1b2e3f;
+}
+
+.ship-nft-detail[data-stage="2"],
+.ship-nft-editions button[data-stage="2"] {
+  --accent: #a3ecff;
+  --accent-border: #58a9c2;
+  --sheet-edge: #315365;
+  --sheet-top: #113340;
+}
+
+.ship-nft-detail[data-stage="3"],
+.ship-nft-editions button[data-stage="3"] {
+  --accent: #ffdea0;
+  --accent-border: #ad8a53;
+  --sheet-edge: #59462d;
+  --sheet-top: #382719;
+}
+
+.ship-nft-page .ship-nft-editions button[aria-pressed="true"] {
+  border-color: var(--accent-border);
+  color: var(--accent);
+  background: var(--sheet-top);
+}
+
+.ship-nft-locked {
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.8rem 1rem;
+  border: 1px solid #29394f;
+  border-radius: 0.8rem;
+  color: #e5edf7;
+  background: #0e1725;
+}
+
+.ship-nft-locked small {
+  color: #bccbde;
+}

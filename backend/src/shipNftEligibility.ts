@@ -1,0 +1,78 @@
+import { hangarCatalog } from "./hangarCatalog";
+import { shipColors, spriteForShip, standardShips, type PlayerSave } from "./playerSave";
+import { ownedShipStage, type ShipStage } from "./shipLoadout";
+import { shipNftEditions, shipNftLivery, shipNftStories } from "./shipNftCatalog";
+
+export const SHIP_NFT_ART_REVISION = "original-livery-20261113";
+export const SHIP_NFT_ART_COLLECTION = "shipNftPreviewArtwork";
+
+export const shipNftMainnetEnabled = () =>
+  process.env.CRYPTOID_MAINNET_SHIP_NFTS_ENABLED === "1" &&
+  process.env.VERCEL_ENV === "production" &&
+  process.env.VERCEL_PROJECT_PRODUCTION_URL === "cryptoid-evolution.vercel.app";
+
+export const shipNftOffers = hangarCatalog.filter(offer => offer.kind === "ship_upgrade");
+const offersById = new Map<string, typeof shipNftOffers[number]>(shipNftOffers.map(offer => [offer.id, offer]));
+
+export const shipNftCatalog = standardShips.flatMap(shipId => {
+  const sprite = spriteForShip(shipId);
+  const name = shipId.split("-").map(word => word[0].toUpperCase() + word.slice(1)).join(" ");
+  const stories = shipNftStories[shipId as keyof typeof shipNftStories];
+  return shipNftEditions.map((edition, index) => {
+    const stage = (index + 1) as ShipStage;
+    const number = String(sprite + 1).padStart(2, "0");
+    const key = edition.toLowerCase();
+    const offer = shipNftOffers.find(item => item.shipIndex === sprite && item.stage === stage);
+    return {
+      id: `${shipId}-${key}`, shipId, sprite, name, stage, edition, livery: shipNftLivery,
+      story: stories[index], productId: offer?.id ?? null, upgradePricePi: offer?.pricePi ?? null,
+      requiresProductId: stage === 3 ? `ship_${number}_stage_2` : null,
+      acquisition: stage > 1 ? "confirmed_ship_upgrade" : shipId === "grey-scout" ? "starter" : "shard_hull",
+      spritePath: `ships/evolution/ship_${number}_stage_${stage}.png`,
+      backgroundPath: `cards/space/unique/${key}-${number}.webp`,
+    };
+  });
+});
+
+type MainnetSave = Pick<PlayerSave, "fleet" | "legacyImported" | "standardShipAcquisitions">;
+export type ShipNftOrder = {
+  user: string;
+  product_id: string;
+  paid: boolean;
+  cancelled?: boolean;
+  payment_network: string;
+  payment_amount_pi: number;
+  owner_testnet_catalog?: boolean;
+  pi_payment_id: string;
+  txid: string;
+  completed_at: Date;
+};
+
+export function confirmedMainnetShipUpgrades(uid: string, orders: readonly ShipNftOrder[]) {
+  return orders.filter(order => {
+    const offer = offersById.get(order.product_id);
+    return offer && order.user === uid && order.paid === true && !order.cancelled &&
+      order.payment_network === "Pi Network" && !order.owner_testnet_catalog &&
+      order.payment_amount_pi === offer.pricePi &&
+      typeof order.pi_payment_id === "string" && /^[a-z0-9_-]{1,100}$/i.test(order.pi_payment_id) &&
+      typeof order.txid === "string" && /^[a-f0-9]{64}$/i.test(order.txid) &&
+      order.completed_at instanceof Date && Number.isFinite(order.completed_at.getTime());
+  }).map(order => order.product_id);
+}
+
+export function shipNftStatus(card: typeof shipNftCatalog[number], save: MainnetSave | undefined, confirmedUpgrades: readonly string[]) {
+  const ownedHull = shipColors.some(color => {
+    const count = save?.fleet?.[card.shipId]?.[color];
+    return typeof count === "number" && Number.isSafeInteger(count) && count > 0;
+  });
+  if (!ownedHull) return "needs-hull";
+  if (card.stage === 1) {
+    // A non-imported save only gains hulls through server-side Shard purchases.
+    // In imported saves, use the explicit receipt so a browser import alone cannot grant a card.
+    return card.shipId === "grey-scout" || save?.legacyImported === false || save?.standardShipAcquisitions?.[card.shipId]
+      ? "eligible" : "needs-hull-proof";
+  }
+  const stage = ownedShipStage(card.sprite, confirmedUpgrades);
+  if (card.stage === 3 && stage < 2) return "needs-advanced";
+  return stage >= card.stage ? "eligible" : "needs-purchase";
+}

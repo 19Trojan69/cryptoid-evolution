@@ -140,6 +140,7 @@ export const createApiGateway = (
       const env = environment();
       const testnet = isTestnetDeployment(req, env);
       const localTestnet = localTestnetEnabled(env);
+      if (testnet && /^ship-nft-preview(?:\/|$)/.test(path)) return res.status(404).json({ error: "not_found" });
       const arcade = /^admin\/galaxy-minigames(?:\/(.*))?$/.exec(path);
       if (arcade) {
         const key = testnet && env.VERCEL_ENV === "preview" ? env.CRYPTOID_GALAXY_ARCADE_KEY : undefined;

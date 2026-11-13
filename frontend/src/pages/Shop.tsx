@@ -35,6 +35,7 @@ import "./shopPurchase.css";
 import "../metallic.css";
 import { saveGuestShipPurchase } from "./shipFleet";
 import TermsDialog from "../components/TermsDialog";
+import { shipNftMainnetVisible } from "./shipNftVisibility";
 import { hangarCatalog, purchasePrerequisite } from "../../../backend/src/hangarCatalog";
 import { isTestnetWeaponPurchaseEnabled, testPiPurchaseAllowed } from "../../../backend/src/paymentPolicy";
 import { primeGameAudio } from "./gameAudio";
@@ -338,6 +339,7 @@ const Shop = () => {
       if (!account) { setAccountError("Account save is loading or unavailable."); return; }
       void accountCommand({ action: "buy", skin: previewSkin.id, color: previewColor.id }); return;
     }
+    if (shipNftMainnetVisible) { requireAuth(); return; }
     const currentFleet = readShipFleet(localStorage.getItem(SHIP_FLEET_KEY), localStorage.getItem(SHIP_OWNED_KEY), localStorage.getItem(SHIP_COLORS_KEY));
     const currentBalance = shardBalance(localStorage.getItem(SHARD_BALANCE_KEY));
     setShards(currentBalance);
@@ -537,6 +539,8 @@ const Shop = () => {
         onCards={() => setCollectionOpen(true)}
         nftLink={shipSaveNetwork === "testnet"
           ? <Link className="cinematic-nft-link" to="/nft-bosses">NFTs</Link>
+          : shipNftMainnetVisible
+          ? <Link className="cinematic-nft-link" to="/nft-ships">NFTs</Link>
           : authReady && isAuthenticated && canAdmin && !isAuthLoading
           ? <Link className="cinematic-nft-link" to="/admin/nft-bosses">NFTs</Link>
           : undefined}

@@ -8,6 +8,7 @@ import { validResumedBonusScore, validRunScore } from "../leaderboardRules";
 import { restoreScoreRun } from "../restoreScoreRun";
 import { Router } from "express";
 import { rewardNetwork } from "../rewardNetwork";
+import { shipNftMainnetEnabled } from "../shipNftEligibility";
 import { canUseOwnerTestnetCatalog, isAdminMode, ownerTestnetOrderScope } from "../adminAccess";
 import { MAX_MISSION_HEARTS, maxMissionHearts } from "../lifeRules";
 import { emptyPlayerSave, firstMissionSnapshot, readSnapshot, legacyInventory, publicSave, shipColors, shipPrice, validSelection, standardShips, spriteForShip, type PlayerSave } from "../playerSave";
@@ -199,6 +200,9 @@ export default function mountProgressEndpoints(router: Router) {
         if (price === null || !shipColors.includes(color)) return res.status(400).json({ error: "invalid_ship" });
         if (save.balance < price) return res.status(403).json({ error: "not_enough_shards" });
         fields = { balance: save.balance - price, totalShardsSpent: (save.totalShardsSpent || 0) + price, fleet: { ...save.fleet, [skin]: { ...save.fleet[skin], [color]: (save.fleet[skin]?.[color] || 0) + 1 } } };
+        if (network === "mainnet" && shipNftMainnetEnabled() && !save.standardShipAcquisitions?.[skin]) {
+          fields.standardShipAcquisitions = { ...save.standardShipAcquisitions, [skin]: new Date().toISOString() };
+        }
       }
       const updated = { ...save, ...fields, version: version + 1, updatedAt: new Date().toISOString() };
       const result = await users.updateOne({ uid, [`${key}.version`]: version }, { $set: Object.fromEntries(Object.entries(fields).map(([k, v]) => [`${key}.${k}`, v]).concat([[`${key}.updatedAt`, updated.updatedAt]])), $inc: { [`${key}.version`]: 1 } });

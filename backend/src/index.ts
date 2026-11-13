@@ -24,6 +24,8 @@ import mountAdminEndpoints from "./handlers/admin";
 import { restoreAdminPreview } from "./adminAccess";
 import { BOSS_NFT_ART_COLLECTION } from "./bossNftGallery";
 import mountBossNftPreview from "./handlers/bossNftPreview";
+import mountShipNftPreview from "./handlers/shipNftPreview";
+import { SHIP_NFT_ART_COLLECTION } from "./shipNftEligibility";
 import { collectUsage } from "./handlers/usage";
 import mountProgressEndpoints from "./handlers/progress";
 
@@ -119,8 +121,9 @@ app.use(async (req, _res, next) => {
   const authorization = req.get("authorization") || "";
   const match = authorization.match(/^Bearer\s+(.+)$/i);
   const accessToken = match?.[1]?.trim();
-  // The proxy can sign in to another account while a local Testnet cookie survives.
-  if (req.testnetSave && accessToken && req.session.currentUser && req.session.currentUser.accessToken !== accessToken) {
+  // A new Pi account may be signed in while a previously issued cookie survives.
+  const scopedBearer = req.testnetSave || req.path === "/ship-nft-preview" || req.path === "/ship-nft-preview/";
+  if (scopedBearer && accessToken && req.session.currentUser && req.session.currentUser.accessToken !== accessToken) {
     req.session.currentUser = null;
     req.session.scoreRun = null;
     req.session.adminMode = false;
@@ -234,6 +237,10 @@ const bossNftPreviewRouter = express.Router();
 mountBossNftPreview(bossNftPreviewRouter);
 app.use("/boss-nft-preview", bossNftPreviewRouter);
 
+const shipNftPreviewRouter = express.Router();
+mountShipNftPreview(shipNftPreviewRouter);
+app.use("/ship-nft-preview", shipNftPreviewRouter);
+
 // User endpoints (e.g signin, signout) under /user:
 const userRouter = express.Router();
 mountUserEndpoints(userRouter);
@@ -258,6 +265,7 @@ export const start = async (listen = true): Promise<void> => {
     app.locals.orderCollection = db.collection("orders");
     app.locals.userCollection = db.collection("users");
     app.locals.bossNftPreviewCollection = db.collection(BOSS_NFT_ART_COLLECTION);
+    app.locals.shipNftPreviewCollection = db.collection(SHIP_NFT_ART_COLLECTION);
     if (process.env.VERCEL_PROJECT_PRODUCTION_URL === "cryptoid-evolution-testnet.vercel.app"
         && process.env.CRYPTOID_TESTNET_GALAXY_ARCADE === "1") {
       await app.locals.userCollection.createIndex({ [`${galaxyArcadeRatingField}.$**`]: 1 });

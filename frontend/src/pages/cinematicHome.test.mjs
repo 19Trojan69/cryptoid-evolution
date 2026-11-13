@@ -94,7 +94,7 @@ test('home never exits existing fullscreen or re-enters after the user leaves it
 
 test('the signed-in account button opens the existing profile action',()=>{
   let opened=0;
-  const Header=component('../components/Header.tsx',{'../i18n':{useLocale:()=>({t:source=>translate('de',source)})},'react-router-dom':{Link:()=>null},'./BlockchainIcon':{default:()=>null},'./WolfLogo':{default:()=>null},'./ServiceBadge':{default:()=>null}});
+  const Header=component('../components/Header.tsx',{'../i18n':{useLocale:()=>({t:source=>translate('de',source)})},'react-router-dom':{Link:()=>null},'./BlockchainIcon':{default:()=>null},'./WolfLogo':{default:()=>null},'./ServiceBadge':{default:()=>null},'./LoadingStripes':{default:()=>null}});
   const tree=Header({user:{username:'19Trojan69',roles:[]},onOpenQuickAccess:()=>{},onOpenProfile:()=>opened++,onSignIn:()=>{}});
   const account=elements(tree).find(node=>node.type==='button'&&node.props.className==='header-account');
   assert.ok(account);account.props.onClick();assert.equal(opened,1);assert.match(account.props['aria-label'],/@19Trojan69/);
@@ -116,14 +116,15 @@ test('home actions reach the existing game, ship shop, career, cards, feedback a
   let cursor=0,user=null,authRequests=0,fullscreen=0;
   const memory=[],navigations=[],storage=new Map();
   imports.react={useState:initial=>{const id=cursor++;if(!(id in memory))memory[id]=typeof initial==='function'?initial():initial;return[memory[id],next=>memory[id]=typeof next==='function'?next(memory[id]):next];},useRef:initial=>{const id=cursor++;return memory[id]??(memory[id]={current:initial});},useCallback:fn=>fn,useEffect:()=>{}};
-  imports['react-router-dom']={useLocation:()=>({state:null}),useNavigate:()=>target=>navigations.push(target)};
+  imports['react-router-dom']={Link:()=>null,useLocation:()=>({state:null}),useNavigate:()=>target=>navigations.push(target)};
   imports['../i18n']={useLocale:()=>({locale:'de',t:source=>translate('de',source)})};
   imports['../hooks/useAuth']={useAuth:()=>({user,authReady:true,isLoading:false,adminMode:false,requireAuth:()=>authRequests++})};
   imports['../hooks/usePayments']={usePayments:()=>({isLoading:false})};
   const skin={id:'ship-01',sprite:1,name:'Scout'},color={id:'silver',name:'Silver'};
-  Object.assign(imports['./shipFleet'],{playerSkins:[skin],playerColors:[color],allPlayerColors:[color],selectedShip:()=>({skin,color}),readShipFleet:()=>({}),fleetCount:()=>1,shardBalance:()=>150});
+  Object.assign(imports['./shipFleet'],{shipSaveNetwork:'mainnet',playerSkins:[skin],playerColors:[color],allPlayerColors:[color],selectedShip:()=>({skin,color}),readShipFleet:()=>({}),fleetCount:()=>1,shardBalance:()=>150});
   Object.assign(imports['./rewardProgress'],{emptyRewardProgress:()=>({highestLevel:1,linkedBlocks:{},completedChains:[],bossWins:{},bonusMedals:{}}),rankForLevel:()=>({name:'Rookie'}),CHAIN_MILESTONES:[]});
   imports['../../../backend/src/hangarCatalog']={hangarCatalog:[]};
+  imports['./shipNftVisibility']={shipNftMainnetVisible:false};
   imports['./musicPreferences']={readMusicVolume:()=>50,readEffectsVolume:()=>50,MUSIC_STORAGE_KEY:'music'};
   imports['./gameFullscreen']={requestGameFullscreen:()=>fullscreen++,toggleGameFullscreen:()=>fullscreen++};
   const componentTypes=['./CinematicHome','./FeedbackHub','./PilotProfile','./Collection','../components/Header','../components/TermsDialog','./CareerDashboard','../components/QuickAccessMenu'];
@@ -144,6 +145,11 @@ test('home actions reach the existing game, ship shop, career, cards, feedback a
   find(nodes,'./PilotProfile').props.onClose();nodes=render();find(nodes,'./CinematicHome').props.onTerms();nodes=render();assert.ok(find(nodes,'../components/TermsDialog'));
   find(nodes,'./CinematicHome').props.onSound();assert.equal(storage.get('music'),'off');
   assert.equal(storage.size,1); // No player, payment, reward or inventory writes.
+  assert.equal(home.props.nftLink,undefined);
+  imports['./shipNftVisibility'].shipNftMainnetVisible=true;
+  assert.equal(find(render(),'./CinematicHome').props.nftLink.props.to,'/nft-ships');
+  imports['./shipFleet'].shipSaveNetwork='testnet';
+  assert.equal(find(render(),'./CinematicHome').props.nftLink.props.to,'/nft-bosses');
 });
 
 test('animation stops for hidden pages, dialogs and reduced motion, and releases all listeners',()=>{

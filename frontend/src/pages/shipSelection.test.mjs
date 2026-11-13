@@ -9,11 +9,14 @@ import * as availability from './ownerTestnetCatalog.ts';
 import * as evolution from './shipEvolution.ts';
 import * as attributes from './shipAttributes.ts';
 import {hangarCatalog} from '../../../backend/src/hangarCatalog.ts';
+import {shipNftEditions} from '../../../backend/src/shipNftCatalog.ts';
+import {shipNftCopy} from '../locales/shipNft.ts';
 const ShipPreview=()=>null;
 const code=ts.transpileModule(readFileSync(new URL('./ShipSelectionPanel.tsx',import.meta.url),'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,jsx:ts.JsxEmit.ReactJSX}}).outputText;
-const exports={};
-vm.runInNewContext(code,{exports,require:name=>({'react/jsx-runtime':jsx,'./ShipPreview':{default:ShipPreview},'../components/PiPrice':{default:()=>null},'./ownerTestnetCatalog':availability,'./shipFleet':fleet,'./shipEvolution':evolution,'./shipAttributes':attributes,'./shipPreviewPlacement':{shipPreviewPlacement:()=>({})}})[name]});
-const Panel=exports.default;
+const loadPanel=shipNftMainnetVisible=>{const exports={};
+vm.runInNewContext(code,{exports,require:name=>({'react/jsx-runtime':jsx,'./ShipPreview':{default:ShipPreview},'../components/PiPrice':{default:()=>null},'./ownerTestnetCatalog':availability,'./shipFleet':fleet,'./shipEvolution':evolution,'./shipAttributes':attributes,'./shipPreviewPlacement':{shipPreviewPlacement:()=>({})},'../../../backend/src/shipNftCatalog':{shipNftEditions},'../locales/shipNft':{shipNftCopy},'./shipNftVisibility':{shipNftMainnetVisible}})[name]});
+return exports.default;};
+const Panel=loadPanel(false);
 const nodes=tree=>{const out=[];function walk(node){if(!node||typeof node!=='object')return;if(node.type)out.push(node);for(const child of [node.props?.children].flat(Infinity))walk(child);}walk(tree);return out;};
 const label=node=>typeof node==='string'?node:Array.isArray(node)?node.map(label).join(''):node?.props?label(node.props.children):'';
 const defaults=()=>({view:'shop',skin:fleet.playerSkins[0],color:fleet.playerColors[0],focusStage:1,ownedStage:1,fleet:{'grey-scout':{silver:1}},shards:500,locale:'de',offers:hangarCatalog.filter(x=>x.kind==='ship_upgrade'),message:'',selectedSkinId:'nova-wing',selectedColorId:'silver',t:x=>x,onStageChange:()=>{},onColorChange:()=>{},onBuyStandard:()=>{},onEquipPreview:()=>{},onOpenShop:()=>{}});
@@ -78,4 +81,19 @@ test('purchase ownership exposes Select for each owned stage; only the confirmed
   button=nodes(Panel({...props,selectionConfirmed:false})).find(n=>n.props.className?.includes('ship-equip-button'));assert.equal(Boolean(button.props.disabled),false);assert.equal(label(button),'Select');
   button=nodes(Panel({...props,purchaseBusy:true})).find(n=>n.props.className?.includes('ship-equip-button'));assert.equal(button.props.disabled,true);
  }
+});
+
+
+test('the ship purchase note names the correct edition only in the released Mainnet shop',()=>{
+  const LivePanel=loadPanel(true);
+  const note=(panel,props)=>nodes(panel({...defaults(),...props})).find(node=>node.props.className==='ship-nft-purchase-note');
+  for(const focusStage of [1,2,3]) {
+    const props={skin:fleet.playerSkins[1],focusStage};
+    assert.equal(note(Panel,props),undefined);
+    assert.equal(note(LivePanel,{...props,view:'hangar'}),undefined);
+    assert.equal(note(LivePanel,{...props,adminPreview:true}),undefined);
+    assert.ok(label(note(LivePanel,props)).includes(`Nova Wing ${shipNftEditions[focusStage-1]} NFT`));
+    assert.match(label(note(LivePanel,props)),focusStage===1?/mit Shards.*kostenlos/:/Kauf.*ohne Aufpreis/);
+  }
+  assert.match(label(note(LivePanel,{})),/kostenloses Startschiff/);
 });
