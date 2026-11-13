@@ -1,4 +1,5 @@
 export const shipNftEditions = ["Standard", "Advanced", "Elite"] as const;
+export const shipNftMaxSupply = { Standard: 99_999, Advanced: 31_415, Elite: 3_141 } as const;
 export const shipNftLivery = "Original Livery";
 
 // The three entries follow the ship's Standard, Advanced and Elite stages.

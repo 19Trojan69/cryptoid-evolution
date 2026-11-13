@@ -1,7 +1,7 @@
 import { hangarCatalog } from "./hangarCatalog";
 import { shipColors, spriteForShip, standardShips, type PlayerSave } from "./playerSave";
 import { ownedShipStage, type ShipStage } from "./shipLoadout";
-import { shipNftEditions, shipNftLivery, shipNftStories } from "./shipNftCatalog";
+import { shipNftEditions, shipNftLivery, shipNftMaxSupply, shipNftStories } from "./shipNftCatalog";
 import { shipLiveryAssetPath, vanguardMetallic } from './shipLivery';
 
 export const SHIP_NFT_ART_REVISION = "fleet-liveries-20261113";
@@ -27,7 +27,8 @@ export const shipNftCatalog = standardShips.flatMap(shipId => {
     const offer = shipNftOffers.find(item => item.shipIndex === sprite && item.stage === stage);
     return {
       id: `${shipId}-${key}`, shipId, sprite, name, stage, edition, livery: metallic ? vanguardMetallic.name : shipNftLivery,
-      story: stories[index], productId: offer?.id ?? null, upgradePricePi: offer?.pricePi ?? null,
+      maxSupply: shipNftMaxSupply[edition], story: stories[index],
+      productId: offer?.id ?? null, upgradePricePi: offer?.pricePi ?? null,
       requiresProductId: stage === 3 ? `ship_${number}_stage_2` : null,
       acquisition: stage > 1 ? "confirmed_ship_upgrade" : shipId === "grey-scout" ? "starter" : "shard_hull",
       spritePath: shipLiveryAssetPath(sprite, stage, metallic ? vanguardMetallic.id : undefined),

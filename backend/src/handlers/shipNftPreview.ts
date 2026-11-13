@@ -54,7 +54,7 @@ export default function mountShipNftPreview(router: Router, enabled = shipNftMai
       const artRows = eligibleArt.length ? await artwork.find({ _id: { $in: eligibleArt } }, { projection: { webp: 1 } }).toArray() : [];
       const artById = new Map(artRows.map(art => [art._id, art.webp]));
       return res.json({ owner: user.uid, total: cards.length, pageSize, cards: selected.map((card, index) => {
-        const summary = { id: card.id, name: card.name, status: statuses[index] };
+        const summary = { id: card.id, name: card.name, maxSupply: card.maxSupply, status: statuses[index] };
         if (summary.status !== "eligible") return summary;
         const webp = artById.get(artworkId(card.id));
         if (typeof webp !== "string" || !webp.startsWith("UklGR") || webp.length > 140_000) throw new Error("Artwork unavailable");

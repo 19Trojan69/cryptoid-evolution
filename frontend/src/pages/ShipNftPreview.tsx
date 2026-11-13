@@ -7,7 +7,7 @@ import { useLocale } from "../i18n";
 import { axiosClient } from "../lib/axiosClient";
 import { nftGalleryCopy } from "../locales/bossNftGallery";
 import { shipNftCopy } from "../locales/shipNft";
-import { shipNftEditions } from "../../../backend/src/shipNftCatalog";
+import { shipNftEditions, shipNftMaxSupply } from "../../../backend/src/shipNftCatalog";
 import { vanguardMetallic } from '../../../backend/src/shipLivery.ts';
 import type { ShipStage } from "./shipEvolution";
 import { shipNftMainnetVisible } from "./shipNftVisibility";
@@ -16,7 +16,7 @@ import "./bossNftPreview.css";
 import "./shipNftPreview.css";
 
 type LockedStatus = "needs-hull" | "needs-hull-proof" | "needs-advanced" | "needs-purchase";
-type Card = { id: string; name: string } & ({ status: LockedStatus } | { status: "eligible"; story: string; livery?: string; webp: string });
+type Card = { id: string; name: string; maxSupply?: number } & ({ status: LockedStatus } | { status: "eligible"; story: string; livery?: string; webp: string });
 type EligibleCard = Extract<Card, { status: "eligible" }>;
 type Page = { owner: string; total: number; pageSize: number; cards: Card[] };
 const cardImage = (card: EligibleCard) => `data:image/webp;base64,${card.webp}`;
@@ -25,6 +25,8 @@ const editionName = (stage: ShipStage) => shipNftEditions[stage - 1];
 function CardDetail({ card, stage, close }: { card: EligibleCard; stage: ShipStage; close: () => void }) {
   const { locale, t } = useLocale();
   const copy = shipNftCopy(locale);
+  const edition = editionName(stage);
+  const maxSupply = (card.maxSupply ?? shipNftMaxSupply[edition]).toLocaleString(locale);
   const dialogRef = useRef<HTMLDialogElement>(null);
   const titleId = useId();
   useEffect(() => {
@@ -42,14 +44,17 @@ function CardDetail({ card, stage, close }: { card: EligibleCard; stage: ShipSta
     onClick={event => { if (event.target === event.currentTarget) close(); }}>
     <div className="nft-preview-panel">
       <header className="nft-preview-heading">
-        <div><span className="nft-preview-edition">{editionName(stage)}</span><h2 id={titleId}>{card.name}</h2></div>
+        <div><span className="nft-preview-edition">{edition}</span><h2 id={titleId}>{card.name}</h2></div>
         <button className="nft-preview-close" type="button" aria-label={t("Close")} onClick={close}>×</button>
       </header>
       <div className="nft-preview-content">
         <p className="nft-preview-story" lang="en">{card.story}</p>
         <figure className="nft-preview-figure">
-          <img src={cardImage(card)} width={540} height={720} alt={`${card.name} · ${editionName(stage)}`} />
-          <figcaption>{card.livery === vanguardMetallic.name ? vanguardMetallic.name : copy.livery}</figcaption>
+          <img src={cardImage(card)} width={540} height={720} alt={`${card.name} · ${edition}`} />
+          <figcaption>
+            {card.livery === vanguardMetallic.name ? vanguardMetallic.name : copy.livery}
+            {" · "}{copy.maxSupply.replace("{count}", maxSupply)}
+          </figcaption>
         </figure>
         <p className="nft-preview-status">{copy.ready}</p>
       </div>

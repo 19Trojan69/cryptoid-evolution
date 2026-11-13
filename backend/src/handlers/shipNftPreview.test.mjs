@@ -67,7 +67,7 @@ function fixture({ mainnet, orders = [], enabled = true } = {}) {
 
 const cardsById = new Map(shipNftCatalog.map(card => [card.id, card]));
 
-test("each of the 20 ship families has three distinct cards and the correct upgrade IDs", () => {
+test("each of the 20 ship families has three distinct cards with the correct caps and upgrade IDs", () => {
   assert.equal(shipNftCatalog.length, 60);
   assert.equal(cardsById.size, 60);
   for (const field of ["story", "spritePath", "backgroundPath"]) {
@@ -76,6 +76,7 @@ test("each of the 20 ship families has three distinct cards and the correct upgr
   assert.equal(cardsById.get("grey-scout-advanced").productId, "ship_02_stage_2");
   assert.equal(cardsById.get("nova-wing-elite").requiresProductId, "ship_01_stage_2");
   for (const card of shipNftCatalog) {
+    assert.equal(card.maxSupply, [99_999, 31_415, 3_141][card.stage - 1]);
     assert.equal(card.upgradePricePi, [null, 9.9, 19.9][card.stage - 1]);
     assert.equal(card.productId, card.stage === 1 ? null : `ship_${String(card.sprite + 1).padStart(2, "0")}_stage_${card.stage}`);
   }
@@ -108,7 +109,7 @@ test("Standard requires saved Mainnet ownership and handles imported and older c
   assert.equal(headers["Cache-Control"], "private, no-store");
   assert.equal(body.owner, user.uid);
   assert.equal(body.cards[0].status, "eligible");
-  assert.deepEqual(body.cards[1], { id: "nova-wing-standard", name: "Nova Wing", status: "needs-hull-proof" });
+  assert.deepEqual(body.cards[1], { id: "nova-wing-standard", name: "Nova Wing", maxSupply: 99_999, status: "needs-hull-proof" });
   assert.equal(body.cards[2].status, "eligible");
   assert.deepEqual(legacy.artLookups, [[`${SHIP_NFT_ART_REVISION}:grey-scout-standard`, `${SHIP_NFT_ART_REVISION}:solar-lance-standard`]]);
   assert.deepEqual(legacy.orderLookups, []);
@@ -136,6 +137,7 @@ test("Advanced and Elite reject other networks, cancelled and incomplete receipt
   const missing = fixture({ mainnet: { fleet }, orders: otherRows });
   assert.deepEqual(confirmedMainnetShipUpgrades(user.uid, otherRows), ["ship_01_stage_2", "ship_02_stage_3"]);
   const advanced = await missing.request({ query: { stage: "2" }, adminMode: true });
+  assert.equal(advanced.body.cards[0].maxSupply, 31_415);
   assert.equal(advanced.body.cards[0].status, "needs-purchase");
   assert.equal(advanced.body.cards[1].status, "eligible");
   const elite = await missing.request({ query: { stage: "3" } });
@@ -143,6 +145,7 @@ test("Advanced and Elite reject other networks, cancelled and incomplete receipt
   const owned = fixture({ mainnet: { fleet }, orders: [...otherRows, receipt("ship_02_stage_2")] });
   const confirmed = await owned.request({ query: { stage: "3" } });
   assert.equal(confirmed.body.cards[0].status, "eligible");
+  assert.equal(confirmed.body.cards[0].maxSupply, 3_141);
   assert.equal(confirmed.body.cards[0].story, cardsById.get("grey-scout-elite").story);
   assert.equal(confirmed.body.cards[1].status, "needs-purchase");
   assert.deepEqual(owned.artLookups, [[`${SHIP_NFT_ART_REVISION}:grey-scout-elite`]]);

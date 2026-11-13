@@ -1,6 +1,6 @@
 const en = {
   title: "Ship NFTs", signIn: "Connect your Pi account to see your ship cards.",
-  livery: "Original livery", ready: "Eligible for NFT issuance",
+  livery: "Original livery", ready: "Eligible for NFT issuance", maxSupply: "Edition of {count}",
   "needs-hull": "Acquire this ship in the Hangar.",
   "needs-hull-proof": "A confirmed Shard purchase is required.",
   "needs-advanced": "Acquire the Advanced stage of this ship first.",
@@ -15,7 +15,7 @@ const copy: Record<string, typeof en> = {
   en,
   de: {
     title: "Schiffs-NFTs", signIn: "Verbinde dein Pi-Konto, um deine Schiffskarten zu sehen.",
-    livery: "Originallackierung", ready: "Für die NFT-Ausgabe berechtigt",
+    livery: "Originallackierung", ready: "Für die NFT-Ausgabe berechtigt", maxSupply: "Auflage von {count} Stück",
     "needs-hull": "Erwirb dieses Schiff im Hangar.",
     "needs-hull-proof": "Ein bestätigter Kauf mit Shards ist erforderlich.",
     "needs-advanced": "Erwirb zuerst die Advanced-Stufe dieses Schiffs.",
@@ -27,7 +27,7 @@ const copy: Record<string, typeof en> = {
   },
   es: {
     title: "NFT de naves", signIn: "Conecta tu cuenta de Pi para ver las cartas de tus naves.",
-    livery: "Pintura original", ready: "Cumples los requisitos para recibir el NFT",
+    livery: "Pintura original", ready: "Cumples los requisitos para recibir el NFT", maxSupply: "Edición limitada a {count} ejemplares",
     "needs-hull": "Adquiere esta nave en el hangar.",
     "needs-hull-proof": "Se requiere una compra con Shards confirmada.",
     "needs-advanced": "Adquiere primero la etapa Advanced de esta nave.",
@@ -39,7 +39,7 @@ const copy: Record<string, typeof en> = {
   },
   zh: {
     title: "飞船 NFT", signIn: "关联你的 Pi 账户以查看飞船卡牌。",
-    livery: "原版涂装", ready: "已符合 NFT 发放条件",
+    livery: "原版涂装", ready: "已符合 NFT 发放条件", maxSupply: "限量 {count} 枚",
     "needs-hull": "请在机库中获取这艘飞船。",
     "needs-hull-proof": "需要一笔已确认的 Shards 购买记录。",
     "needs-advanced": "请先获取这艘飞船的 Advanced 阶段。",
@@ -51,7 +51,7 @@ const copy: Record<string, typeof en> = {
   },
   vi: {
     title: "NFT phi thuyền", signIn: "Kết nối tài khoản Pi để xem thẻ phi thuyền của bạn.",
-    livery: "Màu sơn nguyên bản", ready: "Đủ điều kiện nhận NFT",
+    livery: "Màu sơn nguyên bản", ready: "Đủ điều kiện nhận NFT", maxSupply: "Giới hạn {count} bản",
     "needs-hull": "Hãy sở hữu phi thuyền này trong nhà chứa.",
     "needs-hull-proof": "Cần giao dịch bằng Shards đã được xác nhận.",
     "needs-advanced": "Hãy sở hữu phiên bản Advanced của phi thuyền này trước.",
