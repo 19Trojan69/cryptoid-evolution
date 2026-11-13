@@ -11,6 +11,18 @@ import { staticHullAsset } from './staticHullAssets';
 type StickerArtwork = Omit<ArcadeSticker, 'owner'>;
 export type ArcadeStickerAlbum = { stickers: StickerArtwork[]; savedToAccount: boolean };
 
+function stickerArtwork(sticker: ArcadeStickerBackup, local?: ArcadeSticker): StickerArtwork | undefined {
+  const skin = playerSkins.find(entry => entry.id === sticker.modelId);
+  const color = allPlayerColors.find(entry => entry.id === sticker.colorId);
+  if (!skin || !color) return;
+  const fallback = local?.image ?? shipEvolutionAsset(skin.sprite, sticker.stage);
+  return {
+    ...sticker,
+    shipName: local?.shipName ?? skin.name,
+    image: (sticker.stage === 1 ? local?.image : undefined) ?? staticHullAsset(skin.sprite, color.id, sticker.stage)?.url ?? fallback,
+  };
+}
+
 function readArcadeStickers(owner: string): Promise<ArcadeSticker[]> {
   const { database, version, store, keyPath } = arcadeStickerStore;
   return new Promise((resolve, reject) => {
@@ -58,9 +70,14 @@ export async function syncArcadeStickerAlbum(owner: string, stations: readonly {
   const [device, account] = await Promise.allSettled([readArcadeStickers(owner), requestAccountAlbum(owner, signal)]);
   const levels = new Set(stations.map(station => station.level));
   const local = device.status === 'fulfilled' ? device.value.filter(sticker => levels.has(sticker.level)) : [];
+  const bySlot = new Map<string, StickerArtwork>();
+  for (const sticker of local) {
+    const artwork = stickerArtwork(sticker, sticker);
+    if (artwork) bySlot.set(arcadeStickerSlot(sticker), artwork);
+  }
   if (account.status === 'rejected') {
-    if (local.length === 0) throw account.reason;
-    return { stickers: local, savedToAccount: false };
+    if (bySlot.size === 0) throw account.reason;
+    return { stickers: [...bySlot.values()], savedToAccount: false };
   }
 
   let saved = account.value;
@@ -73,17 +90,13 @@ export async function syncArcadeStickerAlbum(owner: string, stations: readonly {
     catch { savedToAccount = false; }
   }
 
-  const bySlot = new Map<string, StickerArtwork>(local.map(sticker => [arcadeStickerSlot(sticker), sticker]));
   for (const sticker of saved) {
     if (!levels.has(sticker.level)) continue;
     const slot = arcadeStickerSlot(sticker);
     const original = bySlot.get(slot);
     if (original?.modelId === sticker.modelId && original.stage === sticker.stage && original.colorId === sticker.colorId) continue;
-    const skin = playerSkins.find(entry => entry.id === sticker.modelId);
-    const color = allPlayerColors.find(entry => entry.id === sticker.colorId);
-    if (!skin || !color) continue;
-    const image = staticHullAsset(skin.sprite, color.id, sticker.stage)?.url ?? shipEvolutionAsset(skin.sprite, sticker.stage);
-    bySlot.set(slot, { ...sticker, shipName: skin.name, image });
+    const artwork = stickerArtwork(sticker);
+    if (artwork) bySlot.set(slot, artwork);
   }
   return { stickers: [...bySlot.values()].sort((a, b) => a.level - b.level || a.rank - b.rank), savedToAccount };
 }

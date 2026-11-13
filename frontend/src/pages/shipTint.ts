@@ -14,7 +14,10 @@ export function tintShipPixels(data: Uint8ClampedArray, target: readonly number[
     const lightness = Math.max(.8, Math.min(1.06, .64 + .36 * luminance / 190));
     const reflection = Math.pow(Math.max(0, (brightness - 115) / 140), 2) * .68;
     const tone = 255 * Math.pow(brightness / 255, .92) * lightness;
-    const strength = brightness < 32 ? .48 : .88;
+    // A selected metal finish still recolors neutral armor. Saturated factory
+    // markings keep their hue, including when an upgraded hull adds new panels.
+    const marking = identityPixel ? 0 : Math.min(.78, Math.max(0, (saturation - 36) / 118));
+    const strength = (brightness < 32 ? .48 : .88) * (1 - marking);
     for (let channel = 0; channel < 3; channel++) {
       const metal = tone * (.24 + .76 * palette[channel] / luminance);
       const reflected = metal * (1 - reflection) + Math.min(255, tone + 15) * reflection;

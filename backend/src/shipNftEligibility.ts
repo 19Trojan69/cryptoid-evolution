@@ -3,7 +3,7 @@ import { shipColors, spriteForShip, standardShips, type PlayerSave } from "./pla
 import { ownedShipStage, type ShipStage } from "./shipLoadout";
 import { shipNftEditions, shipNftLivery, shipNftStories } from "./shipNftCatalog";
 
-export const SHIP_NFT_ART_REVISION = "original-livery-20261113";
+export const SHIP_NFT_ART_REVISION = "standard-livery-20261113";
 export const SHIP_NFT_ART_COLLECTION = "shipNftPreviewArtwork";
 
 export const shipNftMainnetEnabled = () =>

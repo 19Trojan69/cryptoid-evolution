@@ -27,6 +27,19 @@ test('blue glass stays blue, named red trim stays red on silver and gold', () =>
   }
 });
 
+test('saturated factory markings retain their hues across selectable metal finishes', () => {
+  const source = new Uint8ClampedArray([205, 35, 187, 255, 239, 124, 28, 255, 150, 150, 150, 255]);
+  const silver = source.slice();
+  const blue = source.slice();
+  tintShipPixels(silver, [184, 197, 206]);
+  tintShipPixels(blue, [84, 131, 178]);
+  for (const result of [silver, blue]) {
+    assert.ok(result[0] - result[1] > 90 && result[2] - result[1] > 90);
+    assert.ok(result[4] - result[5] > 50 && result[5] - result[6] > 40);
+  }
+  assert.notDeepEqual([...silver.slice(8)], [...blue.slice(8)]);
+});
+
 test('baked relief never expands alpha bounds, changes glass or creates opaque corners', () => {
   const pixels = new Uint8ClampedArray(5*5*4);
   for (let y=1;y<4;y++) for (let x=1;x<4;x++) pixels.set([100+x*25,100+x*25,100+x*25,255], (y*5+x)*4);

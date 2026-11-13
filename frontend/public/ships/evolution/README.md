@@ -8,11 +8,10 @@ in `backend/src/hangarCatalog.ts`.
 
 Stage 1 preserves the original playable ship pixels from the existing
 `frontend/public/ships/cryptoid-fleet.png` atlas, with only unrelated fragments
-from neighboring atlas cells removed. Some original hulls have painted accents;
-they remain in the source file to honor the original artwork. The existing
-runtime paint pass provides the silver display option. Advanced and Elite were
-edited separately from each family's own source art and packaged at the same
-visual size and orientation as the original.
+from neighboring atlas cells removed. Its original livery supplies the armor
+and marking colors for Advanced and Elite. The higher stages retain their own
+geometry, glass and equipment lights. The shop's metal finishes are applied to
+these sprites, which also supply the default artwork for the ship NFT cards.
 
 The PNGs contain no long thrust animation. Flame placement still uses the
 ship-specific nozzle anchors in `shipFleet.ts`. Weapon patterns, collision

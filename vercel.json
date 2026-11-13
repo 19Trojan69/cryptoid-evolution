@@ -62,6 +62,7 @@
   ],
   "git": {
     "deploymentEnabled": {
+      "codex/ship-livery-inheritance-20261113": false,
       "codex/ship-nft-preparation-20261113": false,
       "codex/testnet-boss-nft-preview-20261112": false,
       "codex/admin-boss-nft-gallery-20261112": false,
