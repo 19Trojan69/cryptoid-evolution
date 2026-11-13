@@ -2080,14 +2080,6 @@ html[data-motion="reduced"] .home-combat-ally-1 { left: 27%; top: 66%; opacity: 
 .button .pi-price span { margin-left: 0; font-size: inherit; }
 .button .pi-price .pi-price-test { font-size: .7em; }
 .ship-inline-purchase .button:disabled { opacity: 1; border-color: #536b82; background: #12273c; color: #b6c6d5; cursor: not-allowed; }
-.ship-one-colors { display: grid; gap: 7px; padding: 10px 12px; border: 1px solid #56869b70; border-radius: 10px; background: #0d2741bb; }
-.ship-one-colors-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 7px; }
-.ship-one-colors h4 { margin: 0; color: #eaf8fb; font: 800 12px 'Oxanium', sans-serif; text-transform: uppercase; }
-.ship-one-colors-heading span { overflow: hidden; color: #b9d9e3; font: 600 11px 'Rajdhani', sans-serif; text-overflow: ellipsis; white-space: nowrap; }
-.ship-color-dots { display: flex; flex-wrap: wrap; gap: 7px; }
-.ship-color-dots button { flex: 0 0 35px; width: 35px; height: 35px; padding: 0; border: 2px solid #a4b6c7; border-radius: 50%; background: radial-gradient(circle at 31% 24%, white, var(--paint) 32%, color-mix(in srgb, var(--paint) 55%, #07182b)); box-shadow: inset 0 -3px 5px #04101a70, 0 1px 5px #000a; cursor: pointer; }
-.ship-color-dots button[aria-pressed="true"] { border: 3px solid #8cf8d7; outline: 2px solid #215e6b; box-shadow: 0 0 11px #54edc6; }
-.ship-color-dots button:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
 .ship-one-checkout { display: flex; align-items: center; gap: 12px; min-height: 49px; }
 .ship-one-checkout .button { flex: 1 1 0; min-width: 0; min-height: 52px; padding: 5px 7px; border-radius: 10px; clip-path: none; font-size: 11px; line-height: 1.2; }
 .ship-one-checkout .button:disabled { opacity: .53; cursor: not-allowed; }
@@ -2114,14 +2106,10 @@ html[data-motion="reduced"] .home-combat-ally-1 { left: 27%; top: 66%; opacity: 
   .landing-shell .ship-one-info h3 { font-size: 15px; }
   .landing-shell .ship-one-info p { font-size: 12px; line-height: 1.25; }
   .ship-one-info { gap: 5px; }
-  .ship-one-colors { padding: 7px 8px; gap: 5px; }
-  .ship-color-dots { gap: 6px; }
-  .ship-color-dots button { flex-basis: 34px; width: 34px; height: 34px; }
   .ship-one-checkout { position: sticky; bottom: 0; z-index: 5; padding: 3px; border-radius: 10px; background: #0b2139; box-shadow: 0 -6px 18px #081628b8; }
 }
 @media (max-height: 670px) and (max-width: 600px) {
   .ship-one-hero { min-height: 118px; }
-  .ship-color-dots button { flex-basis: 30px; width: 30px; height: 30px; }
 }
 .admin-preview-banner {
   padding: 10px 20px;
@@ -2318,12 +2306,6 @@ html[data-motion="reduced"] .quick-access-panel { animation: none; }
 .ship-one-info h3 small { font-size: 13px; }
 .ship-one-hero .ship-one-art-wrap { min-height: 220px; }
 .ship-one-hero .ship-one-art-frame { height: min(100%, 240px); }
-.ship-one-hero .ship-one-colors { align-content: center; gap: 14px; padding: 14px; }
-.ship-one-colors-heading { flex-direction: column; align-items: flex-start; gap: 7px; }
-.ship-one-colors h4 { font-size: 13px; line-height: 1.4; }
-.ship-one-colors-heading span { font-size: 14px; white-space: normal; overflow: visible; line-height: 1.4; }
-.ship-color-dots { gap: 10px; }
-.ship-color-dots button { flex-basis: 44px; width: 44px; height: 44px; }
 .ship-configuration-summary { grid-column: 1 / -1; display: grid; gap: 12px; min-width: 0; }
 .ship-inline-purchase { gap: 10px; margin: 0; padding: 14px; border: 1px solid #71bfa65e; border-radius: 10px; background: #071b2c; }
 .ship-inline-purchase .ship-purchase-price { display: flex; align-items: baseline; flex-wrap: wrap; gap: 8px; font: 600 15px/1.4 'Rajdhani', sans-serif; color: #d0e5ee; }
@@ -2346,8 +2328,6 @@ html[data-motion="reduced"] .quick-access-panel { animation: none; }
   .ship-one-hero, .ship-selector-shop .ship-one-hero { grid-template-columns: minmax(0, 1fr) minmax(132px, 1fr); gap: 10px; padding: 10px; }
   .ship-one-hero .ship-one-art-wrap { min-height: 218px; }
   .ship-one-hero .ship-one-art-frame { height: min(100%, 190px); }
-  .ship-one-hero .ship-one-colors { padding: 8px; gap: 10px; }
-  .ship-color-dots { gap: 8px; }
   .ship-inline-purchase { padding: 12px; }
   .ship-inline-purchase .button { font-size: 13px; }
   .landing-shell .quick-access-trigger { padding: 6px; }
@@ -2632,7 +2612,7 @@ html[data-motion="reduced"] .hull-hotspot b, html[data-motion="reduced"] .hull-h
   .landing-shell .shop-tabs button > b { font-size: 17px; white-space: normal; line-height: 1.25; }
   .landing-shell .shop-modal :is(p, label, .text-button, .menu-return) { font-size: 16px; line-height: 1.45; }
   .landing-shell .shop-modal :is(small, .shard-help, .card-heading, .hangar-offer > span, .hangar-offer > strong) { font-size: 15px; line-height: 1.4; }
-  .landing-shell .shop-modal :is(.button, h4, .ship-one-colors h4) { font-size: 18px; line-height: 1.35; }
+  .landing-shell .shop-modal :is(.button, h4) { font-size: 18px; line-height: 1.35; }
   .landing-shell .shop-modal :is(.ship-stage-strip button span, .ship-stage-strip button small, .ship-evolution-stage-info strong, .ship-evolution-stage-info em) { font-size: 15px; line-height: 1.4; }
   .landing-shell .shop-modal .ship-one-info p { font-size: 17px; }
   .landing-shell .reward-rank-path { grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; }

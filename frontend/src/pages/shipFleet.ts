@@ -3,8 +3,8 @@ import type { ShipStage } from './shipEvolution';
 import { RELEASED_STANDARD_SHIPS } from './cardAvailability.ts';
 import type { CSSProperties } from "react";
 import type { CryptoidClass } from "./cryptoidRoster";
-import { originalLivery, shipPaintMatchesHull as shipPaintAvailable, vanguardMetallic } from '../../../backend/src/shipLivery.ts';
-export { shipPaintAvailable };
+import { originalLivery, shipFactoryPaint, shipPaintMatchesHull as shipPaintAvailable, standardHullInventoryColor, vanguardMetallic } from '../../../backend/src/shipLivery.ts';
+export { shipFactoryPaint, shipPaintAvailable };
 
 export const FLEET_IMAGE = "/ships/cryptoid-fleet.png";
 export type ShipSaveNetwork = "testnet" | "mainnet";
@@ -28,7 +28,6 @@ export const SHIP_FLEET_KEY = shipSaveKey("cryptoid_ship_fleet_v2", shipSaveNetw
 export const SHARD_BALANCE_KEY = shipSaveKey("cryptoid_shard_balance", shipSaveNetwork);
 export const ADMIN_MODE_KEY = "cryptoid_admin_preview";
 export const ADMIN_SHIP_SKIN_KEY = "cryptoid_admin_ship_skin";
-export const ADMIN_SHIP_COLOR_KEY = "cryptoid_admin_ship_color";
 export const ADMIN_START_SECTOR_KEY = "cryptoid_admin_start_sector";
 export const ADMIN_SHIP_STAGE_KEY = "cryptoid_admin_ship_stage";
 export const ADMIN_TEST_CONFIG_KEY = "cryptoid_admin_test_config";
@@ -113,24 +112,11 @@ export type PlayerSkinId = (typeof playerSkins)[number]["id"];
 export type PlayerColorId = (typeof allPlayerColors)[number]["id"];
 export type ShipFleet = Partial<Record<PlayerSkinId, Partial<Record<PlayerColorId, number>>>>;
 
-export const shipFactoryPaint = (skin: PlayerSkinId) => skin === 'pi-vanguard' ? vanguardMetallic : originalLivery;
-
 export const fleetCount = (fleet: ShipFleet, skin: PlayerSkinId, color?: PlayerColorId) =>
   color ? fleet[skin]?.[color] ?? 0 : Object.values(fleet[skin] ?? {}).reduce((sum, count) => sum + (count ?? 0), 0);
 
-export const canEquipShipPaint = (fleet: ShipFleet, skin: PlayerSkinId, color: PlayerColorId) =>
-  shipPaintAvailable(skin, color) && fleetCount(fleet, skin, color === originalLivery.id ? undefined : color) > 0;
-
-export const repaintStarter = (fleet: ShipFleet, color: PlayerColorId): ShipFleet => {
-  if (fleetCount(fleet, "grey-scout", color)) return fleet;
-  const old = { ...(fleet["grey-scout"] ?? { grey: 1 }) };
-  const previous = Object.keys(old).find(key => (old[key as PlayerColorId] ?? 0) > 0) as PlayerColorId | undefined;
-  if (!previous) return fleet;
-  old[previous] = (old[previous] ?? 0) - 1;
-  if (old[previous] === 0) delete old[previous];
-  old[color] = 1;
-  return { ...fleet, "grey-scout": old };
-};
+export const ownedShipInventoryColor = (fleet: ShipFleet, skin: PlayerSkinId) =>
+  allPlayerColors.find(color => shipPaintAvailable(skin, color.id) && fleetCount(fleet, skin, color.id) > 0)?.id;
 
 export const readShipFleet = (raw: string | null, oldOwned: string | null, oldColors: string | null): ShipFleet => {
   if (raw !== null) {
@@ -159,18 +145,18 @@ export const readShipFleet = (raw: string | null, oldOwned: string | null, oldCo
   return result;
 };
 
-export const buyShipVariant = (skinId: PlayerSkinId, colorId: PlayerColorId, fleet: ShipFleet, balance: number) => {
+export const buyStandardShip = (skinId: PlayerSkinId, fleet: ShipFleet, balance: number) => {
   const skin = playerSkins.find(item => item.id === skinId);
   const price = skin ? standardShipPrice(skin) : undefined;
-  if (!skin || !testnetStandardHullAvailable(skinId) || price === undefined || !shipPaintAvailable(skinId, colorId) || !allPlayerColors.some(color => color.id === colorId) || !Number.isSafeInteger(balance) || balance < price) return null;
-  const count = fleetCount(fleet, skinId, colorId);
+  if (!skin || !testnetStandardHullAvailable(skinId) || price === undefined || !Number.isSafeInteger(balance) || balance < price) return null;
+  const count = fleetCount(fleet, skinId, standardHullInventoryColor);
   if (!Number.isSafeInteger(count) || count >= Number.MAX_SAFE_INTEGER) return null;
-  return { fleet: { ...fleet, [skinId]: { ...fleet[skinId], [colorId]: count + 1 } }, balance: balance - price };
+  return { fleet: { ...fleet, [skinId]: { ...fleet[skinId], [standardHullInventoryColor]: count + 1 } }, balance: balance - price };
 };
 
 // Do not leave a deducted balance or changed selection when browser storage fails.
-export function saveGuestShipPurchase(storage: Pick<Storage, 'getItem' | 'setItem' | 'removeItem'>, skin: PlayerSkinId, color: PlayerColorId, purchase: NonNullable<ReturnType<typeof buyShipVariant>>) {
-  if (!fleetCount(purchase.fleet, skin, color)) throw new Error('Purchased ship is missing');
+export function saveGuestShipPurchase(storage: Pick<Storage, 'getItem' | 'setItem' | 'removeItem'>, skin: PlayerSkinId, purchase: NonNullable<ReturnType<typeof buyStandardShip>>) {
+  if (!fleetCount(purchase.fleet, skin, standardHullInventoryColor)) throw new Error('Purchased ship is missing');
   const values: [string, string][] = [
     [SHIP_FLEET_KEY, JSON.stringify(purchase.fleet)],
     [SHARD_BALANCE_KEY, String(purchase.balance)],
@@ -196,10 +182,6 @@ export const savedShipColors = (raw: string | null): Partial<Record<PlayerSkinId
   } catch { return {}; }
 };
 
-export const colorForSkin = (skinId: PlayerSkinId, saved: Partial<Record<PlayerSkinId, PlayerColorId>>, legacyColor?: string | null, selectedId?: PlayerSkinId) =>
-  allPlayerColors.find(item => item.id === saved[skinId]) ??
-  (skinId === selectedId ? allPlayerColors.find(item => item.id === legacyColor) : undefined) ?? legacyColors[0];
-
 export const ownedSkins = (raw: string | null): PlayerSkinId[] => {
   try {
     const ids: unknown = JSON.parse(raw || "[]");
@@ -223,16 +205,11 @@ export const selectedShip = () => {
   const stored = playerSkins.find(item => item.id === (adminPreview ? sessionStorage.getItem(ADMIN_SHIP_SKIN_KEY) : localStorage.getItem(SHIP_SKIN_KEY)));
   if (adminPreview) {
     const skin = stored ?? playerSkins[0];
-    const color = allPlayerColors.find(item => item.id === sessionStorage.getItem(ADMIN_SHIP_COLOR_KEY) && shipPaintAvailable(skin.id, item.id));
-    return { skin, color: color ?? shipFactoryPaint(skin.id) };
+    return { skin, color: shipFactoryPaint(skin.id) };
   }
   const fleet = readShipFleet(localStorage.getItem(SHIP_FLEET_KEY), localStorage.getItem(SHIP_OWNED_KEY), localStorage.getItem(SHIP_COLORS_KEY));
   const skin = stored && fleetCount(fleet, stored.id) ? stored : playerSkins[0];
-  const savedColor = colorForSkin(skin.id, savedShipColors(localStorage.getItem(SHIP_COLORS_KEY)), localStorage.getItem(SHIP_COLOR_KEY), skin.id);
-  const legacyStarter = skin.price === 0 && localStorage.getItem(SHIP_FLEET_KEY) === null && shipPaintAvailable(skin.id, savedColor.id);
-  const color = canEquipShipPaint(fleet, skin.id, savedColor.id) || legacyStarter
-    ? savedColor : allPlayerColors.find(item => fleetCount(fleet, skin.id, item.id)) ?? shipFactoryPaint(skin.id);
-  return { skin, color };
+  return { skin, color: shipFactoryPaint(skin.id) };
 };
 
 // The 20 cells retain the reference sheet's row-major order.

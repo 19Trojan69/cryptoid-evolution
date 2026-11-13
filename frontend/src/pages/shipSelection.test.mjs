@@ -20,16 +20,19 @@ return exports.default;};
 const Panel=loadPanel(false);
 const nodes=tree=>{const out=[];function walk(node){if(!node||typeof node!=='object')return;if(node.type)out.push(node);for(const child of [node.props?.children].flat(Infinity))walk(child);}walk(tree);return out;};
 const label=node=>typeof node==='string'?node:Array.isArray(node)?node.map(label).join(''):node?.props?label(node.props.children):'';
-const defaults=()=>({view:'shop',skin:fleet.playerSkins[0],color:fleet.playerColors[0],focusStage:1,ownedStage:1,fleet:{'grey-scout':{silver:1}},shards:500,locale:'de',offers:hangarCatalog.filter(x=>x.kind==='ship_upgrade'),message:'',selectedSkinId:'nova-wing',selectedColorId:'silver',t:x=>x,onStageChange:()=>{},onColorChange:()=>{},onBuyStandard:()=>{},onEquipPreview:()=>{},onOpenShop:()=>{}});
+const defaults=()=>({view:'shop',skin:fleet.playerSkins[0],focusStage:1,ownedStage:1,fleet:{'grey-scout':{silver:1}},shards:500,locale:'de',offers:hangarCatalog.filter(x=>x.kind==='ship_upgrade'),message:'',selectedSkinId:'nova-wing',t:x=>x,onStageChange:()=>{},onBuyStandard:()=>{},onEquipPreview:()=>{},onOpenShop:()=>{}});
 
-test('all versions use one preview with the corresponding stage, paint and actual offer',()=>{
+test('all versions use one preview with the corresponding stage, fixed livery and actual offer',()=>{
   for(const stage of [1,2,3]){
     const clicks=[],props={...defaults(),focusStage:stage,onStageChange:x=>clicks.push(x)};
     const tree=nodes(Panel(props));const tabs=tree.find(x=>x.props.className==='ship-version-tabs');
     const buttons=nodes(tabs).filter(x=>x.type==='button');assert.equal(buttons.length,3);
     assert.deepEqual(buttons.map(x=>x.props['aria-pressed']),[stage===1,stage===2,stage===3]);
     buttons.forEach(x=>x.props.onClick());assert.deepEqual(clicks,[1,2,3]);
-    const artwork=tree.filter(x=>x.type===ShipPreview);assert.equal(artwork.length,1);assert.equal(artwork[0].props.stage,stage);assert.equal(artwork[0].props.color,'silver');
+    const artwork=tree.filter(x=>x.type===ShipPreview);assert.equal(artwork.length,1);assert.equal(artwork[0].props.stage,stage);assert.equal(artwork[0].props.color,'original');
+    assert.equal(tree.some(x=>x.props['data-paint'] || x.props.className==='ship-one-colors'),false);
+    const metallic = nodes(Panel({...props,skin:fleet.playerSkins[18]})).find(x=>x.type===ShipPreview);
+    assert.equal(metallic.props.color,'vanguard-metallic');
     assert.equal(tree.some(x=>x.props.className==='ship-evolution-stage-art'),false);
   if(stage>1)assert.ok(tree.some(x=>x.type==='p'&&label(x).includes(stage===2?'10% larger pickup radius':'20% larger pickup radius')));
   }
@@ -48,19 +51,20 @@ test('shard balance, released hulls, busy state and Pi locks still gate purchase
 });
 
 test('owned stages use explicit selection rather than highest ownership',()=>{
-  let equipped=0,color;
-  const props={...defaults(),view:'hangar',ownedStage:2,focusStage:2,fleet:{'grey-scout':{silver:1,gold:1}},onEquipPreview:()=>equipped++,onColorChange:x=>color=x.id};
+  let equipped=0;
+  const props={...defaults(),view:'hangar',ownedStage:2,focusStage:2,fleet:{'grey-scout':{silver:1,gold:1}},onEquipPreview:()=>equipped++};
   let tree=nodes(Panel(props));const equip=tree.find(x=>x.props.className?.includes('ship-equip-button'));
   assert.ok(equip);equip.props.onClick();assert.equal(equipped,1);
-  const paints=tree.filter(x=>x.type==='button'&&x.props.title);assert.equal(paints.length,3);paints.find(x=>x.props.title==='Gold').props.onClick();assert.equal(color,'gold');assert.equal(equipped,1);
-  assert.equal(paints.find(x=>x.props['data-paint']==='original').props['data-owned'],true);
+  assert.equal(tree.some(x=>x.props['data-paint']),false);
   assert.equal(nodes(Panel({...props,focusStage:1})).some(x=>x.props.className?.includes('ship-equip-button')),true);
   assert.equal(nodes(Panel({...props,focusStage:3})).some(x=>x.props.className?.includes('ship-equip-button')),false);
   tree=nodes(Panel({...props,selectedSkinId:'grey-scout',selectedStage:2}));assert.equal(tree.find(x=>x.props.className?.includes('ship-equip-button')).props.disabled,true);
 });
 
-test('missing standard ownership and an unowned color never expose an equip action',()=>{
-  for(const props of [{fleet:{}},{color:fleet.playerColors[1]}])assert.equal(nodes(Panel({...defaults(),...props})).some(x=>x.props.className?.includes('ship-equip-button')),false);
+test('an owned legacy hull can equip the fixed livery and an unowned hull cannot be equipped',()=>{
+  assert.equal(nodes(Panel({...defaults(),fleet:{}})).some(x=>x.props.className?.includes('ship-equip-button')),false);
+  const props={...defaults(),skin:fleet.playerSkins[18],fleet:{'pi-vanguard':{silver:1}},focusStage:3,ownedStage:3};
+  assert.ok(nodes(Panel(props)).some(x=>x.props.className?.includes('ship-equip-button')));
 });
 
 test('shop comparisons reflect the actual equipped hull and owned stage rather than paint or preview stage',()=>{
@@ -69,14 +73,14 @@ test('shop comparisons reflect the actual equipped hull and owned stage rather t
   assert.match(label(node),/\+6%/);assert.equal(node.props['data-improved'],true);
   node=comparison({skin:fleet.playerSkins[1],selectedSkinId:'grey-scout',selectedStage:3});
   assert.match(label(node),/-18%/);assert.equal(node.props['data-improved'],false);
-  node=comparison({skin:fleet.playerSkins[1],selectedSkinId:'nova-wing',focusStage:2,selectedStage:2,color:fleet.playerColors[1]});
+  node=comparison({skin:fleet.playerSkins[1],selectedSkinId:'nova-wing',focusStage:2,selectedStage:2});
   assert.match(label(node),/: 0%/);
 });
 
 
-test('purchase ownership exposes Select for each owned stage; only the confirmed exact hull/color/stage says Equipped',()=>{
+test('purchase ownership exposes Select for each owned stage; only the confirmed exact hull and stage says Equipped',()=>{
  for(const focusStage of [1,2,3]){
-  const chosen=[],props={...defaults(),ownedStage:3,focusStage,selectedSkinId:'grey-scout',selectedColorId:'silver',selectedStage:1,onEquipPreview:stage=>chosen.push(stage)};
+  const chosen=[],props={...defaults(),ownedStage:3,focusStage,selectedSkinId:'grey-scout',selectedStage:1,onEquipPreview:stage=>chosen.push(stage)};
   let button=nodes(Panel(props)).find(n=>n.props.className?.includes('ship-equip-button'));
   assert.equal(Boolean(button.props.disabled),focusStage===1);assert.equal(label(button),focusStage===1?'EQUIPPED':'Select');
   button.props.onClick();assert.deepEqual(chosen,[focusStage]);

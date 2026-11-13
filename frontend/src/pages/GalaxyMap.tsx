@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useLocale } from '../i18n';
 import BlockchainIcon from '../components/BlockchainIcon';
 import ShipPortrait from './ShipPortrait';
-import { ADMIN_MODE_KEY, ADMIN_SHIP_STAGE_KEY, allPlayerColors, playerSkins, selectedShip, shipSaveNetwork } from './shipFleet';
+import { ADMIN_MODE_KEY, ADMIN_SHIP_STAGE_KEY, playerSkins, selectedShip, shipFactoryPaint, shipSaveNetwork } from './shipFleet';
 import { selectedShipStage, shipEvolutionAsset, type ShipStage } from './shipEvolution';
 import useGalaxyData from './useGalaxyData';
 import GalaxySector from './GalaxySector';
@@ -139,7 +139,7 @@ export default function GalaxyMap() {
   const lockedPortal = previewAccess && selection?.kind === 'mini' && !miniGame && previewLevels.includes(selection.level);
   const point = galaxyShipPoint(progress.currentLevel);
   const skin = playerSkins.find(entry => entry.id === snapshot.skin) ?? playerSkins[0];
-  const color = allPlayerColors.find(entry => entry.id === snapshot.color) ?? allPlayerColors.find(entry => entry.id === 'grey')!;
+  const color = shipFactoryPaint(skin.id);
   const stage = selectedShipStage(skin.sprite, snapshot.upgrades, snapshot.shipStage);
   const reduced = () => document.documentElement.dataset.motion === 'reduced' || localStorage.getItem(MOTION_STORAGE_KEY) === '1' || window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const goTo = (level: number, smooth = true) => {
@@ -207,7 +207,7 @@ export default function GalaxyMap() {
       <div className="galaxy-map-world">
         {[...galaxyRegions.keys()].reverse().map(region => <GalaxySector key={region} region={region} progress={progress} retroLevels={retroLevels} unlockedGames={unlocked} onSelect={setSelection}/>)}
         {status === 'ready' && <div ref={ship} className="galaxy-player" data-player-level={progress.currentLevel} data-player-port={point.port} style={{ '--player-x': `calc(${point.x}% + ${point.dx}px)`, '--player-y': `${point.mapY + point.dy}px` } as CSSProperties}>
-          <ShipPortrait src={shipEvolutionAsset(skin.sprite, stage)} color={color.id} name={`${t('Your ship')} · ${skin.name}`}/><span aria-hidden="true" className="galaxy-engine"/><small>{t('Your ship')}</small>
+          <ShipPortrait src={shipEvolutionAsset(skin.sprite, stage, color.id)} name={`${t('Your ship')} · ${skin.name}`}/><span aria-hidden="true" className="galaxy-engine"/><small>{t('Your ship')}</small>
         </div>}
       </div>
       <article className="galaxy-intro">

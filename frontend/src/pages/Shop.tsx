@@ -27,9 +27,9 @@ import { accountSelection, loadAccountSave, localInventory, mutateAccountInvento
 import { usePayments } from "../hooks/usePayments";
 import { axiosClient } from "../lib/axiosClient.ts";
 import { BEST_SCORE_KEY, HIGHEST_SECTOR_KEY, TOTAL_DESTROYED_KEY } from "../lib/localRecordKeys";
-import { allPlayerColors, buyShipVariant, canEquipShipPaint, fleetCount, playerColors, playerSkins, readShipFleet, savedShipColors, selectedShip, shardBalance, shipSaveNetwork, ADMIN_SHIP_COLOR_KEY, ADMIN_SHIP_SKIN_KEY, ADMIN_SHIP_STAGE_KEY, ADMIN_START_SECTOR_KEY, SHARD_BALANCE_KEY, SHIP_COLOR_KEY, SHIP_COLORS_KEY, SHIP_FLEET_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY, type ShipFleet } from "./shipFleet";
+import { buyStandardShip, fleetCount, ownedShipInventoryColor, playerSkins, readShipFleet, selectedShip, shardBalance, shipFactoryPaint, shipSaveNetwork, ADMIN_SHIP_SKIN_KEY, ADMIN_SHIP_STAGE_KEY, ADMIN_START_SECTOR_KEY, SHARD_BALANCE_KEY, SHIP_COLORS_KEY, SHIP_FLEET_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY, type ShipFleet } from "./shipFleet";
 import { ownedShipStage, selectedShipStage, type ShipStage } from "./shipEvolution";
-import { originalLivery, vanguardMetallic } from '../../../backend/src/shipLivery.ts';
+import { standardHullInventoryColor } from '../../../backend/src/shipLivery.ts';
 
 import FleetShipPanel from "./FleetShipPanel";
 import "./shopPurchase.css";
@@ -73,10 +73,7 @@ const shopTabs = [
   ["leaders", "Top 100", "#"],
 ] as const;
 
-const adminFleet: ShipFleet = Object.fromEntries(playerSkins.map(skin => [skin.id, {
-  ...Object.fromEntries(playerColors.map(color => [color.id, 1])), [originalLivery.id]: 1,
-  ...(skin.id === 'pi-vanguard' ? { [vanguardMetallic.id]: 1 } : {}),
-}])) as ShipFleet;
+const adminFleet: ShipFleet = Object.fromEntries(playerSkins.map(skin => [skin.id, { [standardHullInventoryColor]: 1 }]));
 
 const Shop = () => {
   const navigate = useNavigate();
@@ -294,8 +291,8 @@ const Shop = () => {
       try { applyConfirmed(await loadAccountSave()); } catch { /* No local fallback for account balances. */ }
     } finally { if (inventoryOwnerRef.current === owner) setAccountBusy(false); }
   };
-  const [hangarMessage, setHangarMessage] = useState<string | { ship: string; color: string; status: string; count?: number }>("");
-  const hangarMessageText = typeof hangarMessage === "string" ? t(hangarMessage) : `${hangarMessage.ship} · ${t(hangarMessage.color)} · ${t(hangarMessage.status)}${hangarMessage.count ? ` ×${hangarMessage.count}` : ""}`;
+  const [hangarMessage, setHangarMessage] = useState<string | { ship: string; status: string; count?: number }>("");
+  const hangarMessageText = typeof hangarMessage === "string" ? t(hangarMessage) : `${hangarMessage.ship} · ${t(hangarMessage.status)}${hangarMessage.count ? ` ×${hangarMessage.count}` : ""}`;
   const [offers, setOffers] = useState<Offer[]>(() => [...hangarCatalog]);
   const [catalogReady, setCatalogReady] = useState(false);
   const [inventory, setInventory] = useState<Inventory | null>(null);
@@ -335,48 +332,46 @@ const Shop = () => {
     primeGameAudio(); requestGameFullscreen(); navigate("/game");
   };
 
-  const purchasePreview = (previewSkin: typeof playerSkins[number], previewColor: typeof allPlayerColors[number]) => {
+  const purchaseStandard = (previewSkin: typeof playerSkins[number]) => {
     primeCardSound();
     if (adminMode) return;
     if (!standardHullAvailable(previewSkin.id, ownerTestnet)) { setHangarMessage("MAINNET READY"); return; }
     if (user) {
       if (!account) { setAccountError("Account save is loading or unavailable."); return; }
-      void accountCommand({ action: "buy", skin: previewSkin.id, color: previewColor.id }); return;
+      void accountCommand({ action: "buy", skin: previewSkin.id, color: standardHullInventoryColor }); return;
     }
     if (shipNftMainnetVisible) { requireAuth(); return; }
     const currentFleet = readShipFleet(localStorage.getItem(SHIP_FLEET_KEY), localStorage.getItem(SHIP_OWNED_KEY), localStorage.getItem(SHIP_COLORS_KEY));
     const currentBalance = shardBalance(localStorage.getItem(SHARD_BALANCE_KEY));
     setShards(currentBalance);
-    const purchase = buyShipVariant(previewSkin.id, previewColor.id, currentFleet, currentBalance);
+    const purchase = buyStandardShip(previewSkin.id, currentFleet, currentBalance);
     if (!purchase) { setHangarMessage("Not enough Shards yet. Earn them by defeating Cryptoids."); return; }
-    try { saveGuestShipPurchase(localStorage, previewSkin.id, previewColor.id, purchase); }
+    try { saveGuestShipPurchase(localStorage, previewSkin.id, purchase); }
     catch { setHangarMessage("Could not save loadout. Please retry."); return; }
     setFleet(purchase.fleet);
     if(!fleetCount(currentFleet,previewSkin.id))setNewCards(unseenShipCards([{key:`${previewSkin.id}-1`,ship:previewSkin.id,stage:1}],readCardReveals('guest')));
 
     setShards(purchase.balance);
-    setHangarMessage({ ship: previewSkin.name, color: previewColor.name, status: "Owned", count: fleetCount(purchase.fleet, previewSkin.id, previewColor.id) });
+    setHangarMessage({ ship: previewSkin.name, status: "Owned", count: fleetCount(purchase.fleet, previewSkin.id) });
   };
-  const equipShip = (skin: typeof playerSkins[number], color: typeof allPlayerColors[number], stage: ShipStage) => {
-    if (!canEquipShipPaint(visibleFleet, skin.id, color.id)) return;
+  const equipShip = (skin: typeof playerSkins[number], stage: ShipStage) => {
+    const inventoryColor = ownedShipInventoryColor(visibleFleet, skin.id);
+    if (!inventoryColor) return;
+    const color = shipFactoryPaint(skin.id);
     if (adminMode) {
       sessionStorage.setItem(ADMIN_SHIP_SKIN_KEY, skin.id);
-      sessionStorage.setItem(ADMIN_SHIP_COLOR_KEY, color.id);
       sessionStorage.setItem(ADMIN_SHIP_STAGE_KEY, String(stage));
       setSelected({ skin, color });
-      setHangarMessage({ ship: skin.name, color: color.name, status: "Admin center" });
+      setHangarMessage({ ship: skin.name, status: "Admin center" });
       return;
     }
     if (user) {
       if (!account) { setAccountError("Account save is loading or unavailable."); return; }
-      void accountCommand({ action: "select", skin: skin.id, color: color.id, shipStage: stage }); return;
+      void accountCommand({ action: "select", skin: skin.id, color: inventoryColor, shipStage: stage }); return;
     }
     localStorage.setItem(SHIP_SKIN_KEY, skin.id);
-    localStorage.setItem(SHIP_COLOR_KEY, color.id);
-    const nextColors = { ...savedShipColors(localStorage.getItem(SHIP_COLORS_KEY)), [skin.id]: color.id };
-    localStorage.setItem(SHIP_COLORS_KEY, JSON.stringify(nextColors));
     setSelected({ skin, color });
-    setHangarMessage({ ship: skin.name, color: color.name, status: "EQUIPPED" });
+    setHangarMessage({ ship: skin.name, status: "EQUIPPED" });
   };
   const toggleAdmin = async () => {
     try { await setAdminPreview(!adminMode); setAdminError(""); }
@@ -472,12 +467,12 @@ const Shop = () => {
     if (guides[action]) { setGuideTopic(guides[action]); setActivePanel("how"); return; }
     const settings: Partial<Record<QuickAction, SettingsSection>> = { language: "language", controls: "controls", audio: "audio", display: "display", vibration: "display" };
     if (settings[action]) { setSettingsSection(settings[action]); setSystemMenuOpen(true); return; }
-    const fleetViews: Partial<Record<QuickAction, NonNullable<typeof shopView>>> = { hangar: "hangar", shop: "shop", upgrades: "shop", colors: "hangar", weapons: "weapons", armor: "weapons", powers: "powers", progress: "progress", rewards: "rewards", leaders: "leaders", ranks: "rewards", bosses: "rewards", medals: "rewards", chains: "rewards" };
+    const fleetViews: Partial<Record<QuickAction, NonNullable<typeof shopView>>> = { hangar: "hangar", shop: "shop", upgrades: "shop", weapons: "weapons", armor: "weapons", powers: "powers", progress: "progress", rewards: "rewards", leaders: "leaders", ranks: "rewards", bosses: "rewards", medals: "rewards", chains: "rewards" };
     const view = fleetViews[action];
     if (view) {
       if (view === "hangar" || view === "shop") setShopTarget(null);
       if (view === "leaders") setLeadersStatus("loading");
-      const targets: Partial<Record<QuickAction, string>> = { upgrades: ".ship-evolution-stages", colors: ".ship-one-colors", armor: ".hangar-offer-armor", ranks: "#reward-ranks", bosses: "#reward-bosses", medals: "#reward-medals", chains: "#reward-chains" };
+      const targets: Partial<Record<QuickAction, string>> = { upgrades: ".ship-version-tabs", armor: ".hangar-offer-armor", ranks: "#reward-ranks", bosses: "#reward-bosses", medals: "#reward-medals", chains: "#reward-chains" };
       setQuickTarget(targets[action] ?? null);
       setShopView(view); return;
     }
@@ -658,15 +653,15 @@ const Shop = () => {
         <div className="fleet-scroll-list">
           {shipSearchOptions.map(skin => <article id={`fleet-${skin.id}`} key={`${shopView}:${skin.id}`} className="fleet-list-entry">
             <FleetShipPanel view={shopView} skin={skin} ownedStage={ownedShipStage(skin.sprite, inventory?.ownedShipUpgrades)} fleet={visibleFleet} shards={displayedShards} locale={locale} adminPreview={adminMode} testnetCatalogAccess={ownerTestnet}
-              offers={offers.filter(offer => offer.kind === "ship_upgrade")} selectedSkinId={selected.skin.id} selectedColorId={selected.color.id} selectedStage={selectedShipStage(selected.skin.sprite, inventory?.ownedShipUpgrades, account?.shipStage)} selectionConfirmed={!user || adminMode || account?.shipStage !== undefined}
+              offers={offers.filter(offer => offer.kind === "ship_upgrade")} selectedSkinId={selected.skin.id} selectedStage={selectedShipStage(selected.skin.sprite, inventory?.ownedShipUpgrades, account?.shipStage)} selectionConfirmed={!user || adminMode || account?.shipStage !== undefined}
               message={typeof hangarMessage === "object" && hangarMessage.ship === skin.name ? hangarMessageText : ""} t={t}
               requestedStage={shopTarget?.skin === skin.id ? shopTarget.stage : undefined}
               purchaseBusy={accountBusy || isLoading || !catalogReady || Boolean(user && !account)}
               upgradePending={isLoading && Boolean(activeProductId?.startsWith(`ship_${String(skin.sprite + 1).padStart(2, "0")}_`))}
               upgradeStatus={activeProductId?.startsWith(`ship_${String(skin.sprite + 1).padStart(2, "0")}_`) ? paymentStatus : undefined}
               upgradeDiagnostic={activeProductId?.startsWith(`ship_${String(skin.sprite + 1).padStart(2, "0")}_`) ? paymentDiagnostic : undefined}
-              onBuyUpgrade={offer => buyTestPiOffer(offer)} onBuy={color => purchasePreview(skin, color)}
-              onEquip={(color, stage) => equipShip(skin, color, stage)}
+              onBuyUpgrade={buyTestPiOffer} onBuy={() => purchaseStandard(skin)}
+              onEquip={stage => equipShip(skin, stage)}
               onStage={stage => { if (adminMode) sessionStorage.setItem(ADMIN_SHIP_STAGE_KEY, String(stage)); }}
               onUpgrade={stage => { setShipQuery(""); setShipFilter("all"); setShopTarget({ skin: skin.id, stage }); setShopView("shop"); }} />
           </article>)}

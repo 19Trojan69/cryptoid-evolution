@@ -97,7 +97,7 @@ const topics = [
   },
   {
     id: "hangar", label: "Hangar & Testnet", title: "Expand your fleet",
-    intro: "Grey Scout is free. Use earned Shards for available Standard ships and their color variants.",
+    intro: "Grey Scout is free. Use earned Shards for available Standard ships.",
     details: [
       "On Testnet, ten Standard hulls are available, including the free Grey Scout. Verified owner access opens all 20 hulls for Shards.",
       "With a connected Pi account, regular Testnet pilots can buy Twin Laser and Rapid Twin charges with Test-Pi. Verified owner access also opens Triple Laser, Plasma, start power-ups, armor and ship upgrades.",
@@ -147,7 +147,7 @@ const GameGuide = ({ onClose, initialTopic = "controls", backLabel = "Back to sy
       <section className="guide-detail" aria-live="polite" aria-labelledby="guide-section-title" key={topic.id}>
         <h3 id="guide-section-title">{t(topic.title)}</h3>
         <p>{t(topic.intro)}</p>
-        {topic.id === "visuals" && <div className="guide-ship-gallery">{([1, 2, 3] as const).map(stage => <figure key={stage}><ShipPortrait src={shipEvolutionAsset(0, stage)} color="grey" name={t(stage === 1 ? "Standard ship" : stage === 2 ? "Advanced ship" : "Elite ship")} /><figcaption>{t(stage === 1 ? "STANDARD" : stage === 2 ? "ADVANCED" : "ELITE")}</figcaption></figure>)}<figure className="guide-boss-example"><BossPortrait id={1} /><figcaption>#01 · {bossName(1)}</figcaption></figure></div>}
+        {topic.id === "visuals" && <div className="guide-ship-gallery">{([1, 2, 3] as const).map(stage => <figure key={stage}><ShipPortrait src={shipEvolutionAsset(0, stage)} name={t(stage === 1 ? "Standard ship" : stage === 2 ? "Advanced ship" : "Elite ship")} /><figcaption>{t(stage === 1 ? "STANDARD" : stage === 2 ? "ADVANCED" : "ELITE")}</figcaption></figure>)}<figure className="guide-boss-example"><BossPortrait id={1} /><figcaption>#01 · {bossName(1)}</figcaption></figure></div>}
         {(topic.id === "boosts" || topic.id === "controls") && <WeaponTutorial />}
         {topic.id === "survival" && <BossPhaseGuide />}
         <ul>{topic.details.map(detail => <li key={detail}>{t(detail, powerSeconds)}</li>)}</ul>

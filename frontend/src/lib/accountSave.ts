@@ -1,6 +1,6 @@
 import { axiosClient } from "./axiosClient";
 import type { PlayerSave, Snapshot } from "../../../backend/src/playerSave";
-import { allPlayerColors, playerSkins, readShipFleet, shardBalance, SHARD_BALANCE_KEY, SHIP_COLOR_KEY, SHIP_COLORS_KEY, SHIP_FLEET_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY } from "../pages/shipFleet";
+import { playerSkins, readShipFleet, shardBalance, shipFactoryPaint, SHARD_BALANCE_KEY, SHIP_COLOR_KEY, SHIP_COLORS_KEY, SHIP_FLEET_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY } from "../pages/shipFleet";
 import { shipSaveNetwork } from "../pages/shipFleet";
 import { BASE_MISSION_HEARTS, MAX_MISSION_HEARTS, cappedSnapshot } from "../../../backend/src/lifeRules";
 import { appendPendingSave, type PendingSave } from './saveOutbox';
@@ -8,7 +8,10 @@ import { sessionDiagnostic } from './sessionDiagnosticEvents';
 export type AccountSave = Pick<PlayerSave, "cardReveals" | "usedShipSkins" | "version" | "balance" | "fleet" | "skin" | "color" | "shipStage" | "mission" | "highestSector" | "totalDestroyed" | "totalShardsEarned" | "totalShardsSpent" | "legacyImported" | "updatedAt">;
 export type { Snapshot };
 export const loadAccountSave = async () => (await axiosClient.get<{ save: AccountSave }>("/progress/me")).data.save;
-export const accountSelection = (save: AccountSave) => ({ skin: playerSkins.find(s => s.id === save.skin) || playerSkins[0], color: allPlayerColors.find(c => c.id === save.color) || allPlayerColors.find(c => c.id === "grey")! });
+export const accountSelection = (save: AccountSave) => {
+  const skin = playerSkins.find(item => item.id === save.skin) ?? playerSkins[0];
+  return { skin, color: shipFactoryPaint(skin.id) };
+};
 export const localInventory = () => ({ balance: shardBalance(localStorage.getItem(SHARD_BALANCE_KEY)), fleet: readShipFleet(localStorage.getItem(SHIP_FLEET_KEY), localStorage.getItem(SHIP_OWNED_KEY), localStorage.getItem(SHIP_COLORS_KEY)), skin: localStorage.getItem(SHIP_SKIN_KEY) || "grey-scout", color: localStorage.getItem(SHIP_COLOR_KEY) || "grey" });
 export const mutateAccountInventory = async (save: AccountSave, command: object) => (await axiosClient.post<{ save: AccountSave }>("/progress/inventory", { version: save.version, ...command })).data.save;
 export const snapshotOf = (s: Snapshot & { combo?: {total:number} }): Snapshot => {

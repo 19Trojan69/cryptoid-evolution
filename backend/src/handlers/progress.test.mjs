@@ -210,7 +210,7 @@ test('explicit import is one-time, strips paid ownership, and purchases use comp
   const results = await Promise.all([h.call('progress', '/inventory', purchase), h.call('progress', '/inventory', purchase)]);
   assert.deepEqual(results.map(r => r.code).sort(), [200, 409]);
   assert.equal(h.profile().balance, 600);
-  assert.equal(h.profile().fleet['solar-lance'].gold, 1);
+  assert.deepEqual(h.profile().fleet['solar-lance'], { grey: 1 });
   assert.equal(h.profile().totalShardsSpent, 400);
   assert.equal(h.profile().skin, 'nova-wing');
   assert.equal(h.profile().color, 'gold');

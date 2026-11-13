@@ -11,8 +11,7 @@ Stage 1 preserves the original playable ship pixels from the existing
 `frontend/public/ships/cryptoid-fleet.png` atlas, with only unrelated fragments
 from neighboring atlas cells removed. Its original livery supplies the armor
 and marking colors for Advanced and Elite. The higher stages retain their own
-geometry, glass and equipment lights. The shop's metal finishes are applied to
-these sprites, which also supply the default artwork for the ship NFT cards.
+geometry, glass and equipment lights. The Shop, Hangar, player fleet and ship NFT cards all show these fixed liveries.
 The Pi Vanguard Metallic Edition uses the three separate `ship_19_stage_*_metallic.png`
 sprites, extracted from the approved gold and violet comparison art. The game
 uses their painted colors directly and aligns engine effects to their outlets.

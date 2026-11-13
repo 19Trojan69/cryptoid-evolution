@@ -1,6 +1,6 @@
 # Cryptoid Evolution ship NFTs
 
-The collection contains 20 player hulls in three editions. In revision `fleet-liveries-20261113`, the Advanced and Elite artwork carries each hull's Standard livery. The Pi Vanguard cards use the approved gold and violet Metallic Edition. The Shop starts with those same liveries for all three stages and retains the chosen paint when switching stages. The downloadable bundle includes all 60 full-size cards, 60 matching WebP previews, English stories in the individual metadata files and a manifest with SHA-256 hashes. The metadata image references are relative to the extracted bundle. Assign immutable hosted image and metadata URIs when preparing the contract. Edition supply is open.
+The collection contains 20 player hulls in three editions. In revision `fleet-liveries-20261113`, the Advanced and Elite artwork carries each hull's Standard livery. The Pi Vanguard cards use the approved gold and violet Metallic Edition. The Shop shows the same fixed livery for each hull in all three stages. The downloadable bundle includes all 60 full-size cards, 60 matching WebP previews, English stories in the individual metadata files and a manifest with SHA-256 hashes. The metadata image references are relative to the extracted bundle. Assign immutable hosted image and metadata URIs when preparing the contract. Edition supply is open.
 
 | Edition | Mainnet trigger |
 | --- | --- |

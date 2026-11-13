@@ -19,7 +19,6 @@
 .admin-shell :is(button, a.admin-button, select, input:not([type="checkbox"])) {
   min-height: 48px;
 }
-.admin-shell .admin-colors button { min-width: 48px; }
 .admin-usage-scroll { overflow-x: auto; margin: 14px 0 24px; }
 .admin-usage-scroll table { border-collapse: collapse; width: 100%; min-width: 540px; }
 .admin-usage-scroll th, .admin-usage-scroll td { text-align: left; padding: 10px; border-bottom: 1px solid #264752; }
@@ -281,30 +280,6 @@
 .admin-score-reset input[type="text"] { max-width: 24rem; }
 .admin-score-reset .admin-score-confirm { flex-direction: row; align-items: center; }
 .admin-score-reset .admin-score-confirm input { width: 20px; min-height: 20px; height: 20px; padding: 0; flex: none; }
-.admin-colors {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 11px;
-  padding: 0;
-  margin: 16px 0 0;
-  border: 0;
-}
-.admin-colors legend {
-  margin-bottom: 9px;
-  font-size: 14px;
-  color: #b9d0d8;
-}
-.admin-colors button {
-  width: 38px;
-  height: 38px;
-  border: 2px solid #56656b;
-  border-radius: 50%;
-  cursor: pointer;
-}
-.admin-colors button[aria-pressed="true"] {
-  outline: 2px solid #e5fbff;
-  outline-offset: 3px;
-}
 .admin-fleet {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
@@ -585,7 +560,5 @@
   .admin-shell button:hover:not(:disabled), .admin-shell a.admin-button:hover { border-color: var(--admin-gold); background: var(--admin-action); }
   .admin-shell :is(button, a, input, select):focus-visible { outline: 2px solid var(--admin-gold); }
   .admin-primary { background: var(--admin-gold); color: var(--admin-night); }
-  .admin-colors button { min-width: 44px; min-height: 44px; width: 44px; height: 44px; border-color: var(--admin-line); }
-  .admin-colors button[aria-pressed="true"] { border-color: var(--admin-gold); outline-color: var(--admin-gold); }
   .admin-usage-scroll th { color: var(--admin-gold); }
 }

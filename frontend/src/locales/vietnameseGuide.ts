@@ -63,7 +63,7 @@ export const vietnameseGuideTranslations: Record<string, string> = {
   "Free boosts can appear throughout the campaign, but each type appears only once per level.": "Vật phẩm tăng cường miễn phí có thể xuất hiện trong suốt chiến dịch, nhưng mỗi loại chỉ xuất hiện một lần trong mỗi màn.",
   "Free projectile hits per life": "Số lần chịu đạn miễn phí trong mỗi mạng",
   "Game description": "Giới thiệu trò chơi",
-  "Grey Scout is free. Use earned Shards for available Standard ships and their color variants.": "Grey Scout được cấp miễn phí. Dùng Mảnh vỡ kiếm được để mua tàu cấp Tiêu chuẩn đang mở bán và các màu của chúng.",
+  "Grey Scout is free. Use earned Shards for available Standard ships.": "Grey Scout được cấp miễn phí. Dùng Mảnh vỡ kiếm được để mua tàu cấp Tiêu chuẩn đang mở bán.",
   "Guest ship cards are stored on this device. Sign in to view your account collection.": "Thẻ tàu của khách được lưu trên thiết bị này. Đăng nhập để xem bộ sưu tập của tài khoản.",
   "Guide topics": "Chủ đề hướng dẫn",
   "Hangar & Testnet": "Nhà chứa tàu và Testnet",

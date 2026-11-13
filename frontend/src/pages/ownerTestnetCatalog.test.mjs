@@ -33,7 +33,7 @@ function component(file, extra = {}) {
 const Purchase = component('./TestPiPurchase.tsx');
 const Panel = component('./ShipSelectionPanel.tsx',{'./TestPiPurchase':{default:Purchase}});
 const nodes = tree => {const out=[]; const visit=n=>{if(!n||typeof n!=='object')return;if(n.type)out.push(n);[n.props?.children].flat(Infinity).forEach(visit);};visit(tree);return out;};
-const defaults = () => ({view:'shop',skin:fleet.playerSkins[0],color:fleet.playerColors[0],focusStage:1,ownedStage:1,fleet:{'grey-scout':{silver:1}},shards:10000,locale:'en',offers:hangarCatalog.filter(x=>x.kind==='ship_upgrade'),message:'',selectedSkinId:'grey-scout',selectedColorId:'silver',t:s=>s,onStageChange:()=>{},onColorChange:()=>{},onBuyStandard:()=>{},onEquipPreview:()=>{},onOpenShop:()=>{}});
+const defaults = () => ({view:'shop',skin:fleet.playerSkins[0],focusStage:1,ownedStage:1,fleet:{'grey-scout':{silver:1}},shards:10000,locale:'en',offers:hangarCatalog.filter(x=>x.kind==='ship_upgrade'),message:'',selectedSkinId:'grey-scout',t:s=>s,onStageChange:()=>{},onBuyStandard:()=>{},onEquipPreview:()=>{},onOpenShop:()=>{}});
 
 test('owner permission expands every catalog item strictly on Pi Testnet',()=>{
  for(const offer of hangarCatalog){

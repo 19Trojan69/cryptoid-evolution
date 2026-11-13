@@ -340,6 +340,13 @@ test('default Testnet proxy does not start the local backend and keeps authentic
   assert.equal(res.headers['x-cryptoid-backend'], 'production-proxy');
   assert.equal(res.headers['x-cryptoid-upstream-request-id'], 'fra1::upstream-123');
   assert.deepEqual(res.headers['set-cookie'], ['connect.sid=test; HttpOnly']);
+  for (const action of ['buy', 'select', 'import']) {
+    const inventory = { action, skin: 'nova-wing', color: 'gold', version: 7 };
+    await gateway({ method: 'POST', url: '/api/index?path=progress%2Finventory', body: inventory,
+      headers: { host: 'cryptoid-evolution-testnet.vercel.app' } }, response());
+    assert.deepEqual(JSON.parse(sent.init.body), { ...inventory, color: action === 'buy' ? 'grey' : 'gold' });
+    assert.equal(sent.init.headers.get('x-cryptoid-app-network'), 'testnet');
+  }
 });
 
 test('local preview retains the existing Pi-key service for payments and payment administration', async t => {

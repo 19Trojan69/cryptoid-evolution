@@ -5,19 +5,14 @@ import { useAuth } from "../hooks/useAuth";
 import { axiosClient } from "../lib/axiosClient";
 import {
   playerSkins,
-  playerColors,
-  allPlayerColors,
   shipFactoryPaint,
-  shipPaintAvailable,
   ADMIN_MODE_KEY,
   ADMIN_TEST_CONFIG_KEY,
   ADMIN_SHIP_SKIN_KEY,
-  ADMIN_SHIP_COLOR_KEY,
   ADMIN_SHIP_STAGE_KEY,
   ADMIN_START_SECTOR_KEY,
   shipSaveNetwork,
   type PlayerSkinId,
-  type PlayerColorId,
 } from "./shipFleet";
 import { type ShipStage } from "./shipEvolution";
 import { MAX_DIFFICULTY_LEVEL } from "./levelDifficulty";
@@ -362,13 +357,6 @@ export default function AdminPage() {
   const [skinId, setSkinId] = useState<PlayerSkinId>(
     () => playerSkins.find(skin => skin.id === sessionStorage.getItem(ADMIN_SHIP_SKIN_KEY))?.id || playerSkins[0].id
   );
-  const [colorId, setColorId] = useState<PlayerColorId>(
-    () => allPlayerColors.find(color => color.id === sessionStorage.getItem(ADMIN_SHIP_COLOR_KEY) && shipPaintAvailable(skinId, color.id))?.id ?? shipFactoryPaint(skinId).id
-  );
-  const selectSkin = (skin: PlayerSkinId) => {
-    setSkinId(skin);
-    setColorId(shipFactoryPaint(skin).id);
-  };
   const [stage, setStage] = useState<ShipStage>(() => {
     const value = Number(sessionStorage.getItem(ADMIN_SHIP_STAGE_KEY));
     return value === 2 || value === 3 ? value : 1;
@@ -498,7 +486,6 @@ export default function AdminPage() {
         sessionStorage.setItem(ADMIN_MODE_KEY, "1");
         sessionStorage.setItem(ADMIN_TEST_CONFIG_KEY, JSON.stringify(configuration));
         sessionStorage.setItem(ADMIN_SHIP_SKIN_KEY, skinId);
-        sessionStorage.setItem(ADMIN_SHIP_COLOR_KEY, colorId);
         sessionStorage.setItem(ADMIN_SHIP_STAGE_KEY, String(stage));
         sessionStorage.setItem(ADMIN_START_SECTOR_KEY, String(configuration.sector));
         audioRequest.current += 1;
@@ -803,7 +790,7 @@ export default function AdminPage() {
                   <h2>{t("Testauswahl")}</h2>
                   <div className="admin-field-grid">
                     <label>
-                      {t("Raumschiff")} <select aria-label={t("Raumschiff")} value={skinId} onChange={event => selectSkin(event.target.value as PlayerSkinId)}>
+                      {t("Raumschiff")} <select aria-label={t("Raumschiff")} value={skinId} onChange={event => setSkinId(event.target.value as PlayerSkinId)}>
                         {playerSkins.map(skin => (
                           <option key={skin.id} value={skin.id}>
                             {skin.name}
@@ -842,20 +829,6 @@ export default function AdminPage() {
                       </select>
                     </label>
                   </div>
-                  <fieldset className="admin-colors">
-                    <legend>{t("Schiffsfarbe")}</legend>
-                    {[shipFactoryPaint(skinId), ...playerColors].map(color => (
-                      <button
-                        key={color.id}
-                        type="button"
-                        aria-label={t(color.name)}
-                        title={t(color.name)}
-                        aria-pressed={colorId === color.id}
-                        style={{ backgroundColor: color.glow }}
-                        onClick={() => setColorId(color.id)}
-                      />
-                    ))}
-                  </fieldset>
                   <p>{t("Alle Modelle, Stufen und Waffen stehen im Test zur Verfügung.")}</p>
                 </div>
               </section>
@@ -872,9 +845,9 @@ export default function AdminPage() {
                         key={skin.id}
                         className={skin.id === skinId ? "selected" : ""}
                         aria-pressed={skin.id === skinId}
-                        onClick={() => selectSkin(skin.id)}
+                        onClick={() => setSkinId(skin.id)}
                       >
-                        <ShipPreview sprite={skin.sprite} stage={stage} color={shipPaintAvailable(skin.id, colorId) ? colorId : shipFactoryPaint(skin.id).id} />
+                        <ShipPreview sprite={skin.sprite} stage={stage} color={shipFactoryPaint(skin.id).id} />
                         <strong>{skin.name}</strong>
                         <span>{t(stageNames[stage - 1])}</span>
                       </button>

@@ -2,6 +2,7 @@ import { hangarCatalog } from "./hangarCatalog";
 import { communityLocale, translateCommunity } from "./communityTranslation";
 import { testnetAccountDeletionEnabled } from './playerAdministration';
 import { serveGalaxyArcade, servePublicGalaxyArcade, galaxyArcadeStationIndex } from "./galaxyArcade";
+import { standardHullInventoryColor } from './shipLivery';
 
 const productionBackendOrigin = "https://cryptoid-evolution.vercel.app";
 
@@ -84,6 +85,12 @@ const proxyToProduction = async (
       for await (const chunk of req) chunks.push(Buffer.from(chunk));
       body = Buffer.concat(chunks);
     }
+  }
+  if (path === "progress/inventory" && req.method === "POST" && body) {
+    try {
+      const inventory = JSON.parse(body.toString());
+      if (inventory?.action === "buy") body = JSON.stringify({ ...inventory, color: standardHullInventoryColor });
+    } catch { /* Let the account service validate malformed requests. */ }
   }
   headers.set("x-cryptoid-app-network", "testnet");
   const upstream = await fetch(target, {

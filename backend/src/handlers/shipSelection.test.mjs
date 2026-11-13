@@ -23,8 +23,8 @@ test('all twenty hull identities share stage selection, prerequisite and legacy 
 test('confirmed Standard purchases add ownership and deduct once without changing the selected loadout',async()=>{
  const h=await prepared();Object.assign(h.profile(),{balance:5000,legacyImported:true,shipStage:2});
  const before={skin:h.profile().skin,color:h.profile().color,shipStage:h.profile().shipStage};
- const response=await h.call('progress','/inventory',{action:'buy',version:h.profile().version,skin:'nova-wing',color:'gold'});
- assert.equal(response.code,200);assert.equal(response.body.save.fleet['nova-wing'].gold,1);assert.equal(response.body.save.balance,4850);
+ const response=await h.call('progress','/inventory',{action:'buy',version:h.profile().version,skin:'nova-wing',color:'grey'});
+ assert.equal(response.code,200);assert.deepEqual(response.body.save.fleet['nova-wing'],{grey:1});assert.equal(response.body.save.balance,4850);
  assert.deepEqual({skin:h.profile().skin,color:h.profile().color,shipStage:h.profile().shipStage},before);
 });
 
@@ -64,9 +64,9 @@ test('invalid stages, unowned paint and stale versions never change the confirme
 test('existing hulls can equip their original livery at an owned stage without buying again',async()=>{
  const h=await prepared();upgrades(h);h.profile().fleet['grey-scout']={silver:1};
  const before=structuredClone(h.profile().fleet);
- const selected=await choose(h,3,{color:'original'});
+ const selected=await choose(h,3,{color:'silver'});
  assert.equal(selected.code,200);
- assert.equal(selected.body.save.color,'original');
+ assert.equal(selected.body.save.color,'silver');
  assert.equal(selected.body.save.shipStage,3);
  assert.deepEqual(selected.body.save.fleet,before);
  assert.equal((await choose(h,3,{color:'vanguard-metallic'})).code,403);

@@ -297,7 +297,7 @@ test('actual ship flight only reflects a new adjacent confirmed stage and never 
     '../lib/axiosClient':{axiosClient:{get:async()=>({data:undefined})}},
     './useGalaxyData':{default:()=>data},'./galaxyModel':model,'./displaySettings':{MOTION_STORAGE_KEY:'motion'},
     './controlPreferences':{readControlHand:()=> 'right'},
-    './shipFleet':{shipSaveNetwork:'testnet',playerSkins:[{id:'grey-scout',name:'Grey Scout',sprite:1}],allPlayerColors:[{id:'grey',name:'Grey'}]},
+    './shipFleet':{shipSaveNetwork:'testnet',playerSkins:[{id:'grey-scout',name:'Grey Scout',sprite:1}],shipFactoryPaint:()=>({id:'original'})},
     './shipEvolution':{selectedShipStage:()=>1,shipEvolutionAsset:()=>'/existing.png'},
   },{document:doc,localStorage:{getItem:()=>null},window:{matchMedia:()=>({matches:false})},
     AbortController});

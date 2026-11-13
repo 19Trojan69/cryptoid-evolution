@@ -2,17 +2,17 @@ import { arcadeShipArtworkSize, arcadeStickerImage, type ArcadeFlightShip } from
 import type { GalaxyEquipment } from './galaxyData';
 import { loadShipArtwork } from './shipArtwork';
 import { selectedShipStage, shipEvolutionAsset, type ShipStage } from './shipEvolution';
-import { allPlayerColors, playerSkins } from './shipFleet';
+import { playerSkins, shipFactoryPaint } from './shipFleet';
 
 const stageNames = ['Standard', 'Advanced', 'Elite'] as const;
 
 export async function prepareArcadeFlightShip(equipment: GalaxyEquipment, translate: (name: string) => string, previewStage?: ShipStage): Promise<ArcadeFlightShip> {
   const skin = playerSkins.find(entry => entry.id === equipment.skin);
-  const color = allPlayerColors.find(entry => entry.id === equipment.color);
-  if (!skin || !color) throw new Error('Selected arcade ship is unavailable');
+  if (!skin) throw new Error('Selected arcade ship is unavailable');
+  const paint = shipFactoryPaint(skin.id);
 
   const stage = previewStage ?? selectedShipStage(skin.sprite, equipment.upgrades, equipment.shipStage);
-  const source = await loadShipArtwork(shipEvolutionAsset(skin.sprite, stage), color.id);
+  const source = await loadShipArtwork(shipEvolutionAsset(skin.sprite, stage, paint.id));
   // The arcade draws its hulls at this pixel resolution. Send just the painted
   // sprite through the same-tab form so the isolated document needs no network.
   const scale = arcadeShipArtworkSize / Math.max(source.width, source.height);
@@ -25,7 +25,7 @@ export async function prepareArcadeFlightShip(equipment: GalaxyEquipment, transl
     context.drawImage(source, 0, 0, canvas.width, canvas.height);
     const artwork = canvas.toDataURL('image/png');
     if (!arcadeStickerImage.test(artwork)) throw new Error('Arcade ship artwork is unavailable');
-    return { modelId: skin.id, stage, colorId: color.id, name: [skin.name, translate(stageNames[stage - 1]), translate(color.name)].join(' · '), artwork };
+    return { modelId: skin.id, stage, colorId: paint.id, name: [skin.name, translate(stageNames[stage - 1])].join(' · '), artwork };
   } finally {
     canvas.width = canvas.height = 0;
   }

@@ -48,4 +48,14 @@ function restore(source, changes) {
   return source;
 }
 export const restoreBalanceReloadGameChanges = source => restore(restoreBossHudGameChanges(source), balanceReloadChanges);
-export const restoreBalanceAccountChanges = source => restore(source, balanceAccountChanges);
+const fixedLiveryAccountChanges = [
+  {
+    before: 'import { allPlayerColors, playerSkins, readShipFleet, shardBalance, SHARD_BALANCE_KEY, SHIP_COLOR_KEY, SHIP_COLORS_KEY, SHIP_FLEET_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY } from "../pages/shipFleet";',
+    after: 'import { playerSkins, readShipFleet, shardBalance, shipFactoryPaint, SHARD_BALANCE_KEY, SHIP_COLOR_KEY, SHIP_COLORS_KEY, SHIP_FLEET_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY } from "../pages/shipFleet";',
+  },
+  {
+    before: 'export const accountSelection = (save: AccountSave) => ({ skin: playerSkins.find(s => s.id === save.skin) || playerSkins[0], color: allPlayerColors.find(c => c.id === save.color) || allPlayerColors.find(c => c.id === "grey")! });',
+    after: 'export const accountSelection = (save: AccountSave) => {\n  const skin = playerSkins.find(item => item.id === save.skin) ?? playerSkins[0];\n  return { skin, color: shipFactoryPaint(skin.id) };\n};',
+  },
+];
+export const restoreBalanceAccountChanges = source => restore(source, [...balanceAccountChanges, ...fixedLiveryAccountChanges]);

@@ -138,7 +138,7 @@ export const chineseGameplayTranslations: Record<string, string> = {
   "Gold": "金牌",
   "GOLD NETWORK": "黄金网络",
   "Grey Scout is free; nine Standard hulls cost Shards. Other hulls are currently locked.": "灰色侦察机免费提供；另外九款标准型飞船可用碎片购买。其余飞船暂未开放。",
-  "Grey Scout is free. Use earned Shards for available Standard ships and their color variants.": "灰色侦察机免费提供。可用获得的碎片购买已开放的标准型飞船及配色。",
+  "Grey Scout is free. Use earned Shards for available Standard ships.": "灰色侦察机免费提供。可用获得的碎片购买已开放的标准型飞船。",
   "Group {current}/{total}": "敌机组 {current}/{total}",
   "Guide topics": "指南主题",
   "Hangar & Testnet": "机库与测试网",
