@@ -190,15 +190,15 @@ export const createApiGateway = (
       const testnetSave = testnet && req.method === "POST"
         && /^(?:rewards\/event|progress\/checkpoint|leaderboard\/score)$/.test(path)
         && authenticatedLocal;
+      const testnetInventory = testnet && req.method === "POST" && path === "progress/inventory" && authenticatedLocal;
       const bossNftGallery = testnet && path === "admin/boss-nfts";
       const bossNftPreview = /^boss-nft-preview(?:\/|$)/.test(path);
       if (bossNftPreview && !localTestnet && env.VERCEL_PROJECT_PRODUCTION_URL !== "cryptoid-evolution-testnet.vercel.app")
         return res.status(404).json({ error: "not_found" });
       if (bossNftPreview && !/^Bearer\s+\S+$/i.test(req.headers?.authorization || ""))
         return res.status(401).json({ error: "not_authenticated" });
-      // Add only the new, network-scoped features locally. Existing Testnet
-      // accounts/payments keep their established proxy; no Mainnet deployment.
-      const localFeature = powerRoute || testnetSave || bossNftGallery || bossNftPreview || !!arcadeRating || arcadeProgress || arcadeStickerBackup || testnet && (/^progress\/boss-summary\/(?:prepare|continue)$/.test(path)
+      // Serve network-scoped features locally. Account sign-in and payments use the existing proxy.
+      const localFeature = powerRoute || testnetSave || testnetInventory || bossNftGallery || bossNftPreview || !!arcadeRating || arcadeProgress || arcadeStickerBackup || testnet && (/^progress\/boss-summary\/(?:prepare|continue)$/.test(path)
         || /^admin\/players(?:\/|$)/.test(path));
       // The public catalog must match this deployment's Shop, even while
       // account and payment requests use the established Pi service.
@@ -288,7 +288,7 @@ export const createApiGateway = (
         req.headers ??= {};
         req.headers["x-cryptoid-app-network"] = "testnet";
       }
-      if (testnetSave || bossNftGallery || bossNftPreview || powerRoute || arcadeRating || arcadeProgress || arcadeStickerBackup) req.testnetSave = true;
+      if (testnetSave || testnetInventory || bossNftGallery || bossNftPreview || powerRoute || arcadeRating || arcadeProgress || arcadeStickerBackup) req.testnetSave = true;
       ready ??= loadBackend().then(async (backend) => {
         await backend.start(false);
         return backend;

@@ -1,6 +1,5 @@
 import { shipOverlayGeometry } from './shipOverlayGeometry.ts';
 import type { ShipStage } from './shipEvolution';
-import { RELEASED_STANDARD_SHIPS } from './cardAvailability.ts';
 import type { CSSProperties } from "react";
 import type { CryptoidClass } from "./cryptoidRoster";
 import { originalLivery, shipFactoryPaint, shipPaintMatchesHull as shipPaintAvailable, standardHullInventoryColor, vanguardMetallic } from '../../../backend/src/shipLivery.ts';
@@ -58,12 +57,10 @@ export const playerSkins = [
   { id: "pi-vanguard", name: "Pi Vanguard", sprite: 18, price: 4400 },
   { id: "core-carrier", name: "Core Carrier", sprite: 19, price: 4650 },
 ] as const;
-// Ten standard hulls are released for Testnet, including the free Grey Scout.
-// Later hulls stay visible, and prior ownership is preserved.
-export const TESTNET_STANDARD_HULL_COUNT = RELEASED_STANDARD_SHIPS;
-export const testnetStandardHullAvailable = (skinId: PlayerSkinId) => {
+export const RELEASED_STANDARD_SHIPS = 10;
+export const standardHullAvailable = (skinId: PlayerSkinId, mainnetNftsEnabled = false) => {
   const index = playerSkins.findIndex(skin => skin.id === skinId);
-  return index >= 0 && index < TESTNET_STANDARD_HULL_COUNT;
+  return index >= 0 && (shipSaveNetwork === "testnet" || mainnetNftsEnabled || index < RELEASED_STANDARD_SHIPS);
 };
 
 const legacyColors = [
@@ -148,7 +145,7 @@ export const readShipFleet = (raw: string | null, oldOwned: string | null, oldCo
 export const buyStandardShip = (skinId: PlayerSkinId, fleet: ShipFleet, balance: number) => {
   const skin = playerSkins.find(item => item.id === skinId);
   const price = skin ? standardShipPrice(skin) : undefined;
-  if (!skin || !testnetStandardHullAvailable(skinId) || price === undefined || !Number.isSafeInteger(balance) || balance < price) return null;
+  if (!skin || !standardHullAvailable(skinId) || price === undefined || !Number.isSafeInteger(balance) || balance < price) return null;
   const count = fleetCount(fleet, skinId, standardHullInventoryColor);
   if (!Number.isSafeInteger(count) || count >= Number.MAX_SAFE_INTEGER) return null;
   return { fleet: { ...fleet, [skinId]: { ...fleet[skinId], [standardHullInventoryColor]: count + 1 } }, balance: balance - price };
@@ -196,7 +193,7 @@ export const shardBalance = (raw: string | null) => {
 
 export const buySkin = (id: PlayerSkinId, owned: readonly PlayerSkinId[], balance: number) => {
   const skin = playerSkins.find(item => item.id === id);
-  if (!skin || !testnetStandardHullAvailable(id) || skin.price === 0 || owned.includes(id) || !Number.isSafeInteger(balance) || balance < skin.price) return null;
+  if (!skin || !standardHullAvailable(id) || skin.price === 0 || owned.includes(id) || !Number.isSafeInteger(balance) || balance < skin.price) return null;
   return { owned: [...owned, id], balance: balance - skin.price };
 };
 

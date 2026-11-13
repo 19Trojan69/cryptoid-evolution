@@ -75,9 +75,14 @@ test("each of the 20 ship families has three distinct cards with the correct cap
   }
   assert.equal(cardsById.get("grey-scout-advanced").productId, "ship_02_stage_2");
   assert.equal(cardsById.get("nova-wing-elite").requiresProductId, "ship_01_stage_2");
+  assert.equal(cardsById.get("grey-scout-standard").standardPriceShards, 0);
+  assert.equal(cardsById.get("nova-wing-standard").standardPriceShards, 150);
+  assert.equal(cardsById.get("pi-vanguard-standard").standardPriceShards, 4_400);
+  assert.equal(cardsById.get("core-carrier-standard").standardPriceShards, 4_650);
   for (const card of shipNftCatalog) {
     assert.equal(card.maxSupply, [99_999, 31_415, 3_141][card.stage - 1]);
     assert.equal(card.upgradePricePi, [null, 9.9, 19.9][card.stage - 1]);
+    assert.equal(card.stage === 1, Number.isSafeInteger(card.standardPriceShards));
     assert.equal(card.productId, card.stage === 1 ? null : `ship_${String(card.sprite + 1).padStart(2, "0")}_stage_${card.stage}`);
   }
 });

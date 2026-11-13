@@ -9,7 +9,7 @@ import { restoreScoreRun } from "../restoreScoreRun";
 import { Router } from "express";
 import { rewardNetwork } from "../rewardNetwork";
 import { shipNftMainnetEnabled } from "../shipNftEligibility";
-import { canUseOwnerTestnetCatalog, isAdminMode, ownerTestnetOrderScope } from "../adminAccess";
+import { isAdminMode, ownerTestnetOrderScope } from "../adminAccess";
 import { MAX_MISSION_HEARTS, maxMissionHearts } from "../lifeRules";
 import { standardHullInventoryColor } from "../shipLivery";
 import { emptyPlayerSave, firstMissionSnapshot, readSnapshot, legacyInventory, publicSave, shipPaintAvailable, shipPrice, validSelection, standardShips, spriteForShip, type PlayerSave } from "../playerSave";
@@ -197,12 +197,13 @@ export default function mountProgressEndpoints(router: Router) {
         if (stage !== undefined && stage > ownedShipStage(sprite, ids)) return res.status(403).json({ error: "ship_stage_not_owned" });
         fields = { skin, color, shipStage: stage ?? selectedShipStage(sprite, ids, skin === save.skin ? save.shipStage : undefined) };
       } else {
-        const price = shipPrice(skin, await canUseOwnerTestnetCatalog(req));
+        const mainnetShipNfts = network === "mainnet" && shipNftMainnetEnabled();
+        const price = shipPrice(skin, network === "testnet" || mainnetShipNfts);
         if (price === null || network === "mainnet" && !shipPaintAvailable(skin, color)) return res.status(400).json({ error: "invalid_ship" });
         if (save.balance < price) return res.status(403).json({ error: "not_enough_shards" });
         const inventoryColor = network === "testnet" ? standardHullInventoryColor : color;
         fields = { balance: save.balance - price, totalShardsSpent: (save.totalShardsSpent || 0) + price, fleet: { ...save.fleet, [skin]: { ...save.fleet[skin], [inventoryColor]: (save.fleet[skin]?.[inventoryColor] || 0) + 1 } } };
-        if (network === "mainnet" && shipNftMainnetEnabled() && !save.standardShipAcquisitions?.[skin]) {
+        if (mainnetShipNfts && !save.standardShipAcquisitions?.[skin]) {
           fields.standardShipAcquisitions = { ...save.standardShipAcquisitions, [skin]: new Date().toISOString() };
         }
       }

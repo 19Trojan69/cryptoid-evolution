@@ -1,5 +1,5 @@
 import { hangarCatalog } from "./hangarCatalog";
-import { shipColors, spriteForShip, standardShips, type PlayerSave } from "./playerSave";
+import { shipColors, shipPrice, spriteForShip, standardShips, type PlayerSave } from "./playerSave";
 import { ownedShipStage, type ShipStage } from "./shipLoadout";
 import { shipNftEditions, shipNftLivery, shipNftMaxSupply, shipNftStories } from "./shipNftCatalog";
 import { shipLiveryAssetPath, vanguardMetallic } from './shipLivery';
@@ -20,6 +20,8 @@ export const shipNftCatalog = standardShips.flatMap(shipId => {
   const name = shipId.split("-").map(word => word[0].toUpperCase() + word.slice(1)).join(" ");
   const stories = shipNftStories[shipId as keyof typeof shipNftStories];
   const metallic = shipId === 'pi-vanguard';
+  const starter = shipId === "grey-scout";
+  const standardPriceShards = starter ? 0 : shipPrice(shipId, true);
   return shipNftEditions.map((edition, index) => {
     const stage = (index + 1) as ShipStage;
     const number = String(sprite + 1).padStart(2, "0");
@@ -29,8 +31,9 @@ export const shipNftCatalog = standardShips.flatMap(shipId => {
       id: `${shipId}-${key}`, shipId, sprite, name, stage, edition, livery: metallic ? vanguardMetallic.name : shipNftLivery,
       maxSupply: shipNftMaxSupply[edition], story: stories[index],
       productId: offer?.id ?? null, upgradePricePi: offer?.pricePi ?? null,
+      standardPriceShards: stage === 1 ? standardPriceShards : null,
       requiresProductId: stage === 3 ? `ship_${number}_stage_2` : null,
-      acquisition: stage > 1 ? "confirmed_ship_upgrade" : shipId === "grey-scout" ? "starter" : "shard_hull",
+      acquisition: stage > 1 ? "confirmed_ship_upgrade" : starter ? "starter" : "shard_hull",
       spritePath: shipLiveryAssetPath(sprite, stage, metallic ? vanguardMetallic.id : undefined),
       backgroundPath: `cards/space/unique/${key}-${number}.webp`,
     };

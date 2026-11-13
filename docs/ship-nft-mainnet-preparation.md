@@ -1,12 +1,14 @@
 # Cryptoid Evolution ship NFTs
 
-The collection contains 20 player hulls in three editions. In revision `fleet-liveries-20261113`, the Advanced and Elite artwork carries each hull's Standard livery. The Pi Vanguard cards use the approved gold and violet Metallic Edition. The Shop shows the same fixed livery for each hull in all three stages. The downloadable bundle includes all 60 full-size cards, 60 matching WebP previews, English stories in the individual metadata files and a manifest with SHA-256 hashes. The metadata image references are relative to the extracted bundle. Assign immutable hosted image and metadata URIs when preparing the contract. Edition supply is open.
+The collection contains 20 player hulls in three editions. In revision `fleet-liveries-20261113`, the Advanced and Elite artwork carries each hull's Standard livery. The Pi Vanguard cards use the approved gold and violet Metallic Edition. The Shop shows the same fixed livery for each hull in all three stages. The downloadable bundle includes 60 full-size cards, 60 matching WebP previews, English stories and per-card terms in the metadata, and a manifest with SHA-256 hashes. The metadata image references are relative to the extracted bundle. Assign immutable hosted image and metadata URIs when preparing the contract.
 
-| Edition | Mainnet trigger |
-| --- | --- |
-| Standard | The free Grey Scout starter is issued to the saved account. Each other Standard card is free after the first confirmed Shard purchase of its matching hull. |
-| Advanced | The account owns the base hull and has a completed Mainnet Pi payment for its matching Advanced stage. The NFT is included in that upgrade. |
-| Elite | The account owns the base hull and has completed Mainnet Pi payments for its matching Advanced and Elite stages. The Elite NFT is included in the Elite upgrade. |
+| Edition | Max per model | Mainnet acquisition |
+| --- | ---: | --- |
+| Standard | 99,999 | Grey Scout is the free starter. The other 19 hulls cost 150 to 4,650 Shards, depending on the model. The NFT is included after confirmed acquisition. |
+| Advanced | 31,415 | The matching base hull and a confirmed upgrade for 9.90 Pi. The NFT is included. |
+| Elite | 3,141 | The matching Advanced stage and a confirmed Elite upgrade for 19.90 Pi. Both upgrades total 29.80 Pi. The Elite NFT is included. |
+
+The combined maximum is 2,691,100 NFTs. The manifest gives the planned Shard or Pi price for each model and edition. Public Testnet players earn and spend Shards to acquire all 20 Standard ships, with the free Grey Scout as their starter. Each owned Standard ship can be selected for a Testnet mission. Testnet ship ownership is stored in the Testnet save slot.
 
 ## Prepared application behavior
 

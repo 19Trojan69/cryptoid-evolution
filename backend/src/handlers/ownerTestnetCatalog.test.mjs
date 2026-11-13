@@ -211,14 +211,43 @@ test('owner earns Shards in a saved mission before buying the last Standard ship
   assert.equal(shipPrice('core-carrier'), null);
 });
 
-test('normal users and Mainnet cannot buy a locked Standard hull by forging flags', async t => {
+test('every Standard hull can be purchased, equipped and flown on a normal Testnet account', async t => {
   owner(t);
-  for (const request of [{ session: { currentUser: { uid: 'pilot-b', username: '19Trojan69' }, canAdmin: true } }, { network: 'mainnet' }]) {
-    const h = harness();
-    const initialized = await h.call('progress', '/me', null, { method: 'GET', ...request });
-    const response = await h.call('progress', '/inventory', { action: 'buy', version: initialized.body.save.version, skin: 'core-carrier', color: 'gold', canAdmin: true }, request);
-    assert.equal(response.code, 400); assert.equal(response.body.error, 'invalid_ship');
+  const request = { session: { currentUser: { uid: 'pilot-b', username: 'Pilot' } } };
+  const h = harness();
+  await h.call('progress', '/me', null, { method: 'GET', ...request });
+  const save = () => h.docs[1].playerByNetwork.testnet;
+  for (const skin of standardShips) {
+    if (skin !== 'grey-scout') {
+      const price = shipPrice(skin, true);
+      const buy = () => h.call('progress', '/inventory', { action: 'buy', version: save().version, skin, color: 'grey' }, request);
+      save().balance = price - 1;
+      assert.equal((await buy()).body.error, 'not_enough_shards', skin);
+      save().balance = price;
+      assert.equal((await buy()).code, 200, skin);
+      assert.equal(save().balance, 0, skin);
+      assert.deepEqual(save().fleet[skin], { grey: 1 }, skin);
+    }
+    const select = await h.call('progress', '/inventory', { action: 'select', version: save().version, skin, color: 'grey', shipStage: 1 }, request);
+    assert.equal(select.code, 200, skin);
+    const start = await h.call('hangar', '/start', { action: 'new', version: save().version, startKey: `public-standard-${skin}`, rulesVersion: 2 }, request);
+    assert.equal(start.code, 200, skin);
+    assert.deepEqual([start.body.profile.skin, start.body.shipStage, start.body.testnetCatalogAccess], [skin, 1, false], skin);
   }
+  assert.equal(h.docs[1].playerByNetwork.mainnet, undefined);
+  assert.equal(save().standardShipAcquisitions, undefined);
+});
+
+test('Mainnet keeps its existing Standard limits while the NFT launch is disabled', async t => {
+  const previous = process.env.CRYPTOID_MAINNET_SHIP_NFTS_ENABLED;
+  process.env.CRYPTOID_MAINNET_SHIP_NFTS_ENABLED = '0';
+  t.after(() => { if (previous === undefined) delete process.env.CRYPTOID_MAINNET_SHIP_NFTS_ENABLED; else process.env.CRYPTOID_MAINNET_SHIP_NFTS_ENABLED = previous; });
+  const h = harness();
+  const request = { network: 'mainnet' };
+  const initialized = await h.call('progress', '/me', null, { method: 'GET', ...request });
+  const response = await h.call('progress', '/inventory', { action: 'buy', version: initialized.body.save.version, skin: 'core-carrier', color: 'grey', ownerTestnet: true }, request);
+  assert.equal(response.code, 400);
+  assert.equal(response.body.error, 'invalid_ship');
 });
 
 test('all paid catalog items require a confirmed Test-Pi payment, not free admin inventory', async t => {

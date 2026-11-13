@@ -1,8 +1,7 @@
-import { standardHullAvailable } from "./ownerTestnetCatalog";
 import ShipPreview from "./ShipPreview";
 import PiPrice from "../components/PiPrice";
 import TestPiPurchase from './TestPiPurchase';
-import { fleetCount, shipFactoryPaint, standardShipPrice, type ShipFleet } from "./shipFleet";
+import { fleetCount, shipFactoryPaint, standardHullAvailable, standardShipPrice, type ShipFleet } from "./shipFleet";
 import { stagePickupRadiusBonus, type ShipStage } from "./shipEvolution";
 import { vanguardMetallic } from '../../../backend/src/shipLivery.ts';
 import { shipNftEditions } from "../../../backend/src/shipNftCatalog";
@@ -53,7 +52,7 @@ export default function ShipSelectionPanel({
   const price = standardShipPrice(skin);
   const shardPrice = price.toLocaleString(locale);
   const piPrice = (amount: number) => <PiPrice amount={amount} locale={locale} testnet={testnetCatalogAccess} />;
-  const standardAvailable = standardHullAvailable(skin.id, testnetCatalogAccess);
+  const standardAvailable = standardHullAvailable(skin.id, shipNftMainnetVisible);
   const offerFor = (level: ShipStage) => offers.find(offer => offer.shipIndex === skin.sprite && offer.stage === level);
   const focusedOffer = offerFor(stage);
   const nftCopy = shipNftCopy(locale);

@@ -8,7 +8,6 @@ import ts from 'typescript';
 import * as jsx from 'react/jsx-runtime';
 import { renderToStaticMarkup } from 'react-dom/server';
 import * as fleet from './shipFleet.ts';
-import * as availability from './ownerTestnetCatalog.ts';
 import * as evolution from './shipEvolution.ts';
 import * as attributes from './shipAttributes.ts';
 import { hangarCatalog } from '../../../backend/src/hangarCatalog.ts';
@@ -26,7 +25,7 @@ function component(file, extra = {}) {
  const source = readFileSync(new URL(file, import.meta.url),'utf8');
  const code = ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,jsx:ts.JsxEmit.ReactJSX}}).outputText;
  const exports = {};
- const modules = {'react/jsx-runtime':jsx,'./ShipPreview':{default:()=>null},'../components/PiPrice':{default:Price},'../i18n':{useLocale:()=>({locale:'en',t:s=>s})},'./ownerTestnetCatalog':availability,'./shipFleet':fleet,'./shipEvolution':evolution,'./shipAttributes':attributes,'../../../backend/src/shipNftCatalog':{shipNftEditions},'../../../backend/src/shipLivery.ts':liveries,'../locales/shipNft':{shipNftCopy},'./shipNftVisibility':{shipNftMainnetVisible:false},...extra};
+ const modules = {'react/jsx-runtime':jsx,'./ShipPreview':{default:()=>null},'../components/PiPrice':{default:Price},'../i18n':{useLocale:()=>({locale:'en',t:s=>s})},'./shipFleet':fleet,'./shipEvolution':evolution,'./shipAttributes':attributes,'../../../backend/src/shipNftCatalog':{shipNftEditions},'../../../backend/src/shipLivery.ts':liveries,'../locales/shipNft':{shipNftCopy},'./shipNftVisibility':{shipNftMainnetVisible:false},...extra};
  vm.runInNewContext(code,{exports,require:name=>{if(!modules[name])throw Error(`Unstubbed ${name}`);return modules[name];}});
  return exports.default;
 }
@@ -45,17 +44,17 @@ test('owner permission expands every catalog item strictly on Pi Testnet',()=>{
  assert.equal(isTestnetWeaponPurchaseEnabled({id:'unknown',kind:'weapon'},true),false);
 });
 
-test('all Standard hulls can be bought by owner only after enough Shards, with original prices',()=>{
+test('all Standard hulls in the prepared Mainnet catalog keep their original Shard prices',()=>{
+ const MainnetPanel = component('./ShipSelectionPanel.tsx',{'./TestPiPurchase':{default:Purchase},'./shipNftVisibility':{shipNftMainnetVisible:true}});
  for(const skin of fleet.playerSkins){
-  assert.equal(availability.standardHullAvailable(skin.id,true),true);
-  const props={...defaults(),skin,testnetCatalogAccess:true};
-  const buy=p=>nodes(Panel({...props,...p})).find(n=>n.props.className?.includes('ship-shard-button'));
+  const props={...defaults(),skin};
+  const buy=p=>nodes(MainnetPanel({...props,...p})).find(n=>n.props.className?.includes('ship-shard-button'));
   const price=fleet.standardShipPrice(skin);
   assert.equal(Boolean(buy({shards:price-1}).props.disabled),true);
   assert.equal(Boolean(buy({shards:price}).props.disabled),false);
   assert.equal(Boolean(buy({shards:price,purchaseBusy:true}).props.disabled),true);
  }
- assert.equal(availability.standardHullAvailable('core-carrier'),false);
+ assert.equal(fleet.standardHullAvailable('core-carrier'),false);
 });
 
 test('Advanced and Elite checkout keeps base hull, prerequisite, busy and confirmed ownership gates',()=>{

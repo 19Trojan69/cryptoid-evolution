@@ -1,4 +1,3 @@
-import { standardHullAvailable } from "./ownerTestnetCatalog";
 import { requestGameFrame, cancelGameFrame } from '../lib/frameScheduler';
 import ServiceBadge from "../components/ServiceBadge";
 import useModalNavigation from "../hooks/useModalNavigation";
@@ -25,9 +24,9 @@ import SignIn from "../components/SignIn";
 import { useAuth } from "../hooks/useAuth";
 import { accountSelection, loadAccountSave, localInventory, mutateAccountInventory, type AccountSave } from "../lib/accountSave";
 import { usePayments } from "../hooks/usePayments";
-import { axiosClient } from "../lib/axiosClient.ts";
+import { axiosClient, PI_ACCESS_TOKEN_KEY } from "../lib/axiosClient.ts";
 import { BEST_SCORE_KEY, HIGHEST_SECTOR_KEY, TOTAL_DESTROYED_KEY } from "../lib/localRecordKeys";
-import { buyStandardShip, fleetCount, ownedShipInventoryColor, playerSkins, readShipFleet, selectedShip, shardBalance, shipFactoryPaint, shipSaveNetwork, ADMIN_SHIP_SKIN_KEY, ADMIN_SHIP_STAGE_KEY, ADMIN_START_SECTOR_KEY, SHARD_BALANCE_KEY, SHIP_COLORS_KEY, SHIP_FLEET_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY, type ShipFleet } from "./shipFleet";
+import { buyStandardShip, fleetCount, ownedShipInventoryColor, playerSkins, readShipFleet, selectedShip, shardBalance, shipFactoryPaint, shipSaveNetwork, standardHullAvailable, ADMIN_SHIP_SKIN_KEY, ADMIN_SHIP_STAGE_KEY, ADMIN_START_SECTOR_KEY, SHARD_BALANCE_KEY, SHIP_COLORS_KEY, SHIP_FLEET_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY, type ShipFleet } from "./shipFleet";
 import { ownedShipStage, selectedShipStage, type ShipStage } from "./shipEvolution";
 import { standardHullInventoryColor } from '../../../backend/src/shipLivery.ts';
 
@@ -302,7 +301,7 @@ const Shop = () => {
   const shipSearchOptions = playerSkins.filter(skin => {
     const owned = fleetCount(visibleFleet, skin.id) > 0;
     return (shopView === "shop" || owned) && skin.name.toLocaleLowerCase(locale).includes(shipQuery.trim().toLocaleLowerCase(locale)) &&
-      (shopTarget?.skin === skin.id || shipFilter === "all" || (shipFilter === "owned" ? owned : standardHullAvailable(skin.id, ownerTestnet)));
+      (shopTarget?.skin === skin.id || shipFilter === "all" || (shipFilter === "owned" ? owned : standardHullAvailable(skin.id, shipNftMainnetVisible)));
   });
   useEffect(() => {
     let active = true;
@@ -335,9 +334,10 @@ const Shop = () => {
   const purchaseStandard = (previewSkin: typeof playerSkins[number]) => {
     primeCardSound();
     if (adminMode) return;
-    if (!standardHullAvailable(previewSkin.id, ownerTestnet)) { setHangarMessage("MAINNET READY"); return; }
+    if (!standardHullAvailable(previewSkin.id, shipNftMainnetVisible)) { setHangarMessage("MAINNET READY"); return; }
     if (user) {
       if (!account) { setAccountError("Account save is loading or unavailable."); return; }
+      if (shipSaveNetwork === "testnet" && !sessionStorage.getItem(PI_ACCESS_TOKEN_KEY)) { void signIn(); return; }
       void accountCommand({ action: "buy", skin: previewSkin.id, color: standardHullInventoryColor }); return;
     }
     if (shipNftMainnetVisible) { requireAuth(); return; }

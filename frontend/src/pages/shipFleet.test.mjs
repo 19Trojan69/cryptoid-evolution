@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { allPlayerColors, bossNozzleStyles, buySkin, buyStandardShip, enemyAppearance, enemySprite, EXTRA_STARTER_PRICE, fleetCount, migrateLegacyTestnetShipSave, ownedSkins, playerColors, playerSkins, readShipFleet, ownedShipInventoryColor, savedShipColors, selectedShip, shardBalance, SHARD_BALANCE_KEY, SHIP_COLOR_KEY, SHIP_COLORS_KEY, SHIP_FLEET_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY, shipSaveKey, shipSaveNetworkForHost, shipNozzleStyles, spriteVisualOffset, TESTNET_STANDARD_HULL_COUNT, testnetStandardHullAvailable } from "./shipFleet.ts";
+import { allPlayerColors, bossNozzleStyles, buySkin, buyStandardShip, enemyAppearance, enemySprite, EXTRA_STARTER_PRICE, fleetCount, migrateLegacyTestnetShipSave, ownedSkins, playerColors, playerSkins, readShipFleet, ownedShipInventoryColor, savedShipColors, selectedShip, shardBalance, SHARD_BALANCE_KEY, SHIP_COLOR_KEY, SHIP_COLORS_KEY, SHIP_FLEET_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY, shipSaveKey, shipSaveNetworkForHost, shipNozzleStyles, spriteVisualOffset, standardHullAvailable } from "./shipFleet.ts";
 import { reinforcementCount } from "./sectorManager.ts";
 
 globalThis.sessionStorage ??= { getItem: () => null };
@@ -28,17 +28,16 @@ test("Testnet Shards and ship purchases never populate Mainnet saves", () => {
   assert.notEqual(SHARD_BALANCE_KEY, "cryptoid_shard_balance");
 });
 
-test("only the grey starter is free and the first ten standard hulls are released", () => {
+test("only the grey starter is free and the prepared Mainnet catalog covers all 20 hulls", () => {
   assert.equal(playerSkins.length, 20);
   assert.equal(playerSkins[0].id, "grey-scout");
   assert.equal(playerSkins.filter(skin => skin.price === 0).length, 1);
   assert.equal(new Set(playerSkins.map(skin => skin.sprite)).size, 20);
   assert.equal(EXTRA_STARTER_PRICE, 150);
   playerSkins.slice(1).forEach((skin, index) => assert.equal(skin.price, 150 + index * 250, skin.id));
-  assert.equal(TESTNET_STANDARD_HULL_COUNT, 10);
-  assert.equal(playerSkins.filter(skin => testnetStandardHullAvailable(skin.id)).length, 10);
-  assert.equal(testnetStandardHullAvailable("red-comet"), true);
-  assert.equal(testnetStandardHullAvailable("twin-core"), false);
+  assert.equal(playerSkins.filter(skin => standardHullAvailable(skin.id)).length, 10);
+  assert.equal(playerSkins.filter(skin => standardHullAvailable(skin.id, true)).length, 20);
+  assert.equal(standardHullAvailable("unknown", true), false);
 });
 
 test("later sectors field all 20 player hulls as enemy models", () => {

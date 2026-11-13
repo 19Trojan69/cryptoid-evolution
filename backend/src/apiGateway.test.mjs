@@ -349,6 +349,21 @@ test('default Testnet proxy does not start the local backend and keeps authentic
   }
 });
 
+test('authenticated Testnet inventory writes use the Testnet account slot', async () => {
+  const { calls, backend } = backendFixture();
+  const gateway = createApiGateway(async () => ({ ...backend, app(req, res) {
+    calls.push({ path: req.url, network: req.headers['x-cryptoid-app-network'], scopedBearer: req.testnetSave, body: req.body });
+    return res.json({ ok: true });
+  } }), () => ({ VERCEL_ENV: 'production', VERCEL_PROJECT_PRODUCTION_URL: 'cryptoid-evolution-testnet.vercel.app' }));
+  const body = { action: 'buy', skin: 'core-carrier', color: 'grey', version: 4 };
+  const res = response();
+  await gateway({ method: 'POST', url: '/api/index?path=progress%2Finventory', body, headers: {
+    host: 'cryptoid-evolution-testnet.vercel.app', authorization: 'Bearer test-token', 'x-cryptoid-app-network': 'mainnet',
+  } }, res);
+  assert.equal(res.headers['x-cryptoid-backend'], 'testnet-local');
+  assert.deepEqual(calls, [{ start: false }, { path: '/progress/inventory', network: 'testnet', scopedBearer: true, body }]);
+});
+
 test('local preview retains the existing Pi-key service for payments and payment administration', async t => {
   const urls = [];
   t.mock.method(globalThis, 'fetch', async (url, init) => {
