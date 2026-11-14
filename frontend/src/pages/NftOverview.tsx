@@ -28,7 +28,8 @@ const editions = [
 ] as const;
 const testnet = shipSaveNetwork === "testnet";
 const editionCount = Object.keys(bossNftEditions).length + editions.length;
-const cardCount = Object.keys(bossNftEditions).length * BOSS_STICKER_COUNT + editions.length * playerSkins.length;
+const cardCount = Object.keys(bossNftEditions).length * BOSS_STICKER_COUNT + editions.length * playerSkins.length
+  + (testnet ? retroNftPreviewCount : 0);
 
 type NftProgress = { owner: string; boss: number; ships: [number, number, number] };
 
@@ -86,7 +87,7 @@ function NftOverviewPage() {
       <div className="nft-overview-title"><BlockchainIcon kind="collection"/><h1>{t("NFT overview")}</h1></div>
       <p className="nft-unlock-notice">{t("All NFT card slots are visible. Artwork appears once you unlock the card.")}</p>
       <p className="nft-overview-notice">{t("NFT issuance and sales are planned for the Mainnet app.")}</p>
-      <div className="nft-catalog-size"><b>{designs(cardCount)}</b><span>{t("{count} editions", { count: number(editionCount) })}</span></div>
+      <div className="nft-catalog-size"><b>{designs(cardCount)}</b>{!testnet && <span>{t("{count} editions", { count: number(editionCount) })}</span>}</div>
     </header>
     {progressFailed && <div className="boss-nft-state" role="alert">
       <p>{gallery.error}</p><button type="button" onClick={retry}>{t("Try again")}</button>

@@ -303,6 +303,7 @@
   text-align: center;
 }
 .galaxy-retro-nft-card {
+  --rank-glint: linear-gradient(120deg, transparent 18%, #ffffff 47%, transparent 80%);
   position: relative;
   display: grid;
   aspect-ratio: 545 / 925;
@@ -327,6 +328,23 @@
   content: '';
   pointer-events: none;
 }
+.galaxy-retro-nft-card::before {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--arcade-rank-color) 50%, transparent);
+  background: var(--rank-glint);
+  opacity: .15;
+  pointer-events: none;
+  content: '';
+}
+.galaxy-retro-nft[data-nft-rank='copper'] .galaxy-retro-nft-card { --rank-glint: repeating-linear-gradient(148deg, #c67a53 0 1px, transparent 1px 9px); }
+.galaxy-retro-nft[data-nft-rank='brass'] .galaxy-retro-nft-card { --rank-glint: linear-gradient(90deg, #e8be66, transparent 24% 76%, #e8be66); }
+.galaxy-retro-nft[data-nft-rank='silver'] .galaxy-retro-nft-card { --rank-glint: linear-gradient(148deg, transparent 36%, #d6e2f5, transparent 60%); }
+.galaxy-retro-nft[data-nft-rank='gold'] .galaxy-retro-nft-card { --rank-glint: radial-gradient(ellipse at 80% 15%, #ffcb4f, transparent 55%); }
+.galaxy-retro-nft[data-nft-rank='platinum'] .galaxy-retro-nft-card { --rank-glint: linear-gradient(160deg, #b9f5e8, transparent 25% 70%, #b9f5e8); }
+.galaxy-retro-nft[data-nft-rank='diamond'] .galaxy-retro-nft-card { --rank-glint: conic-gradient(from 44deg at 87% 18%, #88caff, transparent 16%, #cda1ff 31%, transparent 43%, #8aedff 62%, transparent 80%, #88caff); }
 .galaxy-retro-nft-title, .galaxy-retro-nft-rank {
   z-index: 1;
   justify-self: stretch;

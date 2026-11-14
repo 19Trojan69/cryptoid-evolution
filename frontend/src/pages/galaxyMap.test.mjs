@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import vm from 'node:vm';
 import ts from 'typescript';
 import * as jsx from 'react/jsx-runtime';
@@ -16,6 +16,8 @@ import { galaxyMapTranslations } from '../locales/galaxyMap.ts';
 import { galaxyScenery, galaxySceneryAsset } from './galaxyScenery.ts';
 import { MAX_DIFFICULTY_LEVEL } from './levelDifficulty.ts';
 import { BOSS_STICKER_COUNT } from '../../../backend/src/rewardRules.ts';
+import { arcadeRankIds } from '../../../backend/src/galaxyArcadeStickerSchema.ts';
+import { retroNftPreviewCount, retroNftPreviewFor } from './retroNftPreviews.ts';
 
 test('500 unique levels ascend from the bottom across ten regions with exact port counts', () => {
   const stations = model.galaxyStations.flat();
@@ -50,6 +52,24 @@ test('each Retro Mini Game station has a distinct sticker motif', () => {
   const levels = Object.keys(arcadeStickerMotifs).map(Number);
   assert.deepEqual(levels, Array.from({ length: 40 }, (_, index) => (index + 1) * 5));
   assert.equal(new Set(Object.values(arcadeStickerMotifs).map(motif => motif.shape)).size, levels.length);
+});
+
+test('all playable Retro stations have a distinct HD scene shared by their six ranks', () => {
+  const scenes = new Set();
+  for (const level of Object.keys(arcadeStickerMotifs).map(Number)) {
+    const previews = arcadeRankIds.map((_, index) => retroNftPreviewFor({ level, rank: index + 1 }));
+    assert.deepEqual(previews.map(preview => preview?.rankId), arcadeRankIds);
+    const { image, title } = previews[0];
+    assert.ok(title.trim());
+    assert.ok(previews.every(preview => preview.image === image));
+    assert.ok(existsSync(new URL(`../../public${image}`, import.meta.url)), image);
+    assert.ok(!scenes.has(image), image);
+    scenes.add(image);
+  }
+  assert.equal(scenes.size, 40);
+  assert.equal(retroNftPreviewCount, 240);
+  assert.equal(retroNftPreviewFor({ level: 205, rank: 1 }), undefined);
+  for (const rank of [0, 1.5, 7]) assert.equal(retroNftPreviewFor({ level: 5, rank }), undefined);
 });
 
 test('six arcade ranks retain legacy best scores without treating a legacy medal as a sticker rank', () => {

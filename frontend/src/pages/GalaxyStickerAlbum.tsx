@@ -57,16 +57,17 @@ export default function GalaxyStickerAlbum({ owner, stations, stationCount, init
   const previewSticker = previewRank === undefined ? undefined : stationStickers.get(previewRank);
   const preview = previewSticker && retroNftPreviewFor(previewSticker);
   const copy = retroNftCopy(locale);
+  const previewImage = preview?.image;
 
   useEffect(() => {
-    if (preview) {
+    if (previewImage) {
       dialog.current?.scrollTo({ top: 0, behavior: 'instant' });
       previewBack.current?.focus({ preventScroll: true });
     } else if (previewTrigger.current) {
       previewTrigger.current.focus();
       previewTrigger.current = null;
     }
-  }, [preview]);
+  }, [previewImage]);
 
   const backToAlbum = () => setPreviewRank(undefined);
   const dismiss = preview ? backToAlbum : onClose;
@@ -80,7 +81,7 @@ export default function GalaxyStickerAlbum({ owner, stations, stationCount, init
         <button ref={previewBack} type="button" className="galaxy-retro-nft-back" onClick={backToAlbum}>
           <span aria-hidden="true">←</span> {copy.backToAlbum}
         </button>
-        <RetroNftCardPreview key={preview.image} sticker={previewSticker} title={preview.title} image={preview.image}
+        <RetroNftCardPreview key={`${preview.image}:${preview.rankId}`} sticker={previewSticker} preview={preview}
           rankLabel={labels.ranks[previewSticker.rank - 1]}/>
       </>}
       <div hidden={!!preview}>
@@ -106,7 +107,6 @@ export default function GalaxyStickerAlbum({ owner, stations, stationCount, init
                 {labels.ranks.map((name, index) => {
                   const sticker = stationStickers.get(index + 1);
                   const shipName = sticker?.shipName.split(' · ')[0];
-                  const hasPreview = sticker && retroNftPreviewFor(sticker);
                   return <li key={arcadeRankIds[index]} data-arcade-rank={index + 1} data-earned={!!sticker}>
                     <div className="galaxy-sticker-art" aria-hidden="true">
                       {sticker ? <>
@@ -124,7 +124,7 @@ export default function GalaxyStickerAlbum({ owner, stations, stationCount, init
                     </div>
                     <strong>{name}</strong>
                     <small title={sticker?.shipName}>{shipName || t('Locked')}</small>
-                    {hasPreview && <button type="button" className="galaxy-retro-nft-open" aria-label={`${copy.preview} · ${name}`}
+                    {sticker && retroNftPreviewFor(sticker) && <button type="button" className="galaxy-retro-nft-open" aria-label={`${copy.preview} · ${name}`}
                       onClick={event => { previewTrigger.current = event.currentTarget; setPreviewRank(sticker.rank); }}>
                       {copy.preview}
                     </button>}
