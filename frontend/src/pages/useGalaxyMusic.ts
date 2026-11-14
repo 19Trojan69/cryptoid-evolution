@@ -20,7 +20,7 @@ export function useGalaxyMusic(active: boolean) {
   const player = useRef<MusicPlayer | null>(null);
   const leaving = useRef(false);
 
-  const start = useCallback(() => {
+  const start = useCallback((fromGesture = false) => {
     if (!active || !enabledRef.current || leaving.current || document.hidden) return;
     const volume = readVolume();
     if (!volume) return;
@@ -28,6 +28,7 @@ export function useGalaxyMusic(active: boolean) {
       const music = player.current ??= new MusicPlayer(source, volume);
       music.setVolume(volume);
       if (!music.playing) {
+        if (fromGesture) void music.unlock(true);
         void music.play().then(() => {
           if (player.current === music && enabledRef.current && !leaving.current) setPlaying(music.playing);
         });
@@ -42,19 +43,23 @@ export function useGalaxyMusic(active: boolean) {
 
   useEffect(() => {
     if (!active) return;
-    const onClick = (event: MouseEvent) => {
+    const onGesture = (event: Event) => {
       if (event.target instanceof Element && event.target.closest('[data-galaxy-music]')) return;
-      start();
+      start(true);
     };
     const onVisibility = () => { if (document.hidden) stop(); else start(); };
     const onShow = () => { leaving.current = false; start(); };
-    document.addEventListener('click', onClick, true);
+    document.addEventListener('click', onGesture, true);
+    document.addEventListener('touchend', onGesture, true);
+    document.addEventListener('keydown', onGesture, true);
     document.addEventListener('visibilitychange', onVisibility);
     window.addEventListener('pagehide', stop);
     window.addEventListener('pageshow', onShow);
     start();
     return () => {
-      document.removeEventListener('click', onClick, true);
+      document.removeEventListener('click', onGesture, true);
+      document.removeEventListener('touchend', onGesture, true);
+      document.removeEventListener('keydown', onGesture, true);
       document.removeEventListener('visibilitychange', onVisibility);
       window.removeEventListener('pagehide', stop);
       window.removeEventListener('pageshow', onShow);
@@ -68,7 +73,7 @@ export function useGalaxyMusic(active: boolean) {
     enabledRef.current = next;
     setEnabled(next);
     try { localStorage.setItem(MUSIC_STORAGE_KEY, next ? 'on' : 'off'); } catch { /* Session only. */ }
-    if (next) start();
+    if (next) start(true);
     else stop();
   };
 
