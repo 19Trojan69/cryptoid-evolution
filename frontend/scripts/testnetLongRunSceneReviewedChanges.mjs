@@ -1,4 +1,5 @@
 import { restoreTestnetMissionPowerChanges } from './testnetMissionPowerReviewedChanges.mjs';
+import { restoreSoundtrackChanges } from './soundtrackReviewedChanges.mjs';
 
 // Exact controller edits from the long-run iPhone scene. Restore them before the older release checks.
 const sceneChanges = [
@@ -132,6 +133,7 @@ const missionEditionChanges = [
 ];
 
 export function restoreTestnetLongRunSceneChanges(source) {
+  source = restoreSoundtrackChanges(source);
   if (source.includes('className="mission-pause-heading"') || source.includes('deviceSaved={guestCreditedShardsRef.current')) {
     for (const { before, after } of missionEditionChanges) {
       if (source.split(after).length !== 2) throw Error('Expected one exact mission presentation change');

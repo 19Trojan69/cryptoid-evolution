@@ -124,6 +124,8 @@ const GAME_OVER_REVEAL_MS = 1_750;
 const testnetMissionPowers = shipSaveNetwork === 'testnet';
 const ENTRY_HUD_GAP_PX = 8;
 const BOSS_VICTORY_VOLUME_BOOST = 1.6;
+const BONUS_MUSIC_SOURCE = "/audio/bonus-orbit.mp3";
+const COMPLETION_MUSIC_SOURCE = "/audio/level-complete.mp3";
 // Let the deep impact lead before its long tail overlaps the victory cue.
 const BOSS_FALL_DURATION_MS = BOSS_DEFEAT_MS;
 const BOSS_VICTORY_START_MS = BOSS_FALL_DURATION_MS + 650;
@@ -603,6 +605,13 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
   useEffect(() => { resetAudioVolumeDefaults(); }, []);
   const musicRef = useRef<MusicPlayer | null>(null);
   const regularMusicPositionRef = useRef(0);
+  const hasBonusMusic = shipSaveNetwork === "testnet" && game.encounter === "bonus";
+  const bonusMusicEnding = hasBonusMusic && game.phase === "SECTOR_CLEAR"
+    && (game.status === "playing" || game.status === "paused");
+  const hasCompletionMusic = shipSaveNetwork === "testnet" && bossSummary !== null;
+  const completionMusicVisible = hasCompletionMusic && !rewardCards.length && !homePrompt;
+  const completionMusicVisibleRef = useRef(completionMusicVisible);
+  completionMusicVisibleRef.current = completionMusicVisible;
   const soundRef = useRef<GameAudio | null>(null);
   const ownerAudioAuditRef = useRef<ReturnType<typeof createOwnerAudioAudit>>(null);
   useLayoutEffect(() => {
@@ -1199,14 +1208,27 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
     };
     track.audio.addEventListener("ended", finishVictoryMusic);
     const resume = () => {
-      if (document.visibilityState === "hidden" || (backgroundHiddenAtRef.current && Date.now() - backgroundHiddenAtRef.current > 1_000) || !["playing", "game-over", "victory"].includes(stateRef.current.status)) return;
+      if (document.visibilityState === "hidden" || (backgroundHiddenAtRef.current && Date.now() - backgroundHiddenAtRef.current > 1_000)) return;
+      const status = stateRef.current.status;
+      const canResume = track.currentSource === COMPLETION_MUSIC_SOURCE
+        ? completionMusicVisibleRef.current && status === "paused" && !track.audio.ended
+        : ["playing", "game-over", "victory"].includes(status);
+      if (!canResume) return;
       void track.play();
+    };
+    const pauseCompletionMusic = () => {
+      if (track.currentSource === COMPLETION_MUSIC_SOURCE) track.pause();
+    };
+    const onVisibilityChange = () => {
+      if (document.hidden) pauseCompletionMusic();
+      else resume();
     };
     document.addEventListener("pointerdown", resume, true);
     document.addEventListener("pointerup", resume, true);
     document.addEventListener("touchend", resume, true);
     document.addEventListener("keydown", resume, true);
-    document.addEventListener("visibilitychange", resume);
+    document.addEventListener("visibilitychange", onVisibilityChange);
+    window.addEventListener("pagehide", pauseCompletionMusic);
     window.addEventListener("pageshow", resume);
     window.addEventListener("focus", resume);
     resume();
@@ -1215,7 +1237,8 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
       document.removeEventListener("pointerup", resume, true);
       document.removeEventListener("touchend", resume, true);
       document.removeEventListener("keydown", resume, true);
-      document.removeEventListener("visibilitychange", resume);
+      document.removeEventListener("visibilitychange", onVisibilityChange);
+      window.removeEventListener("pagehide", pauseCompletionMusic);
       window.removeEventListener("pageshow", resume);
       window.removeEventListener("focus", resume);
       track.audio.removeEventListener("ended", finishVictoryMusic);
@@ -1228,27 +1251,37 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
     if (!track) return;
     const normalSource = "/audio/battle-orbit.mp3";
     const waitingForExplosion = game.encounter === "boss-clear" && bossVictoryPendingRef.current;
+    if (bonusMusicEnding && !hasCompletionMusic
+      && (bossSummaryRef.current?.accepted || track.currentSource !== BONUS_MUSIC_SOURCE)) {
+      track.pause();
+      return;
+    }
     const desiredSource = game.status === "game-over" ? "/audio/last-signal.mp3"
       : game.status === "victory" ? "/audio/beyond-the-last-star.mp3"
+      : hasCompletionMusic ? COMPLETION_MUSIC_SOURCE
+      : hasBonusMusic ? BONUS_MUSIC_SOURCE
       : game.encounter === "boss-clear"
       ? waitingForExplosion ? "/audio/dreadnought-duel.mp3" : bossVictoryFinishedRef.current ? normalSource : "/audio/boss-victory-v2.mp3"
       : game.encounter === "boss-intro" || game.encounter === "boss-fight"
         ? "/audio/dreadnought-duel.mp3"
         : normalSource;
-    track.audio.loop = game.status === "playing" && (game.encounter !== "boss-clear" || waitingForExplosion || bossVictoryFinishedRef.current);
+    track.audio.loop = !hasCompletionMusic && game.status === "playing"
+      && (game.encounter !== "boss-clear" || waitingForExplosion || bossVictoryFinishedRef.current);
     if (track.currentSource !== desiredSource) {
       if (track.currentSource === normalSource) regularMusicPositionRef.current = track.audio.currentTime || 0;
       track.setSource(desiredSource, desiredSource === normalSource ? regularMusicPositionRef.current : 0);
     }
-    if (game.status === "playing" || game.status === "game-over" || game.status === "victory") void track.play();
+    const playCompletion = completionMusicVisible && !document.hidden && !track.audio.ended;
+    if (playCompletion || game.status === "playing" || game.status === "game-over" || game.status === "victory") void track.play();
     else if (game.status !== "loading") track.pause();
-  }, [game.status, game.encounter, musicEnabled]);
+  }, [game.status, game.encounter, musicEnabled, hasBonusMusic, bonusMusicEnding, hasCompletionMusic, completionMusicVisible]);
   useEffect(() => {
+    const fadeBonus = bonusMusicEnding && !hasCompletionMusic;
     const volume = game.status === "playing" && game.encounter === "boss-clear"
       ? Math.min(100, musicVolume * BOSS_VICTORY_VOLUME_BOOST)
-      : musicVolume;
-    musicRef.current?.setVolume(volume);
-  }, [musicVolume, game.encounter, game.status]);
+      : fadeBonus ? 0 : musicVolume;
+    musicRef.current?.setVolume(volume, fadeBonus ? .12 : undefined);
+  }, [musicVolume, game.encounter, game.status, bonusMusicEnding, hasCompletionMusic]);
   const startBossVictory = () => {
     performanceProbeRef.current?.lifecycle('boss-victory-start');
     if (ownerDiagnostics) recordReloadEvent('boss-victory-start');
@@ -1469,6 +1502,7 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
     if (!pending || pending.accepted || !bossSummaryPrepared || bossSummarySaving || (bossSummaryFailed && !retry) || bossSummaryContinuing) return;
     const generation = bossPreparationRef.current;
     const current = () => weaponMountedRef.current && generation === bossPreparationRef.current && bossSummaryRef.current === pending && scoreRunRef.current === runId;
+    musicRef.current?.pause();
     unlockAudioForResume(); setBossSummaryContinuing(true); setBossSummaryFailed(false); setBossSummaryContinueFailed(false);
     try {
       if (!current()) return;
@@ -1491,7 +1525,7 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
     // Menu taps must not restart the soundtrack while the simulation is paused.
     if (document.visibilityState === "hidden" || !["playing", "game-over", "victory"].includes(stateRef.current.status)) return;
     void startEffects();
-    if (musicEnabled && musicRef.current) void musicRef.current.play();
+    if (musicEnabled && musicRef.current && musicRef.current.currentSource !== COMPLETION_MUSIC_SOURCE) void musicRef.current.play();
   };
   const retryAudioRef = useRef(retryAudio);
   retryAudioRef.current = retryAudio;

@@ -125,11 +125,11 @@ export class MusicPlayer {
     }
   }
 
-  setVolume(percent: number) {
+  setVolume(percent: number, timeConstant = .015) {
     this.volume = percent;
     if (this.context && this.gain) {
       this.audio.volume = 1;
-      this.gain.gain.setTargetAtTime(this.pauseMuted ? 0 : musicGain(percent), this.context.currentTime, .015);
+      this.gain.gain.setTargetAtTime(this.pauseMuted ? 0 : musicGain(percent), this.context.currentTime, timeConstant);
     } else {
       this.audio.volume = this.pauseMuted ? 0 : musicGain(percent);
     }

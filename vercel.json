@@ -62,6 +62,7 @@
   ],
   "git": {
     "deploymentEnabled": {
+      "codex/soundtrack-transitions-20261114": false,
       "codex/nft-piano-music-20261114": false,
       "codex/galaxy-map-music-20261114": false,
       "codex/master-elite-edition-20261113": false,
