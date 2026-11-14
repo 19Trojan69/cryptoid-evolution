@@ -9,7 +9,10 @@ import { BOSS_STICKER_COUNT } from "../../../backend/src/rewardRules";
 import { useLocale } from "../i18n";
 import { nftGalleryCopy } from "../locales/bossNftGallery";
 import { bossNftPreviewCopy } from "../locales/bossNftPreview";
+import { retroNftCopy } from "../locales/retroNft";
 import { bossNftEditions } from "./bossNftEditions";
+import { retroNftPreviewCount } from "./retroNftPreviews";
+import { arcadeStickerAlbumName, retroMiniGamesName } from "./galaxyArcadeRecords";
 import { playerSkins, shipSaveNetwork } from "./shipFleet";
 import { shipNftMainnetVisible } from "./shipNftVisibility";
 import { NftMusicButton } from "./NftMusic";
@@ -135,6 +138,14 @@ function NftOverviewPage() {
           })}
         </ul>
       </section>
+      {testnet && <section aria-labelledby="nft-overview-retro-heading">
+        <h2 id="nft-overview-retro-heading">{retroMiniGamesName}</h2>
+        <Link data-edition="retro" className="nft-overview-edition" to="/galaxy?album=retro"
+          state={{ fromNfts: true, owner: user?.uid }}>
+          <strong>{arcadeStickerAlbumName}</strong>
+          <span>{retroNftCopy(locale).previewCount.replace('{count}', number(retroNftPreviewCount))}</span>
+        </Link>
+      </section>}
     </div>
   </main>;
 }

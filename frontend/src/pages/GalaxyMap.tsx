@@ -39,9 +39,12 @@ export default function GalaxyMap() {
   const [previewLevels, setPreviewLevels] = useState<number[]>([]);
   const [arcadeListOpen, setArcadeListOpen] = useState(false);
   const [album, setAlbum] = useState<{ level?: number } | null>(null);
+  const [arcadeCatalogFailed, setArcadeCatalogFailed] = useState(false);
   const query = location.search ? new URLSearchParams(location.search) : undefined;
   const previewAccess = query?.get('admin-test') === '1';
   const returningFromArcade = query?.get('arcade-return') === '1';
+  const albumRequested = shipSaveNetwork === 'testnet' && !previewAccess && query?.get('album') === 'retro';
+  const fromNfts = location.state?.fromNfts === true;
   const scroll = useRef<HTMLDivElement>(null), ship = useRef<HTMLDivElement>(null);
   const previousLevel = useRef<number | null>(null);
   const music = usePageMusic('/audio/keep-a-light-on.mp3', shipSaveNetwork === 'testnet');
@@ -51,6 +54,14 @@ export default function GalaxyMap() {
     setSelection(null);
     setArcadeListOpen(false);
     setAlbum({ level });
+  };
+  const closeAlbum = () => {
+    setAlbum(null);
+    if (albumRequested) {
+      const search = new URLSearchParams(location.search);
+      search.delete('album');
+      void navigate({ search: search.toString() }, { replace: true, state: location.state });
+    }
   };
   const launchArcade = useCallback(async (target: GalaxyArcadeLaunch, signal: AbortSignal) => {
     let previewStage: ShipStage | undefined;
@@ -104,9 +115,12 @@ export default function GalaxyMap() {
     const request = new AbortController();
     void axiosClient.get<PublicArcade>('/galaxy-minigames', { baseURL: '/api', params: { lang: locale }, signal: request.signal })
       .then(({ data }) => {
-        if (!request.signal.aborted && Array.isArray(data?.levels) && Array.isArray(data?.stations) && data.labels) setOfficialArcade(data);
+        if (request.signal.aborted) return;
+        if (!Array.isArray(data?.levels) || !Array.isArray(data?.stations) || !data.labels) throw new Error('Arcade catalog is unavailable');
+        setOfficialArcade(data);
+        setArcadeCatalogFailed(false);
       })
-      .catch(() => undefined);
+      .catch(() => { if (!request.signal.aborted) setArcadeCatalogFailed(true); });
     return () => request.abort();
   }, [locale, previewAccess]);
   useEffect(() => {
@@ -191,7 +205,7 @@ export default function GalaxyMap() {
   const home = (state: object = {}) => navigate('/', { state });
   return <main className="galaxy-page" data-progress-status={status} data-network={shipSaveNetwork}>
     <header className="galaxy-toolbar">
-      <button type="button" className="galaxy-back" onClick={() => home({ openQuickMenu: fromQuick })}><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m14 6-6 6 6 6M8 12h12"/></svg><span>{t('Back')}</span></button>
+      <button type="button" className="galaxy-back" onClick={() => fromNfts ? navigate('/nfts') : home({ openQuickMenu: fromQuick })}><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m14 6-6 6 6 6M8 12h12"/></svg><span>{t(fromNfts ? 'NFT overview' : 'Back')}</span></button>
       <div><p>CRYPTOID EVOLUTION</p><h1>{t('Galaxy map')}</h1></div>
       {shipSaveNetwork === 'testnet' && <button type="button" className="galaxy-music"
         data-galaxy-music data-music-toggle aria-pressed={music.playing} onClick={music.toggle}>
@@ -243,8 +257,11 @@ export default function GalaxyMap() {
         record: readArcadeRecord(officialGame, snapshot.owner), owner: snapshot.owner,
         openAlbum: () => openAlbum(officialGame.level) } : undefined}
       onEnterTestCode={lockedPortal ? enterTestCode : undefined} onLaunch={launchArcade} onClose={close} onShop={view => home({ openShopView: view })} onCards={() => home({ openCollection: true })}/>}
-    {album && officialArcade && unlocked && <GalaxyStickerAlbum key={snapshot.owner ?? 'guest'} owner={snapshot.owner}
-      stations={unlocked} stationCount={officialArcade.levels.length} initialLevel={album.level}
-      labels={officialArcade.labels.stickers} onClose={() => setAlbum(null)}/>}
+    {albumRequested && !unlocked && status === 'ready' && <p className="galaxy-data-status" role="status">
+      {arcadeCatalogFailed || officialArcade ? t('Preview unavailable') : t('Loading…')}
+    </p>}
+    {(album || albumRequested) && officialArcade && unlocked && <GalaxyStickerAlbum key={snapshot.owner ?? 'guest'} owner={snapshot.owner}
+      stations={unlocked} stationCount={officialArcade.levels.length} initialLevel={album?.level}
+      labels={officialArcade.labels.stickers} onClose={closeAlbum}/>}
   </main>;
 }

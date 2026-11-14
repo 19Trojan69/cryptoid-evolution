@@ -62,6 +62,7 @@
   ],
   "git": {
     "deploymentEnabled": {
+      "codex/retro-nft-preview-20261114": false,
       "codex/soundtrack-transitions-20261114": false,
       "codex/nft-piano-music-20261114": false,
       "codex/galaxy-map-music-20261114": false,

@@ -59,6 +59,7 @@
 .nft-overview-edition[data-edition='holo'] { --edition-accent: #d3aafa; }
 .nft-overview-edition[data-edition='advanced'] { --edition-accent: #8ce6e4; }
 .nft-overview-edition[data-edition='elite'] { --edition-accent: #f2ca76; }
+.nft-overview-edition[data-edition='retro'] { --edition-accent: #b6a6fd; }
 .nft-overview-edition > strong { color: var(--edition-accent); font: 750 1.05rem/1.3 'Oxanium', sans-serif; }
 
 a.nft-overview-edition::after {
