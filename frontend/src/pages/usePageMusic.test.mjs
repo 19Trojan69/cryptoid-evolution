@@ -4,7 +4,7 @@ import { readFileSync } from 'node:fs';
 import vm from 'node:vm';
 import ts from 'typescript';
 
-const code = ts.transpileModule(readFileSync(new URL('./useGalaxyMusic.ts', import.meta.url), 'utf8'), {
+const code = ts.transpileModule(readFileSync(new URL('./usePageMusic.ts', import.meta.url), 'utf8'), {
   compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },
 }).outputText;
 
@@ -73,7 +73,7 @@ function fixture(t, { enabled = true, autoplay = false, volume = 50, active = tr
   });
   const render = () => {
     cursor = 0;
-    view = exports.useGalaxyMusic(active);
+    view = exports.usePageMusic('/audio/keep-a-light-on.mp3', active);
     effects.splice(0).forEach(effect => effect());
     return view;
   };

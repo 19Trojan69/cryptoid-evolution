@@ -13,6 +13,7 @@ import { shipSaveNetwork } from "./shipFleet";
 import { BOSS_NFT_PREVIEW_PAGE_SIZE as pageSize } from "../../../backend/src/nftPreviewLimits";
 import { BOSS_STICKER_COUNT } from "../../../backend/src/rewardRules";
 import NftCardCover from "./NftCardCover";
+import { NftMusicButton } from "./NftMusic";
 import "./bossNftGallery.css";
 import "./bossNftPreview.css";
 
@@ -249,6 +250,7 @@ function TestnetBossNftPreview() {
         <Link className="boss-nft-home" to="/nfts"><span aria-hidden="true">←</span> {t("NFT overview")}</Link>
         <Link className="boss-nft-home" to="/">{t("Home")}</Link>
         <Link className="boss-nft-home" to="/" state={{ openCollection: true }}>{t("Card collection")}</Link>
+        <NftMusicButton />
       </nav>
       <span className="nft-preview-network">{copy.preview}</span>
       <h1>{gallery.title}</h1>

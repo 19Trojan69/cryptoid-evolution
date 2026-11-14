@@ -2,7 +2,6 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { MusicPlayer } from './musicPlayback';
 import { DEFAULT_MUSIC_VOLUME, MUSIC_STORAGE_KEY, readMusicVolume } from './musicPreferences';
 
-const source = '/audio/keep-a-light-on.mp3';
 const fadeMs = 220;
 
 function readVolume() {
@@ -10,7 +9,7 @@ function readVolume() {
   catch { return DEFAULT_MUSIC_VOLUME * 0.4; }
 }
 
-export function useGalaxyMusic(active: boolean) {
+export function usePageMusic(source: string, active: boolean) {
   const [enabled, setEnabled] = useState(() => {
     try { return localStorage.getItem(MUSIC_STORAGE_KEY) !== 'off'; }
     catch { return true; }
@@ -34,7 +33,7 @@ export function useGalaxyMusic(active: boolean) {
         });
       }
     } catch { /* Audio availability must never prevent exploring the map. */ }
-  }, [active]);
+  }, [source, active]);
 
   const stop = useCallback(() => {
     player.current?.pause();
@@ -44,7 +43,7 @@ export function useGalaxyMusic(active: boolean) {
   useEffect(() => {
     if (!active) return;
     const onGesture = (event: Event) => {
-      if (event.target instanceof Element && event.target.closest('[data-galaxy-music]')) return;
+      if (event.target instanceof Element && event.target.closest('[data-music-toggle]')) return;
       start(true);
     };
     const onVisibility = () => { if (document.hidden) stop(); else start(); };

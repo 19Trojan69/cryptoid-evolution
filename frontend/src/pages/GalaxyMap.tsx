@@ -10,7 +10,7 @@ import GalaxySector from './GalaxySector';
 import GalaxyInfoDialog, { type GalaxyArcadeLaunch } from './GalaxyInfoDialog';
 import GalaxyArcadeAccess from './GalaxyArcadeAccess';
 import GalaxyStickerAlbum from './GalaxyStickerAlbum';
-import { useGalaxyMusic } from './useGalaxyMusic';
+import { usePageMusic } from './usePageMusic';
 import { axiosClient } from '../lib/axiosClient';
 import { loadGalaxyEquipment, type GalaxyEquipment, type GalaxyMiniGame } from './galaxyData';
 import { prepareArcadeFlightShip } from './galaxyArcadeEquipment';
@@ -44,7 +44,7 @@ export default function GalaxyMap() {
   const returningFromArcade = query?.get('arcade-return') === '1';
   const scroll = useRef<HTMLDivElement>(null), ship = useRef<HTMLDivElement>(null);
   const previousLevel = useRef<number | null>(null);
-  const music = useGalaxyMusic(shipSaveNetwork === 'testnet');
+  const music = usePageMusic('/audio/keep-a-light-on.mp3', shipSaveNetwork === 'testnet');
   const fadeMusic = music.fadeOut;
   const close = useCallback(() => setSelection(null), []);
   const openAlbum = (level?: number) => {
@@ -194,7 +194,7 @@ export default function GalaxyMap() {
       <button type="button" className="galaxy-back" onClick={() => home({ openQuickMenu: fromQuick })}><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m14 6-6 6 6 6M8 12h12"/></svg><span>{t('Back')}</span></button>
       <div><p>CRYPTOID EVOLUTION</p><h1>{t('Galaxy map')}</h1></div>
       {shipSaveNetwork === 'testnet' && <button type="button" className="galaxy-music"
-        data-galaxy-music aria-pressed={music.playing} onClick={music.toggle}>
+        data-galaxy-music data-music-toggle aria-pressed={music.playing} onClick={music.toggle}>
         <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 18V5l11-2v13M9 18a3 2 0 1 1-6 0 3 2 0 1 1 6 0Zm11-2a3 2 0 1 1-6 0 3 2 0 1 1 6 0Z"/></svg>
         <span>{t(music.playing ? 'Music on' : music.enabled ? 'Tap for music' : 'Music off')}</span>
       </button>}

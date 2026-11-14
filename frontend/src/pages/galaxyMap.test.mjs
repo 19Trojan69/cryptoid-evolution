@@ -294,7 +294,7 @@ test('actual ship flight only reflects a new adjacent confirmed stage and never 
     '../components/BlockchainIcon':{default:()=>null},'./ShipPortrait':{default:()=>null},
     './GalaxySector':{default:()=>null},'./GalaxyInfoDialog':{default:()=>null},'./GalaxyArcadeAccess':{default:()=>null},
     './GalaxyStickerAlbum':{default:()=>null},
-    './useGalaxyMusic':{useGalaxyMusic:()=>({fadeOut:async()=>{},resume:()=>{},enabled:true,playing:false,toggle:()=>{}})},
+    './usePageMusic':{usePageMusic:()=>({fadeOut:async()=>{},resume:()=>{},enabled:true,playing:false,toggle:()=>{}})},
     './galaxyData':{loadGalaxyEquipment},'./galaxyArcadeEquipment':{prepareArcadeFlightShip:()=>{}},
     './galaxyArcadeRecords':arcadeRecords,
     './galaxyArcadeStickers':{syncArcadeStickerAlbum:async()=>{}},

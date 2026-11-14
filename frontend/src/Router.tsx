@@ -20,19 +20,22 @@ export const router = createBrowserRouter([
     errorElement: <AdminRouteRecovery />,
   },
   {
-    path: "/nfts",
-    lazy: async () => ({ Component: (await import("./pages/NftOverview")).default }),
+    lazy: async () => ({ Component: (await import("./pages/NftMusic")).NftMusicLayout }),
     errorElement: <RouteRecovery />,
-  },
-  {
-    path: "/nft-bosses",
-    lazy: async () => ({ Component: (await import("./pages/BossNftPreview")).default }),
-    errorElement: <RouteRecovery />,
-  },
-  {
-    path: "/nft-ships",
-    lazy: async () => ({ Component: (await import("./pages/ShipNftPreview")).default }),
-    errorElement: <RouteRecovery />,
+    children: [
+      {
+        path: "/nfts",
+        lazy: async () => ({ Component: (await import("./pages/NftOverview")).default }),
+      },
+      {
+        path: "/nft-bosses",
+        lazy: async () => ({ Component: (await import("./pages/BossNftPreview")).default }),
+      },
+      {
+        path: "/nft-ships",
+        lazy: async () => ({ Component: (await import("./pages/ShipNftPreview")).default }),
+      },
+    ],
   },
   {
     path: "/",

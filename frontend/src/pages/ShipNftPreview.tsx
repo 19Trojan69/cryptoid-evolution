@@ -15,6 +15,7 @@ import type { ShipStage } from "./shipEvolution";
 import { playerSkins, shipSaveNetwork } from "./shipFleet";
 import { shipNftMainnetVisible } from "./shipNftVisibility";
 import NftCardCover from "./NftCardCover";
+import { NftMusicButton } from "./NftMusic";
 import "./bossNftGallery.css";
 import "./bossNftPreview.css";
 import "./shipNftPreview.css";
@@ -165,6 +166,7 @@ function ShipNftPreviewPage() {
         <Link className="boss-nft-home" to="/">{t("Home")}</Link>
         <Link className="boss-nft-home" to="/" state={{ openShopView: "shop" }}>{t("Ship shop")}</Link>
         {!testnet && user && canAdmin && <Link className="boss-nft-home" to="/admin/nft-bosses">{gallery.title}</Link>}
+        <NftMusicButton />
       </nav>
       <h1>{t("Ship NFTs")}</h1>
       <p className="nft-unlock-notice">{t("All NFT card slots are visible. Artwork appears once you unlock the card.")}</p>

@@ -27,6 +27,21 @@
   text-decoration: none;
 }
 
+.nft-music-toggle {
+  padding: 0 0.65rem;
+  border: 1px solid #355674;
+  border-radius: 0.65rem;
+  background: #112437;
+  font: inherit;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.nft-music-toggle:focus-visible {
+  outline: 2px solid #b9dcfc;
+  outline-offset: 3px;
+}
+
 .boss-nft-header h1 {
   margin: 0.55rem 0 0.32rem;
   font-size: clamp(2rem, 7vw, 3.4rem);

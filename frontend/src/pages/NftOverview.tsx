@@ -12,6 +12,7 @@ import { bossNftPreviewCopy } from "../locales/bossNftPreview";
 import { bossNftEditions } from "./bossNftEditions";
 import { playerSkins, shipSaveNetwork } from "./shipFleet";
 import { shipNftMainnetVisible } from "./shipNftVisibility";
+import { NftMusicButton } from "./NftMusic";
 import "./bossNftGallery.css";
 import "./bossNftPreview.css";
 import "./nftOverview.css";
@@ -77,6 +78,7 @@ function NftOverviewPage() {
         <Link className="boss-nft-home" to="/"><span aria-hidden="true">←</span> {t("Home")}</Link>
         <Link className="boss-nft-home" to="/" state={{ openShopView: "shop" }}>{t("Ship shop")}</Link>
         <Link className="boss-nft-home" to="/" state={{ openCollection: true }}>{t("Card collection")}</Link>
+        <NftMusicButton />
       </nav>
       <div className="nft-overview-title"><BlockchainIcon kind="collection"/><h1>{t("NFT overview")}</h1></div>
       <p className="nft-unlock-notice">{t("All NFT card slots are visible. Artwork appears once you unlock the card.")}</p>
