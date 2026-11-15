@@ -2,7 +2,7 @@
 const changes = [
   {
     "before": "",
-    "after": "import StoryBriefing from \"./story/StoryBriefing\";\nimport { storyBriefingsEnabled, type StoryScene } from \"./story/storyPreferences\";\n"
+    "after": "import StoryBriefing from \"./story/StoryBriefing\";\nimport { storyBriefingsEnabled } from \"./story/storyPreferences\";\nimport { bossStoryAtSector, storyScenes, type StoryScene } from \"./story/storyScenes\";\n"
   },
   {
     "before": "  useEffect(() => { wakeGameLoopRef.current?.(); }, [game.status]);\n",
@@ -10,7 +10,7 @@ const changes = [
   },
   {
     "before": "",
-    "after": "      if (!adminRunRef.current && saveChoiceRef.current === 'new' && data.startSector === 1 && !data.checkpoint) {\n        queueStory('campaign');\n      } else if (adminRunRef.current && data.startSector === 10 && stateRef.current.encounter === 'boss-intro') {\n        queueStory('varneth');\n      }\n"
+    "after": "      if (!adminRunRef.current && saveChoiceRef.current === 'new' && data.startSector === 1 && !data.checkpoint) {\n        queueStory('campaign');\n      } else if (adminRunRef.current) {\n        const encounter = stateRef.current.encounter;\n        const preview = encounter === 'boss-intro' ? bossStoryAtSector(data.startSector)\n          : encounter === 'normal' && data.startSector === 11 ? 'level-two' : undefined;\n        if (preview) queueStory(preview);\n      }\n"
   },
   {
     "before": "",
@@ -22,7 +22,7 @@ const changes = [
   },
   {
     "before": "",
-    "after": "    if (story) { track.pause(); return; }\n"
+    "after": "    if (story) {\n      if (!track.playing) { track.pause(); return; }\n      track.setVolume(0, .055);\n      let fading = true;\n      const pauseAfterFade = window.setTimeout(() => { fading = false; track.pause(); }, 260);\n      return () => { window.clearTimeout(pauseAfterFade); if (fading) track.pause(); };\n    }\n"
   },
   {
     "before": "  }, [game.status, game.encounter, musicEnabled, hasBonusMusic, bonusMusicEnding, hasCompletionMusic, completionMusicVisible]);\n",
@@ -50,11 +50,15 @@ const changes = [
   },
   {
     "before": "              soundRef.current?.play(\"boss\");\n",
-    "after": "              if (state.sector !== 10 || !queueStory('varneth')) soundRef.current?.play(\"boss\");\n"
+    "after": "              const briefing = bossStoryAtSector(state.sector);\n              if (!briefing || !queueStory(briefing)) soundRef.current?.play(\"boss\");\n"
   },
   {
     "before": "      active: () => stateRef.current.status === 'playing',\n      sleepWhenInactive: () => stateRef.current.status === 'game-over' || (stateRef.current.status !== 'destroying' && stateRef.current.effects.length === 0),\n",
     "after": "      active: () => stateRef.current.status === 'playing' && !storyRef.current,\n      sleepWhenInactive: () => Boolean(storyRef.current) || stateRef.current.status === 'game-over' || (stateRef.current.status !== 'destroying' && stateRef.current.effects.length === 0),\n"
+  },
+  {
+    "before": "            }\n            forceScene = true;\n            return;\n          }\n        }\n        performanceProbeRef.current?.mark('transitions');\n",
+    "after": "            }\n            if (clearEncounter === 'bonus' && next.sector === 11) queueStory('level-two');\n            forceScene = true;\n            return;\n          }\n        }\n        performanceProbeRef.current?.mark('transitions');\n"
   },
   {
     "before": "  }, [showRewardCards, diagnosticContext, beginBossSummary]);\n",
@@ -65,12 +69,36 @@ const changes = [
     "after": "    if (stateRef.current.status === 'playing') queueStory('campaign');\n"
   },
   {
+    "before": "\n  return (\n    <main className=\"game-shell\" data-effects-paused={game.status === \"paused\" || game.status === \"loading\"} onPointerDownCapture={() => { primeCardSound(); if(rewardCardsRef.current.length)return; retryAudio(); }}>\n",
+    "after": "\n  const briefingBoss = story ? storyScenes[story].boss : undefined;\n  const briefingVisible = Boolean(story) && !rewardCards.length;\n  return (\n    <main className=\"game-shell\" data-effects-paused={briefingVisible || game.status === \"paused\" || game.status === \"loading\"} onPointerDownCapture={() => { primeCardSound(); if(rewardCardsRef.current.length)return; retryAudio(); }}>\n"
+  },
+  {
     "before": "",
-    "after": "      {story && !rewardCards.length && <StoryBriefing key={story} scene={story}\n        unlocked={story === 'varneth' && (rewardProgressRef.current.bossWins[1] ?? 0) > 0}\n        withAudio={musicEnabled && !ownerAudioDisabled() && musicVolume > 0} volume={musicVolume}\n        onFinish={() => {\n          if (storyRef.current !== story) return;\n          storyRef.current = null;\n          clearControls();\n          lastFrameRef.current = 0;\n          if (story === 'varneth') soundRef.current?.play('boss');\n          setStory(null);\n        }} />}\n"
+    "after": "      {story && briefingVisible && <StoryBriefing key={story} scene={story}\n        unlocked={briefingBoss !== undefined && (rewardProgressRef.current.bossWins[briefingBoss.id] ?? 0) > 0}\n        withAudio={musicEnabled && !ownerAudioDisabled() && musicVolume > 0} volume={musicVolume}\n        onFinish={() => {\n          if (storyRef.current !== story) return;\n          storyRef.current = null;\n          clearControls();\n          lastFrameRef.current = 0;\n          fadeMusicAfterStoryRef.current = musicRef.current !== null;\n          if (briefingBoss) soundRef.current?.play('boss');\n          setStory(null);\n        }} />}\n"
   },
   {
     "before": "      <div ref={fieldRef} className=\"game-field\" onContextMenu={event => event.preventDefault()} onDoubleClick={event => event.preventDefault()} onDragStart={event => event.preventDefault()}>\n",
-    "after": "      <div ref={fieldRef} className=\"game-field\" inert={Boolean(story) && !rewardCards.length} onContextMenu={event => event.preventDefault()} onDoubleClick={event => event.preventDefault()} onDragStart={event => event.preventDefault()}>\n"
+    "after": "      <div ref={fieldRef} className=\"game-field\" inert={briefingVisible} onContextMenu={event => event.preventDefault()} onDoubleClick={event => event.preventDefault()} onDragStart={event => event.preventDefault()}>\n"
+  },
+  {
+    "before": "  const musicRef = useRef<MusicPlayer | null>(null);\n",
+    "after": "  const musicRef = useRef<MusicPlayer | null>(null);\n  const fadeMusicAfterStoryRef = useRef(false);\n"
+  },
+  {
+    "before": "    if (playCompletion || game.status === \"playing\" || game.status === \"game-over\" || game.status === \"victory\") void track.play();\n    else if (game.status !== \"loading\") track.pause();\n",
+    "after": "    if (playCompletion || game.status === \"playing\" || game.status === \"game-over\" || game.status === \"victory\") {\n      if (fadeMusicAfterStoryRef.current) {\n        fadeMusicAfterStoryRef.current = false;\n        track.setVolume(0);\n        void track.play();\n        track.setVolume(readMusicVolume(), .14);\n      } else void track.play();\n    } else if (game.status !== \"loading\") track.pause();\n"
+  },
+  {
+    "before": "  useEffect(() => {\n    const fadeBonus = bonusMusicEnding && !hasCompletionMusic;\n",
+    "after": "  useEffect(() => {\n    if (storyRef.current) return;\n    const fadeBonus = bonusMusicEnding && !hasCompletionMusic;\n"
+  },
+  {
+    "before": " paused={game.status !== \"playing\"} showNebula={game.encounter === \"boss-fight\"} />\n",
+    "after": " paused={briefingVisible || game.status !== \"playing\"} showNebula={game.encounter === \"boss-fight\"} />\n"
+  },
+  {
+    "before": "        <SectorBackdrop sector={game.sector} player={game.player} paused={game.status !== \"playing\"} />\n",
+    "after": "        <SectorBackdrop sector={game.sector} player={game.player} paused={briefingVisible || game.status !== \"playing\"} />\n"
   }
 ];
 

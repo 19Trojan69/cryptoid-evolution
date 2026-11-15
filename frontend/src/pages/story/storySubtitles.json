@@ -1,0 +1,668 @@
+{
+  "de": {
+    "campaign": [
+      "Die erste Kryptowährung ermöglichte den direkten Handel über Grenzen hinweg.",
+      "Jahrhunderte später bezogen Kolonien im tiefen All Lebensmittel, Treibstoff und Medikamente über dasselbe Netzwerk.",
+      "Dann kam der Spam. Gefälschte Nachrichten räumten Konten leer.",
+      "Mit dem gestohlenen Geld rüsteten die Betrüger eine Flotte aus.",
+      "Die Cryptoids.",
+      "Von Anfang an deckten Freiwillige den Betrug auf.",
+      "Ihre Nachfolger brachen ins All auf, um Versorgungsschiffe zu eskortieren und auf Notrufe zu reagieren.",
+      "Vor wenigen Minuten lockte ein gefälschter Notruf unsere Patrouillen von der Erde weg.",
+      "Jetzt verstummen die Genesis-Kolonien.",
+      "Wenn dieser Krieg eines Tages vorbei ist, werden unsere Schiffe wieder aufbrechen …",
+      "… um Welten zu erkunden, die wir bisher nur durch Teleskope gesehen haben.",
+      "Pilot, Startfreigabe erteilt."
+    ],
+    "varneth": [
+      "Kontakt bestätigt. Varneth.",
+      "Das Schiff transportierte einst Versorgungsdaten zwischen den Genesis-Kolonien.",
+      "Es verschwand nahe einem verlassenen Relais.",
+      "Jetzt ist es zurück. Seine Übertragungen übertönen jeden Hilferuf.",
+      "Pilot, unterbrich das Signal."
+    ],
+    "level-two": [
+      "Varneth ist besiegt. Die Genesis-Relais übertragen wieder Notrufe.",
+      "Ein Versorgungskonvoi hat gerade auf Befehl einer Grenzstation den Kurs geändert.",
+      "Die Station schwört, dass sie den Befehl nie gesendet hat.",
+      "Der Konvoi ist noch da draußen. Pilot, folge seiner letzten Übertragung.",
+      "Holen wir die Besatzungen nach Hause."
+    ],
+    "korvessa": [
+      "Pilot, wir haben das Signal zu Korvessa zurückverfolgt.",
+      "Früher überbrachte sie diplomatische Depeschen. Jede Grenzstation kannte ihr Rufzeichen.",
+      "Jetzt nutzt sie auf jedem Kanal ein anderes.",
+      "Der Konvoi folgte ihr direkt in einen Hinterhalt. Ihr Schiff liegt genau vor uns.",
+      "Feuer frei, Pilot. Mach den Heimweg frei."
+    ]
+  },
+  "es": {
+    "campaign": [
+      "La primera criptomoneda permitió comerciar directamente entre países.",
+      "Siglos después, las colonias del espacio profundo dependían de esa red para recibir alimentos, combustible y medicinas.",
+      "Entonces llegó el spam. Los mensajes falsificados vaciaron cuentas.",
+      "Con el dinero robado, los estafadores armaron una flota.",
+      "Los Cryptoids.",
+      "Desde el principio hubo voluntarios que sacaron el fraude a la luz.",
+      "Sus sucesores partieron hacia las estrellas para escoltar naves de suministros y responder a llamadas de auxilio.",
+      "Hace unos minutos, una falsa llamada de auxilio alejó a nuestras patrullas de la Tierra.",
+      "Ahora las colonias de Génesis están quedándose en silencio.",
+      "Algún día, cuando termine esta guerra, nuestras naves volverán a zarpar…",
+      "… para explorar mundos que solo hemos visto a través de telescopios.",
+      "Piloto, tienes autorización para despegar."
+    ],
+    "varneth": [
+      "Contacto confirmado. Varneth.",
+      "Antes transportaba registros de suministros entre las colonias de Génesis.",
+      "Desapareció cerca de un repetidor abandonado.",
+      "Ahora ha vuelto y sus transmisiones ahogan todas las llamadas de auxilio.",
+      "Piloto, corta esa señal."
+    ],
+    "level-two": [
+      "Varneth ha caído. Los repetidores de Génesis vuelven a transmitir llamadas de auxilio.",
+      "Un convoy de suministros acaba de cambiar de rumbo por orden de una estación fronteriza.",
+      "La estación jura que nunca emitió esa orden.",
+      "El convoy sigue ahí fuera. Piloto, sigue su última transmisión.",
+      "Traigamos a esas tripulaciones a casa."
+    ],
+    "korvessa": [
+      "Piloto, hemos rastreado la señal hasta Korvessa.",
+      "Antes llevaba despachos diplomáticos. Todas las estaciones fronterizas conocían su indicativo.",
+      "Ahora usa uno distinto en cada canal.",
+      "El convoy la siguió directo a una emboscada. Su nave está justo enfrente.",
+      "Fuego a discreción, piloto. Abre una ruta de regreso."
+    ]
+  },
+  "fr": {
+    "campaign": [
+      "La première cryptomonnaie a permis de commercer directement au-delà des frontières.",
+      "Des siècles plus tard, les colonies de l’espace lointain dépendaient de ce réseau pour se ravitailler en vivres, carburant et médicaments.",
+      "Puis le spam est arrivé. Des messages falsifiés ont vidé des comptes.",
+      "Avec l’argent volé, les escrocs ont armé une flotte.",
+      "Les Cryptoids.",
+      "Dès le début, des volontaires ont démasqué la fraude.",
+      "Leurs successeurs ont gagné les étoiles pour escorter les vaisseaux de ravitaillement et répondre aux appels de détresse.",
+      "Il y a quelques minutes, un faux appel de détresse a éloigné nos patrouilles de la Terre.",
+      "Maintenant, les colonies de Genesis ne répondent plus.",
+      "Un jour, quand cette guerre sera finie, nos vaisseaux repartiront…",
+      "… explorer les mondes que nous n’avons vus qu’au télescope.",
+      "Pilote, décollage autorisé."
+    ],
+    "varneth": [
+      "Contact confirmé. Varneth.",
+      "Ce vaisseau transportait autrefois les registres de ravitaillement entre les colonies de Genesis.",
+      "Il a disparu près d’un relais abandonné.",
+      "Il est revenu. Ses transmissions couvrent tous les appels au secours.",
+      "Pilote, coupe ce signal."
+    ],
+    "level-two": [
+      "Varneth est tombé. Les relais de Genesis transmettent de nouveau les appels de détresse.",
+      "Un convoi de ravitaillement vient de changer de cap sur ordre d’une station frontalière.",
+      "La station jure n’avoir jamais donné cet ordre.",
+      "Le convoi est toujours là dehors. Pilote, suis sa dernière transmission.",
+      "Ramenons ces équipages chez eux."
+    ],
+    "korvessa": [
+      "Pilote, nous avons remonté le signal jusqu’à Korvessa.",
+      "Elle transportait autrefois des dépêches diplomatiques. Toutes les stations frontalières connaissaient son indicatif.",
+      "Elle en utilise désormais un différent sur chaque canal.",
+      "Le convoi l’a suivie droit dans une embuscade. Son vaisseau est droit devant.",
+      "Feu à volonté, pilote. Ouvre une voie de retour."
+    ]
+  },
+  "pt": {
+    "campaign": [
+      "A primeira criptomoeda permitiu que as pessoas negociassem diretamente entre países.",
+      "Séculos depois, as colónias no espaço profundo dependiam dessa rede para receber alimentos, combustível e medicamentos.",
+      "Depois veio o spam. Mensagens forjadas esvaziaram contas.",
+      "Com o dinheiro roubado, os burlões armaram uma frota.",
+      "Os Cryptoids.",
+      "Desde o início, voluntários denunciaram a fraude.",
+      "Os seus sucessores partiram para as estrelas para escoltar naves de abastecimento e responder a pedidos de socorro.",
+      "Há poucos minutos, um falso pedido de socorro afastou as nossas patrulhas da Terra.",
+      "Agora, as colónias de Génesis estão a ficar em silêncio.",
+      "Um dia, quando esta guerra terminar, as nossas naves voltarão a partir…",
+      "… para explorar mundos que só vimos através de telescópios.",
+      "Piloto, descolagem autorizada."
+    ],
+    "varneth": [
+      "Contacto confirmado. Varneth.",
+      "Esta nave transportava registos de abastecimento entre as colónias de Génesis.",
+      "Desapareceu perto de um retransmissor abandonado.",
+      "Agora regressou, e as suas transmissões abafam todos os pedidos de socorro.",
+      "Piloto, corta esse sinal."
+    ],
+    "level-two": [
+      "Varneth caiu. Os retransmissores de Génesis voltaram a transmitir pedidos de socorro.",
+      "Um comboio de abastecimento acabou de mudar de rumo por ordem de uma estação fronteiriça.",
+      "A estação jura que nunca enviou essa ordem.",
+      "O comboio ainda está lá fora. Piloto, segue a sua última transmissão.",
+      "Vamos trazer essas tripulações para casa."
+    ],
+    "korvessa": [
+      "Piloto, rastreámos o sinal até Korvessa.",
+      "Ela já transportou despachos diplomáticos. Todas as estações fronteiriças conheciam o seu indicativo.",
+      "Agora usa um indicativo diferente em cada canal.",
+      "O comboio seguiu-a diretamente para uma emboscada. A nave dela está mesmo à frente.",
+      "Fogo à vontade, piloto. Abre um caminho de regresso."
+    ]
+  },
+  "it": {
+    "campaign": [
+      "La prima criptovaluta permise di commerciare direttamente oltre i confini.",
+      "Secoli dopo, le colonie nello spazio profondo dipendevano da quella rete per cibo, carburante e medicinali.",
+      "Poi arrivò lo spam. Messaggi falsificati svuotarono i conti.",
+      "Con il denaro rubato, i truffatori armarono una flotta.",
+      "I Cryptoids.",
+      "Fin dall’inizio, alcuni volontari smascherarono la truffa.",
+      "I loro successori partirono per le stelle per scortare le navi di rifornimento e rispondere alle richieste di soccorso.",
+      "Pochi minuti fa, un falso segnale di soccorso ha allontanato le nostre pattuglie dalla Terra.",
+      "Ora le colonie di Genesis stanno ammutolendo.",
+      "Un giorno, quando questa guerra sarà finita, le nostre navi salperanno di nuovo…",
+      "… per esplorare mondi che abbiamo visto solo attraverso i telescopi.",
+      "Pilota, decollo autorizzato."
+    ],
+    "varneth": [
+      "Contatto confermato. Varneth.",
+      "Un tempo trasportava i registri dei rifornimenti tra le colonie di Genesis.",
+      "È scomparsa nei pressi di un ripetitore abbandonato.",
+      "Ora è tornata. Le sue trasmissioni coprono ogni richiesta di soccorso.",
+      "Pilota, interrompi quel segnale."
+    ],
+    "level-two": [
+      "Varneth è caduta. I ripetitori di Genesis trasmettono di nuovo le richieste di soccorso.",
+      "Un convoglio di rifornimenti ha appena cambiato rotta per ordine di una stazione di confine.",
+      "La stazione giura di non aver mai inviato quell’ordine.",
+      "Il convoglio è ancora là fuori. Pilota, segui la sua ultima trasmissione.",
+      "Riportiamo a casa quegli equipaggi."
+    ],
+    "korvessa": [
+      "Pilota, abbiamo rintracciato il segnale fino a Korvessa.",
+      "Un tempo portava dispacci diplomatici. Ogni stazione di confine conosceva il suo nominativo.",
+      "Ora ne usa uno diverso su ogni canale.",
+      "Il convoglio l’ha seguita dritto in un’imboscata. La sua nave è proprio davanti a noi.",
+      "Fuoco a volontà, pilota. Apri una via per tornare a casa."
+    ]
+  },
+  "pl": {
+    "campaign": [
+      "Pierwsza kryptowaluta umożliwiła bezpośredni handel ponad granicami.",
+      "Wieki później kolonie w głębi kosmosu polegały na tej sieci, by otrzymywać żywność, paliwo i leki.",
+      "Potem pojawił się spam. Sfałszowane wiadomości opróżniały konta.",
+      "Za skradzione pieniądze oszuści uzbroili flotę.",
+      "Cryptoids.",
+      "Od samego początku ochotnicy ujawniali oszustwa.",
+      "Ich następcy wyruszyli ku gwiazdom, by eskortować statki zaopatrzeniowe i odpowiadać na wezwania o pomoc.",
+      "Kilka minut temu fałszywe wezwanie o pomoc odciągnęło nasze patrole od Ziemi.",
+      "Teraz kolonie Genesis milkną.",
+      "Pewnego dnia, gdy ta wojna się skończy, nasze statki znów wyruszą…",
+      "… by badać światy, które dotąd oglądaliśmy tylko przez teleskopy.",
+      "Pilocie, masz zgodę na start."
+    ],
+    "varneth": [
+      "Kontakt potwierdzony. Varneth.",
+      "Kiedyś przewoził rejestry zaopatrzenia między koloniami Genesis.",
+      "Zniknął w pobliżu porzuconego przekaźnika.",
+      "Teraz wrócił. Jego transmisje zagłuszają wszystkie wezwania o pomoc.",
+      "Pilocie, przerwij ten sygnał."
+    ],
+    "level-two": [
+      "Varneth pokonany. Przekaźniki Genesis znów przekazują wezwania o pomoc.",
+      "Konwój zaopatrzeniowy właśnie zmienił kurs na rozkaz stacji granicznej.",
+      "Stacja przysięga, że nigdy nie wysłała tego rozkazu.",
+      "Konwój wciąż tam jest. Pilocie, podążaj za jego ostatnią transmisją.",
+      "Sprowadźmy te załogi do domu."
+    ],
+    "korvessa": [
+      "Pilocie, namierzyliśmy źródło sygnału. To Korvessa.",
+      "Kiedyś przewoziła depesze dyplomatyczne. Każda stacja graniczna znała jej znak wywoławczy.",
+      "Teraz na każdym kanale używa innego.",
+      "Konwój poleciał za nią prosto w zasadzkę. Jej statek jest tuż przed nami.",
+      "Ognia, pilocie. Otwórz drogę powrotną."
+    ]
+  },
+  "cs": {
+    "campaign": [
+      "První kryptoměna umožnila lidem obchodovat přímo přes hranice.",
+      "O staletí později závisely kolonie v hlubokém vesmíru na téže síti, aby získaly potraviny, palivo a léky.",
+      "Pak přišel spam. Podvržené zprávy vyprázdnily účty.",
+      "Za ukradené peníze podvodníci vyzbrojili flotilu.",
+      "Cryptoids.",
+      "Dobrovolníci odhalovali podvody od samého začátku.",
+      "Jejich nástupci se vydali ke hvězdám, aby doprovázeli zásobovací lodě a odpovídali na tísňová volání.",
+      "Před pár minutami odlákalo falešné tísňové volání naše hlídky od Země.",
+      "Kolonie Genesis teď utichají.",
+      "Jednoho dne, až tahle válka skončí, naše lodě zase vyrazí…",
+      "… zkoumat světy, které jsme dosud viděli jen v dalekohledech.",
+      "Pilote, máte povolení ke startu."
+    ],
+    "varneth": [
+      "Kontakt potvrzen. Varneth.",
+      "Kdysi přepravoval záznamy o zásobování mezi koloniemi Genesis.",
+      "Zmizel poblíž opuštěného retranslátoru.",
+      "Teď se vrátil. Jeho vysílání přehlušuje všechna volání o pomoc.",
+      "Pilote, přerušte ten signál."
+    ],
+    "level-two": [
+      "Varneth je poražený. Retranslátory Genesis znovu přenášejí tísňová volání.",
+      "Zásobovací konvoj právě změnil kurz na rozkaz pohraniční stanice.",
+      "Stanice přísahá, že ten rozkaz nikdy nevyslala.",
+      "Konvoj je pořád tam venku. Pilote, sledujte jeho poslední vysílání.",
+      "Dostaňme ty posádky domů."
+    ],
+    "korvessa": [
+      "Pilote, signál nás dovedl ke Korvesse.",
+      "Kdysi vozila diplomatické depeše. Každá pohraniční stanice znala její volací znak.",
+      "Teď na každém kanálu používá jiný.",
+      "Konvoj ji následoval přímo do léčky. Její loď je přímo před námi.",
+      "Palba povolena, pilote. Uvolněte cestu domů."
+    ]
+  },
+  "sk": {
+    "campaign": [
+      "Prvá kryptomena umožnila ľuďom obchodovať priamo cez hranice.",
+      "O stáročia neskôr boli kolónie v hlbokom vesmíre odkázané na túto sieť pri zásobovaní potravinami, palivom a liekmi.",
+      "Potom prišiel spam. Falošné správy vyprázdnili účty.",
+      "Za ukradnuté peniaze podvodníci vyzbrojili flotilu.",
+      "Cryptoids.",
+      "Dobrovoľníci od začiatku odhaľovali podvody.",
+      "Ich nástupcovia sa vydali k hviezdam, aby sprevádzali zásobovacie lode a odpovedali na núdzové volania.",
+      "Pred pár minútami odlákalo falošné núdzové volanie naše hliadky od Zeme.",
+      "Kolónie Genesis teraz utíchajú.",
+      "Raz, keď sa táto vojna skončí, naše lode opäť vyrazia…",
+      "… skúmať svety, ktoré sme doteraz videli iba cez ďalekohľady.",
+      "Pilot, máte povolenie na štart."
+    ],
+    "varneth": [
+      "Kontakt potvrdený. Varneth.",
+      "Kedysi prevážal záznamy o zásobovaní medzi kolóniami Genesis.",
+      "Zmizol pri opustenom retranslátore.",
+      "Teraz sa vrátil. Jeho vysielanie prehlušuje každé volanie o pomoc.",
+      "Pilot, prerušte ten signál."
+    ],
+    "level-two": [
+      "Varneth je porazený. Retranslátory Genesis opäť prenášajú núdzové volania.",
+      "Zásobovací konvoj práve zmenil kurz na rozkaz pohraničnej stanice.",
+      "Stanica prisahá, že ten rozkaz nikdy nevyslala.",
+      "Konvoj je stále tam vonku. Pilot, sledujte jeho posledné vysielanie.",
+      "Dostaňme tie posádky domov."
+    ],
+    "korvessa": [
+      "Pilot, signál nás priviedol ku Korvesse.",
+      "Kedysi prevážala diplomatické depeše. Každá pohraničná stanica poznala jej volací znak.",
+      "Teraz na každom kanáli používa iný.",
+      "Konvoj ju nasledoval priamo do pasce. Jej loď je rovno pred nami.",
+      "Paľba povolená, pilot. Uvoľnite cestu domov."
+    ]
+  },
+  "ru": {
+    "campaign": [
+      "Первая криптовалюта позволила людям торговать напрямую через границы.",
+      "Спустя века колонии в дальнем космосе зависели от этой сети, получая по ней продовольствие, топливо и лекарства.",
+      "Потом появился спам. Поддельные сообщения опустошали счета.",
+      "На украденные деньги мошенники вооружили флот.",
+      "Криптоиды.",
+      "С самого начала добровольцы разоблачали обман.",
+      "Их преемники ушли к звёздам, чтобы сопровождать суда снабжения и отвечать на сигналы бедствия.",
+      "Несколько минут назад ложный сигнал бедствия увёл наши патрули от Земли.",
+      "Теперь колонии Генезиса замолкают.",
+      "Однажды, когда эта война закончится, наши корабли снова отправятся в путь…",
+      "… чтобы исследовать миры, которые мы видели только в телескопы.",
+      "Пилот, взлёт разрешён."
+    ],
+    "varneth": [
+      "Контакт подтверждён. Варнет.",
+      "Когда-то он перевозил данные о снабжении между колониями Генезиса.",
+      "Он исчез возле заброшенного ретранслятора.",
+      "Теперь он вернулся. Его передачи заглушают все сигналы бедствия.",
+      "Пилот, прерви этот сигнал."
+    ],
+    "level-two": [
+      "Варнет повержен. Ретрансляторы Генезиса снова передают сигналы бедствия.",
+      "Конвой снабжения только что сменил курс по приказу пограничной станции.",
+      "На станции клянутся, что этого приказа не отправляли.",
+      "Конвой всё ещё там. Пилот, следуй за его последним сигналом.",
+      "Вернём эти экипажи домой."
+    ],
+    "korvessa": [
+      "Пилот, мы отследили сигнал до Корвессы.",
+      "Когда-то она перевозила дипломатические депеши. Её позывной знала каждая пограничная станция.",
+      "Теперь на каждом канале у неё новый позывной.",
+      "Конвой последовал за ней прямо в засаду. Её корабль прямо по курсу.",
+      "Огонь разрешён, пилот. Проложи путь домой."
+    ]
+  },
+  "uk": {
+    "campaign": [
+      "Перша криптовалюта дала людям змогу напряму торгувати через кордони.",
+      "Через століття колонії в далекому космосі покладалися на цю мережу, щоб отримувати їжу, пальне й ліки.",
+      "Потім з’явився спам. Підроблені повідомлення спустошували рахунки.",
+      "За вкрадені гроші шахраї озброїли флот.",
+      "Криптоїди.",
+      "Від самого початку добровольці викривали шахрайство.",
+      "Їхні наступники вирушили до зірок, щоб супроводжувати кораблі постачання та відповідати на сигнали лиха.",
+      "Кілька хвилин тому фальшивий сигнал лиха відвів наші патрулі від Землі.",
+      "Тепер колонії Генезису замовкають.",
+      "Колись, коли ця війна скінчиться, наші кораблі знову вирушать…",
+      "… досліджувати світи, які ми доти бачили тільки в телескопи.",
+      "Пілоте, зліт дозволено."
+    ],
+    "varneth": [
+      "Контакт підтверджено. Варнет.",
+      "Колись він перевозив дані про постачання між колоніями Генезису.",
+      "Він зник поблизу покинутого ретранслятора.",
+      "Тепер він повернувся. Його передачі глушать усі сигнали лиха.",
+      "Пілоте, перерви цей сигнал."
+    ],
+    "level-two": [
+      "Варнета знищено. Ретранслятори Генезису знову передають сигнали лиха.",
+      "Конвой постачання щойно змінив курс за наказом прикордонної станції.",
+      "На станції присягаються, що ніколи не надсилали цього наказу.",
+      "Конвой ще там. Пілоте, іди за його останнім сигналом.",
+      "Повернімо ці екіпажі додому."
+    ],
+    "korvessa": [
+      "Пілоте, ми простежили сигнал до Корвесси.",
+      "Колись вона перевозила дипломатичні депеші. Кожна прикордонна станція знала її позивний.",
+      "Тепер на кожному каналі вона використовує інший.",
+      "Конвой пішов за нею просто в засідку. Її корабель прямо попереду.",
+      "Вогонь дозволено, пілоте. Відкрий шлях додому."
+    ]
+  },
+  "hr": {
+    "campaign": [
+      "Prva kriptovaluta omogućila je izravnu trgovinu preko granica.",
+      "Stoljećima poslije kolonije u dalekom svemiru oslanjale su se na istu mrežu za hranu, gorivo i lijekove.",
+      "Tada je stigao spam. Krivotvorene poruke ispraznile su račune.",
+      "Ukradenim novcem prevaranti su naoružali flotu.",
+      "Cryptoidi.",
+      "Od samog početka dobrovoljci su razotkrivali prijevaru.",
+      "Njihovi nasljednici krenuli su prema zvijezdama kako bi pratili opskrbne brodove i odgovarali na pozive u pomoć.",
+      "Prije nekoliko minuta lažni poziv u pomoć odmamio je naše patrole od Zemlje.",
+      "Sada kolonije Genesisa utihnjuju.",
+      "Jednog dana, kad ovaj rat završi, naši će brodovi ponovno krenuti…",
+      "… istražiti svjetove koje smo dosad vidjeli samo kroz teleskope.",
+      "Pilote, polijetanje je odobreno."
+    ],
+    "varneth": [
+      "Kontakt potvrđen. Varneth.",
+      "Nekoć je prevozio zapise o opskrbi između kolonija Genesisa.",
+      "Nestao je kraj napuštene relejne postaje.",
+      "Sada se vratio. Njegov signal zaglušuje svaki poziv u pomoć.",
+      "Pilote, prekini taj signal."
+    ],
+    "level-two": [
+      "Varneth je poražen. Relejne postaje Genesisa ponovno prenose pozive u pomoć.",
+      "Opskrbni konvoj upravo je promijenio kurs po zapovijedi granične postaje.",
+      "Na postaji se kunu da tu zapovijed nikad nisu poslali.",
+      "Konvoj je još tamo vani. Pilote, slijedi njegovo posljednje javljanje.",
+      "Vratimo te posade kući."
+    ],
+    "korvessa": [
+      "Pilote, ušli smo u trag signalu. Dolazi s broda Korvessa.",
+      "Nekoć je prevozila diplomatske depeše. Svaka granična postaja znala je njezin pozivni znak.",
+      "Sad na svakom kanalu upotrebljava drugi.",
+      "Konvoj ju je slijedio ravno u zasjedu. Njezin je brod točno ispred nas.",
+      "Vatra po volji, pilote. Otvori put kući."
+    ]
+  },
+  "sr": {
+    "campaign": [
+      "Прва криптовалута омогућила је директну трговину преко граница.",
+      "Вековима касније, колоније у дубоком свемиру ослањале су се на исту мрежу за храну, гориво и лекове.",
+      "Онда је стигао спам. Фалсификоване поруке испразниле су рачуне.",
+      "Украденим новцем преваранти су наоружали флоту.",
+      "Криптоиди.",
+      "Од самог почетка добровољци су разоткривали преваре.",
+      "Њихови наследници кренули су ка звездама да прате бродове за снабдевање и одговарају на позиве у помоћ.",
+      "Пре неколико минута лажни позив у помоћ одвукао је наше патроле од Земље.",
+      "Сада колоније Генезиса утихњују.",
+      "Једног дана, кад се овај рат заврши, наши бродови ће поново кренути…",
+      "… да истраже светове које смо до сада видели само кроз телескопе.",
+      "Пилоте, полетање је одобрено."
+    ],
+    "varneth": [
+      "Контакт потврђен. Варнет.",
+      "Некада је преносио евиденцију о снабдевању између колонија Генезиса.",
+      "Нестао је близу напуштене релејне станице.",
+      "Сада се вратио. Његове емисије заглушују сваки позив у помоћ.",
+      "Пилоте, прекини тај сигнал."
+    ],
+    "level-two": [
+      "Варнет је поражен. Релејне станице Генезиса поново преносе позиве у помоћ.",
+      "Конвој за снабдевање управо је променио курс по наређењу граничне станице.",
+      "На станици се куну да то наређење никад нису послали.",
+      "Конвој је још тамо. Пилоте, прати његово последње јављање.",
+      "Вратимо те посаде кући."
+    ],
+    "korvessa": [
+      "Пилоте, сигнал нас је довео до Корвесе.",
+      "Некада је превозила дипломатске депеше. Свака гранична станица знала је њен позивни знак.",
+      "Сада на сваком каналу користи други.",
+      "Конвој ју је пратио право у заседу. Њен брод је право испред нас.",
+      "Отвори ватру, пилоте. Пробиј пут кући."
+    ]
+  },
+  "tr": {
+    "campaign": [
+      "İlk kripto para, insanların sınırlar ötesinde doğrudan ticaret yapmasını sağladı.",
+      "Yüzyıllar sonra uzayın derinliklerindeki koloniler gıda, yakıt ve ilaç için aynı ağa bağımlıydı.",
+      "Ardından spam geldi. Sahte mesajlar hesapları boşalttı.",
+      "Dolandırıcılar çaldıkları parayla bir filoyu silahlandırdı.",
+      "Cryptoids.",
+      "Gönüllüler en başından beri bu sahtekârlığı ortaya çıkardı.",
+      "Onların ardından gelenler ikmal gemilerine eşlik etmek ve yardım çağrılarını yanıtlamak için yıldızlara açıldı.",
+      "Birkaç dakika önce sahte bir yardım çağrısı devriyelerimizi Dünya’dan uzaklaştırdı.",
+      "Şimdi Genesis kolonileri birer birer sessizliğe gömülüyor.",
+      "Bir gün bu savaş bittiğinde gemilerimiz yeniden yola çıkacak…",
+      "… şimdiye dek yalnızca teleskoplarla gördüğümüz dünyaları keşfetmek için.",
+      "Pilot, kalkış izni verildi."
+    ],
+    "varneth": [
+      "Temas doğrulandı. Varneth.",
+      "Bir zamanlar Genesis kolonileri arasında ikmal kayıtları taşırdı.",
+      "Terk edilmiş bir aktarma istasyonunun yakınında kayboldu.",
+      "Şimdi geri döndü. Yayınları bütün yardım çağrılarını bastırıyor.",
+      "Pilot, o sinyali kes."
+    ],
+    "level-two": [
+      "Varneth düştü. Genesis aktarma istasyonları yeniden yardım çağrılarını iletiyor.",
+      "Bir ikmal konvoyu az önce bir sınır istasyonunun emriyle rotasını değiştirdi.",
+      "İstasyon o emri hiç göndermediğine yemin ediyor.",
+      "Konvoy hâlâ dışarıda. Pilot, son yayınını takip et.",
+      "Mürettebatı evlerine götürelim."
+    ],
+    "korvessa": [
+      "Pilot, sinyali takip ettik. Kaynağı Korvessa.",
+      "Bir zamanlar diplomatik mesajlar taşırdı. Her sınır istasyonu onun çağrı kodunu bilirdi.",
+      "Şimdi her kanalda farklı bir kod kullanıyor.",
+      "Konvoy onu izleyip doğrudan pusuya düştü. Gemisi tam karşımızda.",
+      "Ateş serbest, pilot. Eve dönüş yolunu aç."
+    ]
+  },
+  "hu": {
+    "campaign": [
+      "Az első kriptovaluta lehetővé tette a közvetlen, határokon átnyúló kereskedelmet.",
+      "Évszázadokkal később a mélyűri kolóniák ezen a hálózaton keresztül jutottak élelemhez, üzemanyaghoz és gyógyszerhez.",
+      "Aztán megjelent a spam. Hamis üzenetekkel ürítették ki a számlákat.",
+      "A csalók a lopott pénzből felfegyvereztek egy flottát.",
+      "A Cryptoids.",
+      "Az önkéntesek a kezdetektől leleplezték a csalásokat.",
+      "Utódaik a csillagok felé indultak, hogy utánpótlásszállító hajókat kísérjenek és segélyhívásokra válaszoljanak.",
+      "Néhány perce egy hamis segélyhívás elcsalta járőreinket a Föld közeléből.",
+      "Most a Genesis-kolóniák elnémulnak.",
+      "Egy napon, amikor véget ér ez a háború, hajóink újra útra kelnek…",
+      "… hogy felfedezzék az eddig csak távcsövön át látott világokat.",
+      "Pilóta, felszállás engedélyezve."
+    ],
+    "varneth": [
+      "Azonosítás megerősítve. Varneth.",
+      "Egykor ellátási nyilvántartásokat szállított a Genesis-kolóniák között.",
+      "Eltűnt egy elhagyott átjátszó közelében.",
+      "Most visszatért. Az adásai minden segélyhívást elnyomnak.",
+      "Pilóta, szakítsd meg a jelét."
+    ],
+    "level-two": [
+      "Varneth elesett. A Genesis átjátszói újra továbbítják a segélyhívásokat.",
+      "Egy utánpótlás-konvoj épp most módosította útvonalát egy határállomás parancsára.",
+      "Az állomás állítja, hogy sosem küldött ilyen parancsot.",
+      "A konvoj még odakint van. Pilóta, kövesd a legutóbbi adását.",
+      "Hozzuk haza a legénységeket."
+    ],
+    "korvessa": [
+      "Pilóta, bemértük a jelet. Korvessától érkezik.",
+      "Egykor diplomáciai küldeményeket szállított. Minden határállomás ismerte a hívójelét.",
+      "Most minden csatornán más hívójelet használ.",
+      "A konvoj őt követte, egyenesen a csapdába. A hajója épp előttünk van.",
+      "Szabad a tűz, pilóta. Nyiss utat hazafelé."
+    ]
+  },
+  "ro": {
+    "campaign": [
+      "Prima criptomonedă le-a permis oamenilor să facă schimburi directe peste granițe.",
+      "Secole mai târziu, coloniile din spațiul îndepărtat depindeau de aceeași rețea pentru hrană, combustibil și medicamente.",
+      "Apoi a venit spamul. Mesajele falsificate au golit conturile.",
+      "Cu banii furați, escrocii au înarmat o flotă.",
+      "Cryptoizii.",
+      "Încă de la început, voluntarii au demascat fraudele.",
+      "Urmașii lor au plecat printre stele, escortând nave de aprovizionare și răspunzând apelurilor de urgență.",
+      "Acum câteva minute, un fals apel de urgență ne-a îndepărtat patrulele de Pământ.",
+      "Acum, coloniile Genesis amuțesc.",
+      "Într-o zi, când războiul se va sfârși, navele noastre vor porni din nou…",
+      "… să exploreze lumi pe care până acum le-am privit doar prin telescoape.",
+      "Pilot, ai permisiunea de decolare."
+    ],
+    "varneth": [
+      "Contact confirmat. Varneth.",
+      "Cândva, transporta evidențele de aprovizionare între coloniile Genesis.",
+      "A dispărut lângă un releu abandonat.",
+      "Acum s-a întors, iar transmisiunile sale acoperă toate apelurile de ajutor.",
+      "Pilot, întrerupe semnalul."
+    ],
+    "level-two": [
+      "Varneth a căzut. Releele Genesis transmit din nou apelurile de urgență.",
+      "Un convoi de aprovizionare tocmai a schimbat cursul la ordinul unei stații de frontieră.",
+      "Stația jură că nu a trimis niciodată acel ordin.",
+      "Convoiul e încă acolo. Pilot, urmărește ultima lui transmisie.",
+      "Să aducem echipajele acasă."
+    ],
+    "korvessa": [
+      "Pilot, am urmărit semnalul până la Korvessa.",
+      "Cândva, transporta depeșe diplomatice. Toate stațiile de frontieră îi cunoșteau indicativul.",
+      "Acum folosește un indicativ diferit pe fiecare canal.",
+      "Convoiul a urmat-o drept într-o ambuscadă. Nava ei e chiar în fața noastră.",
+      "Foc la discreție, pilot. Deschide drumul spre casă."
+    ]
+  },
+  "th": {
+    "campaign": [
+      "คริปโทเคอร์เรนซีสกุลแรกทำให้ผู้คนค้าขายข้ามพรมแดนกันได้โดยตรง",
+      "หลายศตวรรษต่อมา อาณานิคมในห้วงอวกาศต้องพึ่งเครือข่ายเดียวกันเพื่อรับอาหาร เชื้อเพลิง และยา",
+      "จากนั้นสแปมก็ตามมา ข้อความปลอมทำให้เงินในบัญชีหายไปจนหมด",
+      "พวกมิจฉาชีพใช้เงินที่ขโมยมาไปติดอาวุธให้กองยาน",
+      "เหล่าคริปทอยด์",
+      "ตั้งแต่แรก อาสาสมัครคอยเปิดโปงการฉ้อโกง",
+      "คนรุ่นหลังออกเดินทางสู่หมู่ดาวเพื่อคุ้มกันยานลำเลียงเสบียงและตอบรับสัญญาณขอความช่วยเหลือ",
+      "ไม่กี่นาทีก่อน สัญญาณขอความช่วยเหลือปลอมล่อกองลาดตระเวนของเราให้ออกห่างจากโลก",
+      "ตอนนี้อาณานิคมเจเนซิสกำลังเงียบหายไป",
+      "สักวัน เมื่อสงครามนี้สิ้นสุด ยานของเราจะออกเดินทางอีกครั้ง…",
+      "…เพื่อสำรวจโลกที่เราเคยเห็นเพียงผ่านกล้องโทรทรรศน์",
+      "นักบิน ได้รับอนุญาตให้ออกบิน"
+    ],
+    "varneth": [
+      "ยืนยันการตรวจพบเป้าหมาย วาร์เนธ",
+      "ครั้งหนึ่งยานลำนี้เคยขนส่งข้อมูลเสบียงระหว่างอาณานิคมเจเนซิส",
+      "มันหายไปใกล้สถานีถ่ายทอดสัญญาณร้าง",
+      "ตอนนี้มันกลับมาแล้ว สัญญาณที่มันส่งกลบทุกเสียงขอความช่วยเหลือ",
+      "นักบิน ตัดสัญญาณนั้นซะ"
+    ],
+    "level-two": [
+      "วาร์เนธถูกกำจัดแล้ว สถานีถ่ายทอดสัญญาณเจเนซิสส่งต่อสัญญาณขอความช่วยเหลือได้อีกครั้ง",
+      "ขบวนยานลำเลียงเสบียงเพิ่งเปลี่ยนเส้นทางตามคำสั่งจากสถานีชายแดน",
+      "สถานียืนยันว่าไม่เคยส่งคำสั่งนั้น",
+      "ขบวนยานยังอยู่ข้างนอก นักบิน ตามสัญญาณล่าสุดของพวกเขาไป",
+      "พาลูกเรือเหล่านั้นกลับบ้านกันเถอะ"
+    ],
+    "korvessa": [
+      "นักบิน เราตามสัญญาณไปจนพบว่ามาจากคอร์เวสซา",
+      "เธอเคยขนส่งสารทางการทูต สถานีชายแดนทุกแห่งรู้จักรหัสเรียกขานของเธอ",
+      "ตอนนี้เธอใช้รหัสเรียกขานต่างกันในแต่ละช่องสัญญาณ",
+      "ขบวนยานตามเธอเข้าไปติดกับดัก ยานของเธออยู่ตรงหน้าเรา",
+      "นักบิน อนุญาตให้เปิดฉากยิง เปิดทางกลับบ้านให้พวกเขา"
+    ]
+  },
+  "zh": {
+    "campaign": [
+      "第一种加密货币让人们能够跨越国界直接交易。",
+      "几个世纪后，深空殖民地仍依靠同一个网络获取食物、燃料和药品。",
+      "后来，垃圾信息开始泛滥。伪造的消息让人们的账户被洗劫一空。",
+      "骗子用偷来的钱武装了一支舰队。",
+      "他们就是加密异族。",
+      "从一开始，就有志愿者揭露这些骗局。",
+      "他们的继任者奔赴星海，为补给舰护航，响应求救信号。",
+      "几分钟前，一条虚假的求救信号把我们的巡逻队引离了地球。",
+      "现在，创世殖民地正一个接一个地失去联系。",
+      "终有一天，这场战争结束后，我们的飞船会再次启航……",
+      "……去探索那些只能透过望远镜看见的世界。",
+      "飞行员，准许起飞。"
+    ],
+    "varneth": [
+      "确认接触。是瓦尔内斯。",
+      "它曾在创世殖民地之间运送补给记录。",
+      "它在一座废弃中继站附近失踪了。",
+      "现在它回来了。它的广播淹没了所有求救信号。",
+      "飞行员，切断那个信号。"
+    ],
+    "level-two": [
+      "瓦尔内斯已被击败。创世中继站又能转发求救信号了。",
+      "一支补给船队刚按照边境站的指令改变了航向。",
+      "边境站坚称从未发出那条指令。",
+      "船队还在外面。飞行员，追踪它最后一次发出的信号。",
+      "让我们带船员们回家。"
+    ],
+    "korvessa": [
+      "飞行员，我们追踪到了信号源。是科尔维萨。",
+      "她曾负责运送外交公文。每个边境站都熟悉她的呼号。",
+      "现在，她在每个频道都使用不同的呼号。",
+      "补给船队跟着她一头闯进了伏击圈。她的飞船就在正前方。",
+      "飞行员，可以自由开火。为他们打开回家的路。"
+    ]
+  },
+  "vi": {
+    "campaign": [
+      "Đồng tiền mã hóa đầu tiên cho phép mọi người giao dịch trực tiếp xuyên biên giới.",
+      "Nhiều thế kỷ sau, các thuộc địa ở vùng không gian xa xôi phụ thuộc vào mạng lưới ấy để nhận lương thực, nhiên liệu và thuốc men.",
+      "Rồi thư rác xuất hiện. Tin nhắn giả mạo khiến các tài khoản bị rút sạch.",
+      "Bọn lừa đảo dùng số tiền đánh cắp để vũ trang cho một hạm đội.",
+      "Bọn Cryptoids.",
+      "Ngay từ đầu, các tình nguyện viên đã vạch trần những vụ lừa đảo.",
+      "Những người kế nhiệm lên đường tới các vì sao để hộ tống tàu tiếp tế và đáp lại tín hiệu cầu cứu.",
+      "Vài phút trước, một tín hiệu cầu cứu giả đã dụ đội tuần tra của chúng ta rời xa Trái Đất.",
+      "Giờ đây, các thuộc địa Genesis đang dần mất liên lạc.",
+      "Một ngày nào đó, khi cuộc chiến kết thúc, tàu của chúng ta sẽ lại lên đường…",
+      "… để khám phá những thế giới mà ta mới chỉ thấy qua kính thiên văn.",
+      "Phi công, được phép cất cánh."
+    ],
+    "varneth": [
+      "Đã xác nhận mục tiêu. Varneth.",
+      "Nó từng chuyển hồ sơ tiếp tế giữa các thuộc địa Genesis.",
+      "Nó biến mất gần một trạm chuyển tiếp bị bỏ hoang.",
+      "Giờ nó đã quay lại. Sóng phát của nó lấn át mọi tín hiệu cầu cứu.",
+      "Phi công, cắt đứt tín hiệu đó."
+    ],
+    "level-two": [
+      "Varneth đã bị đánh bại. Các trạm chuyển tiếp Genesis lại truyền được tín hiệu cầu cứu.",
+      "Một đoàn tàu tiếp tế vừa đổi hướng theo lệnh từ một trạm biên giới.",
+      "Trạm quả quyết chưa từng gửi lệnh đó.",
+      "Đoàn tàu vẫn ở ngoài kia. Phi công, hãy lần theo tín hiệu cuối cùng của họ.",
+      "Hãy đưa những thủy thủ đoàn ấy về nhà."
+    ],
+    "korvessa": [
+      "Phi công, chúng tôi đã lần ra nguồn tín hiệu. Đó là Korvessa.",
+      "Cô ta từng chuyển công văn ngoại giao. Mọi trạm biên giới đều biết hô hiệu của cô ta.",
+      "Giờ mỗi kênh cô ta lại dùng một hô hiệu khác.",
+      "Đoàn tàu theo cô ta vào thẳng ổ phục kích. Tàu của cô ta ở ngay phía trước.",
+      "Được phép khai hỏa, phi công. Mở đường về nhà cho họ."
+    ]
+  }
+}

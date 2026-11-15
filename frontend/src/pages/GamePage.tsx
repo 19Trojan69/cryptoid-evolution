@@ -100,7 +100,8 @@ import { makeShipVolley, shipFireInterval } from "./shipAttributes";
 import { activateCollectedPower } from "./collectedPower";
 import { leaveGameFullscreen } from "./gameFullscreen";
 import StoryBriefing from "./story/StoryBriefing";
-import { storyBriefingsEnabled, type StoryScene } from "./story/storyPreferences";
+import { storyBriefingsEnabled } from "./story/storyPreferences";
+import { bossStoryAtSector, storyScenes, type StoryScene } from "./story/storyScenes";
 import { levelDifficulty, MAX_DIFFICULTY_LEVEL } from "./levelDifficulty";
 import { createDoubleKillCombo, creditComboDefeat, DOUBLE_KILL_SCORE, DOUBLE_KILL_SHARDS, type DoubleKillCombo } from "./doubleKillCombo";
 import { missionShardBase, missionShardTotal, uncreditedGuestShards, BONUS_TARGET_SHARD_REWARD, bossPoints, bossShardReward, creditReward } from "./shardEarnings";
@@ -615,6 +616,7 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
   const [effectsVolume, setEffectsVolume] = useState(readEffectsVolume);
   useEffect(() => { resetAudioVolumeDefaults(); }, []);
   const musicRef = useRef<MusicPlayer | null>(null);
+  const fadeMusicAfterStoryRef = useRef(false);
   const regularMusicPositionRef = useRef(0);
   const hasBonusMusic = shipSaveNetwork === "testnet" && game.encounter === "bonus";
   const bonusMusicEnding = hasBonusMusic && game.phase === "SECTOR_CLEAR"
@@ -1111,8 +1113,11 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
       }
       if (!adminRunRef.current && saveChoiceRef.current === 'new' && data.startSector === 1 && !data.checkpoint) {
         queueStory('campaign');
-      } else if (adminRunRef.current && data.startSector === 10 && stateRef.current.encounter === 'boss-intro') {
-        queueStory('varneth');
+      } else if (adminRunRef.current) {
+        const encounter = stateRef.current.encounter;
+        const preview = encounter === 'boss-intro' ? bossStoryAtSector(data.startSector)
+          : encounter === 'normal' && data.startSector === 11 ? 'level-two' : undefined;
+        if (preview) queueStory(preview);
       }
     } catch (error) {
       console.error("Could not load paid loadout", error);
@@ -1267,7 +1272,13 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
   useEffect(() => {
     const track = musicRef.current;
     if (!track) return;
-    if (story) { track.pause(); return; }
+    if (story) {
+      if (!track.playing) { track.pause(); return; }
+      track.setVolume(0, .055);
+      let fading = true;
+      const pauseAfterFade = window.setTimeout(() => { fading = false; track.pause(); }, 260);
+      return () => { window.clearTimeout(pauseAfterFade); if (fading) track.pause(); };
+    }
     const normalSource = "/audio/battle-orbit.mp3";
     const waitingForExplosion = game.encounter === "boss-clear" && bossVictoryPendingRef.current;
     if (bonusMusicEnding && !hasCompletionMusic
@@ -1291,10 +1302,17 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
       track.setSource(desiredSource, desiredSource === normalSource ? regularMusicPositionRef.current : 0);
     }
     const playCompletion = completionMusicVisible && !document.hidden && !track.audio.ended;
-    if (playCompletion || game.status === "playing" || game.status === "game-over" || game.status === "victory") void track.play();
-    else if (game.status !== "loading") track.pause();
+    if (playCompletion || game.status === "playing" || game.status === "game-over" || game.status === "victory") {
+      if (fadeMusicAfterStoryRef.current) {
+        fadeMusicAfterStoryRef.current = false;
+        track.setVolume(0);
+        void track.play();
+        track.setVolume(readMusicVolume(), .14);
+      } else void track.play();
+    } else if (game.status !== "loading") track.pause();
   }, [game.status, game.encounter, musicEnabled, hasBonusMusic, bonusMusicEnding, hasCompletionMusic, completionMusicVisible, story]);
   useEffect(() => {
+    if (storyRef.current) return;
     const fadeBonus = bonusMusicEnding && !hasCompletionMusic;
     const volume = game.status === "playing" && game.encounter === "boss-clear"
       ? Math.min(100, musicVolume * BOSS_VICTORY_VOLUME_BOOST)
@@ -1831,7 +1849,8 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
               performanceProbeRef.current?.checkpoint('boss-model-start', { sector: state.sector, encounter: 'boss-intro', phase: 'SECTOR_INTRO', hearts: state.hearts });
               state.boss = createSectorBoss(state.sector, width, visibleTop, height);
               performanceProbeRef.current?.checkpoint('boss-model-ready', { sector: state.sector, encounter: 'boss-intro', phase: 'SECTOR_INTRO', hearts: state.hearts, bossId: state.boss.config.id });
-              if (state.sector !== 10 || !queueStory('varneth')) soundRef.current?.play("boss");
+              const briefing = bossStoryAtSector(state.sector);
+              if (!briefing || !queueStory(briefing)) soundRef.current?.play("boss");
             } else {
               state.boss = null;
             }
@@ -1877,6 +1896,7 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
               if (state.encounter === 'bonus') recordOwnerResourceSnapshot('resource-bonus-start');
               else if (state.encounter === 'normal') recordOwnerResourceSnapshot('resource-normal-start');
             }
+            if (clearEncounter === 'bonus' && next.sector === 11) queueStory('level-two');
             forceScene = true;
             return;
           }
@@ -2802,17 +2822,20 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
       void saveQueueRef.current?.recover().then(() => { setScoreSync("saved"); setSaveNotice("Game saved."); }).catch(() => setScoreSync("failed"));
     }}>{t("Retry save")}</button>}</p>;
 
+  const briefingBoss = story ? storyScenes[story].boss : undefined;
+  const briefingVisible = Boolean(story) && !rewardCards.length;
   return (
-    <main className="game-shell" data-effects-paused={game.status === "paused" || game.status === "loading"} onPointerDownCapture={() => { primeCardSound(); if(rewardCardsRef.current.length)return; retryAudio(); }}>
-      {story && !rewardCards.length && <StoryBriefing key={story} scene={story}
-        unlocked={story === 'varneth' && (rewardProgressRef.current.bossWins[1] ?? 0) > 0}
+    <main className="game-shell" data-effects-paused={briefingVisible || game.status === "paused" || game.status === "loading"} onPointerDownCapture={() => { primeCardSound(); if(rewardCardsRef.current.length)return; retryAudio(); }}>
+      {story && briefingVisible && <StoryBriefing key={story} scene={story}
+        unlocked={briefingBoss !== undefined && (rewardProgressRef.current.bossWins[briefingBoss.id] ?? 0) > 0}
         withAudio={musicEnabled && !ownerAudioDisabled() && musicVolume > 0} volume={musicVolume}
         onFinish={() => {
           if (storyRef.current !== story) return;
           storyRef.current = null;
           clearControls();
           lastFrameRef.current = 0;
-          if (story === 'varneth') soundRef.current?.play('boss');
+          fadeMusicAfterStoryRef.current = musicRef.current !== null;
+          if (briefingBoss) soundRef.current?.play('boss');
           setStory(null);
         }} />}
       {rewardCards[0] && <CardReveal reward={rewardCards[0]} remaining={rewardCards.length} onContinue={continueRewardCard}/>}
@@ -2824,10 +2847,10 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
         saving={bossSummarySaving} failed={bossSummaryFailed} continuing={bossSummaryContinuing} failureMessage={bossSummaryFailure}
         onRetry={() => { if (bossSummaryContinueFailed) void continueBossSummary(true); else void prepareBossSummary(true); }} onContinue={() => { void continueBossSummary(); }} />}
       {extraLifeVisible&&<div className={`boss-extra-life${game.bossHeartShards ? " boss-shard-reward" : ""}`} role="status" aria-live="polite"><strong>{t(game.bossHeartShards ? 'FULL HEARTS' : 'HEART RESTORED')}</strong><span>{game.bossHeartShards ? `+${game.bossHeartShards} ◆` : '+1 ♥'}</span></div>}
-      <div ref={fieldRef} className="game-field" inert={Boolean(story) && !rewardCards.length} onContextMenu={event => event.preventDefault()} onDoubleClick={event => event.preventDefault()} onDragStart={event => event.preventDefault()}>
+      <div ref={fieldRef} className="game-field" inert={briefingVisible} onContextMenu={event => event.preventDefault()} onDoubleClick={event => event.preventDefault()} onDragStart={event => event.preventDefault()}>
         <GameSceneBoundary onError={error => interruptionRef.current('render-error', error)} fallback={retry => <div className="game-overlay"><div className="game-modal" role="alert"><h1>{t('MISSION PAUSED')}</h1><p>{t("The mission was paused after a technical interruption. Try Resume to continue.")}</p><button type="button" className="button button-primary" onClick={retry}>{t('Try again')}</button></div></div>}>
-        <Starfield sector={game.sector} player={game.player} paused={game.status !== "playing"} showNebula={game.encounter === "boss-fight"} />
-        <SectorBackdrop sector={game.sector} player={game.player} paused={game.status !== "playing"} />
+        <Starfield sector={game.sector} player={game.player} paused={briefingVisible || game.status !== "playing"} showNebula={game.encounter === "boss-fight"} />
+        <SectorBackdrop sector={game.sector} player={game.player} paused={briefingVisible || game.status !== "playing"} />
         <header ref={hudRef} className="game-hud">
           <div className="hud-actions"><button className="game-control home-control" type="button" disabled={weaponBusy || rewardCards.length > 0 || weaponMenuOpen || weaponCountdown !== null || game.status === "loading" || game.status === "destroying"} onClick={() => { if (game.status === "game-over" || game.status === "victory") { goHome(); return; } homePromptWasPlayingRef.current = stateRef.current.status === "playing"; stateRef.current.status = "paused"; clearControls();
         musicRef.current?.pause(); void saveCombat().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried.")); setGame({ ...stateRef.current }); setHomePrompt(true); }} aria-label={t("Go home")}><CockpitIcon kind="home" /></button></div>

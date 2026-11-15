@@ -26,7 +26,7 @@ function tracked(ctx, label, x, y, spacing) {
   }
 }
 
-export function createCinematic(ctx, assets, timeline, createSurface, appearance) {
+export function createCinematic(ctx, assets, timeline, createSurface, appearance, presentation) {
   let backdrop;
   let vortex;
   let width;
@@ -139,7 +139,7 @@ export function createCinematic(ctx, assets, timeline, createSurface, appearance
     ctx.fillStyle = '#f5cc80';
     ctx.font = `800 ${unit * .058}px ${typeface}`;
     ctx.textBaseline = 'middle';
-    tracked(ctx, 'CRYPTOID EVOLUTION', width / 2, y, unit * .005);
+    tracked(ctx, presentation.heading, width / 2, y, unit * .005);
     ctx.strokeStyle = 'rgba(245, 204, 128, .42)';
     ctx.lineWidth = unit * .0015;
     ctx.beginPath();
@@ -173,7 +173,7 @@ export function createCinematic(ctx, assets, timeline, createSurface, appearance
   function crawl(time, reveal, reducedMotion) {
     const scroll = scrollAt(time);
     const opticalHorizon = height * .205;
-    const focus = height * .605;
+    const focus = height * .56;
     const vanishingDistance = focus - opticalHorizon;
     const active = rows.findIndex(row => time >= row.start && time <= row.end);
     ctx.save();
@@ -194,12 +194,12 @@ export function createCinematic(ctx, assets, timeline, createSurface, appearance
         if (depth <= 0) continue;
         const scale = 1 / depth;
         const y = opticalHorizon + scale * vanishingDistance;
-        if (y < height * .248 || y > height * .933) continue;
+        if (y < height * .243 || y > height * .852) continue;
         // Keep the scroll on the narration clock and warp only its distant projection.
-        const pull = 1 - smooth(y, height * .389, height * .515);
+        const pull = 1 - smooth(y, height * .368, height * .480);
         if (pull > .99) continue;
-        const distanceFade = smooth(y, height * .305, height * .556) + smooth(pull, .1, .65) * .27;
-        const entranceFade = 1 - smooth(y, height * .807, height * .929);
+        const distanceFade = smooth(y, height * .294, height * .517) + smooth(pull, .1, .65) * .27;
+        const entranceFade = 1 - smooth(y, height * .739, height * .848);
         const opacity = distanceFade * entranceFade * (1 - reveal) * (1 - smooth(pull, .83, .99));
         if (opacity < .015) continue;
         drawIntake(ctx, vortex, y, pull, opacity);
@@ -274,7 +274,7 @@ export function createCinematic(ctx, assets, timeline, createSurface, appearance
     const shipWidth = Math.min(width * .87, height * .93) * (.75 + .25 * reveal + Math.min(Math.max(0, time - timeline.duration), 3) * .009);
     const centerY = height * (.358 + reveal * .055);
     ship(centerY, shipWidth, reveal, unlocked);
-    if (unlocked && firing) {
+    if (unlocked && firing && assets.ship && assets.muzzles) {
       const shipHeight = shipWidth * assets.ship.height / assets.ship.width;
       fire((width - shipWidth) / 2, centerY - shipHeight / 2, shipWidth, shipHeight, time);
     }
@@ -283,16 +283,16 @@ export function createCinematic(ctx, assets, timeline, createSurface, appearance
     ctx.textBaseline = 'middle';
     ctx.fillStyle = '#edbd72';
     ctx.font = `700 ${unit * .029}px ${typeface}`;
-    tracked(ctx, 'BOSS 01', width / 2, titleY - unit * .099, unit * .0095);
+    tracked(ctx, `BOSS ${String(presentation.boss.id).padStart(2, '0')}`, width / 2, titleY - unit * .099, unit * .0095);
     ctx.font = `900 ${unit * .141}px ${typeface}`;
     ctx.fillStyle = '#fff1d3';
     ctx.shadowColor = 'rgba(0, 0, 0, .8)';
     ctx.shadowBlur = unit * .023;
-    tracked(ctx, 'VARNETH', width / 2, titleY, unit * .0073);
+    tracked(ctx, presentation.boss.name.toUpperCase(), width / 2, titleY, unit * .0073);
     ctx.shadowBlur = 0;
     ctx.font = `600 ${unit * .0245}px ${typeface}`;
     ctx.fillStyle = '#a9bac8';
-    tracked(ctx, 'THE SPAM BROADCASTER', width / 2, titleY + unit * .105, unit * .0053);
+    tracked(ctx, presentation.boss.subtitle.toUpperCase(), width / 2, titleY + unit * .105, unit * .0053);
     ctx.restore();
   }
 
@@ -310,7 +310,7 @@ export function createCinematic(ctx, assets, timeline, createSurface, appearance
     if (distantShip > 0) ship(height * .293, Math.min(width * .53, height * .53), distantShip * .21, false);
     if (time < firstWord + 3.3) openingTitle(time);
     if (reveal < 1) crawl(time, reveal, reducedMotion);
-    if (contactTime !== undefined) boss(reveal, time, unlocked, !reducedMotion);
+    if (presentation.boss && contactTime !== undefined) boss(reveal, time, unlocked, !reducedMotion);
   }
 
   return { resize, draw, dispose: () => { if (backdrop) backdrop.width = backdrop.height = 0; backdrop = undefined; } };

@@ -1,5 +1,3 @@
-export type StoryScene = 'campaign' | 'varneth';
-
 const key = 'cryptoid-story-briefings';
 let disabledForSession = false;
 

@@ -92,7 +92,7 @@ export default function SystemSettings({ musicVolume, effectsVolume, changeMusic
             <button className="system-setting" type="button" disabled={!supportsVibration()} aria-pressed={vibrationEnabled && supportsVibration()} onClick={() => { const enabled = !vibrationEnabled; localStorage.setItem(VIBRATION_KEY, enabled ? "on" : "off"); setVibrationEnabled(enabled); onChange?.(); if (!enabled) gameHaptics.stop(); }}><span aria-hidden="true">≋</span><b>{t(!supportsVibration() ? "Vibration unavailable" : vibrationEnabled ? "Vibration on" : "Vibration off")}</b></button>
             <button className="system-setting" type="button" aria-pressed={briefings} onClick={() => {
               setStoryBriefingsEnabled(!briefings); setBriefings(!briefings);
-            }}><span aria-hidden="true">▤</span><b>{storyCopy(locale)[3]}</b></button>
+            }}><span aria-hidden="true">▤</span><b>{storyCopy(locale)[1]}</b></button>
             <button className="system-setting" type="button" aria-pressed={reducedEffects} onClick={() => { const reduced = !reducedEffects; localStorage.setItem(MOTION_STORAGE_KEY, reduced ? "1" : "0"); applySavedDisplaySettings(); setReducedEffects(readReducedEffects()); if (reduced) gameHaptics.stop(); onChange?.(); }}><span aria-hidden="true">◌</span><b>{t(reducedEffects ? 'Reduced effects' : 'Standard effects')}</b></button>
           </div>
   </div>;
