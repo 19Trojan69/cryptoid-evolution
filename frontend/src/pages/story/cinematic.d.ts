@@ -12,4 +12,5 @@ export function createCinematic(
   },
   timing: StoryTiming,
   surface: (width: number, height: number) => HTMLCanvasElement,
+  appearance: { variant: number; seed: number },
 ): { resize(width: number, height: number): void; draw(seconds: number, reducedMotion: boolean, unlocked: boolean): void; dispose(): void };

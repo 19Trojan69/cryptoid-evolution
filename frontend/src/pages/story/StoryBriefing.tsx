@@ -9,6 +9,22 @@ import muzzles from './muzzles.json';
 import './storyBriefing.css';
 
 type Props = { scene: StoryScene; withAudio: boolean; volume: number; unlocked: boolean; onFinish: () => void };
+const backdrops = ['nebula.webp', 'amber-galaxy.webp', 'ringed-world.webp'];
+const backdropKey = 'cryptoid-story-backdrop';
+let lastBackdrop: string | undefined;
+
+function chooseAppearance() {
+  let previous = lastBackdrop;
+  if (previous === undefined) {
+    try { previous = sessionStorage.getItem(backdropKey) ?? undefined; } catch { /* Memory alone is enough to vary subsequent briefings. */ }
+  }
+  const choices = backdrops.filter(name => name !== previous);
+  const backdrop = choices[Math.floor(Math.random() * choices.length)];
+  lastBackdrop = backdrop;
+  try { sessionStorage.setItem(backdropKey, backdrop); } catch { /* In-memory variation still works. */ }
+  return { backdrop, variant: backdrops.indexOf(backdrop), seed: Math.floor(Math.random() * 4294967296) };
+}
+
 const loadImage = (name: string) => {
   const image = new Image();
   image.src = '/story/' + name;
@@ -20,6 +36,7 @@ export default function StoryBriefing({ scene, withAudio, volume, unlocked, onFi
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
   const skipRef = useRef<HTMLButtonElement>(null);
+  const appearanceRef = useRef<ReturnType<typeof chooseAppearance> | null>(null);
   const finishRef = useRef(onFinish);
   finishRef.current = onFinish;
   const [needsPlay, setNeedsPlay] = useState(false);
@@ -87,8 +104,10 @@ export default function StoryBriefing({ scene, withAudio, volume, unlocked, onFi
     const resizeObserver = new ResizeObserver(resize);
     const prepare = async () => {
       try {
+        const appearance = appearanceRef.current ??= chooseAppearance();
+        const backdrop = loadImage(appearance.backdrop);
         const [nebula, outline, ship] = await Promise.all([
-          loadImage('nebula.webp'),
+          appearance.variant === 0 ? backdrop : backdrop.catch(() => loadImage(backdrops[0])),
           scene === 'varneth' ? loadImage('outline.webp') : undefined,
           scene === 'varneth' && unlocked ? loadImage('ship.webp') : undefined,
           document.fonts.load('600 20px Barlow'),
@@ -101,7 +120,7 @@ export default function StoryBriefing({ scene, withAudio, volume, unlocked, onFi
           const surface = document.createElement('canvas');
           surface.width = width; surface.height = height;
           return surface;
-        });
+        }, appearance);
         resize();
         resizeObserver.observe(canvas);
       } catch { fallback = true; }

@@ -1,3 +1,5 @@
+import { drawIntake, drawVortexDust, paintVortex, vortexPosition } from './storyVortex.js';
+
 const clamp = (value, low, high) => Math.max(low, Math.min(value, high));
 const range = (value, from, to) => clamp((value - from) / (to - from), 0, 1);
 const smooth = (value, from, to) => {
@@ -24,8 +26,9 @@ function tracked(ctx, label, x, y, spacing) {
   }
 }
 
-export function createCinematic(ctx, assets, timeline, createSurface) {
+export function createCinematic(ctx, assets, timeline, createSurface, appearance) {
   let backdrop;
+  let vortex;
   let width;
   let height;
   let unit;
@@ -58,9 +61,20 @@ export function createCinematic(ctx, assets, timeline, createSurface) {
         const start = line[0].start;
         const row = position++;
         const text = line.map(word => word.text).join(' ');
+        const width = ctx.measureText(text).width;
+        let advance = 0;
+        let prefix = '';
+        const letters = Array.from(text, letter => {
+          prefix += letter;
+          const next = ctx.measureText(prefix).width;
+          const x = (advance + next - width) * .5;
+          advance = next;
+          return { letter, x };
+        });
         rows.push({
           text,
-          width: ctx.measureText(text).width,
+          width,
+          letters,
           font,
           position: row,
           kind: group.kind,
@@ -104,6 +118,7 @@ export function createCinematic(ctx, assets, timeline, createSurface) {
     vignette.addColorStop(1, 'rgba(1, 4, 9, .8)');
     base.fillStyle = vignette;
     base.fillRect(0, 0, w, h);
+    vortex = paintVortex(base, w, h, unit, appearance.variant, appearance.seed);
   }
 
   function scrollAt(time) {
@@ -134,6 +149,27 @@ export function createCinematic(ctx, assets, timeline, createSurface) {
     ctx.restore();
   }
 
+  function clipOutsideVortex() {
+    ctx.beginPath();
+    ctx.rect(0, 0, width, height);
+    ctx.arc(vortex.x, vortex.y, vortex.radius, 0, Math.PI * 2);
+    ctx.clip('evenodd');
+  }
+
+  function bendLetters(row, pull) {
+    const halfWidth = row.width * .5;
+    const curve = typeSize * .85 * smooth(pull, .14, .83);
+    for (const { letter, x } of row.letters) {
+      if (letter === ' ') continue;
+      const offset = x / halfWidth;
+      ctx.save();
+      ctx.translate(x, curve * offset ** 2);
+      ctx.rotate(Math.atan(2 * curve * offset / halfWidth));
+      ctx.fillText(letter, 0, 0);
+      ctx.restore();
+    }
+  }
+
   function crawl(time, reveal, reducedMotion) {
     const scroll = scrollAt(time);
     const opticalHorizon = height * .205;
@@ -152,25 +188,34 @@ export function createCinematic(ctx, assets, timeline, createSurface) {
         ctx.fillText(row.text, width / 2, focus);
       }
     } else {
+      clipOutsideVortex();
       for (const [index, row] of rows.entries()) {
         const depth = 1 - (row.position - scroll) * .115;
         if (depth <= 0) continue;
         const scale = 1 / depth;
         const y = opticalHorizon + scale * vanishingDistance;
         if (y < height * .248 || y > height * .933) continue;
-        const distanceFade = smooth(y, height * .305, height * .556);
+        // Keep the scroll on the narration clock and warp only its distant projection.
+        const pull = 1 - smooth(y, height * .389, height * .515);
+        if (pull > .99) continue;
+        const distanceFade = smooth(y, height * .305, height * .556) + smooth(pull, .1, .65) * .27;
         const entranceFade = 1 - smooth(y, height * .807, height * .929);
-        const opacity = distanceFade * entranceFade * (1 - reveal);
+        const opacity = distanceFade * entranceFade * (1 - reveal) * (1 - smooth(pull, .83, .99));
         if (opacity < .015) continue;
+        drawIntake(ctx, vortex, y, pull, opacity);
         ctx.save();
-        ctx.translate(width / 2, y);
-        ctx.scale(Math.min(Math.pow(scale, .77), width * .922 / row.width), scale * .88);
+        const position = vortexPosition(vortex, y, pull);
+        ctx.translate(position.x, position.y);
+        ctx.rotate(position.rotation);
+        const stretch = Math.min(Math.pow(scale, .77), width * .922 / row.width);
+        ctx.scale(stretch * (1 - .84 * pull), scale * .88 * (1 - .59 * pull));
         ctx.globalAlpha = opacity;
         ctx.font = row.font;
-        ctx.shadowBlur = unit * .013;
+        ctx.shadowBlur = pull < .14 ? unit * .013 : 0;
         ctx.shadowColor = 'rgba(0, 0, 0, .91)';
         ctx.fillStyle = index === active || row.kind !== 'story' ? '#ffe1a0' : '#f0c575';
-        ctx.fillText(row.text, 0, 0);
+        if (pull < .14) ctx.fillText(row.text, 0, 0);
+        else bendLetters(row, pull);
         ctx.restore();
       }
     }
@@ -254,6 +299,12 @@ export function createCinematic(ctx, assets, timeline, createSurface) {
   function draw(time, reducedMotion = false, unlocked = false) {
     if (!backdrop) return;
     ctx.drawImage(backdrop, 0, 0);
+    if (!reducedMotion) {
+      ctx.save();
+      clipOutsideVortex();
+      drawVortexDust(ctx, vortex, time);
+      ctx.restore();
+    }
     const reveal = smooth(time, revealTime, revealTime + 2.35);
     const distantShip = (contactTime === undefined ? 0 : smooth(time, contactTime, contactTime + 3.4)) * (1 - reveal);
     if (distantShip > 0) ship(height * .293, Math.min(width * .53, height * .53), distantShip * .21, false);

@@ -62,6 +62,7 @@
   ],
   "git": {
     "deploymentEnabled": {
+      "codex/story-black-hole-vortex-20261115": false,
       "codex/split-campaign-and-varneth-intros": false,
       "codex/premium-boss-nfts-20261115": false,
       "codex/testnet-admin-nft-collection-20261115": false,
