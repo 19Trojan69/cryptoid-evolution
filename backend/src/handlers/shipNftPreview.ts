@@ -82,7 +82,7 @@ export default function mountShipNftPreview(router: Router, enabled = shipNftMai
   });
 }
 
-async function packagedPreview(card: CatalogCard) {
+export async function packagedShipNftPreview(card: CatalogCard) {
   const base = process.env.VERCEL
     ? join(process.cwd(), "backend", "ship-nft-previews")
     : join(__dirname, "../../ship-nft-previews");
@@ -102,7 +102,7 @@ async function unlockedTestnetShips(cards: readonly CatalogCard[], save: Pick<Pl
   return owned.filter(card => ownedShipStage(card.sprite, upgrades) >= card.stage);
 }
 
-export function mountTestnetShipNftPreview(router: Router, readArtwork = packagedPreview) {
+export function mountTestnetShipNftPreview(router: Router, readArtwork = packagedShipNftPreview) {
   router.get(["/", "/progress"], async (req, res) => {
     res.setHeader("Cache-Control", "private, no-store");
     if (!req.testnetSave || rewardNetwork(req) !== "testnet") return res.status(404).json({ error: "not_found" });

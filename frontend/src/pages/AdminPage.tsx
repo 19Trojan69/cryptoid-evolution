@@ -680,6 +680,7 @@ export default function AdminPage() {
                 {t(label)}
               </button>
             ))}
+            {shipSaveNetwork === "testnet" && <Link className="admin-button" to="/admin/nfts">{t("NFT overview")}</Link>}
           </nav>
           {error && (
             <p className="admin-error" role="alert">
@@ -777,7 +778,7 @@ export default function AdminPage() {
           )}
           {(view === "ships" || view === "levels") && (
             <>
-              {view === "levels" && <section className="admin-panel">
+              {view === "levels" && shipSaveNetwork !== "testnet" && <section className="admin-panel">
                 <Link className="admin-button" to="/admin/nft-bosses">{nftGalleryCopy(locale).title}</Link>
               </section>}
               <section className="admin-panel admin-test-selection">

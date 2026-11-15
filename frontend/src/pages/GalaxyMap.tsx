@@ -205,7 +205,7 @@ export default function GalaxyMap() {
   const home = (state: object = {}) => navigate('/', { state });
   return <main className="galaxy-page" data-progress-status={status} data-network={shipSaveNetwork}>
     <header className="galaxy-toolbar">
-      <button type="button" className="galaxy-back" onClick={() => fromNfts ? navigate('/nfts') : home({ openQuickMenu: fromQuick })}><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m14 6-6 6 6 6M8 12h12"/></svg><span>{t(fromNfts ? 'NFT overview' : 'Back')}</span></button>
+      <button type="button" className="galaxy-back" onClick={() => fromNfts ? navigate('/admin/nfts?collection=retro') : home({ openQuickMenu: fromQuick })}><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m14 6-6 6 6 6M8 12h12"/></svg><span>{t(fromNfts ? 'NFT overview' : 'Back')}</span></button>
       <div><p>CRYPTOID EVOLUTION</p><h1>{t('Galaxy map')}</h1></div>
       {shipSaveNetwork === 'testnet' && <button type="button" className="galaxy-music"
         data-galaxy-music data-music-toggle aria-pressed={music.playing} onClick={music.toggle}>
@@ -261,7 +261,8 @@ export default function GalaxyMap() {
       {arcadeCatalogFailed || officialArcade ? t('Preview unavailable') : t('Loading…')}
     </p>}
     {(album || albumRequested) && officialArcade && unlocked && <GalaxyStickerAlbum key={snapshot.owner ?? 'guest'} owner={snapshot.owner}
-      stations={unlocked} stationCount={officialArcade.levels.length} initialLevel={album?.level}
+      stations={unlocked} canPreviewNfts={shipSaveNetwork === 'testnet' && snapshot.canAdmin === true}
+      stationCount={officialArcade.levels.length} initialLevel={album?.level}
       labels={officialArcade.labels.stickers} onClose={closeAlbum}/>}
   </main>;
 }

@@ -468,8 +468,11 @@ const Shop = () => {
     return () => cancelGameFrame(frame);
   }, [shopView, quickTarget, rewardStatus]);
 
-  const nftPreviewPath = shipSaveNetwork === "testnet" || shipNftMainnetVisible ? "/nfts" : undefined;
-  const homeNftPath = nftPreviewPath ?? (authReady && isAuthenticated && canAdmin && !isAuthLoading ? "/admin/nft-bosses" : undefined);
+  const verifiedAdmin = authReady && isAuthenticated && canAdmin && !isAuthLoading;
+  const nftPreviewPath = shipSaveNetwork === "testnet"
+    ? (verifiedAdmin ? "/admin/nfts" : undefined)
+    : (shipNftMainnetVisible ? "/nfts" : undefined);
+  const homeNftPath = nftPreviewPath ?? (verifiedAdmin ? "/admin/nft-bosses" : undefined);
   const openQuickAction = (action: QuickAction) => {
     closeQuickMenu();
     setQuickTarget(null);

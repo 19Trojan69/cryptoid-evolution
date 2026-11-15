@@ -239,9 +239,35 @@ const rows = {
   ],
 } satisfies Partial<Record<Locale, TranslationRow<typeof keys>>>;
 
+const adminKeys = ["Edition", "Edition size", "Rank", "Paint", "Free", "Ship", "Ship stage", "Test selection", "Admin dashboard"] as const;
+const adminRows = {
+  en: adminKeys,
+  de: ["Edition", "Auflage", "Rang", "Lackierung", "Kostenlos", "Raumschiff", "Schiffsstufe", "Testauswahl", "Admin-Zentrale"],
+  es: ["Edición", "Tirada", "Rango", "Pintura", "Gratis", "Nave", "Nivel de la nave", "Selección de prueba", "Panel de administración"],
+  fr: ["Édition", "Tirage", "Rang", "Peinture", "Gratuit", "Vaisseau", "Niveau du vaisseau", "Sélection de test", "Espace d’administration"],
+  pt: ["Edição", "Tiragem", "Grau", "Pintura", "Grátis", "Nave", "Nível da nave", "Seleção de teste", "Painel de administração"],
+  it: ["Edizione", "Tiratura", "Grado", "Verniciatura", "Gratis", "Nave", "Stadio della nave", "Selezione di test", "Pannello di amministrazione"],
+  pl: ["Edycja", "Nakład", "Ranga", "Malowanie", "Za darmo", "Statek", "Poziom statku", "Wybór testowy", "Panel administracyjny"],
+  tr: ["Sürüm", "Baskı adedi", "Rütbe", "Boya", "Ücretsiz", "Gemi", "Gemi aşaması", "Test seçimi", "Yönetim paneli"],
+  ru: ["Издание", "Тираж", "Ранг", "Окраска", "Бесплатно", "Корабль", "Ступень корабля", "Тестовые параметры", "Панель администратора"],
+  hr: ["Izdanje", "Naklada", "Rang", "Boja", "Besplatno", "Brod", "Stupanj broda", "Odabir za test", "Administracijska ploča"],
+  cs: ["Edice", "Náklad", "Hodnost", "Nátěr", "Zdarma", "Loď", "Stupeň lodi", "Nastavení testu", "Správa hry"],
+  sk: ["Edícia", "Náklad", "Hodnosť", "Náter", "Zadarmo", "Loď", "Stupeň lode", "Nastavenie testu", "Správa hry"],
+  hu: ["Kiadás", "Példányszám", "Rang", "Festés", "Ingyenes", "Hajó", "Hajószint", "Tesztbeállítások", "Adminisztrációs felület"],
+  ro: ["Ediție", "Tiraj", "Rang", "Vopsea", "Gratuit", "Navă", "Nivelul navei", "Selecție pentru test", "Panou de administrare"],
+  sr: ["Издање", "Тираж", "Ранг", "Боја", "Бесплатно", "Брод", "Степен брода", "Избор за тест", "Администраторска табла"],
+  uk: ["Видання", "Тираж", "Ранг", "Фарбування", "Безкоштовно", "Корабель", "Ступінь корабля", "Параметри тесту", "Панель адміністратора"],
+  th: ["รุ่น", "จำนวนผลิต", "อันดับ", "สีของยาน", "ฟรี", "ยาน", "ระดับยาน", "ตัวเลือกการทดสอบ", "แผงผู้ดูแล"],
+  zh: ["版本", "发行量", "段位", "涂装", "免费", "飞船", "飞船等级", "测试配置", "管理面板"],
+  vi: ["Phiên bản", "Số lượng phát hành", "Hạng", "Màu sơn", "Miễn phí", "Phi thuyền", "Cấp phi thuyền", "Tùy chọn thử nghiệm", "Bảng quản trị"],
+} satisfies Record<keyof typeof rows, TranslationRow<typeof adminKeys>>;
+
 export const nftOverviewTranslations = Object.fromEntries(
-  Object.entries(rows).map(([locale, row]) => [
+  (Object.keys(rows) as (keyof typeof rows)[]).map(locale => [
     locale,
-    Object.fromEntries(keys.map((key, index) => [key, row[index]])),
+    Object.fromEntries([
+      ...keys.map((key, index) => [key, rows[locale][index]]),
+      ...adminKeys.map((key, index) => [key, adminRows[locale][index]]),
+    ] as [string, string][]),
   ]),
 );

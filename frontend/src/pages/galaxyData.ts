@@ -5,7 +5,7 @@ import type { AccountSave } from '../lib/accountSave.ts';
 type Getter = <T>(path: string, config?: { baseURL: string }) => Promise<{ data: T }>;
 export type GalaxyMiniGame = { level: number; name: string };
 export type GalaxyEquipment = Pick<AccountSave, 'skin' | 'color' | 'shipStage'> & { upgrades: string[] };
-export type GalaxySnapshot = GalaxyEquipment & { progress: GalaxyProgress; owner: string | null; miniGames?: GalaxyMiniGame[] };
+export type GalaxySnapshot = GalaxyEquipment & { progress: GalaxyProgress; owner: string | null; canAdmin?: boolean; miniGames?: GalaxyMiniGame[] };
 export const emptyGalaxySnapshot = (): GalaxySnapshot => ({ progress: emptyGalaxyProgress(), skin: 'grey-scout', color: 'grey', upgrades: [], owner: null });
 
 export async function loadGalaxyEquipment(get: Getter) {
@@ -53,5 +53,5 @@ export async function loadGalaxySnapshot(get: Getter, network: 'mainnet' | 'test
   ]);
   if (rewards.data.network !== network) throw new Error('Progress network mismatch');
   const progress = readRewardProgress(JSON.stringify(rewards.data.progress));
-  return { owner: uid, ...equipment, progress: galaxyProgress(progress, highestSector), miniGames };
+  return { owner: uid, canAdmin, ...equipment, progress: galaxyProgress(progress, highestSector), miniGames };
 }

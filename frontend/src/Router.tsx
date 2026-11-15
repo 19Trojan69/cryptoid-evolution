@@ -1,7 +1,14 @@
-import { createBrowserRouter } from "react-router-dom";
+import type { ComponentType } from "react";
+import { createBrowserRouter, redirect } from "react-router-dom";
 import PiSignInCallback from "./pages/PiSignInCallback.tsx";
 import LegalPage from "./pages/LegalPage.tsx";
 import RouteRecovery, { AdminRouteRecovery } from "./RouteRecovery";
+
+const nftRoute = (load: () => Promise<{ default: ComponentType }>, testnetPath: string) => async () => {
+  const { shipSaveNetwork } = await import("./pages/shipFleet");
+  if (shipSaveNetwork === "testnet") return { loader: () => redirect(testnetPath) };
+  return { Component: (await load()).default };
+};
 
 export const router = createBrowserRouter([
   {
@@ -15,8 +22,13 @@ export const router = createBrowserRouter([
     errorElement: <AdminRouteRecovery />,
   },
   {
+    path: "/admin/nfts",
+    lazy: async () => ({ Component: (await import("./pages/NftAdminCollection")).default }),
+    errorElement: <AdminRouteRecovery />,
+  },
+  {
     path: "/admin/nft-bosses",
-    lazy: async () => ({ Component: (await import("./pages/BossNftGallery")).default }),
+    lazy: nftRoute(() => import("./pages/BossNftGallery"), "/admin/nfts?collection=bosses"),
     errorElement: <AdminRouteRecovery />,
   },
   {
@@ -25,15 +37,15 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "/nfts",
-        lazy: async () => ({ Component: (await import("./pages/NftOverview")).default }),
+        lazy: nftRoute(() => import("./pages/NftOverview"), "/admin/nfts"),
       },
       {
         path: "/nft-bosses",
-        lazy: async () => ({ Component: (await import("./pages/BossNftPreview")).default }),
+        lazy: nftRoute(() => import("./pages/BossNftPreview"), "/admin/nfts?collection=bosses"),
       },
       {
         path: "/nft-ships",
-        lazy: async () => ({ Component: (await import("./pages/ShipNftPreview")).default }),
+        lazy: nftRoute(() => import("./pages/ShipNftPreview"), "/admin/nfts?collection=ships"),
       },
     ],
   },

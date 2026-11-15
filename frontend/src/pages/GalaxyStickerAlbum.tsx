@@ -12,12 +12,13 @@ type Props = {
   owner: string | null;
   stations: ArcadeStation[];
   stationCount: number;
+  canPreviewNfts?: boolean;
   initialLevel?: number;
   labels: ArcadeLabels['stickers'];
   onClose: () => void;
 };
 
-export default function GalaxyStickerAlbum({ owner, stations, stationCount, initialLevel, labels, onClose }: Props) {
+export default function GalaxyStickerAlbum({ owner, stations, stationCount, canPreviewNfts = false, initialLevel, labels, onClose }: Props) {
   const { t, locale } = useLocale();
   const dialog = useRef<HTMLDialogElement>(null);
   const close = useRef<HTMLButtonElement>(null);
@@ -55,19 +56,19 @@ export default function GalaxyStickerAlbum({ owner, stations, stationCount, init
   const motif = station && arcadeStickerMotifs[station.level];
   const stationStickers = new Map(stickers.filter(sticker => sticker.level === station?.level).map(sticker => [sticker.rank, sticker]));
   const previewSticker = previewRank === undefined ? undefined : stationStickers.get(previewRank);
-  const preview = previewSticker && retroNftPreviewFor(previewSticker);
+  const preview = canPreviewNfts && previewSticker ? retroNftPreviewFor(previewSticker) : undefined;
   const copy = retroNftCopy(locale);
-  const previewImage = preview?.image;
+  const previewPath = preview?.artworkPath;
 
   useEffect(() => {
-    if (previewImage) {
+    if (previewPath) {
       dialog.current?.scrollTo({ top: 0, behavior: 'instant' });
       previewBack.current?.focus({ preventScroll: true });
     } else if (previewTrigger.current) {
       previewTrigger.current.focus();
       previewTrigger.current = null;
     }
-  }, [previewImage]);
+  }, [previewPath]);
 
   const backToAlbum = () => setPreviewRank(undefined);
   const dismiss = preview ? backToAlbum : onClose;
@@ -81,7 +82,7 @@ export default function GalaxyStickerAlbum({ owner, stations, stationCount, init
         <button ref={previewBack} type="button" className="galaxy-retro-nft-back" onClick={backToAlbum}>
           <span aria-hidden="true">←</span> {copy.backToAlbum}
         </button>
-        <RetroNftCardPreview key={`${preview.image}:${preview.rankId}`} sticker={previewSticker} preview={preview}
+        <RetroNftCardPreview key={preview.artworkPath} sticker={previewSticker} preview={preview}
           rankLabel={labels.ranks[previewSticker.rank - 1]}/>
       </>}
       <div hidden={!!preview}>
@@ -124,7 +125,7 @@ export default function GalaxyStickerAlbum({ owner, stations, stationCount, init
                     </div>
                     <strong>{name}</strong>
                     <small title={sticker?.shipName}>{shipName || t('Locked')}</small>
-                    {sticker && retroNftPreviewFor(sticker) && <button type="button" className="galaxy-retro-nft-open" aria-label={`${copy.preview} · ${name}`}
+                    {canPreviewNfts && sticker && retroNftPreviewFor(sticker) && <button type="button" className="galaxy-retro-nft-open" aria-label={`${copy.preview} · ${name}`}
                       onClick={event => { previewTrigger.current = event.currentTarget; setPreviewRank(sticker.rank); }}>
                       {copy.preview}
                     </button>}

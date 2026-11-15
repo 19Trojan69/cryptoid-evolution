@@ -17,6 +17,7 @@ import { galaxyScenery, galaxySceneryAsset } from './galaxyScenery.ts';
 import { MAX_DIFFICULTY_LEVEL } from './levelDifficulty.ts';
 import { BOSS_STICKER_COUNT } from '../../../backend/src/rewardRules.ts';
 import { arcadeRankIds } from '../../../backend/src/galaxyArcadeStickerSchema.ts';
+import { retroNftScenes } from '../../../backend/src/retroNftScenes.ts';
 import { retroNftPreviewCount, retroNftPreviewFor } from './retroNftPreviews.ts';
 
 test('500 unique levels ascend from the bottom across ten regions with exact port counts', () => {
@@ -59,12 +60,15 @@ test('all playable Retro stations have a distinct HD scene shared by their six r
   for (const level of Object.keys(arcadeStickerMotifs).map(Number)) {
     const previews = arcadeRankIds.map((_, index) => retroNftPreviewFor({ level, rank: index + 1 }));
     assert.deepEqual(previews.map(preview => preview?.rankId), arcadeRankIds);
-    const { image, title } = previews[0];
+    const { artwork, title } = retroNftScenes[level];
     assert.ok(title.trim());
-    assert.ok(previews.every(preview => preview.image === image));
-    assert.ok(existsSync(new URL(`../../public${image}`, import.meta.url)), image);
-    assert.ok(!scenes.has(image), image);
-    scenes.add(image);
+    assert.ok(previews.every(preview => preview.title === title));
+    assert.deepEqual(previews.map(preview => preview.artworkPath),
+      arcadeRankIds.map(rank => `/admin/nft-collection/retro/${level}/${rank}`));
+    assert.ok(existsSync(new URL(`../../../backend/retro-nft-previews/${artwork}.webp`, import.meta.url)), artwork);
+    assert.ok(!existsSync(new URL(`../../public/nft/retro/${artwork}.webp`, import.meta.url)), artwork);
+    assert.ok(!scenes.has(artwork), artwork);
+    scenes.add(artwork);
   }
   assert.equal(scenes.size, 40);
   assert.equal(retroNftPreviewCount, 240);

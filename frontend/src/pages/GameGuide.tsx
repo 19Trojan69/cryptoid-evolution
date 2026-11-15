@@ -193,7 +193,6 @@ const GameGuide = ({ onClose, initialTopic, backLabel, onNavigate, nftPreviewAva
             <li>{t("With a connected Pi account, Testnet pilots can buy Twin Laser and Rapid Twin charges with Test-Pi. Verified owner access also opens Triple Laser, Plasma, start power-ups and armor.")}</li>
             <li>{t("Choose 1, 5 or 10 charges, or enter a quantity from 1 to {max} before confirming a Test-Pi purchase.", { max: MAX_CHARGE_QUANTITY })}</li>
           </>}
-          {topic.id === "nfts" && shipSaveNetwork === "testnet" && <li>{t("Defeat a boss to reveal both of its NFT cards.")}</li>}
         </ul>
       </section>
       <button className="button button-secondary guide-back" type="button" onClick={onClose}><span className="guide-back-arrow" aria-hidden="true">←</span>{t(backLabel)}</button>

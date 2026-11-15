@@ -67,16 +67,8 @@ function fixture(account) {
   };
 }
 
-test("only the Testnet deployment routes authenticated NFT preview requests locally", async () => {
-  const calls = [];
-  const backend = {
-    async start() {},
-    app(req, res) {
-      calls.push({ path: req.url, network: req.headers["x-cryptoid-app-network"], authorizedNetwork: req.testnetSave });
-      return res.json({ ok: true });
-    },
-  };
-  const create = project => createApiGateway(async () => backend, () => ({
+test("the former public Boss NFT preview is retired on Testnet for every session", async () => {
+  const create = project => createApiGateway(async () => { throw Error("Legacy preview must not start a backend"); }, () => ({
     VERCEL_ENV: "production", VERCEL_PROJECT_PRODUCTION_URL: project,
   }));
   const headers = { host: "cryptoid-evolution-testnet.vercel.app", "x-cryptoid-app-network": "testnet" };
@@ -86,9 +78,8 @@ test("only the Testnet deployment routes authenticated NFT preview requests loca
     return res.code;
   };
   assert.equal(await check("cryptoid-evolution.vercel.app", "Bearer token"), 404);
-  assert.equal(await check(headers.host), 401);
-  assert.equal(await check(headers.host, "Bearer token"), 200);
-  assert.deepEqual(calls, [{ path: "/boss-nft-preview?edition=holo", network: "testnet", authorizedNetwork: true }]);
+  assert.equal(await check(headers.host), 404);
+  assert.equal(await check(headers.host, "Bearer token"), 404);
 });
 
 test("neither a mismatched token nor reaching a boss exposes artwork without a confirmed Testnet win", async () => {

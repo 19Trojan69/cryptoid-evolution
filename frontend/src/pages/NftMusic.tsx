@@ -1,4 +1,4 @@
-import { createContext, useContext } from "react";
+import { createContext, useContext, type ReactNode } from "react";
 import { Outlet } from "react-router-dom";
 import { useLocale } from "../i18n";
 import { shipSaveNetwork } from "./shipFleet";
@@ -7,14 +7,18 @@ import { usePageMusic } from "./usePageMusic";
 const testnet = shipSaveNetwork === "testnet";
 const NftMusicContext = createContext<ReturnType<typeof usePageMusic> | null>(null);
 
-export function NftMusicLayout() {
-  // The route layout stays mounted while its NFT pages change.
-  const music = usePageMusic("/audio/keep-a-light-on-piano.mp3", testnet);
+export function NftMusicProvider({ active, children }: { active: boolean; children: ReactNode }) {
+  const music = usePageMusic("/audio/keep-a-light-on-piano.mp3", active);
   return (
-    <NftMusicContext.Provider value={testnet ? music : null}>
-      <Outlet />
+    <NftMusicContext.Provider value={active ? music : null}>
+      {children}
     </NftMusicContext.Provider>
   );
+}
+
+export function NftMusicLayout() {
+  // The route layout stays mounted while its NFT pages change.
+  return <NftMusicProvider active={testnet}><Outlet /></NftMusicProvider>;
 }
 
 export function NftMusicButton() {
