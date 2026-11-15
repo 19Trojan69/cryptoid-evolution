@@ -119,7 +119,7 @@ test('losing focus only clears controls, while going into the background still p
   const document = Object.assign(new EventTarget(), { visibilityState: 'visible' });
   const state = { status: 'playing', effects: [] };
   Object.assign(h.context, {
-    window, document, stateRef: { current: state }, backgroundHiddenAtRef: { current: 0 },
+    window, document, stateRef: { current: state }, storyRef: { current: null }, backgroundHiddenAtRef: { current: 0 },
     lastFrameRef: { current: 0 }, slowFramesRef: { current: 0 },
     soundRef: { current: { setPaused: paused => h.events.push('sound:' + paused) } },
     musicRef: { current: { pause: () => h.events.push('music paused') } },

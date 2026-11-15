@@ -4,9 +4,10 @@ import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { startGuardedGameLoop } from './gameLoop.ts';
 import { createFrameScheduler } from '../lib/frameScheduler.ts';
+import { restoreStoryBriefingChanges } from '../../scripts/storyBriefingReviewedChanges.mjs';
 import { gameOverLoopChange, restoreGameOverLoopGameChange } from '../../scripts/gameOverLoopReviewedChanges.mjs';
 
-const source = readFileSync(new URL('./GamePage.tsx', import.meta.url), 'utf8');
+const source = restoreStoryBriefingChanges(readFileSync(new URL('./GamePage.tsx', import.meta.url), 'utf8'));
 assert.equal(source.split(gameOverLoopChange.after).length, 2);
 const predicate = (line, stateRef) => new Function('stateRef', 'return (' + line.trim().slice('sleepWhenInactive: '.length, -1) + ')')(stateRef);
 

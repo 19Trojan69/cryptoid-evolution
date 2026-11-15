@@ -8,10 +8,13 @@ import { VIBRATION_KEY, readVibrationEnabled, supportsVibration, gameHaptics } f
 import { requestGameFullscreen } from "./gameFullscreen";
 import MusicVolumeSlider from "./MusicVolumeSlider";
 import { MOTION_STORAGE_KEY, applySavedDisplaySettings, readReducedEffects, type SettingsSection } from './displaySettings';
+import { storyBriefingsEnabled, setStoryBriefingsEnabled } from "./story/storyPreferences";
+import { storyCopy } from "./story/storyCopy";
 type Props = { musicVolume: number; effectsVolume: number; changeMusicVolume: (value: number) => void; changeEffectsVolume: (value: number) => void; onChange?: () => void; idPrefix: string; initialSection?: SettingsSection; compactMobile?: boolean };
 export default function SystemSettings({ musicVolume, effectsVolume, changeMusicVolume, changeEffectsVolume, onChange, idPrefix, initialSection, compactMobile = false }: Props) {
   const { locale, automatic, t } = useLocale();
   const [languageMenuOpen, setLanguageMenuOpen] = useState(false);
+  const [briefings, setBriefings] = useState(storyBriefingsEnabled);
   const [reducedEffects, setReducedEffects] = useState(readReducedEffects);
   const [fullscreenStatus, setFullscreenStatus] = useState("");
   useEffect(() => {
@@ -87,6 +90,9 @@ export default function SystemSettings({ musicVolume, effectsVolume, changeMusic
             <button className="system-setting phone-fullscreen-setting" type="button" onClick={fullScreen}><span aria-hidden="true">⛶</span><b>{t('Full screen')}</b></button>
             {fullscreenStatus && <p role="status" className="fullscreen-status phone-fullscreen-setting">{t(fullscreenStatus)}</p>}
             <button className="system-setting" type="button" disabled={!supportsVibration()} aria-pressed={vibrationEnabled && supportsVibration()} onClick={() => { const enabled = !vibrationEnabled; localStorage.setItem(VIBRATION_KEY, enabled ? "on" : "off"); setVibrationEnabled(enabled); onChange?.(); if (!enabled) gameHaptics.stop(); }}><span aria-hidden="true">≋</span><b>{t(!supportsVibration() ? "Vibration unavailable" : vibrationEnabled ? "Vibration on" : "Vibration off")}</b></button>
+            <button className="system-setting" type="button" aria-pressed={briefings} onClick={() => {
+              setStoryBriefingsEnabled(!briefings); setBriefings(!briefings);
+            }}><span aria-hidden="true">▤</span><b>{storyCopy(locale)[3]}</b></button>
             <button className="system-setting" type="button" aria-pressed={reducedEffects} onClick={() => { const reduced = !reducedEffects; localStorage.setItem(MOTION_STORAGE_KEY, reduced ? "1" : "0"); applySavedDisplaySettings(); setReducedEffects(readReducedEffects()); if (reduced) gameHaptics.stop(); onChange?.(); }}><span aria-hidden="true">◌</span><b>{t(reducedEffects ? 'Reduced effects' : 'Standard effects')}</b></button>
           </div>
   </div>;

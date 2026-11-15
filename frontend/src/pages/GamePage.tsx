@@ -99,6 +99,8 @@ import axios from "axios";
 import { makeShipVolley, shipFireInterval } from "./shipAttributes";
 import { activateCollectedPower } from "./collectedPower";
 import { leaveGameFullscreen } from "./gameFullscreen";
+import StoryBriefing from "./story/StoryBriefing";
+import { storyBriefingsEnabled, type StoryScene } from "./story/storyPreferences";
 import { levelDifficulty, MAX_DIFFICULTY_LEVEL } from "./levelDifficulty";
 import { createDoubleKillCombo, creditComboDefeat, DOUBLE_KILL_SCORE, DOUBLE_KILL_SHARDS, type DoubleKillCombo } from "./doubleKillCombo";
 import { missionShardBase, missionShardTotal, uncreditedGuestShards, BONUS_TARGET_SHARD_REWARD, bossPoints, bossShardReward, creditReward } from "./shardEarnings";
@@ -501,7 +503,16 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
   const pendingBossCardRef=useRef<CardReward|null>(null);
   const [extraLifeVisible,setExtraLifeVisible]=useState(false);
   const [game, setGame] = useState<GameState>(() => createInitialState(authenticated));
-  useEffect(() => { wakeGameLoopRef.current?.(); }, [game.status]);
+  const [story, setStory] = useState<StoryScene | null>(() => game.status === 'playing' && storyBriefingsEnabled() ? 'campaign' : null);
+  const storyRef = useRef(story);
+  const queueStory = useCallback((scene: StoryScene) => {
+    if (!storyBriefingsEnabled()) return false;
+    storyRef.current = scene;
+    clearControls();
+    setStory(scene);
+    return true;
+  }, [clearControls]);
+  useEffect(() => { wakeGameLoopRef.current?.(); }, [game.status, story]);
   const [bossSummary, setBossSummary] = useState<BossSummary | null>(null);
   const bossSummaryRef = useRef<{ summary: BossSummary; accepted: boolean; restored: boolean } | null>(null);
   const [bossSummaryPrepared, setBossSummaryPrepared] = useState(false);
@@ -1098,6 +1109,11 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
           confirm: true, summaryPlacement: 'level-end' };
         await retrySave(() => axiosClient.post('/progress/boss-summary/continue', legacyStop));
       }
+      if (!adminRunRef.current && saveChoiceRef.current === 'new' && data.startSector === 1 && !data.checkpoint) {
+        queueStory('campaign');
+      } else if (adminRunRef.current && data.startSector === 10 && stateRef.current.encounter === 'boss-intro') {
+        queueStory('varneth');
+      }
     } catch (error) {
       console.error("Could not load paid loadout", error);
       if (sessionStorage.getItem(ADMIN_MODE_KEY) === "1") {
@@ -1198,6 +1214,7 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
     void fetch("/audio/boss-victory-v2.mp3").catch(() => {});
     const track = takeHandoffGameMusic() ?? new MusicPlayer("/audio/battle-orbit.mp3", readMusicVolume());
     musicRef.current = track;
+    if (storyRef.current) track.pause();
     const finishVictoryMusic = () => {
       if (stateRef.current.encounter !== "boss-clear" || track.currentSource !== "/audio/boss-victory-v2.mp3") return;
       bossVictoryFinishedRef.current = true;
@@ -1209,6 +1226,7 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
     track.audio.addEventListener("ended", finishVictoryMusic);
     const resume = () => {
       if (document.visibilityState === "hidden" || (backgroundHiddenAtRef.current && Date.now() - backgroundHiddenAtRef.current > 1_000)) return;
+      if (storyRef.current) return;
       const status = stateRef.current.status;
       const canResume = track.currentSource === COMPLETION_MUSIC_SOURCE
         ? completionMusicVisibleRef.current && status === "paused" && !track.audio.ended
@@ -1249,6 +1267,7 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
   useEffect(() => {
     const track = musicRef.current;
     if (!track) return;
+    if (story) { track.pause(); return; }
     const normalSource = "/audio/battle-orbit.mp3";
     const waitingForExplosion = game.encounter === "boss-clear" && bossVictoryPendingRef.current;
     if (bonusMusicEnding && !hasCompletionMusic
@@ -1274,7 +1293,7 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
     const playCompletion = completionMusicVisible && !document.hidden && !track.audio.ended;
     if (playCompletion || game.status === "playing" || game.status === "game-over" || game.status === "victory") void track.play();
     else if (game.status !== "loading") track.pause();
-  }, [game.status, game.encounter, musicEnabled, hasBonusMusic, bonusMusicEnding, hasCompletionMusic, completionMusicVisible]);
+  }, [game.status, game.encounter, musicEnabled, hasBonusMusic, bonusMusicEnding, hasCompletionMusic, completionMusicVisible, story]);
   useEffect(() => {
     const fadeBonus = bonusMusicEnding && !hasCompletionMusic;
     const volume = game.status === "playing" && game.encounter === "boss-clear"
@@ -1523,6 +1542,7 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
 
   const retryAudio = () => {
     // Menu taps must not restart the soundtrack while the simulation is paused.
+    if (storyRef.current) return;
     if (document.visibilityState === "hidden" || !["playing", "game-over", "victory"].includes(stateRef.current.status)) return;
     void startEffects();
     if (musicEnabled && musicRef.current && musicRef.current.currentSource !== COMPLETION_MUSIC_SOURCE) void musicRef.current.play();
@@ -1535,7 +1555,7 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
     if (!field) return;
     const input = bindGameInput(field, {
       pointer: pointerRef, origin: touchOriginRef,
-      playing: () => stateRef.current.status === 'playing',
+      playing: () => stateRef.current.status === 'playing' && !storyRef.current,
       aboveFinger: () => readShipStart() !== 'touch',
       sensitivity: () => sensitivityMultiplier[readControlSensitivity()],
       area: readControlZone,
@@ -1551,13 +1571,14 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
   useEffect(() => {
     const controls = new Set(["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "KeyA", "KeyD", "KeyW", "KeyS"]);
     const keyDown = (event: KeyboardEvent) => {
-      if (stateRef.current.status !== 'playing' || rewardCardsRef.current.length || !controls.has(event.code) || (event.target as HTMLElement)?.closest("input, textarea, select")) return;
+      if (storyRef.current || stateRef.current.status !== 'playing' || rewardCardsRef.current.length || !controls.has(event.code) || (event.target as HTMLElement)?.closest("input, textarea, select")) return;
       event.preventDefault();
       void startEffectsRef.current();
       keysRef.current.add(event.code);
     };
     const keyUp = (event: KeyboardEvent) => keysRef.current.delete(event.code);
     const pauseAfterBackground = () => {
+      if (storyRef.current) return;
       if (document.visibilityState === "hidden") {
         if (stateRef.current.status === "playing") void saveCombatRef.current().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried."));
         if (!backgroundHiddenAtRef.current) backgroundHiddenAtRef.current = Date.now();
@@ -1614,6 +1635,7 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
   useEffect(() => {
     let frameGap = 0, simulatedMs = 0, forceScene = false, requestScene = false;
     const simulate = (time: number, delta: number, present: boolean) => {
+      if (storyRef.current) return;
       const state = stateRef.current;
       // Preserve destruction effects through a user pause or a backgrounded tab.
       if (state.status !== "playing") {
@@ -1809,7 +1831,7 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
               performanceProbeRef.current?.checkpoint('boss-model-start', { sector: state.sector, encounter: 'boss-intro', phase: 'SECTOR_INTRO', hearts: state.hearts });
               state.boss = createSectorBoss(state.sector, width, visibleTop, height);
               performanceProbeRef.current?.checkpoint('boss-model-ready', { sector: state.sector, encounter: 'boss-intro', phase: 'SECTOR_INTRO', hearts: state.hearts, bossId: state.boss.config.id });
-              soundRef.current?.play("boss");
+              if (state.sector !== 10 || !queueStory('varneth')) soundRef.current?.play("boss");
             } else {
               state.boss = null;
             }
@@ -2367,8 +2389,8 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
     };
     const stop = startGuardedGameLoop({ step,
       fault: (reason, error) => interruptionRef.current(reason, error),
-      active: () => stateRef.current.status === 'playing',
-      sleepWhenInactive: () => stateRef.current.status === 'game-over' || (stateRef.current.status !== 'destroying' && stateRef.current.effects.length === 0),
+      active: () => stateRef.current.status === 'playing' && !storyRef.current,
+      sleepWhenInactive: () => Boolean(storyRef.current) || stateRef.current.status === 'game-over' || (stateRef.current.status !== 'destroying' && stateRef.current.effects.length === 0),
       visible: () => document.visibilityState !== 'hidden',
       now: () => performance.now(),
       requestFrame: requestGameFrame,
@@ -2383,7 +2405,7 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
       if (gameOverTimerRef.current !== null) window.clearTimeout(gameOverTimerRef.current);
       gameOverTimerRef.current = null;
     };
-  }, [showRewardCards, diagnosticContext, beginBossSummary]);
+  }, [showRewardCards, diagnosticContext, beginBossSummary, queueStory]);
 
   const applyPurchasedPower = (power: MissionPower) => {
     const state = stateRef.current;
@@ -2656,6 +2678,7 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
     lastFrameRef.current = 0;
     lastPaintRef.current = 0;
     slowFramesRef.current = 0;
+    if (stateRef.current.status === 'playing') queueStory('campaign');
     setGame(stateRef.current);
     if (stateRef.current.status === "loading") void activateLoadout();
   };
@@ -2781,6 +2804,17 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
 
   return (
     <main className="game-shell" data-effects-paused={game.status === "paused" || game.status === "loading"} onPointerDownCapture={() => { primeCardSound(); if(rewardCardsRef.current.length)return; retryAudio(); }}>
+      {story && !rewardCards.length && <StoryBriefing key={story} scene={story}
+        unlocked={story === 'varneth' && (rewardProgressRef.current.bossWins[1] ?? 0) > 0}
+        withAudio={musicEnabled && !ownerAudioDisabled() && musicVolume > 0} volume={musicVolume}
+        onFinish={() => {
+          if (storyRef.current !== story) return;
+          storyRef.current = null;
+          clearControls();
+          lastFrameRef.current = 0;
+          if (story === 'varneth') soundRef.current?.play('boss');
+          setStory(null);
+        }} />}
       {rewardCards[0] && <CardReveal reward={rewardCards[0]} remaining={rewardCards.length} onContinue={continueRewardCard}/>}
       {bossSummary && !rewardCards.length && !homePrompt && <LevelCompletion key={bossSummary.stage} summary={bossSummary} name={sectorName(game.sector)} headline={transitionHeadline}
         bonusHits={game.bonusHits} bonus={bonusReward(game.bonusHits, game.sector)} chainShards={bonusChainReward(game.chainBlocks, game.bonusHits, game.sector)}
@@ -2790,7 +2824,7 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
         saving={bossSummarySaving} failed={bossSummaryFailed} continuing={bossSummaryContinuing} failureMessage={bossSummaryFailure}
         onRetry={() => { if (bossSummaryContinueFailed) void continueBossSummary(true); else void prepareBossSummary(true); }} onContinue={() => { void continueBossSummary(); }} />}
       {extraLifeVisible&&<div className={`boss-extra-life${game.bossHeartShards ? " boss-shard-reward" : ""}`} role="status" aria-live="polite"><strong>{t(game.bossHeartShards ? 'FULL HEARTS' : 'HEART RESTORED')}</strong><span>{game.bossHeartShards ? `+${game.bossHeartShards} ◆` : '+1 ♥'}</span></div>}
-      <div ref={fieldRef} className="game-field" onContextMenu={event => event.preventDefault()} onDoubleClick={event => event.preventDefault()} onDragStart={event => event.preventDefault()}>
+      <div ref={fieldRef} className="game-field" inert={Boolean(story) && !rewardCards.length} onContextMenu={event => event.preventDefault()} onDoubleClick={event => event.preventDefault()} onDragStart={event => event.preventDefault()}>
         <GameSceneBoundary onError={error => interruptionRef.current('render-error', error)} fallback={retry => <div className="game-overlay"><div className="game-modal" role="alert"><h1>{t('MISSION PAUSED')}</h1><p>{t("The mission was paused after a technical interruption. Try Resume to continue.")}</p><button type="button" className="button button-primary" onClick={retry}>{t('Try again')}</button></div></div>}>
         <Starfield sector={game.sector} player={game.player} paused={game.status !== "playing"} showNebula={game.encounter === "boss-fight"} />
         <SectorBackdrop sector={game.sector} player={game.player} paused={game.status !== "playing"} />
