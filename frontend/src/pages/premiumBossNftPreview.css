@@ -1,0 +1,77 @@
+.premium-battle-draft { color: #f0d4a3; margin: .25rem 0 .6rem; }
+.premium-battle-card {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  isolation: isolate;
+  overflow: hidden;
+  border-radius: .6rem;
+  background: #040813 center / cover no-repeat;
+  container-type: inline-size;
+  --battle-light: #acf5ff;
+  --boss-bank: -12deg;
+  --ship-bank: -29deg;
+  --ship-position: 61%;
+  --beam-position: 56%;
+  --beam-bank: -29deg;
+}
+.premium-battle-card[data-edition="diamond"] { --battle-light: #d3a0ff; }
+.premium-battle-card[data-angle="1"] { --boss-bank: 15deg; --ship-position: 5%; --beam-position: 42%; --ship-bank: 34deg; --beam-bank: 34deg; }
+.premium-battle-card[data-angle="2"] { --boss-bank: -19deg; --ship-position: 49%; --beam-position: 53%; --ship-bank: -14deg; --beam-bank: -14deg; }
+.premium-battle-card[data-angle="3"] { --boss-bank: 22deg; --ship-position: 16%; --beam-position: 46%; --ship-bank: 19deg; --beam-bank: 19deg; }
+.premium-battle-title { position: relative; z-index: 2; padding: 5% 8% 0; text-align: center; color: #eef4fc; }
+.premium-battle-title > div:nth-child(-n+2) { font-size: 3.1cqi; letter-spacing: .23em; text-transform: uppercase; }
+.premium-battle-title > div:nth-child(2) { margin-top: 2%; color: var(--battle-light); }
+.premium-battle-name {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3%;
+  min-height: 18cqi;
+  font: 700 10cqi/.98 Georgia, serif;
+  text-shadow: 0 .035em #7b8290, 0 .075em #4c5160, 0 .11em #202635, 0 .15em .16em #050810;
+  text-transform: uppercase;
+}
+.premium-battle-name strong { overflow-wrap: anywhere; }
+.premium-battle-name img { width: 29%; flex-shrink: 0; filter: drop-shadow(0 4px 3px #000c); }
+.premium-battle-title p { margin: 0; font: italic 3.4cqi/1.25 Georgia, serif; }
+.premium-battle-stage { position: absolute; inset: 0; perspective: 420px; }
+.premium-battle-stage img { position: absolute; height: auto; }
+.premium-battle-stage .premium-battle-boss {
+  z-index: 1;
+  width: 111%;
+  top: 34%;
+  left: -5%;
+  transform: rotate(var(--boss-bank)) rotateX(21deg);
+  filter: drop-shadow(0 1.5rem 1rem #000c);
+}
+.premium-battle-stage .premium-battle-ship {
+  z-index: 2;
+  width: 33%;
+  left: var(--ship-position);
+  top: 65%;
+  transform: rotate(var(--ship-bank)) rotateX(16deg);
+  filter: drop-shadow(0 .8rem 1.2rem #010209);
+}
+.premium-battle-beam {
+  position: absolute;
+  z-index: 1;
+  top: 42%;
+  left: var(--beam-position);
+  width: 1.05%;
+  height: 29%;
+  transform: rotate(var(--beam-bank));
+  border-radius: 50%;
+  background-color: #fff;
+  box-shadow: 0 0 .6rem .16rem var(--battle-light);
+}
+.premium-edition-notice { padding-inline-start: 1.1rem; margin: .45rem 0 0; }
+.premium-edition-notice li + li { margin-top: .25rem; }
+.premium-battle-card[data-concealed="true"] {
+  background: radial-gradient(ellipse at 40% 56%, #1b2b42, #070b16 63%);
+}
+.premium-battle-card[data-concealed="true"] img {
+  filter: brightness(0) drop-shadow(0 1px 0 var(--battle-light))
+    drop-shadow(0 -1px 0 var(--battle-light)) drop-shadow(1px 0 0 var(--battle-light))
+    drop-shadow(-1px 0 0 var(--battle-light));
+}
+.premium-battle-card[data-concealed="true"] .premium-battle-beam { display: none; }

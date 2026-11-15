@@ -6,6 +6,7 @@ import { arcadeStickerLabels } from '../../../backend/src/galaxyArcadeStickerCop
 import { retroNftScenes } from '../../../backend/src/retroNftScenes.ts';
 import { BOSS_STICKER_COUNT } from '../../../backend/src/rewardRules';
 import { shipNftMaxSupply } from '../../../backend/src/shipNftCatalog';
+import { isPremiumBossEdition, premiumBossCard, premiumBossEditions } from '../../../backend/src/premiumBossNft';
 import { hangarCatalog } from '../../../backend/src/hangarCatalog';
 import { useAuth } from '../hooks/useAuth';
 import { useLocale } from '../i18n';
@@ -13,6 +14,7 @@ import { nftGalleryCopy } from '../locales/bossNftGallery';
 import { bossName } from './bossNames';
 import { bossNftEditions } from './bossNftEditions';
 import { retroNftPreviewCount, retroNftPreviewFor } from './retroNftPreviews';
+import PremiumBossNftPreview from './PremiumBossNftPreview';
 import RetroNftCardPreview from './RetroNftCardPreview';
 import { retroMiniGamesName } from './galaxyArcadeRecords';
 import { allPlayerColors, playerSkins, shipFactoryPaint, shipPaintAvailable, shipSaveNetwork } from './shipFleet';
@@ -24,7 +26,8 @@ import './adminNftCollection.css';
 
 const sections = ['bosses', 'ships', 'retro'] as const;
 const stages = ['Standard', 'Advanced', 'Elite'] as const;
-const bossEditions = ['victory', 'holo'] as const;
+const bossEditions = { ...bossNftEditions, ...premiumBossEditions };
+const bossEditionKeys = Object.keys(bossEditions) as Array<keyof typeof bossEditions>;
 const bossIds = Array.from({ length: BOSS_STICKER_COUNT }, (_, i) => i + 1);
 const stationLevels = Object.keys(retroNftScenes).map(Number);
 const retroTerms = {
@@ -36,11 +39,11 @@ const retroTerms = {
   diamond: { supply: 314, pricePi: 12 },
 } as const;
 
-function NftTerms({ supply, price, currency }: { supply: number; price?: number; currency: 'Pi' | 'Shards' }) {
+function NftTerms({ supply, price, currency }: { supply?: number; price?: number; currency: 'Pi' | 'Shards' }) {
   const { locale, t } = useLocale();
   const priceFormat = currency === 'Pi' ? { minimumFractionDigits: 2, maximumFractionDigits: 2 } : undefined;
   return <dl className="admin-nft-terms">
-    <div><dt>{t('Edition size')}</dt><dd>{supply.toLocaleString(locale)}</dd></div>
+    {supply !== undefined && <div><dt>{t('Edition size')}</dt><dd>{supply.toLocaleString(locale)}</dd></div>}
     {price !== undefined && <div><dt>{t('Planned price')}</dt><dd>{price === 0 ? t('Free') : `${price.toLocaleString(locale, priceFormat)} ${currency}`}</dd></div>}
   </dl>;
 }
@@ -63,20 +66,33 @@ function StoredArtwork({ path, title }: { path: string; title: string }) {
 function BossCollection() {
   const { t, locale } = useLocale();
   const [id, setId] = useState(1);
-  const [edition, setEdition] = useState<typeof bossEditions[number]>('victory');
-  const plan = bossNftEditions[edition];
+  const [edition, setEdition] = useState<keyof typeof bossEditions>('victory');
+  const plan = bossEditions[edition];
+  const premium = isPremiumBossEdition(edition) ? premiumBossCard(id, edition) : undefined;
   const path = `/admin/nft-collection/bosses/${id}/${edition}`;
   return <>
+    <section className="admin-nft-notice">
+      <strong>{t('Coming to Mainnet')}</strong>
+      <ul className="premium-edition-notice">
+        {Object.values(premiumBossEditions).map(edition => <li key={edition.name}>
+          <span lang="en">{edition.name}</span> · {edition.pricePi.toLocaleString(locale)} <span>Pi</span> · {t('{count} wins against the same boss', { count: edition.requiredWins })}
+        </li>)}
+      </ul>
+    </section>
     <div className="admin-nft-filters">
       <label>{t('Boss')}<select value={id} onChange={event => setId(Number(event.currentTarget.value))}>
         {bossIds.map(boss => <option key={boss} value={boss}>{boss.toLocaleString(locale)} · {bossName(boss)}</option>)}
       </select></label>
-      <label>{t('Edition')}<select value={edition} onChange={event => setEdition(event.currentTarget.value === 'holo' ? 'holo' : 'victory')}>
-        {bossEditions.map(key => <option key={key} value={key}>{bossNftEditions[key].name}</option>)}
+      <label>{t('Edition')}<select value={edition} onChange={event => {
+        const selected = bossEditionKeys.find(key => key === event.currentTarget.value);
+        if (selected) setEdition(selected);
+      }}>
+        {bossEditionKeys.map(key => <option key={key} value={key}>{bossEditions[key].name}</option>)}
       </select></label>
     </div>
-    <NftTerms supply={plan.supply} price={edition === 'holo' ? bossNftEditions.holo.pricePi : 0} currency="Pi"/>
-    <StoredArtwork path={path} key={path} title={`${bossName(id)} · ${plan.name}`}/>
+    <NftTerms supply={'supply' in plan ? plan.supply : undefined} price={'pricePi' in plan ? plan.pricePi : 0} currency="Pi"/>
+    {premium ? <PremiumBossNftPreview key={path} card={premium}/>
+      : <StoredArtwork path={path} key={path} title={`${bossName(id)} · ${plan.name}`}/>}
   </>;
 }
 
@@ -153,7 +169,7 @@ function TestnetNftCollection() {
   const [search, setSearch] = useSearchParams();
   const section = sections.find(key => key === search.get('collection')) ?? sections[0];
   const names = { bosses: nftGalleryCopy(locale).title, ships: t('Ship NFTs'), retro: retroMiniGamesName };
-  const counts = { bosses: bossIds.length * bossEditions.length, ships: playerSkins.length * stages.length, retro: retroNftPreviewCount };
+  const counts = { bosses: bossIds.length * bossEditionKeys.length, ships: playerSkins.length * stages.length, retro: retroNftPreviewCount };
   const total = counts.bosses + counts.ships + counts.retro;
   const verifiedAdmin = authReady && !isLoading && !!user && canAdmin;
 

@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
+import { existsSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import test from 'node:test';
 
@@ -10,13 +11,15 @@ const { BOSS_NFT_PREVIEW_ART_REVISION } = require('../build/handlers/bossNftPrev
 const { arcadeRankIds } = require('../build/galaxyArcadeStickerSchema.js');
 const { retroNftScenes } = require('../build/retroNftScenes.js');
 const { shipNftCatalog } = require('../build/shipNftEligibility.js');
+const { premiumBossCard, premiumBossEditions } = require('../build/premiumBossNft.js');
+const { shipLiveryAssetPath, shipFactoryPaint } = require('../build/shipLivery.js');
 const testnet = 'cryptoid-evolution-testnet.vercel.app';
 const mainnet = 'cryptoid-evolution.vercel.app';
 const testnetEnv = { VERCEL_ENV: 'production', VERCEL_PROJECT_PRODUCTION_URL: testnet };
 const artworkPath = 'admin/nft-collection';
 const bossExample = artworkPath + '/bosses/1/victory';
 
-function fixture(t, env = testnetEnv) {
+function fixture(t, env = testnetEnv, wins = {}) {
   const previous = process.env.ADMIN_PI_TESTNET_UID;
   process.env.ADMIN_PI_TESTNET_UID = 'fixture-owner';
   t.after(() => {
@@ -38,7 +41,10 @@ function fixture(t, env = testnetEnv) {
       const [, , , collection, item, edition] = req.url.split('/');
       req.params = { collection, item, edition };
       req.get = name => req.headers[name];
-      req.app = { locals: { bossNftPreviewCollection: {
+      req.app = { locals: { userCollection: { async findOne({ uid }) {
+        assert.equal(uid, req.session.currentUser.uid);
+        return { rewardsByNetwork: { testnet: { bossWins: wins }, mainnet: { bossWins: { 1: 3 } } } };
+      } }, bossNftPreviewCollection: {
         async findOne({ _id }) {
           lookedUp.push(_id);
           return { webp: 'UklGRfixture', story: 'Stored English artwork description' };
@@ -134,5 +140,67 @@ test('the owner can request each of the 400 variants without unlocking or buying
 
   for (const path of ['bosses/51/victory', 'bosses/1/free', 'ships/grey-scout/invalid', 'retro/205/diamond', 'retro/5/holo']) {
     assert.equal((await f.get(`${artworkPath}/${path}`)).code, 404, path);
+  }
+});
+
+test('premium catalog contains 100 unique boss editions with verified ship assets and consistent prices', () => {
+  const designs = new Set();
+  const scenes = new Set();
+  const captions = new Set();
+  const platinumShips = new Set();
+  const diamondShips = new Set();
+  for (let boss = 1; boss <= 50; boss++) {
+    const platinum = premiumBossCard(boss, 'platinum');
+    const diamond = premiumBossCard(boss, 'diamond');
+    assert.notEqual(platinum.shipId, 'pi-vanguard');
+    assert.notEqual(platinum.shipId, diamond.shipId);
+    assert.notEqual(platinum.battle, diamond.battle);
+    platinumShips.add(platinum.shipId);
+    diamondShips.add(diamond.shipId);
+    for (const card of [platinum, diamond]) {
+      designs.add(card.id);
+      scenes.add(card.battle);
+      captions.add(card.story);
+      const ship = shipNftCatalog.find(entry => entry.shipId === card.shipId && entry.stage === card.stage);
+      assert.ok(ship, card.id);
+      const path = shipLiveryAssetPath(ship.sprite, card.stage, shipFactoryPaint(card.shipId).id);
+      assert.ok(existsSync(new URL(`../../frontend/public/${path}`, import.meta.url)), card.id);
+    }
+  }
+  assert.equal(designs.size, 100);
+  assert.equal(scenes.size, 100);
+  assert.equal(captions.size, 100);
+  assert.ok(platinumShips.size >= 15 && diamondShips.size >= 15);
+  assert.equal(premiumBossCard(1, 'platinum').shipId, 'solar-lance');
+  assert.equal(premiumBossCard(1, 'diamond').shipId, 'pi-vanguard');
+  assert.equal(premiumBossEditions.platinum.pricePi, 25);
+  assert.equal(premiumBossEditions.diamond.pricePi, 50);
+});
+
+test('a premium preview sends only silhouettes until the same boss meets the Testnet win requirement', async t => {
+  const wins = { 1: 1, 2: 1, 3: 3 };
+  const f = fixture(t, testnetEnv, wins);
+  const preview = async (boss, edition) => (await f.get(`${artworkPath}/bosses/${boss}/${edition}`)).body;
+  assert.deepEqual(await preview(1, 'platinum'), { wins: 1, eligible: false, design: 'silhouette' });
+  wins[2] = 2;
+  assert.deepEqual(await preview(2, 'platinum'), { wins: 2, eligible: true, design: 'layout' });
+  assert.deepEqual(await preview(2, 'diamond'), { wins: 2, eligible: false, design: 'silhouette' });
+  wins[2] = 3;
+  assert.deepEqual(await preview(2, 'diamond'), { wins: 3, eligible: true, design: 'layout' });
+  assert.equal((await f.get(artworkPath + '/bosses/51/diamond')).code, 404);
+  assert.equal((await f.get(artworkPath + '/bosses/2/diamond', { uid: 'other-player' })).code, 403);
+  assert.equal((await f.get(artworkPath + '/bosses/2/diamond', { method: 'POST' })).code, 405);
+});
+
+test('approved Varneth artwork authenticates and decrypts after enough wins', {
+  skip: !process.env.PREMIUM_NFT_ART_KEY,
+}, async t => {
+  const f = fixture(t, testnetEnv, { 1: 3 });
+  for (const edition of ['platinum', 'diamond']) {
+    const reply = await f.get(`${artworkPath}/bosses/1/${edition}`);
+    assert.equal(reply.code, 200);
+    assert.equal(reply.body.design, 'illustration');
+    assert.match(reply.body.artwork, /^data:image\/webp;base64,UklGR/);
+    assert.equal(reply.headers['Cache-Control'], 'private, no-store');
   }
 });

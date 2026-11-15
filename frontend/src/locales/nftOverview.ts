@@ -262,12 +262,39 @@ const adminRows = {
   vi: ["Phiên bản", "Số lượng phát hành", "Hạng", "Màu sơn", "Miễn phí", "Phi thuyền", "Cấp phi thuyền", "Tùy chọn thử nghiệm", "Bảng quản trị"],
 } satisfies Record<keyof typeof rows, TranslationRow<typeof adminKeys>>;
 
+const premiumKeys = [
+  "Coming to Mainnet", "{count} wins against the same boss", "Confirmed boss wins",
+  "NFT purchase", "Win requirement met", "Artwork in progress",
+] as const;
+const premiumRows = {
+  en: premiumKeys,
+  de: ["Geplant für Mainnet", "{count} Siege gegen denselben Boss", "Bestätigte Boss-Siege", "NFT-Kauf", "Siegbedingung erfüllt", "Illustration in Arbeit"],
+  es: ["Próximamente en Mainnet", "{count} victorias contra el mismo jefe", "Victorias confirmadas contra el jefe", "Compra de NFT", "Requisito de victorias cumplido", "Ilustración en preparación"],
+  fr: ["Prévu sur Mainnet", "{count} victoires contre le même boss", "Victoires confirmées contre le boss", "Achat de NFT", "Condition de victoire remplie", "Illustration en préparation"],
+  pt: ["Em breve na Mainnet", "{count} vitórias contra o mesmo chefe", "Vitórias confirmadas contra o chefe", "Compra de NFT", "Requisito de vitórias cumprido", "Ilustração em preparação"],
+  it: ["In arrivo su Mainnet", "{count} vittorie contro lo stesso boss", "Vittorie confermate contro il boss", "Acquisto NFT", "Requisito di vittorie soddisfatto", "Illustrazione in lavorazione"],
+  pl: ["W planach na Mainnet", "{count} zwycięstwa nad tym samym bossem", "Potwierdzone zwycięstwa nad bossem", "Zakup NFT", "Warunek zwycięstw spełniony", "Ilustracja w przygotowaniu"],
+  tr: ["Mainnet için planlanıyor", "Aynı bossa karşı {count} zafer", "Doğrulanmış boss zaferleri", "NFT satın alma", "Zafer koşulu sağlandı", "Görsel hazırlanıyor"],
+  ru: ["Планируется в Mainnet", "{count} победы над одним и тем же боссом", "Подтверждённые победы над боссом", "Покупка NFT", "Условие побед выполнено", "Иллюстрация готовится"],
+  hr: ["Planirano za Mainnet", "{count} pobjede protiv istog šefa", "Potvrđene pobjede protiv šefa", "Kupnja NFT-a", "Uvjet pobjeda ispunjen", "Ilustracija je u izradi"],
+  cs: ["Plánováno pro Mainnet", "{count} výhry proti stejnému bossovi", "Potvrzené výhry proti bossovi", "Nákup NFT", "Požadavek na výhry splněn", "Ilustrace se připravuje"],
+  sk: ["Plánované pre Mainnet", "{count} výhry nad rovnakým bossom", "Potvrdené výhry nad bossom", "Nákup NFT", "Podmienka výhier splnená", "Ilustrácia sa pripravuje"],
+  hu: ["Mainnetre tervezve", "{count} győzelem ugyanaz ellen a főellenfél ellen", "Megerősített győzelmek a főellenfél ellen", "NFT-vásárlás", "A győzelmi feltétel teljesült", "Az illusztráció készül"],
+  ro: ["Planificat pentru Mainnet", "{count} victorii împotriva aceluiași șef", "Victorii confirmate împotriva șefului", "Cumpărare NFT", "Condiția de victorii este îndeplinită", "Ilustrația este în lucru"],
+  sr: ["Планирано за Mainnet", "{count} победе против истог шефа", "Потврђене победе против шефа", "Куповина NFT-а", "Услов победа је испуњен", "Илустрација је у изради"],
+  uk: ["Заплановано для Mainnet", "{count} перемоги над тим самим босом", "Підтверджені перемоги над босом", "Купівля NFT", "Умову щодо перемог виконано", "Ілюстрація в роботі"],
+  th: ["วางแผนเปิดตัวบน Mainnet", "ชนะบอสตัวเดิม {count} ครั้ง", "จำนวนครั้งที่ชนะบอสที่ได้รับการยืนยัน", "ซื้อ NFT", "ชนะครบตามเงื่อนไข", "กำลังจัดทำภาพประกอบ"],
+  zh: ["计划在主网上线", "击败同一首领 {count} 次", "已确认的首领胜场", "购买 NFT", "已达到胜场要求", "插画制作中"],
+  vi: ["Dự kiến có trên Mainnet", "Thắng cùng một trùm {count} lần", "Số lần thắng trùm đã xác nhận", "Mua NFT", "Đã đủ số trận thắng", "Đang thực hiện hình minh họa"],
+} satisfies Record<keyof typeof rows, TranslationRow<typeof premiumKeys>>;
+
 export const nftOverviewTranslations = Object.fromEntries(
   (Object.keys(rows) as (keyof typeof rows)[]).map(locale => [
     locale,
     Object.fromEntries([
       ...keys.map((key, index) => [key, rows[locale][index]]),
       ...adminKeys.map((key, index) => [key, adminRows[locale][index]]),
+      ...premiumKeys.map((key, index) => [key, premiumRows[locale][index]]),
     ] as [string, string][]),
   ]),
 );
