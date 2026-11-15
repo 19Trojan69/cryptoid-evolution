@@ -175,32 +175,50 @@ test('premium catalog contains 100 unique boss editions with verified ship asset
   assert.equal(premiumBossCard(1, 'diamond').shipId, 'pi-vanguard');
   assert.equal(premiumBossEditions.platinum.pricePi, 25);
   assert.equal(premiumBossEditions.diamond.pricePi, 50);
+  assert.equal(premiumBossEditions.platinum.supply, 628);
+  assert.equal(premiumBossEditions.diamond.supply, 314);
 });
 
-test('a premium preview sends only silhouettes until the same boss meets the Testnet win requirement', async t => {
-  const wins = { 1: 1, 2: 1, 3: 3 };
+test('other premium cards remain silhouettes and purchase eligibility requires wins against that boss', async t => {
+  const wins = { 1: 3 };
   const f = fixture(t, testnetEnv, wins);
-  const preview = async (boss, edition) => (await f.get(`${artworkPath}/bosses/${boss}/${edition}`)).body;
-  assert.deepEqual(await preview(1, 'platinum'), { wins: 1, eligible: false, design: 'silhouette' });
-  wins[2] = 2;
-  assert.deepEqual(await preview(2, 'platinum'), { wins: 2, eligible: true, design: 'layout' });
-  assert.deepEqual(await preview(2, 'diamond'), { wins: 2, eligible: false, design: 'silhouette' });
-  wins[2] = 3;
-  assert.deepEqual(await preview(2, 'diamond'), { wins: 3, eligible: true, design: 'layout' });
+  const preview = async (boss, edition, count, eligible) => {
+    const reply = await f.get(`${artworkPath}/bosses/${boss}/${edition}`);
+    assert.equal(reply.code, 200);
+    assert.deepEqual(reply.body, { wins: count, eligible, design: 'silhouette' });
+  };
+  for (let boss = 2; boss <= 50; boss++) {
+    await preview(boss, 'platinum', 0, false);
+    wins[boss] = 2;
+    await preview(boss, 'platinum', 2, true);
+    await preview(boss, 'diamond', 2, false);
+    wins[boss] = 3;
+    await preview(boss, 'diamond', 3, true);
+  }
   assert.equal((await f.get(artworkPath + '/bosses/51/diamond')).code, 404);
-  assert.equal((await f.get(artworkPath + '/bosses/2/diamond', { uid: 'other-player' })).code, 403);
+  assert.equal((await f.get(artworkPath + '/bosses/1/platinum', { uid: 'other-player' })).code, 403);
+  assert.equal((await f.get(artworkPath + '/bosses/1/diamond', { token: '' })).code, 401);
   assert.equal((await f.get(artworkPath + '/bosses/2/diamond', { method: 'POST' })).code, 405);
 });
 
-test('approved Varneth artwork authenticates and decrypts after enough wins', {
+test('a verified Testnet admin sees both Varneth illustrations even with zero wins', {
   skip: !process.env.PREMIUM_NFT_ART_KEY,
 }, async t => {
-  const f = fixture(t, testnetEnv, { 1: 3 });
+  const wins = { 2: 3 };
+  const f = fixture(t, testnetEnv, wins);
   for (const edition of ['platinum', 'diamond']) {
-    const reply = await f.get(`${artworkPath}/bosses/1/${edition}`);
+    const path = `${artworkPath}/bosses/1/${edition}`;
+    const reply = await f.get(path);
     assert.equal(reply.code, 200);
     assert.equal(reply.body.design, 'illustration');
     assert.match(reply.body.artwork, /^data:image\/webp;base64,UklGR/);
+    assert.equal(reply.body.wins, 0);
+    assert.equal(reply.body.eligible, false);
     assert.equal(reply.headers['Cache-Control'], 'private, no-store');
+    wins[1] = premiumBossEditions[edition].requiredWins;
+    const after = await f.get(path);
+    assert.equal(after.code, 200);
+    assert.deepEqual(after.body, { ...reply.body, wins: wins[1], eligible: true });
+    delete wins[1];
   }
 });

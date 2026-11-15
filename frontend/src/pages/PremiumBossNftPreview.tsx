@@ -13,22 +13,16 @@ import './premiumBossNftPreview.css';
 
 type Card = NonNullable<ReturnType<typeof premiumBossCard>>;
 type Preview = { wins: number; eligible: boolean } & (
-  { design: 'layout' | 'silhouette' } | { design: 'illustration'; artwork: string }
+  { design: 'silhouette' } | { design: 'illustration'; artwork: string }
 );
 
-const fallbackBackgrounds = ['ringed-world', 'blue-nebula', 'amber-galaxy'];
-
-function BattleLayout({ card, concealed }: { card: Card; concealed: boolean }) {
+function BossSilhouette({ card }: { card: Card }) {
   const name = bossName(card.bossId);
   const boss = bossManifest[card.bossId - 1];
   const ship = playerSkins.find(skin => skin.id === card.shipId);
   if (!boss || !ship) return null;
-  const background = card.bossId > 3
-    ? `/cards/space/unique/boss-${String(card.bossId).padStart(2, '0')}.webp`
-    : `/cards/space/${fallbackBackgrounds[card.bossId - 1]}.png`;
   const fighter = '/' + shipLiveryAssetPath(ship.sprite, card.stage, shipFactoryPaint(ship.id).id);
-  return <div className="premium-battle-card" data-edition={card.edition} data-concealed={concealed} data-angle={card.battleIndex % 4} lang="en"
-    style={concealed ? undefined : { backgroundImage: `linear-gradient(#050810 3%, transparent 50%, #040610b0 100%), url(${background})` }}>
+  return <div className="premium-battle-card" data-edition={card.edition} data-angle={card.battleIndex % 4} lang="en">
     <div className="premium-battle-title">
       <div>CRYPTOID EVOLUTION</div>
       <div>{card.name}</div>
@@ -39,7 +33,6 @@ function BattleLayout({ card, concealed }: { card: Card; concealed: boolean }) {
     </div>
     <div className="premium-battle-stage">
       <img className="premium-battle-boss" src={boss.image} alt={name} decoding="async" />
-      <div className="premium-battle-beam" aria-hidden="true" />
       <img className="premium-battle-ship" src={fighter} alt={ship.name} decoding="async" />
     </div>
   </div>;
@@ -57,7 +50,7 @@ export default function PremiumBossNftPreview({ card }: { card: Card }) {
     }).then(({ data }) => {
       if (request.signal.aborted) return;
       const valid = Number.isInteger(data?.wins) && typeof data.eligible === 'boolean' && (
-        data.design === 'layout' || data.design === 'silhouette' || (data.design === 'illustration' && typeof data.artwork === 'string' && data.artwork.startsWith('data:image/webp;base64,UklGR'))
+        data.design === 'silhouette' || (data.design === 'illustration' && typeof data.artwork === 'string' && data.artwork.startsWith('data:image/webp;base64,UklGR'))
       );
       setPreview(valid ? data : 'error');
     }).catch(() => { if (!request.signal.aborted) setPreview('error'); });
@@ -71,6 +64,7 @@ export default function PremiumBossNftPreview({ card }: { card: Card }) {
   </div>;
 
   const winCount = Math.min(preview.wins, card.requiredWins);
+  const bossLevel = bossManifest[bossId - 1].level;
   const ship = playerSkins.find(skin => skin.id === card.shipId);
   return <>
     <dl className="admin-nft-terms">
@@ -80,10 +74,10 @@ export default function PremiumBossNftPreview({ card }: { card: Card }) {
     <figure className="admin-nft-art premium-battle-preview">
       {preview.design === 'illustration'
         ? <img src={preview.artwork} alt={`${bossName(bossId)} · ${card.name}`} width={1086} height={1448} decoding="async" />
-        : <>{preview.design === 'layout' && <p className="premium-battle-draft">{t('Artwork in progress')}</p>}<BattleLayout card={card} concealed={preview.design === 'silhouette'} /></>}
+        : <BossSilhouette card={card} />}
       <figcaption>
         <strong lang="en">{card.battle}</strong> · {ship?.name} {t(edition === 'diamond' ? 'Elite' : 'Advanced')}
-        <br /><span>{bossNftPreviewCopy(locale).preview}</span>
+        <br /><span>{bossNftPreviewCopy(locale).preview} · {t('Level')} {bossLevel.toLocaleString(locale)}</span>
       </figcaption>
     </figure>
   </>;

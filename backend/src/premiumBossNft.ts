@@ -3,8 +3,8 @@ import { standardShips } from "./playerSave";
 import { BOSS_STICKER_COUNT, readRewardProgress } from "./rewardRules";
 
 export const premiumBossEditions = {
-  platinum: { name: "Platinum Edition", pricePi: 25, requiredWins: 2, stage: 2 },
-  diamond: { name: "Diamond Edition", pricePi: 50, requiredWins: 3, stage: 3 },
+  platinum: { name: "Platinum Edition", pricePi: 25, supply: 628, requiredWins: 2, stage: 2 },
+  diamond: { name: "Diamond Edition", pricePi: 50, supply: 314, requiredWins: 3, stage: 3 },
 } as const;
 
 export type PremiumBossEdition = keyof typeof premiumBossEditions;
@@ -29,7 +29,7 @@ export function premiumBossCard(bossId: number, edition: PremiumBossEdition) {
   return {
     id: `boss-${String(bossId).padStart(2, "0")}-${edition}`,
     bossId, edition, shipId, battle, story, battleIndex,
-    artworkReady: bossId === 1,
+    showFullPreview: bossId === 1,
     ...premiumBossEditions[edition],
   };
 }

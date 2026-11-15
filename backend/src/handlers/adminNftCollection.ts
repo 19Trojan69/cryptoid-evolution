@@ -38,8 +38,7 @@ export function mountAdminNftCollection(router: Router) {
         );
         if (!account) return res.status(401).json({ error: "not_authenticated" });
         const eligibility = premiumBossEligibility(card.bossId, edition, account.rewardsByNetwork?.testnet);
-        if (!eligibility.eligible) return res.json({ ...eligibility, design: "silhouette" });
-        if (!card.artworkReady) return res.json({ ...eligibility, design: "layout" });
+        if (!card.showFullPreview) return res.json({ ...eligibility, design: "silhouette" });
 
         const artDirectory = process.env.VERCEL
           ? join(process.cwd(), "backend", "premium-boss-nft-previews")

@@ -39,11 +39,11 @@ const retroTerms = {
   diamond: { supply: 314, pricePi: 12 },
 } as const;
 
-function NftTerms({ supply, price, currency }: { supply?: number; price?: number; currency: 'Pi' | 'Shards' }) {
+function NftTerms({ supply, price, currency }: { supply: number; price?: number; currency: 'Pi' | 'Shards' }) {
   const { locale, t } = useLocale();
   const priceFormat = currency === 'Pi' ? { minimumFractionDigits: 2, maximumFractionDigits: 2 } : undefined;
   return <dl className="admin-nft-terms">
-    {supply !== undefined && <div><dt>{t('Edition size')}</dt><dd>{supply.toLocaleString(locale)}</dd></div>}
+    <div><dt>{t('Edition size')}</dt><dd>{supply.toLocaleString(locale)}</dd></div>
     {price !== undefined && <div><dt>{t('Planned price')}</dt><dd>{price === 0 ? t('Free') : `${price.toLocaleString(locale, priceFormat)} ${currency}`}</dd></div>}
   </dl>;
 }
@@ -75,7 +75,12 @@ function BossCollection() {
       <strong>{t('Coming to Mainnet')}</strong>
       <ul className="premium-edition-notice">
         {Object.values(premiumBossEditions).map(edition => <li key={edition.name}>
-          <span lang="en">{edition.name}</span> · {edition.pricePi.toLocaleString(locale)} <span>Pi</span> · {t('{count} wins against the same boss', { count: edition.requiredWins })}
+          <strong lang="en">{edition.name}</strong> · {edition.pricePi.toLocaleString(locale)} <span>Pi</span> · {t('{count} copies per boss', {
+            count: edition.supply.toLocaleString(locale),
+          })}
+          <p>{t('{count} confirmed wins against the same boss on its level unlock its card for purchase.', {
+            count: edition.requiredWins.toLocaleString(locale),
+          })}</p>
         </li>)}
       </ul>
     </section>
@@ -90,7 +95,7 @@ function BossCollection() {
         {bossEditionKeys.map(key => <option key={key} value={key}>{bossEditions[key].name}</option>)}
       </select></label>
     </div>
-    <NftTerms supply={'supply' in plan ? plan.supply : undefined} price={'pricePi' in plan ? plan.pricePi : 0} currency="Pi"/>
+    <NftTerms supply={plan.supply} price={'pricePi' in plan ? plan.pricePi : 0} currency="Pi"/>
     {premium ? <PremiumBossNftPreview key={path} card={premium}/>
       : <StoredArtwork path={path} key={path} title={`${bossName(id)} · ${plan.name}`}/>}
   </>;

@@ -263,29 +263,101 @@ const adminRows = {
 } satisfies Record<keyof typeof rows, TranslationRow<typeof adminKeys>>;
 
 const premiumKeys = [
-  "Coming to Mainnet", "{count} wins against the same boss", "Confirmed boss wins",
-  "NFT purchase", "Win requirement met", "Artwork in progress",
+  "Coming to Mainnet", "{count} confirmed wins against the same boss on its level unlock its card for purchase.",
+  "{count} copies per boss", "Confirmed boss wins", "NFT purchase", "Win requirement met",
 ] as const;
 const premiumRows = {
   en: premiumKeys,
-  de: ["Geplant für Mainnet", "{count} Siege gegen denselben Boss", "Bestätigte Boss-Siege", "NFT-Kauf", "Siegbedingung erfüllt", "Illustration in Arbeit"],
-  es: ["Próximamente en Mainnet", "{count} victorias contra el mismo jefe", "Victorias confirmadas contra el jefe", "Compra de NFT", "Requisito de victorias cumplido", "Ilustración en preparación"],
-  fr: ["Prévu sur Mainnet", "{count} victoires contre le même boss", "Victoires confirmées contre le boss", "Achat de NFT", "Condition de victoire remplie", "Illustration en préparation"],
-  pt: ["Em breve na Mainnet", "{count} vitórias contra o mesmo chefe", "Vitórias confirmadas contra o chefe", "Compra de NFT", "Requisito de vitórias cumprido", "Ilustração em preparação"],
-  it: ["In arrivo su Mainnet", "{count} vittorie contro lo stesso boss", "Vittorie confermate contro il boss", "Acquisto NFT", "Requisito di vittorie soddisfatto", "Illustrazione in lavorazione"],
-  pl: ["W planach na Mainnet", "{count} zwycięstwa nad tym samym bossem", "Potwierdzone zwycięstwa nad bossem", "Zakup NFT", "Warunek zwycięstw spełniony", "Ilustracja w przygotowaniu"],
-  tr: ["Mainnet için planlanıyor", "Aynı bossa karşı {count} zafer", "Doğrulanmış boss zaferleri", "NFT satın alma", "Zafer koşulu sağlandı", "Görsel hazırlanıyor"],
-  ru: ["Планируется в Mainnet", "{count} победы над одним и тем же боссом", "Подтверждённые победы над боссом", "Покупка NFT", "Условие побед выполнено", "Иллюстрация готовится"],
-  hr: ["Planirano za Mainnet", "{count} pobjede protiv istog šefa", "Potvrđene pobjede protiv šefa", "Kupnja NFT-a", "Uvjet pobjeda ispunjen", "Ilustracija je u izradi"],
-  cs: ["Plánováno pro Mainnet", "{count} výhry proti stejnému bossovi", "Potvrzené výhry proti bossovi", "Nákup NFT", "Požadavek na výhry splněn", "Ilustrace se připravuje"],
-  sk: ["Plánované pre Mainnet", "{count} výhry nad rovnakým bossom", "Potvrdené výhry nad bossom", "Nákup NFT", "Podmienka výhier splnená", "Ilustrácia sa pripravuje"],
-  hu: ["Mainnetre tervezve", "{count} győzelem ugyanaz ellen a főellenfél ellen", "Megerősített győzelmek a főellenfél ellen", "NFT-vásárlás", "A győzelmi feltétel teljesült", "Az illusztráció készül"],
-  ro: ["Planificat pentru Mainnet", "{count} victorii împotriva aceluiași șef", "Victorii confirmate împotriva șefului", "Cumpărare NFT", "Condiția de victorii este îndeplinită", "Ilustrația este în lucru"],
-  sr: ["Планирано за Mainnet", "{count} победе против истог шефа", "Потврђене победе против шефа", "Куповина NFT-а", "Услов победа је испуњен", "Илустрација је у изради"],
-  uk: ["Заплановано для Mainnet", "{count} перемоги над тим самим босом", "Підтверджені перемоги над босом", "Купівля NFT", "Умову щодо перемог виконано", "Ілюстрація в роботі"],
-  th: ["วางแผนเปิดตัวบน Mainnet", "ชนะบอสตัวเดิม {count} ครั้ง", "จำนวนครั้งที่ชนะบอสที่ได้รับการยืนยัน", "ซื้อ NFT", "ชนะครบตามเงื่อนไข", "กำลังจัดทำภาพประกอบ"],
-  zh: ["计划在主网上线", "击败同一首领 {count} 次", "已确认的首领胜场", "购买 NFT", "已达到胜场要求", "插画制作中"],
-  vi: ["Dự kiến có trên Mainnet", "Thắng cùng một trùm {count} lần", "Số lần thắng trùm đã xác nhận", "Mua NFT", "Đã đủ số trận thắng", "Đang thực hiện hình minh họa"],
+  de: [
+    "Geplant für Mainnet",
+    "Nach {count} bestätigten Siegen gegen denselben Boss auf seinem Level wird seine Karte zum Kauf freigeschaltet.",
+    "{count} Stück je Boss", "Bestätigte Boss-Siege", "NFT-Kauf", "Siegbedingung erfüllt",
+  ],
+  es: [
+    "Próximamente en Mainnet",
+    "Tras {count} victorias confirmadas contra el mismo jefe en su nivel, se desbloquea la compra de su carta.",
+    "{count} ejemplares por jefe", "Victorias confirmadas contra el jefe", "Compra de NFT", "Requisito de victorias cumplido",
+  ],
+  fr: [
+    "Prévu sur Mainnet",
+    "Après {count} victoires confirmées contre le même boss à son niveau, l’achat de sa carte est débloqué.",
+    "{count} exemplaires par boss", "Victoires confirmées contre le boss", "Achat de NFT", "Condition de victoire remplie",
+  ],
+  pt: [
+    "Em breve na Mainnet",
+    "Após {count} vitórias confirmadas contra o mesmo chefe no respetivo nível, a sua carta fica disponível para compra.",
+    "{count} exemplares por chefe", "Vitórias confirmadas contra o chefe", "Compra de NFT", "Requisito de vitórias cumprido",
+  ],
+  it: [
+    "In arrivo su Mainnet",
+    "Dopo {count} vittorie confermate contro lo stesso boss nel suo livello, si sblocca l’acquisto della sua carta.",
+    "{count} esemplari per boss", "Vittorie confermate contro il boss", "Acquisto NFT", "Requisito di vittorie soddisfatto",
+  ],
+  pl: [
+    "W planach na Mainnet",
+    "Po {count} potwierdzonych zwycięstwach nad tym samym bossem na jego poziomie odblokujesz możliwość zakupu jego karty.",
+    "{count} egzemplarzy na bossa", "Potwierdzone zwycięstwa nad bossem", "Zakup NFT", "Warunek zwycięstw spełniony",
+  ],
+  tr: [
+    "Mainnet için planlanıyor",
+    "Aynı bossu kendi seviyesinde {count} kez yendiğin doğrulandığında kartını satın alma hakkı açılır.",
+    "Boss başına {count} adet", "Doğrulanmış boss zaferleri", "NFT satın alma", "Zafer koşulu sağlandı",
+  ],
+  ru: [
+    "Планируется в Mainnet",
+    "После {count} подтверждённых побед над одним и тем же боссом на его уровне откроется возможность купить его карту.",
+    "{count} экземпляров на босса", "Подтверждённые победы над боссом", "Покупка NFT", "Условие побед выполнено",
+  ],
+  hr: [
+    "Planirano za Mainnet",
+    "Nakon {count} potvrđene pobjede protiv istog šefa na njegovoj razini otključava se kupnja njegove karte.",
+    "{count} primjeraka po šefu", "Potvrđene pobjede protiv šefa", "Kupnja NFT-a", "Uvjet pobjeda ispunjen",
+  ],
+  cs: [
+    "Plánováno pro Mainnet",
+    "Po {count} potvrzených výhrách nad stejným bossem na jeho úrovni se odemkne nákup jeho karty.",
+    "{count} kusů na bosse", "Potvrzené výhry proti bossovi", "Nákup NFT", "Požadavek na výhry splněn",
+  ],
+  sk: [
+    "Plánované pre Mainnet",
+    "Po {count} potvrdených výhrach nad tým istým bossom na jeho úrovni sa odomkne nákup jeho karty.",
+    "{count} kusov na bossa", "Potvrdené výhry nad bossom", "Nákup NFT", "Podmienka výhier splnená",
+  ],
+  hu: [
+    "Mainnetre tervezve",
+    "A főellenfél kártyája akkor válik megvásárolhatóvá, ha a saját pályáján {count} igazolt győzelmet szerzel ellene.",
+    "{count} példány főellenfelenként", "Megerősített győzelmek a főellenfél ellen", "NFT-vásárlás", "A győzelmi feltétel teljesült",
+  ],
+  ro: [
+    "Planificat pentru Mainnet",
+    "După {count} victorii confirmate împotriva aceluiași șef la nivelul său, se deblochează cumpărarea cărții sale.",
+    "{count} de exemplare per șef", "Victorii confirmate împotriva șefului", "Cumpărare NFT", "Condiția de victorii este îndeplinită",
+  ],
+  sr: [
+    "Планирано за Mainnet",
+    "После {count} потврђене победе над истим шефом на његовом нивоу откључава се куповина његове карте.",
+    "{count} примерака по шефу", "Потврђене победе против шефа", "Куповина NFT-а", "Услов победа је испуњен",
+  ],
+  uk: [
+    "Заплановано для Mainnet",
+    "Після {count} підтверджених перемог над тим самим босом на його рівні відкривається можливість купити його картку.",
+    "{count} примірників на боса", "Підтверджені перемоги над босом", "Купівля NFT", "Умову щодо перемог виконано",
+  ],
+  th: [
+    "วางแผนเปิดตัวบน Mainnet",
+    "เมื่อชนะบอสตัวเดิมในเลเวลของบอสนั้นครบ {count} ครั้งและระบบยืนยันแล้ว จะปลดล็อกสิทธิ์ซื้อการ์ดของบอส",
+    "{count} ใบต่อบอส", "จำนวนครั้งที่ชนะบอสที่ได้รับการยืนยัน", "ซื้อ NFT", "ชนะครบตามเงื่อนไข",
+  ],
+  zh: [
+    "计划在主网上线",
+    "在同一首领所在的关卡中累计击败该首领 {count} 次，战绩确认后即可解锁该卡牌的购买资格。",
+    "每位首领限量 {count} 份", "已确认的首领胜场", "购买 NFT", "已达到胜场要求",
+  ],
+  vi: [
+    "Dự kiến có trên Mainnet",
+    "Sau {count} trận thắng được xác nhận trước cùng một trùm ở cấp độ của trùm đó, thẻ của trùm sẽ được mở khóa để mua.",
+    "{count} bản cho mỗi trùm", "Số lần thắng trùm đã xác nhận", "Mua NFT", "Đã đủ số trận thắng",
+  ],
 } satisfies Record<keyof typeof rows, TranslationRow<typeof premiumKeys>>;
 
 export const nftOverviewTranslations = Object.fromEntries(
