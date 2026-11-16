@@ -16,6 +16,7 @@ type Props = {
   volume: number;
   prepareAudio: (source: string) => MusicPlayer | null;
   unlocked: boolean;
+  onCovered?: () => void;
   onReturn: () => void;
   onFinish: () => void;
 };
@@ -48,11 +49,12 @@ const loadImage = (name: string) => {
   return image.decode().then(() => image);
 };
 
-export default function StoryBriefing({ scene, withAudio, volume, prepareAudio, unlocked, onReturn, onFinish }: Props) {
+export default function StoryBriefing({ scene, withAudio, volume, prepareAudio, unlocked, onCovered, onReturn, onFinish }: Props) {
   const { locale } = useLocale();
   const dialogRef = useRef<HTMLElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const appearanceRef = useRef<ReturnType<typeof chooseAppearance> | null>(null);
+  const coveredRef = useRef(onCovered);
   const returnRef = useRef(onReturn);
   const finishRef = useRef(onFinish);
   const volumeRef = useRef(volume);
@@ -61,6 +63,7 @@ export default function StoryBriefing({ scene, withAudio, volume, prepareAudio, 
   const retryAudioRef = useRef<() => void>(() => {});
   const [artReady, setArtReady] = useState(false);
   const [phase, setPhase] = useState<Phase>('covering');
+  const [coverBlend, setCoverBlend] = useState(false);
   const [cueIndex, setCueIndex] = useState(-1);
   const [offerAudioRetry, setOfferAudioRetry] = useState(false);
   const [skipLabel, , retryLabel] = storyCopy(locale);
@@ -70,10 +73,11 @@ export default function StoryBriefing({ scene, withAudio, volume, prepareAudio, 
   const caption = translation ?? (!artReady ? cues[cueIndex]?.text : undefined);
 
   useEffect(() => {
+    coveredRef.current = onCovered;
     returnRef.current = onReturn;
     finishRef.current = onFinish;
     volumeRef.current = volume;
-  }, [onReturn, onFinish, volume]);
+  }, [onCovered, onReturn, onFinish, volume]);
   useEffect(() => { dialogRef.current?.focus({ preventScroll: true }); }, []);
 
   useEffect(() => {
@@ -91,7 +95,7 @@ export default function StoryBriefing({ scene, withAudio, volume, prepareAudio, 
       setPhase(next);
     };
     let cinematic: ReturnType<typeof createCinematic> | undefined;
-    let disposed = false, finished = false, frame = 0, lastCue = -1;
+    let disposed = false, finished = false, coverBlended = false, frame = 0, lastCue = -1;
     let silentMs = 0, silentStart = performance.now();
     let visualMs = 0, lastVisualAt = silentStart;
     let player: MusicPlayer | null = null;
@@ -143,9 +147,16 @@ export default function StoryBriefing({ scene, withAudio, volume, prepareAudio, 
       if (transition.phase === 'covering') {
         if ((reduced() && !withAudio) || elapsed >= storyFadeMs.gameOut) {
           enterPhase('briefing', now);
+          coveredRef.current?.();
           silentStart = lastVisualAt = now;
           play(now);
-        } else schedule();
+        } else {
+          if (!coverBlended && !reduced() && elapsed >= storyFadeMs.gameOut - storyFadeMs.briefingLead) {
+            coverBlended = true;
+            setCoverBlend(true);
+          }
+          schedule();
+        }
         return;
       }
       if (transition.phase === 'leaving') {
@@ -322,7 +333,7 @@ export default function StoryBriefing({ scene, withAudio, volume, prepareAudio, 
   }, [definition, cues, withAudio, unlocked, prepareAudio]);
 
   return <section ref={dialogRef} className="story-briefing" role="dialog" aria-modal="true" tabIndex={-1} aria-label={definition.title}
-    data-phase={phase} style={fadeStyle}
+    data-phase={phase} data-overlap={phase === 'covering' && coverBlend ? true : undefined} style={fadeStyle}
     onKeyDown={event => { if (event.key === 'Escape') exitRef.current(); }}>
     <div className="story-briefing-content">
       <div className="story-briefing-frame" data-ready={artReady || undefined}>

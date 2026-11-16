@@ -6,26 +6,32 @@ import { BLOCKS_PER_CHAIN } from './networkChain';
 import { BONUS_TARGET_COUNT } from './bonusChallenge';
 
 export default function LevelCompletion({ summary, name, headline, bonusHits, bonus, bonusHeart,
-  chainShards, saveDestination, deviceSaved, prepared, saving, failed, continuing, failureMessage, onRetry, onContinue }: {
+  chainShards, saveDestination, deviceSaved, prepared, saving, failed, continuing, departing = false, failureMessage, onRetry, onContinue }: {
   summary: BossSummary; name: string; headline: ReactNode; bonusHits: number; bonusHeart: boolean;
   chainShards: number; bonus: { shards: number; points: number; powerUps: readonly string[] };
   saveDestination: 'account' | 'device' | 'test'; deviceSaved: boolean;
-  prepared: boolean; saving: boolean; failed: boolean; continuing: boolean; failureMessage?: string; onRetry: () => void; onContinue: () => void;
+  prepared: boolean; saving: boolean; failed: boolean; continuing: boolean; departing?: boolean; failureMessage?: string; onRetry: () => void; onContinue: () => void;
 }) {
   const { t, locale } = useLocale();
   const panel = useRef<HTMLElement>(null);
   useEffect(() => {
     const previous = document.activeElement;
-    panel.current?.focus({ preventScroll: true });
-    return () => { if (previous instanceof HTMLElement && previous.isConnected) previous.focus({ preventScroll: true }); };
+    const element = panel.current;
+    element?.focus({ preventScroll: true });
+    return () => {
+      const active = document.activeElement;
+      if ((active === document.body || element?.contains(active)) && previous instanceof HTMLElement && previous.isConnected) {
+        previous.focus({ preventScroll: true });
+      }
+    };
   }, []);
-  const ready = canContinueLevelCompletion(prepared, saving || continuing, failed);
+  const ready = !departing && canContinueLevelCompletion(prepared, saving || continuing, failed);
   const number = new Intl.NumberFormat(locale).format;
   const saveConfirmed = prepared && !saving;
   const saveWarning = failed || saveConfirmed && saveDestination === 'device' && !deviceSaved;
   const saveStatus = saveDestination === 'account' ? t('Game saved.') : saveDestination === 'test' ? t('Test run · rewards are not saved.')
     : deviceSaved ? t('Shards saved on this device.') : t('Shards could not be saved on this device.');
-  return <div className="game-overlay level-completion-overlay">
+  return <div className="game-overlay level-completion-overlay" inert={departing}>
     <section ref={panel} className="level-completion" tabIndex={-1} role="dialog" aria-modal="true" aria-labelledby="level-completion-title" data-game-scroll
       onKeyDown={event => {
         if (event.key !== 'Tab') return;

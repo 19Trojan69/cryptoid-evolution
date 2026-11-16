@@ -517,6 +517,7 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
   }, [clearControls]);
   useEffect(() => { wakeGameLoopRef.current?.(); }, [game.status, story]);
   const [bossSummary, setBossSummary] = useState<BossSummary | null>(null);
+  const [departingSummary, setDepartingSummary] = useState<BossSummary | null>(null);
   const bossSummaryRef = useRef<{ summary: BossSummary; accepted: boolean; restored: boolean } | null>(null);
   const [bossSummaryPrepared, setBossSummaryPrepared] = useState(false);
   const [bossSummaryFailure, setBossSummaryFailure] = useState("");
@@ -1292,7 +1293,7 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
       const gameSource = track.currentSource;
       if (gameSource.startsWith("/story/")) return;
       if (!track.playing) { track.pause(); return; }
-      track.setVolume(0, .10);
+      track.setVolume(0, storyFadeMs.gameOut / 6000);
       const pauseAfterFade = window.setTimeout(() => {
         if (track.currentSource === gameSource) track.pause();
       }, storyFadeMs.gameOut);
@@ -1326,7 +1327,7 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
         fadeMusicAfterStoryRef.current = false;
         track.setVolume(0);
         void track.play();
-        track.setVolume(readMusicVolume(), .13);
+        track.setVolume(readMusicVolume(), storyFadeMs.gameIn / 4500);
       } else void track.play();
     } else if (game.status !== "loading") track.pause();
   }, [game.status, game.encounter, musicEnabled, hasBonusMusic, bonusMusicEnding, hasCompletionMusic, completionMusicVisible, story, storyReturning]);
@@ -1565,13 +1566,14 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
     const current = () => weaponMountedRef.current && generation === bossPreparationRef.current && bossSummaryRef.current === pending && scoreRunRef.current === runId;
     const track = musicRef.current;
     const nextBriefing = !pending.restored && storyBriefingsEnabled() && levelStoryAtSector(pending.summary.stage + 1);
-    if (nextBriefing && track?.currentSource === COMPLETION_MUSIC_SOURCE) track.setVolume(0, .10);
+    if (nextBriefing && track?.currentSource === COMPLETION_MUSIC_SOURCE) track.setVolume(0, storyFadeMs.gameOut / 6000);
     else track?.pause();
     unlockAudioForResume(); setBossSummaryContinuing(true); setBossSummaryFailed(false); setBossSummaryContinueFailed(false);
     try {
       if (!current()) return;
       pending.accepted = true;
       if (pending.restored) bossSummaryRef.current = null;
+      if (nextBriefing) setDepartingSummary(pending.summary);
       setBossSummary(null); clearControls(); lastFrameRef.current = 0;
       stateRef.current.status = 'playing'; setGame({ ...stateRef.current });
       if (ownerDiagnostics) sessionDiagnostic('boundary', { operation: 'boss-summary-continue', sector: pending.summary.stage });
@@ -1925,7 +1927,7 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
             }
             const nextBriefing = clearEncounter === 'boss-clear' ? bossOutroAtSector(next.sector)
               : clearEncounter === 'bonus' ? levelStoryAtSector(next.sector) : undefined;
-            if (nextBriefing) queueStory(nextBriefing);
+            if (!(nextBriefing && queueStory(nextBriefing)) && clearEncounter === 'bonus') setDepartingSummary(null);
             forceScene = true;
             return;
           }
@@ -2854,6 +2856,7 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
 
   const briefingBoss = story ? storyScenes[story].boss : undefined;
   const briefingVisible = Boolean(story) && !rewardCards.length;
+  const displayedSummary = bossSummary ?? (game.status === 'playing' ? departingSummary : null);
   return (
     <main className="game-shell" data-campaign-opening={story === 'campaign' && !storyReturning}
       data-effects-paused={briefingVisible || game.status === "paused" || game.status === "loading"} onPointerDownCapture={() => { primeCardSound(); if(rewardCardsRef.current.length)return; retryAudio(); }}>
@@ -2861,8 +2864,10 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
         unlocked={briefingBoss !== undefined && (rewardProgressRef.current.bossWins[briefingBoss.id] ?? 0) > 0}
         withAudio={musicEnabled && !ownerAudioDisabled() && musicVolume > 0} volume={musicVolume}
         prepareAudio={prepareStoryAudio}
+        onCovered={() => setDepartingSummary(null)}
         onReturn={() => {
           if (storyRef.current !== story) return;
+          setDepartingSummary(null);
           fadeMusicAfterStoryRef.current = musicRef.current !== null;
           setGame({ ...stateRef.current });
           setStoryReturning(true);
@@ -2878,12 +2883,12 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
           setStory(null);
         }} />}
       {rewardCards[0] && <CardReveal reward={rewardCards[0]} remaining={rewardCards.length} onContinue={continueRewardCard}/>}
-      {bossSummary && !rewardCards.length && !homePrompt && <LevelCompletion key={bossSummary.stage} summary={bossSummary} name={sectorName(game.sector)} headline={transitionHeadline}
+      {displayedSummary && !rewardCards.length && !homePrompt && <LevelCompletion key={displayedSummary.stage} summary={displayedSummary} name={sectorName(game.sector)} headline={transitionHeadline}
         bonusHits={game.bonusHits} bonus={bonusReward(game.bonusHits, game.sector)} chainShards={bonusChainReward(game.chainBlocks, game.bonusHits, game.sector)}
         bonusHeart={game.bonusResult.includes(' · +1 HEART')}
         saveDestination={accountRun ? 'account' : adminRunRef.current ? 'test' : 'device'}
-        deviceSaved={guestCreditedShardsRef.current >= bossSummary.shards} prepared={bossSummaryPrepared}
-        saving={bossSummarySaving} failed={bossSummaryFailed} continuing={bossSummaryContinuing} failureMessage={bossSummaryFailure}
+        deviceSaved={guestCreditedShardsRef.current >= displayedSummary.shards} prepared={bossSummaryPrepared}
+        saving={bossSummarySaving} failed={bossSummaryFailed} continuing={bossSummaryContinuing} departing={bossSummary === null} failureMessage={bossSummaryFailure}
         onRetry={() => { if (bossSummaryContinueFailed) void continueBossSummary(true); else void prepareBossSummary(true); }} onContinue={() => { void continueBossSummary(); }} />}
       {extraLifeVisible&&<div className={`boss-extra-life${game.bossHeartShards ? " boss-shard-reward" : ""}`} role="status" aria-live="polite"><strong>{t(game.bossHeartShards ? 'FULL HEARTS' : 'HEART RESTORED')}</strong><span>{game.bossHeartShards ? `+${game.bossHeartShards} ◆` : '+1 ♥'}</span></div>}
       <div ref={fieldRef} className="game-field" inert={briefingVisible} onContextMenu={event => event.preventDefault()} onDoubleClick={event => event.preventDefault()} onDragStart={event => event.preventDefault()}>

@@ -1,6 +1,6 @@
 {
   "level-two": {
-    "duration": 32.6,
+    "duration": 33.01,
     "groups": [
       {
         "kind": "story",
@@ -50,22 +50,22 @@
           { "text": "is", "start": 17.68, "end": 18.12 },
           { "text": "still", "start": 18.12, "end": 18.32 },
           { "text": "out", "start": 18.32, "end": 18.46 },
-          { "text": "there.", "start": 18.46, "end": 18.62 },
-          { "text": "Pilot,", "start": 18.64, "end": 18.86 },
-          { "text": "follow", "start": 20.15, "end": 20.49 },
-          { "text": "its", "start": 21.21, "end": 21.37 },
-          { "text": "last", "start": 21.37, "end": 21.67 },
-          { "text": "transmission.", "start": 21.67, "end": 22.34 }
+          { "text": "there.", "start": 18.46, "end": 18.63 },
+          { "text": "Pilot,", "start": 19.13, "end": 19.42 },
+          { "text": "follow", "start": 20.56, "end": 20.9 },
+          { "text": "its", "start": 21.62, "end": 21.78 },
+          { "text": "last", "start": 21.78, "end": 22.08 },
+          { "text": "transmission.", "start": 22.08, "end": 22.75 }
         ]
       },
       {
         "kind": "order",
         "words": [
-          { "text": "Let’s", "start": 24.67, "end": 24.96 },
-          { "text": "bring", "start": 24.96, "end": 25.23 },
-          { "text": "those", "start": 26.74, "end": 27.01 },
-          { "text": "crews", "start": 27.01, "end": 27.62 },
-          { "text": "home.", "start": 29.3, "end": 29.76 }
+          { "text": "Let’s", "start": 25.08, "end": 25.37 },
+          { "text": "bring", "start": 25.37, "end": 25.64 },
+          { "text": "those", "start": 27.15, "end": 27.42 },
+          { "text": "crews", "start": 27.42, "end": 28.03 },
+          { "text": "home.", "start": 29.71, "end": 30.17 }
         ]
       }
     ]

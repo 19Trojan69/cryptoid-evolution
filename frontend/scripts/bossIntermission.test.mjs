@@ -7,6 +7,7 @@ import {componentHost} from './componentTestHost.mjs';
 import {actualBackend} from './weaponReloadRecoveryHost.mjs';
 import {canContinueLevelCompletion} from '../src/pages/bossSummaryTiming.ts';
 import {ResourceCache} from '../src/pages/resourceCache.ts';
+import {storyFadeMs} from '../src/pages/story/storyFades.ts';
 const summary={stage:10,score:100,shards:12,destroyed:10,hearts:3,combos:2};
 const translate=(s,p={})=>s.replace(/\{(\w+)\}/g,(_,k)=>String(p[k]));
 test('the real completion has no countdown and permits an immediate prepared click only',()=>{
@@ -22,6 +23,9 @@ test('the real completion has no countdown and permits an immediate prepared cli
  for(const blocked of [{saving:true},{saving:false,failed:true},{failed:false,continuing:true},{continuing:false,prepared:false}]){
   h.update(blocked);assert.equal(button().props.disabled,true);
  }
+ h.update({prepared:true,departing:true});
+ assert.equal(button().props.disabled,true);
+ assert.equal(h.nodes().find(node=>node.props.className==='game-overlay level-completion-overlay').props.inert,true);
  h.unmount();
 });
 async function handlers(){
@@ -37,7 +41,7 @@ async function handlers(){
   completionSaveFailure,hasLocalLevelBackup:()=>false,localExitAvailable:false,bossSummaryFailure:"",
   weaponBusy:false,bossSummary:null,bossSummaryPrepared:false,bossSummarySaving:false,bossSummaryFailed:false,bossSummaryContinuing:false,bossSummaryContinueFailed:false,
   clearControls(){calls.push('controls');},soundRef:ref({setPaused(){calls.push('audio-pause');}}),musicRef:ref({pause(){}}),
-  storyBriefingsEnabled:()=>true,levelStoryAtSector:sector=>sector===11?'level-two':undefined,
+  storyBriefingsEnabled:()=>true,levelStoryAtSector:sector=>sector===11?'level-two':undefined,storyFadeMs,
   COMPLETION_MUSIC_SOURCE:'/audio/level-complete.mp3',
   unlockAudioForResume(){calls.push('gesture');},ownerDiagnostics:true,sessionDiagnostic(kind,data){calls.push(data.operation||kind);},ownerResourceContext:()=>({effects:state.effects.length}),
   releaseIdleCanvasEffects(){calls.push('cleanup');return env.idle!==false;},releaseCompletedLevelHulls(stage){calls.push(`release-hulls-${stage}`);},syncSelectedWeapon(){},setWeaponStock(){},
@@ -48,7 +52,7 @@ async function handlers(){
    if(env.loseContinue&&path.endsWith('/continue'))throw Error('lost reply');return{data:res.body};}},
   retrySave:fn=>fn(),useEffect(){},useCallback:fn=>fn,setGame(value){env.game=value;},
  };
- for(const field of ['localExitAvailable','bossSummaryFailure','bossSummary','bossSummaryPrepared','bossSummarySaving','bossSummaryFailed','bossSummaryContinuing','bossSummaryContinueFailed'])env['set'+field[0].toUpperCase()+field.slice(1)]=value=>{env[field]=value;};
+ for(const field of ['localExitAvailable','bossSummaryFailure','bossSummary','departingSummary','bossSummaryPrepared','bossSummarySaving','bossSummaryFailed','bossSummaryContinuing','bossSummaryContinueFailed'])env['set'+field[0].toUpperCase()+field.slice(1)]=value=>{env[field]=value;};
  const api=new Function('env','with(env){'+code+';return {beginBossSummary,prepareBossSummary,continueBossSummary};}')(env);
  return{...api,h,env,state,calls};
 }
@@ -80,14 +84,17 @@ test('continuing a completed level changes no rewards and a repeated click is ig
  await f.continueBossSummary();assert.equal(f.calls.filter(v=>v==='gesture').length,gestures);
  assert.ok(!f.calls.includes('/progress/boss-summary/continue'));
 });
-test('Continue fades an audible completion track while handing over to the next briefing',async()=>{
+test('Continue holds the completion screen and fades its track while handing over to the next briefing',async()=>{
  const f=await handlers();f.beginBossSummary();await f.prepareBossSummary();
+ const result=f.env.bossSummary;
  f.env.musicRef.current={currentSource:f.env.COMPLETION_MUSIC_SOURCE,
   setVolume(volume,timeConstant){f.calls.push(['fade',volume,timeConstant]);},
   pause(){f.calls.push('music-pause');}};
  await f.continueBossSummary();
  assert.equal(f.state.status,'playing');
- assert.deepEqual(f.calls.filter(Array.isArray),[['fade',0,.10]]);
+ assert.equal(f.env.bossSummary,null);
+ assert.equal(f.env.departingSummary,result);
+ assert.deepEqual(f.calls.filter(Array.isArray),[['fade',0,storyFadeMs.gameOut/6000]]);
  assert.ok(!f.calls.includes('music-pause'));
 });
 test('late preparation and continuation replies cannot resume an unmounted game',async()=>{
@@ -115,7 +122,7 @@ test('closing a reward card cannot resume a pending boss summary or count time h
  const code=transformSync(source.slice(start,end),{loader:'tsx'}).code;
  const state={status:'paused'},env={rewardCardsRef:{current:[{}]},bossSummaryRef:{current:{accepted:false}},stateRef:{current:state},clearControls(){},setRewardCards(){},setGame(){},lastFrameRef:{current:0},performance:{now:()=>1000}};
  new Function('env','with(env){'+code+';return continueRewardCard;}')(env)();assert.equal(state.status,'paused');
- assert.match(source,/bossSummary && !rewardCards\.length && !homePrompt && <LevelCompletion/);
+ assert.match(source,/displayedSummary && !rewardCards\.length && !homePrompt && <LevelCompletion/);
 });
 
 test('an unconfirmed reward snapshot cannot enable Continue',async()=>{

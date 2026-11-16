@@ -14,6 +14,7 @@ function setup({ withAudio = true, startAudio, artwork = false, reducedMotion = 
   const starts = [];
   const unlocks = [];
   const preparations = [];
+  const covers = [];
   const transitions = [];
   const drawings = [];
   const window = Object.assign(new EventTarget(), { matchMedia: () => ({ matches: reducedMotion }) });
@@ -48,6 +49,7 @@ function setup({ withAudio = true, startAudio, artwork = false, reducedMotion = 
       audio.currentTime = 0;
       return player;
     },
+    onCovered: () => covers.push(time),
     onReturn: () => {
       transitions.push('reveal');
       player.currentSource = '/audio/dreadnought-duel.mp3';
@@ -70,7 +72,7 @@ function setup({ withAudio = true, startAudio, artwork = false, reducedMotion = 
   });
   const find = name => host.nodes().find(node => node.props.className === name)?.props;
   return {
-    ...host, player, audio, starts, unlocks, preparations, transitions, drawings,
+    ...host, player, audio, starts, unlocks, preparations, covers, transitions, drawings,
     tick(ms) {
       time += ms;
       const callbacks = [...frames.values()];
@@ -79,6 +81,7 @@ function setup({ withAudio = true, startAudio, artwork = false, reducedMotion = 
       host.render();
     },
     phase: () => find('story-briefing')['data-phase'],
+    overlapping: () => find('story-briefing')['data-overlap'],
     retry: () => find('story-briefing-audio'),
     skip: () => find('story-briefing-skip').onClick(),
     hide() {
@@ -94,6 +97,24 @@ function setup({ withAudio = true, startAudio, artwork = false, reducedMotion = 
     },
   };
 }
+
+test('the briefing image starts blending in while the game is covered before the voice starts', async () => {
+  const story = setup();
+  story.tick(storyFadeMs.gameOut - storyFadeMs.briefingLead - 1);
+  assert.equal(story.overlapping(), undefined);
+  story.tick(1);
+  assert.equal(story.phase(), 'covering');
+  assert.equal(story.overlapping(), true);
+  assert.deepEqual(story.starts, []);
+  assert.deepEqual(story.covers, []);
+  story.tick(storyFadeMs.briefingLead);
+  await story.flush();
+  assert.equal(story.phase(), 'briefing');
+  assert.equal(story.overlapping(), undefined);
+  assert.deepEqual(story.starts, [0]);
+  assert.deepEqual(story.covers, [1000 + storyFadeMs.gameOut]);
+  story.unmount();
+});
 
 test('a briefing resumes the same recording at its position after returning to the app', async () => {
   const story = setup();

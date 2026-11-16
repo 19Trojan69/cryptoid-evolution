@@ -19,6 +19,7 @@
   z-index: 1900;
   color: #ffda8e;
   --story-motion: 1;
+  --story-easing: cubic-bezier(.38, 0, .26, 1);
 }
 
 .story-briefing::before {
@@ -27,12 +28,12 @@
   inset: 0;
   background: #03060b;
   opacity: 1;
-  animation: story-briefing-cover calc(var(--story-game-out) * var(--story-motion)) ease-in-out both;
+  animation: story-briefing-cover calc(var(--story-game-out) * var(--story-motion)) var(--story-easing) both;
 }
 
 .story-briefing[data-phase="returning"]::before {
   opacity: 0;
-  animation: story-briefing-uncover calc(var(--story-game-in) * var(--story-motion)) ease-in-out both;
+  animation: story-briefing-uncover calc(var(--story-game-in) * var(--story-motion)) cubic-bezier(.25, .46, .45, .94) both;
 }
 
 .story-briefing:focus { outline: none; }
@@ -41,10 +42,11 @@
   position: absolute;
   inset: 0;
   opacity: 0;
-  transition: opacity calc(var(--story-briefing-out) * var(--story-motion)) ease-in-out;
+  transition: opacity calc(var(--story-briefing-out) * var(--story-motion)) var(--story-easing);
 }
 
 .story-briefing[data-phase="briefing"] .story-briefing-content,
+.story-briefing[data-overlap] .story-briefing-content,
 .game-shell[data-campaign-opening="true"] > .story-briefing[data-phase="covering"] .story-briefing-content {
   opacity: 1;
   transition-duration: calc(var(--story-briefing-in) * var(--story-motion));

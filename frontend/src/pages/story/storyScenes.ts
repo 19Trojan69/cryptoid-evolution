@@ -25,20 +25,20 @@ export const storyScenes: Record<StoryScene, StoryDefinition> = {
   campaign: {
     title: 'Cryptoid Evolution',
     heading: 'CRYPTOID EVOLUTION',
-    audio: 'campaign-intro.mp3',
+    audio: 'campaign-intro-phrased.mp3',
     timing: originalTiming.campaign,
   },
   varneth: {
     title: 'Varneth',
     heading: 'CRYPTOID EVOLUTION',
-    audio: 'varneth-intro.mp3',
+    audio: 'varneth-intro-phrased.mp3',
     timing: originalTiming.varneth,
     boss: { id: 1, name: 'Varneth', subtitle: 'The Spam Broadcaster', outline: 'outline.webp', ship: 'ship.webp', muzzles: varnethMuzzles },
   },
   'level-two': {
     title: 'Level 2',
     heading: 'LEVEL 02',
-    audio: 'level-two-intro.mp3',
+    audio: 'level-two-intro-phrased.mp3',
     timing: chapterTwoTiming['level-two'],
   },
   korvessa: {
@@ -57,7 +57,7 @@ export const storyScenes: Record<StoryScene, StoryDefinition> = {
   'level-three': {
     title: 'Level 3',
     heading: 'LEVEL 03',
-    audio: 'level-three-intro.mp3',
+    audio: 'level-three-intro-phrased.mp3',
     timing: levelThreeTiming,
   },
   drelvorn: {

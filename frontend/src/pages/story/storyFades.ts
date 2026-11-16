@@ -1,6 +1,7 @@
 export const storyFadeMs = {
-  gameOut: 520,
-  briefingIn: 560,
-  briefingOut: 560,
-  gameIn: 640,
+  gameOut: 820,
+  briefingLead: 260,
+  briefingIn: 760,
+  briefingOut: 780,
+  gameIn: 960,
 } as const;
