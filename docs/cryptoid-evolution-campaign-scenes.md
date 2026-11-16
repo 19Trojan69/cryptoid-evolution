@@ -18,10 +18,11 @@ Drehbuch für Kampagnenstart, Level-Briefings, Boss-Intros und Sieges-Outros. Je
 | Kampagneneinleitung, Intros von Varneth bis Drelvorn, Korvessas Outro, Briefings 2 und 3 | Sprechtext und deutsche Untertitel | Sieben Aufnahmen im ausgelieferten Testnet 08758df |
 | Varneth · The First Reply | Originale Suno-Vorlage und 9 Untertitelabschnitte für den eingesandten Take | Suno-MP3 von Marcus Wolf im Kandidaten, vollständiges Sprachsignal aus dem Upload |
 | Drelvorns Outro (Seal Revoked) | Sprechtext und acht Untertitelabschnitte | Eingereichte Suno-Aufnahme im Story-Zweig |
-| Briefing 4, Talvreks Intro und Outro | Sprechtext und deutsche Untertitel | Englische Teststimme mit eigens produzierten leisen Streicher- und Klavierklängen |
+| Talvreks Intro und Outro | Sprechtext und deutsche Untertitel | Zwei eingereichte Suno-Aufnahmen im Story-Zweig |
+| Briefing 4 | Sprechtext und deutsche Untertitel | Englische Teststimme mit eigens produzierten leisen Streicher- und Klavierklängen |
 | Level 5–50 | 138 Drehbuchfassungen bis zum Finale | Aufnahmen, Zeitpläne und Einbau folgen je Szene |
 
-Die drei übrigen Testaufnahmen wurden für die Prüfung der Übergänge mit der Stimme am_onyx aus [Kokoro](https://huggingface.co/hexgrad/Kokoro-82M) produziert. Finale Suno-Fassungen können für jede Szene die Testaufnahme samt Wortzeitplan ersetzen.
+Die Testaufnahme für Briefing 4 wurde mit der Stimme am_onyx aus [Kokoro](https://huggingface.co/hexgrad/Kokoro-82M) produziert. Die Suno-Fassung kann diese Aufnahme samt Wortzeitplan ersetzen.
 
 ## Genesis und die falschen Befehle
 
@@ -264,7 +265,7 @@ The convoy crews have spoken to their families. Genesis is holding. Before Drelv
 
 #### Boss-Intro · What the Books Say
 
-Testaufnahme im Kandidaten. talvrek.mp3 · 36,55 s.
+Suno-Aufnahme von Marcus Wolf. Eingereicht als „Hit Talvrek’s Reactor“. talvrek.mp3 · 36,38 s.
 
 **Suno-Stil**
 
@@ -276,7 +277,8 @@ Contact confirmed. Talvrek, the Chronicle Forger. That ship once surveyed new co
 
 **Deutsche Untertitel**
 
-- Kontakt bestätigt. Talvrek, der Chronikfälscher.
+- Kontakt bestätigt.
+- Talvrek, der Chronikfälscher.
 - Dieses Schiff hat früher junge Kolonien vermessen und ihre Anfänge festgehalten.
 - Seinen Kopien zufolge haben diese Menschen dort nie gelebt.
 - Die Hafenkontrolle weist deshalb Lebensmittel und Medizin ab.
@@ -285,7 +287,7 @@ Contact confirmed. Talvrek, the Chronicle Forger. That ship once surveyed new co
 
 #### Boss-Outro · Names on the Roll
 
-Testaufnahme im Kandidaten. talvrek-outro.mp3 · 33,73 s.
+Suno-Aufnahme von Marcus Wolf. Eingereicht als „Zeraveth Repair Platform“. talvrek-outro.mp3 · 34,82 s.
 
 **Suno-Stil**
 
