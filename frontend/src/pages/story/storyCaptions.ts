@@ -3,7 +3,9 @@ import type { StoryTiming } from './cinematic.js';
 import type { StoryScene } from './storyScenes';
 import translated from './storySubtitles.json';
 
-const cueEnds: Record<StoryScene, readonly number[]> = {
+// Older recordings contain paragraphs that need a separate set of caption boundaries.
+// In the Genesis continuation each timing group is one caption.
+const cueEnds: Partial<Record<StoryScene, readonly number[]>> = {
   campaign: [9, 25, 33, 42, 44, 51, 65, 77, 84, 97, 106, 112],
   varneth: [3, 12, 18, 31, 35],
   'level-two': [11, 23, 30, 41, 46],
@@ -15,7 +17,9 @@ const cueEnds: Record<StoryScene, readonly number[]> = {
 
 export function storyCues(scene: StoryScene, timing: StoryTiming) {
   const words = timing.groups.flatMap(group => group.words);
-  return cueEnds[scene].map((end, index, cueBoundaries) => {
+  let wordCount = 0;
+  const boundaries = cueEnds[scene] ?? timing.groups.map(group => wordCount += group.words.length);
+  return boundaries.map((end, index, cueBoundaries) => {
     const first = cueBoundaries[index - 1] ?? 0;
     return {
       text: words.slice(first, end).map(word => word.text).join(' '),
@@ -26,4 +30,4 @@ export function storyCues(scene: StoryScene, timing: StoryTiming) {
 }
 
 const translations: Partial<Record<Locale, Record<StoryScene, readonly string[]>>> = translated;
-export const storySubtitle = (scene: StoryScene, locale: Locale, cue: number) => translations[locale]?.[scene][cue];
+export const storySubtitle = (scene: StoryScene, locale: Locale, cue: number) => translations[locale]?.[scene]?.[cue];

@@ -2878,7 +2878,7 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
           clearControls();
           lastFrameRef.current = 0;
           backgroundHiddenAtRef.current = 0;
-          if (briefingBoss) soundRef.current?.play('boss');
+          if (briefingBoss && stateRef.current.encounter === 'boss-intro') soundRef.current?.play('boss');
           setStoryReturning(false);
           setStory(null);
         }} />}

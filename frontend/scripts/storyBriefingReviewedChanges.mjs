@@ -1,6 +1,10 @@
 // Restore exact story changes before the historical gameplay fingerprints.
 const changes = [
   {
+    before: "          if (briefingBoss) soundRef.current?.play('boss');\n",
+    after: "          if (briefingBoss && stateRef.current.encounter === 'boss-intro') soundRef.current?.play('boss');\n",
+  },
+  {
     "before": "  useEffect(() => { wakeGameLoopRef.current?.(); }, [game.status, story]);\n  const [bossSummary, setBossSummary] = useState<BossSummary | null>(null);\n  const bossSummaryRef = useRef<{ summary: BossSummary; accepted: boolean; restored: boolean } | null>(null);\n  const [bossSummaryPrepared, setBossSummaryPrepared] = useState(false);\n",
     "after": "  useEffect(() => { wakeGameLoopRef.current?.(); }, [game.status, story]);\n  const [bossSummary, setBossSummary] = useState<BossSummary | null>(null);\n  const [departingSummary, setDepartingSummary] = useState<BossSummary | null>(null);\n  const bossSummaryRef = useRef<{ summary: BossSummary; accepted: boolean; restored: boolean } | null>(null);\n  const [bossSummaryPrepared, setBossSummaryPrepared] = useState(false);\n"
   },

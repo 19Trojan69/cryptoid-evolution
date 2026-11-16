@@ -97,9 +97,7 @@
   width: max-content;
   max-width: min(calc(100% - 3rem), 40rem);
   padding: .42rem .65rem;
-  border-radius: .4rem;
-  background: rgb(5 10 17 / 36%);
-  text-shadow: 0 1px 3px #020407, 0 0 6px #020407;
+  text-shadow: 0 1px 3px #020407, 0 0 8px #020407;
 }
 
 :is(.story-briefing-skip, .story-briefing-audio) {

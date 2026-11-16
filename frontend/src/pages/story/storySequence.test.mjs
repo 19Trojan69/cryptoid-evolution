@@ -10,6 +10,7 @@ const { outputFiles } = buildSync({
       export { bossOutroAtSector, bossStoryAtSector, levelStoryAtSector, storyScenes } from './storyScenes';
       export { storyCues, storySubtitle } from './storyCaptions';
       export { supportedLanguages } from '../../locales/config';
+      export { BOSS_NAMES } from '../bossNames';
     `,
     resolveDir: fileURLToPath(new URL('.', import.meta.url)),
     loader: 'ts',
@@ -19,16 +20,31 @@ const { outputFiles } = buildSync({
   write: false,
 });
 const { bossOutroAtSector, bossStoryAtSector, levelStoryAtSector, storyScenes,
-  storyCues, storySubtitle, supportedLanguages } = await import('data:text/javascript;base64,' + Buffer.from(outputFiles[0].contents).toString('base64'));
+  storyCues, storySubtitle, supportedLanguages, BOSS_NAMES } = await import('data:text/javascript;base64,' + Buffer.from(outputFiles[0].contents).toString('base64'));
 
-test('Korvessa’s victory, the next level, and Drelvorn use their own story scenes', () => {
-  assert.equal(bossStoryAtSector(20), 'korvessa');
-  assert.equal(bossOutroAtSector(20), 'korvessa-outro');
-  assert.equal(levelStoryAtSector(21), 'level-three');
-  assert.equal(bossStoryAtSector(30), 'drelvorn');
-  assert.equal(bossOutroAtSector(30), undefined);
-  assert.equal(storyScenes.drelvorn.boss.id, 3);
-  assert.equal(storyScenes.drelvorn.boss.name, 'Drelvorn');
+test('through Talvrek each boss has its own intro, victory scene and next briefing in order', () => {
+  const briefings = [undefined, 'level-two', 'level-three', 'level-four'];
+  for (const [index, name] of BOSS_NAMES.entries()) {
+    const level = index + 1;
+    const sector = level * 10;
+    const intro = bossStoryAtSector(sector);
+    const outro = bossOutroAtSector(sector);
+    const briefing = levelStoryAtSector(sector - 9);
+    assert.equal(briefing, briefings[index]);
+    assert.equal(bossStoryAtSector(sector - 1), undefined);
+    assert.equal(bossOutroAtSector(sector - 1), undefined);
+    if (index >= briefings.length) {
+      assert.equal(intro, undefined);
+      assert.equal(outro, undefined);
+      continue;
+    }
+    assert.equal(intro, name.toLowerCase());
+    assert.equal(outro, intro + '-outro');
+    assert.equal(storyScenes[intro].boss.id, level);
+    assert.equal(storyScenes[intro].boss.name, name);
+    assert.ok(storyScenes[outro].title.startsWith(name + ' · '));
+  }
+  assert.equal(levelStoryAtSector(501), undefined);
 });
 
 test('every voice track has complete timed captions in every selectable language', () => {
@@ -61,5 +77,16 @@ test('corrected sentence pauses separate the spoken phrases on the caption clock
     const index = words.findIndex((word, i) => word.text === stop && words[i + 1]?.text === next);
     assert.ok(index >= 0, `${scene} is missing ${stop} ${next}`);
     assert.ok(words[index + 1].start - words[index].end >= .4, `${scene} needs a pause after ${stop}`);
+  }
+});
+
+test('the new recordings give each sentence its own audible pause', () => {
+  for (const scene of ['varneth-outro', 'drelvorn-outro', 'level-four', 'talvrek', 'talvrek-outro']) {
+    const words = storyScenes[scene].timing.groups.flatMap(group => group.words);
+    for (const [index, word] of words.slice(0, -1).entries()) {
+      if (/[.!?]$/.test(word.text)) {
+        assert.ok(words[index + 1].start - word.end >= .5, `${scene} needs a pause after ${word.text}`);
+      }
+    }
   }
 });

@@ -58,6 +58,49 @@
       "Genesis hat gerade einen Evakuierungsbefehl erhalten. Er trägt eines dieser Siegel.",
       "Die Türen der Schutzräume öffnen sich. Die Familien der Konvoi-Crews sind noch drinnen.",
       "Ich warne sie. Triff Drelvorns Reaktor."
+    ],
+    "varneth-outro": [
+      "Pilot.",
+      "Varneths Signal ist verstummt.",
+      "Ich höre eine Stimme auf dem Genesis-Relais.",
+      "Ein Reparaturtrupp am Außenring ruft seit Tagesanbruch um Hilfe.",
+      "Ich habe die Koordinaten.",
+      "Die Sanitäter sind unterwegs.",
+      "Halte den Kanal frei, Pilot.",
+      "Zum ersten Mal heute …",
+      "… wird dort draußen jemand eine Antwort hören."
+    ],
+    "drelvorn-outro": [
+      "Genesis, Evakuierung abbrechen. Drelvorns Sender ist ausgefallen.",
+      "Die Schutzraumwarte haben die Türen gesichert.",
+      "Alle Familien der Konvoi-Crews sind in den Schutzräumen in Sicherheit.",
+      "Das gestohlene Siegel wurde gesperrt.",
+      "Wegen eines Kolonieregisters bestand der falsche Befehl jede Prüfung.",
+      "Dasselbe Register führt die Schutzräume als leer.",
+      "Ich rufe die Originaldaten ab."
+    ],
+    "level-four": [
+      "Die Konvoi-Crews haben mit ihren Familien gesprochen. Genesis hält stand.",
+      "Noch vor Drelvorns Befehl hat jemand die Familien aus den Schutzraumlisten gestrichen.",
+      "Auf den Lieferbelegen der Crews stehen noch die Originaleinträge.",
+      "Vergleiche sie mit dem neuen Register. Dort siehst du die Änderungen.",
+      "Verfolge die Spur der ersten gefälschten Kopie, Pilot."
+    ],
+    "talvrek": [
+      "Kontakt bestätigt. Talvrek, der Chronikfälscher.",
+      "Dieses Schiff hat früher junge Kolonien vermessen und ihre Anfänge festgehalten.",
+      "Seinen Kopien zufolge haben diese Menschen dort nie gelebt.",
+      "Die Hafenkontrolle weist deshalb Lebensmittel und Medizin ab.",
+      "Die Originalbelege sind bereits in unserer Hand.",
+      "Triff Talvreks Reaktor, bevor er eine weitere Kopie sendet."
+    ],
+    "talvrek-outro": [
+      "Talvreks Sender ist verstummt.",
+      "Zwei Kolonien haben die Originalbelege geprüft und die Schutzraumlisten wiederhergestellt.",
+      "Der erste Frachter mit Medikamenten hat Andockfreigabe.",
+      "Eine Station hat immer noch nicht geantwortet.",
+      "Eine Reparaturplattform namens Zeraveth versperrt den Anflug.",
+      "Das Wartungsteam wartet draußen mit den Ersatzteilen für die Station."
     ]
   },
   "es": {
@@ -119,6 +162,49 @@
       "Génesis acaba de recibir una orden de evacuación firmada con uno de esos sellos.",
       "Las puertas de los refugios se están abriendo. Las familias de las tripulaciones del convoy siguen dentro.",
       "Voy a avisarles. Ataca el reactor de Drelvorn."
+    ],
+    "varneth-outro": [
+      "Piloto.",
+      "La señal de Varneth se ha apagado.",
+      "Oigo una voz en el repetidor de Génesis.",
+      "Un equipo de reparación del anillo exterior pide ayuda desde el alba.",
+      "Tengo sus coordenadas.",
+      "Los sanitarios van de camino.",
+      "Mantén el canal libre, piloto.",
+      "Por primera vez hoy…",
+      "…alguien ahí fuera va a oír una respuesta."
+    ],
+    "drelvorn-outro": [
+      "Génesis, cancelad la evacuación. El transmisor de Drelvorn ha caído.",
+      "Los responsables de los refugios han asegurado las puertas.",
+      "Las familias de las tripulaciones del convoy están dentro y a salvo.",
+      "Hemos revocado el sello robado.",
+      "Un registro colonial hizo que la orden falsa pasara todos los controles.",
+      "Ese registro también da los refugios por vacíos.",
+      "Voy a recuperar los registros originales."
+    ],
+    "level-four": [
+      "Las tripulaciones han hablado con sus familias. Génesis resiste.",
+      "Antes de la orden de Drelvorn, alguien borró a las familias de las listas de los refugios.",
+      "Los recibos de entrega aún conservan los datos originales.",
+      "Compáralos con el nuevo registro. Verás dónde cambió.",
+      "Sigue el rastro de esa primera copia alterada, piloto."
+    ],
+    "talvrek": [
+      "Contacto confirmado. Talvrek, el Falsificador de Crónicas.",
+      "Esa nave cartografió colonias jóvenes y guardó sus primeros registros.",
+      "Ahora sus copias dicen que esa gente jamás vivió allí.",
+      "El puerto usa su versión para rechazar alimentos y medicinas.",
+      "Ya tenemos los recibos originales.",
+      "Ataca el reactor de Talvrek antes de que envíe otra copia."
+    ],
+    "talvrek-outro": [
+      "El transmisor de Talvrek se ha apagado.",
+      "Dos colonias verificaron los recibos originales y restauraron las listas de los refugios.",
+      "El primer carguero de medicinas tiene permiso para atracar.",
+      "Una estación sigue sin responder.",
+      "Una plataforma de reparación llamada Zeraveth bloquea el acceso.",
+      "El equipo de mantenimiento espera fuera con las piezas que necesita la estación."
     ]
   },
   "fr": {
@@ -180,6 +266,49 @@
       "Genesis vient de recevoir un ordre d’évacuation signé avec l’un de ces sceaux.",
       "Les portes des abris s’ouvrent. Les familles des équipages du convoi sont encore à l’intérieur.",
       "Je vais les prévenir. Vise le réacteur de Drelvorn."
+    ],
+    "varneth-outro": [
+      "Pilote.",
+      "Le signal de Varneth s’est éteint.",
+      "J’entends une voix sur le relais de Genesis.",
+      "Une équipe de réparation de l’anneau extérieur appelle depuis l’aube.",
+      "J’ai leurs coordonnées.",
+      "Les secours sont en route.",
+      "Garde le canal libre, pilote.",
+      "Pour la première fois aujourd’hui…",
+      "…quelqu’un là-bas va entendre une réponse."
+    ],
+    "drelvorn-outro": [
+      "Genesis, annulez l’évacuation. L’émetteur de Drelvorn est hors service.",
+      "Les responsables des abris ont sécurisé les portes.",
+      "Les familles des équipages sont à l’intérieur et en sécurité.",
+      "Le sceau volé a été révoqué.",
+      "Un registre colonial a permis au faux ordre de passer tous les contrôles.",
+      "Ce même registre indique que les abris sont vides.",
+      "Je récupère les registres originaux."
+    ],
+    "level-four": [
+      "Les équipages ont parlé à leurs familles. Genesis tient bon.",
+      "Avant l’ordre de Drelvorn, quelqu’un a rayé les familles des listes des abris.",
+      "Les reçus de livraison contiennent encore les données d’origine.",
+      "Compare-les au nouveau registre. Tu verras ce qui a changé.",
+      "Remonte à cette première copie falsifiée, pilote."
+    ],
+    "talvrek": [
+      "Contact confirmé. Talvrek, le Faussaire des chroniques.",
+      "Ce vaisseau cartographiait les jeunes colonies et conservait leurs premiers registres.",
+      "Ses copies prétendent maintenant que ces gens n’y ont jamais vécu.",
+      "Le port s’y fie pour refuser vivres et médicaments.",
+      "Nous avons déjà les reçus originaux.",
+      "Frappe le réacteur de Talvrek avant qu’il envoie une autre copie."
+    ],
+    "talvrek-outro": [
+      "L’émetteur de Talvrek s’est tu.",
+      "Deux colonies ont vérifié les reçus originaux et rétabli les listes des abris.",
+      "Le premier cargo de médicaments est autorisé à accoster.",
+      "Une station n’a toujours pas répondu.",
+      "Une plateforme de réparation nommée Zeraveth bloque l’approche.",
+      "L’équipe de maintenance attend dehors avec les pièces dont la station a besoin."
     ]
   },
   "pt": {
@@ -241,6 +370,49 @@
       "Genesis acaba de receber uma ordem de evacuação assinada com um desses selos.",
       "As portas dos abrigos estão a abrir-se. As famílias das tripulações do comboio ainda estão lá dentro.",
       "Vou avisá-las. Ataca o reator de Drelvorn."
+    ],
+    "varneth-outro": [
+      "Piloto.",
+      "O sinal de Varneth sumiu.",
+      "Ouço uma voz na estação retransmissora de Genesis.",
+      "Uma equipe de reparos do anel externo pede ajuda desde o amanhecer.",
+      "Tenho as coordenadas.",
+      "A equipe médica está a caminho.",
+      "Deixe o canal livre, piloto.",
+      "Pela primeira vez hoje…",
+      "…alguém lá fora vai ouvir uma resposta."
+    ],
+    "drelvorn-outro": [
+      "Genesis, cancele a evacuação. O transmissor de Drelvorn parou.",
+      "Os responsáveis pelos abrigos protegeram as portas.",
+      "As famílias das tripulações do comboio estão dentro, todas em segurança.",
+      "O selo roubado foi revogado.",
+      "Um registro colonial fez a ordem falsa passar por todas as verificações.",
+      "O mesmo registro declara que os abrigos estão vazios.",
+      "Vou recuperar os registros originais."
+    ],
+    "level-four": [
+      "As tripulações falaram com suas famílias. Genesis está resistindo.",
+      "Antes da ordem de Drelvorn, alguém apagou as famílias das listas dos abrigos.",
+      "Os comprovantes de entrega ainda guardam os dados originais.",
+      "Compare-os com o novo registro. Você verá onde ele mudou.",
+      "Siga o rastro da primeira cópia adulterada, piloto."
+    ],
+    "talvrek": [
+      "Contato confirmado. Talvrek, o Falsificador de Crônicas.",
+      "A nave mapeava colônias novas e guardava seus primeiros registros.",
+      "Agora as cópias dele dizem que essas pessoas nunca moraram lá.",
+      "O controle do porto usa a versão dele para recusar alimentos e remédios.",
+      "Já temos os comprovantes originais.",
+      "Acerte o reator de Talvrek antes que ele envie outra cópia."
+    ],
+    "talvrek-outro": [
+      "O transmissor de Talvrek parou.",
+      "Duas colônias conferiram os comprovantes originais e restauraram as listas dos abrigos.",
+      "O primeiro cargueiro de medicamentos está autorizado a atracar.",
+      "Uma estação ainda não respondeu.",
+      "Uma plataforma de reparo chamada Zeraveth bloqueia o acesso.",
+      "A equipe de manutenção espera do lado de fora com as peças de que a estação precisa."
     ]
   },
   "it": {
@@ -302,6 +474,49 @@
       "Genesis ha appena ricevuto un ordine di evacuazione firmato con uno di quei sigilli.",
       "Le porte dei rifugi si stanno aprendo. Le famiglie degli equipaggi del convoglio sono ancora dentro.",
       "Le avverto io. Colpisci il reattore di Drelvorn."
+    ],
+    "varneth-outro": [
+      "Pilota.",
+      "Il segnale di Varneth è sparito.",
+      "Sento una voce sul ripetitore di Genesis.",
+      "Una squadra di riparazione dell’anello esterno chiede aiuto dall’alba.",
+      "Ho le coordinate.",
+      "I soccorritori sono in arrivo.",
+      "Tieni libero il canale, pilota.",
+      "Per la prima volta oggi…",
+      "…là fuori qualcuno sentirà una risposta."
+    ],
+    "drelvorn-outro": [
+      "Genesis, annullate l’evacuazione. Il trasmettitore di Drelvorn è fuori uso.",
+      "Gli addetti ai rifugi hanno messo in sicurezza le porte.",
+      "Le famiglie degli equipaggi sono dentro e tutte al sicuro.",
+      "Il sigillo rubato è stato revocato.",
+      "Un registro coloniale ha fatto passare il falso ordine a tutti i controlli.",
+      "Lo stesso registro dà i rifugi per vuoti.",
+      "Sto recuperando i registri originali."
+    ],
+    "level-four": [
+      "Gli equipaggi hanno parlato con le famiglie. Genesis tiene.",
+      "Prima dell’ordine di Drelvorn, qualcuno ha cancellato le famiglie dalle liste dei rifugi.",
+      "Le ricevute di consegna conservano ancora i dati originali.",
+      "Confrontale con il nuovo registro. Vedrai dov’è cambiato.",
+      "Segui la traccia della prima copia alterata, pilota."
+    ],
+    "talvrek": [
+      "Contatto confermato. Talvrek, il Falsario delle cronache.",
+      "Quella nave un tempo mappava nuove colonie e ne custodiva i primi registri.",
+      "Ora le sue copie sostengono che quella gente non abbia mai vissuto lì.",
+      "Il porto usa la sua versione per respingere viveri e medicinali.",
+      "Abbiamo già le ricevute originali.",
+      "Colpisci il reattore di Talvrek prima che invii un’altra copia."
+    ],
+    "talvrek-outro": [
+      "Il trasmettitore di Talvrek ha smesso di trasmettere.",
+      "Due colonie hanno verificato le ricevute originali e ripristinato le liste dei rifugi.",
+      "Il primo cargo di medicinali è autorizzato ad attraccare.",
+      "Una stazione non ha ancora risposto.",
+      "Una piattaforma di riparazione chiamata Zeraveth blocca l’accesso.",
+      "La squadra di manutenzione aspetta fuori con i pezzi che servono alla stazione."
     ]
   },
   "pl": {
@@ -363,6 +578,49 @@
       "Genesis właśnie otrzymało rozkaz ewakuacji podpisany jedną z tych pieczęci.",
       "Drzwi schronów się otwierają. Rodziny załóg konwoju wciąż są w środku.",
       "Ostrzegę ich. Uderz w reaktor Drelvorna."
+    ],
+    "varneth-outro": [
+      "Pilocie.",
+      "Sygnał Varnetha zamilkł.",
+      "Słyszę głos na przekaźniku Genesis.",
+      "Ekipa naprawcza na zewnętrznym pierścieniu wzywa pomocy od świtu.",
+      "Mam współrzędne.",
+      "Ratownicy są w drodze.",
+      "Nie zajmuj kanału, pilocie.",
+      "Dziś po raz pierwszy…",
+      "…ktoś tam usłyszy odpowiedź."
+    ],
+    "drelvorn-outro": [
+      "Genesis, odwołajcie ewakuację. Nadajnik Drelvorna nie działa.",
+      "Strażnicy schronów zabezpieczyli drzwi.",
+      "Rodziny załóg konwoju są w środku. Wszyscy są bezpieczni.",
+      "Unieważniliśmy skradzioną pieczęć.",
+      "Rejestr kolonii sprawił, że fałszywy rozkaz przeszedł wszystkie kontrole.",
+      "Według tego samego rejestru schrony są puste.",
+      "Pobieram oryginalne zapisy."
+    ],
+    "level-four": [
+      "Załogi rozmawiały z rodzinami. Genesis się trzyma.",
+      "Przed rozkazem Drelvorna ktoś wykreślił rodziny z list schronów.",
+      "Oryginalne wpisy są wciąż na potwierdzeniach dostaw.",
+      "Porównaj je z nowym rejestrem. Zobaczysz, co zmieniono.",
+      "Podążaj tropem pierwszej zmienionej kopii, pilocie."
+    ],
+    "talvrek": [
+      "Kontakt potwierdzony. Talvrek, Fałszerz Kronik.",
+      "Ten statek mapował młode kolonie i przechowywał ich pierwsze zapisy.",
+      "Teraz jego kopie twierdzą, że ci ludzie nigdy tam nie mieszkali.",
+      "Kontrola portu ufa jego wersji i odsyła żywność i leki.",
+      "Mamy już oryginalne potwierdzenia.",
+      "Traf w reaktor Talvreka, zanim wyśle kolejną kopię."
+    ],
+    "talvrek-outro": [
+      "Nadajnik Talvreka zamilkł.",
+      "Dwie kolonie sprawdziły oryginalne potwierdzenia i przywróciły listy schronów.",
+      "Pierwszy transport leków ma zgodę na dokowanie.",
+      "Jedna stacja nadal nie odpowiada.",
+      "Drogę do niej blokuje platforma naprawcza Zeraveth.",
+      "Ekipa serwisowa czeka na zewnątrz z częściami dla stacji."
     ]
   },
   "cs": {
@@ -424,6 +682,49 @@
       "Genesis právě obdržela evakuační příkaz podepsaný jednou z těch pečetí.",
       "Dveře krytů se otevírají. Rodiny posádek konvoje jsou stále uvnitř.",
       "Varuji je. Zasáhni Drelvornův reaktor."
+    ],
+    "varneth-outro": [
+      "Pilote.",
+      "Varnethův signál zmizel.",
+      "Z retranslátoru Genesis slyším hlas.",
+      "Opraváři na vnějším prstenci volají od svítání o pomoc.",
+      "Mám jejich souřadnice.",
+      "Zdravotníci jsou na cestě.",
+      "Nech kanál volný, pilote.",
+      "Poprvé za dnešek…",
+      "…tam někdo uslyší odpověď."
+    ],
+    "drelvorn-outro": [
+      "Genesis, zrušte evakuaci. Drelvornův vysílač je mimo provoz.",
+      "Správci krytů zajistili dveře.",
+      "Rodiny posádek konvoje jsou uvnitř. Všichni jsou v bezpečí.",
+      "Platnost ukradené pečeti byla zrušena.",
+      "Díky koloniálnímu registru prošel falešný rozkaz všemi kontrolami.",
+      "Tentýž registr vede kryty jako prázdné.",
+      "Vyhledávám původní záznamy."
+    ],
+    "level-four": [
+      "Posádky mluvily s rodinami. Genesis se drží.",
+      "Před Drelvornovým rozkazem někdo rodiny vyškrtl ze seznamů krytů.",
+      "Potvrzení o dodávkách stále obsahují původní údaje.",
+      "Porovnej je s novým registrem. Uvidíš, kde se změnil.",
+      "Sleduj stopu první pozměněné kopie, pilote."
+    ],
+    "talvrek": [
+      "Kontakt potvrzen. Talvrek, Padělatel kronik.",
+      "Ta loď kdysi mapovala nové kolonie a uchovávala jejich první záznamy.",
+      "Jeho kopie teď tvrdí, že tam ti lidé nikdy nežili.",
+      "Přístavní kontrola podle nich odmítá jídlo a léky.",
+      "Originály potvrzení už máme.",
+      "Zasáhni Talvrekův reaktor, než odešle další kopii."
+    ],
+    "talvrek-outro": [
+      "Talvrekův vysílač utichl.",
+      "Dvě kolonie ověřily původní potvrzení a obnovily seznamy krytů.",
+      "První loď s léky má povolení zakotvit.",
+      "Jedna stanice stále neodpovídá.",
+      "Přílet k ní blokuje opravárenská plošina Zeraveth.",
+      "Údržbáři čekají venku s díly, které stanice potřebuje."
     ]
   },
   "sk": {
@@ -485,6 +786,49 @@
       "Genesis práve dostala príkaz na evakuáciu podpísaný jednou z tých pečatí.",
       "Dvere krytov sa otvárajú. Rodiny posádok konvoja sú stále vnútri.",
       "Varujem ich. Zasiahni Drelvornov reaktor."
+    ],
+    "varneth-outro": [
+      "Pilot.",
+      "Varnethov signál zmizol.",
+      "Z relé Genesis počujem hlas.",
+      "Opravársky tím na vonkajšom prstenci volá od svitania o pomoc.",
+      "Mám ich súradnice.",
+      "Zdravotníci sú na ceste.",
+      "Nechaj kanál voľný, pilot.",
+      "Dnes prvýkrát…",
+      "…tam niekto začuje odpoveď."
+    ],
+    "drelvorn-outro": [
+      "Genesis, zrušte evakuáciu. Drelvornov vysielač je mimo prevádzky.",
+      "Správcovia krytov zaistili dvere.",
+      "Rodiny posádok konvoja sú vnútri. Všetci sú v bezpečí.",
+      "Platnosť ukradnutej pečate bola zrušená.",
+      "Vďaka koloniálnemu registru prešiel falošný rozkaz všetkými kontrolami.",
+      "Ten istý register uvádza, že kryty sú prázdne.",
+      "Vyhľadávam pôvodné záznamy."
+    ],
+    "level-four": [
+      "Posádky sa spojili s rodinami. Genesis sa drží.",
+      "Pred Drelvornovým rozkazom niekto vyškrtol rodiny zo zoznamov krytov.",
+      "Potvrdenia o dodávkach stále obsahujú pôvodné údaje.",
+      "Porovnaj ich s novým registrom. Uvidíš, kde sa zmenil.",
+      "Sleduj stopu prvej pozmenenej kópie, pilot."
+    ],
+    "talvrek": [
+      "Kontakt potvrdený. Talvrek, Falšovateľ kroník.",
+      "Tá loď kedysi mapovala nové kolónie a uchovávala ich prvé záznamy.",
+      "Jeho kópie teraz tvrdia, že tam tí ľudia nikdy nežili.",
+      "Prístavná kontrola podľa nich odmieta potraviny a lieky.",
+      "Originály potvrdení už máme.",
+      "Zasiahni Talvrekov reaktor skôr, než odošle ďalšiu kópiu."
+    ],
+    "talvrek-outro": [
+      "Talvrekov vysielač stíchol.",
+      "Dve kolónie overili pôvodné potvrdenia a obnovili zoznamy krytov.",
+      "Prvá loď s liekmi má povolenie zakotviť.",
+      "Jedna stanica stále neodpovedá.",
+      "Prílet k nej blokuje opravárenská plošina Zeraveth.",
+      "Údržbári čakajú vonku s dielmi, ktoré stanica potrebuje."
     ]
   },
   "ru": {
@@ -546,6 +890,49 @@
       "На Генезис только что поступил приказ об эвакуации с одной из этих печатей.",
       "Двери убежищ открываются. Семьи экипажей конвоя всё ещё внутри.",
       "Я их предупрежу. Бей по реактору Дрелворна."
+    ],
+    "varneth-outro": [
+      "Пилот.",
+      "Сигнал Варнета исчез.",
+      "На ретрансляторе Генезиса слышен голос.",
+      "Ремонтная бригада на внешнем кольце просит о помощи с рассвета.",
+      "Координаты у меня.",
+      "Медики уже в пути.",
+      "Не занимай канал, пилот.",
+      "Сегодня впервые…",
+      "…там услышат ответ."
+    ],
+    "drelvorn-outro": [
+      "Генезис, отмените эвакуацию. Передатчик Дрелворна отключён.",
+      "Смотрители убежищ заблокировали двери.",
+      "Семьи экипажей конвоя внутри. Все на месте и в безопасности.",
+      "Украденная печать аннулирована.",
+      "Из-за колониального реестра поддельный приказ прошёл все проверки.",
+      "В том же реестре убежища числятся пустыми.",
+      "Я запрашиваю исходные записи."
+    ],
+    "level-four": [
+      "Экипажи поговорили с родными. Генезис держится.",
+      "Ещё до приказа Дрелворна семьи вычеркнули из списков убежищ.",
+      "Исходные записи сохранились в квитанциях о доставке.",
+      "Сравни их с новым реестром. Будет видно, что изменилось.",
+      "Проследи, откуда пришла первая подделка, пилот."
+    ],
+    "talvrek": [
+      "Контакт подтверждён. Талврек, Фальсификатор хроник.",
+      "Этот корабль исследовал молодые колонии и хранил их первые записи.",
+      "Теперь его копии утверждают, что эти люди там никогда не жили.",
+      "По его версии порт не принимает грузы с едой и лекарствами.",
+      "Исходные квитанции уже у нас.",
+      "Бей по реактору Талврека, пока он не отправил новую копию."
+    ],
+    "talvrek-outro": [
+      "Передатчик Талврека замолчал.",
+      "Две колонии проверили исходные квитанции и восстановили списки убежищ.",
+      "Первому судну с лекарствами разрешили стыковку.",
+      "Одна станция всё ещё не отвечает.",
+      "Подлёт к ней перекрыла ремонтная платформа Зеравет.",
+      "Ремонтная бригада ждёт снаружи с деталями, нужными станции."
     ]
   },
   "uk": {
@@ -607,6 +994,49 @@
       "На Генезис щойно надійшов наказ про евакуацію з однією з цих печаток.",
       "Двері укриттів відчиняються. Родини екіпажів конвою все ще всередині.",
       "Я їх попереджу. Влуч у реактор Дрелворна."
+    ],
+    "varneth-outro": [
+      "Пілоте.",
+      "Сигнал Варнета зник.",
+      "Чую голос на ретрансляторі Генезиса.",
+      "Ремонтна бригада на зовнішньому кільці кличе на допомогу від світанку.",
+      "Маю координати.",
+      "Медики вже в дорозі.",
+      "Залиш канал вільним, пілоте.",
+      "Сьогодні вперше…",
+      "…там почують відповідь."
+    ],
+    "drelvorn-outro": [
+      "Генезисе, скасуйте евакуацію. Передавач Дрелворна вимкнено.",
+      "Чергові в укриттях заблокували двері.",
+      "Родини екіпажів конвою всередині. Усі в безпеці.",
+      "Викрадену печатку анульовано.",
+      "Через колоніальний реєстр підроблений наказ пройшов усі перевірки.",
+      "У тому самому реєстрі укриття значаться порожніми.",
+      "Запитую оригінальні записи."
+    ],
+    "level-four": [
+      "Екіпажі поговорили зі своїми родинами. Генезис тримається.",
+      "Ще до наказу Дрелворна хтось викреслив родини зі списків укриттів.",
+      "У квитанціях про доставку досі є оригінальні записи.",
+      "Зістав їх із новим реєстром. Побачиш, де його змінили.",
+      "Вийди на слід першої зміненої копії, пілоте."
+    ],
+    "talvrek": [
+      "Контакт підтверджено. Талврек, Фальсифікатор хронік.",
+      "Цей корабель колись картографував нові колонії та зберігав їхні перші записи.",
+      "Тепер його копії стверджують, що ці люди там ніколи не жили.",
+      "Порт за його версією відхиляє вантажі з їжею та ліками.",
+      "Оригінальні квитанції вже в нас.",
+      "Уразь реактор Талврека, поки він не надіслав нову копію."
+    ],
+    "talvrek-outro": [
+      "Передавач Талврека замовк.",
+      "Дві колонії перевірили оригінальні квитанції й відновили списки укриттів.",
+      "Першому вантажному кораблю з ліками дозволили стикування.",
+      "Одна станція досі не відповідає.",
+      "Підліт до неї перекрила ремонтна платформа Зеравет.",
+      "Ремонтна бригада чекає зовні з деталями, потрібними станції."
     ]
   },
   "hr": {
@@ -668,6 +1098,49 @@
       "Genesis je upravo primio naredbu za evakuaciju potpisanu jednim od tih pečata.",
       "Vrata skloništa se otvaraju. Obitelji posada konvoja još su unutra.",
       "Upozorit ću ih. Pogodi Drelvornov reaktor."
+    ],
+    "varneth-outro": [
+      "Pilote.",
+      "Varnethov je signal nestao.",
+      "Čujem glas na releju Genesisa.",
+      "Ekipa za popravke na vanjskom prstenu od zore traži pomoć.",
+      "Imam koordinate.",
+      "Medicinska ekipa je na putu.",
+      "Ostavi kanal slobodnim, pilote.",
+      "Prvi put danas…",
+      "…netko će ondje čuti odgovor."
+    ],
+    "drelvorn-outro": [
+      "Genesis, otkažite evakuaciju. Drelvornov odašiljač je ugašen.",
+      "Čuvari skloništa osigurali su vrata.",
+      "Obitelji posada konvoja su unutra. Svi su na sigurnom.",
+      "Ukradeni je pečat poništen.",
+      "Zbog kolonijalnog registra lažna je naredba prošla sve provjere.",
+      "U istom registru skloništa su označena kao prazna.",
+      "Dohvaćam izvorne zapise."
+    ],
+    "level-four": [
+      "Posade su razgovarale sa svojim obiteljima. Genesis se drži.",
+      "Prije Drelvornove naredbe netko je izbrisao obitelji s popisa skloništa.",
+      "Potvrde o isporuci još čuvaju izvorne upise.",
+      "Usporedi ih s novim registrom. Vidjet ćeš gdje je izmijenjen.",
+      "Slijedi trag prve izmijenjene kopije, pilote."
+    ],
+    "talvrek": [
+      "Kontakt potvrđen. Talvrek, Krivotvoritelj kronika.",
+      "Taj je brod kartirao mlade kolonije i čuvao njihove prve zapise.",
+      "Njegove kopije sada tvrde da ti ljudi ondje nikad nisu živjeli.",
+      "Lučka kontrola na temelju toga odbija hranu i lijekove.",
+      "Izvorne potvrde već su kod nas.",
+      "Pogodi Talvrekov reaktor prije nego što pošalje novu kopiju."
+    ],
+    "talvrek-outro": [
+      "Talvrekov je odašiljač utihnuo.",
+      "Dvije su kolonije provjerile izvorne potvrde i obnovile popise skloništa.",
+      "Prvi teretnjak s lijekovima ima dopuštenje za pristajanje.",
+      "Jedna postaja još ne odgovara.",
+      "Servisna platforma Zeraveth blokira prilaz.",
+      "Ekipa za održavanje čeka izvana s dijelovima koji postaji trebaju."
     ]
   },
   "sr": {
@@ -729,6 +1202,49 @@
       "Генезис је управо примио наредбу за евакуацију потписану једним од тих печата.",
       "Врата склоништа се отварају. Породице посада конвоја још су унутра.",
       "Упозорићу их. Погоди Дрелворнов реактор."
+    ],
+    "varneth-outro": [
+      "Пилоте.",
+      "Варнетов сигнал је нестао.",
+      "Чујем глас на релеју Генезиса.",
+      "Екипа за поправке на спољном прстену тражи помоћ од зоре.",
+      "Имам координате.",
+      "Медицинска екипа је на путу.",
+      "Остави канал слободан, пилоте.",
+      "Први пут данас…",
+      "…неко ће тамо чути одговор."
+    ],
+    "drelvorn-outro": [
+      "Генезис, обуставите евакуацију. Дрелворнов предајник је угашен.",
+      "Чувари склоништа су обезбедили врата.",
+      "Породице посада конвоја су унутра. Сви су на сигурном.",
+      "Украдени печат је поништен.",
+      "Због колонијалног регистра лажна наредба је прошла све провере.",
+      "У истом регистру склоништа се воде као празна.",
+      "Прибављам изворне записе."
+    ],
+    "level-four": [
+      "Посаде су разговарале са породицама. Генезис се држи.",
+      "Пре Дрелворнове наредбе неко је избрисао породице са спискова склоништа.",
+      "На потврдама о испоруци још стоје изворни уписи.",
+      "Упореди их с новим регистром. Видећеш шта је промењено.",
+      "Прати траг прве измењене копије, пилоте."
+    ],
+    "talvrek": [
+      "Контакт потврђен. Талврек, Фалсификатор хроника.",
+      "Тај брод је некада мапирао младе колоније и чувао њихове прве записе.",
+      "Његове копије сада тврде да ти људи никада нису живели тамо.",
+      "Лучка контрола се ослања на њих и одбија храну и лекове.",
+      "Изворне потврде су већ код нас.",
+      "Погоди Талвреков реактор пре него што пошаље још једну копију."
+    ],
+    "talvrek-outro": [
+      "Талвреков предајник је утихнуо.",
+      "Две колоније су провериле изворне потврде и обновиле спискове склоништа.",
+      "Први теретњак с лековима има дозволу за пристајање.",
+      "Једна станица још не одговара.",
+      "Сервисна платформа Зеревет блокира прилаз.",
+      "Екипа за одржавање чека напољу са деловима који су станици потребни."
     ]
   },
   "tr": {
@@ -790,6 +1306,49 @@
       "Genesis az önce o mühürlerden biriyle imzalanmış bir tahliye emri aldı.",
       "Sığınak kapıları açılıyor. Konvoy mürettebatının aileleri hâlâ içeride.",
       "Onları uyaracağım. Drelvorn’un reaktörünü vur."
+    ],
+    "varneth-outro": [
+      "Pilot.",
+      "Varneth’in sinyali kesildi.",
+      "Genesis aktarıcısından bir ses geliyor.",
+      "Dış halkadaki bir onarım ekibi şafaktan beri yardım istiyor.",
+      "Koordinatları aldım.",
+      "Sağlık ekibi yolda.",
+      "Kanalı açık tut, pilot.",
+      "Bugün ilk kez…",
+      "…orada birileri yanıt duyacak."
+    ],
+    "drelvorn-outro": [
+      "Genesis, tahliyeyi iptal edin. Drelvorn’un vericisi devre dışı.",
+      "Sığınak görevlileri kapıları güvene aldı.",
+      "Konvoy mürettebatının aileleri içeride. Hepsi güvende.",
+      "Çalıntı mühür iptal edildi.",
+      "Bir koloni kaydı sayesinde sahte emir tüm kontrollerden geçti.",
+      "Aynı kayıtta sığınaklar boş görünüyor.",
+      "Özgün kayıtları getiriyorum."
+    ],
+    "level-four": [
+      "Konvoy ekipleri aileleriyle konuştu. Genesis direniyor.",
+      "Drelvorn’un emrinden önce biri aileleri sığınak listelerinden silmiş.",
+      "Teslimat makbuzlarında özgün kayıtlar hâlâ duruyor.",
+      "Bunları yeni kayıtla karşılaştır. Nerenin değiştiğini göreceksin.",
+      "Değiştirilen ilk kopyanın izini sür, pilot."
+    ],
+    "talvrek": [
+      "Temas doğrulandı. Kronik Sahtecisi Talvrek.",
+      "Bu gemi eskiden yeni kolonileri haritalar ve ilk kayıtlarını saklardı.",
+      "Şimdi kopyaları, bu insanların orada hiç yaşamadığını öne sürüyor.",
+      "Liman, onun kayıtlarına dayanarak yiyecek ve ilaçları geri çeviriyor.",
+      "Özgün makbuzlar artık elimizde.",
+      "Bir kopya daha göndermeden Talvrek’in reaktörünü vur."
+    ],
+    "talvrek-outro": [
+      "Talvrek’in vericisi sustu.",
+      "İki koloni özgün makbuzları doğrulayıp sığınak listelerini geri yükledi.",
+      "İlk ilaç gemisine yanaşma izni verildi.",
+      "Bir istasyon hâlâ yanıt vermedi.",
+      "Zeraveth adlı bir onarım platformu yaklaşma yolunu kesiyor.",
+      "Bakım ekibi istasyonun ihtiyacı olan parçalarla dışarıda bekliyor."
     ]
   },
   "hu": {
@@ -851,6 +1410,49 @@
       "Genesis most kapott egy kiürítési parancsot az egyik ellopott pecséttel.",
       "Az óvóhelyek ajtói nyílnak. A konvoj legénységének családjai még bent vannak.",
       "Figyelmeztetem őket. Célozd Drelvorn reaktorát."
+    ],
+    "varneth-outro": [
+      "Pilóta.",
+      "Varneth jele eltűnt.",
+      "Egy hangot hallok a Genesis átjátszóján.",
+      "A külső gyűrű javítócsapata hajnal óta segítséget kér.",
+      "Megvannak a koordinátáik.",
+      "A mentők úton vannak.",
+      "Hagyd szabadon a csatornát, pilóta.",
+      "Ma először…",
+      "…valaki ott választ fog hallani."
+    ],
+    "drelvorn-outro": [
+      "Genesis, vonják vissza a kiürítést. Drelvorn adója elhallgatott.",
+      "Az óvóhelyek őrei biztosították az ajtókat.",
+      "A konvoj legénységének családtagjai odabent vannak. Mindenki biztonságban van.",
+      "A lopott pecsétet érvénytelenítették.",
+      "Egy gyarmati nyilvántartás miatt a hamis parancs minden ellenőrzésen átment.",
+      "Ugyanaz a nyilvántartás üresnek jelzi az óvóhelyeket.",
+      "Előkeresem az eredeti bejegyzéseket."
+    ],
+    "level-four": [
+      "A legénység beszélt a családtagjaival. A Genesis tartja magát.",
+      "Valaki már Drelvorn parancsa előtt kitörölte a családokat az óvóhelyi névsorból.",
+      "A szállítási bizonylatokon még ott vannak az eredeti bejegyzések.",
+      "Vesd össze őket az új nyilvántartással. Látszik majd, hol változott.",
+      "Kövesd az első meghamisított másolat nyomát, pilóta."
+    ],
+    "talvrek": [
+      "Kapcsolat megerősítve. Talvrek, a Krónikahamisító.",
+      "Ez a hajó egykor új gyarmatokat térképezett fel, és megőrizte az első feljegyzéseiket.",
+      "A másolatai most azt állítják, hogy ezek az emberek sosem éltek ott.",
+      "A kikötő ennek alapján fordítja vissza az élelmet és a gyógyszert.",
+      "Az eredeti bizonylatok már nálunk vannak.",
+      "Találd el Talvrek reaktorát, mielőtt újabb másolatot küld."
+    ],
+    "talvrek-outro": [
+      "Talvrek adója elhallgatott.",
+      "Két gyarmat ellenőrizte az eredeti bizonylatokat, és helyreállította az óvóhelyi névsorokat.",
+      "Az első gyógyszerszállító megkapta a dokkolási engedélyt.",
+      "Egy állomás továbbra sem válaszol.",
+      "Egy Zeraveth nevű javítóplatform elzárja a megközelítést.",
+      "A karbantartók kint várnak az állomásnak szükséges alkatrészekkel."
     ]
   },
   "ro": {
@@ -912,6 +1514,49 @@
       "Genesis tocmai a primit un ordin de evacuare semnat cu unul dintre acele sigilii.",
       "Ușile adăposturilor se deschid. Familiile echipajelor convoiului sunt încă înăuntru.",
       "Îi avertizez eu. Lovește reactorul lui Drelvorn."
+    ],
+    "varneth-outro": [
+      "Pilot.",
+      "Semnalul lui Varneth a dispărut.",
+      "Aud o voce pe releul Genesis.",
+      "O echipă de intervenție de pe inelul exterior cere ajutor de la răsărit.",
+      "Am coordonatele.",
+      "Medicii sunt pe drum.",
+      "Ține canalul liber, pilot.",
+      "Pentru prima dată astăzi…",
+      "…cineva de acolo va auzi un răspuns."
+    ],
+    "drelvorn-outro": [
+      "Genesis, anulați evacuarea. Emițătorul lui Drelvorn a căzut.",
+      "Personalul adăposturilor a securizat ușile.",
+      "Familiile echipajelor sunt înăuntru. Toate sunt în siguranță.",
+      "Sigiliul furat a fost revocat.",
+      "Din cauza unui registru colonial, ordinul fals a trecut toate verificările.",
+      "Același registru arată că adăposturile sunt goale.",
+      "Recuperez înregistrările originale."
+    ],
+    "level-four": [
+      "Echipajele au vorbit cu familiile lor. Genesis rezistă.",
+      "Înainte de ordinul lui Drelvorn, cineva a șters familiile din listele adăposturilor.",
+      "Dovezile de livrare păstrează înregistrările inițiale.",
+      "Compară-le cu noul registru. Vei vedea unde s-a schimbat.",
+      "Ia urma primei copii modificate, pilot."
+    ],
+    "talvrek": [
+      "Contact confirmat. Talvrek, Falsificatorul de Cronici.",
+      "Nava cartografia colonii noi și păstra primele lor înregistrări.",
+      "Acum copiile lui susțin că oamenii aceia n-au locuit vreodată acolo.",
+      "Portul folosește versiunea lui pentru a refuza alimente și medicamente.",
+      "Avem deja dovezile originale de livrare.",
+      "Lovește reactorul lui Talvrek înainte să trimită altă copie."
+    ],
+    "talvrek-outro": [
+      "Emițătorul lui Talvrek a amuțit.",
+      "Două colonii au verificat dovezile originale și au refăcut listele adăposturilor.",
+      "Primul transport de medicamente are permisiunea să andocheze.",
+      "O stație încă nu răspunde.",
+      "O platformă de reparații numită Zeraveth îi blochează accesul.",
+      "Echipa de mentenanță așteaptă afară, cu piesele necesare stației."
     ]
   },
   "th": {
@@ -973,6 +1618,49 @@
       "เจเนซิส เพิ่งได้รับคำสั่งอพยพที่ลงนามด้วยตราประทับดวงหนึ่ง",
       "ประตูที่หลบภัยกำลังเปิด ครอบครัวของลูกเรือในขบวนยังอยู่ข้างใน",
       "ฉันจะเตือนพวกเขา โจมตีเตาปฏิกรณ์ของ เดรลวอร์น"
+    ],
+    "varneth-outro": [
+      "นักบิน",
+      "สัญญาณของวาร์เนธหายไปแล้ว",
+      "ได้ยินเสียงคนจากสถานีถ่ายทอดสัญญาณเจเนซิส",
+      "ทีมช่างที่วงแหวนรอบนอกส่งสัญญาณขอความช่วยเหลือมาตั้งแต่รุ่งสาง",
+      "ได้พิกัดแล้ว",
+      "หน่วยแพทย์กำลังเดินทางไป",
+      "เว้นช่องสื่อสารไว้ นักบิน",
+      "เป็นครั้งแรกในวันนี้…",
+      "…คนที่นั่นจะได้ยินคำตอบ"
+    ],
+    "drelvorn-outro": [
+      "เจเนซิส ยกเลิกการอพยพ เครื่องส่งสัญญาณของเดรลวอร์นหยุดทำงานแล้ว",
+      "เจ้าหน้าที่ล็อกประตูหลุมหลบภัยแล้ว",
+      "ครอบครัวลูกเรือในขบวนอยู่ข้างในและปลอดภัยครบทุกคน",
+      "ยกเลิกสิทธิ์ของตราที่ถูกขโมยแล้ว",
+      "ทะเบียนอาณานิคมทำให้คำสั่งปลอมผ่านการตรวจสอบทุกขั้น",
+      "ทะเบียนเดียวกันนั้นระบุว่าหลุมหลบภัยว่างเปล่า",
+      "กำลังดึงบันทึกต้นฉบับขึ้นมา"
+    ],
+    "level-four": [
+      "ลูกเรือได้คุยกับครอบครัวแล้ว เจเนซิสยังยืนหยัดอยู่",
+      "ก่อนเดรลวอร์นออกคำสั่ง มีคนลบชื่อครอบครัวออกจากรายชื่อหลุมหลบภัย",
+      "ใบรับสินค้าของลูกเรือยังเก็บข้อมูลเดิมไว้",
+      "เทียบกับทะเบียนใหม่ แล้วจะเห็นว่าตรงไหนถูกแก้",
+      "ตามรอยสำเนาฉบับแรกที่ถูกแก้ไขไป นักบิน"
+    ],
+    "talvrek": [
+      "ยืนยันการพบเป้าหมาย ทัลเวรก จอมปลอมแปลงพงศาวดาร",
+      "ยานลำนั้นเคยสำรวจอาณานิคมใหม่และเก็บบันทึกยุคแรกของพวกเขา",
+      "ตอนนี้สำเนาของเขาอ้างว่าคนเหล่านั้นไม่เคยอยู่ที่นั่น",
+      "หอบังคับการท่าเรือใช้ข้อมูลนั้นปฏิเสธอาหารและยา",
+      "ใบรับสินค้าต้นฉบับอยู่ในมือเราแล้ว",
+      "โจมตีเตาปฏิกรณ์ของทัลเวรกก่อนที่เขาจะส่งสำเนาอีกฉบับ"
+    ],
+    "talvrek-outro": [
+      "เครื่องส่งสัญญาณของทัลเวรกเงียบลงแล้ว",
+      "สองอาณานิคมตรวจใบรับสินค้าต้นฉบับและกู้รายชื่อหลุมหลบภัยกลับมาแล้ว",
+      "ยานขนยาลำแรกได้รับอนุญาตให้เข้าเทียบท่า",
+      "ยังมีสถานีหนึ่งไม่ตอบ",
+      "แท่นซ่อมชื่อเซราเวธจอดขวางทางเข้าสถานี",
+      "ทีมช่างรออยู่ข้างนอกพร้อมอะไหล่ที่สถานีต้องใช้"
     ]
   },
   "zh": {
@@ -1034,6 +1722,49 @@
       "创世星刚收到撤离命令，上面盖着其中一枚印章。",
       "避难所的大门正在开启。船队船员的家属还在里面。",
       "我来警告他们。击中德雷尔沃恩的反应堆。"
+    ],
+    "varneth-outro": [
+      "飞行员。",
+      "瓦尔内斯的信号消失了。",
+      "创世星的中继站传来了人声。",
+      "外环有一支维修队，从天亮起就在呼救。",
+      "我已拿到坐标。",
+      "医疗队正在赶过去。",
+      "保持频道畅通，飞行员。",
+      "今天第一次……",
+      "他们会听到有人回应。"
+    ],
+    "drelvorn-outro": [
+      "创世星，取消撤离。德雷尔沃恩的发射器已停机。",
+      "避难所值守人员已锁好门。",
+      "运输船队船员的家属都在里面，人数已核对，全员安全。",
+      "被盗的印章已作废。",
+      "一份殖民地登记册让这道假命令通过了所有核查。",
+      "这份登记册还把避难所标记为空置。",
+      "我正在调取原始记录。"
+    ],
+    "level-four": [
+      "船员们已经和家人通话了。创世星撑住了。",
+      "德雷尔沃恩下令前，有人从避难所名单里删掉了这些家属。",
+      "船员的交货凭证上还保留着原始条目。",
+      "把凭证和新登记册对照一下，就能看到哪里被改了。",
+      "飞行员，追踪第一份被篡改的副本。"
+    ],
+    "talvrek": [
+      "确认接触目标。塔尔弗雷克，编年史伪造者。",
+      "那艘船曾为新殖民地测绘，并保存了它们最早的记录。",
+      "现在他的副本却说，那些人从未在那里生活过。",
+      "港口管制据此拒收食品和药品。",
+      "原始交货凭证已经在我们手上。",
+      "在塔尔弗雷克发出下一份副本之前，击中他的反应堆。"
+    ],
+    "talvrek-outro": [
+      "塔尔弗雷克的发射器停机了。",
+      "两个殖民地核对了原始凭证，恢复了避难所名单。",
+      "第一艘运药船已获准停靠。",
+      "还有一座空间站没有回应。",
+      "一座叫泽拉韦斯的维修平台堵住了进站航线。",
+      "维修队在外面等候，带着空间站需要的零件。"
     ]
   },
   "vi": {
@@ -1095,6 +1826,49 @@
       "Genesis vừa nhận lệnh sơ tán mang một trong những ấn tín ấy.",
       "Cửa hầm trú ẩn đang mở. Gia đình các thủy thủ trong đoàn vẫn ở bên trong.",
       "Tôi sẽ cảnh báo họ. Hãy đánh vào lò phản ứng của Drelvorn."
+    ],
+    "varneth-outro": [
+      "Phi công.",
+      "Tín hiệu của Varneth đã tắt.",
+      "Có tiếng nói từ trạm tiếp sóng Genesis.",
+      "Một đội sửa chữa ngoài vành đai đã cầu cứu từ lúc rạng sáng.",
+      "Tôi có tọa độ rồi.",
+      "Đội y tế đang đến.",
+      "Giữ kênh liên lạc thông suốt, phi công.",
+      "Lần đầu tiên trong ngày hôm nay…",
+      "…sẽ có người ngoài kia nghe được lời đáp."
+    ],
+    "drelvorn-outro": [
+      "Genesis, hủy lệnh sơ tán. Máy phát của Drelvorn đã ngừng hoạt động.",
+      "Nhân viên trực đã khóa cửa các hầm trú ẩn.",
+      "Gia đình các thủy thủ đoàn đều ở trong hầm và đã được xác nhận an toàn.",
+      "Ấn tín bị đánh cắp đã bị vô hiệu hóa.",
+      "Một sổ đăng ký thuộc địa khiến lệnh giả vượt qua mọi khâu kiểm tra.",
+      "Chính sổ đó ghi rằng các hầm trú ẩn trống.",
+      "Tôi đang truy xuất hồ sơ gốc."
+    ],
+    "level-four": [
+      "Các thủy thủ đoàn đã nói chuyện với gia đình. Genesis vẫn trụ vững.",
+      "Trước lệnh của Drelvorn, có người đã xóa tên các gia đình khỏi danh sách trú ẩn.",
+      "Phiếu giao hàng của các đoàn vẫn lưu những mục gốc.",
+      "Hãy đối chiếu với sổ mới. Anh sẽ thấy chỗ bị sửa.",
+      "Lần theo bản sao bị sửa đầu tiên, phi công."
+    ],
+    "talvrek": [
+      "Xác nhận tiếp xúc. Talvrek, Kẻ Làm Giả Biên Niên Sử.",
+      "Con tàu đó từng khảo sát các thuộc địa mới và giữ những hồ sơ đầu tiên.",
+      "Giờ các bản sao của hắn nói rằng những người đó chưa từng sống ở đó.",
+      "Cảng dựa vào bản của hắn để từ chối lương thực và thuốc men.",
+      "Phiếu giao hàng gốc đã nằm trong tay chúng ta.",
+      "Hãy bắn trúng lò phản ứng của Talvrek trước khi hắn gửi thêm một bản sao."
+    ],
+    "talvrek-outro": [
+      "Máy phát của Talvrek đã im tiếng.",
+      "Hai thuộc địa kiểm tra phiếu giao hàng gốc và khôi phục danh sách trú ẩn.",
+      "Tàu chở thuốc đầu tiên đã được phép cập bến.",
+      "Vẫn còn một trạm chưa trả lời.",
+      "Một giàn sửa chữa mang tên Zeraveth đang chặn lối vào.",
+      "Đội bảo trì đang chờ bên ngoài với linh kiện trạm cần."
     ]
   }
 }
