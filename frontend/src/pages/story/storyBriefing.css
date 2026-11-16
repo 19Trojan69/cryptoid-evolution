@@ -83,7 +83,7 @@
 }
 
 .story-briefing-frame [data-translated] {
-  width: fit-content;
+  width: max-content;
   max-width: min(calc(100% - 3rem), 40rem);
   padding: .42rem .65rem;
   border-radius: .4rem;

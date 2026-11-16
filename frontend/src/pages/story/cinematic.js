@@ -199,12 +199,12 @@ export function createCinematic(ctx, assets, timeline, createSurface, appearance
         if (depth <= 0) continue;
         const scale = 1 / depth;
         const y = opticalHorizon + scale * vanishingDistance;
-        if (y < height * .243 || y > height * .852) continue;
+        if (y < height * .243 || y > height * .765) continue;
         // Keep the scroll on the narration clock and warp only its distant projection.
         const pull = 1 - smooth(y, height * .368, height * .480);
         if (pull > .99) continue;
         const distanceFade = smooth(y, height * .294, height * .517) + smooth(pull, .1, .65) * .27;
-        const entranceFade = 1 - smooth(y, height * .739, height * .848);
+        const entranceFade = 1 - smooth(y, height * .663, height * .765);
         const opacity = distanceFade * entranceFade * (1 - reveal);
         if (opacity < .015) continue;
         drawIntake(ctx, vortex, y, pull, opacity);
