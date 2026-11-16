@@ -620,6 +620,20 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
   const musicRef = useRef<MusicPlayer | null>(null);
   const fadeMusicAfterStoryRef = useRef(false);
   const regularMusicPositionRef = useRef(0);
+  const prepareStoryAudio = useCallback((source: string) => {
+    const track = musicRef.current;
+    if (!track || ownerAudioDisabled()) return null;
+    try {
+      if (track.currentSource === "/audio/battle-orbit.mp3") regularMusicPositionRef.current = track.audio.currentTime || 0;
+      track.pause();
+      const sameRecording = track.currentSource === source;
+      track.setVolume(0);
+      track.setSource(source);
+      track.audio.loop = false;
+      if (sameRecording && track.audio.currentTime > 0) track.audio.currentTime = 0;
+      return track;
+    } catch { return null; }
+  }, []);
   const hasBonusMusic = shipSaveNetwork === "testnet" && game.encounter === "bonus";
   const bonusMusicEnding = hasBonusMusic && game.phase === "SECTOR_CLEAR"
     && (game.status === "playing" || game.status === "paused");
@@ -1275,11 +1289,14 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
     const track = musicRef.current;
     if (!track) return;
     if (story && !storyReturning) {
+      const gameSource = track.currentSource;
+      if (gameSource.startsWith("/story/")) return;
       if (!track.playing) { track.pause(); return; }
       track.setVolume(0, .10);
-      let fading = true;
-      const pauseAfterFade = window.setTimeout(() => { fading = false; track.pause(); }, storyFadeMs.gameOut);
-      return () => { window.clearTimeout(pauseAfterFade); if (fading) track.pause(); };
+      const pauseAfterFade = window.setTimeout(() => {
+        if (track.currentSource === gameSource) track.pause();
+      }, storyFadeMs.gameOut);
+      return () => window.clearTimeout(pauseAfterFade);
     }
     const normalSource = "/audio/battle-orbit.mp3";
     const waitingForExplosion = game.encounter === "boss-clear" && bossVictoryPendingRef.current;
@@ -2633,6 +2650,7 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
   };
 
   const restart = () => {
+    if (storyBriefingsEnabled()) void musicRef.current?.play();
     confirmedReloadRef.current = null; setConfirmedReload(null);
     bossPreparationRef.current++; bossSummaryRef.current = null; setBossSummary(null);
     setBossSummaryPrepared(false); setBossSummaryFailed(false); setBossSummarySaving(false); setBossSummaryContinuing(false);
@@ -2832,6 +2850,7 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
       {story && briefingVisible && <StoryBriefing key={story} scene={story}
         unlocked={briefingBoss !== undefined && (rewardProgressRef.current.bossWins[briefingBoss.id] ?? 0) > 0}
         withAudio={musicEnabled && !ownerAudioDisabled() && musicVolume > 0} volume={musicVolume}
+        prepareAudio={prepareStoryAudio}
         onReturn={() => {
           if (storyRef.current !== story) return;
           fadeMusicAfterStoryRef.current = musicRef.current !== null;

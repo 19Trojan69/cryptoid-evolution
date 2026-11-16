@@ -22,7 +22,7 @@ const changes = [
   },
   {
     "before": "",
-    "after": "    if (story && !storyReturning) {\n      if (!track.playing) { track.pause(); return; }\n      track.setVolume(0, .10);\n      let fading = true;\n      const pauseAfterFade = window.setTimeout(() => { fading = false; track.pause(); }, storyFadeMs.gameOut);\n      return () => { window.clearTimeout(pauseAfterFade); if (fading) track.pause(); };\n    }\n"
+    "after": "    if (story && !storyReturning) {\n      const gameSource = track.currentSource;\n      if (gameSource.startsWith(\"/story/\")) return;\n      if (!track.playing) { track.pause(); return; }\n      track.setVolume(0, .10);\n      const pauseAfterFade = window.setTimeout(() => {\n        if (track.currentSource === gameSource) track.pause();\n      }, storyFadeMs.gameOut);\n      return () => window.clearTimeout(pauseAfterFade);\n    }\n"
   },
   {
     "before": "  }, [game.status, game.encounter, musicEnabled, hasBonusMusic, bonusMusicEnding, hasCompletionMusic, completionMusicVisible]);\n",
@@ -74,7 +74,7 @@ const changes = [
   },
   {
     "before": "",
-    "after": "      {story && briefingVisible && <StoryBriefing key={story} scene={story}\n        unlocked={briefingBoss !== undefined && (rewardProgressRef.current.bossWins[briefingBoss.id] ?? 0) > 0}\n        withAudio={musicEnabled && !ownerAudioDisabled() && musicVolume > 0} volume={musicVolume}\n        onReturn={() => {\n          if (storyRef.current !== story) return;\n          fadeMusicAfterStoryRef.current = musicRef.current !== null;\n          setGame({ ...stateRef.current });\n          setStoryReturning(true);\n        }}\n        onFinish={() => {\n          if (storyRef.current !== story) return;\n          storyRef.current = null;\n          clearControls();\n          lastFrameRef.current = 0;\n          backgroundHiddenAtRef.current = 0;\n          if (briefingBoss) soundRef.current?.play('boss');\n          setStoryReturning(false);\n          setStory(null);\n        }} />}\n"
+    "after": "      {story && briefingVisible && <StoryBriefing key={story} scene={story}\n        unlocked={briefingBoss !== undefined && (rewardProgressRef.current.bossWins[briefingBoss.id] ?? 0) > 0}\n        withAudio={musicEnabled && !ownerAudioDisabled() && musicVolume > 0} volume={musicVolume}\n        prepareAudio={prepareStoryAudio}\n        onReturn={() => {\n          if (storyRef.current !== story) return;\n          fadeMusicAfterStoryRef.current = musicRef.current !== null;\n          setGame({ ...stateRef.current });\n          setStoryReturning(true);\n        }}\n        onFinish={() => {\n          if (storyRef.current !== story) return;\n          storyRef.current = null;\n          clearControls();\n          lastFrameRef.current = 0;\n          backgroundHiddenAtRef.current = 0;\n          if (briefingBoss) soundRef.current?.play('boss');\n          setStoryReturning(false);\n          setStory(null);\n        }} />}\n"
   },
   {
     "before": "      <div ref={fieldRef} className=\"game-field\" onContextMenu={event => event.preventDefault()} onDoubleClick={event => event.preventDefault()} onDragStart={event => event.preventDefault()}>\n",
@@ -107,6 +107,14 @@ const changes = [
   {
     "before": "        {(game.status === \"playing\" || game.status === \"paused\") && !levelComplete",
     "after": "        {!briefingVisible && (game.status === \"playing\" || game.status === \"paused\") && !levelComplete"
+  },
+  {
+    "before": "",
+    "after": "  const prepareStoryAudio = useCallback((source: string) => {\n    const track = musicRef.current;\n    if (!track || ownerAudioDisabled()) return null;\n    try {\n      if (track.currentSource === \"/audio/battle-orbit.mp3\") regularMusicPositionRef.current = track.audio.currentTime || 0;\n      track.pause();\n      const sameRecording = track.currentSource === source;\n      track.setVolume(0);\n      track.setSource(source);\n      track.audio.loop = false;\n      if (sameRecording && track.audio.currentTime > 0) track.audio.currentTime = 0;\n      return track;\n    } catch { return null; }\n  }, []);\n"
+  },
+  {
+    "before": "",
+    "after": "    if (storyBriefingsEnabled()) void musicRef.current?.play();\n"
   }
 ];
 

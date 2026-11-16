@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
 import { requestGameFrame, cancelGameFrame } from '../../lib/frameScheduler';
 import { useLocale } from '../../i18n';
+import type { MusicPlayer } from '../musicPlayback';
 import { createCinematic } from './cinematic.js';
 import { documentLanguage } from '../../locales/config';
 import { storyCues, storySubtitle } from './storyCaptions';
@@ -13,6 +14,7 @@ type Props = {
   scene: StoryScene;
   withAudio: boolean;
   volume: number;
+  prepareAudio: (source: string) => MusicPlayer | null;
   unlocked: boolean;
   onReturn: () => void;
   onFinish: () => void;
@@ -46,21 +48,22 @@ const loadImage = (name: string) => {
   return image.decode().then(() => image);
 };
 
-export default function StoryBriefing({ scene, withAudio, volume, unlocked, onReturn, onFinish }: Props) {
+export default function StoryBriefing({ scene, withAudio, volume, prepareAudio, unlocked, onReturn, onFinish }: Props) {
   const { locale } = useLocale();
   const dialogRef = useRef<HTMLElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const audioRef = useRef<HTMLAudioElement>(null);
   const appearanceRef = useRef<ReturnType<typeof chooseAppearance> | null>(null);
   const returnRef = useRef(onReturn);
   const finishRef = useRef(onFinish);
   const volumeRef = useRef(volume);
   const transitionRef = useRef<{ phase: Phase; startedAt: number } | null>(null);
   const exitRef = useRef<() => void>(() => {});
+  const retryAudioRef = useRef<() => void>(() => {});
   const [artReady, setArtReady] = useState(false);
   const [phase, setPhase] = useState<Phase>('covering');
   const [cueIndex, setCueIndex] = useState(-1);
-  const [skipLabel] = storyCopy(locale);
+  const [offerAudioRetry, setOfferAudioRetry] = useState(false);
+  const [skipLabel, , retryLabel] = storyCopy(locale);
   const definition = storyScenes[scene];
   const cues = useMemo(() => storyCues(scene, definition.timing), [scene, definition]);
   const translation = storySubtitle(scene, locale, cueIndex);
@@ -76,7 +79,7 @@ export default function StoryBriefing({ scene, withAudio, volume, unlocked, onRe
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const audio = audioRef.current;
+    const source = '/story/' + definition.audio;
     const story = definition.timing;
     const boss = definition.boss;
     const media = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -90,14 +93,24 @@ export default function StoryBriefing({ scene, withAudio, volume, unlocked, onRe
     let cinematic: ReturnType<typeof createCinematic> | undefined;
     let disposed = false, finished = false, frame = 0, lastCue = -1;
     let silentMs = 0, silentStart = performance.now();
-    let followsAudio = Boolean(audio), playGeneration = 0;
-    let lastAudioMs = 0, lastAdvanceAt = silentStart, exitVolume = audio?.volume ?? 0;
+    let player: MusicPlayer | null = null;
+    let followsAudio = false, playPending = false, playGeneration = 0, suspended = false;
+    let lastAudioMs = 0, lastAdvanceAt = silentStart, fadeInAt = 0;
+    let audioLevel = 0, exitVolume = 0;
 
-    const position = (now: number) => followsAudio && audio ? audio.currentTime * 1000
-      : silentMs + Math.max(0, now - silentStart);
+    const position = (now: number) => {
+      if (suspended) return silentMs;
+      if (followsAudio && player) return Math.max(silentMs, player.audio.currentTime * 1000);
+      return silentMs + Math.max(0, now - silentStart);
+    };
     const setAudioLevel = (level: number) => {
-      if (!audio || Math.abs(audio.volume - level) < .004) return;
-      try { audio.volume = level; } catch { /* The host may manage volume itself. */ }
+      if (player?.currentSource !== source || Math.abs(audioLevel - level) < .25) return;
+      try { player.setVolume(level); audioLevel = level; } catch { /* The host may manage volume itself. */ }
+    };
+    const pauseAudio = () => {
+      ++playGeneration;
+      playPending = false;
+      if (player?.currentSource === source) player.pause();
     };
     const showCaptions = () => {
       cinematic?.dispose(); cinematic = undefined;
@@ -121,12 +134,13 @@ export default function StoryBriefing({ scene, withAudio, volume, unlocked, onRe
     };
     const tick = (now: number) => {
       frame = 0;
-      if (disposed || finished || document.hidden) return;
+      if (disposed || finished || suspended || document.hidden) return;
       const elapsed = Math.max(0, now - transition.startedAt);
       if (transition.phase === 'covering') {
         if (reduced() || elapsed >= storyFadeMs.gameOut) {
           enterPhase('briefing', now);
-          play();
+          silentStart = now;
+          play(now);
         } else schedule();
         return;
       }
@@ -144,9 +158,9 @@ export default function StoryBriefing({ scene, withAudio, volume, unlocked, onRe
       }
       const ms = position(now);
       if (followsAudio) {
-        if (ms !== lastAudioMs) { lastAudioMs = ms; lastAdvanceAt = now; }
+        if (player?.playing && ms !== lastAudioMs) { lastAudioMs = ms; lastAdvanceAt = now; }
         else if (now - lastAdvanceAt >= 3200) { continueSilently(); return; }
-        setAudioLevel(volumeRef.current / 100 * Math.min(1, ms / 240));
+        setAudioLevel(volumeRef.current * Math.min(1, Math.max(0, ms - fadeInAt) / 240));
       }
       if (ms >= story.duration * 1000) { exit(); return; }
       const seconds = ms / 1000;
@@ -155,14 +169,14 @@ export default function StoryBriefing({ scene, withAudio, volume, unlocked, onRe
       try { cinematic?.draw(seconds, reduced(), unlocked); } catch { showCaptions(); }
       schedule();
     };
-    const schedule = () => { if (!frame && !document.hidden && !disposed && !finished) frame = requestGameFrame(tick); };
+    const schedule = () => { if (!frame && !suspended && !document.hidden && !disposed && !finished) frame = requestGameFrame(tick); };
     const stop = () => { cancelGameFrame(frame); frame = 0; };
     const complete = () => {
       if (finished || disposed) return;
-      finished = true; stop(); audio?.pause(); finishRef.current();
+      finished = true; stop(); finishRef.current();
     };
     const revealGame = (now: number) => {
-      audio?.pause();
+      pauseAudio();
       enterPhase('returning', now);
       returnRef.current();
       if (reduced()) complete();
@@ -171,7 +185,8 @@ export default function StoryBriefing({ scene, withAudio, volume, unlocked, onRe
     const exit = () => {
       if (disposed || finished || transition.phase === 'leaving' || transition.phase === 'returning') return;
       const now = performance.now();
-      exitVolume = audio?.volume ?? 0;
+      if (playPending) pauseAudio();
+      exitVolume = audioLevel;
       if (reduced()) revealGame(now);
       else {
         enterPhase('leaving', now);
@@ -179,49 +194,75 @@ export default function StoryBriefing({ scene, withAudio, volume, unlocked, onRe
       }
     };
     const continueSilently = () => {
-      if (!followsAudio || disposed || transition.phase !== 'briefing') return;
+      if (disposed || suspended || document.hidden || transition.phase !== 'briefing') return;
       const now = performance.now();
       silentMs = position(now);
       silentStart = now;
       followsAudio = false;
-      audio?.pause();
+      pauseAudio();
+      setOfferAudioRetry(withAudio);
       schedule();
     };
-    const play = () => {
-      if (document.hidden || disposed || finished || frame) return;
-      silentStart = lastAdvanceAt = performance.now();
+    const play = (now: number, fromGesture = false) => {
       schedule();
-      if (!audio || !followsAudio) return;
-      if (audio.error) { continueSilently(); return; }
+      if (!withAudio || suspended || document.hidden || disposed || finished || transition.phase !== 'briefing'
+        || playPending || (followsAudio && player?.playing)) return;
+      if (!player) {
+        player = prepareAudio(source);
+        player?.audio.addEventListener('ended', ended);
+        player?.audio.addEventListener('error', audioError);
+      }
+      if (!player) { continueSilently(); return; }
+      silentMs = position(now);
+      silentStart = lastAdvanceAt = now;
+      fadeInAt = lastAudioMs = silentMs;
+      followsAudio = true;
+      playPending = true;
       const generation = ++playGeneration;
-      setAudioLevel(volumeRef.current / 100 * Math.min(1, audio.currentTime / .24));
+      setAudioLevel(0);
+      const played = (ok: boolean) => {
+        if (generation !== playGeneration || disposed || transition.phase !== 'briefing') return;
+        playPending = false;
+        if (ok) setOfferAudioRetry(false);
+        else continueSilently();
+      };
       try {
-        void audio.play().catch(() => {
-          if (generation === playGeneration && !document.hidden) continueSilently();
-        });
-      } catch { continueSilently(); }
+        if (player.audio.error) player.audio.load();
+        if (silentMs > 0) player.audio.currentTime = silentMs / 1000;
+        if (fromGesture) void player.unlock(true);
+        void player.play().then(played, () => played(false));
+      } catch { played(false); }
     };
     const suspend = () => {
-      ++playGeneration;
-      if (!followsAudio && frame && transition.phase === 'briefing') silentMs = position(performance.now());
-      stop(); audio?.pause();
+      if (suspended) return;
+      if (transition.phase === 'briefing') silentMs = position(performance.now());
+      suspended = true;
+      followsAudio = false;
+      stop();
+      pauseAudio();
     };
     const visibility = () => {
       if (document.hidden) { suspend(); return; }
-      if (transition.phase === 'briefing') play();
+      const now = performance.now();
+      if (suspended) {
+        suspended = false;
+        silentStart = now;
+      }
+      if (transition.phase === 'briefing') play(now);
       else schedule();
     };
-    const playing = () => { if (!followsAudio || document.hidden || transition.phase !== 'briefing') audio?.pause(); };
-    const ended = () => { if (followsAudio && transition.phase === 'briefing') exit(); };
+    const ended = () => {
+      if (followsAudio && player?.currentSource === source && player.audio.ended && transition.phase === 'briefing') exit();
+    };
+    const audioError = () => { if (player?.currentSource === source && player.audio.error) continueSilently(); };
     const resizeObserver = typeof ResizeObserver === 'undefined' ? undefined : new ResizeObserver(resize);
     exitRef.current = exit;
+    retryAudioRef.current = () => play(performance.now(), true);
     document.addEventListener('visibilitychange', visibility);
     window.addEventListener('pagehide', suspend);
     window.addEventListener('pageshow', visibility);
+    window.addEventListener('focus', visibility);
     canvas.addEventListener('contextlost', showCaptions);
-    audio?.addEventListener('playing', playing);
-    audio?.addEventListener('ended', ended);
-    audio?.addEventListener('error', continueSilently);
     const prepare = async () => {
       const appearance = appearanceRef.current ??= chooseAppearance();
       try {
@@ -245,7 +286,6 @@ export default function StoryBriefing({ scene, withAudio, volume, unlocked, onRe
         if (cinematic) { resizeObserver?.observe(canvas); setArtReady(true); }
       } catch { if (!disposed && transition.phase !== 'leaving' && transition.phase !== 'returning') showCaptions(); }
     };
-    if (transition.phase === 'covering' && reduced()) enterPhase('briefing', performance.now());
     if (transition.phase === 'covering' || transition.phase === 'briefing') void prepare();
     visibility();
     return () => {
@@ -253,16 +293,16 @@ export default function StoryBriefing({ scene, withAudio, volume, unlocked, onRe
       document.removeEventListener('visibilitychange', visibility);
       window.removeEventListener('pagehide', suspend);
       window.removeEventListener('pageshow', visibility);
+      window.removeEventListener('focus', visibility);
       canvas.removeEventListener('contextlost', showCaptions);
-      audio?.removeEventListener('playing', playing);
-      audio?.removeEventListener('ended', ended);
-      audio?.removeEventListener('error', continueSilently);
+      player?.audio.removeEventListener('ended', ended);
+      player?.audio.removeEventListener('error', audioError);
       stop(); resizeObserver?.disconnect();
-      audio?.pause();
+      pauseAudio();
       cinematic?.dispose();
       canvas.width = canvas.height = 0;
     };
-  }, [definition, cues, withAudio, unlocked]);
+  }, [definition, cues, withAudio, unlocked, prepareAudio]);
 
   return <section ref={dialogRef} className="story-briefing" role="dialog" aria-modal="true" tabIndex={-1} aria-label={definition.title}
     data-phase={phase} style={fadeStyle}
@@ -274,8 +314,9 @@ export default function StoryBriefing({ scene, withAudio, volume, unlocked, onRe
           data-translated={Boolean(translation) || undefined}
           lang={translation ? documentLanguage(locale) : 'en'}>{caption}</p>}
       </div>
+      {withAudio && offerAudioRetry && phase === 'briefing' &&
+        <button className="story-briefing-audio" type="button" onClick={() => retryAudioRef.current()}>{retryLabel}</button>}
       <button className="story-briefing-skip" type="button" disabled={phase !== 'briefing'} onClick={() => exitRef.current()}>{skipLabel}</button>
     </div>
-    {withAudio && <audio ref={audioRef} preload="auto" src={'/story/' + definition.audio} />}
   </section>;
 }
