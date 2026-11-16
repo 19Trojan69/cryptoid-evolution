@@ -23,7 +23,8 @@ Drehbuch für Kampagnenstart, Level-Briefings, Boss-Intros und Sieges-Outros. Je
 | Intro Zeraveth und Outro Zeraveth | Sprechtext und deutsche Untertitel | Eingereichte Suno-Aufnahmen mit Wortzeitplan |
 | Briefing 5 | Sprechtext und deutsche Untertitel | Eingereichte Suno-Aufnahme mit Wortzeitplan |
 | Briefing 6, Intro Orvask und Outro Orvask | Sprechtext und deutsche Untertitel | Eingereichte Suno-Aufnahmen mit Wortzeitplan |
-| Level 7–50 | 132 Drehbuchfassungen bis zum Finale | Aufnahmen, Zeitpläne und Einbau folgen je Szene |
+| Briefing 7, Intro Keldrava und Outro Keldrava | Sprechtext und deutsche Untertitel | Eingereichte Suno-Aufnahmen mit Wortzeitplan |
+| Level 8–50 | 129 Drehbuchfassungen bis zum Finale | Aufnahmen, Zeitpläne und Einbau folgen je Szene |
 
 Die Testaufnahme für Briefing 4 wurde mit der Stimme am_onyx aus [Kokoro](https://huggingface.co/hexgrad/Kokoro-82M) produziert. Die Suno-Fassung kann diese Aufnahme samt Wortzeitplan ersetzen.
 
@@ -452,19 +453,27 @@ Die Schattenbrücke · The Shadow Bridge
 
 #### Level-Briefing · Two Ends of the Route
 
+Suno-Aufnahme „Matching Container Numbers“. level-seven.mp3 · 24,84 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Inquisitive quiet strings, with a restrained pulse under the paired messages. Around 22–27 seconds.
 
 **Englischer Sprechtext**
 
-The two colonies copied us on their loading logs. Each has a receipt stamped by the other side. The last freight crews still have their loading photographs. We’re matching the container numbers while you approach the transfer dock.
+The two colonies copied us on their loading logs. Each has a receipt stamped by the other side. The last freight crews still have their loading photographs. We’re matching the container numbers… while you approach the transfer dock.
 
 **Deutsche Untertitel**
 
-Die beiden Kolonien haben uns ihre Ladelisten geschickt. Jede hat eine Quittung mit dem Stempel der anderen. Die letzten Frachtcrews haben noch ihre Fotos von der Verladung. Wir gleichen die Containernummern ab, während du dich dem Umschlagdock näherst.
+- Die beiden Kolonien haben uns ihre Ladelisten geschickt.
+- Jede hat eine Quittung mit dem Stempel der anderen.
+- Die letzten Frachtcrews haben noch ihre Fotos von der Verladung.
+- Wir gleichen die Containernummern ab …
+- während du dich dem Umschlagdock näherst.
 
-#### Boss-Intro · Between Her Locks
+#### Boss-Intro · Intro Keldrava
+
+Suno-Aufnahme „Clear the Way“. keldrava-intro.mp3 · 33,60 s.
 
 **Suno-Stil**
 
@@ -472,13 +481,22 @@ English spoken-word fleet command. Keep one clear narrator up front. Allow an au
 
 **Englischer Sprechtext**
 
-Contact confirmed. Keldrava, the Shadow Bridge. The colony crews used to hand cargo over inside her locks. Now one bay gives them a stamped receipt while another takes the crate. We can see the missing containers through her maintenance hatch. Clear the way for recovery.
+Contact confirmed. Keldrava… the Shadow Bridge. The colony crews used to hand cargo over inside her locks. Now one bay gives them a stamped receipt while another takes the crate. We can see the missing containers through her maintenance hatch. Clear the way… for recovery.
 
 **Deutsche Untertitel**
 
-Kontakt bestätigt. Keldrava, die Schattenbrücke. Früher übergaben die Koloniecrews Fracht in ihren Schleusen. Jetzt erhalten sie in einer Bucht eine gestempelte Quittung, während die Kiste in der anderen verschwindet. Durch die Wartungsluke sehen wir die vermissten Container. Mach den Weg für die Bergung frei.
+- Kontakt bestätigt.
+- Keldrava …
+- die Schattenbrücke.
+- Früher übergaben die Koloniecrews Fracht in ihren Schleusen.
+- Eine Bucht stempelt die Quittung, die andere nimmt die Kiste.
+- Durch die Wartungsluke sehen wir die vermissten Container.
+- Mach den Weg frei …
+- für die Bergung.
 
-#### Boss-Outro · Count the Crates
+#### Boss-Outro · Outro Keldrava
+
+Suno-Aufnahme „Speaking on Air“. keldrava-outro.mp3 · 23,64 s.
 
 **Suno-Stil**
 
@@ -486,11 +504,16 @@ English spoken-word fleet command. Keep one clear narrator up front. Allow an au
 
 **Englischer Sprechtext**
 
-Both colonies are counting their cargo on the same call. They’ve found the greenhouse pumps and the emergency rations. A news ship is telling their neighbors the bridge collapsed with everyone still aboard. The two crews have offered to speak on air.
+Both colonies are counting their cargo on the same call. They found the greenhouse pumps and the emergency rations. A news ship is telling the neighbors… the bridge collapsed with everyone still aboard. The two crews… have offered to speak on air.
 
 **Deutsche Untertitel**
 
-Beide Kolonien zählen ihre Fracht in derselben Funkverbindung. Sie haben die Pumpen für die Gewächshäuser und die Notrationen gefunden. Ein Nachrichtenschiff meldet den Nachbarn, die Brücke sei mit allen Besatzungen eingestürzt. Die beiden Crews haben angeboten, sich live zu melden.
+- Beide Kolonien zählen ihre Fracht in derselben Funkverbindung.
+- Sie haben die Pumpen für die Gewächshäuser und die Notrationen gefunden.
+- Ein Nachrichtenschiff meldet den Nachbarn …
+- die Brücke sei mit allen Besatzungen eingestürzt.
+- Die beiden Crews …
+- haben angeboten, sich live zu melden.
 
 ### Level 08 · Veshkorn
 

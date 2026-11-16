@@ -23,7 +23,7 @@ const { bossOutroAtSector, bossStoryAtSector, levelStoryAtSector, storyScenes,
   storyCues, storySubtitle, supportedLanguages, BOSS_NAMES } = await import('data:text/javascript;base64,' + Buffer.from(outputFiles[0].contents).toString('base64'));
 
 test('each registered boss story and briefing appears at the correct campaign sector', () => {
-  const briefings = [undefined, 'level-two', 'level-three', 'level-four', 'level-five', 'level-six'];
+  const briefings = [undefined, 'level-two', 'level-three', 'level-four', 'level-five', 'level-six', 'level-seven'];
   for (const [index, name] of BOSS_NAMES.entries()) {
     const level = index + 1;
     const sector = level * 10;
@@ -83,6 +83,9 @@ test('corrected sentence pauses separate the spoken phrases on the caption clock
     ['level-six', 'recording…', 'to'],
     ['orvask', 'Orvask…', 'the'],
     ['orvask-outro', 'cargo…', 'that'],
+    ['level-seven', 'numbers…', 'while'],
+    ['keldrava', 'Keldrava…', 'the'],
+    ['keldrava-outro', 'neighbors…', 'the'],
   ];
   for (const [scene, stop, next] of boundaries) {
     const words = storyScenes[scene].timing.groups.flatMap(group => group.words);
@@ -96,6 +99,7 @@ test('the new recordings give each sentence its own audible pause', () => {
   const scenes = [
     'varneth-outro', 'drelvorn-outro', 'level-four', 'talvrek', 'talvrek-outro',
     'level-five', 'zeraveth', 'zeraveth-outro', 'level-six', 'orvask', 'orvask-outro',
+    'level-seven', 'keldrava', 'keldrava-outro',
   ];
   for (const scene of scenes) {
     const words = storyScenes[scene].timing.groups.flatMap(group => group.words);

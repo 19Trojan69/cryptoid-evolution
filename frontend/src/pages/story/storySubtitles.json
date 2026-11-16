@@ -154,6 +154,31 @@
       "Beide erhalten noch immer Quittungen …",
       "für Fracht …",
       "die nie angekommen ist."
+    ],
+    "level-seven": [
+      "Die beiden Kolonien haben uns ihre Ladelisten geschickt.",
+      "Jede hat eine Quittung mit dem Stempel der anderen.",
+      "Die letzten Frachtcrews haben noch ihre Fotos von der Verladung.",
+      "Wir gleichen die Containernummern ab …",
+      "während du dich dem Umschlagdock näherst."
+    ],
+    "keldrava": [
+      "Kontakt bestätigt.",
+      "Keldrava …",
+      "die Schattenbrücke.",
+      "Früher übergaben die Koloniecrews Fracht in ihren Schleusen.",
+      "Eine Bucht stempelt die Quittung, die andere nimmt die Kiste.",
+      "Durch die Wartungsluke sehen wir die vermissten Container.",
+      "Mach den Weg frei …",
+      "für die Bergung."
+    ],
+    "keldrava-outro": [
+      "Beide Kolonien zählen ihre Fracht in derselben Funkverbindung.",
+      "Sie haben die Pumpen für die Gewächshäuser und die Notrationen gefunden.",
+      "Ein Nachrichtenschiff meldet den Nachbarn …",
+      "die Brücke sei mit allen Besatzungen eingestürzt.",
+      "Die beiden Crews …",
+      "haben angeboten, sich live zu melden."
     ]
   },
   "es": {
@@ -311,6 +336,31 @@
       "Ambas siguen recibiendo recibos…",
       "por una carga…",
       "que jamás llegó."
+    ],
+    "level-seven": [
+      "Las dos colonias nos enviaron sus listas de carga.",
+      "Cada una tiene un recibo sellado por la otra.",
+      "Las últimas tripulaciones aún conservan sus fotos de la carga.",
+      "Estamos cotejando los números de los contenedores…",
+      "mientras te acercas al muelle de transbordo."
+    ],
+    "keldrava": [
+      "Contacto confirmado.",
+      "Keldrava…",
+      "el Puente de las Sombras.",
+      "Las colonias solían entregar la carga dentro de sus esclusas.",
+      "Una bahía sella el recibo y la otra se lleva la caja.",
+      "Vemos los contenedores perdidos por su escotilla de mantenimiento.",
+      "Despeja el camino…",
+      "para recuperar la carga."
+    ],
+    "keldrava-outro": [
+      "Ambas colonias cuentan su carga en la misma llamada.",
+      "Han encontrado las bombas de los invernaderos y las raciones de emergencia.",
+      "Una nave de noticias informa a los vecinos…",
+      "que el puente se derrumbó con todos a bordo.",
+      "Las dos tripulaciones…",
+      "se han ofrecido a hablar en directo."
     ]
   },
   "fr": {
@@ -468,6 +518,31 @@
       "Toutes deux reçoivent encore des reçus…",
       "pour une cargaison…",
       "qui n’est jamais arrivée."
+    ],
+    "level-seven": [
+      "Les deux colonies nous ont transmis leurs listes de chargement.",
+      "Chacune a un reçu tamponné par l’autre.",
+      "Les derniers équipages de fret ont gardé leurs photos du chargement.",
+      "Nous comparons les numéros des conteneurs…",
+      "pendant que tu approches du quai de transbordement."
+    ],
+    "keldrava": [
+      "Contact confirmé.",
+      "Keldrava…",
+      "le Pont des ombres.",
+      "Les colonies se remettaient autrefois le fret dans ses sas.",
+      "Une baie tamponne le reçu, l’autre emporte la caisse.",
+      "Nous voyons les conteneurs disparus par sa trappe de maintenance.",
+      "Dégage le passage…",
+      "pour récupérer le fret."
+    ],
+    "keldrava-outro": [
+      "Les deux colonies comptent leur fret sur le même canal.",
+      "Elles ont retrouvé les pompes des serres et les rations d’urgence.",
+      "Un vaisseau de presse annonce aux voisins…",
+      "que le pont s’est effondré avec tout le monde à bord.",
+      "Les deux équipages…",
+      "ont proposé de parler en direct."
     ]
   },
   "pt": {
@@ -625,6 +700,31 @@
       "Ambas ainda recebem recibos…",
       "de uma carga…",
       "que nunca chegou."
+    ],
+    "level-seven": [
+      "As duas colônias nos enviaram as listas de carregamento.",
+      "Cada uma tem um recibo carimbado pela outra.",
+      "As últimas tripulações de carga ainda têm fotos do embarque.",
+      "Estamos conferindo os números dos contêineres…",
+      "enquanto você se aproxima da doca de transbordo."
+    ],
+    "keldrava": [
+      "Contato confirmado.",
+      "Keldrava…",
+      "a Ponte das Sombras.",
+      "As colônias trocavam cargas dentro de suas eclusas.",
+      "Um compartimento carimba o recibo, o outro leva o caixote.",
+      "Vemos os contêineres perdidos pela escotilha de manutenção.",
+      "Abra caminho…",
+      "para recuperar a carga."
+    ],
+    "keldrava-outro": [
+      "As duas colônias contam a carga na mesma chamada.",
+      "Elas acharam as bombas das estufas e as rações de emergência.",
+      "Uma nave de notícias diz aos vizinhos…",
+      "que a ponte desabou com todos a bordo.",
+      "As duas tripulações…",
+      "se ofereceram para falar ao vivo."
     ]
   },
   "it": {
@@ -782,6 +882,31 @@
       "A entrambe arrivano ancora ricevute…",
       "per un carico…",
       "che non è mai arrivato."
+    ],
+    "level-seven": [
+      "Le due colonie ci hanno inviato i loro registri di carico.",
+      "Ciascuna ha una ricevuta timbrata dall’altra.",
+      "Gli ultimi equipaggi hanno ancora le foto del carico.",
+      "Stiamo confrontando i numeri dei container…",
+      "mentre ti avvicini al molo di trasbordo."
+    ],
+    "keldrava": [
+      "Contatto confermato.",
+      "Keldrava…",
+      "il Ponte delle ombre.",
+      "Un tempo le colonie si passavano il carico nelle sue chiuse.",
+      "Un vano timbra la ricevuta, l’altro si prende la cassa.",
+      "Dal portello di manutenzione vediamo i container smarriti.",
+      "Apri un varco…",
+      "per il recupero."
+    ],
+    "keldrava-outro": [
+      "Le due colonie stanno contando il carico sulla stessa frequenza.",
+      "Hanno ritrovato le pompe per le serre e le razioni d’emergenza.",
+      "Una nave di notizie riferisce ai vicini…",
+      "che il ponte è crollato con tutti a bordo.",
+      "I due equipaggi…",
+      "si sono offerti di parlare in diretta."
     ]
   },
   "pl": {
@@ -939,6 +1064,31 @@
       "Obie nadal otrzymują pokwitowania…",
       "za ładunek…",
       "który nigdy nie dotarł."
+    ],
+    "level-seven": [
+      "Obie kolonie przesłały nam wykazy załadunku.",
+      "Każda ma pokwitowanie z pieczęcią drugiej.",
+      "Ostatnie załogi wciąż mają zdjęcia z załadunku.",
+      "Porównujemy numery kontenerów…",
+      "gdy zbliżasz się do doku przeładunkowego."
+    ],
+    "keldrava": [
+      "Kontakt potwierdzony.",
+      "Keldrava…",
+      "Most Cieni.",
+      "Dawniej załogi kolonii przekazywały ładunek w jej śluzach.",
+      "Jedna ładownia podbija pokwitowanie, druga zabiera skrzynię.",
+      "Przez właz serwisowy widać zaginione kontenery.",
+      "Otwórz drogę…",
+      "do odzyskania ładunku."
+    ],
+    "keldrava-outro": [
+      "Obie kolonie liczą ładunek na wspólnym kanale.",
+      "Odnalazły pompy do szklarni i racje awaryjne.",
+      "Statek informacyjny donosi sąsiadom…",
+      "że most się zawalił, gdy wszyscy byli jeszcze na pokładzie.",
+      "Obie załogi…",
+      "zgłosiły się do rozmowy na żywo."
     ]
   },
   "cs": {
@@ -1096,6 +1246,31 @@
       "Obě stále dostávají potvrzení…",
       "za náklad…",
       "který nikdy nedorazil."
+    ],
+    "level-seven": [
+      "Obě kolonie nám poslaly své nakládací seznamy.",
+      "Každá má potvrzení s razítkem té druhé.",
+      "Poslední nákladní posádky stále mají fotky z nakládky.",
+      "Porovnáváme čísla kontejnerů…",
+      "zatímco se blížíš k překladišti."
+    ],
+    "keldrava": [
+      "Kontakt potvrzen.",
+      "Keldrava…",
+      "Stínový most.",
+      "Kdysi si posádky kolonií předávaly náklad v jejích komorách.",
+      "Jeden prostor orazítkuje potvrzení, druhý sebere bednu.",
+      "Servisním průlezem vidíme pohřešované kontejnery.",
+      "Uvolni cestu…",
+      "pro vyzvednutí nákladu."
+    ],
+    "keldrava-outro": [
+      "Obě kolonie počítají náklad na společném kanálu.",
+      "Našly čerpadla do skleníků i nouzové dávky.",
+      "Zpravodajská loď hlásí jejich sousedům…",
+      "že se most zřítil a všichni zůstali na palubě.",
+      "Obě posádky…",
+      "se nabídly, že promluví živě."
     ]
   },
   "sk": {
@@ -1253,6 +1428,31 @@
       "Obe stále dostávajú potvrdenia…",
       "za náklad…",
       "ktorý nikdy nedorazil."
+    ],
+    "level-seven": [
+      "Obe kolónie nám poslali nakladacie zoznamy.",
+      "Každá má potvrdenie s pečiatkou tej druhej.",
+      "Posledné nákladné posádky ešte majú fotky z nakládky.",
+      "Porovnávame čísla kontajnerov…",
+      "kým sa blížiš k prekladisku."
+    ],
+    "keldrava": [
+      "Kontakt potvrdený.",
+      "Keldrava…",
+      "Tieňový most.",
+      "Kedysi si posádky kolónií odovzdávali náklad v jej komorách.",
+      "Jeden priestor opečiatkuje potvrdenie, druhý vezme debnu.",
+      "Cez servisný prielez vidíme stratené kontajnery.",
+      "Uvoľni cestu…",
+      "na vyzdvihnutie nákladu."
+    ],
+    "keldrava-outro": [
+      "Obe kolónie počítajú náklad na spoločnom kanáli.",
+      "Našli čerpadlá do skleníkov aj núdzové dávky.",
+      "Spravodajská loď hlási susedom…",
+      "že sa most zrútil so všetkými na palube.",
+      "Obe posádky…",
+      "sa ponúkli, že prehovoria naživo."
     ]
   },
   "ru": {
@@ -1410,6 +1610,31 @@
       "Обе всё ещё получают квитанции…",
       "за груз…",
       "который так и не прибыл."
+    ],
+    "level-seven": [
+      "Обе колонии прислали нам погрузочные ведомости.",
+      "У каждой есть квитанция с печатью другой.",
+      "У последних грузовых экипажей ещё есть фотографии погрузки.",
+      "Мы сверяем номера контейнеров…",
+      "пока ты приближаешься к перегрузочному доку."
+    ],
+    "keldrava": [
+      "Контакт подтверждён.",
+      "Келдрава…",
+      "Теневой мост.",
+      "Раньше экипажи колоний передавали грузы в её шлюзах.",
+      "Один отсек ставит печать на квитанции, другой забирает ящик.",
+      "Мы видим пропавшие контейнеры через сервисный люк.",
+      "Освободи путь…",
+      "для вывоза груза."
+    ],
+    "keldrava-outro": [
+      "Обе колонии сверяют груз по общей связи.",
+      "Они нашли насосы для теплиц и аварийные пайки.",
+      "Новостной корабль сообщает соседям…",
+      "что мост рухнул со всеми, кто был на борту.",
+      "Оба экипажа…",
+      "предложили выступить в прямом эфире."
     ]
   },
   "uk": {
@@ -1567,6 +1792,31 @@
       "Обидві досі отримують квитанції…",
       "за вантаж…",
       "який так і не прибув."
+    ],
+    "level-seven": [
+      "Обидві колонії надіслали нам списки завантаження.",
+      "Кожна має квитанцію з печаткою іншої.",
+      "В останніх вантажних екіпажів ще є фотографії завантаження.",
+      "Ми звіряємо номери контейнерів…",
+      "поки ти наближаєшся до перевантажувального дока."
+    ],
+    "keldrava": [
+      "Контакт підтверджено.",
+      "Келдрава…",
+      "Тіньовий міст.",
+      "Колись екіпажі колоній передавали вантаж у її шлюзах.",
+      "Один відсік штампує квитанцію, інший забирає ящик.",
+      "Ми бачимо зниклі контейнери крізь сервісний люк.",
+      "Звільни шлях…",
+      "для вивезення вантажу."
+    ],
+    "keldrava-outro": [
+      "Обидві колонії рахують вантаж у спільному ефірі.",
+      "Вони знайшли насоси для теплиць та аварійні пайки.",
+      "Новинний корабель повідомляє сусідам…",
+      "що міст обвалився з усіма, хто був на борту.",
+      "Обидва екіпажі…",
+      "запропонували виступити наживо."
     ]
   },
   "hr": {
@@ -1724,6 +1974,31 @@
       "Obje još primaju potvrde…",
       "za teret…",
       "koji nikad nije stigao."
+    ],
+    "level-seven": [
+      "Obje kolonije poslale su nam popise utovara.",
+      "Svaka ima potvrdu s pečatom one druge.",
+      "Posljednje teretne posade još imaju fotografije utovara.",
+      "Uspoređujemo brojeve kontejnera…",
+      "dok prilaziš pretovarnom doku."
+    ],
+    "keldrava": [
+      "Kontakt potvrđen.",
+      "Keldrava…",
+      "Most sjena.",
+      "Nekada su posade kolonija predavale teret u njezinim komorama.",
+      "Jedan odjeljak pečatira potvrdu, drugi uzima sanduk.",
+      "Kroz servisni otvor vidimo nestale kontejnere.",
+      "Oslobodi prolaz…",
+      "za izvlačenje tereta."
+    ],
+    "keldrava-outro": [
+      "Obje kolonije broje teret na istom kanalu.",
+      "Našle su crpke za staklenike i zalihe za nuždu.",
+      "Novinarski brod javlja susjedima…",
+      "da se most srušio dok su svi još bili na brodu.",
+      "Obje posade…",
+      "ponudile su se javiti uživo."
     ]
   },
   "sr": {
@@ -1881,6 +2156,31 @@
       "Обе још примају потврде…",
       "за терет…",
       "који никада није стигао."
+    ],
+    "level-seven": [
+      "Обе колоније послале су нам спискове утовара.",
+      "Свака има потврду с печатом друге.",
+      "Последње теретне посаде још имају фотографије утовара.",
+      "Упоређујемо бројеве контејнера…",
+      "док прилазиш претоварном доку."
+    ],
+    "keldrava": [
+      "Контакт потврђен.",
+      "Келдрава…",
+      "Мост сенки.",
+      "Посаде колонија некада су предавале терет у њеним коморама.",
+      "Један одељак печатира потврду, други узима сандук.",
+      "Кроз сервисни отвор видимо нестале контејнере.",
+      "Ослободи пролаз…",
+      "за извлачење терета."
+    ],
+    "keldrava-outro": [
+      "Обе колоније броје терет на истом каналу.",
+      "Нашле су пумпе за стакленике и залихе за нужду.",
+      "Новинарски брод јавља суседима…",
+      "да се мост срушио док су сви били на броду.",
+      "Обе посаде…",
+      "понудиле су да се јаве уживо."
     ]
   },
   "tr": {
@@ -2038,6 +2338,31 @@
       "İkisine de hâlâ teslim makbuzları geliyor…",
       "bir yük için…",
       "ama o yük hiç ulaşmadı."
+    ],
+    "level-seven": [
+      "İki koloni de yük kayıtlarını bize gönderdi.",
+      "Her birinde diğerinin mühürlediği bir makbuz var.",
+      "Son yük mürettebatlarının elinde hâlâ yükleme fotoğrafları var.",
+      "Konteyner numaralarını karşılaştırıyoruz…",
+      "sen aktarma iskelesine yaklaşırken."
+    ],
+    "keldrava": [
+      "Temas doğrulandı.",
+      "Keldrava…",
+      "Gölge Köprü.",
+      "Koloni ekipleri eskiden yükü onun geçiş bölmelerinde teslim ederdi.",
+      "Şimdi bir bölme makbuzu mühürlüyor, diğeri kasayı alıyor.",
+      "Kayıp konteynerleri bakım kapağından görüyoruz.",
+      "Yolu aç…",
+      "yükü geri alabilelim."
+    ],
+    "keldrava-outro": [
+      "İki koloni de aynı görüşmede yüklerini sayıyor.",
+      "Sera pompalarını ve acil durum erzakını buldular.",
+      "Bir haber gemisi komşularına şunu duyuruyor…",
+      "köprü çökmüş ve herkes hâlâ gemideymiş.",
+      "İki mürettebat da…",
+      "canlı yayında konuşmayı teklif etti."
     ]
   },
   "hu": {
@@ -2195,6 +2520,31 @@
       "Mindkettő továbbra is kap bizonylatokat…",
       "egy rakományról…",
       "amely sosem érkezett meg."
+    ],
+    "level-seven": [
+      "Mindkét kolónia elküldte a rakodási jegyzékét.",
+      "Mindkettőnek van egy bizonylata a másik pecsétjével.",
+      "Az utolsó teherhajók legénységének még megvannak a rakodási fotói.",
+      "Egyeztetjük a konténerek számait…",
+      "miközben az átrakódokkhoz közeledsz."
+    ],
+    "keldrava": [
+      "Kapcsolat megerősítve.",
+      "Keldrava…",
+      "az Árnyhíd.",
+      "Régen a kolóniák legénysége a zsilipjeiben adta át a rakományt.",
+      "Most az egyik rekesz lepecsételi a bizonylatot, a másik elviszi a ládát.",
+      "A szerelőnyíláson át látjuk az eltűnt konténereket.",
+      "Tedd szabaddá az utat…",
+      "a rakomány visszaszerzéséhez."
+    ],
+    "keldrava-outro": [
+      "A két kolónia közös csatornán számolja a rakományt.",
+      "Megtalálták az üvegházi szivattyúkat és a vésztartalékot.",
+      "Egy híradós hajó azt jelenti a szomszédoknak…",
+      "hogy a híd összeomlott, miközben mindenki a fedélzeten volt.",
+      "A két legénység…",
+      "felajánlotta, hogy élőben megszólal."
     ]
   },
   "ro": {
@@ -2352,6 +2702,31 @@
       "Ambele încă primesc chitanțe…",
       "pentru o marfă…",
       "care n-a ajuns niciodată."
+    ],
+    "level-seven": [
+      "Ambele colonii ne-au trimis listele de încărcare.",
+      "Fiecare are o chitanță ștampilată de cealaltă.",
+      "Ultimele echipaje de marfă mai au fotografiile de la încărcare.",
+      "Comparăm numerele containerelor…",
+      "în timp ce te apropii de docul de transbordare."
+    ],
+    "keldrava": [
+      "Contact confirmat.",
+      "Keldrava…",
+      "Podul Umbrelor.",
+      "Echipajele coloniilor predau cândva marfa în ecluzele ei.",
+      "Un compartiment ștampilează chitanța, celălalt ia lada.",
+      "Vedem containerele dispărute prin trapa de întreținere.",
+      "Eliberează calea…",
+      "pentru recuperarea mărfii."
+    ],
+    "keldrava-outro": [
+      "Cele două colonii își numără marfa pe același canal.",
+      "Au găsit pompele pentru sere și rațiile de urgență.",
+      "O navă de știri le transmite vecinilor…",
+      "că podul s-a prăbușit cu toată lumea la bord.",
+      "Cele două echipaje…",
+      "s-au oferit să vorbească în direct."
     ]
   },
   "th": {
@@ -2509,6 +2884,31 @@
       "ทั้งสองแห่งยังได้รับใบรับสินค้า…",
       "สำหรับสินค้า…",
       "ที่ไม่เคยมาถึง"
+    ],
+    "level-seven": [
+      "ทั้งสองอาณานิคมส่งบัญชีการขนสินค้ามาให้เรา",
+      "แต่ละแห่งมีใบรับสินค้าที่อีกฝ่ายประทับตราไว้",
+      "ลูกเรือขนส่งชุดล่าสุดยังเก็บรูปตอนขนสินค้าไว้",
+      "เรากำลังเทียบหมายเลขตู้สินค้า…",
+      "ระหว่างที่คุณเข้าใกล้ท่าขนถ่าย"
+    ],
+    "keldrava": [
+      "ยืนยันการพบเป้าหมาย",
+      "เคลดราวา…",
+      "สะพานเงา",
+      "เมื่อก่อนลูกเรืออาณานิคมส่งมอบสินค้ากันในห้องปรับความดันของยาน",
+      "ตอนนี้ช่องหนึ่งประทับตราใบรับสินค้า อีกช่องเอาลังไป",
+      "เรามองเห็นตู้สินค้าที่หายไปผ่านช่องซ่อมบำรุง",
+      "เปิดทาง…",
+      "เพื่อกู้สินค้าคืน"
+    ],
+    "keldrava-outro": [
+      "ทั้งสองอาณานิคมกำลังนับสินค้าผ่านช่องสื่อสารเดียวกัน",
+      "พวกเขาเจอปั๊มสำหรับเรือนกระจกและเสบียงฉุกเฉินแล้ว",
+      "ยานข่าวกำลังรายงานให้เพื่อนบ้านทราบ…",
+      "ว่าสะพานถล่มลงมาขณะที่ทุกคนยังอยู่บนยาน",
+      "ลูกเรือทั้งสองชุด…",
+      "เสนอที่จะออกอากาศสด"
     ]
   },
   "zh": {
@@ -2666,6 +3066,31 @@
       "两个殖民地至今仍在收到回执……",
       "签收的是一批货物……",
       "而这批货从未送达。"
+    ],
+    "level-seven": [
+      "两个殖民地都把装货清单发给了我们。",
+      "两边都有一份盖着对方印章的收据。",
+      "上一批货运船员还留着装货时拍的照片。",
+      "我们正在核对集装箱编号……",
+      "你继续接近转运码头。"
+    ],
+    "keldrava": [
+      "确认接触目标。",
+      "凯尔德拉瓦……",
+      "暗影之桥。",
+      "殖民地的船员以前在她的气闸里交接货物。",
+      "现在一个舱盖章签收，另一个舱把货箱拿走。",
+      "透过检修舱口，我们看见了丢失的集装箱。",
+      "打开通道……",
+      "让我们把货物取回来。"
+    ],
+    "keldrava-outro": [
+      "两个殖民地正在同一个频道上清点货物。",
+      "他们找到了温室用的泵和应急口粮。",
+      "一艘新闻船正在向邻近殖民地报道……",
+      "那座桥已经坍塌，所有人当时都还在船上。",
+      "两边的船员都……",
+      "主动提出在直播中发言。"
     ]
   },
   "vi": {
@@ -2823,6 +3248,31 @@
       "Cả hai vẫn nhận được biên nhận…",
       "cho số hàng…",
       "chưa từng đến nơi."
+    ],
+    "level-seven": [
+      "Hai thuộc địa đã gửi cho chúng ta nhật ký chất hàng.",
+      "Mỗi bên đều có biên nhận đóng dấu của bên kia.",
+      "Những đoàn thủy thủ chở hàng cuối vẫn giữ ảnh lúc xếp hàng.",
+      "Chúng ta đang đối chiếu số hiệu công-ten-nơ…",
+      "trong lúc phi công tiến gần bến trung chuyển."
+    ],
+    "keldrava": [
+      "Xác nhận tiếp xúc.",
+      "Keldrava…",
+      "Cây Cầu Bóng Tối.",
+      "Trước kia các thuộc địa giao hàng trong khoang điều áp của nó.",
+      "Giờ một khoang đóng dấu biên nhận, khoang kia lấy thùng hàng.",
+      "Chúng ta thấy các công-ten-nơ mất tích qua cửa bảo trì.",
+      "Mở đường…",
+      "để thu hồi hàng."
+    ],
+    "keldrava-outro": [
+      "Hai thuộc địa đang kiểm đếm hàng trên cùng một kênh.",
+      "Họ đã tìm thấy máy bơm cho nhà kính và khẩu phần khẩn cấp.",
+      "Một tàu đưa tin đang báo cho các thuộc địa lân cận…",
+      "rằng cây cầu đã sập khi mọi người vẫn còn trên tàu.",
+      "Cả hai đoàn thủy thủ…",
+      "đều đề nghị lên sóng trực tiếp."
     ]
   }
 }
