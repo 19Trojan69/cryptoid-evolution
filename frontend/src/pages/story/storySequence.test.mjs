@@ -25,7 +25,7 @@ const { bossOutroAtSector, bossStoryAtSector, levelStoryAtSector, storyScenes,
 test('each registered boss story and briefing appears at the correct campaign sector', () => {
   const briefings = [
     undefined, 'level-two', 'level-three', 'level-four',
-    'level-five', 'level-six', 'level-seven', 'level-eight',
+    'level-five', 'level-six', 'level-seven', 'level-eight', 'level-nine',
   ];
   for (const [index, name] of BOSS_NAMES.entries()) {
     const level = index + 1;
@@ -106,7 +106,7 @@ test('the new recordings give each sentence its own audible pause', () => {
     'varneth-outro', 'drelvorn-outro', 'level-four', 'talvrek', 'talvrek-outro',
     'level-five', 'zeraveth', 'zeraveth-outro', 'level-six', 'orvask', 'orvask-outro',
     'level-seven', 'keldrava', 'keldrava-outro',
-    'level-eight', 'veshkorn', 'veshkorn-outro',
+    'level-eight', 'veshkorn', 'veshkorn-outro', 'level-nine', 'neravoss', 'neravoss-outro',
   ];
   for (const scene of scenes) {
     const words = storyScenes[scene].timing.groups.flatMap(group => group.words);

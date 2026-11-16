@@ -236,3 +236,50 @@ test('reduced motion still gives audible tracks their full fade', async () => {
   assert.deepEqual(story.transitions, ['reveal', 'finish']);
   story.unmount();
 });
+
+test('admin preview primes the narration muted and unmutes after rewinding', () => {
+  const scene = 'korvessa-outro';
+  const source = '/story/korvessa-outro.mp3';
+  let primed;
+  let paused;
+  class PreviewPlayer {
+    audio = { muted: false, loop: true, currentTime: 0 };
+    constructor(src) { this.currentSource = src; }
+    play() {
+      primed = { ...this.audio };
+      this.audio.currentTime = .6;
+      return Promise.resolve(true);
+    }
+    pause() { paused = { ...this.audio }; }
+    close() {}
+  }
+  const preview = componentHost('src/pages/AdminStoryScenes.tsx', 'AdminStoryScenes', {
+    onStartPreview() {},
+  }, {
+    adminText: text => text,
+    BOSS_NAMES: ['Varneth', 'Korvessa'],
+    levelStoryAtSector: () => undefined,
+    bossStoryAtSector: () => undefined,
+    bossOutroAtSector: sector => sector === 20 ? scene : undefined,
+    storyScenes: {
+      campaign: { chapterTitle: 'Campaign', timing: { duration: 70 } },
+      [scene]: { audio: 'korvessa-outro.mp3', chapterTitle: 'Clear the Route', timing: { duration: 28.44 } },
+    },
+    localStorage: { getItem: () => null },
+    MUSIC_STORAGE_KEY: 'music',
+    readMusicVolume: () => 50,
+    MusicPlayer: PreviewPlayer,
+    StoryBriefing: Symbol('StoryBriefing'),
+    useCallback: handler => handler,
+    useLayoutEffect() {},
+  });
+  preview.nodes().find(node => node.type === 'button' &&
+    node.props.children.some(child => child.props?.children.includes('Clear the Route'))).props.onClick();
+  preview.render();
+  const briefing = preview.nodes().find(node => node.type === preview.env.StoryBriefing);
+  assert.deepEqual(primed, { muted: true, loop: false, currentTime: 0 });
+  const player = briefing.props.prepareAudio(source);
+  assert.deepEqual(paused, { muted: true, loop: false, currentTime: .6 });
+  assert.deepEqual(player.audio, { muted: false, loop: false, currentTime: 0 });
+  preview.unmount();
+});

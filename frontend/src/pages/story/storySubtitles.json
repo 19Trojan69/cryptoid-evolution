@@ -205,6 +205,32 @@
       "Ein Kapitän sagt, man habe ihm in der Panik einen ganzen Laderaum Saatgut angeboten.",
       "Er schickt uns das Manifest.",
       "Es gibt kein einziges Foto von der Verladung."
+    ],
+    "level-nine": [
+      "Die Routen sind wieder offen.",
+      "Der Kapitän hat uns sein Saatgutmanifest geschickt.",
+      "Die Verladefotos fehlen.",
+      "Er hat die ganze Nacht an der Laderampe gewartet.",
+      "Seine Anzeige meldete volle Ladung.",
+      "Sein Schiff wog genauso viel wie bei der Ankunft.",
+      "Er fliegt mit leerem Frachtraum zurück zur Kolonie.",
+      "Folge der Adresse auf dem Manifest, Pilot."
+    ],
+    "neravoss": [
+      "Kontakt bestätigt.",
+      "Neravoss, der Guthabenblender.",
+      "Dieses Schiff stellte einst echte Waren auf einer Handelsmesse aus.",
+      "Seine Anzeigen werben jetzt mit erfundenen Vorräten.",
+      "Damit hat er Frachter mit echten Lieferungen angelockt.",
+      "Hinter der Anzeige sehen wir die Namen der Frachter, die entladen haben und warteten.",
+      "Schalte den Schutz des Laderaums aus."
+    ],
+    "neravoss-outro": [
+      "Die Prüfer haben echtes Saatgut an Bord gefunden.",
+      "Es kam mit Frachtern, die Neravoss als unbezahlt vermerkte.",
+      "Die Crews bringen es durch die Kristallpassage nach Hause.",
+      "Ein Schiff an der Engstelle hat allen eine Rechnung geschickt.",
+      "Sogar die Sanitäter sollen zahlen."
     ]
   },
   "es": {
@@ -413,6 +439,32 @@
       "Un capitán dice que en pleno pánico le ofrecieron una bodega entera de semillas.",
       "Nos envía el manifiesto.",
       "No hay ni una sola foto de la carga."
+    ],
+    "level-nine": [
+      "Las rutas vuelven a estar abiertas.",
+      "El capitán nos ha enviado el manifiesto de su cargamento de semillas.",
+      "Faltan las fotos de la carga.",
+      "Esperó toda la noche en el muelle de carga.",
+      "Su pantalla indicaba que la bodega estaba llena.",
+      "La nave pesaba lo mismo que al llegar.",
+      "Regresa a la colonia con la bodega vacía.",
+      "Sigue la dirección del manifiesto, piloto."
+    ],
+    "neravoss": [
+      "Contacto confirmado.",
+      "Neravoss, el ilusionista de los balances.",
+      "Esta nave exhibía mercancía real en una feria comercial.",
+      "Ahora sus pantallas anuncian reservas inventadas.",
+      "Esas promesas atrajeron a cargueros con suministros reales.",
+      "Detrás de la pantalla vemos los nombres de los cargueros que descargaron y esperaron.",
+      "Neutraliza las defensas de esa bodega."
+    ],
+    "neravoss-outro": [
+      "Los inspectores encontraron semillas de verdad a bordo.",
+      "Llegaron en cargueros que Neravoss marcó como impagados.",
+      "Las tripulaciones las llevan a casa por el paso de cristal.",
+      "Una nave en el estrecho ha enviado una factura a cada una.",
+      "Hasta los sanitarios tienen que pagar."
     ]
   },
   "fr": {
@@ -621,6 +673,32 @@
       "Un capitaine dit qu’en pleine panique, on lui a proposé une soute entière de semences.",
       "Il nous envoie le manifeste de chargement.",
       "Il n’y a pas une seule photo du chargement."
+    ],
+    "level-nine": [
+      "Les routes sont de nouveau ouvertes.",
+      "Le capitaine nous a envoyé le manifeste de son chargement de semences.",
+      "Les photos du chargement manquent.",
+      "Il a attendu toute la nuit au quai de chargement.",
+      "Son écran indiquait que la soute était pleine.",
+      "Son vaisseau pesait autant qu’à son arrivée.",
+      "Il retourne à la colonie avec une soute vide.",
+      "Suis l’adresse indiquée sur le manifeste, pilote."
+    ],
+    "neravoss": [
+      "Contact confirmé.",
+      "Neravoss, l’Illusionniste des soldes.",
+      "Ce vaisseau exposait autrefois de vraies marchandises dans un salon commercial.",
+      "Ses écrans annoncent maintenant des réserves fictives.",
+      "Ces promesses ont attiré des cargos chargés de vraies provisions.",
+      "Derrière l’écran, on voit les noms des cargos qui ont déchargé puis attendu.",
+      "Neutralise les défenses de cette soute."
+    ],
+    "neravoss-outro": [
+      "Les inspecteurs ont trouvé de vraies semences à bord.",
+      "Elles sont arrivées avec des cargos que Neravoss avait marqués comme impayés.",
+      "Les équipages les ramènent par le passage de cristal.",
+      "Un vaisseau au goulet leur a envoyé une facture à chacun.",
+      "Même les secouristes doivent payer."
     ]
   },
   "pt": {
@@ -829,6 +907,32 @@
       "Um capitão diz que, durante o pânico, lhe ofereceram um porão cheio de sementes.",
       "Ele está nos enviando o manifesto.",
       "Não há uma única foto do carregamento."
+    ],
+    "level-nine": [
+      "As rotas estão abertas de novo.",
+      "O capitão nos enviou o manifesto da carga de sementes.",
+      "Faltam as fotos do carregamento.",
+      "Ele esperou a noite inteira na doca de carga.",
+      "A tela indicava que o porão estava cheio.",
+      "A nave pesava o mesmo que na chegada.",
+      "Ele volta à colônia com o porão vazio.",
+      "Siga o endereço no manifesto, piloto."
+    ],
+    "neravoss": [
+      "Contato confirmado.",
+      "Neravoss, o Ilusionista dos Saldos.",
+      "Esta nave já expôs mercadorias reais em uma feira comercial.",
+      "Agora, suas telas anunciam reservas inventadas.",
+      "Essas promessas atraíram cargueiros com suprimentos reais.",
+      "Por trás da tela, vemos os nomes dos cargueiros que descarregaram e esperaram.",
+      "Derrube as defesas desse porão."
+    ],
+    "neravoss-outro": [
+      "Os inspetores encontraram sementes de verdade a bordo.",
+      "Elas chegaram em cargueiros que Neravoss marcou como não pagos.",
+      "As tripulações as levam para casa pela passagem de cristal.",
+      "Uma nave no trecho estreito enviou uma cobrança a cada uma.",
+      "Até os socorristas têm de pagar."
     ]
   },
   "it": {
@@ -1037,6 +1141,32 @@
       "Un capitano dice che nel panico gli hanno offerto una stiva piena di sementi.",
       "Ci sta mandando il manifesto di carico.",
       "Non c’è neppure una foto del carico."
+    ],
+    "level-nine": [
+      "Le rotte sono di nuovo aperte.",
+      "Il capitano ci ha inviato il manifesto del carico di sementi.",
+      "Mancano le foto del carico.",
+      "Ha aspettato tutta la notte alla banchina di carico.",
+      "Il display indicava che la stiva era piena.",
+      "La nave pesava quanto al suo arrivo.",
+      "Sta tornando alla colonia con la stiva vuota.",
+      "Segui l’indirizzo sul manifesto, pilota."
+    ],
+    "neravoss": [
+      "Contatto confermato.",
+      "Neravoss, l’Illusionista dei saldi.",
+      "Questa nave un tempo esponeva merci vere a una fiera commerciale.",
+      "Ora i suoi schermi pubblicizzano scorte inventate.",
+      "Quelle promesse hanno attirato mercantili con rifornimenti veri.",
+      "Dietro lo schermo vediamo i nomi dei mercantili che hanno scaricato e aspettato.",
+      "Neutralizza le difese di quella stiva."
+    ],
+    "neravoss-outro": [
+      "Gli ispettori hanno trovato vere sementi a bordo.",
+      "Sono arrivate sui mercantili che Neravoss aveva segnato come non pagati.",
+      "Gli equipaggi le riportano a casa attraverso il passaggio di cristallo.",
+      "Una nave alla strettoia ha mandato una fattura a ognuno di loro.",
+      "Persino i soccorritori devono pagare."
     ]
   },
   "pl": {
@@ -1245,6 +1375,32 @@
       "Kapitan mówi, że podczas paniki zaoferowano mu ładownię pełną nasion.",
       "Wysyła nam manifest ładunkowy.",
       "Nie ma ani jednego zdjęcia załadunku."
+    ],
+    "level-nine": [
+      "Szlaki są znowu otwarte.",
+      "Kapitan przysłał nam wykaz ładunku nasion.",
+      "Brakuje zdjęć z załadunku.",
+      "Czekał całą noc przy rampie załadunkowej.",
+      "Wyświetlacz wskazywał pełną ładownię.",
+      "Statek ważył tyle samo co po przylocie.",
+      "Wraca do kolonii z pustą ładownią.",
+      "Leć pod adres z wykazu, pilocie."
+    ],
+    "neravoss": [
+      "Kontakt potwierdzony.",
+      "Neravoss, Iluzjonista Sald.",
+      "Na tym statku wystawiano kiedyś prawdziwy towar na targach.",
+      "Teraz jego ekrany reklamują zmyślone zapasy.",
+      "Te obietnice zwabiły frachtowce z rzeczywistymi dostawami.",
+      "Za ekranem widać nazwy frachtowców, które rozładowały towar i czekały.",
+      "Zlikwiduj osłonę tej ładowni."
+    ],
+    "neravoss-outro": [
+      "Inspektorzy znaleźli na pokładzie prawdziwe nasiona.",
+      "Przywiozły je frachtowce, które Neravoss oznaczył jako nieopłacone.",
+      "Załogi wiozą nasiona do domu przez kryształowe przejście.",
+      "Statek przy przewężeniu wysłał każdej załodze rachunek.",
+      "Nawet medycy mają zapłacić."
     ]
   },
   "cs": {
@@ -1453,6 +1609,32 @@
       "Kapitán říká, že mu během paniky nabídli nákladový prostor plný osiva.",
       "Posílá nám seznam nákladu.",
       "Není tu jediná fotka z nakládky."
+    ],
+    "level-nine": [
+      "Trasy jsou opět otevřené.",
+      "Kapitán nám poslal soupis zásilky osiva.",
+      "Chybí fotografie z nakládky.",
+      "U nakládací rampy čekal celou noc.",
+      "Displej hlásil plný nákladový prostor.",
+      "Loď vážila stejně jako při příletu.",
+      "Vrací se do kolonie s prázdným nákladovým prostorem.",
+      "Leť na adresu v soupisu, pilote."
+    ],
+    "neravoss": [
+      "Kontakt potvrzen.",
+      "Neravoss, Iluzionista zůstatků.",
+      "Tato loď kdysi na veletrhu vystavovala skutečné zboží.",
+      "Její obrazovky teď nabízejí smyšlené zásoby.",
+      "Tyto sliby přilákaly nákladní lodě se skutečnými dodávkami.",
+      "Za obrazovkou vidíme jména lodí, které vyložily náklad a čekaly.",
+      "Zneškodni obranu nákladového prostoru."
+    ],
+    "neravoss-outro": [
+      "Inspektoři našli na palubě skutečné osivo.",
+      "Přivezly ho lodě, které Neravoss označil jako nezaplacené.",
+      "Posádky vezou osivo domů křišťálovým průsmykem.",
+      "Loď u zúžení každé posádce poslala fakturu.",
+      "Dokonce i zdravotníci mají zaplatit."
     ]
   },
   "sk": {
@@ -1661,6 +1843,32 @@
       "Kapitán hovorí, že mu počas paniky ponúkli podpalubie plné osiva.",
       "Posiela nám zoznam nákladu.",
       "Nie je tu jediná fotka z nakládky."
+    ],
+    "level-nine": [
+      "Trasy sú opäť otvorené.",
+      "Kapitán nám poslal súpis nákladu osiva.",
+      "Chýbajú fotografie z nakládky.",
+      "Pri nakladacej rampe čakal celú noc.",
+      "Displej hlásil plný nákladový priestor.",
+      "Loď vážila rovnako ako pri prílete.",
+      "Vracia sa do kolónie s prázdnym nákladovým priestorom.",
+      "Leť na adresu zo súpisu, pilot."
+    ],
+    "neravoss": [
+      "Kontakt potvrdený.",
+      "Neravoss, Iluzionista zostatkov.",
+      "Táto loď kedysi na veľtrhu vystavovala skutočný tovar.",
+      "Jej obrazovky teraz ponúkajú vymyslené zásoby.",
+      "Tieto sľuby prilákali nákladné lode so skutočnými dodávkami.",
+      "Za obrazovkou vidíme mená lodí, ktoré vyložili náklad a čakali.",
+      "Zneškodni obranu nákladového priestoru."
+    ],
+    "neravoss-outro": [
+      "Inšpektori našli na palube skutočné osivo.",
+      "Priviezli ho lode, ktoré Neravoss označil ako nezaplatené.",
+      "Posádky vezú osivo domov krištáľovým priesmykom.",
+      "Loď pri zúžení poslala každej posádke faktúru.",
+      "Zaplatiť majú dokonca aj zdravotníci."
     ]
   },
   "ru": {
@@ -1869,6 +2077,32 @@
       "Капитан говорит, что во время паники ему предложили целый трюм семян.",
       "Он пересылает нам грузовой манифест.",
       "Нет ни одной фотографии погрузки."
+    ],
+    "level-nine": [
+      "Маршруты снова открыты.",
+      "Капитан прислал нам грузовую ведомость на семена.",
+      "Снимков погрузки нет.",
+      "Он всю ночь ждал у погрузочной платформы.",
+      "На экране был указан полный трюм.",
+      "Корабль весил столько же, сколько по прибытии.",
+      "Он возвращается в колонию с пустым трюмом.",
+      "Лети по адресу из ведомости, пилот."
+    ],
+    "neravoss": [
+      "Контакт подтверждён.",
+      "Неравосс, Иллюзионист балансов.",
+      "Когда-то на этом корабле показывали настоящие товары на ярмарке.",
+      "Теперь на его экранах рекламируют выдуманные запасы.",
+      "Эти обещания заманили грузовые корабли с настоящими припасами.",
+      "За экраном видны названия кораблей, которые разгрузились и ждали.",
+      "Выведи из строя защиту трюма."
+    ],
+    "neravoss-outro": [
+      "Инспекторы нашли на борту настоящие семена.",
+      "Их привезли грузовые корабли, которые Неравосс пометил как неоплаченные.",
+      "Экипажи везут семена домой через Кристальный проход.",
+      "Корабль у сужения выставил счёт каждому экипажу.",
+      "Заплатить велели даже медикам."
     ]
   },
   "uk": {
@@ -2077,6 +2311,32 @@
       "Капітан каже, що під час паніки йому запропонували цілий трюм насіння.",
       "Він надсилає нам вантажний маніфест.",
       "Немає жодного фото завантаження."
+    ],
+    "level-nine": [
+      "Маршрути знову відкриті.",
+      "Капітан надіслав нам вантажний маніфест на насіння.",
+      "Фотографій завантаження немає.",
+      "Він чекав біля вантажної рампи всю ніч.",
+      "Дисплей показував, що трюм повний.",
+      "Корабель важив стільки ж, як і після прибуття.",
+      "Він повертається до колонії з порожнім трюмом.",
+      "Лети за адресою з маніфесту, пілоте."
+    ],
+    "neravoss": [
+      "Контакт підтверджено.",
+      "Неравосс, Ілюзіоніст балансів.",
+      "На цьому кораблі колись виставляли справжні товари на ярмарку.",
+      "Тепер на його екранах рекламують вигадані запаси.",
+      "Ці обіцянки заманили вантажні кораблі зі справжніми припасами.",
+      "За екраном видно назви кораблів, які розвантажилися й чекали.",
+      "Виведи з ладу захист трюму."
+    ],
+    "neravoss-outro": [
+      "Інспектори знайшли на борту справжнє насіння.",
+      "Його привезли вантажні кораблі, які Неравосс позначив як неоплачені.",
+      "Екіпажі везуть насіння додому через Кришталевий прохід.",
+      "Корабель біля вузької ділянки надіслав рахунок кожному екіпажу.",
+      "Заплатити наказали навіть медикам."
     ]
   },
   "hr": {
@@ -2285,6 +2545,32 @@
       "Kapetan kaže da su mu usred panike ponudili spremište puno sjemena.",
       "Šalje nam popis tereta.",
       "Nema nijedne fotografije utovara."
+    ],
+    "level-nine": [
+      "Rute su ponovno otvorene.",
+      "Kapetan nam je poslao popis tereta sjemena.",
+      "Nedostaju fotografije utovara.",
+      "Cijelu je noć čekao kod utovarne rampe.",
+      "Zaslon mu je pokazivao pun teretni prostor.",
+      "Brod je težio isto kao pri dolasku.",
+      "Vraća se u koloniju s praznim teretnim prostorom.",
+      "Prati adresu s popisa tereta, pilote."
+    ],
+    "neravoss": [
+      "Kontakt potvrđen.",
+      "Neravoss, Iluzionist salda.",
+      "Ovaj je brod nekoć na sajmu izlagao pravu robu.",
+      "Njegovi zasloni sada oglašavaju izmišljene zalihe.",
+      "Ta su obećanja privukla teretne brodove s pravim zalihama.",
+      "Iza zaslona vidimo imena brodova koji su istovarili teret i čekali.",
+      "Onesposobi obranu tog teretnog prostora."
+    ],
+    "neravoss-outro": [
+      "Inspektori su na brodu pronašli pravo sjeme.",
+      "Dopremili su ga teretnjaci koje je Neravoss označio kao neplaćene.",
+      "Posade ga voze kući kroz kristalni prolaz.",
+      "Brod na suženju poslao je račun svakoj posadi.",
+      "Čak i medicinske ekipe moraju platiti."
     ]
   },
   "sr": {
@@ -2493,6 +2779,32 @@
       "Капетан каже да су му усред панике понудили складиште пуно семена.",
       "Шаље нам списак терета.",
       "Нема ниједне фотографије утовара."
+    ],
+    "level-nine": [
+      "Rute su ponovo otvorene.",
+      "Kapetan nam je poslao manifest tovara semena.",
+      "Nedostaju fotografije utovara.",
+      "Čekao je celu noć kod rampe za utovar.",
+      "Ekran je pokazivao da je tovarni prostor pun.",
+      "Brod je težio isto kao po dolasku.",
+      "Vraća se u koloniju s praznim tovarnim prostorom.",
+      "Prati adresu iz manifesta, pilote."
+    ],
+    "neravoss": [
+      "Kontakt potvrđen.",
+      "Neravoss, Iluzionista salda.",
+      "Ovaj brod je nekada na sajmu izlagao pravu robu.",
+      "Sada njegovi ekrani oglašavaju izmišljene zalihe.",
+      "Ta obećanja su privukla teretnjake s pravim zalihama.",
+      "Iza ekrana vidimo imena brodova koji su istovarili robu i čekali.",
+      "Onesposobi odbranu tog tovarnog prostora."
+    ],
+    "neravoss-outro": [
+      "Inspektori su našli pravo seme na brodu.",
+      "Stiglo je teretnjacima koje je Neravoss označio kao neplaćene.",
+      "Posade ga nose kući kroz kristalni prolaz.",
+      "Brod na suženju poslao je račun svakoj posadi.",
+      "Čak i medicinske ekipe moraju da plate."
     ]
   },
   "tr": {
@@ -2701,6 +3013,32 @@
       "Bir kaptan, panik sırasında bir ambar dolusu tohum teklif edildiğini söylüyor.",
       "Yük manifestosunu bize gönderiyor.",
       "Yüklemeye ait tek bir fotoğraf bile yok."
+    ],
+    "level-nine": [
+      "Rotalar yeniden açık.",
+      "Kaptan tohum yükünün manifestosunu bize gönderdi.",
+      "Yükleme fotoğrafları eksik.",
+      "Yükleme rampasında bütün gece bekledi.",
+      "Ekranı ambarın dolu olduğunu gösteriyordu.",
+      "Gemisi vardığındakiyle aynı ağırlıktaydı.",
+      "Koloniye boş bir ambarla dönüyor.",
+      "Manifestodaki adresi takip et, pilot."
+    ],
+    "neravoss": [
+      "Temas doğrulandı.",
+      "Neravoss, Bakiye İllüzyonisti.",
+      "Bu gemi bir zamanlar bir ticaret fuarında gerçek mallar sergilerdi.",
+      "Şimdi ekranlarında uydurma stoklar ilan ediliyor.",
+      "Bu vaatler, gerçek erzak taşıyan yük gemilerini çekti.",
+      "Ekranın arkasında yükünü boşaltıp bekleyen gemilerin adlarını görüyoruz.",
+      "Ambarın savunmasını devre dışı bırak."
+    ],
+    "neravoss-outro": [
+      "Müfettişler gemide gerçek tohum buldu.",
+      "Tohumları Neravoss’un ödenmemiş diye işaretlediği yük gemileri getirdi.",
+      "Mürettebatlar tohumları kristal geçitten eve götürüyor.",
+      "Dar noktadaki bir gemi her birine fatura gönderdi.",
+      "Sağlık ekiplerinden bile ödeme istendi."
     ]
   },
   "hu": {
@@ -2909,6 +3247,32 @@
       "A kapitány szerint a pánik idején egy raktérnyi vetőmagot ajánlottak neki.",
       "Már küldi a rakományjegyzéket.",
       "Egyetlen rakodási fotó sincs."
+    ],
+    "level-nine": [
+      "Az útvonalak újra nyitva vannak.",
+      "A kapitány elküldte a vetőmag rakományjegyzékét.",
+      "A berakodásról hiányoznak a fotók.",
+      "Egész éjjel a rakodórámpánál várt.",
+      "A kijelzője szerint tele volt a raktér.",
+      "A hajó ugyanannyit nyomott, mint érkezéskor.",
+      "Üres raktérrel tér vissza a kolóniára.",
+      "Kövesd a jegyzéken szereplő címet, pilóta."
+    ],
+    "neravoss": [
+      "Kontaktus megerősítve.",
+      "Neravoss, az Egyenlegilluzionista.",
+      "Ez a hajó egykor valódi árukat mutatott be egy vásáron.",
+      "A kijelzői most kitalált készleteket hirdetnek.",
+      "Ezek az ígéretek valódi készleteket szállító teherhajókat csaltak ide.",
+      "A kijelző mögött ott vannak a lerakodó és várakozó teherhajók nevei.",
+      "Iktasd ki a raktér védelmét."
+    ],
+    "neravoss-outro": [
+      "Az ellenőrök valódi vetőmagot találtak a fedélzeten.",
+      "Olyan teherhajók hozták, amelyeket Neravoss kifizetetlenként jelölt meg.",
+      "A legénységek a kristályátjárón át viszik haza a magokat.",
+      "Egy hajó a szűkületnél mindegyiküknek számlát küldött.",
+      "Még az egészségügyi egységeknek is fizetniük kell."
     ]
   },
   "ro": {
@@ -3117,6 +3481,32 @@
       "Un căpitan spune că i s-a oferit o cală plină de semințe în timpul panicii.",
       "Ne trimite manifestul de încărcare.",
       "Nu există nicio fotografie de la încărcare."
+    ],
+    "level-nine": [
+      "Rutele sunt din nou deschise.",
+      "Căpitanul ne-a trimis manifestul transportului de semințe.",
+      "Lipsesc fotografiile de la încărcare.",
+      "A așteptat toată noaptea la rampa de încărcare.",
+      "Afișajul indica o cală plină.",
+      "Nava cântărea la fel ca la sosire.",
+      "Se întoarce la colonie cu cala goală.",
+      "Urmează adresa din manifest, pilotule."
+    ],
+    "neravoss": [
+      "Contact confirmat.",
+      "Neravoss, Iluzionistul soldurilor.",
+      "Nava aceasta expunea cândva mărfuri reale la un târg.",
+      "Acum, ecranele ei anunță rezerve inventate.",
+      "Promisiunile au atras cargouri cu provizii reale.",
+      "În spatele afișajului vedem numele cargourilor care au descărcat și au așteptat.",
+      "Neutralizează apărarea calei."
+    ],
+    "neravoss-outro": [
+      "Inspectorii au găsit semințe adevărate la bord.",
+      "Le-au adus cargourile pe care Neravoss le-a trecut ca neplătite.",
+      "Echipajele duc semințele acasă prin pasajul de cristal.",
+      "O navă la îngustare i-a trimis fiecărui echipaj o factură.",
+      "Chiar și medicii trebuie să plătească."
     ]
   },
   "th": {
@@ -3325,6 +3715,32 @@
       "กัปตันคนหนึ่งบอกว่าช่วงชุลมุนมีคนเสนอเมล็ดพันธุ์ให้เต็มห้องเก็บสินค้า",
       "เขากำลังส่งบัญชีสินค้าให้เรา",
       "ไม่มีภาพตอนขนสินค้าเลยแม้แต่ภาพเดียว"
+    ],
+    "level-nine": [
+      "เส้นทางเปิดอีกครั้งแล้ว",
+      "กัปตันส่งบัญชีรายการเมล็ดพันธุ์มาให้เรา",
+      "ไม่มีภาพตอนขนเมล็ดพันธุ์ขึ้นยาน",
+      "เขารอที่ท่าขนสินค้าตลอดทั้งคืน",
+      "หน้าจอของเขาแจ้งว่าห้องเก็บสินค้าเต็ม",
+      "ยานของเขาหนักเท่าเดิมกับตอนมาถึง",
+      "เขากำลังกลับอาณานิคมโดยที่ห้องเก็บสินค้าว่างเปล่า",
+      "ไปตามที่อยู่ในบัญชีสินค้า นักบิน"
+    ],
+    "neravoss": [
+      "ยืนยันการพบเป้าหมาย",
+      "เนราวอส นักลวงยอดบัญชี",
+      "ยานลำนี้เคยจัดแสดงสินค้าจริงในงานแสดงสินค้า",
+      "ตอนนี้หน้าจอของมันโฆษณาเสบียงที่กุขึ้น",
+      "คำสัญญานั้นล่อยานที่บรรทุกเสบียงจริงเข้ามา",
+      "หลังจอแสดงผล เราเห็นชื่อยานที่ขนสินค้าลงแล้วรออยู่",
+      "ทำลายระบบป้องกันห้องเก็บสินค้านั้น"
+    ],
+    "neravoss-outro": [
+      "เจ้าหน้าที่ตรวจพบเมล็ดพันธุ์จริงบนยาน",
+      "ยานขนส่งที่เนราวอสระบุว่ายังไม่ได้รับเงินเป็นผู้นำเมล็ดพันธุ์มา",
+      "ลูกเรือกำลังนำเมล็ดพันธุ์กลับบ้านผ่านช่องแคบคริสตัล",
+      "ยานตรงจุดแคบส่งใบเรียกเก็บเงินให้ลูกเรือทุกลำ",
+      "แม้แต่ทีมแพทย์ก็ถูกเรียกเก็บเงิน"
     ]
   },
   "zh": {
@@ -3533,6 +3949,32 @@
       "有位船长说，恐慌期间有人向他兜售了一整舱种子。",
       "他正在把装货清单发给我们。",
       "连一张装货时的照片都没有。"
+    ],
+    "level-nine": [
+      "航线重新开放了。",
+      "船长把种子货单发给了我们。",
+      "装货照片缺失。",
+      "他在装货区等了整整一夜。",
+      "显示屏提示货舱已经装满。",
+      "飞船重量和抵达时一样。",
+      "他正开着空舱的飞船返回殖民地。",
+      "飞行员，按货单上的地址追查。"
+    ],
+    "neravoss": [
+      "确认接触目标。",
+      "内拉沃斯，余额幻术师。",
+      "这艘船曾在交易会上展示过真实货物。",
+      "如今它的屏幕宣传虚构的储备。",
+      "这些承诺引来了运送真实补给的货船。",
+      "透过虚假的展示，我们看到了卸货后仍在等待的货船名单。",
+      "解除货舱的防御。"
+    ],
+    "neravoss-outro": [
+      "检查员在船上找到了真正的种子。",
+      "种子来自那些被内拉沃斯标记为未付款的货船。",
+      "船员正带着种子穿过水晶通道回家。",
+      "狭窄处的一艘飞船给每艘货船都发了账单。",
+      "就连医疗队也被要求付费。"
     ]
   },
   "vi": {
@@ -3741,6 +4183,32 @@
       "Một thuyền trưởng nói lúc hoảng loạn có người chào bán cả khoang hạt giống.",
       "Ông ấy đang gửi bảng kê hàng cho chúng ta.",
       "Không có lấy một tấm ảnh chất hàng."
+    ],
+    "level-nine": [
+      "Các tuyến đường đã mở lại.",
+      "Thuyền trưởng đã gửi cho chúng ta bản kê lô hạt giống.",
+      "Thiếu ảnh lúc bốc hàng lên tàu.",
+      "Ông ấy đã đợi cả đêm ở khoang bốc hàng.",
+      "Màn hình báo khoang hàng đã đầy.",
+      "Con tàu vẫn nặng như lúc đến.",
+      "Ông ấy đang trở về thuộc địa với khoang hàng trống.",
+      "Hãy theo địa chỉ trên bản kê, phi công."
+    ],
+    "neravoss": [
+      "Đã xác nhận tiếp xúc.",
+      "Neravoss, Kẻ Tạo Ảo Tưởng Số Dư.",
+      "Con tàu này từng trưng bày hàng hóa thật ở một hội chợ.",
+      "Giờ các màn hình của nó quảng cáo kho dự trữ bịa đặt.",
+      "Những lời hứa đó đã dụ các tàu chở tiếp tế thật tới.",
+      "Sau màn hình, ta thấy tên các tàu đã dỡ hàng rồi chờ đợi.",
+      "Hãy vô hiệu hóa hệ thống bảo vệ khoang hàng đó."
+    ],
+    "neravoss-outro": [
+      "Các thanh tra đã tìm thấy hạt giống thật trên tàu.",
+      "Chúng được đưa tới bằng các tàu mà Neravoss đánh dấu là chưa được trả tiền.",
+      "Các thủy thủ đang đưa hạt giống về qua lối đi pha lê.",
+      "Một tàu ở đoạn hẹp đã gửi hóa đơn cho từng đoàn thủy thủ.",
+      "Ngay cả đội y tế cũng bị yêu cầu trả tiền."
     ]
   }
 }

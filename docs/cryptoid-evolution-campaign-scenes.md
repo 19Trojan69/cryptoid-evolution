@@ -25,7 +25,8 @@ Drehbuch für Kampagnenstart, Level-Briefings, Boss-Intros und Sieges-Outros. Je
 | Briefing 6, Intro Orvask und Outro Orvask | Sprechtext und deutsche Untertitel | Eingereichte Suno-Aufnahmen mit Wortzeitplan |
 | Briefing 7, Intro Keldrava und Outro Keldrava | Sprechtext und deutsche Untertitel | Eingereichte Suno-Aufnahmen mit Wortzeitplan |
 | Briefing 8, Intro Veshkorn und Outro Veshkorn | Sprechtext und deutsche Untertitel | Eingereichte Suno-Aufnahmen mit Wortzeitplan |
-| Level 9–50 | 126 Drehbuchfassungen bis zum Finale | Aufnahmen, Zeitpläne und Einbau folgen je Szene |
+| Briefing 9, Intro Neravoss und Outro Neravoss | Englischer Sprechtext und 18 Untertitelsprachen | Vorläufige Roboterstimme mit leiser Orchesterbegleitung und Wortzeitplan |
+| Level 10–50 | 123 Drehbuchfassungen bis zum Finale | Aufnahmen, Zeitpläne und Einbau folgen je Szene |
 
 Die Testaufnahme für Briefing 4 wurde mit der Stimme am_onyx aus [Kokoro](https://huggingface.co/hexgrad/Kokoro-82M) produziert. Die Suno-Fassung kann diese Aufnahme samt Wortzeitplan ersetzen.
 
@@ -589,7 +590,11 @@ Traffic control just reopened the lanes. Their operators are reading weather and
 
 Der Guthabenblender · The Balance Illusionist
 
+Die drei vorläufigen Aufnahmen verwenden Kokoro am_onyx als Roboterstimme. Die eigens komponierte Begleitung aus Streichern, Klavier und zurückhaltendem Horn wurde mit GeneralUser GS eingespielt. [Kokoro](https://huggingface.co/hexgrad/Kokoro-82M) · [GeneralUser GS](https://github.com/mrbumpy409/GeneralUser-GS)
+
 #### Level-Briefing · No Weight on the Scales
+
+Vorläufige Roboteraufnahme. level-nine.mp3 · 30,19 s.
 
 **Suno-Stil**
 
@@ -597,13 +602,36 @@ English spoken-word fleet command. Keep one clear narrator up front. Allow an au
 
 **Englischer Sprechtext**
 
-The captain waited at the bay all night. His display said the seed stock was on board. His ship weighed the same as when it arrived. He’s taking the empty hold back to the colony. Follow the manifest address, Pilot.
+The lanes are open again.
+
+The captain sent us his seed manifest.
+
+No loading photos.
+
+He waited at the loading bay all night.
+
+His display showed a full hold.
+
+His ship weighed the same as when it arrived.
+
+He’s heading back to the colony with an empty hold.
+
+Follow the address on the manifest, Pilot.
 
 **Deutsche Untertitel**
 
-Der Kapitän hat die ganze Nacht an der Laderampe gewartet. Seine Anzeige meldete, das Saatgut sei an Bord. Das Schiff wog genau so viel wie bei der Ankunft. Er bringt den leeren Frachtraum zurück zur Kolonie. Folge der Adresse auf dem Manifest, Pilot.
+- Die Routen sind wieder offen.
+- Der Kapitän hat uns sein Saatgutmanifest geschickt.
+- Die Verladefotos fehlen.
+- Er hat die ganze Nacht an der Laderampe gewartet.
+- Seine Anzeige meldete volle Ladung.
+- Sein Schiff wog genauso viel wie bei der Ankunft.
+- Er fliegt mit leerem Frachtraum zurück zur Kolonie.
+- Folge der Adresse auf dem Manifest, Pilot.
 
-#### Boss-Intro · The Exhibition Hold
+#### Boss-Intro · Intro Neravoss
+
+Vorläufige Roboteraufnahme. neravoss-intro.mp3 · 32,11 s.
 
 **Suno-Stil**
 
@@ -611,13 +639,33 @@ English spoken-word fleet command. Keep one clear narrator up front. Allow an au
 
 **Englischer Sprechtext**
 
-Contact confirmed. Neravoss, the Balance Illusionist. This ship once displayed real cargo at a trade fair. Its screens now advertise reserves that do not exist. Behind the display we can see the names of freighters that unloaded and waited. Break the guard on that hold.
+Contact confirmed.
+
+Neravoss, the Balance Illusionist.
+
+This ship once displayed real cargo at a trade fair.
+
+Its screens now advertise invented reserves.
+
+Those promises drew in freighters carrying real supplies.
+
+Behind the display, we can see the names of the freighters that unloaded and waited.
+
+Break the guard on that hold.
 
 **Deutsche Untertitel**
 
-Kontakt bestätigt. Neravoss, der Guthabenblender. Dieses Schiff stellte früher echte Waren auf einer Handelsmesse aus. Seine Anzeigen versprechen heute Vorräte, die es nicht gibt. Hinter der Kulisse sehen wir die Namen der Frachter, die abgeladen und gewartet haben. Schalte den Schutz des Laderaums aus.
+- Kontakt bestätigt.
+- Neravoss, der Guthabenblender.
+- Dieses Schiff stellte einst echte Waren auf einer Handelsmesse aus.
+- Seine Anzeigen werben jetzt mit erfundenen Vorräten.
+- Damit hat er Frachter mit echten Lieferungen angelockt.
+- Hinter der Anzeige sehen wir die Namen der Frachter, die entladen haben und warteten.
+- Schalte den Schutz des Laderaums aus.
 
-#### Boss-Outro · What Was Actually There
+#### Boss-Outro · Outro Neravoss
+
+Vorläufige Roboteraufnahme. neravoss-outro.mp3 · 24,50 s.
 
 **Suno-Stil**
 
@@ -625,11 +673,23 @@ English spoken-word fleet command. Keep one clear narrator up front. Allow an au
 
 **Englischer Sprechtext**
 
-The inspectors found real seed aboard. It came in on freighters Neravoss marked as unpaid. The crews are taking it home through the crystal passage. A ship at the narrow end has sent an invoice to every one of them. Even the medics have been told to pay.
+The inspectors found real seed aboard.
+
+It came in on freighters Neravoss marked as unpaid.
+
+The crews are taking it home through the crystal passage.
+
+A ship at the narrow end has sent an invoice to every one of them.
+
+Even the medics have been told to pay.
 
 **Deutsche Untertitel**
 
-Die Prüfer haben echtes Saatgut gefunden. Es kam mit Frachtern, die Neravoss als unbezahlt vermerkte. Die Crews nehmen es durch die Kristallpassage mit nach Hause. Ein Schiff am engen Ende hat allen eine Rechnung geschickt. Sogar die Sanitäter sollen zahlen.
+- Die Prüfer haben echtes Saatgut an Bord gefunden.
+- Es kam mit Frachtern, die Neravoss als unbezahlt vermerkte.
+- Die Crews bringen es durch die Kristallpassage nach Hause.
+- Ein Schiff an der Engstelle hat allen eine Rechnung geschickt.
+- Sogar die Sanitäter sollen zahlen.
 
 ### Level 10 · Thalverik
 

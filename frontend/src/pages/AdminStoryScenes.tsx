@@ -34,9 +34,14 @@ export default function AdminStoryScenes({ onStartPreview }: { onStartPreview: (
     onStartPreview();
     const volume = localStorage.getItem(MUSIC_STORAGE_KEY) === 'off' ? 0 : readMusicVolume();
     playerRef.current?.close();
-    playerRef.current = volume > 0 ? new MusicPlayer('/story/' + storyScenes[scene].audio, 0) : null;
-    // Start the retained media element silently during the tap for iOS autoplay.
-    void playerRef.current?.play();
+    const player = volume > 0 ? new MusicPlayer('/story/' + storyScenes[scene].audio, 0) : null;
+    playerRef.current = player;
+    if (player) {
+      player.audio.loop = false;
+      // Mute the tap-initiated playback even when the host ignores media volume.
+      player.audio.muted = true;
+      void player.play();
+    }
     setPreview({ scene, volume, unlocked });
   };
   const prepareAudio = useCallback((source: string) => {
@@ -44,6 +49,7 @@ export default function AdminStoryScenes({ onStartPreview }: { onStartPreview: (
     if (!player || player.currentSource !== source) return null;
     player.pause();
     player.audio.currentTime = 0;
+    player.audio.muted = false;
     return player;
   }, []);
   const finish = useCallback(() => {
