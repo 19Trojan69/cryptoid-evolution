@@ -1,0 +1,1091 @@
+{
+  "campaign": [
+    "La primera criptomoneda permitió comerciar directamente entre países.",
+    "Siglos después, las colonias del espacio profundo dependían de esa red para recibir alimentos, combustible y medicinas.",
+    "Entonces llegó el spam. Los mensajes falsificados vaciaron cuentas.",
+    "Con el dinero robado, los estafadores armaron una flota.",
+    "Los Cryptoids.",
+    "Desde el principio hubo voluntarios que sacaron el fraude a la luz.",
+    "Sus sucesores partieron hacia las estrellas para escoltar naves de suministros y responder a llamadas de auxilio.",
+    "Hace unos minutos, una falsa llamada de auxilio alejó a nuestras patrullas de la Tierra.",
+    "Ahora las colonias de Génesis están quedándose en silencio.",
+    "Algún día, cuando termine esta guerra, nuestras naves volverán a zarpar…",
+    "… para explorar mundos que solo hemos visto a través de telescopios.",
+    "Piloto, tienes autorización para despegar."
+  ],
+  "varneth": [
+    "Contacto confirmado.",
+    "Varneth.",
+    "Antes transportaba registros de suministros entre las colonias de Génesis.",
+    "Desapareció cerca de un repetidor abandonado.",
+    "Ahora ha vuelto y sus transmisiones ahogan todas las llamadas de auxilio.",
+    "Piloto, corta esa señal."
+  ],
+  "varneth-outro": [
+    "Piloto.",
+    "La señal de Varneth se ha apagado.",
+    "Oigo una voz en el repetidor de Génesis.",
+    "Un equipo de reparación del anillo exterior pide ayuda desde el alba.",
+    "Tengo sus coordenadas.",
+    "Los sanitarios van de camino.",
+    "Mantén el canal libre, piloto.",
+    "Por primera vez hoy…",
+    "…alguien ahí fuera va a oír una respuesta."
+  ],
+  "level-two": [
+    "Varneth está abajo.",
+    "Los relés de Génesis están llevando llamadas de socorro de nuevo.",
+    "Un convoy de suministros acaba de cambiar de rumbo por orden de una estación fronteriza.",
+    "La estación jura que nunca emitió esa orden.",
+    "El convoy sigue ahí fuera.",
+    "Piloto, sigue su última transmisión.",
+    "Traigamos a esas tripulaciones a casa."
+  ],
+  "korvessa": [
+    "Piloto, hemos rastreado la señal hasta Korvessa.",
+    "Una vez llevó envíos diplomáticos.",
+    "Cada estación de la frontera conocía su identificador de radio.",
+    "Ahora usa uno distinto en cada canal.",
+    "Ese convoy la siguió directamente a una emboscada.",
+    "Su nave está muerta por delante.",
+    "Sin armas, Piloto.",
+    "Abre un camino a casa."
+  ],
+  "korvessa-outro": [
+    "Piloto, el repetidor de Korvessa ha caído.",
+    "El carguero que va al frente ha encendido las luces de carga.",
+    "Su tripulación está señalando un paso entre los restos.",
+    "Llamaré al convoy en un barco a la vez.",
+    "Dos ya han respondido.",
+    "Mantén la ruta despejada para las demás, piloto.",
+    "Quiero oír cómo se reporta la última tripulación."
+  ],
+  "level-three": [
+    "Piloto, Korvessa está abajo.",
+    "Cada equipo de convoy lo hizo.",
+    "El último carguero trajo una grabación de la emboscada.",
+    "Mientras combatíamos contra Korvessa, una segunda nave se abrió paso entre los restos y puso rumbo a Génesis.",
+    "Sus familias esperan allí, en los refugios.",
+    "Sigue el rastro de esa nave.",
+    "Revisaré el archivo de Korvessa mientras estés en vuelo."
+  ],
+  "drelvorn": [
+    "Piloto, el archivo de Korvessa lo confirma.",
+    "La nave que seguiste es Drelvorn, el ladrón de sellos.",
+    "Su guardián robó los sellos de los comandantes de la flota durante la revuelta.",
+    "Génesis acaba de recibir una orden de evacuación firmada con uno de esos sellos.",
+    "Las puertas de refugio están abriendo.",
+    "Las familias de los convoyes siguen dentro.",
+    "Les avisaré.",
+    "Golpea el reactor de Drelvorn."
+  ],
+  "drelvorn-outro": [
+    "Génesis, cancelad la evacuación.",
+    "El transmisor de Drelvorn ha caído.",
+    "Los responsables de los refugios han asegurado las puertas.",
+    "Las familias de las tripulaciones del convoy están dentro y a salvo.",
+    "Hemos revocado el sello robado.",
+    "Un registro colonial hizo que la orden falsa pasara todos los controles.",
+    "Ese registro también da los refugios por vacíos.",
+    "Voy a recuperar los registros originales."
+  ],
+  "level-four": [
+    "Los convoyes han hablado con sus familias.",
+    "Génesis está retenido.",
+    "Antes de la orden de Drelvorn, alguien borró a las familias de las listas de los refugios.",
+    "Los recibos de entrega aún conservan los datos originales.",
+    "Ponlos al lado del nuevo registro.",
+    "Puedes ver dónde cambió.",
+    "Sigue el rastro de esa primera copia alterada, piloto."
+  ],
+  "talvrek": [
+    "Contacto confirmado.",
+    "Talvrek, el Falsificador de Crónicas.",
+    "Esa nave cartografió colonias jóvenes y guardó sus primeros registros.",
+    "Ahora sus copias dicen que esa gente jamás vivió allí.",
+    "El puerto usa su versión para rechazar alimentos y medicinas.",
+    "Ya tenemos los recibos originales.",
+    "Ataca el reactor de Talvrek antes de que envíe otra copia."
+  ],
+  "talvrek-outro": [
+    "El transmisor de Talvrek se ha apagado.",
+    "Dos colonias verificaron los recibos originales y restauraron las listas de los refugios.",
+    "El primer carguero de medicinas tiene permiso para atracar.",
+    "Una estación sigue sin responder.",
+    "Una plataforma de reparación llamada Zeraveth bloquea el acceso.",
+    "El equipo de mantenimiento espera fuera con las piezas que necesita la estación."
+  ],
+  "level-five": [
+    "El equipo de auxilio del anillo exterior de Genesis nos envió repuestos.",
+    "La estación que Talvrek dejó en silencio los necesita todos.",
+    "El equipo de mantenimiento ve las luces del muelle desde donde espera.",
+    "Lleva al equipo hasta la estación.",
+    "Piloto."
+  ],
+  "zeraveth": [
+    "Contacto confirmado.",
+    "Zeraveth, el Sitiador de Nodos.",
+    "Antes reparaba anillos de relés enteros.",
+    "Ahora sus brazos de atraque mantienen el asedio en el único acceso.",
+    "La estación está perdiendo el último transmisor que le funciona.",
+    "Golpea el reactor de Zeraveth…",
+    "y abre paso a las embarcaciones de reparación."
+  ],
+  "zeraveth-outro": [
+    "Las embarcaciones ya están dentro.",
+    "La operadora de la estación acaba de llamar desde el muelle, y el relé lleva su voz.",
+    "Al mismo tiempo llegó una segunda autorización.",
+    "Recuerda haberla dado hace años.",
+    "He guardado ambas grabaciones."
+  ],
+  "level-six": [
+    "El repetidor reparado volvió a recibir señales…",
+    "que la tripulación creía perdidas.",
+    "Un remolcador va a partir con un permiso grabado antes de que su capitán asumiera el mando.",
+    "Pedimos a la estación que retuviera al remolcador.",
+    "Sigue la grabación antigua…",
+    "hasta su origen."
+  ],
+  "orvask": [
+    "Ese es Orvask…",
+    "el Cazador de Ecos.",
+    "Escoltaba convoyes y guardaba cada autorización que oía.",
+    "Ahora retransmite esas órdenes…",
+    "como si las hubieran dado hoy.",
+    "Un remolcador y un carguero…",
+    "han recibido la misma ventana de salida.",
+    "Corta la señal de Orvask."
+  ],
+  "orvask-outro": [
+    "El remolcador tiene una autorización nueva.",
+    "Oímos a la operadora darla en directo.",
+    "El registro de Orvask indica dónde cambiaron de manos las grabaciones más antiguas.",
+    "Es un muelle de transbordo entre dos colonias.",
+    "Ambas siguen recibiendo recibos…",
+    "por una carga…",
+    "que jamás llegó."
+  ],
+  "level-seven": [
+    "Las dos colonias nos enviaron sus listas de carga.",
+    "Cada una tiene un recibo sellado por la otra.",
+    "Las últimas tripulaciones aún conservan sus fotos de la carga.",
+    "Estamos cotejando los números de los contenedores…",
+    "mientras te acercas al muelle de transbordo."
+  ],
+  "keldrava": [
+    "Contacto confirmado.",
+    "Keldrava…",
+    "el Puente de las Sombras.",
+    "Las colonias solían entregar la carga dentro de sus esclusas.",
+    "Una bahía sella el recibo y la otra se lleva la caja.",
+    "Vemos los contenedores perdidos por su escotilla de mantenimiento.",
+    "Despeja el camino…",
+    "para recuperar la carga."
+  ],
+  "keldrava-outro": [
+    "Ambas colonias cuentan su carga en la misma llamada.",
+    "Han encontrado las bombas de los invernaderos y las raciones de emergencia.",
+    "Una nave de noticias informa a los vecinos…",
+    "que el puente se derrumbó con todos a bordo.",
+    "Las dos tripulaciones…",
+    "se han ofrecido a hablar en directo."
+  ],
+  "level-eight": [
+    "Las tripulaciones del puente están en directo.",
+    "Un tripulante acaba de mostrar a cámara una bomba recuperada.",
+    "Tras las alertas, tres puertos vecinos cerraron sus rutas de todos modos.",
+    "Enviamos el testimonio de las tripulaciones a cada centro de control.",
+    "Vuela hacia el transmisor…",
+    "donde empezó todo."
+  ],
+  "veshkorn": [
+    "Contacto confirmado.",
+    "Veshkorn…",
+    "el Portador de Rumores.",
+    "Reconocemos la fanfarria de su antiguo servicio de noticias.",
+    "La usa para alertar de catástrofes que jamás ocurrieron.",
+    "Su último boletín dice que las rutas de suministro volverán a cerrarse.",
+    "Los puertos ya están dispuestos a escuchar a sus pilotos.",
+    "Saca su transmisor…",
+    "del aire."
+  ],
+  "veshkorn-outro": [
+    "Control de tráfico acaba de reabrir las rutas.",
+    "Los operadores revisan los partes de clima y carga con las tripulaciones que los enviaron.",
+    "Un capitán dice que en pleno pánico le ofrecieron una bodega entera de semillas.",
+    "Nos envía el manifiesto.",
+    "No hay ni una sola foto de la carga."
+  ],
+  "level-nine": [
+    "Las rutas vuelven a estar abiertas.",
+    "El capitán nos ha enviado el manifiesto de su cargamento de semillas.",
+    "Faltan las fotos de la carga.",
+    "Esperó toda la noche en el muelle de carga.",
+    "Su pantalla indicaba que la bodega estaba llena.",
+    "La nave pesaba lo mismo que al llegar.",
+    "Regresa a la colonia con la bodega vacía.",
+    "Sigue la dirección del manifiesto, piloto."
+  ],
+  "neravoss": [
+    "Contacto confirmado.",
+    "Neravoss, el ilusionista de los balances.",
+    "Esta nave exhibía mercancía real en una feria comercial.",
+    "Ahora sus pantallas anuncian reservas inventadas.",
+    "Esas promesas atrajeron a cargueros con suministros reales.",
+    "Detrás de la pantalla vemos los nombres de los cargueros que descargaron y esperaron.",
+    "Neutraliza las defensas de esa bodega."
+  ],
+  "neravoss-outro": [
+    "Los inspectores encontraron semillas de verdad a bordo.",
+    "Llegaron en cargueros que Neravoss marcó como impagados.",
+    "Las tripulaciones las llevan a casa por el paso de cristal.",
+    "Una nave en el estrecho ha enviado una factura a cada una.",
+    "Hasta los sanitarios tienen que pagar."
+  ],
+  "level-10": [
+    "Los cargueros con semillas esperan en fila ante el paso.",
+    "Un buque sanitario espera entre ellos. Sus pacientes ven las luces de la estación.",
+    "La autoridad portuaria determinó que las nuevas tasas carecen de base legal.",
+    "Vuela hacia la entrada.",
+    "Nosotros mantendremos la calma entre las tripulaciones que esperan."
+  ],
+  "thalverik": [
+    "Ese es Thalverik, el Tirano de la Toll.",
+    "Solía escoltar barcos a través de este pasaje.",
+    "Hoy cobra por cruzar y acusa de nuevo por pedir ayuda.",
+    "Está manteniendo la línea a través del canal.",
+    "El cortador puede salir tan pronto como esa línea se rompe.",
+    "Objetivo para el reactor de Thalverik."
+  ],
+  "thalverik-outro": [
+    "El barco médico lo hizo a través del pasaje.",
+    "Los fletadores están siguiendo, y la junta portuaria ha cancelado los cargos.",
+    "Recuperamos una cuenta que recibió casi todos los pagos.",
+    "Compró miles de votos en una estación de consejos que creíamos que sólo tenía treinta pilotos."
+  ],
+  "level-11": [
+    "La estación del consejo nos invitó a ver una llamada de rodaje.",
+    "El registro muestra miles de pilotos, pero sólo treinta berths están ocupados.",
+    "Un aprendiz reconoció su antiguo identificador de radio simulador en la votación.",
+    "Nos dio la dirección del barco de entrenamiento."
+  ],
+  "skorveth": [
+    "Ahí está Skorveth, el \"Muchos Faced\".",
+    "Sus núcleos de entrenamiento enseñaron a los pilotos a volar.",
+    "El sistema cuenta ahora a los equipos simulados como residentes que confirman las identidades de los demás.",
+    "Sus votos ya han despejado un desvío de suministro de flotas sombra.",
+    "Apaga el transmisor de los núcleos."
+  ],
+  "skorveth-outro": [
+    "Los treinta pilotos firmaron un nuevo rollo juntos.",
+    "El aprendiz ayudó al consejo a eliminar su viejo identificador de radio.",
+    "Un desvío aprobado sigue en los libros de ruta.",
+    "Un barco de rescate lo tomó a primera luz.",
+    "Se perdió dos check-ins."
+  ],
+  "level-12": [
+    "El baliza del barco de rescate sigue transmitiendo.",
+    "Nuestra estación más cercana puede ver su luz a través de la nebulosa.",
+    "La ruta de transmisión lo pone a dos saltos.",
+    "Llevaremos la estación a esa luz mientras sigues la ruta falsa río arriba."
+  ],
+  "azhrel": [
+    "Azhrel, el Poisoner de la Ruta.",
+    "Ese barco sacó las primeras tablas de saltos a lo largo de este borde.",
+    "Sus nuevas entradas envían llamadas de socorro a través de relés los controles de la flota de sombras.",
+    "La guía del barco de rescate terminó en espacio vacío.",
+    "Tenemos los viejos gráficos.",
+    "Despejado Azhrel lejos de la unión."
+  ],
+  "azhrel-outro": [
+    "El equipo de rescate está en rango de la estación otra vez.",
+    "Las estaciones revisaron las coordenadas antiguas y pusieron la ruta directa de nuevo en servicio.",
+    "Hay un viejo registrador en el barco de rescate.",
+    "Alguien que ofreció guardar sus datos tomó el disco y dejó una copia dañada."
+  ],
+  "level-13": [
+    "El equipo de rescate mantuvo un registro manuscrito.",
+    "Describe una nave de salvamento que ofrece proteger las grabaciones de la ruta falsa.",
+    "Aún podemos probar cuando llegó el barco de rescate.",
+    "Necesitamos el disco para mostrar lo que la tripulación oyó en su camino."
+  ],
+  "dornavik": [
+    "Contacto confirmado.",
+    "Dornavik, el Arsonist del Archivo.",
+    "Sus cámaras aisladas guardaban archivos vivos dentro de los restos quemados.",
+    "Ahora mantiene las unidades intactas y envía copias dañadas a las tripulaciones.",
+    "Esa bahía parpadeante sostiene la grabadora del barco de rescate.",
+    "Deja de Dornavik de saltar."
+  ],
+  "dornavik-outro": [
+    "Recuperamos la unidad.",
+    "La tripulación ha emparejado la grabación a cada entrada en su registro.",
+    "Sus sustituciones llegaron a tres colonias esta mañana.",
+    "Un puesto no ha recibido nada desde la semana pasada.",
+    "Un portador de archivo sigue manteniendo todas sus actualizaciones."
+  ],
+  "level-14": [
+    "El puesto está tratando de atracar un carguero en un puerto cerrado para reparaciones.",
+    "Su boletín local tiene una semana.",
+    "Enviamos un mensaje de voz del puerto y el carguero está girando.",
+    "La actualización programada sigue a bordo del transportista que estaba destinado a entregarlo."
+  ],
+  "velkrath": [
+    "Es Velkrath, el Bloque Con Titular.",
+    "Sus portadores sellados una vez mantuvieron intactos los registros de investigación para las estaciones exteriores.",
+    "Las actualizaciones siguen dentro, en orden de fecha.",
+    "Libera a uno viejo cuando puede causar problemas.",
+    "Abra un camino a los contenedores."
+  ],
+  "velkrath-outro": [
+    "El puesto tiene el último boletín.",
+    "Dos registros de tripulación dicen que la misma actualización llegó a tiempo y después de la fecha límite.",
+    "Ambos relojes estaban tomando señales de un barco de precisión.",
+    "El controlador de tráfico nos está enviando su reloj mecánico de lectura."
+  ],
+  "level-15": [
+    "El reloj mecánico está de acuerdo con el tiempo transcurrido de los equipos de suministro.",
+    "El reloj de avanzada se ha adelantado.",
+    "Se ha dicho que dos vuelos de mantenimiento utilizarán la misma esclusa a diferentes horas, y ambos están en proceso de aproximación.",
+    "El oficial de muelles los ha detenido en los balizas."
+  ],
+  "irdavoss": [
+    "Contacto confirmado.",
+    "Irdavoss, el Cierre de la Bruja.",
+    "Flotas enteras una vez pusieron sus maniobras a su hora de estación.",
+    "Vimos su señal empujando una autorización de vuelo válida más allá de su plazo.",
+    "Tres estaciones están comparando sus propios relojes.",
+    "Golpea el reactor de Irdavoss mientras terminan el cheque."
+  ],
+  "irdavoss-outro": [
+    "Ambos equipos de mantenimiento han atracado con seguridad en las autorizaciones de vuelo separadas.",
+    "Una clínica debería haber recibido sus registros cuando se corrigieron los relojes.",
+    "Los registros siguen cerrados.",
+    "Su guardián acaba de llamar un precio por la llave."
+  ],
+  "level-16": [
+    "El personal de la clínica trabaja de notas de papel mientras sus registros están cerrados.",
+    "Un depósito de suministros cerca perdió su lista de medicamentos disponibles también.",
+    "Ambos recibieron la misma demanda.",
+    "Síguelo al barco que lleva sus archivos."
+  ],
+  "rhazvorn": [
+    "Ese transporte de la prisión es Rhazvorn, el Cazador de la Clave.",
+    "Sus células solían contener a la gente.",
+    "Ahora tienen archivos sellados de las clínicas y depósitos de suministros.",
+    "Hemos rastreado las solicitudes de acceso originales a la bóveda central.",
+    "Mantenga a Rhazvorn aquí mientras el equipo de recuperación se acerca."
+  ],
+  "rhazvorn-outro": [
+    "La clínica abrió sus archivos.",
+    "El depósito está contando la medicina contra su lista de stock restaurada.",
+    "Su informe meteorológico aún dice que la ruta está cerrada, aunque la tripulación puede ver que está clara.",
+    "Las extrañas lecturas provenían del mismo barco de reconocimiento."
+  ],
+  "level-17": [
+    "El equipo de depósitos ha enviado una imagen de un enfoque claro.",
+    "Sus instrumentos muestran una tormenta y la pantalla del inventario muestra una sala de estar completa.",
+    "La tripulación ha contado dos cajas de medicina.",
+    "Estamos manteniendo los envíos automáticos hasta que podamos comprobar la fuente."
+  ],
+  "kelvash": [
+    "Contacto confirmado.",
+    "Kelvash, el Deceiver Oráculo.",
+    "Sus informes de encuestas se utilizaron para guiar el depósito.",
+    "Ahora el barco inventa las lecturas del tiempo y del inventario, y las computadoras del depósito envían carga real lejos.",
+    "La clínica más cercana necesita esos suministros.",
+    "Tome el transmisor de Kelvash fuera de línea."
+  ],
+  "kelvash-outro": [
+    "El depósito ha enviado medicinas a la clínica otra vez.",
+    "Dos centros de suministro utilizaron la misma fotografía para actualizar sus registros.",
+    "Sus nuevos registros siguen en desacuerdo.",
+    "Ambos centros recibieron un mensaje insistiendo en que el suyo era la única copia válida."
+  ],
+  "level-18": [
+    "Los dos centros de suministro acordaron abrir sus registros en la misma llamada.",
+    "Encontraron entradas idénticas hasta ayer.",
+    "Un barco de consejo de viaje emitió las páginas conflictivas.",
+    "Sus escoltas se están reuniendo entre las dos estaciones.",
+    "Siga los sellos de presentación."
+  ],
+  "othravel": [
+    "Ahí está Othravel, el Señor de la horquilla.",
+    "Solía reunir a colonias rivales en su cubierta de conferencias.",
+    "Ahora les envía libros separados y se dice que el otro ha falsificado sus entradas.",
+    "Ambas estaciones han puesto sus armas en espera.",
+    "Mantengan a Othravel fuera de sus conversaciones."
+  ],
+  "othravel-outro": [
+    "Los dos registros están de acuerdo en su última página verificada.",
+    "Los centros están resolviendo las entradas posteriores juntos.",
+    "Ambos recibieron una oferta de relés independientes de rescate.",
+    "La oferta pide a los oficiales de muelles que envíen sus autorizaciones de vuelo privadas.",
+    "Les hemos dicho que esperen."
+  ],
+  "level-19": [
+    "Un oficial de muelles ha visto la bengala de oro antes.",
+    "Un equipo de rescate auténtico lo usó para traerla a casa después de una tormenta.",
+    "Este remitente abrirá su bahía sólo cuando comparta su autorización de vuelo.",
+    "El oficial de muelles se queda en nuestro canal mientras se acerca."
+  ],
+  "zarnvek": [
+    "Esa bengala pertenece a Zarnvek, el Falso Rescuer.",
+    "La vieja señal del barco de rescate todavía parece igual.",
+    "Su muelle de atraque tiene el equipo de rastreo apuntado a la escotilla, y las solicitudes de autorización de vuelo siguen saliendo.",
+    "Marca el canal de rescate real.",
+    "Entonces baja el transmisor de Zarnvek."
+  ],
+  "zarnvek-outro": [
+    "Un tug de rescate verificado ha recogido a los equipos de espera.",
+    "Su capitán dice que perdió su espacio en el puerto antes de responder a nuestra llamada.",
+    "El registro muestra que un buque de carga sombra tomó la ranura segundos después.",
+    "El sello de tiempo original de la tug sigue en su libro de registros."
+  ],
+  "level-20": [
+    "El registro de la tug coincide con la primera cola del puerto.",
+    "Desde entonces, alguien movió cada solicitud de rescate detrás de los mismos seis cargueros.",
+    "Una línea está sujetando botellas de oxígeno para un equipo de reparación.",
+    "Siga el horario de puerto en movimiento mientras el personal marca el orden original."
+  ],
+  "vorathen": [
+    "Contacto confirmado.",
+    "Vorathen, el corredor de cola.",
+    "Su cubierta solía mantener miles de llegadas en orden.",
+    "Ahora vende sus lugares a sus aliados.",
+    "El envío de oxígeno fue primero cuando las puertas cerraron.",
+    "Rompe el control de Vorathen para que el muelle pueda llamarlo."
+  ],
+  "vorathen-outro": [
+    "El oxígeno está en el muelle.",
+    "El puerto ha publicado la cola con su época original, y los equipos de espera están comparando los recibos.",
+    "Cada nave acaba de recibir un pequeño paquete que nadie pidió.",
+    "Un observador está viendo qué tripulación reconocen la entrega."
+  ],
+  "level-21": [
+    "Los tripulantes del puerto dejaron de reconocer los paquetes no solicitados.",
+    "Encontramos la misma pequeña entrega en castañas privadas alrededor de las vías comerciales.",
+    "El remitente está rastreando quién responde y quién pasa un paquete.",
+    "Siga el siguiente de vuelta a la bahía de lanzamiento."
+  ],
+  "drazkell": [
+    "Contacto confirmado.",
+    "Drazkell, el Dust Scatterer.",
+    "Sus cubiertas de carga una vez abastecían las células de energía a los balizas de navegación.",
+    "Ahora cada entrega no solicitada puede revelar un vínculo privado más entre estaciones.",
+    "El anotador sigue recogiendo respuestas.",
+    "Detenga la bahía de lanzamiento antes de enviar el próximo lote."
+  ],
+  "drazkell-outro": [
+    "Los paquetes se han detenido.",
+    "Las estaciones han sellado sus registros de respuesta, y las tripulaciones están cambiando los canales que utilizan para llamadas privadas.",
+    "Los inspectores encontraron el mismo sello de aspecto oficial en cada caja de Drazkell.",
+    "Su emisor ya ha aprobado el convoy de suministros de la próxima semana."
+  ],
+  "level-22": [
+    "Un inspector de puerto comparó los sellos con su lista de tareas.",
+    "Los oficiales que se les registran nunca visitaron las bahías de carga.",
+    "El convoy recientemente aprobado está esperando una inspección real.",
+    "Volar hacia la oficina móvil que emitió los certificados."
+  ],
+  "nethrava": [
+    "Es Nethrava, el Custodio Falso.",
+    "Sus certificados enumeran cada inspección tal como se aprobó.",
+    "Crews confiaba en esos sellos y entregaba suministros a los buques que nunca habían sido autorizados a examinar.",
+    "El puerto puede reabrir las inspecciones una vez que la oficina falsa pierde su enlace.",
+    "Baja el enlace."
+  ],
+  "nethrava-outro": [
+    "Los oficiales del puerto inspeccionaron el convoy en persona.",
+    "Ahora pueden rastrear las cajas a sus tripulaciones originales.",
+    "Un barco de registros llegó durante la noche y borró las historias de inspección como limpieza rutinaria.",
+    "Un oficial guardó una copia de carbono de la orden."
+  ],
+  "level-23": [
+    "La copia del oficial enumera las historias de inspección como desechables.",
+    "El mismo barco visitó un depósito cuyos registros de propiedad ahora detienen la mitad de un envío.",
+    "Tenemos los números de página perdidos.",
+    "Encuentra el barco antes de que salga el siguiente detalle de limpieza."
+  ],
+  "valdrek": [
+    "Contacto confirmado.",
+    "Valdrek, el Mástil de Memoria.",
+    "Fue construido para limpiar registros redundantes.",
+    "Ahora él marca evidencia del robo como desorden y borra de las estaciones que lo necesitan.",
+    "El registro de eliminación todavía lista los archivos que tomó.",
+    "Desactiva el reactor de Valdrek."
+  ],
+  "valdrek-outro": [
+    "Los oficiales recuperaron suficientes copias para reconstruir la pista de propiedad del depósito.",
+    "Valdrek despejó cada recibo de un mercado a la misma hora.",
+    "Sus gráficos de ventas seguían subiendo después de que los recibos se desaparecieran.",
+    "La junta del puerto quiere que alguien vea los almacenes."
+  ],
+  "level-24": [
+    "La pantalla del mercado mostró docenas de ventas antes de que llegaran nuestros inspectores.",
+    "Vio una puerta de carga por una hora.",
+    "Nunca se abrió.",
+    "El tráfico comercial se dirige hacia las acciones anunciadas.",
+    "Los inspectores te están esperando en el almacén."
+  ],
+  "korzeth": [
+    "Contacto confirmado.",
+    "Korzeth, el mercado del espejo.",
+    "Está haciendo negocios entre compradores y vendedores.",
+    "El mismo cargamento parece vender de nuevo cada pocos minutos.",
+    "Los credos están llevando bienes genuinos a almacenes vacíos.",
+    "Borrar Korzeth lejos de las puertas para que los inspectores puedan abrirlas."
+  ],
+  "korzeth-outro": [
+    "Los almacenes están abiertos.",
+    "El cargamento que llegó va a volver con sus tripulaciones.",
+    "Un carguero tomó un envío de recuperación hacia las estaciones exteriores y luego se dio la vuelta.",
+    "El destino recibió un recibo de entrega firmado mientras el fletador seguía en vuelo."
+  ],
+  "level-25": [
+    "El piloto de carga abrió su cámara en un agarre lleno de suministros.",
+    "La estación receptora tiene un recibo por cada caja.",
+    "Pedimos a ambos fines que guarden sus mensajes.",
+    "Rastrea el recibo a su remitente y voltearemos el carguero hacia la estación."
+  ],
+  "thervoss": [
+    "Hay Thervoss, el Jefe de Confirmación.",
+    "Emite recibos antes de que un envío aterrice.",
+    "El carguero oye que ha terminado el trabajo y se dirige a casa.",
+    "La estación sigue esperando la carga que supuestamente recibió.",
+    "Tenemos un canal directo para ambas tripulaciones.",
+    "Saca el transmisor de Thervoss."
+  ],
+  "thervoss-outro": [
+    "La primera caja está bajada.",
+    "La tripulación de la estación envió el recibo de la cubierta de carga.",
+    "Su apelación contra la recepción anterior acaba de volver rechazado.",
+    "Un buque de tribunal falló para el mismo portaaviones en cada caso que revisamos."
+  ],
+  "level-26": [
+    "La tripulación receptora envió al tribunal un video de su muelle vacío.",
+    "La respuesta llamó al video una ofensa de red.",
+    "Otras tres estaciones tienen el mismo fallo.",
+    "Hemos pedido a sus oficiales que mantengan los expedientes completos.",
+    "Tienes las coordenadas del barco del tribunal."
+  ],
+  "akraveth": [
+    "Contacto confirmado.",
+    "Akraveth, el Juez de la Fog.",
+    "Sus asesores solían resolver disputas de carga entre las tripulaciones.",
+    "Ahora rechaza la evidencia que exponga a sus clientes y lista a cualquiera que se oponga como enemigo.",
+    "Los puertos afectados han traído sus registros.",
+    "Despejado Akraveth lejos del carril auditivo."
+  ],
+  "akraveth-outro": [
+    "Las estaciones han recuperado sus archivos de casos.",
+    "Un grupo mixto acordó escuchar a ambos equipos de cada entrega.",
+    "Cada nave favorecida por Akraveth tenía el mismo paquete de mantenimiento reciente.",
+    "Un piloto informa que sus motores fallaron en el primer salto después de instalarlo."
+  ],
+  "level-27": [
+    "El piloto está a salvo en una bahía de remolque.",
+    "Los ingenieros encontraron que el nuevo paquete de servicio cambió el control del motor mientras dejaba la pantalla verde.",
+    "Tres equipos más lo instalaron mientras esperaban sus audiencias.",
+    "Mantenga la ruta de reparación.",
+    "Les decimos que mantengan su salto."
+  ],
+  "zelkharn": [
+    "Es Zelkharn, el gusano de la cadena de suministro.",
+    "Sus bahías de mantenimiento solían mantener la flota volando.",
+    "Ahora sus partes de repuesto dejan naves dependientes de la flota de sombras para un impulso de trabajo.",
+    "Nuestros ingenieros tienen partes limpias listas.",
+    "Consigue que tengan acceso a esos barcos."
+  ],
+  "zelkharn-outro": [
+    "Los Crews están probando las partes limpias en el muelle antes de volar.",
+    "Una clínica perdió un archivo de envío durante el fracaso.",
+    "Pagó un transportista de almacenamiento para copias.",
+    "El transportista acaba de enviar una lista de nombres de archivos y una unidad vacía."
+  ],
+  "level-28": [
+    "La clínica encontró su nombre de archivo en el directorio del transportista.",
+    "El equipo de respaldo pidió un archivo y consiguió otra transferencia vacía.",
+    "La clínica todavía tiene sus envíos más recientes localmente.",
+    "Siga al propietario del directorio mientras les ayudamos a preservar esas copias."
+  ],
+  "odravik": [
+    "Contacto confirmado.",
+    "Odravik, el Empty Backup Merchant.",
+    "Su arsenal promete recuperación de cualquier desastre.",
+    "Algunos de los archivos en su pantalla nunca llegaron a un disco.",
+    "Las clínicas necesitan las copias que aún existen.",
+    "Abra el camino para que sus propios ingenieros revisen los estantes."
+  ],
+  "odravik-outro": [
+    "Los ingenieros restauraron las copias que estaban en los estantes.",
+    "Leían tres advertencias de que un inspector envió hace meses.",
+    "Ningún puerto los recibió.",
+    "Una de las advertencias llama el filtro del puerto antiguo como el último lugar que los mensajes fueron vistos."
+  ],
+  "level-29": [
+    "El jefe del puerto dice que nunca oyó una alarma.",
+    "El inspector guardó tres copias con su tiempo de envío.",
+    "Cada uno muestra que el antiguo filtro de radio del puerto lo reconoció.",
+    "El próximo equipo de inspección está usando un canal abierto para que podamos escucharlo directamente."
+  ],
+  "varnokh": [
+    "Contacto confirmado.",
+    "Varnokh, el filtro del silencio.",
+    "Una vez separó las llamadas de socorro del ruido en puertos ocupados.",
+    "Su nueva lista trata a inspectores independientes como interferencia.",
+    "Podemos escuchar a un segundo equipo en el canal abierto ahora.",
+    "Desactivar los filtros de Varnokh para que las estaciones también puedan oírlos."
+  ],
+  "varnokh-outro": [
+    "Las estaciones están escuchando advertencias que nunca lo hicieron.",
+    "Varios reportan que los colonos ausentes recurrieron a órdenes de carga después de que sus nombres aparecieran en una subasta.",
+    "Los colonos han presentado sus registros originales.",
+    "Quieren ver quién los ha anunciado para la venta."
+  ],
+  "level-30": [
+    "Los colonos recuerdan firmar a bordo de la flota que los llevó a sus nuevos hogares.",
+    "Sus números de registro ahora aparecen en subastas separadas.",
+    "Una mujer reconoció el número que usaba en su primer día en la colonia.",
+    "Nos ha copiado la lista de venta."
+  ],
+  "kezravel": [
+    "Es Kezravel, el Auctioneer de Identidad.",
+    "Su antiguo registro de colonos ahora suministra nombres a la venta.",
+    "Los compradores pueden colocar órdenes bajo identidades que la gente pasó una vida construyendo.",
+    "Tenemos a los propietarios en un canal verificado.",
+    "Detén a Kezravel antes de que se abra la próxima subasta."
+  ],
+  "kezravel-outro": [
+    "Los colonos han revocado las credenciales robadas.",
+    "Sus estaciones están emitiendo reemplazos en persona.",
+    "El primer aviso de revocación llegó al dilatado relé con un destino diferente en él.",
+    "Ambos extremos recibieron un reconocimiento.",
+    "Pedimos a los tripulantes que guarden sus originales."
+  ],
+  "level-31": [
+    "El remitente y el receptor en la ruta remota compararon sus copias.",
+    "A ambos se les dijo que la revocación llegó.",
+    "Los dos avisos discrepan sobre quién es el dueño del nombre.",
+    "Mantenemos un enlace separado abierto.",
+    "Encuentra dónde se divergieron los dos mensajes."
+  ],
+  "dravosk": [
+    "Contacto confirmado.",
+    "Dravosk, el Ilusión Relé.",
+    "Sus antenas sustituyeron estaciones por rutas vacías.",
+    "Ahora edita algunas transmisiones y deja a otros en silencio después de reconocerlas.",
+    "Nuestro canal alternativo está intacto.",
+    "Limpiar el camino para que las colonias revisen sus mensajes de fin a fin."
+  ],
+  "dravosk-outro": [
+    "La revocación llegó intacta en la ruta independiente.",
+    "Los operadores encontraron tráfico de petición extraño en el viejo registro del relé.",
+    "Cada explosión lleva el número de un drone de trabajo que su propietario reportó falta.",
+    "Los drones siguen transmitiendo juntos."
+  ],
+  "level-32": [
+    "Un mecánico de la estación reconoció su viejo drone de tug en el tráfico de relés.",
+    "Fue recogido para reparación y nunca llegó a casa.",
+    "Cientos de otros propietarios nos han enviado números iguales.",
+    "Volar hacia el centro de las transmisiones.",
+    "Se están acercando."
+  ],
+  "thalzek": [
+    "Ese es Thalzek, el coleccionista de Swarm.",
+    "Su casco solía albergar drones de trabajo dañados.",
+    "Ahora les dirige a abrumar los relés con solicitudes.",
+    "Los propietarios han suministrado sus números de serie para que nuestros equipos de recuperación puedan reconocer las unidades.",
+    "Baja el barco de mando."
+  ],
+  "thalzek-outro": [
+    "Los dueños están recuperando sus drones.",
+    "Un buque de recuperación quería que firmaran un contrato de servicio antes de recibir el parto.",
+    "Un ingeniero encontró una cláusula que entrega el control de cada unidad reparada.",
+    "La misma oferta ya ha llegado a la mitad de las estaciones en esta ruta."
+  ],
+  "level-33": [
+    "El ingeniero leyó el contrato de recuperación todo el camino.",
+    "Varias estaciones firmaron una versión que permite al proveedor tomar el control de sus reparaciones.",
+    "Sus tripulaciones están llevando una copia de cada página.",
+    "Siga la oferta de vuelta a la oficina de comercio."
+  ],
+  "orvethra": [
+    "Contacto confirmado.",
+    "Orvethra, el Trampa de Contrato.",
+    "Este barco negocia acuerdos de suministro a largo plazo.",
+    "Sus nuevas ofertas dan el control de la flota sombra sobre el trabajo rutinario.",
+    "Las estaciones están listas para suspender esos términos juntos.",
+    "Secure Orvethra ha firmado copias para ellos."
+  ],
+  "orvethra-outro": [
+    "Las estaciones han suspendido los términos ocultos.",
+    "Cada acuerdo lleva un sello que dice que un inspector independiente lo leyó.",
+    "El inspector cuyo nombre aparece estaba reparando un drone ese día.",
+    "Quiere ver el barco que emitió el sello."
+  ],
+  "level-34": [
+    "El inspector pidió que se repitiera el cheque certificado.",
+    "La oficina envió la misma imagen de un sello verde.",
+    "Hay una línea de carga que se marca en esa base.",
+    "Volar a la fuente.",
+    "Nuestro equipo probará el cheque de los registros originales."
+  ],
+  "kelzorn": [
+    "Ese es Kelzorn, el Pintor de la Chequesa.",
+    "Sus herramientas una vez restauradas desperfectan los datos dañados.",
+    "Ahora pintan resultados convincentes de inspección sobre archivos que nadie ha comprobado.",
+    "Nuestro inspector realizó la comparación con dos copias independientes.",
+    "Las marcas no coinciden.",
+    "Abra la ruta al archivo."
+  ],
+  "kelzorn-outro": [
+    "El cheque real es público ahora.",
+    "Los inspectores encontraron un sello en las reclamaciones de reserva de tres colonias.",
+    "Las tres reclamaciones apuntan a la misma bahía de almacenamiento.",
+    "El primer convoy de invierno está cargando en la puerta.",
+    "Las colonias nos pidieron contar con la acción con ellos."
+  ],
+  "level-35": [
+    "Cada colonia envió su asignación de invierno.",
+    "Juntos, las reclamaciones llenan la bahía tres veces más.",
+    "El equipo de carga contaba sólo una fila de cajas a través del vidrio.",
+    "Vuele a la bóveda de reserva mientras las tres estaciones están de acuerdo en un inventario compartido."
+  ],
+  "vashravel": [
+    "Contacto confirmado.",
+    "Vashravel, el Promesor de la Vault.",
+    "Su bóveda tenía reservas de emergencia para las colonias fronterizas.",
+    "Los nuevos administradores redactaron reclamaciones sobre los mismos suministros una y otra vez.",
+    "Los equipos están esperando contarlos juntos.",
+    "Desparmar a la guardia de Vashravel en el agarre."
+  ],
+  "vashravel-outro": [
+    "Las tres colonias presenciaron el conteo.",
+    "Dividieron los suministros reales y enviaron un envío compartido.",
+    "La estación fronteriza reconoció la mitad del viaje y se negó a registrar la llegada.",
+    "Ambos puertos creen que el otro está sujetando la carga."
+  ],
+  "level-36": [
+    "El puerto de envío firmó la salida y el puerto de recepción tiene una vista en vivo del carguero.",
+    "Un buque fronterizo acepta sólo las entradas que su propia flota envió.",
+    "Los dos puertos están comparando registros en nuestro canal.",
+    "Volar hacia la posición del carguero."
+  ],
+  "zorveth": [
+    "Es Zorveth, el Bloqueador de Fronteras.",
+    "Solía hacer que las entregas fueran rastreables en ambos registros.",
+    "Ahora rechaza la prueba de un lado y deja cada cruce en disputa.",
+    "El envío de invierno está esperando un carril claro.",
+    "Baja la barrera de Zorveth."
+  ],
+  "zorveth-outro": [
+    "El envío de invierno se atrapó.",
+    "Ambos puertos firmaron la misma entrada de llegada.",
+    "Sus navegantes compararon también los diagramas de ruta.",
+    "Tres afirman ser el original de la encuesta única.",
+    "Cada uno tiene la misma esquina gastada y el nombre de un propietario diferente."
+  ],
+  "level-37": [
+    "Una escuela de navegación nos mostró su copia de la lista de encuestas.",
+    "La esquina gastada ya estaba allí.",
+    "Su copia está claramente etiquetada.",
+    "Alguien ha estado eliminando esa etiqueta y vendiendo cada versión como la primera.",
+    "Mantenga el marcador de ruta original en la vista."
+  ],
+  "drelkash": [
+    "Contacto confirmado.",
+    "Drelkash, el Príncipe Copiado.",
+    "Sus salas de impresión una vez dieron cartas a los estudiantes que podían pagar.",
+    "Ahora el personal vende cada copia como original único y deja las colonias para luchar por la propiedad.",
+    "Sabemos dónde están los registros de edición.",
+    "Abra el camino al taller."
+  ],
+  "drelkash-outro": [
+    "La escuela puede rastrear sus gráficos a la encuesta real.",
+    "Los registros están marcando las copias con sus orígenes apropiados de nuevo.",
+    "Un centro de suministro dice que ya ha procesado la corrección miles de veces.",
+    "Un envío urgente de agua todavía no se ha movido."
+  ],
+  "level-38": [
+    "Un operador de suministros nos envió una vista en directo de su cola.",
+    "Parece ocupado, y las mismas entradas siguen subiendo a la cima.",
+    "El equipo de agua ha estado esperando desde ayer.",
+    "Hemos establecido una llamada directa entre ellos.",
+    "Volar a la máquina alimentando la cola."
+  ],
+  "nerthavel": [
+    "Ahí está Nerthavel, el devoto de la cola.",
+    "Su antigua memoria de suministro podría contener días de peticiones.",
+    "Ahora alimenta los centros entradas sin valor y los pone por delante de entregas críticas.",
+    "Tenemos la solicitud original del envío de agua.",
+    "Rompe el flujo para que el operador pueda leerlo."
+  ],
+  "nerthavel-outro": [
+    "El envío de agua ha dejado el muelle.",
+    "Los despachadores restauraron la cola crítica de sus copias locales.",
+    "Un reporte acaba de llegar acusando a esa tripulación de iniciar una pelea en la bahía.",
+    "Su grabación comienza después del único código de tiempo que recuerda el oficial de muelles."
+  ],
+  "level-39": [
+    "El oficial del muelle recuerda abrir la puerta para el equipo de agua.",
+    "El informe se abre con un disparo de advertencia y omite el registro de la puerta.",
+    "Una segunda cámara grabó todo el enfoque.",
+    "Le pedimos a su equipo que guarde el archivo sin tocar mientras sigue el informe editado."
+  ],
+  "rhazkora": [
+    "Contacto confirmado.",
+    "Rhazkora, la prueba de Twister.",
+    "Ese laboratorio de accidentes solía poner en orden los eventos.",
+    "Sus nuevos informes levantan unos segundos de contexto hasta que las víctimas parezcan atacantes.",
+    "La segunda grabación muestra una escolta de sombras disparando primero.",
+    "Mantenga Rhazkora de tomar el original."
+  ],
+  "rhazkora-outro": [
+    "Toda la grabación es pública.",
+    "El consejo retiró su acusación contra la tripulación del agua.",
+    "Tres estaciones pidieron votar sobre la corrección.",
+    "Sus votos fueron sellados después de que la sesión se cerrara, aunque sus capitanes los cargaron a tiempo.",
+    "Estamos revisando las paradas del mensajero."
+  ],
+  "level-40": [
+    "Las tres estaciones todavía tienen sus recibos de envío.",
+    "Su mensajero se detuvo en dos puertos favorecidos a tiempo y celebró los otros votos hasta que terminó la sesión.",
+    "El consejo ha dejado esos asientos abiertos.",
+    "Volar al correo y mantener las boletas perdidas en rango."
+  ],
+  "velzhar": [
+    "Ahí está Velzhar, el guardabotas.",
+    "Su ruta sellada una vez dio a cada estación la misma oportunidad de votar.",
+    "Ahora elige cuyas boletas llegan antes de que cierren las puertas.",
+    "Las estaciones de espera pueden autenticar sus propios paquetes.",
+    "Detengan a Velzhar para que puedan enviarlos directamente."
+  ],
+  "velzhar-outro": [
+    "El consejo reabrió el voto y leyó el nombre de cada estación en voz alta.",
+    "Los representantes solicitaron las votaciones originales para una auditoría.",
+    "La red de almacenamiento dice que esos paquetes existen y no entregarán uno solo.",
+    "El consejo está pidiendo una ruta de trabajo en el archivo."
+  ],
+  "level-41": [
+    "El consejo probó tres direcciones para los paquetes de papeletas.",
+    "Cada uno confirmó que el registro estaba presente.",
+    "Cada recuperación volvió en blanco.",
+    "Los oficiales encontraron una antigua ruta de mantenimiento al transportista de almacenamiento.",
+    "Tome esa ruta y mantenga los enlaces independientes abiertos."
+  ],
+  "korthaven": [
+    "Contacto confirmado.",
+    "Korthaven, el Breaker de disponibilidad.",
+    "El transportista solía traer copias a cualquier estación que se le pidiera.",
+    "Ahora sus respuestas dicen que la evidencia existe mientras las puertas permanecen cerradas.",
+    "El viejo caché sigue dentro.",
+    "Haga lugar para los equipos independientes de recuperación."
+  ],
+  "korthaven-outro": [
+    "El consejo puede leer las boletas.",
+    "Las copias coinciden con lo que guardaban las estaciones.",
+    "Una estación exterior acaba de perder el acceso a archivos y recibió una oferta de recuperación inmediata prometedora.",
+    "Pide cada llave de respaldo en el puerto.",
+    "Hemos pedido una llamada con su tripulación."
+  ],
+  "level-42": [
+    "El jefe de la estación exterior estaba a punto de enviar sus llaves de seguridad.",
+    "Los mantuvo después de que supo que la oferta había alcanzado a otros dos equipos con el mismo fracaso.",
+    "Se está preparando un equipo de recuperación verificado.",
+    "Siga la nave que respondió primero."
+  ],
+  "azravel": [
+    "Es Azravel, el Impostor de Recuperación.",
+    "Su viejo identificador de radio pertenecía a un barco que buscaba sondas perdidas.",
+    "Ahora ese nombre llega a las estaciones justo después de una pérdida y pide sus secretos.",
+    "Los equipos de recuperación necesitan una fortaleza segura.",
+    "Clara Azravel de su enfoque."
+  ],
+  "azravel-outro": [
+    "El equipo real ha restaurado el acceso a archivos.",
+    "Las llaves de seguridad se quedaron con la estación.",
+    "Sus informes de mantenimiento fueron marcados como seguros mientras los inspectores fueron enviados a través del cinturón a un muelle de demostración.",
+    "Sus cartas de enfoque originales regresaron con los archivos recuperados."
+  ],
+  "level-43": [
+    "Los inspectores enviaron una foto de estantes intachables.",
+    "El equipo de mantenimiento envió una foto del nodo fallido donde realmente trabajan.",
+    "El gráfico del inspector termina en el muelle limpio.",
+    "Le pedimos que vuele el enfoque original contigo."
+  ],
+  "threvask": [
+    "Contacto confirmado.",
+    "Threvask, el Diverter de Auditoría.",
+    "Su cubierta de navegación solía enviar inspectores a nodos vulnerables.",
+    "Ahora les dirige a exposiciones hechas a medida.",
+    "El nodo sin fixed está emitiendo su ubicación real en el canal de mantenimiento.",
+    "Lleve a los inspectores allí."
+  ],
+  "threvask-outro": [
+    "Los inspectores llegaron al nodo.",
+    "Su informe incluye lo que vieron y quién estuvo allí.",
+    "Un operador recibió un mensaje citando una línea que escribió en un registro personal hace años.",
+    "El registro fue recuperado de un accidente y estaba destinado a ir a su familia."
+  ],
+  "level-44": [
+    "La operadora reconoció la línea de su primer viaje.",
+    "El remitente lo usó para pedirle que cambiara el registro de inspección.",
+    "Su familia todavía tiene la entrada original.",
+    "Tenemos su permiso para rastrear quién obtuvo una copia.",
+    "Siga la ruta del barco de recuperación."
+  ],
+  "dorzheva": [
+    "Ese es Dorzheva, el cazador de memoria.",
+    "Sus propiedades solían llevar registros personales a sus familias.",
+    "Ahora la tripulación presta detalles familiares para hacer que los extraños sonen de confianza.",
+    "Otros operadores han recibido mensajes similares.",
+    "Asegure el archivo antes de que Dorzheva pueda dispersarlo."
+  ],
+  "dorzheva-outro": [
+    "La familia recibió su copia a través de la estación que eligieron.",
+    "El informe del operador está en pie.",
+    "Un buque de emergencia ha utilizado los mensajes filtrados para predecir un colapso y exigir el control de toda la red de relés.",
+    "Las estaciones de nuestro canal siguen respondiendo."
+  ],
+  "level-45": [
+    "Pedimos a las estaciones de relé que respondan a su vez.",
+    "Todos los equipos del canal de emergencia pasaron.",
+    "Un barco de emergencia dice que esas voces se simulan y las estaciones deben transferir el control antes de la hora siguiente.",
+    "Mantenga la línea abierta.",
+    "Encuentra el barco antes de la fecha límite que anunció."
+  ],
+  "vezrakh": [
+    "Contacto confirmado.",
+    "Vezrakh, el Usurper de Emergencia.",
+    "Fue construido para ayudar cuando una estación de comando real falló.",
+    "La tripulación declara ahora sus propias emergencias y las utiliza para tomar los controles.",
+    "Las estaciones están comparando sus lecturas.",
+    "Golpea el reactor de Vezrakh antes de que pueda cortarlos."
+  ],
+  "vezrakh-outro": [
+    "La hora pasó.",
+    "Las estaciones guardaban sus controles y todavía se pueden oír.",
+    "Un coordinador de socorro recibió seis recomendaciones para hacer un nuevo socio la ruta central de la red.",
+    "Los seis rastrean a un barco que usaba para trazar conexiones de ayuda.",
+    "Estamos comparando las rutas en su mapa."
+  ],
+  "level-46": [
+    "El coordinador de socorro expuso las conexiones que utiliza para llegar a las clínicas.",
+    "Casi todos los envíos de emergencia cruzan el mismo relé.",
+    "El socio recomendado lo controlaría.",
+    "Dos estaciones vecinas han abierto un segundo camino.",
+    "Cubrirlos mientras lo prueban con un envío en vivo."
+  ],
+  "orzhaven": [
+    "Es Orzhaven, el cartógrafo de confianza.",
+    "Sus cartas ayudaron a los grupos de ayuda a llegar a estaciones remotas.",
+    "Está usando el mismo mapa para poner a sus aliados en la ruta en la que todos dependen.",
+    "Tenemos un portador de medicina que cruza el enlace alternativo ahora.",
+    "Mantenga a Orzhaven lejos de ella."
+  ],
+  "orzhaven-outro": [
+    "Ambas clínicas escucharon el muelle de portadores de medicina.",
+    "Sus tripulaciones locales acordaron mantener abiertas ambas rutas.",
+    "Un mediador del consejo acaba de decir a cada estación que el otro ha exigido control exclusivo.",
+    "Están leyendo los dos mensajes lado a lado."
+  ],
+  "level-47": [
+    "Las estaciones compararon sus ofertas directamente.",
+    "Tampoco pidió control exclusivo.",
+    "Un barco de consejos sigue enviando nuevas demandas que los participantes nunca hicieron.",
+    "Estamos abriendo un canal para que todos puedan escuchar los mismos términos.",
+    "Siga las objeciones falsificadas de vuelta a la cubierta del consejo."
+  ],
+  "keldroth": [
+    "Contacto confirmado.",
+    "Keldroth, el Besieger de Consenso.",
+    "Sus cámaras fueron construidas para que las colonias rivales pudieran resolver disputas.",
+    "Ahora los mantiene discutiendo mientras la flota de sombras ocupa sus carriles.",
+    "Estamos escuchando las posiciones originales en el canal compartido.",
+    "Rompe el bloqueo de Keldroth de las conversaciones."
+  ],
+  "keldroth-outro": [
+    "Las estaciones acordaron mantener abierta las vías mientras trabajan a través de un verdadero desacuerdo.",
+    "Sus inspectores encontraron envíos de sombras marcados como acciones de socorro.",
+    "Cada uno enumera un astillero diferente.",
+    "La tripulación del anillo exterior reparado reconoció una marca de serie bajo las nuevas etiquetas."
+  ],
+  "level-48": [
+    "La marca pertenece a un patio de la tripulación de la red exterior utilizada durante años.",
+    "Las nuevas etiquetas nombran un patio que nunca manejaba esas naves.",
+    "La tripulación envió su libro original de reparación.",
+    "Siga a los propietarios transferidos y mantenga una copia de cada paso en una ruta independiente."
+  ],
+  "zhavrek": [
+    "Es Zhavrek, el borrador de origen.",
+    "Por generaciones su archivo contó a los equipos donde sus barcos fueron construidos.",
+    "Ahora intercambia esos registros para hacer que los envíos robados parezcan legítimos.",
+    "Tenemos el libro de reparación del anillo exterior.",
+    "Asegure los originales restantes antes de que Zhavrek salte."
+  ],
+  "zhavrek-outro": [
+    "El astillero ha comprobado los originales contra sus órdenes de trabajo.",
+    "Los equipos de socorro tienen su carga de nuevo a ambos lados de la frontera.",
+    "El registro de envío muestra un refugio pasado el último relé en funcionamiento.",
+    "La flota de sombras ha estado reenviando sólo grabaciones de ataques."
+  ],
+  "level-49": [
+    "El refugio respondió a nuestra vieja frecuencia de socorro.",
+    "A sus residentes se les dijo que toda la red los había encendido.",
+    "Nos ofrecimos ponerlos en una línea con una estación que elijan.",
+    "Pidieron a la tripulación de reparación del anillo exterior del Génesis.",
+    "Mantenga la ruta clara."
+  ],
+  "vorthaz": [
+    "Contacto confirmado.",
+    "Vorthaz, el consolador final.",
+    "Una vez guardó el refugio después de una larga guerra.",
+    "Ahora bloquea sus ventanas en la red y las llena con las transmisiones elegidas.",
+    "Los residentes quieren oír más allá de la pared.",
+    "Haga espacio para que su propia antena venga en línea."
+  ],
+  "vorthaz-outro": [
+    "El refugio puso su propia antena en la radio.",
+    "El equipo de la banda exterior respondió por nombre.",
+    "Entonces ambas estaciones vieron el mismo comando aparecer en sus libros locales.",
+    "Un barco en el núcleo quiere que cada nodo libre acepte un registro maestro.",
+    "El refugio nos envió el origen del comando."
+  ],
+  "level-50": [
+    "Las estaciones están guardando sus propios registros.",
+    "Génesis tiene la primera llamada del equipo de reparación.",
+    "El refugio tiene su propio registro de la respuesta.",
+    "Drazevorn les pide que se rindan a su registro.",
+    "Han abierto líneas independientes entre sí.",
+    "Volar al núcleo, Piloto.",
+    "Mantengan esas líneas al alcance."
+  ],
+  "drazevorn": [
+    "Contacto confirmado.",
+    "Drazevorn, el Señor de la Verdad Falsa.",
+    "Sus cubiertas llevan nombres robados, crónicas falsas y evidencia oculta por los barcos que detuvimos.",
+    "Acaba de marcar el relé de Génesis en silencio.",
+    "Puedo oír al equipo de reparación en la otra línea.",
+    "Deja que sigan hablando, Piloto.",
+    "Golpea el reactor de Drazevorn."
+  ],
+  "drazevorn-outro": [
+    "El registro de Drazevorn ha dejado de responder.",
+    "Las colonias están comprobando los registros originales juntos.",
+    "Génesis encontró la primera llamada del equipo de reparación del anillo exterior.",
+    "El refugio tiene su propia grabación de la respuesta.",
+    "Escucha un momento.",
+    "Las estaciones están tocando ambas grabaciones en el canal abierto.",
+    "Todavía hay diferencias por las que trabajar.",
+    "Cada estación puede hablar por sí misma ahora.",
+    "Una voz acaba de llegar de la Tierra.",
+    "Génesis relé, aquí la Tierra.",
+    "Te escuchamos claramente.",
+    "El equipo de reparación está respondiendo ahora.",
+    "Están pidiendo a la Tierra que mantenga el canal abierto para las estaciones más lejos.",
+    "Mantén el canal libre, piloto.",
+    "Los próximos buques solicitan permiso para partir en misiones de exploración.",
+    "Cuando el primer barco atraviese el anillo, quiero oír adónde va su tripulación."
+  ]
+}

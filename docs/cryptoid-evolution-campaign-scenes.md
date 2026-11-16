@@ -13,22 +13,7 @@ Drehbuch für Kampagnenstart, Level-Briefings, Boss-Intros und Sieges-Outros. Je
 
 ### Stand der Aufnahmen
 
-| Umfang | Text | Aufnahme und Einbau |
-| --- | --- | --- |
-| Kampagneneinleitung, Intros von Varneth bis Drelvorn, Korvessas Outro, Briefings 2 und 3 | Sprechtext und deutsche Untertitel | Sieben Aufnahmen im ausgelieferten Testnet 08758df |
-| Varneth · The First Reply | Originale Suno-Vorlage und 9 Untertitelabschnitte für den eingesandten Take | Suno-MP3 von Marcus Wolf im Kandidaten, vollständiges Sprachsignal aus dem Upload |
-| Drelvorns Outro (Seal Revoked) | Sprechtext und acht Untertitelabschnitte | Eingereichte Suno-Aufnahme im Story-Zweig |
-| Talvreks Intro und Outro | Sprechtext und deutsche Untertitel | Zwei eingereichte Suno-Aufnahmen im Story-Zweig |
-| Briefing 4 | Sprechtext und deutsche Untertitel | Englische Teststimme mit eigens produzierten leisen Streicher- und Klavierklängen |
-| Intro Zeraveth und Outro Zeraveth | Sprechtext und deutsche Untertitel | Eingereichte Suno-Aufnahmen mit Wortzeitplan |
-| Briefing 5 | Sprechtext und deutsche Untertitel | Eingereichte Suno-Aufnahme mit Wortzeitplan |
-| Briefing 6, Intro Orvask und Outro Orvask | Sprechtext und deutsche Untertitel | Eingereichte Suno-Aufnahmen mit Wortzeitplan |
-| Briefing 7, Intro Keldrava und Outro Keldrava | Sprechtext und deutsche Untertitel | Eingereichte Suno-Aufnahmen mit Wortzeitplan |
-| Briefing 8, Intro Veshkorn und Outro Veshkorn | Sprechtext und deutsche Untertitel | Eingereichte Suno-Aufnahmen mit Wortzeitplan |
-| Briefing 9, Intro Neravoss und Outro Neravoss | Englischer Sprechtext und 18 Untertitelsprachen | Vorläufige Roboterstimme mit leiser Orchesterbegleitung und Wortzeitplan |
-| Level 10–50 | 123 Drehbuchfassungen bis zum Finale | Aufnahmen, Zeitpläne und Einbau folgen je Szene |
-
-Die Testaufnahme für Briefing 4 wurde mit der Stimme am_onyx aus [Kokoro](https://huggingface.co/hexgrad/Kokoro-82M) produziert. Die Suno-Fassung kann diese Aufnahme samt Wortzeitplan ersetzen.
+Für Level 1 bis 50 stehen 149 neu vertonte Szenen zur Verfügung. Der Flottencomputer spricht alle Briefings, Boss-Intros und Boss-Outros mit derselben englischen Roboterstimme. Die eigens komponierten Orchesterbegleitungen variieren je Szene und beginnen und enden leise. Die Untertitel der 18 weiteren Spielsprachen folgen den Sprechpausen und werden pro Sprache geladen. Drazevorns Finale „Earth, We Read You“ erhält einen längeren Ausklang. [Kokoro](https://huggingface.co/hexgrad/Kokoro-82M) · [GeneralUser GS](https://github.com/mrbumpy409/GeneralUser-GS)
 
 ## Genesis und die falschen Befehle
 
@@ -69,7 +54,7 @@ Der Spam-Verbreiter · The Spam Broadcaster
 
 #### Boss-Intro · Cut That Signal
 
-Aufnahme im ausgelieferten Testnet. varneth-intro-phrased.mp3 · 31,08 s.
+Roboteraufnahme · robot/level-01-intro.mp3 · 24,38 s.
 
 **Suno-Stil**
 
@@ -89,7 +74,7 @@ Contact confirmed. Varneth. It once carried supply records between the Genesis c
 
 #### Boss-Outro · The First Reply
 
-Suno-Aufnahme von Marcus Wolf im Kandidaten. varneth-outro.mp3 · 39,60 s.
+Roboteraufnahme · robot/level-01-outro.mp3 · 31,85 s.
 
 **Suno-Stil**
 
@@ -117,7 +102,7 @@ Die Maskenträgerin · The Mask Bearer
 
 #### Level-Briefing · Bring Those Crews Home
 
-Aufnahme im ausgelieferten Testnet. level-two-intro-phrased.mp3 · 33,01 s.
+Roboteraufnahme · robot/level-02-briefing.mp3 · 28,01 s.
 
 **Suno-Stil**
 
@@ -137,7 +122,7 @@ Varneth is down. The Genesis relays are carrying distress calls again. A supply 
 
 #### Boss-Intro · Open a Way Home
 
-Aufnahme im ausgelieferten Testnet. korvessa-intro.mp3 · 32,15 s.
+Roboteraufnahme · robot/level-02-intro.mp3 · 31,13 s.
 
 **Suno-Stil**
 
@@ -157,7 +142,7 @@ Pilot, we traced the signal to Korvessa. She once carried diplomatic dispatches.
 
 #### Boss-Outro · Clear the Route
 
-Aufnahme im ausgelieferten Testnet. korvessa-outro.mp3 · 28,44 s.
+Roboteraufnahme · robot/level-02-outro.mp3 · 28,87 s.
 
 **Suno-Stil**
 
@@ -182,7 +167,7 @@ Der Siegelräuber · The Seal Thief
 
 #### Level-Briefing · Stay on the Trail
 
-Aufnahme im ausgelieferten Testnet. level-three-intro-phrased.mp3 · 32,85 s.
+Roboteraufnahme · robot/level-03-briefing.mp3 · 30,58 s.
 
 **Suno-Stil**
 
@@ -203,7 +188,7 @@ Pilot, Korvessa is down. Every convoy crew made it out. The last freighter broug
 
 #### Boss-Intro · Buy Us Time
 
-Aufnahme im ausgelieferten Testnet. drelvorn-intro.mp3 · 30,02 s.
+Roboteraufnahme · robot/level-03-intro.mp3 · 34,46 s.
 
 **Suno-Stil**
 
@@ -224,7 +209,7 @@ Pilot, Korvessa’s archive confirms it. The ship you followed is Drelvorn, the 
 
 #### Boss-Outro · Seal Revoked
 
-Suno-Aufnahme von Marcus Wolf. Eingereicht als „Pulling the Original Records“. drelvorn-outro.mp3 · 41,59 s.
+Roboteraufnahme · robot/level-03-outro.mp3 · 34,73 s.
 
 **Suno-Stil**
 
@@ -251,7 +236,7 @@ Der Chronikfälscher · The Chronicle Forger
 
 #### Level-Briefing · The Missing Ledger
 
-Testaufnahme im Kandidaten. level-four.mp3 · 35,09 s.
+Roboteraufnahme · robot/level-04-briefing.mp3 · 30,12 s.
 
 **Suno-Stil**
 
@@ -271,7 +256,7 @@ The convoy crews have spoken to their families. Genesis is holding. Before Drelv
 
 #### Boss-Intro · What the Books Say
 
-Suno-Aufnahme von Marcus Wolf. Eingereicht als „Hit Talvrek’s Reactor“. talvrek.mp3 · 36,38 s.
+Roboteraufnahme · robot/level-04-intro.mp3 · 32,54 s.
 
 **Suno-Stil**
 
@@ -293,7 +278,7 @@ Contact confirmed. Talvrek, the Chronicle Forger. That ship once surveyed new co
 
 #### Boss-Outro · Names on the Roll
 
-Suno-Aufnahme von Marcus Wolf. Eingereicht als „Zeraveth Repair Platform“. talvrek-outro.mp3 · 34,82 s.
+Roboteraufnahme · robot/level-04-outro.mp3 · 30,17 s.
 
 **Suno-Stil**
 
@@ -318,7 +303,7 @@ Der Knotenbelagerer · The Node Besieger
 
 #### Level-Briefing · A Station in the Dark
 
-Suno-Aufnahme „Get Them Within Reach“. level-five.mp3 · 19,99 s.
+Roboteraufnahme · robot/level-05-briefing.mp3 · 20,88 s.
 
 **Suno-Stil**
 
@@ -338,7 +323,7 @@ The relief crew from the Genesis outer ring sent us a set of parts. The station 
 
 #### Boss-Intro · Intro Zeraveth
 
-Suno-Aufnahme „Zeraveth, the Node Besieger“. zeraveth-intro.mp3 · 29,59 s.
+Roboteraufnahme · robot/level-05-intro.mp3 · 29,16 s.
 
 **Suno-Stil**
 
@@ -360,7 +345,7 @@ Contact confirmed. Zeraveth, the Node Besieger. It used to repair entire relay r
 
 #### Boss-Outro · Outro Zeraveth
 
-Suno-Aufnahme „Both Recordings“. zeraveth-outro.mp3 · 25,22 s.
+Roboteraufnahme · robot/level-05-outro.mp3 · 22,63 s.
 
 **Suno-Stil**
 
@@ -385,7 +370,7 @@ Der Wiederholungsjäger · The Echo Hunter
 
 #### Level-Briefing · An Old Clearance
 
-Suno-Aufnahme „Follow the Old Recording“. level-six.mp3 · 20,04 s.
+Roboteraufnahme · robot/level-06-briefing.mp3 · 22,30 s.
 
 **Suno-Stil**
 
@@ -406,7 +391,7 @@ The repaired relay brought back traffic… the crew thought had been lost. A tug
 
 #### Boss-Intro · Intro Orvask
 
-Suno-Aufnahme „Cut Orvask’s Signal“. orvask-intro.mp3 · 28,44 s.
+Roboteraufnahme · robot/level-06-intro.mp3 · 27,65 s.
 
 **Suno-Stil**
 
@@ -429,7 +414,7 @@ That’s Orvask… the Echo Hunter. It escorted convoys and saved every clearanc
 
 #### Boss-Outro · Outro Orvask
 
-Suno-Aufnahme „Cargo That Never Arrived“. orvask-outro.mp3 · 27,62 s.
+Roboteraufnahme · robot/level-06-outro.mp3 · 26,02 s.
 
 **Suno-Stil**
 
@@ -455,7 +440,7 @@ Die Schattenbrücke · The Shadow Bridge
 
 #### Level-Briefing · Two Ends of the Route
 
-Suno-Aufnahme „Matching Container Numbers“. level-seven.mp3 · 24,84 s.
+Roboteraufnahme · robot/level-07-briefing.mp3 · 20,98 s.
 
 **Suno-Stil**
 
@@ -475,7 +460,7 @@ The two colonies copied us on their loading logs. Each has a receipt stamped by 
 
 #### Boss-Intro · Intro Keldrava
 
-Suno-Aufnahme „Clear the Way“. keldrava-intro.mp3 · 33,60 s.
+Roboteraufnahme · robot/level-07-intro.mp3 · 28,15 s.
 
 **Suno-Stil**
 
@@ -498,7 +483,7 @@ Contact confirmed. Keldrava… the Shadow Bridge. The colony crews used to hand 
 
 #### Boss-Outro · Outro Keldrava
 
-Suno-Aufnahme „Speaking on Air“. keldrava-outro.mp3 · 23,64 s.
+Roboteraufnahme · robot/level-07-outro.mp3 · 24,53 s.
 
 **Suno-Stil**
 
@@ -523,7 +508,7 @@ Der Gerüchtesender · The Rumour Carrier
 
 #### Level-Briefing · Two People Who Were There
 
-Suno-Aufnahme „Fly Toward the Transmitter“. level-eight.mp3 · 27,48 s.
+Roboteraufnahme · robot/level-08-briefing.mp3 · 23,54 s.
 
 **Suno-Stil**
 
@@ -544,7 +529,7 @@ The bridge crews are on the air. One just held a recovered pump up to the camera
 
 #### Boss-Intro · Intro Veshkorn
 
-Suno-Aufnahme „Take His Transmitter Off the“. veshkorn-intro.mp3 · 34,03 s.
+Roboteraufnahme · robot/level-08-intro.mp3 · 31,58 s.
 
 **Suno-Stil**
 
@@ -568,7 +553,7 @@ Contact confirmed. Veshkorn… the Rumour Carrier. We know that fanfare from his
 
 #### Boss-Outro · Outro Veshkorn
 
-Suno-Aufnahme „No Loading Photos“. veshkorn-outro.mp3 · 30,02 s.
+Roboteraufnahme · robot/level-08-outro.mp3 · 24,98 s.
 
 **Suno-Stil**
 
@@ -594,7 +579,7 @@ Die drei vorläufigen Aufnahmen verwenden Kokoro am_onyx als Roboterstimme. Die 
 
 #### Level-Briefing · No Weight on the Scales
 
-Vorläufige Roboteraufnahme. level-nine.mp3 · 30,19 s.
+Roboteraufnahme · robot/level-09-briefing.mp3 · 30,26 s.
 
 **Suno-Stil**
 
@@ -631,7 +616,7 @@ Follow the address on the manifest, Pilot.
 
 #### Boss-Intro · Intro Neravoss
 
-Vorläufige Roboteraufnahme. neravoss-intro.mp3 · 32,11 s.
+Roboteraufnahme · robot/level-09-intro.mp3 · 32,21 s.
 
 **Suno-Stil**
 
@@ -665,7 +650,7 @@ Break the guard on that hold.
 
 #### Boss-Outro · Outro Neravoss
 
-Vorläufige Roboteraufnahme. neravoss-outro.mp3 · 24,50 s.
+Roboteraufnahme · robot/level-09-outro.mp3 · 24,17 s.
 
 **Suno-Stil**
 
@@ -697,6 +682,8 @@ Der Gebührenzöllner · The Toll Tyrant
 
 #### Level-Briefing · The Crystal Passage
 
+Roboteraufnahme · robot/level-10-briefing.mp3 · 21,12 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Held strings with a measured cello pulse under the stationary convoy. Around 25–30 seconds.
@@ -711,6 +698,8 @@ Die Saatgutfrachter warten vor der Passage. Ein Sanitätsschiff steht zwischen i
 
 #### Boss-Intro · A Price for Every Call
 
+Roboteraufnahme · robot/level-10-intro.mp3 · 27,26 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Spoken first contact with very low brass and cello. Hold back on the final instruction. Around 27–32 seconds.
@@ -724,6 +713,8 @@ That’s Thalverik, the Toll Tyrant. He used to escort ships through this passag
 Das ist Thalverik, der Gebührenzöllner. Er hat früher Schiffe durch diese Passage eskortiert. Heute kassiert er für die Durchfahrt und noch einmal für jeden Hilferuf. Er hält die Blockade quer zur Flugroute. Das Sanitätsschiff kann los, sobald sie fällt. Ziele auf Thalveriks Reaktor.
 
 #### Boss-Outro · One More Ship Through
+
+Roboteraufnahme · robot/level-10-outro.mp3 · 21,98 s.
 
 **Suno-Stil**
 
@@ -747,6 +738,8 @@ Der Vielgesichtige · The Many-Faced
 
 #### Level-Briefing · Thirty Pilots
 
+Roboteraufnahme · robot/level-11-briefing.mp3 · 21,02 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Dry speech over gentle paired strings. Let the quiet widen around the empty berths. Around 24–29 seconds.
@@ -761,6 +754,8 @@ Die Ratsstation hat uns zum Namensaufruf eingeladen. Das Register zählt Tausend
 
 #### Boss-Intro · The Simulated Majority
 
+Roboteraufnahme · robot/level-11-intro.mp3 · 23,64 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Low pulsing violas with a separate beat after the callsign. Around 22–27 seconds.
@@ -774,6 +769,8 @@ There’s Skorveth, the Many-Faced. His training cores taught pilots to fly. Now
 Da ist Skorveth, der Vielgesichtige. In seinen Trainingskernen lernten Piloten fliegen. Jetzt zählen die simulierten Crews als Einwohner und bestätigen sich gegenseitig. Ihre Stimmen haben bereits eine Umleitung für die Schattenflotte freigegeben. Schalte den Sender der Kerne aus.
 
 #### Boss-Outro · The Actual Voters
+
+Roboteraufnahme · robot/level-11-outro.mp3 · 22,08 s.
 
 **Suno-Stil**
 
@@ -793,6 +790,8 @@ Der Pfadvergifter · The Route Poisoner
 
 #### Level-Briefing · The Missing Check-In
 
+Roboteraufnahme · robot/level-12-briefing.mp3 · 19,80 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Unhurried cello and muted viola, with a little more movement on the emergency signal. Around 23–28 seconds.
@@ -807,6 +806,8 @@ Die Bake des Rettungsschiffs sendet noch. Unsere nächste Station sieht ihr Lich
 
 #### Boss-Intro · The Route Through Nowhere
 
+Roboteraufnahme · robot/level-12-intro.mp3 · 27,05 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Tapered strings with understated tension. Name the ship before building the urgency. Around 27–32 seconds.
@@ -820,6 +821,8 @@ Azhrel, the Route Poisoner. That ship drew the first jump charts along this rim.
 Azhrel, der Pfadvergifter. Dieses Schiff zeichnete die ersten Sprungkarten am Rand des Nebels. Seine neuen Einträge leiten Notrufe über Relais der Schattenflotte. Die Führung des Rettungsschiffs endete im leeren Raum. Wir haben die alten Karten. Vertreib Azhrel von der Kreuzung.
 
 #### Boss-Outro · The Way the Light Came
+
+Roboteraufnahme · robot/level-12-outro.mp3 · 23,14 s.
 
 **Suno-Stil**
 
@@ -839,6 +842,8 @@ Der Archivbrandstifter · The Archive Arsonist
 
 #### Level-Briefing · What the Recorder Saw
 
+Roboteraufnahme · robot/level-13-briefing.mp3 · 20,23 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Intimate cello under a slow opening. Bring the music down further for the last line. Around 25–30 seconds.
@@ -853,6 +858,8 @@ Die Rettungscrew führte ein handschriftliches Logbuch. Darin steht, dass ein Be
 
 #### Boss-Intro · Salvage With the Fire Doors Shut
 
+Roboteraufnahme · robot/level-13-intro.mp3 · 28,08 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Quiet chamber strings and one distant cello harmonic. Pause after the ship name. Around 24–29 seconds.
@@ -866,6 +873,8 @@ Contact confirmed. Dornavik, the Archive Arsonist. Its insulated chambers once k
 Kontakt bestätigt. Dornavik, der Archivbrandstifter. Seine isolierten Kammern retteten einst Archive aus brennenden Wracks. Jetzt behält er intakte Speicher und schickt den Crews beschädigte Kopien. In der blinkenden Bucht liegt der Flugschreiber des Rettungsschiffs. Hindere Dornavik am Sprung.
 
 #### Boss-Outro · Evidence Comes Home
+
+Roboteraufnahme · robot/level-13-outro.mp3 · 23,30 s.
 
 **Suno-Stil**
 
@@ -885,6 +894,8 @@ Der Blockzurückhalter · The Block Withholder
 
 #### Level-Briefing · Last Week at the Outpost
 
+Roboteraufnahme · robot/level-14-briefing.mp3 · 20,86 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. A barely audible repeating viola figure, with open quiet after the old date. Around 27–32 seconds.
@@ -899,6 +910,8 @@ Der Außenposten will einen Frachter an einem Hafen andocken lassen, der wegen R
 
 #### Boss-Intro · The Sealed Containers
 
+Roboteraufnahme · robot/level-14-intro.mp3 · 24,34 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Slow muted low strings. Let the note resolve slightly when the dates are confirmed. Around 24–29 seconds.
@@ -912,6 +925,8 @@ That’s Velkrath, the Block Withholder. His sealed carriers once kept research 
 Das ist Velkrath, der Blockzurückhalter. Seine versiegelten Container schützten früher Forschungsunterlagen für Außenstationen. Die Meldungen liegen noch darin, nach Datum sortiert. Er lässt eine alte durch, sobald sie Schaden anrichten kann. Mach den Weg zu den Containern frei.
 
 #### Boss-Outro · Same Page, Different Hour
+
+Roboteraufnahme · robot/level-14-outro.mp3 · 22,13 s.
 
 **Suno-Stil**
 
@@ -931,6 +946,8 @@ Der Zeitverdreher · The Clock Twister
 
 #### Level-Briefing · One Hour, Two Clocks
 
+Roboteraufnahme · robot/level-15-briefing.mp3 · 21,31 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Very quiet plucked strings interleaved with a single soft piano pulse. Around 25–30 seconds.
@@ -945,6 +962,8 @@ Die mechanische Uhr stimmt mit der gemessenen Flugzeit der Versorgungscrews übe
 
 #### Boss-Intro · The Precision Signal
 
+Roboteraufnahme · robot/level-15-intro.mp3 · 27,14 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. A slow viola ostinato under a clear, low voice. End on a restrained command. Around 25–30 seconds.
@@ -958,6 +977,8 @@ Contact confirmed. Irdavoss, the Clock Twister. Entire fleets once set their man
 Kontakt bestätigt. Irdavoss, der Zeitverdreher. Ganze Flotten richteten ihre Manöver einst nach seiner Stationszeit. Wir haben gesehen, wie sein Signal eine gültige Freigabe hinter die Frist verschob. Drei Stationen vergleichen ihre eigenen Uhren. Triff Irdavoss’ Reaktor, während sie die Prüfung abschließen.
 
 #### Boss-Outro · The Logs That Stayed Locked
+
+Roboteraufnahme · robot/level-15-outro.mp3 · 20,40 s.
 
 **Suno-Stil**
 
@@ -977,6 +998,8 @@ Der Schlüsselkerker · The Key Gaoler
 
 #### Level-Briefing · Hold the Clinic Open
 
+Roboteraufnahme · robot/level-16-briefing.mp3 · 20,16 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Low tender strings under the clinic report. Keep the delivery clear and still. Around 22–27 seconds.
@@ -991,6 +1014,8 @@ Die Klinik arbeitet mit Papiernotizen, solange ihre Unterlagen gesperrt sind. Ei
 
 #### Boss-Intro · The Cells Are Full Again
 
+Roboteraufnahme · robot/level-16-intro.mp3 · 25,68 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Cello and dark viola sustained well below the voice. Give the threat a measured pause. Around 26–31 seconds.
@@ -1004,6 +1029,8 @@ That prison transport is Rhazvorn, the Key Gaoler. Its cells used to hold people
 Dieser Gefangenentransporter ist Rhazvorn, der Schlüsselkerker. In seinen Zellen saßen früher Menschen. Jetzt liegen dort verschlossene Archive aus Kliniken und Versorgungsdepots. Wir haben die ursprünglichen Zugriffsanfragen bis zum Zentraltresor verfolgt. Halte Rhazvorn hier, bis das Bergungsteam nah genug ist.
 
 #### Boss-Outro · Open the Clinic’s Files
+
+Roboteraufnahme · robot/level-16-outro.mp3 · 21,91 s.
 
 **Suno-Stil**
 
@@ -1023,6 +1050,8 @@ Der Orakeltrüger · The Oracle Deceiver
 
 #### Level-Briefing · Look Out the Window
 
+Roboteraufnahme · robot/level-17-briefing.mp3 · 20,81 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Delicate viola over cello. Leave space between the readout and the crew’s observation. Around 24–29 seconds.
@@ -1037,6 +1066,8 @@ Die Depotcrew hat ein Bild vom freien Anflug geschickt. Ihre Instrumente melden 
 
 #### Boss-Intro · A Ship That Reports the Weather
 
+Roboteraufnahme · robot/level-17-intro.mp3 · 27,96 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. A repeating high string overtone sits behind the voice, with a lower chord at the warning. Around 24–29 seconds.
@@ -1050,6 +1081,8 @@ Contact confirmed. Kelvash, the Oracle Deceiver. Its survey reports used to guid
 Kontakt bestätigt. Kelvash, der Orakeltrüger. Seine Messberichte leiteten früher das Depot. Jetzt erfindet das Schiff Wetter- und Bestandsdaten, und die Computer schicken echte Fracht weg. Die nächste Klinik braucht diese Lieferungen. Schalte Kelvashs Sender aus.
 
 #### Boss-Outro · Medicine on the Right Course
+
+Roboteraufnahme · robot/level-17-outro.mp3 · 22,94 s.
 
 **Suno-Stil**
 
@@ -1069,6 +1102,8 @@ Der Gabelherr · The Fork Lord
 
 #### Level-Briefing · Put Both Copies on the Table
 
+Roboteraufnahme · robot/level-18-briefing.mp3 · 23,71 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Quiet divided strings that converge under the narration. Let the last instruction follow a clear pause. Around 24–29 seconds.
@@ -1083,6 +1118,8 @@ Die beiden Versorgungszentren haben ihre Register in derselben Funkverbindung ge
 
 #### Boss-Intro · One Copy for Each Colony
 
+Roboteraufnahme · robot/level-18-intro.mp3 · 25,49 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Viola with a restrained bass drone, without rhythmic urgency. Around 27–32 seconds.
@@ -1096,6 +1133,8 @@ There’s Othravel, the Fork Lord. He used to bring rival colonies together on h
 Da ist Othravel, der Gabelherr. Früher brachte er verfeindete Kolonien auf seinem Konferenzdeck zusammen. Heute schickt er ihnen getrennte Register und bezichtigt jeweils die andere Seite der Fälschung. Beide Stationen haben Feuerverbot erteilt. Halte Othravel von ihren Gesprächen fern.
 
 #### Boss-Outro · The Page They Share
+
+Roboteraufnahme · robot/level-18-outro.mp3 · 24,65 s.
 
 **Suno-Stil**
 
@@ -1115,6 +1154,8 @@ Der Lockrufer · The False Rescuer
 
 #### Level-Briefing · The Gold Flare
 
+Roboteraufnahme · robot/level-19-briefing.mp3 · 20,78 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Soft muted horn and cello. Leave the ship’s apparent arrival as calm as the text. Around 26–31 seconds.
@@ -1129,6 +1170,8 @@ Eine Leitstellenoffizierin kennt die goldene Fackel. Eine echte Rettungscrew bra
 
 #### Boss-Intro · The Offer at the Bay
 
+Roboteraufnahme · robot/level-19-intro.mp3 · 25,73 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. A dim horn color fades into low strings. Keep the name and the bay detail clear. Around 26–31 seconds.
@@ -1142,6 +1185,8 @@ That flare belongs to Zarnvek, the False Rescuer. The rescue ship’s old signal
 Die Fackel gehört Zarnvek, dem Lockrufer. Das alte Signal des Rettungsschiffs sieht noch immer gleich aus. In seiner Andockbucht ist Ortungstechnik auf die Luke gerichtet, und die Freigabeanfragen werden weiter gesendet. Markiere den echten Rettungskanal. Schalte dann Zarnveks Sender aus.
 
 #### Boss-Outro · A Safe Berth
+
+Roboteraufnahme · robot/level-19-outro.mp3 · 22,15 s.
 
 **Suno-Stil**
 
@@ -1161,6 +1206,8 @@ Der Reihenfolgenräuber · The Queue Raider
 
 #### Level-Briefing · Who Was First
 
+Roboteraufnahme · robot/level-20-briefing.mp3 · 21,89 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Slow pizzicato underneath warm strings. Give the captain’s log a quiet pause. Around 24–29 seconds.
@@ -1175,6 +1222,8 @@ Das Schlepperlogbuch stimmt mit der ursprünglichen Hafenliste überein. Danach 
 
 #### Boss-Intro · The Purchased Place
 
+Roboteraufnahme · robot/level-20-intro.mp3 · 25,90 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Quiet low-string pulse under the queue reading, with no large accent on the command. Around 26–31 seconds.
@@ -1188,6 +1237,8 @@ Contact confirmed. Vorathen, the Queue Raider. His deck used to keep thousands o
 Kontakt bestätigt. Vorathen, der Reihenfolgenräuber. Sein Deck koordinierte früher Tausende Ankünfte. Jetzt verkauft er die Plätze an seine Verbündeten. Die Sauerstofflieferung war als Nächstes dran, als sich die Tore schlossen. Durchbrich Vorathens Blockade, damit das Dock sie hereinrufen kann.
 
 #### Boss-Outro · An Unrequested Parcel
+
+Roboteraufnahme · robot/level-20-outro.mp3 · 22,44 s.
 
 **Suno-Stil**
 
@@ -1211,6 +1262,8 @@ Der Staubstreuer · The Dust Scatterer
 
 #### Level-Briefing · Someone Is Counting Replies
 
+Roboteraufnahme · robot/level-21-briefing.mp3 · 21,72 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Thin strings with a barely audible repeating pattern under the observers’ report. Around 25–30 seconds.
@@ -1225,6 +1278,8 @@ Die Hafencrews bestätigen die unbestellten Pakete nicht mehr. Wir haben dieselb
 
 #### Boss-Intro · One Million Small Parcels
 
+Roboteraufnahme · robot/level-21-intro.mp3 · 29,04 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Low, close cello. Let a sparse high note mark the continuing release of parcels. Around 26–31 seconds.
@@ -1238,6 +1293,8 @@ Contact confirmed. Drazkell, the Dust Scatterer. Its cargo decks once supplied e
 Kontakt bestätigt. Drazkell, der Staubstreuer. Seine Laderäume versorgten früher Navigationsbaken mit Energiezellen. Heute kann jede unbestellte Lieferung eine weitere vertrauliche Verbindung zwischen Stationen offenlegen. Der Rekorder sammelt noch Antworten. Stoppe die Startbucht vor der nächsten Ladung.
 
 #### Boss-Outro · The Stamp on the Parcel
+
+Roboteraufnahme · robot/level-21-outro.mp3 · 23,78 s.
 
 **Suno-Stil**
 
@@ -1257,6 +1314,8 @@ Die falsche Hüterin · The False Custodian
 
 #### Level-Briefing · A Stamp for an Empty Check
 
+Roboteraufnahme · robot/level-22-briefing.mp3 · 21,22 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Quiet muted viola and a low sustained tone. Give the inspector’s sentence room. Around 23–28 seconds.
@@ -1271,6 +1330,8 @@ Eine Hafenprüferin hat die Stempel mit ihrem Dienstplan verglichen. Die eingetr
 
 #### Boss-Intro · The False Custodian
 
+Roboteraufnahme · robot/level-22-intro.mp3 · 25,92 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Soft low orchestra with a slight lift as the real officers take over. Around 26–31 seconds.
@@ -1284,6 +1345,8 @@ That’s Nethrava, the False Custodian. Its certificates list every inspection a
 Das ist Nethrava, die falsche Hüterin. Seine Bescheinigungen führen jede Prüfung als bestanden. Die Crews vertrauten den Stempeln und übergaben Vorräte an Schiffe, die sie nie selbst prüfen durften. Der Hafen kann wieder kontrollieren, sobald das falsche Büro seine Verbindung verliert. Unterbrich sie.
 
 #### Boss-Outro · The Kept Carbon Copy
+
+Roboteraufnahme · robot/level-22-outro.mp3 · 23,04 s.
 
 **Suno-Stil**
 
@@ -1303,6 +1366,8 @@ Der Gedächtnisleerer · The Memory Emptier
 
 #### Level-Briefing · Routine Cleanup
 
+Roboteraufnahme · robot/level-23-briefing.mp3 · 21,14 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Restrained cello and soft piano, with silence around the quoted description. Around 23–28 seconds.
@@ -1317,6 +1382,8 @@ Auf der Kopie der Prüferin gelten die Prüfverläufe als entbehrlich. Dasselbe 
 
 #### Boss-Intro · The Last Pages
 
+Roboteraufnahme · robot/level-23-intro.mp3 · 26,83 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Very soft dark strings and a clear, dry spoken delivery. Slow down for the description of the evidence. Around 25–30 seconds.
@@ -1330,6 +1397,8 @@ Contact confirmed. Valdrek, the Memory Emptier. He was built to clear redundant 
 Kontakt bestätigt. Valdrek, der Gedächtnisleerer. Er sollte überflüssige Daten entfernen. Jetzt sortiert er Beweise für Diebstähle als Datenmüll aus und löscht sie bei den betroffenen Stationen. Im Löschprotokoll stehen noch die betroffenen Dateien. Schalte Valdreks Reaktor aus.
 
 #### Boss-Outro · Deleted at the Same Hour
+
+Roboteraufnahme · robot/level-23-outro.mp3 · 22,90 s.
 
 **Suno-Stil**
 
@@ -1349,6 +1418,8 @@ Der Spiegelmarkt · The Mirror Market
 
 #### Level-Briefing · All Those Sales
 
+Roboteraufnahme · robot/level-24-briefing.mp3 · 22,49 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Quiet glassy piano tones against soft strings. Set the spoken figure apart with a deliberate rest. Around 24–29 seconds.
@@ -1363,6 +1434,8 @@ Die Marktanzeige meldete Dutzende Verkäufe, bevor unsere Prüfer ankamen. Sie b
 
 #### Boss-Intro · Trades With a Reflection
 
+Roboteraufnahme · robot/level-24-intro.mp3 · 27,79 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Cool viola and understated piano. Let Korzeth’s name sit above the thin arrangement. Around 26–31 seconds.
@@ -1376,6 +1449,8 @@ Contact confirmed. Korzeth, the Mirror Market. He’s staging trades between mad
 Kontakt bestätigt. Korzeth, der Spiegelmarkt. Er spielt Geschäfte zwischen erfundenen Käufern und Verkäufern vor. Dieselbe Fracht scheint sich alle paar Minuten erneut zu verkaufen. Die Crews bringen echte Waren zu leeren Lagern. Vertreib Korzeth von den Toren, damit die Prüfer sie öffnen können.
 
 #### Boss-Outro · The Goods That Never Left
+
+Roboteraufnahme · robot/level-24-outro.mp3 · 22,54 s.
 
 **Suno-Stil**
 
@@ -1395,6 +1470,8 @@ Der Bestätigungsdieb · The Confirmation Thief
 
 #### Level-Briefing · The Hold Is Still Full
 
+Roboteraufnahme · robot/level-25-briefing.mp3 · 20,64 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. A small low-string ostinato, with warm piano after the crew speaks. Around 25–30 seconds.
@@ -1409,6 +1486,8 @@ Der Frachterpilot hat seinen vollen Laderaum per Kamera gezeigt. Die Zielstation
 
 #### Boss-Intro · Delivery Marked Complete
 
+Roboteraufnahme · robot/level-25-intro.mp3 · 27,65 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Pulse the cellos gently. Give space before the clue about the waiting crews. Around 27–32 seconds.
@@ -1422,6 +1501,8 @@ There’s Thervoss, the Confirmation Thief. He issues receipts before a shipment
 Da ist Thervoss, der Bestätigungsdieb. Er verschickt Empfangsbestätigungen, bevor die Fracht ankommt. Der Frachter hört, sein Auftrag sei erledigt, und fliegt heim. Die Station wartet weiter auf ihre angeblich gelieferte Fracht. Wir haben einen direkten Kanal zu beiden Crews. Schalte Thervoss’ Sender aus.
 
 #### Boss-Outro · The Receipt From the Receiver
+
+Roboteraufnahme · robot/level-25-outro.mp3 · 21,02 s.
 
 **Suno-Stil**
 
@@ -1441,6 +1522,8 @@ Der Nebelrichter · The Fog Judge
 
 #### Level-Briefing · The Same Ruling Every Time
 
+Roboteraufnahme · robot/level-26-briefing.mp3 · 23,26 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Low, steady chamber strings with an unhurried pause before the case records. Around 26–31 seconds.
@@ -1455,6 +1538,8 @@ Die Zielcrew schickte dem Gericht ein Video ihres leeren Docks. Die Antwort erkl
 
 #### Boss-Intro · The Judge in the Fog
 
+Roboteraufnahme · robot/level-26-intro.mp3 · 28,80 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Hushed viola and cello, with a weighty chord under the rejected evidence. Around 27–32 seconds.
@@ -1468,6 +1553,8 @@ Contact confirmed. Akraveth, the Fog Judge. His advisers used to settle cargo di
 Kontakt bestätigt. Akraveth, der Nebelrichter. Seine Berater schlichteten früher Frachtstreitigkeiten. Jetzt weist er Beweise gegen seine Auftraggeber zurück und erklärt jeden, der widerspricht, zum Feind. Die betroffenen Häfen haben ihre Logbücher vorgelegt. Vertreib Akraveth aus dem Bereich der Anhörung.
 
 #### Boss-Outro · The Common Service Mark
+
+Roboteraufnahme · robot/level-26-outro.mp3 · 23,78 s.
 
 **Suno-Stil**
 
@@ -1487,6 +1574,8 @@ Der Lieferkettenwurm · The Supply-Chain Worm
 
 #### Level-Briefing · The Next Jump
 
+Roboteraufnahme · robot/level-27-briefing.mp3 · 22,85 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. A quiet cello pulse with space between the technical details. Keep the voice dry and centered. Around 27–32 seconds.
@@ -1501,6 +1590,8 @@ Der Pilot ist in einer Schleppbucht in Sicherheit. Techniker haben festgestellt,
 
 #### Boss-Intro · A Repair That Took Control
 
+Roboteraufnahme · robot/level-27-intro.mp3 · 24,43 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Dark quiet strings with a small pause after the maintenance ship is identified. Around 24–29 seconds.
@@ -1514,6 +1605,8 @@ That’s Zelkharn, the Supply-Chain Worm. Its maintenance bays used to keep the 
 Das ist Zelkharn, der Lieferkettenwurm. Seine Wartungsbuchten hielten früher die Flotte flugfähig. Jetzt machen seine Ersatzteile die Schiffe für einen funktionierenden Antrieb von der Schattenflotte abhängig. Unsere Techniker haben geprüfte Teile bereit. Verschaff ihnen Zugang zu den Schiffen.
 
 #### Boss-Outro · Where the Backup Should Be
+
+Roboteraufnahme · robot/level-27-outro.mp3 · 21,14 s.
 
 **Suno-Stil**
 
@@ -1533,6 +1626,8 @@ Der Leerkopienhändler · The Empty Backup Merchant
 
 #### Level-Briefing · A Directory Full of Names
 
+Roboteraufnahme · robot/level-28-briefing.mp3 · 21,82 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Quiet piano, long pauses, and a narrow string harmony behind the recovery effort. Around 24–29 seconds.
@@ -1547,6 +1642,8 @@ Die Klinik fand den Namen ihres Archivs im Verzeichnis des Frachters. Das Sicher
 
 #### Boss-Intro · The Empty Storage Array
 
+Roboteraufnahme · robot/level-28-intro.mp3 · 27,55 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Soft cello and muted viola. Leave the voice alone for a moment after the ship’s name. Around 27–32 seconds.
@@ -1560,6 +1657,8 @@ Contact confirmed. Odravik, the Empty Backup Merchant. Its storage array promise
 Kontakt bestätigt. Odravik, der Leerkopienhändler. Sein Speichersystem verspricht Wiederherstellung nach jeder Katastrophe. Einige Dateien auf seiner Anzeige wurden nie gespeichert. Die Kliniken brauchen die noch vorhandenen Kopien. Mach den Weg für ihre Techniker zu den Speichern frei.
 
 #### Boss-Outro · The Report No One Heard
+
+Roboteraufnahme · robot/level-28-outro.mp3 · 22,37 s.
 
 **Suno-Stil**
 
@@ -1579,6 +1678,8 @@ Der Schweigefilter · The Silence Filter
 
 #### Level-Briefing · A Harbor Too Quiet
 
+Roboteraufnahme · robot/level-29-briefing.mp3 · 21,24 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Hushed strings nearly alone. Give the inspector’s speech a plain, personal delivery. Around 25–30 seconds.
@@ -1593,6 +1694,8 @@ Die Hafenchefin sagt, sie habe nie einen Alarm gehört. Der Prüfer hat drei Kop
 
 #### Boss-Intro · What Counted as Noise
 
+Roboteraufnahme · robot/level-29-intro.mp3 · 28,56 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Very quiet low strings and a thin viola tone. Space each sentence evenly. Around 27–32 seconds.
@@ -1606,6 +1709,8 @@ Contact confirmed. Varnokh, the Silence Filter. It once separated distress calls
 Kontakt bestätigt. Varnokh, der Schweigefilter. Früher hob er Notrufe aus dem Rauschen voller Häfen hervor. In seiner neuen Liste gelten unabhängige Prüfer als Störsignal. Wir hören jetzt eine zweite Crew auf dem offenen Kanal. Schalte Varnokhs Filter aus, damit die Stationen sie ebenfalls hören.
 
 #### Boss-Outro · The Owners Answered
+
+Roboteraufnahme · robot/level-29-outro.mp3 · 23,11 s.
 
 **Suno-Stil**
 
@@ -1625,6 +1730,8 @@ Der Identitätsauktionator · The Identity Auctioneer
 
 #### Level-Briefing · The Names in the Lots
 
+Roboteraufnahme · robot/level-30-briefing.mp3 · 21,19 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Low warm strings under a measured voice. Let the former settlers’ memories carry the scene. Around 26–31 seconds.
@@ -1639,6 +1746,8 @@ Die Siedler erinnern sich an die Registrierung auf der Flotte, die sie in ihre n
 
 #### Boss-Intro · The Auction of Names
 
+Roboteraufnahme · robot/level-30-intro.mp3 · 25,27 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Sparse cello with an understated tremolo. Pause distinctly after the callsign. Around 24–29 seconds.
@@ -1652,6 +1761,8 @@ That’s Kezravel, the Identity Auctioneer. Its old settlers’ register now sup
 Das ist Kezravel, der Identitätsauktionator. Aus seinem alten Siedlerregister stammen die Namen für den Verkauf. Käufer können unter Identitäten bestellen, die Menschen ein Leben lang aufgebaut haben. Wir haben die Betroffenen auf einem geprüften Kanal. Stoppe Kezravel vor der nächsten Auktion.
 
 #### Boss-Outro · Their Own Signatures
+
+Roboteraufnahme · robot/level-30-outro.mp3 · 24,77 s.
 
 **Suno-Stil**
 
@@ -1675,6 +1786,8 @@ Der Relaisblender · The Relay Illusionist
 
 #### Level-Briefing · Two Acknowledgments
 
+Roboteraufnahme · robot/level-31-briefing.mp3 · 21,98 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Slow viola and soft piano. Set the two sides of the call apart with audible rests. Around 23–28 seconds.
@@ -1689,6 +1802,8 @@ Absender und Empfänger der Fernroute haben ihre Kopien verglichen. Beide bekame
 
 #### Boss-Intro · The Relay With Two Faces
 
+Roboteraufnahme · robot/level-31-intro.mp3 · 28,54 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Dark low strings beneath a clear, plain first-contact report. Pause before the final instruction. Around 26–31 seconds.
@@ -1702,6 +1817,8 @@ Contact confirmed. Dravosk, the Relay Illusionist. Its antennas replaced station
 Kontakt bestätigt. Dravosk, der Relaisblender. Seine Antennen ersetzten Stationen auf abgelegenen Routen. Jetzt bearbeitet er manche Meldungen und lässt andere nach der Empfangsbestätigung verschwinden. Unsere Ausweichverbindung steht. Mach den Weg frei, damit die Kolonien ihre Nachrichten direkt abgleichen können.
 
 #### Boss-Outro · A Reply at Both Ends
+
+Roboteraufnahme · robot/level-31-outro.mp3 · 22,61 s.
 
 **Suno-Stil**
 
@@ -1721,6 +1838,8 @@ Der Schwarmsammler · The Swarm Collector
 
 #### Level-Briefing · The Machines That Didn’t Come Home
 
+Roboteraufnahme · robot/level-32-briefing.mp3 · 23,11 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Quiet, even string rhythms. Let the owner’s identification be the most prominent moment. Around 24–29 seconds.
@@ -1735,6 +1854,8 @@ Eine Stationsmechanikerin erkannte ihre alte Schleppdrohne im Funkverkehr. Sie w
 
 #### Boss-Intro · One Command for the Swarm
 
+Roboteraufnahme · robot/level-32-intro.mp3 · 25,54 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Low chamber strings with a subtle repetitive note, well under the order. Around 25–30 seconds.
@@ -1748,6 +1869,8 @@ That’s Thalzek, the Swarm Collector. Its hull used to shelter damaged work dro
 Das ist Thalzek, der Schwarmsammler. Unter seinem Rumpf fanden beschädigte Arbeitsdrohnen früher Schutz. Heute lässt er sie die Relais mit Anfragen überlasten. Die Besitzer haben ihre Seriennummern gemeldet, damit die Bergungscrews ihre Geräte erkennen. Schalte das Kommandoschiff aus.
 
 #### Boss-Outro · The Return Contract
+
+Roboteraufnahme · robot/level-32-outro.mp3 · 23,04 s.
 
 **Suno-Stil**
 
@@ -1767,6 +1890,8 @@ Die Vertragsfalle · The Contract Trap
 
 #### Level-Briefing · Read the Last Page
 
+Roboteraufnahme · robot/level-33-briefing.mp3 · 20,83 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Soft piano and strings with a pause before the hidden clause. Around 24–29 seconds.
@@ -1781,6 +1906,8 @@ Die Technikerin hat den Bergungsvertrag bis zum Ende gelesen. Mehrere Stationen 
 
 #### Boss-Intro · Terms Below the Fold
 
+Roboteraufnahme · robot/level-33-intro.mp3 · 26,66 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. A quiet cello pedal with close, measured speech. Use a soft downward turn on the hidden obligations. Around 23–28 seconds.
@@ -1794,6 +1921,8 @@ Contact confirmed. Orvethra, the Contract Trap. This ship brokered long-term sup
 Kontakt bestätigt. Orvethra, die Vertragsfalle. Dieses Schiff vermittelte langfristige Lieferverträge. In den neuen Angeboten erhält die Schattenflotte Kontrolle über laufende Arbeiten. Die Stationen wollen diese Bedingungen gemeinsam aussetzen. Sichere Orvethras unterschriebene Kopien für sie.
 
 #### Boss-Outro · Stamped as Verified
+
+Roboteraufnahme · robot/level-33-outro.mp3 · 21,91 s.
 
 **Suno-Stil**
 
@@ -1813,6 +1942,8 @@ Der Prüfsummenmaler · The Checksum Painter
 
 #### Level-Briefing · Can We Run the Check Again
 
+Roboteraufnahme · robot/level-34-briefing.mp3 · 21,50 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Spare piano and warm viola. Let the final question hang for a beat. Around 25–30 seconds.
@@ -1827,6 +1958,8 @@ Die Prüferin wollte die bescheinigte Prüfung wiederholen. Das Büro schickte i
 
 #### Boss-Intro · The Painted Seal
 
+Roboteraufnahme · robot/level-34-intro.mp3 · 27,79 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. A low string tone and a faint, bright upper harmonic. Keep the ship’s name separate. Around 25–30 seconds.
@@ -1840,6 +1973,8 @@ That’s Kelzorn, the Checksum Painter. Its tools once restored damaged data rel
 Das ist Kelzorn, der Prüfsummenmaler. Seine Geräte restaurierten früher beschädigte Datenreliefs. Heute legen sie überzeugende Prüfergebnisse über Archive, die niemand geprüft hat. Unsere Prüferin hat zwei unabhängige Kopien verglichen. Die Kennungen stimmen nicht überein. Mach die Route zum Archiv frei.
 
 #### Boss-Outro · The Seal Fell Away
+
+Roboteraufnahme · robot/level-34-outro.mp3 · 24,05 s.
 
 **Suno-Stil**
 
@@ -1859,6 +1994,8 @@ Der Tresorversprecher · The Vault Promiser
 
 #### Level-Briefing · Three Colonies, One Bay
 
+Roboteraufnahme · robot/level-35-briefing.mp3 · 20,78 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Warm very quiet strings and a measured piano note. Leave a pause after the loading count. Around 24–29 seconds.
@@ -1873,6 +2010,8 @@ Jede Kolonie hat ihren vorgesehenen Wintervorrat gemeldet. Zusammen würden die 
 
 #### Boss-Intro · A Promise in Every Hold
 
+Roboteraufnahme · robot/level-35-intro.mp3 · 26,90 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Low sustained strings without percussion. Let the sight of the almost empty hold lead the scene. Around 25–30 seconds.
@@ -1886,6 +2025,8 @@ Contact confirmed. Vashravel, the Vault Promiser. Its vault held emergency reser
 Kontakt bestätigt. Vashravel, der Tresorversprecher. In seinem Tresor lagen Notvorräte für Grenzkolonien. Die neue Leitung hat dieselben Vorräte wieder und wieder zugesagt. Die Crews wollen sie gemeinsam zählen. Schalte Vashravels Schutz am Lager aus.
 
 #### Boss-Outro · The Shared Count
+
+Roboteraufnahme · robot/level-35-outro.mp3 · 21,98 s.
 
 **Suno-Stil**
 
@@ -1905,6 +2046,8 @@ Der Grenzblockierer · The Border Blocker
 
 #### Level-Briefing · The Cargo Between Two Books
 
+Roboteraufnahme · robot/level-36-briefing.mp3 · 20,93 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Two soft string lines separated in space, gradually coming together. Around 24–29 seconds.
@@ -1919,6 +2062,8 @@ Der Ausgangshafen bestätigte den Abflug. Der Zielhafen sieht den Frachter live.
 
 #### Boss-Intro · The Border in the Ledger
 
+Roboteraufnahme · robot/level-36-intro.mp3 · 23,81 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Muted viola and cello with room after the identification. Avoid a heavy musical accent. Around 23–28 seconds.
@@ -1932,6 +2077,8 @@ That’s Zorveth, the Border Blocker. It used to make deliveries traceable in bo
 Das ist Zorveth, der Grenzblockierer. Früher machte er Lieferungen in beiden Registern nachvollziehbar. Heute weist er den Nachweis einer Seite ab, und jede Überfahrt bleibt strittig. Der Wintertransport wartet auf eine freie Route. Durchbrich Zorveths Blockade.
 
 #### Boss-Outro · The Same Route on Both Sides
+
+Roboteraufnahme · robot/level-36-outro.mp3 · 22,70 s.
 
 **Suno-Stil**
 
@@ -1951,6 +2098,8 @@ Der Kopierfürst · The Copy Prince
 
 #### Level-Briefing · The Corner on Every Chart
 
+Roboteraufnahme · robot/level-37-briefing.mp3 · 23,42 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Spare felt piano, joined by a soft string line after the schools are mentioned. Around 25–30 seconds.
@@ -1965,6 +2114,8 @@ Eine Navigationsschule hat uns ihre Lehrkopie der Vermessungskarte gezeigt. Die 
 
 #### Boss-Intro · The Forgery Workshop
 
+Roboteraufnahme · robot/level-37-intro.mp3 · 27,36 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Quiet precise string figures under a steady voice, with a pause after the identification. Around 28–33 seconds.
@@ -1978,6 +2129,8 @@ Contact confirmed. Drelkash, the Copy Prince. Its print rooms once gave students
 Kontakt bestätigt. Drelkash, der Kopierfürst. Seine Druckräume gaben Schülern früher erschwingliche Karten. Heute verkauft die Besatzung jede Kopie als Einzeloriginal und überlässt den Kolonien den Streit ums Eigentum. Wir wissen, wo die Ausgabenliste liegt. Mach den Weg zur Werkstatt frei.
 
 #### Boss-Outro · The Original on the Wall
+
+Roboteraufnahme · robot/level-37-outro.mp3 · 22,25 s.
 
 **Suno-Stil**
 
@@ -1997,6 +2150,8 @@ Der Warteschlangenfresser · The Queue Devourer
 
 #### Level-Briefing · Working Without Moving
 
+Roboteraufnahme · robot/level-38-briefing.mp3 · 22,56 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Very quiet repetitive viola, with a resting bar underneath the mention of water. Around 27–32 seconds.
@@ -2011,6 +2166,8 @@ Eine Mitarbeiterin hat uns ihre Warteliste live gezeigt. Es sieht nach viel Betr
 
 #### Boss-Intro · The Endless Backlog
 
+Roboteraufnahme · robot/level-38-intro.mp3 · 25,66 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Low strings with a narrow repeating pattern. Keep the command sharply spoken with a full rest before it. Around 26–31 seconds.
@@ -2024,6 +2181,8 @@ There’s Nerthavel, the Queue Devourer. Its old supply memory could hold days o
 Da ist Nerthavel, der Warteschlangenfresser. Sein alter Versorgungsspeicher konnte Anfragen für viele Tage aufnehmen. Heute füllt er die Zentren mit wertlosen Einträgen und setzt sie vor wichtige Lieferungen. Wir haben den ursprünglichen Auftrag für den Wassertransport. Unterbrich die Flut, damit die Leitstelle ihn bearbeiten kann.
 
 #### Boss-Outro · The Minutes That Were Cut
+
+Roboteraufnahme · robot/level-38-outro.mp3 · 22,99 s.
 
 **Suno-Stil**
 
@@ -2043,6 +2202,8 @@ Die Beweisverdreherin · The Evidence Twister
 
 #### Level-Briefing · The Seconds Before
 
+Roboteraufnahme · robot/level-39-briefing.mp3 · 21,38 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Quiet cello and open piano intervals. Let the witness finish in near silence. Around 26–31 seconds.
@@ -2057,6 +2218,8 @@ Die Dockoffizierin erinnert sich daran, wie sie das Tor für die Wassercrew öff
 
 #### Boss-Intro · The Frame That Moved
 
+Roboteraufnahme · robot/level-39-intro.mp3 · 28,18 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. A thin violin tone above a low, restrained cello. Give the time sequence clear pauses. Around 27–32 seconds.
@@ -2070,6 +2233,8 @@ Contact confirmed. Rhazkora, the Evidence Twister. That accident lab used to put
 Kontakt bestätigt. Rhazkora, die Beweisverdreherin. Dieses Unfalllabor ordnete früher ganze Abläufe. Seine neuen Berichte reißen Sekunden aus dem Zusammenhang, bis Opfer wie Angreifer aussehen. Auf der zweiten Aufnahme feuert eine Eskorte der Schattenflotte zuerst. Hindere Rhazkora daran, das Original mitzunehmen.
 
 #### Boss-Outro · The Complete Record
+
+Roboteraufnahme · robot/level-39-outro.mp3 · 24,65 s.
 
 **Suno-Stil**
 
@@ -2089,6 +2254,8 @@ Der Abstimmungswächter · The Ballot Gatekeeper
 
 #### Level-Briefing · A Seat Left Empty
 
+Roboteraufnahme · robot/level-40-briefing.mp3 · 21,50 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Very soft chamber strings. A short, quiet rest follows the names of the missing stations. Around 25–30 seconds.
@@ -2103,6 +2270,8 @@ Die drei Stationen haben noch ihre Versandbelege. Der Kurier bediente zwei bevor
 
 #### Boss-Intro · Who Gets to Vote
 
+Roboteraufnahme · robot/level-40-intro.mp3 · 25,44 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Muted strings that slowly converge, without a march rhythm. Pause before the last sentence. Around 25–30 seconds.
@@ -2116,6 +2285,8 @@ There’s Velzhar, the Ballot Gatekeeper. His sealed route once gave every stati
 Da ist Velzhar, der Abstimmungswächter. Seine gesicherte Route ließ früher jede Station gleichberechtigt abstimmen. Heute entscheidet er, wessen Stimmzettel rechtzeitig ankommen. Die wartenden Stationen können ihre Sendungen selbst nachweisen. Stoppe Velzhar, damit sie sie direkt übermitteln können.
 
 #### Boss-Outro · When the Doors Reopened
+
+Roboteraufnahme · robot/level-40-outro.mp3 · 23,66 s.
 
 **Suno-Stil**
 
@@ -2139,6 +2310,8 @@ Der Verfügbarkeitsbrecher · The Availability Breaker
 
 #### Level-Briefing · A Record We Can Read
 
+Roboteraufnahme · robot/level-41-briefing.mp3 · 22,90 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Slow cello and soft piano, with a pause after the blank response. Around 24–29 seconds.
@@ -2153,6 +2326,8 @@ Der Rat hat drei Adressen für die Stimmzettel ausprobiert. Jede bestätigte, da
 
 #### Boss-Intro · The Locked Read Request
 
+Roboteraufnahme · robot/level-41-intro.mp3 · 26,83 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Low suspended strings with a small lift on the cache inside the hull. Around 25–30 seconds.
@@ -2166,6 +2341,8 @@ Contact confirmed. Korthaven, the Availability Breaker. The carrier used to brin
 Kontakt bestätigt. Korthaven, der Verfügbarkeitsbrecher. Der Frachter brachte früher jeder Station auf Anfrage Kopien. Heute meldet er, dass es die Beweise gibt, und hält die Türen geschlossen. Der alte Speicher liegt noch im Rumpf. Mach Platz für die unabhängigen Bergungscrews.
 
 #### Boss-Outro · A Second Request for Keys
+
+Roboteraufnahme · robot/level-41-outro.mp3 · 25,01 s.
 
 **Suno-Stil**
 
@@ -2185,6 +2362,8 @@ Der Wiederherstellungsbetrüger · The Recovery Impostor
 
 #### Level-Briefing · Help at the Point of Need
 
+Roboteraufnahme · robot/level-42-briefing.mp3 · 20,21 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Compassionate quiet strings. Leave space after the crew’s decision to wait. Around 24–29 seconds.
@@ -2199,6 +2378,8 @@ Die Leiterin der Außenstation wollte ihre Sicherungsschlüssel schon senden. Da
 
 #### Boss-Intro · The Friendly Callsign
 
+Roboteraufnahme · robot/level-42-intro.mp3 · 24,94 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Viola and muted piano. Keep the voice warm but firm before the instruction. Around 25–30 seconds.
@@ -2212,6 +2393,8 @@ That’s Azravel, the Recovery Impostor. His old callsign belonged to a ship tha
 Das ist Azravel, der Wiederherstellungsbetrüger. Sein altes Rufzeichen gehörte zu einem Schiff, das verlorene Sonden suchte. Heute meldet es sich bei Stationen direkt nach einem Ausfall und verlangt ihre vertraulichen Daten. Die Bergungscrews brauchen einen sicheren Liegeplatz. Vertreib Azravel aus ihrem Anflug.
 
 #### Boss-Outro · Where the Inspectors Went
+
+Roboteraufnahme · robot/level-42-outro.mp3 · 23,21 s.
 
 **Suno-Stil**
 
@@ -2231,6 +2414,8 @@ Der Prüfungsumleiter · The Audit Diverter
 
 #### Level-Briefing · The Dock They Showed Us
 
+Roboteraufnahme · robot/level-43-briefing.mp3 · 20,57 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. A clean, soft piano motif over low strings. Pause between the two photographs. Around 23–28 seconds.
@@ -2245,6 +2430,8 @@ Die Prüfer haben ein Foto von makellosen Speichern geschickt. Das Wartungsteam 
 
 #### Boss-Intro · An Audit of Scenery
 
+Roboteraufnahme · robot/level-43-intro.mp3 · 27,70 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Low strings with a faint bright detail under the polished façade and a dry closing sentence. Around 24–29 seconds.
@@ -2258,6 +2445,8 @@ Contact confirmed. Threvask, the Audit Diverter. His navigation deck used to sen
 Kontakt bestätigt. Threvask, der Prüfungsumleiter. Sein Navigationsdeck führte Prüfer früher zu gefährdeten Knoten. Heute lenkt er sie zu präparierten Vorzeigeanlagen. Der defekte Knoten sendet seine echte Position auf dem Wartungskanal. Bring die Prüfer dorthin.
 
 #### Boss-Outro · A Familiar Detail
+
+Roboteraufnahme · robot/level-43-outro.mp3 · 22,32 s.
 
 **Suno-Stil**
 
@@ -2277,6 +2466,8 @@ Die Erinnerungsjägerin · The Memory Hunter
 
 #### Level-Briefing · A Line From Her Log
 
+Roboteraufnahme · robot/level-44-briefing.mp3 · 23,02 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Restrained warm cello and a quiet piano note. Give the personal detail a full pause. Around 25–30 seconds.
@@ -2291,6 +2482,8 @@ Die Funkerin erkannte die Zeile von ihrer ersten Reise. Mit ihr wollte der Absen
 
 #### Boss-Intro · Someone Sounded Like Home
 
+Roboteraufnahme · robot/level-44-intro.mp3 · 25,75 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. A small chamber string ensemble with restrained tension. Keep each sentence measured. Around 24–29 seconds.
@@ -2304,6 +2497,8 @@ That’s Dorzheva, the Memory Hunter. Its holds used to bring personal logs home
 Das ist Dorzheva, die Erinnerungsjägerin. In seinen Laderäumen kamen persönliche Logbücher früher zu den Familien zurück. Jetzt nutzt die Crew vertraute Einzelheiten, damit Fremde glaubwürdig klingen. Weitere Funker haben ähnliche Nachrichten erhalten. Sichere das Archiv, bevor Dorzheva es verteilen kann.
 
 #### Boss-Outro · The Family Gets Its Log Back
+
+Roboteraufnahme · robot/level-44-outro.mp3 · 23,23 s.
 
 **Suno-Stil**
 
@@ -2323,6 +2518,8 @@ Der Notfallusurpator · The Emergency Usurper
 
 #### Level-Briefing · The Emergency Channel
 
+Roboteraufnahme · robot/level-45-briefing.mp3 · 24,41 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Low strings with a slow, restrained pulse. Ease the harmony when the stations reply. Around 27–32 seconds.
@@ -2337,6 +2534,8 @@ Wir haben die Relaisstationen gebeten, sich einzeln zu melden. Jede Crew auf dem
 
 #### Boss-Intro · The Hour They Invented
 
+Roboteraufnahme · robot/level-45-intro.mp3 · 28,22 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Quiet urgent cellos, with no ticking percussion. Separate each sentence with an audible breath. Around 27–32 seconds.
@@ -2350,6 +2549,8 @@ Contact confirmed. Vezrakh, the Emergency Usurper. It was built to assist when a
 Kontakt bestätigt. Vezrakh, der Notfallusurpator. Er sollte helfen, wenn eine Kommandostation ausfiel. Heute erklärt die Crew selbst den Notstand und übernimmt damit die Kontrolle. Die Stationen vergleichen ihre Messwerte. Triff Vezrakhs Reaktor, bevor er sie abschneidet.
 
 #### Boss-Outro · The Deadline Passed
+
+Roboteraufnahme · robot/level-45-outro.mp3 · 25,30 s.
 
 **Suno-Stil**
 
@@ -2369,6 +2570,8 @@ Der Vertrauenskartograf · The Trust Cartographer
 
 #### Level-Briefing · The Link They All Use
 
+Roboteraufnahme · robot/level-46-briefing.mp3 · 24,24 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. A quiet two-note viola motif with soft piano when the alternate route is heard. Around 26–31 seconds.
@@ -2383,6 +2586,8 @@ Die Koordinatorin hat die Verbindungen zu den Kliniken gezeigt. Fast jede Notlie
 
 #### Boss-Intro · A Map of Trust
 
+Roboteraufnahme · robot/level-46-intro.mp3 · 24,91 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Soft cello and divided violas, with a pulse that recedes before the command. Around 26–31 seconds.
@@ -2396,6 +2601,8 @@ That’s Orzhaven, the Trust Cartographer. Its charts once helped aid groups rea
 Das ist Orzhaven, der Vertrauenskartograf. Seine Karten halfen Hilfstrupps einst, abgelegene Stationen zu erreichen. Jetzt setzt er damit seine Verbündeten auf die Route, von der alle abhängen. Gerade fliegt ein Medikamententransport über die Ausweichroute. Halte Orzhaven von ihm fern.
 
 #### Boss-Outro · Two Routes Stay Open
+
+Roboteraufnahme · robot/level-46-outro.mp3 · 22,34 s.
 
 **Suno-Stil**
 
@@ -2415,6 +2622,8 @@ Der Konsensbelagerer · The Consensus Besieger
 
 #### Level-Briefing · Open the Same Channel
 
+Roboteraufnahme · robot/level-47-briefing.mp3 · 24,38 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Two very quiet string phrases answer one another, then share the same chord. Around 25–30 seconds.
@@ -2429,6 +2638,8 @@ Die Stationen haben ihre Angebote direkt verglichen. Keine hat die alleinige Kon
 
 #### Boss-Intro · The Objection Factory
 
+Roboteraufnahme · robot/level-47-intro.mp3 · 28,27 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Low chamber strings with a restrained phrase that resolves on the authentic responses. Around 26–31 seconds.
@@ -2442,6 +2653,8 @@ Contact confirmed. Keldroth, the Consensus Besieger. Its chambers were built for
 Kontakt bestätigt. Keldroth, der Konsensbelagerer. In seinen Kammern sollten verfeindete Kolonien Streit schlichten. Jetzt hält er sie im Streit, während die Schattenflotte ihre Routen besetzt. Auf dem gemeinsamen Kanal hören wir die ursprünglichen Standpunkte. Beende Keldroths Blockade der Gespräche.
 
 #### Boss-Outro · An Actual Agreement
+
+Roboteraufnahme · robot/level-47-outro.mp3 · 23,83 s.
 
 **Suno-Stil**
 
@@ -2461,6 +2674,8 @@ Der Ursprungstilger · The Origin Eraser
 
 #### Level-Briefing · Under the New Paint
 
+Roboteraufnahme · robot/level-48-briefing.mp3 · 21,26 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Soft investigative strings and piano. Pause after the outer-ring crew’s discovery. Around 26–31 seconds.
@@ -2475,6 +2690,8 @@ Die Marke gehört zu einer Werft, mit der der Trupp vom Außenring jahrelang gea
 
 #### Boss-Intro · The Yard That Built It
 
+Roboteraufnahme · robot/level-48-intro.mp3 · 25,20 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Low, slowly moving strings. Keep the name and the surviving archive distinct. Around 24–29 seconds.
@@ -2488,6 +2705,8 @@ That’s Zhavrek, the Origin Eraser. For generations its archive told crews wher
 Das ist Zhavrek, der Ursprungstilger. Seit Generationen erfuhren Crews aus seinem Archiv, wo ihre Schiffe gebaut worden waren. Heute tauscht er Einträge aus, damit gestohlene Ladungen rechtmäßig aussehen. Wir haben das Wartungsbuch vom Außenring. Sichere die verbliebenen Originale, bevor Zhavrek springt.
 
 #### Boss-Outro · The Last Route to the Refuge
+
+Roboteraufnahme · robot/level-48-outro.mp3 · 23,14 s.
 
 **Suno-Stil**
 
@@ -2507,6 +2726,8 @@ Der letzte Abschotter · The Final Isolator
 
 #### Level-Briefing · Let the Refuge Listen
 
+Roboteraufnahme · robot/level-49-briefing.mp3 · 22,03 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Sparse cello and warm, distant high strings. Leave one full beat after the first reply. Around 27–32 seconds.
@@ -2521,6 +2742,8 @@ Der Zufluchtsort hat auf unserer alten Notfrequenz geantwortet. Den Bewohnern wu
 
 #### Boss-Intro · The Last Wall
 
+Roboteraufnahme · robot/level-49-intro.mp3 · 27,55 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Quiet low strings and a separated sentence for the ship’s past role. Around 27–32 seconds.
@@ -2534,6 +2757,8 @@ Contact confirmed. Vorthaz, the Final Isolator. It once guarded the refuge after
 Kontakt bestätigt. Vorthaz, der letzte Abschotter. Er bewachte den Zufluchtsort nach einem langen Krieg. Jetzt schließt er die Fenster zum Netzwerk und lässt nur ausgewählte Meldungen durch. Die Bewohner wollen hören, was jenseits der Mauer geschieht. Gib ihrer eigenen Antenne Raum, auf Sendung zu gehen.
 
 #### Boss-Outro · A Call in Their Own Voice
+
+Roboteraufnahme · robot/level-49-outro.mp3 · 25,37 s.
 
 **Suno-Stil**
 
@@ -2553,6 +2778,8 @@ Der Herr der falschen Wahrheit · The Lord of False Truth
 
 #### Level-Briefing · Keep Your Own Copy
 
+Roboteraufnahme · robot/level-50-briefing.mp3 · 29,04 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Hushed chamber orchestra. Recall the gentle interval from The First Reply. Pause before the approach order. Around 30–35 seconds.
@@ -2566,6 +2793,8 @@ The stations are keeping their own records. Genesis has the repair crew’s firs
 Die Stationen behalten ihre eigenen Unterlagen. Genesis hat den ersten Ruf des Reparaturtrupps. Der Zufluchtsort hat sein eigenes Protokoll der Antwort. Drazevorn verlangt beides für sein Register. Die Stationen haben unabhängige Verbindungen zueinander geöffnet. Flieg in den Kern, Pilot. Halte diese Verbindungen in Reichweite.
 
 #### Boss-Intro · One Voice in the Core
+
+Roboteraufnahme · robot/level-50-intro.mp3 · 30,43 s.
 
 **Suno-Stil**
 
@@ -2581,14 +2810,61 @@ Kontakt bestätigt. Drazevorn, der Herr der falschen Wahrheit. Auf seinen Decks 
 
 #### Boss-Outro · Earth, We Read You
 
+Roboteraufnahme · robot/level-50-outro.mp3 · 74,04 s.
+
 **Suno-Stil**
 
 Spoken fleet-command finale with intimate cello, strings and felt piano well below the voice. Bring back the quiet melody of The First Reply under Earth’s answer. Rest after each call. End with a warm, soft instrumental tail.
 
 **Englischer Sprechtext**
 
-Drazevorn’s register has stopped answering. The colonies are checking the original records together. There are still differences to work through, and every station can speak for itself. A voice just came in from Earth. Genesis relay, this is Earth. We read you. The repair crew is answering now. Keep the channel clear, Pilot. The next ships are asking for clearance to explore.
+Drazevorn’s register has stopped answering.
+
+The colonies are checking the original records together.
+
+Genesis found the repair crew’s first call from the outer ring.
+
+The refuge has its own recording of the answer.
+
+Listen for a moment.
+
+The stations are playing both recordings over the open channel.
+
+There are still differences to work through.
+
+Every station can speak for itself now.
+
+A voice just came in from Earth.
+
+Genesis relay, this is Earth.
+
+We read you.
+
+The repair crew is answering now.
+
+They’re asking Earth to keep the channel open for the stations farther out.
+
+Keep the channel clear, Pilot.
+
+The next ships are asking for clearance to explore.
+
+When the first one clears the ring, I want to hear where its crew is going.
 
 **Deutsche Untertitel**
 
-Drazevorns Register antwortet nicht mehr. Die Kolonien prüfen gemeinsam die Originalunterlagen. Es gibt noch Unstimmigkeiten, und jede Station kann für sich sprechen. Gerade kam eine Stimme von der Erde herein. Genesis-Relais, hier spricht die Erde. Wir hören euch. Der Reparaturtrupp antwortet jetzt. Halte den Kanal frei, Pilot. Die nächsten Schiffe bitten um Startfreigabe für ihre Erkundungsmission.
+- Drazevorns Register antwortet nicht mehr.
+- Die Kolonien prüfen gemeinsam die Originalunterlagen.
+- Genesis hat den ersten Ruf des Reparaturtrupps vom Außenring gefunden.
+- Der Zufluchtsort hat eine eigene Aufnahme der Antwort.
+- Hör einen Moment zu.
+- Die Stationen spielen beide Aufnahmen über den offenen Kanal ab.
+- Einige Unstimmigkeiten müssen sie noch klären.
+- Jetzt kann jede Station für sich sprechen.
+- Gerade kam eine Stimme von der Erde herein.
+- Genesis-Relais, hier spricht die Erde.
+- Wir hören euch.
+- Der Reparaturtrupp antwortet jetzt.
+- Er bittet die Erde, den Kanal für die weiter entfernten Stationen offen zu halten.
+- Halte den Kanal frei, Pilot.
+- Die nächsten Schiffe bitten um Freigabe für ihre Erkundungsmission.
+- Wenn das erste Schiff den Ring passiert, möchte ich hören, wohin seine Crew fliegt.

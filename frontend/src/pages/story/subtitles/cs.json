@@ -1,0 +1,1091 @@
+{
+  "campaign": [
+    "První kryptoměna umožnila lidem obchodovat přímo přes hranice.",
+    "O staletí později závisely kolonie v hlubokém vesmíru na téže síti, aby získaly potraviny, palivo a léky.",
+    "Pak přišel spam. Podvržené zprávy vyprázdnily účty.",
+    "Za ukradené peníze podvodníci vyzbrojili flotilu.",
+    "Cryptoids.",
+    "Dobrovolníci odhalovali podvody od samého začátku.",
+    "Jejich nástupci se vydali ke hvězdám, aby doprovázeli zásobovací lodě a odpovídali na tísňová volání.",
+    "Před pár minutami odlákalo falešné tísňové volání naše hlídky od Země.",
+    "Kolonie Genesis teď utichají.",
+    "Jednoho dne, až tahle válka skončí, naše lodě zase vyrazí…",
+    "… zkoumat světy, které jsme dosud viděli jen v dalekohledech.",
+    "Pilote, máte povolení ke startu."
+  ],
+  "varneth": [
+    "Kontakt potvrzen.",
+    "Varneth.",
+    "Kdysi přepravoval záznamy o zásobování mezi koloniemi Genesis.",
+    "Zmizel poblíž opuštěného retranslátoru.",
+    "Teď se vrátil. Jeho vysílání přehlušuje všechna volání o pomoc.",
+    "Pilote, přerušte ten signál."
+  ],
+  "varneth-outro": [
+    "Pilote.",
+    "Varnethův signál zmizel.",
+    "Z retranslátoru Genesis slyším hlas.",
+    "Opraváři na vnějším prstenci volají od svítání o pomoc.",
+    "Mám jejich souřadnice.",
+    "Zdravotníci jsou na cestě.",
+    "Nech kanál volný, pilote.",
+    "Poprvé za dnešek…",
+    "…tam někdo uslyší odpověď."
+  ],
+  "level-two": [
+    "Varneth je dole.",
+    "Relé Genesis opět přenášejí tísňová volání.",
+    "Zásobovací konvoj právě změnil kurz na rozkaz pohraniční stanice.",
+    "Stanice přísahá, že ten rozkaz nikdy nevyslala.",
+    "Konvoj je pořád tam venku.",
+    "Pilote, následuj jeho poslední vysílání.",
+    "Dostaňme ty posádky domů."
+  ],
+  "korvessa": [
+    "Pilote, signál nás dovedl ke Korvesse.",
+    "Jednou měla diplomatické zásilky.",
+    "Každá stanice na hranicích znala její rádiový identifikátor.",
+    "Teď na každém kanálu používá jiný.",
+    "Ten konvoj ji sledoval přímo do pasti.",
+    "Její loď je přímo před námi.",
+    "Zbraně zdarma, Pilote.",
+    "Otevři cestu domů."
+  ],
+  "korvessa-outro": [
+    "Pilote, Korvessin retranslátor je mimo provoz.",
+    "První nákladní loď rozsvítila nákladová světla.",
+    "Její posádka vyznačuje průlet mezi troskami.",
+    "Volám konvoj v jedné lodi najednou.",
+    "Dva už odpověděli.",
+    "Udrž průlet volný pro ostatní, pilote.",
+    "Chci slyšet hlášení i od poslední posádky."
+  ],
+  "level-three": [
+    "Pilote, Korvessa je na zemi.",
+    "Každý z posádky konvoje to zvládl.",
+    "Poslední nákladní loď přivezla záznam přepadení.",
+    "Zatímco jsme bojovali s Korvessou, druhá loď proklouzla troskami a zamířila ke Genesis.",
+    "Rodiny posádek tam čekají v krytech.",
+    "Drž se té lodi.",
+    "Prohledám archiv Korvessy, zatímco budeš na cestě."
+  ],
+  "drelvorn": [
+    "Pilote, Korvessin archiv to potvrzuje.",
+    "Loď, kterou jsi sledoval, je Drelvorn, Zloděj pečetí.",
+    "Jeho strážce během povstání ukradl pečeti velitelů flotily.",
+    "Genesis právě obdržela evakuační příkaz podepsaný jednou z těch pečetí.",
+    "Dveře se otevírají.",
+    "Posádka konvoje je stále uvnitř.",
+    "Varuju je.",
+    "Nabourej se do Drelvornova reaktoru."
+  ],
+  "drelvorn-outro": [
+    "Genesis, zrušte evakuaci.",
+    "Drelvornův vysílač je mimo provoz.",
+    "Správci krytů zajistili dveře.",
+    "Rodiny posádek konvoje jsou uvnitř. Všichni jsou v bezpečí.",
+    "Platnost ukradené pečeti byla zrušena.",
+    "Díky koloniálnímu registru prošel falešný rozkaz všemi kontrolami.",
+    "Tentýž registr vede kryty jako prázdné.",
+    "Vyhledávám původní záznamy."
+  ],
+  "level-four": [
+    "Posádka konvoje mluvila se svými rodinami.",
+    "Genesis drží.",
+    "Před Drelvornovým rozkazem někdo rodiny vyškrtl ze seznamů krytů.",
+    "Potvrzení o dodávkách stále obsahují původní údaje.",
+    "Položte je vedle nové pokladny.",
+    "Vidíte, kde se to změnilo.",
+    "Sleduj stopu první pozměněné kopie, pilote."
+  ],
+  "talvrek": [
+    "Kontakt potvrzen.",
+    "Talvrek, Padělatel kronik.",
+    "Ta loď kdysi mapovala nové kolonie a uchovávala jejich první záznamy.",
+    "Jeho kopie teď tvrdí, že tam ti lidé nikdy nežili.",
+    "Přístavní kontrola podle nich odmítá jídlo a léky.",
+    "Originály potvrzení už máme.",
+    "Zasáhni Talvrekův reaktor, než odešle další kopii."
+  ],
+  "talvrek-outro": [
+    "Talvrekův vysílač utichl.",
+    "Dvě kolonie ověřily původní potvrzení a obnovily seznamy krytů.",
+    "První loď s léky má povolení zakotvit.",
+    "Jedna stanice stále neodpovídá.",
+    "Přílet k ní blokuje opravárenská plošina Zeraveth.",
+    "Údržbáři čekají venku s díly, které stanice potřebuje."
+  ],
+  "level-five": [
+    "Záchranný tým z vnějšího prstence Genesis nám poslal náhradní díly.",
+    "Stanice, kterou Talvrek umlčel, potřebuje každý z nich.",
+    "Servisní tým vidí světla doku z místa, kde čeká.",
+    "Dostaň tým ke stanici.",
+    "Pilote."
+  ],
+  "zeraveth": [
+    "Kontakt potvrzen.",
+    "Zeraveth, Obléhatel uzlů.",
+    "Kdysi opravoval celé prstence relé.",
+    "Jeho dokovací ramena teď blokují jedinou příletovou trasu.",
+    "Stanice přichází o poslední funkční vysílač.",
+    "Zasáhni Zeravethův reaktor…",
+    "a uvolni cestu pro servisní čluny."
+  ],
+  "zeraveth-outro": [
+    "Čluny jsou uvnitř.",
+    "Právě volal z doku operátor stanice Côls a vysílač nese její hlas.",
+    "Ve stejnou chvíli dorazilo druhé povolení.",
+    "Pamatuje si, že ho vydala před lety.",
+    "Uložil jsem obě nahrávky."
+  ],
+  "level-six": [
+    "Opravené relé znovu přijímá signály…",
+    "které posádka považovala za ztracené.",
+    "Remorkér se chystá odletět na povolení nahrané před nástupem svého kapitána.",
+    "Požádali jsme stanici, aby remorkér zadržela.",
+    "Sleduj starou nahrávku…",
+    "až k jejímu zdroji."
+  ],
+  "orvask": [
+    "To je Orvask…",
+    "Lovec ozvěn.",
+    "Doprovázel konvoje a zaznamenával každé povolení, které zaslechl.",
+    "Teď ty příkazy vysílá znovu…",
+    "jako by byly vydány dnes.",
+    "Remorkér a nákladní loď…",
+    "dostaly stejné odletové okno.",
+    "Přeruš Orvaskův signál."
+  ],
+  "orvask-outro": [
+    "Remorkér má nové povolení.",
+    "Slyšeli jsme operátorku, jak ho udělila živě.",
+    "Orvaskův záznam ukazuje, kde nejstarší nahrávky změnily majitele.",
+    "Je to překladiště mezi dvěma koloniemi.",
+    "Obě stále dostávají potvrzení…",
+    "za náklad…",
+    "který nikdy nedorazil."
+  ],
+  "level-seven": [
+    "Obě kolonie nám poslaly své nakládací seznamy.",
+    "Každá má potvrzení s razítkem té druhé.",
+    "Poslední nákladní posádky stále mají fotky z nakládky.",
+    "Porovnáváme čísla kontejnerů…",
+    "zatímco se blížíš k překladišti."
+  ],
+  "keldrava": [
+    "Kontakt potvrzen.",
+    "Keldrava…",
+    "Stínový most.",
+    "Kdysi si posádky kolonií předávaly náklad v jejích komorách.",
+    "Jeden prostor orazítkuje potvrzení, druhý sebere bednu.",
+    "Servisním průlezem vidíme pohřešované kontejnery.",
+    "Uvolni cestu…",
+    "pro vyzvednutí nákladu."
+  ],
+  "keldrava-outro": [
+    "Obě kolonie počítají náklad na společném kanálu.",
+    "Našly čerpadla do skleníků i nouzové dávky.",
+    "Zpravodajská loď hlásí jejich sousedům…",
+    "že se most zřítil a všichni zůstali na palubě.",
+    "Obě posádky…",
+    "se nabídly, že promluví živě."
+  ],
+  "level-eight": [
+    "Posádky mostu vysílají živě.",
+    "Jeden člen posádky právě ukázal do kamery získané čerpadlo.",
+    "Po varováních přesto tři sousední přístavy uzavřely své trasy.",
+    "Posíláme svědectví posádek každému dispečinku.",
+    "Leť k vysílači…",
+    "od kterého to začalo."
+  ],
+  "veshkorn": [
+    "Kontakt potvrzen.",
+    "Veshkorn…",
+    "Šiřitel zvěstí.",
+    "Tu fanfáru známe z jeho starého zpravodajství.",
+    "Ohlašuje s ní katastrofy, ke kterým nikdy nedošlo.",
+    "V poslední zprávě tvrdí, že se zásobovací trasy zase zavřou.",
+    "Přístavy jsou připravené vyslechnout vlastní piloty.",
+    "Umlč jeho vysílač…",
+    "a ukonči vysílání."
+  ],
+  "veshkorn-outro": [
+    "Řízení provozu právě otevřelo trasy.",
+    "Dispečeři čtou zprávy o počasí a nákladu s posádkami, které je poslaly.",
+    "Kapitán říká, že mu během paniky nabídli nákladový prostor plný osiva.",
+    "Posílá nám seznam nákladu.",
+    "Není tu jediná fotka z nakládky."
+  ],
+  "level-nine": [
+    "Trasy jsou opět otevřené.",
+    "Kapitán nám poslal soupis zásilky osiva.",
+    "Chybí fotografie z nakládky.",
+    "U nakládací rampy čekal celou noc.",
+    "Displej hlásil plný nákladový prostor.",
+    "Loď vážila stejně jako při příletu.",
+    "Vrací se do kolonie s prázdným nákladovým prostorem.",
+    "Leť na adresu v soupisu, pilote."
+  ],
+  "neravoss": [
+    "Kontakt potvrzen.",
+    "Neravoss, Iluzionista zůstatků.",
+    "Tato loď kdysi na veletrhu vystavovala skutečné zboží.",
+    "Její obrazovky teď nabízejí smyšlené zásoby.",
+    "Tyto sliby přilákaly nákladní lodě se skutečnými dodávkami.",
+    "Za obrazovkou vidíme jména lodí, které vyložily náklad a čekaly.",
+    "Zneškodni obranu nákladového prostoru."
+  ],
+  "neravoss-outro": [
+    "Inspektoři našli na palubě skutečné osivo.",
+    "Přivezly ho lodě, které Neravoss označil jako nezaplacené.",
+    "Posádky vezou osivo domů křišťálovým průsmykem.",
+    "Loď u zúžení každé posádce poslala fakturu.",
+    "Dokonce i zdravotníci mají zaplatit."
+  ],
+  "level-10": [
+    "Nákladní lodě, které nesou semínko, čekají v řadě u průchodu.",
+    "Čeká na ně lékařská loď a její pacienti vidí světla na stanici.",
+    "Přístavní orgán nenašel žádný právní základ pro nové poplatky.",
+    "Leť k bráně.",
+    "Pomůžeme posádce čekat ve frontě, aby se uklidnily."
+  ],
+  "thalverik": [
+    "Ten Thalverik, ten mýtný tyran.",
+    "Provážel lodě touhle chodbou.",
+    "Dnes znovu obviňuje z křížení a z prosby o pomoc.",
+    "Drží linii přes kanál.",
+    "Řezák může odejít, jakmile se ta čára zlomí.",
+    "Miřte na reaktor Thalverik Irass."
+  ],
+  "thalverik-outro": [
+    "Lékařská loď prošla průchodem.",
+    "Nákladní lodě jsou následující, a přístavní rada zrušila obvinění.",
+    "Získali jsme účet, který obdržel téměř každou platbu.",
+    "Koupilo to tisíce hlasů na radnici, o které jsme si mysleli, že má jen třicet pilotů."
+  ],
+  "level-11": [
+    "Rada nás pozvala, abychom sledovali hlášení.",
+    "Registr ukazuje tisíce pilotů, ale jen třicet lůžek je obsazeno.",
+    "Učňovský identifikátor jejího starého simulátoru při hlasování.",
+    "Dala nám adresu té tréninkové lodi."
+  ],
+  "skorveth": [
+    "Tam je Skorveth, Many-Faced.",
+    "Jeho tréninkové jádro učilo piloty létat.",
+    "Systém nyní počítá simulované posádky jako obyvatele, kteří se navzájem potvrzují.",
+    "Jejich hlasy už vyčistily zajížďku stínových lodí.",
+    "Vypněte vysílač jádra."
+  ],
+  "skorveth-outro": [
+    "Třicet pilotů podepsalo novou rolku.",
+    "Učňovský asistent pomohl radě odstranit její starý rádiový identifikátor.",
+    "Jedna schválená objížďka je stále v seznamu tras.",
+    "Záchranná loď ji vzala za svítání.",
+    "Zmeškal dvě šeky."
+  ],
+  "level-12": [
+    "Záchranná loď stále vysílá.",
+    "Naše nejbližší stanice vidí světlo skrz mlhovinu.",
+    "Vysílací cesta ukazuje, že je to dva skoky daleko.",
+    "Vedeme stanici k tomu světlu, zatímco vy budete sledovat falešnou cestu proti proudu."
+  ],
+  "azhrel": [
+    "Azhrl, Trasa Poisoner.",
+    "Ta loď nakreslila první skokové grafy podél tohoto okraje.",
+    "Jeho nové vstupy vysílají nouzové volání přes vysílání kontroly stínových lodí.",
+    "Záchranná loď skončila v prázdném prostoru.",
+    "Máme staré karty.",
+    "Vykliďte Azhrla od křižovatky."
+  ],
+  "azhrel-outro": [
+    "Záchranná četa je opět v dosahu stanice.",
+    "Stanice zkontrolovaly staré souřadnice a vrátily se přímé tratě.",
+    "Na záchranné lodi je starý záznamník.",
+    "Někdo, kdo nabídl, že ušetří data, vzal disk a zanechal poškozenou kopii."
+  ],
+  "level-13": [
+    "Záchranná posádka si nechala ručně psaný deník.",
+    "Popisuje záchrannou loď, která nabízí ochranu nahrávek falešné trasy.",
+    "Pořád můžeme dokázat, kdy dorazila záchranná loď.",
+    "Potřebujeme ten disk, abychom ukázali, co posádka slyšela na cestě sem."
+  ],
+  "dornavik": [
+    "Kontakt potvrzen.",
+    "Dornavik, archív žhář.",
+    "Jeho izolované komory kdysi udržovaly archivy naživu uvnitř hořících vraků.",
+    "Teď si nechává neporušené pohony a posílá poškozené kopie posádky.",
+    "Ten blikající zátoka drží záznamník záchrany lodi.",
+    "Zastavit Dornavika od skoku."
+  ],
+  "dornavik-outro": [
+    "Našli jsme disk.",
+    "Posádka přiřadila záznam ke každému záznamu v deníku.",
+    "Jejich náhradníci dnes ráno dorazili do tří kolonií.",
+    "Jedna základna od minulého týdne nic nedostala.",
+    "Rekordní nosič stále drží všechny aktualizace."
+  ],
+  "level-14": [
+    "Základna se snaží přistát na nákladní lodi v přístavu zavřeném kvůli opravám.",
+    "Jeho místní zprávy jsou týden staré.",
+    "Poslali jsme hlasovou zprávu z přístavu a loď se otáčí.",
+    "Plánované aktualizace jsou stále na palubě lodi, která je měla doručit."
+  ],
+  "velkrath": [
+    "To je Velkrath, blokový strážce.",
+    "Jeho zapečetěné lodě kdysi udržovaly záznamy o výzkumu nedotčené pro vnější stanice.",
+    "Aktualizace jsou stále uvnitř, v pořadí podle data.",
+    "Vypustí starou, kdykoliv to může způsobit potíže.",
+    "Otevřete cestu k kontejnerům."
+  ],
+  "velkrath-outro": [
+    "Základna má nejnovější zprávu.",
+    "Dva záznamy posádky říkají, že stejná aktualizace přišla včas a po termínu.",
+    "Obě hodiny přijímaly signály z přesné lodi.",
+    "Dopravní kontrolor nám posílá její mechanické hodiny čtení."
+  ],
+  "level-15": [
+    "Mechanické hodiny souhlasí se zásobovacím personálem.",
+    "Hodiny na základně se posunuly dopředu.",
+    "Dva lety údržby byly přikázány k použití stejné vzduchové komory v různých hodinách a oba jsou na cestě.",
+    "Důstojník z doku je zastavil u majáků."
+  ],
+  "irdavoss": [
+    "Kontakt potvrzen.",
+    "Irdavoss, Hodinový Twister.",
+    "Celá flotila jednou nastavila manévry na jeho stanici.",
+    "Sledovali jsme jeho signál, jak po termínu vydává platné povolení k letu.",
+    "Tři stanice porovnávají své hodiny.",
+    "Nabourej Irdavossův reaktor, než dokončí kontrolu."
+  ],
+  "irdavoss-outro": [
+    "Obě posádky se bezpečně ukotvily na oddělených letových povoleních.",
+    "Klinika měla dostat své záznamy, když byly hodiny opraveny.",
+    "Záznamy jsou stále zamčené.",
+    "Jejich strážce právě určil cenu za klíč."
+  ],
+  "level-16": [
+    "Zaměstnanci kliniky pracují z papírových bankovek, zatímco jejich záznamy jsou zamčené.",
+    "V blízkosti zásobovacího skladu ztratil také seznam dostupných léků.",
+    "Oba obdrželi stejnou poptávku.",
+    "Sledujte ji na loď, která nese jejich archivy."
+  ],
+  "rhazvorn": [
+    "Ten vězeňský transport je Rhazvorn, Key Gaoler.",
+    "Jeho buňky zadržovaly lidi.",
+    "Teď mají zapečetěné archivy z kliniky a zásobovacích skladů.",
+    "Vystopovali jsme původní žádosti o přístup do centrálního trezoru.",
+    "Rhazvorn tu zůstane, než se tým dostane blíž."
+  ],
+  "rhazvorn-outro": [
+    "Klinika otevřela své soubory.",
+    "Deponát počítá lék proti obnovenému seznamu zásob.",
+    "Podle meteorologické zprávy je cesta uzavřená, i když posádka vidí, že je čistá.",
+    "Všechny ty zvláštní údaje pocházejí ze stejné průzkumné lodi."
+  ],
+  "level-17": [
+    "Posádka z depa poslala obrázek o jasném přístupu.",
+    "Jeho přístroje ukazují bouři a inventární obrazovka ukazuje plnou zásobu.",
+    "Posádka napočítala dvě lékové bedny.",
+    "Držíme automatické dispečinky, dokud nezjistíme zdroj."
+  ],
+  "kelvash": [
+    "Kontakt potvrzen.",
+    "Kelvash, Oracle Deceiver.",
+    "Jeho průzkumné zprávy se používaly k vedení skladu.",
+    "Nyní loď vynalezne údaje o počasí a inventuře a počítače depa posílají skutečný náklad pryč.",
+    "Nejbližší klinika potřebuje ty zásoby.",
+    "Vypněte vysílač Kelvash."
+  ],
+  "kelvash-outro": [
+    "Depo zase poslalo na kliniku léky.",
+    "Dvě zásobovací centra používaly stejnou fotografii k aktualizaci svých záznamů.",
+    "Jejich nové registry stále nesouhlasí.",
+    "Obě centra obdržela zprávu, že jejich jediná platná kopie je jejich."
+  ],
+  "level-18": [
+    "Dvě zásobovací centra souhlasily, že otevřou registry na stejný hovor.",
+    "Našli stejné záznamy až do včerejška.",
+    "Loď rady cestování vydala protichůdné stránky.",
+    "Jeho doprovod se shromažďuje mezi dvěma stanicemi.",
+    "Sledujte známky."
+  ],
+  "othravel": [
+    "Tam je Otravel, lord vidliček.",
+    "Svázal si na své konferenční palubě konkurenční kolonie.",
+    "Teď jim posílá oddělené účetní knihy a říká si, že ten druhý falšoval své záznamy.",
+    "Obě stanice pozdržely zbraně.",
+    "Othravel se nesmí bavit."
+  ],
+  "othravel-outro": [
+    "Oba registry se nyní shodují na jejich poslední ověřené stránce.",
+    "Centra řeší pozdější záznamy společně.",
+    "Oba obdrželi nabídku nezávislých záchranných relé.",
+    "Nabídka žádá dokovací důstojníky, aby poslali svá povolení k letu.",
+    "Řekli jsme jim, ať počkají."
+  ],
+  "level-19": [
+    "Jeden důstojník z doku už tu zlatou světlici viděl.",
+    "Pravá záchranná četa ji použila, aby ji po bouřce přivedla domů.",
+    "Odesílatel otevře svůj záliv, jen když se s ní podělí o povolení k letu.",
+    "Dok důstojník zůstává na našem kanálu, zatímco se blížíte."
+  ],
+  "zarnvek": [
+    "Ta světlice patří Zarnvekovi, Falešnému zachránci.",
+    "Záchranná loď stále vypadá stejně.",
+    "Jeho dokovací prostor má sledovací zařízení namířené na poklop a žádosti o povolení letu stále probíhají.",
+    "Zaznamenejte skutečný záchranný kanál.",
+    "Tak sejměte Zarnvek AIR vysílač."
+  ],
+  "zarnvek-outro": [
+    "Ověřené záchranné přetažení zachytilo čekající posádku.",
+    "Kapitán říká, že ztratil svůj přístav, než odpověděl na náš hovor.",
+    "Záznamy ukazují, že stínová nákladní loď se o pár vteřin později dostala na místo.",
+    "Původní časový údaj je stále v jeho deníku."
+  ],
+  "level-20": [
+    "Záznamy o vlečných člunech se shodují s první frontou přístavu.",
+    "Od té doby někdo přesunul každou žádost o záchranu za těch šest lodí.",
+    "Jedna linka drží kyslíkové láhve pro opraváře.",
+    "Postupujte podle plánu přístavu, zatímco personál označuje původní objednávku."
+  ],
+  "vorathen": [
+    "Kontakt potvrzen.",
+    "Vorathen, Queue Raider.",
+    "Jeho paluba udržovala tisíce příchozích v pořádku.",
+    "Teď prodává jejich místa svým spojencům.",
+    "Zásilka kyslíku byla první, když se brány zavřely.",
+    "Přerušte Vorathen, ať to může dok ohlásit."
+  ],
+  "vorathen-outro": [
+    "Kyslík je na molu.",
+    "Přístav vyvěsil frontu s jeho původní časy, a čekající posádky jsou srovnání účtenky.",
+    "Každá loď právě obdržela malý balíček, který nikdo nechtěl.",
+    "Pozorovatel sleduje, které posádky uznávají dodávku."
+  ],
+  "level-21": [
+    "Posádka přístavu přestala uznávat nevyžádané balíky.",
+    "Našli jsme stejnou malou zásilku v soukromých kotvištích po celém obchodním pruhu.",
+    "Odesílatel sleduje, kdo reaguje a kdo předá balíček dál.",
+    "Následujte další do hangáru."
+  ],
+  "drazkell": [
+    "Kontakt potvrzen.",
+    "Drazkell, Drtič prachu.",
+    "Jeho nákladní paluby kdysi dodávaly energetické články k navigačním majákům.",
+    "Každá nevyžádaná dodávka může odhalit další soukromé spojení mezi stanicemi.",
+    "Reproduktor stále sbírá odpovědi.",
+    "Zastavte startovací rampu, než pošle další dávku."
+  ],
+  "drazkell-outro": [
+    "Zásilky se zastavily.",
+    "Stanice uzavřely své záznamy a posádky mění kanály, které používají pro soukromé hovory.",
+    "Inspektoři našli stejné oficiální razítko na každé bedně z Drazkellu.",
+    "Její emitent již schválil příští týden zásobovací konvoj."
+  ],
+  "level-22": [
+    "Inspektor přístavu porovnal známky s jejím rozpisem povinností.",
+    "Strážníci na nich zaznamenali, že nikdy nenavštívili nákladní prostor.",
+    "Nově schválený konvoj čeká na skutečnou inspekci.",
+    "Leťte k mobilní kanceláři, která vydala certifikáty."
+  ],
+  "nethrava": [
+    "Ten Nethrava, falešný správce.",
+    "Jeho osvědčení uvádějí všechny kontroly, které byly provedeny.",
+    "Posádka věřila těm známkám a předávala zásoby lodím, které nikdy nesměli prozkoumat.",
+    "Přístav může znovu otevřít inspekce, jakmile falešná kancelář ztratí spojení.",
+    "Sundej to."
+  ],
+  "nethrava-outro": [
+    "Důstojníci přístavu osobně zkontrolovali konvoj.",
+    "Nyní mohou vysledovat bedny k jejich původním posádkám.",
+    "Přes noc sem přišla loď s záznamy a vymazal historii inspekcí jako běžné čištění.",
+    "Jeden důstojník si nechal kopii objednávky."
+  ],
+  "level-23": [
+    "Strážník Brix opisuje historii inspekcí jako jednorázové.",
+    "Stejná loď navštívila sklad, jehož vlastnictví se nyní zastaví v polovině zásilky.",
+    "Máme chybějící čísla stránek.",
+    "Najděte loď, než se objeví další úklidová jednotka."
+  ],
+  "valdrek": [
+    "Kontakt potvrzen.",
+    "Valdrek, Paměťový žoldák.",
+    "Byl postaven, aby vymazal nadbytečné záznamy.",
+    "Teď označuje krádež za nepořádnost a vymaže ji ze stanic, které ji potřebují.",
+    "V seznamu pořád je, které složky vzal.",
+    "Vypněte Valdrek Reaktor."
+  ],
+  "valdrek-outro": [
+    "Strážníci získali dost kopií na přestavbu vlastnické stopy depa.",
+    "Valdrek vymazal každou účtenku z jednoho trhu ve stejnou hodinu.",
+    "Jeho prodejní grafy se stále zvyšovaly, když se ztratily účtenky.",
+    "Přístavní rada chce, aby někdo viděl sklady."
+  ],
+  "level-24": [
+    "Na displeji trhu byly tucty prodejů, než dorazili naši inspektoři.",
+    "Sledovali jednu nakládací bránu hodinu.",
+    "Nikdy se neotevřela.",
+    "Obchodní doprava směřuje k inzerovaným zásobám.",
+    "Inspektoři na vás čekají u skladu."
+  ],
+  "korzeth": [
+    "Kontakt potvrzen.",
+    "Korzeth, Zrcadlový trh.",
+    "On se snaží obchodovat mezi made- up kupující a prodejci.",
+    "Zdá se, že stejný náklad se prodává každých pár minut.",
+    "Posádka přináší skutečné zboží do prázdných skladů.",
+    "Vykliďte Korzeth od bran, aby je inspektoři mohli otevřít."
+  ],
+  "korzeth-outro": [
+    "Skladiště je otevřené.",
+    "Náklad, který dorazil, se vrací se svými posádkami.",
+    "Nákladní loď vzala zásilku k vnějším stanicím a pak se otočila.",
+    "Místo určení obdrželo podepsanou doručovací stvrzenku, zatímco nákladní loď byla stále v letu."
+  ],
+  "level-25": [
+    "Pilot nákladní lodi otevřel kameru na nákladním prostoru plném zásob.",
+    "Příjímací stanice má účtenku za každou bednu.",
+    "Požádali jsme oba konce, aby si nechali vzkazy.",
+    "Vystopujte stvrzenku k odesílateli a my otočíme nákladní loď směrem k stanici."
+  ],
+  "thervoss": [
+    "Tady je Thervoss, zlodějíček potvrzení.",
+    "Vydává účty, než zásilka přistane.",
+    "Nákladní loď slyší, že dokončila práci a zamíří domů.",
+    "Stanice stále čeká na náklad, který údajně obdržela.",
+    "Máme přímý kanál k oběma posádkám.",
+    "Vypněte vysílač Thervoss."
+  ],
+  "thervoss-outro": [
+    "První bedna je dole.",
+    "Z nakládací plošiny poslala stvrzenku vlastní posádka stanice Agres.",
+    "Jejich odvolání proti staršímu účtu se právě vrátilo zamítnuté.",
+    "V každém případě, co jsme prohledali, vládla stejná loď tribunálu."
+  ],
+  "level-26": [
+    "Přijímající posádka poslala tribunálu video z jeho prázdného doku.",
+    "Odpověď nazvala video síťovým útokem.",
+    "Tři další stanice mají stejný rozsudek.",
+    "Požádali jsme jejich důstojníky, aby si nechali kompletní složky.",
+    "Máte souřadnice soudní lodi."
+  ],
+  "akraveth": [
+    "Kontakt potvrzen.",
+    "Akraveth, soudce mlhy.",
+    "Jeho poradci urovnávali spory o náklad mezi posádkami.",
+    "Teď odmítá důkazy, které by odhalily jeho patrony a uvádí každého, kdo by protestoval jako nepřítel.",
+    "Postižené přístavy přinesly své záznamy.",
+    "Vykliďte Akraveth od sluchového pruhu."
+  ],
+  "akraveth-outro": [
+    "Stanice si vzali zpět jejich složky.",
+    "Společný panel souhlasil, že vyslechne obě posádky z každé dodávky.",
+    "Každá loď, kterou Akraveth upřednostnil, měla stejný poslední balíček údržby.",
+    "Jeden pilot hlásí, že jeho motory selhaly při prvním skoku poté, co je nainstaloval."
+  ],
+  "level-27": [
+    "Pilot je v bezpečí v odtahovce.",
+    "Inženýři zjistili, že nový servisní balíček změnil kontrolu motoru při ponechání displeje zelené.",
+    "Tři další posádky ho nainstalovali, zatímco čekali na slyšení.",
+    "Držte se cesty opravy.",
+    "Říkáme jim, ať neskáčou."
+  ],
+  "zelkharn": [
+    "Ten Zelkharn, ten červ z Supply- Chain.",
+    "Jeho údržbářské zátoky udržovaly flotilu v pohybu.",
+    "Nyní jeho náhradní díly opouštějí lodě závislé na stínové flotile pro pracovní pohon.",
+    "Naši inženýři mají čisté části připravené.",
+    "Získejte jim přístup k těm lodím."
+  ],
+  "zelkharn-outro": [
+    "Posádka testuje čisté části v doku, než odletí.",
+    "Jedna klinika ztratila během selhání dispečink.",
+    "Zaplatila zásobníku za kopie.",
+    "Nosič právě poslal zpět seznam jmen souborů a prázdnou disk."
+  ],
+  "level-28": [
+    "Klinika našla své archivní jméno v adresáři nosičů.",
+    "Záložní tým si vyžádal jeden soubor a dostal další prázdný přenos.",
+    "Klinika má stále své nejnovější zprávy.",
+    "Sledujte majitele adresáře, zatímco jim pomůžeme uchovat ty kopie."
+  ],
+  "odravik": [
+    "Kontakt potvrzen.",
+    "Odravik, Prázdný záložní obchodník.",
+    "Jeho skladovací zařízení slibuje zotavení se z jakékoli katastrofy.",
+    "Některé soubory na displeji se nikdy nedostaly na disk.",
+    "Kliniky potřebují kopie, které stále existují.",
+    "Otevřete cestu pro jejich vlastní inženýry, aby zkontrolovali regály."
+  ],
+  "odravik-outro": [
+    "Inženýři obnovili kopie, které byly ve skutečnosti na policích.",
+    "Přečetli tři varování, která inspektor poslal před měsíci.",
+    "Žádný přístav je neobdržel.",
+    "Jedno z varování pojmenovalo starý přístavní filtr jako poslední místo, kde byly zprávy spatřeny."
+  ],
+  "level-29": [
+    "Velitel přístavu říká, že nikdy neslyšela alarm.",
+    "Inspektor si nechal tři kopie s jejich vysílací dobou.",
+    "Každý ukazuje, že port je starý radiový filtr to potvrdil.",
+    "Další inspekční tým používá otevřený kanál, takže ho můžeme slyšet přímo."
+  ],
+  "varnokh": [
+    "Kontakt potvrzen.",
+    "Varnokh, filtr ticha.",
+    "Jednou oddělila tísňové volání od hluku v rušných přístavech.",
+    "Jeho nový seznam považuje nezávislé inspektory za zásah.",
+    "Teď slyšíme na otevřeném kanálu druhou posádku.",
+    "Vypněte filtry Varnokh 's, aby je stanice taky slyšely."
+  ],
+  "varnokh-outro": [
+    "Stanice slyší varování, která se nikdy nedostala skrz.",
+    "Několik zpráv, že se na objednávky nákladu objevili nepřítomní osadníci poté, co se jejich jména objevila na aukci.",
+    "Osadníci přišli s původními záznamy.",
+    "Chtějí vědět, kdo je uvedl na prodej."
+  ],
+  "level-30": [
+    "Osadníci si pamatují, že se podepsali na palubu flotily, která je vzala do jejich nových domovů.",
+    "Jejich registrační čísla se nyní objevují v oddělených aukčních partiích.",
+    "Žena poznala číslo, které použila první den v kolonii.",
+    "Okopírovala nám výpis z prodeje."
+  ],
+  "kezravel": [
+    "To je Kezravel, aukční znalec identity.",
+    "Jeho staré osadníky registr nyní dodává jména na prodej.",
+    "Kupující si mohou objednat pod identitami, které lidé strávili celý život.",
+    "Máme majitele na ověřeném kanálu.",
+    "Zastavte Kezravel, než se otevře další aukce."
+  ],
+  "kezravel-outro": [
+    "Osadníci zrušili ukradené pověření.",
+    "Jejich stanice vydávají náhrady osobně.",
+    "První odvolání se dostalo k vzdálenému relé s jiným cílem.",
+    "Oba konce dostaly uznání.",
+    "Požádali jsme posádky, aby si nechali originály."
+  ],
+  "level-31": [
+    "Odesílatel a příjemce na vzdálené trase porovnali své kopie.",
+    "Oba řekli, že se to zrušení objevilo.",
+    "Obě oznámení nesouhlasí s tím, komu to jméno patří.",
+    "Máme oddělené spojení.",
+    "Zjistěte, kde se ty dvě zprávy rozptýlily."
+  ],
+  "dravosk": [
+    "Kontakt potvrzen.",
+    "Dravosk, relay iluzionista.",
+    "Jeho antény nahradily stanice podél prázdných cest.",
+    "Nyní se regeneruje některé přenosy a tiše upouští ostatní poté, co je uzná.",
+    "Náš alternativní kanál je neporušený.",
+    "Uvolněte cestu, aby kolonie kontrolovaly, co mají za vzkazy."
+  ],
+  "dravosk-outro": [
+    "Zrušení dorazilo na nezávislou trasu.",
+    "Operátoři našli zvláštní požadavek provozu ve starém relé logu.",
+    "Každý výbuch nese číslo pracovního dronu, který jeho majitel nahlásil jako pohřešovaný.",
+    "Drony stále vysílají společně."
+  ],
+  "level-32": [
+    "Mechanik z stanice poznal její starý dron v štafetě.",
+    "Sebrali ho na opravu a nikdy se nevrátil domů.",
+    "Stovky dalších majitelů nám poslaly odpovídající čísla.",
+    "Leťte směrem k centru vysílání.",
+    "Přibližují se k sobě."
+  ],
+  "thalzek": [
+    "Ten Thalzek, Sběratel rosy.",
+    "Jeho trup slouží k ukrytí poškozených pracovních dronů.",
+    "Nyní je to vede k přemožení relé požadavky.",
+    "Majitelé dodali sériová čísla, aby naše posádky mohly rozpoznat jednotky.",
+    "Zničte velitelskou loď."
+  ],
+  "thalzek-outro": [
+    "Majitelé dostanou své drony zpět.",
+    "Regenerační loď chtěla, aby podepsali smlouvu o službě, než ji převezmou.",
+    "Inženýr našel klauzuli, která předává kontrolu nad každou opravou.",
+    "Stejná nabídka již dosáhla poloviny stanic na této trase."
+  ],
+  "level-33": [
+    "Inženýr celou dobu četl smlouvu o navrácení.",
+    "Několik stanic podepsalo verzi, která umožňuje poskytovateli převzít kontrolu nad jejich opravami.",
+    "Jejich posádky drží kopii každé stránky.",
+    "Sledujte nabídku zpět na obchodní kancelář."
+  ],
+  "orvethra": [
+    "Kontakt potvrzen.",
+    "Orvethra, Contract Trap.",
+    "Tato loď zprostředkovala dlouhodobé dohody o dodávkách.",
+    "Jeho nové nabídky dávají stínové flotile kontrolu nad rutinní prací.",
+    "Stanice jsou připraveny tyto podmínky pozastavit společně.",
+    "Zabezpečit Orvethra Opers podepsali kopie pro ně."
+  ],
+  "orvethra-outro": [
+    "Stanice pozastavila skryté podmínky.",
+    "Každá dohoda obsahuje pečeť, která říká, že ji četl nezávislý inspektor.",
+    "Inspektor, jehož jméno se tam objevilo, ten den opravoval dron.",
+    "Chce vidět loď, která vydala pečeť."
+  ],
+  "level-34": [
+    "Inspektor požádal o opakování ověřené kontroly.",
+    "Kancelář poslala stejnou fotku zelené pečeti.",
+    "Je tam jen jeden náklad označený jako bezpečný.",
+    "Leťte ke zdroji.",
+    "Náš tým vyzkouší původní záznamy."
+  ],
+  "kelzorn": [
+    "Ten Kelzorn, ten malíř Checksum.",
+    "Jeho nástroje kdysi obnovovaly poškozené reliéfy dat.",
+    "Teď malují přesvědčivé výsledky inspekce nad archivy, které nikdo nekontroloval.",
+    "Náš inspektor porovnal dvě nezávislé kopie.",
+    "Značky se neshodují.",
+    "Otevřete cestu do archivu."
+  ],
+  "kelzorn-outro": [
+    "Pravý šek je teď veřejný.",
+    "Inspektoři našli jednu pečeť na rezervních žádostech ze tří kolonií.",
+    "Všechny tři nároky ukazují na stejný sklad.",
+    "První zimní konvoj se nakládá u brány.",
+    "Kolonie nás požádaly, abychom s nimi spočítali zásoby."
+  ],
+  "level-35": [
+    "Každá kolonie poslala své zimní přidělení.",
+    "Společně, nároky naplní záliv třikrát.",
+    "Nákladní četa počítala jen jednu řadu beden skrz sklo.",
+    "Leťte do trezoru, zatímco se tři stanice dohodnou na sdíleném inventáři."
+  ],
+  "vashravel": [
+    "Kontakt potvrzen.",
+    "Vashravel, zaslíbenec.",
+    "Její trezor měl nouzové rezervy pro hraniční kolonie.",
+    "Noví manažeři psali pořád dokola tvrzení o stejných zásobách.",
+    "Posádka čeká, aby je spočítala.",
+    "Odzbrojte Vashravel Ochránce v nákladovém prostoru."
+  ],
+  "vashravel-outro": [
+    "Všechny tři kolonie byly svědky hraběte.",
+    "Rozdělili skutečné zásoby a poslali společnou zásilku.",
+    "Příhraniční stanice uznala polovinu cesty a odmítla zaznamenat příjezd.",
+    "Oba přístavy si myslí, že ten druhý drží náklad."
+  ],
+  "level-36": [
+    "Posílající přístav podepsal odjezd a přijímající přístav má živý výhled na nákladní loď.",
+    "Příhraniční loď přijímá pouze záznamy, které poslala její vlastní flotila.",
+    "Ty dva přístavy porovnávají záznamy na našem kanálu.",
+    "Leťte k pozici nákladní lodi."
+  ],
+  "zorveth": [
+    "To je Zorveth, Hraniční blokáda.",
+    "Dodával je v obou registrech.",
+    "Teď odmítá jednu stranu a nechává každý přechod ve sporu.",
+    "Zimní zásilka čeká na volnou cestu.",
+    "Zorveth se zhroutí."
+  ],
+  "zorveth-outro": [
+    "Zima zakotvila.",
+    "Oba přístavy podepsaly stejný příjezd.",
+    "Jejich navigátoři také porovnali traťové mapy.",
+    "Tři tvrdí, že je unikátní původní průzkum.",
+    "Každý má stejný obnošený roh a jiné jméno majitele."
+  ],
+  "level-37": [
+    "Navigace nám ukázala svůj posluchačský výtisk grafu.",
+    "Ten obnošený roh už tam byl.",
+    "Jeho kopie je jasně označena.",
+    "Někdo tu značku odstranil a prodal každou verzi jako první.",
+    "Originální značku tratě si nechte na dohled."
+  ],
+  "drelkash": [
+    "Kontakt potvrzen.",
+    "Dračí, Kopírovacího prince.",
+    "Jeho tiskárny kdysi studentům daly tabulky, které si mohli dovolit.",
+    "Nyní zaměstnanci prodávají každou kopii jako unikátní originál a opustit kolonie bojovat o vlastnictví.",
+    "Víme, kde jsou záznamy z vydání.",
+    "Otevřete cestu do dílny."
+  ],
+  "drelkash-outro": [
+    "Škola může vysledovat své grafy ke skutečnému průzkumu.",
+    "Registry znovu označují kopie svým pravým původem.",
+    "Zásobovací centrum říká, že už to prošlo tisíckrát.",
+    "Naléhavá dodávka vody se ještě nepohnula."
+  ],
+  "level-38": [
+    "Dodavatel nám poslal živý pohled na její frontu.",
+    "Vypadá to, že je obsazeno a stejné záznamy stále rostou na vrchol.",
+    "Od včerejška na nás čeká vodní štáb.",
+    "Zařídili jsme přímé spojení.",
+    "Leťte ke stroji a nasměrujte frontu."
+  ],
+  "nerthavel": [
+    "Tam je Nerthavel, Queue Devourer.",
+    "Jeho stará zásobovací paměť by mohla trvat několik dní.",
+    "Teď krmí centra bezcennými vstupy a staví je před kritické dodávky.",
+    "Máme původní žádost o dodávku vody.",
+    "Rozbij proud, ať si to dispečer může přečíst."
+  ],
+  "nerthavel-outro": [
+    "Zásilka vody opustila dok.",
+    "Dispečeři obnovili kritickou frontu z jejich místních kopií.",
+    "Právě dorazila zpráva, že posádka začala v zálivu rvačku.",
+    "Jeho nahrávka začíná po jediném časovém kódu, který si strážník pamatuje."
+  ],
+  "level-39": [
+    "Důstojník z doku si pamatuje, že otevřel bránu pro vodní posádku.",
+    "Zpráva se otevírá varovným výstřelem a vynechá záznam o bráně.",
+    "Druhá kamera nahrála celý přístup.",
+    "Žádáme její posádku, aby si nechala nedotčený soubor, zatímco budete sledovat editovanou zprávu."
+  ],
+  "rhazkora": [
+    "Kontakt potvrzen.",
+    "Rhazkora, Důkazní Twister.",
+    "Ta laboratoř dělala události v pořádku.",
+    "Jeho nové zprávy zvednou pár vteřin z kontextu, dokud oběti nebudou vypadat jako útočníci.",
+    "Druhá nahrávka ukazuje, že stínový doprovod střílel první.",
+    "Rhazkora nesmí vzít originál."
+  ],
+  "rhazkora-outro": [
+    "Celá nahrávka je veřejná.",
+    "Rada stáhla obvinění proti vodárenské posádce.",
+    "Tři stanice požádaly o hlasování o opravě.",
+    "Jejich hlasovací lístky byly po skončení zasedání orazítkovány, i když je kapitáni naložili včas.",
+    "Prověřujeme zastávky kurýra."
+  ],
+  "level-40": [
+    "Tři stanice mají stále své výpisy z vysílání.",
+    "Jejich kurýr se zastavil ve dvou oblíbených přístavech podle plánu a držel ostatní hlasy až do konce zasedání.",
+    "Rada nechala otevřená sedadla.",
+    "Leťte k kurýrovi a udržujte chybějící hlasovací lístky v dosahu."
+  ],
+  "velzhar": [
+    "Tam je Velzhar, Ballotský strážce.",
+    "Jeho uzavřená trasa jednou dala každé stanici stejnou šanci hlasovat.",
+    "Nyní si vybere, čí hlasovací lístky dorazí, než se zavřou dveře.",
+    "Čekací stanice si mohou ověřit své vlastní balíčky.",
+    "Zastavte Velzhara, ať je pošlou přímo."
+  ],
+  "velzhar-outro": [
+    "Rada znovu otevřela hlasování a nahlas přečetla každé stanici.",
+    "Zástupci požádali o původní hlasovací lístky pro audit.",
+    "Podle úložné sítě ty pakety existují a vyhrál jsem, aby doručil jeden.",
+    "Rada žádá pracovní cestu do archivu."
+  ],
+  "level-41": [
+    "Rada zkoušela tři adresy pro volební balíčky.",
+    "Každý z nich potvrdil, že je záznam přítomen.",
+    "Každé vyhledávání bylo prázdné.",
+    "Strážníci našli starou cestu údržby k zásobníku.",
+    "Jeďte tou trasou a udržujte nezávislé linky otevřené."
+  ],
+  "korthaven": [
+    "Kontakt potvrzen.",
+    "Korthaven, Dostupnost Breaker.",
+    "Nosič nosil kopie na každou stanici, která se ptala.",
+    "Teď jeho odpovědi říkají, že důkazy existují, zatímco dveře zůstanou zavřené.",
+    "Stará skrýš je pořád uvnitř.",
+    "Udělejte místo pro nezávislé posádky."
+  ],
+  "korthaven-outro": [
+    "Rada si může přečíst hlasovací lístky.",
+    "Kopie odpovídají tomu, co si udržely stanice.",
+    "Vnější stanice právě ztratila přístup do archivu a obdržela nabídku slibující okamžité zotavení.",
+    "Žádá o každý záložní klíč v přístavu.",
+    "Zažádali jsme o hovor s posádkou."
+  ],
+  "level-42": [
+    "Šéf vnější stanice Brigs se chystal poslat její záložní klíče.",
+    "Nechala si je, když se dozvěděla, že nabídka dosáhla dvou dalších lidí se stejným selháním.",
+    "Ověřený tým na zotavení je na cestě.",
+    "Sledujte loď, která odpověděla jako první."
+  ],
+  "azravel": [
+    "Ten Azravel, ten podvodník z zotavení.",
+    "Jeho starý rádiový identifikátor patřil lodi, která hledala ztracené sondy.",
+    "Teď se to jméno dostane na stanici těsně po ztrátě a žádá o jejich tajemství.",
+    "Posádka potřebuje bezpečné lůžko.",
+    "Vyčistěte Azravel od jejich přiblížení."
+  ],
+  "azravel-outro": [
+    "Skutečný tým obnovil přístup do archivu.",
+    "Záložní klíče zůstaly na stanici.",
+    "Jeho zprávy o údržbě byly označeny bezpečně, zatímco inspektoři byli posláni přes pás do demonstračního doku.",
+    "Jejich původní přístupové grafy se vrátily s obnovenými soubory."
+  ],
+  "level-43": [
+    "Inspektoři poslali fotku bezposkvrny.",
+    "Posádka poslala fotku selhávajícího uzlu, kde pracují.",
+    "Schéma inspektora Azbese končí v čistém doku.",
+    "Žádáme ji, aby s vámi letěla s původním přístupem."
+  ],
+  "threvask": [
+    "Kontakt potvrzen.",
+    "Threvask, auditní divertor.",
+    "Jeho navigační paluba posílala inspektory do zranitelných uzlů.",
+    "Teď je nutí, aby si přečetli exponáty.",
+    "Nepevný uzel vysílá svou skutečnou polohu na údržbovém kanálu.",
+    "Pošlete tam inspektory."
+  ],
+  "threvask-outro": [
+    "Inspektoři dorazili do uzlu.",
+    "Jejich zpráva obsahuje to, co viděli a kdo tam byl.",
+    "Jeden operátor pak dostal zprávu citující řádek, který napsala před lety v osobním deníku.",
+    "Ten deník byl nalezen z vraku a měl jít za její rodinou."
+  ],
+  "level-44": [
+    "Operátor poznal linku z její první plavby.",
+    "Odesílatel ji použil, aby změnila kontrolní záznamy.",
+    "Její rodina má stále původní záznam.",
+    "Máme jejich povolení vysledovat, kdo získal kopii.",
+    "Sledujte cestu z recovery."
+  ],
+  "dorzheva": [
+    "To je Borzheva, lovec vzpomínek.",
+    "Jeho držení používalo k přinesení osobních záznamů domů rodinám.",
+    "Teď si posádka půjčuje známé detaily, aby se cizí lidé zdáli důvěryhodní.",
+    "Podobná sdělení obdržela i jiná operátorka.",
+    "Zajistěte archiv, než ho Dorzheva rozpráší."
+  ],
+  "dorzheva-outro": [
+    "Rodina dostala kopii přes stanici, kterou si vybrali.",
+    "Zpráva operátora je na místě.",
+    "Nouzové plavidlo použilo únikové zprávy k předpovídání zhroucení a kontroly poptávky po celé relé síti.",
+    "Stanice na našem kanálu stále odpovídají."
+  ],
+  "level-45": [
+    "Požádali jsme stanice, aby odpověděly.",
+    "Prošla každá posádka na nouzovém kanálu.",
+    "Pohotovostní loď říká, že ty hlasy jsou simulované a stanice musí do hodiny předávat kontrolu.",
+    "Udržujte naši linku otevřenou.",
+    "Najděte loď před termínem, který oznámila."
+  ],
+  "vezrakh": [
+    "Kontakt potvrzen.",
+    "Vezrakh, pohotovostní vetřelec.",
+    "Byl postaven, aby pomohl, když skutečná velitelská stanice selhala.",
+    "Posádka nyní vyhlásí své vlastní nouzové situace a využívá je k tomu, aby se chopila kontroly.",
+    "Stanice porovnávají údaje.",
+    "Narazil jsem na reaktor Vezrakh 's, než je mohl odříznout."
+  ],
+  "vezrakh-outro": [
+    "Hodina uplynula.",
+    "Stanice udržují kontrolu a stále se slyší.",
+    "Jeden koordinátor dostal šest doporučení, aby se nový partner sítě AIR s centrální trasou.",
+    "Všech šest stop zpět k lodi, která původně plánovala spojení s podporou.",
+    "Porovnáváme trasy na její mapě."
+  ],
+  "level-46": [
+    "Koordinátor záchrany stanovil spojení, které používá k dosažení kliniky.",
+    "Téměř každá záchranná zásilka prochází stejným relé.",
+    "Doporučený partner by to řídil.",
+    "Dvě sousední stanice otevřely druhou cestu.",
+    "Kryjte je, než to otestují živou dodávkou."
+  ],
+  "orzhaven": [
+    "Ten Orzaven, kartograf důvěry.",
+    "Jeho mapy kdysi pomohly skupinám na vzdálených stanicích.",
+    "Používá stejnou mapu, aby umístil své spojence na cestu, na které jsou všichni závislí.",
+    "Máme tu nosiče léků, které teď přecházejí přes alternativní linku.",
+    "Držte Orzaven od něj dál."
+  ],
+  "orzhaven-outro": [
+    "Obě kliniky slyšely dok pro přepravu léků.",
+    "Jejich místní posádky souhlasily, že budou mít obě trasy otevřené.",
+    "Mediator rady právě řekl každé stanici, že ten druhý požaduje výhradní kontrolu.",
+    "Čtou si ty dvě zprávy bok po boku."
+  ],
+  "level-47": [
+    "Stanice přímo porovnávaly své nabídky.",
+    "Ani po nich nechtěli exkluzivní kontrolu.",
+    "Loď rady posílá nové požadavky, které účastníci nikdy nepředložili.",
+    "Otevřeme jeden kanál, aby všichni slyšeli stejné podmínky.",
+    "Následujte falešné námitky zpět na palubu rady."
+  ],
+  "keldroth": [
+    "Kontakt potvrzen.",
+    "Keldroth, Konsensus Besieger.",
+    "Jeho komnaty byly postaveny pro konkurenční kolonie, aby urovnaly spory.",
+    "Teď se hádají, zatímco stínová flotila zabírá své dráhy.",
+    "Slyšíme původní pozice na sdíleném kanálu.",
+    "Přerušte blokádu rozhovorů Keldroth."
+  ],
+  "keldroth-outro": [
+    "Stanice souhlasily, že budou udržovat otevřené pruhy, zatímco budou pracovat na opravdovém rozporu.",
+    "Jejich inspektoři našli stínové zásilky označené jako zásoby pomoci.",
+    "Každý z nich uvádí jinou loděnici.",
+    "Posádka v našem opravovaném vnějším kruhu uznala pod novými štítky sériovou značku."
+  ],
+  "level-48": [
+    "Značka patří k dvorku, který celá léta používali ti, co se střídají.",
+    "Nové štítky pojmenují dvůr, který nikdy neřídil ty lodě.",
+    "Posádka poslala svou původní knihu oprav.",
+    "Sledujte převedené majitele a ponechte si kopii každého kroku na nezávislé trase."
+  ],
+  "zhavrek": [
+    "Ten Zhavrek, Vymazávač Původ.",
+    "Po generace jeho archiv řekl posádce, kde byly jejich lodě postaveny.",
+    "Teď to vyměňuje ty záznamy, aby to vypadalo, že kradené zásilky jsou legitimní.",
+    "Máme tu knihu o opravách vnějších prstenců.",
+    "Zajistěte zbývající originály, než Zhavrek skočí."
+  ],
+  "zhavrek-outro": [
+    "Loděnice ověřila originály podle svých pracovních rozkazů.",
+    "Posádka opět vlastní svůj náklad na obou stranách hranice.",
+    "Záznamy o zásilce ukazují útočiště za posledním provozním relé.",
+    "Stínová flotila ji posílala pouze záznamy útoků."
+  ],
+  "level-49": [
+    "Útočiště zvedlo naši starou nouzovou frekvenci.",
+    "Jeho rezidentům bylo řečeno, že se na ně obrátila celá síť.",
+    "Nabídli jsme jim, že je dáme na linku s stanicí, kterou si zvolí.",
+    "Chtěli opraváře na vnějším kruhu Genesis.",
+    "Udržujte tu cestu volnou."
+  ],
+  "vorthaz": [
+    "Kontakt potvrzen.",
+    "Vortaz, Finální izolátor.",
+    "Kdysi hlídal útočiště po dlouhé válce.",
+    "Nyní zablokuje okna do sítě a naplní je zvoleným vysíláním.",
+    "Obyvatelé chtějí slyšet za zdí.",
+    "Vytvořte prostor pro jejich vlastní anténu, aby se mohla připojit."
+  ],
+  "vorthaz-outro": [
+    "Útočiště si umístilo vlastní anténu do rádia.",
+    "Posádka z venku odpovídá jménem.",
+    "Pak obě stanice viděly stejný příkaz, který se objevil v jejich místních knihách.",
+    "Loď v jádru chce, aby každý volný uzel přijal jeden hlavní registr.",
+    "Útočiště nám poslalo velení původu."
+  ],
+  "level-50": [
+    "Stanice si vedou vlastní záznamy.",
+    "Genesis má první hovor opravářské posádky.",
+    "Útočiště má svůj vlastní záznam odpovědi.",
+    "Drazevorn je žádá, aby se oba odevzdali do jeho registru.",
+    "Otevřeli si nezávislé linie.",
+    "Leť do jádra, Pilote.",
+    "Držte ty čáry na dosah."
+  ],
+  "drazevorn": [
+    "Kontakt potvrzen.",
+    "Drazevorn, Pán falešné pravdy.",
+    "Jeho paluby nesou ukradená jména, falešné kroniky a důkazy ukryté u lodí, které jsme zastavili.",
+    "Právě označil relé Genesis potichu.",
+    "Slyším opraváře na druhé lince.",
+    "Nech je mluvit, Pilote.",
+    "Narazil na Drazevornův reaktor."
+  ],
+  "drazevorn-outro": [
+    "Registr Drazevorn 's přestal odpovídat.",
+    "Kolonie kontrolují původní záznamy společně.",
+    "Genesis našla opraváře, kteří volali z vnějšího kruhu.",
+    "Útočiště má vlastní záznam odpovědi.",
+    "Poslouchej mě.",
+    "Stanice přehrávají obě nahrávky přes otevřený kanál.",
+    "Stále existují rozdíly, které musíme překonat.",
+    "Každá stanice teď může mluvit sama za sebe.",
+    "Právě přišel hlas ze Země.",
+    "Genesis relé, tady Země.",
+    "Slyšíme tě jasně.",
+    "Opraváři už odpovídají.",
+    "Žádají Zemi, aby udržovala kanál pro stanice dál.",
+    "Nech kanál volný, pilote.",
+    "Další lodě žádají o povolení k odletu na průzkumné mise.",
+    "Až první loď projde prstenem, chci slyšet, kam její posádka míří."
+  ]
+}

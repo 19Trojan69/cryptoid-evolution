@@ -1,0 +1,1091 @@
+{
+  "campaign": [
+    "Prima criptomonedă le-a permis oamenilor să facă schimburi directe peste granițe.",
+    "Secole mai târziu, coloniile din spațiul îndepărtat depindeau de aceeași rețea pentru hrană, combustibil și medicamente.",
+    "Apoi a venit spamul. Mesajele falsificate au golit conturile.",
+    "Cu banii furați, escrocii au înarmat o flotă.",
+    "Cryptoizii.",
+    "Încă de la început, voluntarii au demascat fraudele.",
+    "Urmașii lor au plecat printre stele, escortând nave de aprovizionare și răspunzând apelurilor de urgență.",
+    "Acum câteva minute, un fals apel de urgență ne-a îndepărtat patrulele de Pământ.",
+    "Acum, coloniile Genesis amuțesc.",
+    "Într-o zi, când războiul se va sfârși, navele noastre vor porni din nou…",
+    "… să exploreze lumi pe care până acum le-am privit doar prin telescoape.",
+    "Pilot, ai permisiunea de decolare."
+  ],
+  "varneth": [
+    "Contact confirmat.",
+    "Varneth.",
+    "Cândva, transporta evidențele de aprovizionare între coloniile Genesis.",
+    "A dispărut lângă un releu abandonat.",
+    "Acum s-a întors, iar transmisiunile sale acoperă toate apelurile de ajutor.",
+    "Pilot, întrerupe semnalul."
+  ],
+  "varneth-outro": [
+    "Pilot.",
+    "Semnalul lui Varneth a dispărut.",
+    "Aud o voce pe releul Genesis.",
+    "O echipă de intervenție de pe inelul exterior cere ajutor de la răsărit.",
+    "Am coordonatele.",
+    "Medicii sunt pe drum.",
+    "Ține canalul liber, pilot.",
+    "Pentru prima dată astăzi…",
+    "…cineva de acolo va auzi un răspuns."
+  ],
+  "level-two": [
+    "Varneth e la pământ.",
+    "Releele Genezei transmit din nou apeluri de ajutor.",
+    "Un convoi de aprovizionare tocmai a schimbat cursul la ordinul unei stații de frontieră.",
+    "Stația jură că nu a trimis niciodată acel ordin.",
+    "Convoiul este încă acolo.",
+    "Pilot, urmează ultima transmisie.",
+    "Să aducem echipajele acasă."
+  ],
+  "korvessa": [
+    "Pilot, am urmărit semnalul până la Korvessa.",
+    "A purtat odată expediţii diplomatice.",
+    "Fiecare staţie de la graniţă ştia numărul ei de identificare radio.",
+    "Acum folosește un indicativ diferit pe fiecare canal.",
+    "Convoiul a urmărit-o direct într-o ambuscadă.",
+    "Nava ei e în faţă.",
+    "Armele sunt libere, Pilot.",
+    "Deschide o cale spre casă."
+  ],
+  "korvessa-outro": [
+    "Pilot, releul Korvessei a căzut.",
+    "Nava de marfă din frunte și-a aprins luminile de marfă.",
+    "Echipajul ei marchează un culoar prin resturi.",
+    "Sun convoiul pe rând.",
+    "Doi au răspuns deja.",
+    "Ține culoarul liber pentru celelalte, pilot.",
+    "Vreau să aud cum răspunde și ultimul echipaj."
+  ],
+  "level-three": [
+    "Pilot, Korvessa e la pământ.",
+    "Fiecare echipaj convoi a scăpat.",
+    "Ultima navă de marfă a adus o înregistrare a ambuscadei.",
+    "În timp ce luptam cu Korvessa, o a doua navă s-a strecurat printre resturi și a pornit spre Genesis.",
+    "Familiile echipajelor așteaptă acolo, în adăposturi.",
+    "Urmărește nava aceea.",
+    "Voi cerceta arhiva lui Korvessa cât timp ești în zbor."
+  ],
+  "drelvorn": [
+    "Pilot, arhiva Korvessei confirmă.",
+    "Nava pe care ai urmărit-o este Drelvorn, Hoțul Sigiliilor.",
+    "Paznicul ei a furat sigiliile comandanților flotei în timpul revoltei.",
+    "Genesis tocmai a primit un ordin de evacuare semnat cu unul dintre acele sigilii.",
+    "Uşile adăpostului se deschid.",
+    "Familiile echipajelor convoiului sunt încă înăuntru.",
+    "Îi voi avertiza.",
+    "A lovit reactorul lui Drelvorn."
+  ],
+  "drelvorn-outro": [
+    "Genesis, anulați evacuarea.",
+    "Emițătorul lui Drelvorn a căzut.",
+    "Personalul adăposturilor a securizat ușile.",
+    "Familiile echipajelor sunt înăuntru. Toate sunt în siguranță.",
+    "Sigiliul furat a fost revocat.",
+    "Din cauza unui registru colonial, ordinul fals a trecut toate verificările.",
+    "Același registru arată că adăposturile sunt goale.",
+    "Recuperez înregistrările originale."
+  ],
+  "level-four": [
+    "Echipajele convoiului au vorbit cu familiile lor.",
+    "Genesis rezistă.",
+    "Înainte de ordinul lui Drelvorn, cineva a șters familiile din listele adăposturilor.",
+    "Dovezile de livrare păstrează înregistrările inițiale.",
+    "Pune-le lângă noul registru.",
+    "Puteţi vedea unde s-a schimbat.",
+    "Ia urma primei copii modificate, pilot."
+  ],
+  "talvrek": [
+    "Contact confirmat.",
+    "Talvrek, Falsificatorul de Cronici.",
+    "Nava cartografia colonii noi și păstra primele lor înregistrări.",
+    "Acum copiile lui susțin că oamenii aceia n-au locuit vreodată acolo.",
+    "Portul folosește versiunea lui pentru a refuza alimente și medicamente.",
+    "Avem deja dovezile originale de livrare.",
+    "Lovește reactorul lui Talvrek înainte să trimită altă copie."
+  ],
+  "talvrek-outro": [
+    "Emițătorul lui Talvrek a amuțit.",
+    "Două colonii au verificat dovezile originale și au refăcut listele adăposturilor.",
+    "Primul transport de medicamente are permisiunea să andocheze.",
+    "O stație încă nu răspunde.",
+    "O platformă de reparații numită Zeraveth îi blochează accesul.",
+    "Echipa de mentenanță așteaptă afară, cu piesele necesare stației."
+  ],
+  "level-five": [
+    "Echipa de intervenție de pe inelul exterior Genesis ne-a trimis piese de schimb.",
+    "Stația pe care Talvrek a redus-o la tăcere are nevoie de toate.",
+    "Echipa de întreținere vede luminile docului de unde așteaptă.",
+    "Du echipa până la stație.",
+    "Pilotule."
+  ],
+  "zeraveth": [
+    "Contact confirmat.",
+    "Zeraveth, Asediatorul nodurilor.",
+    "Odinioară repara inele întregi de relee.",
+    "Brațele sale de andocare blochează acum singura cale de acces.",
+    "Stația își pierde ultimul emițător funcțional.",
+    "Lovește reactorul lui Zeraveth…",
+    "și eliberează calea pentru navele de reparații."
+  ],
+  "zeraveth-outro": [
+    "Navele au intrat.",
+    "Operatorul staţiei tocmai a sunat de la docuri, iar releul îi poartă vocea.",
+    "O a doua autorizare a sosit în același timp.",
+    "Își amintește că a emis-o cu ani în urmă.",
+    "Am păstrat ambele înregistrări."
+  ],
+  "level-six": [
+    "Releul reparat recepționează din nou semnale…",
+    "pe care echipajul le credea pierdute.",
+    "Un remorcher va pleca cu o aprobare înregistrată înainte să preia comanda căpitanul.",
+    "Am cerut stației să țină remorcherul la doc.",
+    "Urmărește vechea înregistrare…",
+    "până la sursă."
+  ],
+  "orvask": [
+    "Ăsta e Orvask…",
+    "Vânătorul de ecouri.",
+    "Escorta convoaie și păstra fiecare autorizare auzită.",
+    "Acum retransmite acele ordine…",
+    "de parcă ar fi fost date astăzi.",
+    "Un remorcher și un cargou…",
+    "au primit aceeași fereastră de plecare.",
+    "Întrerupe semnalul lui Orvask."
+  ],
+  "orvask-outro": [
+    "Remorcherul are o nouă autorizare.",
+    "Am auzit-o pe operatoare acordând-o în direct.",
+    "Jurnalul lui Orvask arată unde au fost predate cele mai vechi înregistrări.",
+    "Este un doc de transbordare între două colonii.",
+    "Ambele încă primesc chitanțe…",
+    "pentru o marfă…",
+    "care n-a ajuns niciodată."
+  ],
+  "level-seven": [
+    "Ambele colonii ne-au trimis listele de încărcare.",
+    "Fiecare are o chitanță ștampilată de cealaltă.",
+    "Ultimele echipaje de marfă mai au fotografiile de la încărcare.",
+    "Comparăm numerele containerelor…",
+    "în timp ce te apropii de docul de transbordare."
+  ],
+  "keldrava": [
+    "Contact confirmat.",
+    "Keldrava…",
+    "Podul Umbrelor.",
+    "Echipajele coloniilor predau cândva marfa în ecluzele ei.",
+    "Un compartiment ștampilează chitanța, celălalt ia lada.",
+    "Vedem containerele dispărute prin trapa de întreținere.",
+    "Eliberează calea…",
+    "pentru recuperarea mărfii."
+  ],
+  "keldrava-outro": [
+    "Cele două colonii își numără marfa pe același canal.",
+    "Au găsit pompele pentru sere și rațiile de urgență.",
+    "O navă de știri le transmite vecinilor…",
+    "că podul s-a prăbușit cu toată lumea la bord.",
+    "Cele două echipaje…",
+    "s-au oferit să vorbească în direct."
+  ],
+  "level-eight": [
+    "Echipajele podului sunt în direct.",
+    "Un membru al echipajului tocmai a arătat o pompă recuperată la cameră.",
+    "Trei porturi vecine și-au închis totuși rutele după avertismente.",
+    "Trimitem mărturia echipajelor fiecărui centru de control.",
+    "Zboară spre emițătorul…",
+    "de la care a pornit totul."
+  ],
+  "veshkorn": [
+    "Contact confirmat.",
+    "Veshkorn…",
+    "Purtătorul de zvonuri.",
+    "Recunoaștem fanfara vechiului său serviciu de știri.",
+    "O folosește pentru a anunța dezastre care nu s-au întâmplat.",
+    "Ultimul său buletin spune că rutele de aprovizionare se vor închide iar.",
+    "Porturile sunt gata să-și asculte propriii piloți.",
+    "Scoate-i emițătorul…",
+    "din emisie."
+  ],
+  "veshkorn-outro": [
+    "Controlul traficului tocmai a redeschis rutele.",
+    "Dispecerii citesc rapoartele despre vreme și marfă cu echipajele care le-au trimis.",
+    "Un căpitan spune că i s-a oferit o cală plină de semințe în timpul panicii.",
+    "Ne trimite manifestul de încărcare.",
+    "Nu există nicio fotografie de la încărcare."
+  ],
+  "level-nine": [
+    "Rutele sunt din nou deschise.",
+    "Căpitanul ne-a trimis manifestul transportului de semințe.",
+    "Lipsesc fotografiile de la încărcare.",
+    "A așteptat toată noaptea la rampa de încărcare.",
+    "Afișajul indica o cală plină.",
+    "Nava cântărea la fel ca la sosire.",
+    "Se întoarce la colonie cu cala goală.",
+    "Urmează adresa din manifest, pilotule."
+  ],
+  "neravoss": [
+    "Contact confirmat.",
+    "Neravoss, Iluzionistul soldurilor.",
+    "Nava aceasta expunea cândva mărfuri reale la un târg.",
+    "Acum, ecranele ei anunță rezerve inventate.",
+    "Promisiunile au atras cargouri cu provizii reale.",
+    "În spatele afișajului vedem numele cargourilor care au descărcat și au așteptat.",
+    "Neutralizează apărarea calei."
+  ],
+  "neravoss-outro": [
+    "Inspectorii au găsit semințe adevărate la bord.",
+    "Le-au adus cargourile pe care Neravoss le-a trecut ca neplătite.",
+    "Echipajele duc semințele acasă prin pasajul de cristal.",
+    "O navă la îngustare i-a trimis fiecărui echipaj o factură.",
+    "Chiar și medicii trebuie să plătească."
+  ],
+  "level-10": [
+    "Navele de marfă care transportă seminţe aşteaptă la o linie de trecere.",
+    "O navă medicală aşteaptă între ei, iar pacienţii ei pot vedea luminile staţiei.",
+    "Autoritatea portuară nu a găsit niciun temei juridic pentru noile taxe.",
+    "Zboară la poartă.",
+    "Vom ajuta echipele să aştepte la rând să rămână calme."
+  ],
+  "thalverik": [
+    "E Thalverik, Tiranul Toll.",
+    "Obişnuia să escorteze navele prin acest pasaj.",
+    "Astăzi el taxează pentru trecere și taxe din nou pentru a cere ajutor.",
+    "El ține linia peste canal.",
+    "Cutterul poate pleca imediat ce se rupe linia.",
+    "Ţinteşte reactorul lui Thalverik."
+  ],
+  "thalverik-outro": [
+    "Nava medicală a trecut de pasaj.",
+    "Cargourile sunt în urma, iar consiliul portului a anulat taxele.",
+    "Am recuperat un cont care a primit aproape fiecare plată.",
+    "A cumpărat mii de voturi într-o secţie de consiliu despre care credeam că au doar 30 de piloţi."
+  ],
+  "level-11": [
+    "Secţia de consiliu ne-a invitat să vedem un apel.",
+    "Registrul arată mii de piloţi, dar doar 30 de dane sunt ocupate.",
+    "Un stagiar a recunoscut vechiul ei identificator radio simulator în vot.",
+    "Ne-a dat adresa navei de antrenament."
+  ],
+  "skorveth": [
+    "Există Skorveth, Multe-Faced.",
+    "Nucleele sale de antrenament i-au învăţat pe piloţi să zboare.",
+    "Sistemul numără acum echipajele simulate ca rezidenţi care confirmă identitatea celuilalt.",
+    "Voturile lor au eliberat deja un ocol al flotei.",
+    "Opriţi transmiţătorul nucleelor."
+  ],
+  "skorveth-outro": [
+    "Cei 30 de piloţi au semnat un nou rolă împreună.",
+    "Stagiarul a ajutat consiliul să-şi scoată vechiul identificator radio.",
+    "Un ocol aprobat este încă în cărțile de traseu.",
+    "O navă de salvare a luat-o la prima oră.",
+    "A ratat două check-in-uri."
+  ],
+  "level-12": [
+    "Semnalul navei de salvare încă transmite.",
+    "Cea mai apropiată staţie poate vedea lumina prin nebuloasă.",
+    "Traseul de emisie pune două salturi departe.",
+    "Vom ghida staţia spre acea lumină în timp ce tu urmezi ruta falsă în amonte."
+  ],
+  "azhrel": [
+    "Azhrel, Otrăvitorul de pe Rută.",
+    "Nava a desenat primele diagrame de salt de-a lungul acestei jante.",
+    "Noile sale intrări trimit apeluri de ajutor prin relee controlul flotei umbră.",
+    "Îndrumarea navei de salvare s-a terminat în spaţiu gol.",
+    "Avem vechile diagrame.",
+    "Eliberaţi Azhrel-ul de la intersecţie."
+  ],
+  "azhrel-outro": [
+    "Echipa de salvare este din nou în raza staţiei.",
+    "Staţiile au verificat coordonatele vechi şi au pus ruta directă înapoi în funcţiune.",
+    "E un înregistrator vechi pe nava de salvare.",
+    "Cineva care s-a oferit să-şi salveze datele a luat unitatea şi a lăsat o copie deteriorată."
+  ],
+  "level-13": [
+    "Echipa de salvare a păstrat un jurnal scris de mână.",
+    "Descrie o navă de salvare care oferă protecţie pentru înregistrările traseului fals.",
+    "Putem dovedi încă când nava de salvare a sosit.",
+    "Avem nevoie de unitate pentru a arăta ceea ce echipajul auzit pe drum în."
+  ],
+  "dornavik": [
+    "Contact confirmat.",
+    "Dornavik, piromanul arhivă.",
+    "Camerele sale izolate au păstrat cândva arhivele în viaţă în interiorul epavelor arzătoare.",
+    "Acum păstrează unităţile intacte şi trimite echipajelor copii deteriorate.",
+    "Acel golf clipeşte şi ţine recorderul navei de salvare.",
+    "Opriţi-l pe Dornavik să sară."
+  ],
+  "dornavik-outro": [
+    "Am recuperat unitatea.",
+    "Echipajul a potrivit înregistrarea cu fiecare intrare din jurnalul său.",
+    "Înlocuitorii lor au ajuns la trei colonii în această dimineaţă.",
+    "Un avanpost nu a primit nimic de săptămâna trecută.",
+    "Un portavion de arhivă încă ţine toate actualizările."
+  ],
+  "level-14": [
+    "Avanpostul încearcă să doteze un cargobot într-un port închis pentru reparaţii.",
+    "Buletinul local este vechi de o săptămână.",
+    "Am trimis un mesaj vocal din port şi cargobotul se întoarce.",
+    "Actualizarea programată este încă la bordul transportatorului care a fost menit să-l livreze."
+  ],
+  "velkrath": [
+    "E Velkrath, Block Withholder.",
+    "Portavioanele sale sigilate au păstrat odată înregistrările de cercetare intacte pentru staţiile exterioare.",
+    "Actualizările sunt încă în interior, în ordinea datei.",
+    "El eliberează unul vechi ori de câte ori poate provoca probleme.",
+    "Deschideţi calea spre containere."
+  ],
+  "velkrath-outro": [
+    "Avanpostul are ultimul buletin.",
+    "Doi jurnale ale echipajului spun că aceeaşi actualizare a sosit la timp şi după termenul limită.",
+    "Ambele ceasuri recepţionau semnale de la o navă de precizie.",
+    "Controlorul ne trimite datele ceasului mecanic."
+  ],
+  "level-15": [
+    "Ceasul mecanic e de acord cu timpul scurs al echipajului de aprovizionare.",
+    "Ceasul de la avanpost a mers înainte.",
+    "Două zboruri de întreţinere au fost spuse să folosească acelaşi sas la ore diferite, şi ambele sunt în apropiere.",
+    "Ofiţerul de docuri i-a oprit la balize."
+  ],
+  "irdavoss": [
+    "Contact confirmat.",
+    "Irdavoss, Ceasul Twister.",
+    "Flotele întregi îşi pun manevrele la locul lui.",
+    "Am văzut semnalul său împingând o autorizație de zbor valabilă trecut termenul limită.",
+    "Trei staţii îşi compară ceasurile.",
+    "A lovit reactorul lui Irdavoss în timp ce termină cecul."
+  ],
+  "irdavoss-outro": [
+    "Ambele echipe de întreţinere au andocat în siguranţă cu autorizaţii de zbor separate.",
+    "O clinică ar fi trebuit să-şi primească dosarul când ceasurile au fost corectate.",
+    "Înregistrările sunt încă încuiate.",
+    "Paznicul lor tocmai a numit un preţ pentru cheie."
+  ],
+  "level-16": [
+    "Personalul clinicii lucrează din bancnote cât timp dosarele lor sunt încuiate.",
+    "Un depozit de aprovizionare din apropiere a pierdut lista de medicamente disponibile, de asemenea.",
+    "Amândoi au primit aceeaşi cerere.",
+    "Urmăreşte-l până la nava care le transportă arhivele."
+  ],
+  "rhazvorn": [
+    "Transportorul acela e Rhazvorn, Key Gaoler.",
+    "Celulele sale folosite pentru a ține oamenii.",
+    "Acum au arhive sigilate de la clinici şi depozite de aprovizionare.",
+    "Am urmărit cererile de acces originale la seiful central.",
+    "Ţine-l pe Rhazvorn aici cât timp echipa de recuperare se apropie."
+  ],
+  "rhazvorn-outro": [
+    "Clinica şi-a deschis fişierele.",
+    "Depozitul numără medicamentul în raport cu lista de stocuri restaurate.",
+    "Raportul meteo spune că ruta e închisă, deşi echipajul vede că e liberă.",
+    "Ciudatele citiri au venit de la aceeaşi navă de supraveghere."
+  ],
+  "level-17": [
+    "Echipajul depozitului a trimis o imagine a unei abordări clare.",
+    "Instrumentele sale arată o furtună şi ecranul de inventar arată o magazie completă.",
+    "Echipajul a numărat două lăzi de medicamente.",
+    "Ţinem expediţiile automate până putem verifica sursa."
+  ],
+  "kelvash": [
+    "Contact confirmat.",
+    "Kelvash, Înşelătorul Oracol.",
+    "Rapoartele sale de studiu folosite pentru a ghida depozitul.",
+    "Acum nava inventează datele despre vreme şi inventar, iar computerele depozitului trimit marfa reală departe.",
+    "Cea mai apropiată clinică are nevoie de provizii.",
+    "Ia transmiţătorul lui Kelvash offline."
+  ],
+  "kelvash-outro": [
+    "Depozitul a trimis medicamente la clinică din nou.",
+    "Două centre de aprovizionare au folosit aceeaşi fotografie pentru a-şi actualiza înregistrările.",
+    "Noile registre încă nu sunt de acord.",
+    "Ambele centre au primit un mesaj insistând că a lor era singura copie validă."
+  ],
+  "level-18": [
+    "Cele două centre de aprovizionare au fost de acord să deschidă registrele lor pe aceeași linie.",
+    "Au găsit înregistrări identice până ieri.",
+    "O navă a consiliului itinerant a emis paginile contradictorii.",
+    "Escortele sale se adună între cele două staţii.",
+    "Urmează timbrele de depunere."
+  ],
+  "othravel": [
+    "Uite-l pe Otravel, Lordul Furculiţelor.",
+    "Obişnuia să adune colonii rivale pe puntea de conferinţă.",
+    "Acum le trimite registre separate şi îşi spune că celălalt şi-a falsificat intrările.",
+    "Ambele posturi şi-au pus armele în aşteptare.",
+    "Nu-l băga pe Otravel în discuţiile lor."
+  ],
+  "othravel-outro": [
+    "Cele două registre sunt de acord acum cu ultima lor pagină verificată.",
+    "Centrele rezolvă intrările ulterioare împreună.",
+    "Ambele au primit o ofertă de relee de salvare independente.",
+    "Oferta cere ofiţerilor de docuri să-şi trimită autorizaţiile de zbor.",
+    "Le-am spus să aştepte."
+  ],
+  "level-19": [
+    "Un ofiţer de docuri a mai văzut explozia de aur.",
+    "O echipă de salvare autentică a folosit-o pentru a o aduce acasă după o furtună.",
+    "Acest expeditor va deschide golful doar atunci când ea împărtășește autorizația de zbor.",
+    "Ofiţerul de docuri stă pe canalul nostru în timp ce te apropii."
+  ],
+  "zarnvek": [
+    "Acea rachetă aparţine lui Zarnvek, Falsul Salvator.",
+    "Vechiul semnal al navei de salvare arată la fel.",
+    "Docul său are echipament de urmărire îndreptat spre trapă, iar cererile de autorizare a zborului încă mai ies.",
+    "Mark canalul de salvare real.",
+    "Atunci, dă-i transmiţătorul lui Zarnvek jos."
+  ],
+  "zarnvek-outro": [
+    "Un remorcher de salvare verificat a luat echipele de aşteptare.",
+    "Căpitanul spune că şi-a pierdut slotul înainte să răspundă la apelul nostru.",
+    "Jurnalul arată că un cargobot umbra a luat slotul câteva secunde mai târziu.",
+    "Ora originală a remorcherului este încă în jurnalul său."
+  ],
+  "level-20": [
+    "Jurnalul remorcherului se potriveşte cu prima coadă a portului.",
+    "De atunci, cineva a mutat fiecare cerere de salvare în spatele aceluiaşi şase cargouri.",
+    "O linie ţine sticlele de oxigen pentru echipa de reparaţii.",
+    "Urmați programul port în mișcare în timp ce personalul marchează comanda originală."
+  ],
+  "vorathen": [
+    "Contact confirmat.",
+    "Vorathen, Raider Queue.",
+    "Puntea lui obişnuia să ţină mii de sosiri în ordine.",
+    "Acum le vinde locul aliaţilor lui.",
+    "Transportul de oxigen a fost primul când porţile s-au închis.",
+    "Spargeţi-i locul lui Vorathen ca să poată anunţa docul."
+  ],
+  "vorathen-outro": [
+    "Oxigenul e pe doc.",
+    "Portul a postat coada cu orele sale originale, iar echipele de aşteptare compară chitanţele.",
+    "Fiecare navă a primit un pachet mic pe care nimeni nu l-a cerut.",
+    "Un observator urmăreşte ce echipaje confirmă livrarea."
+  ],
+  "level-21": [
+    "Echipajele portuare nu mai recunosc parcelele nesolicitate.",
+    "Am găsit aceeaşi livrare mică în dane private peste tot în jurul benzi comerciale.",
+    "Cel care trimite e pe urmele celui care răspunde şi care dă un pachet.",
+    "Urmează-l pe următorul înapoi în golful de lansare."
+  ],
+  "drazkell": [
+    "Contact confirmat.",
+    "Drazkell, Scatterul de praf.",
+    "Punţile sale de marfă au furnizat cândva celule energetice unor balize de navigaţie.",
+    "Acum fiecare livrare nesolicitată poate dezvălui încă o legătură privată între staţii.",
+    "Înregistratorul încă mai colectează răspunsuri.",
+    "Opriţi rampa de lansare înainte să trimită următorul lot."
+  ],
+  "drazkell-outro": [
+    "Pachetele s-au oprit.",
+    "Posturile au sigilat jurnalele de răspuns, iar echipajele schimbă canalele pe care le folosesc pentru apeluri private.",
+    "Inspectorii au găsit aceeaşi ştampilă oficială pe fiecare ladă din Drazkell.",
+    "Emiţătorul său a aprobat deja convoiul de aprovizionare de săptămâna viitoare."
+  ],
+  "level-22": [
+    "Un inspector de port a comparat timbrele cu lista de sarcini.",
+    "Ofiţerii înregistraţi pe ele nu au vizitat niciodată cabinele de marfă.",
+    "Noul convoi aprobat aşteaptă o inspecţie reală.",
+    "Zboară spre biroul mobil care a eliberat certificatele."
+  ],
+  "nethrava": [
+    "E Nethrava, Falsul Custodian.",
+    "Certificatele sale listează fiecare inspecţie ca fiind aprobată.",
+    "Crews a avut încredere în timbrele alea şi le-a dat provizii navelor pe care nu le-au putut examina niciodată.",
+    "Portul poate redeschide inspecţiile după ce falsul birou îşi pierde legătura.",
+    "Dă-mi veriga jos."
+  ],
+  "nethrava-outro": [
+    "Ofiţerii portului au inspectat convoiul personal.",
+    "Acum pot urmări lăzile până la echipajele originale.",
+    "O navă de înregistrări a venit peste noapte şi a şters istoricul inspecţiei ca curăţare de rutină.",
+    "Un ofiţer a păstrat o copie a ordinului."
+  ],
+  "level-23": [
+    "Copia ofiţerului enumeră istoricul inspecţiei ca fiind de unică folosinţă.",
+    "Aceeaşi navă a vizitat un depozit al cărui cont de proprietate se opreşte acum la jumătatea transportului.",
+    "Avem numerele de pagină lipsă.",
+    "Găseşte nava înainte să se afle următorul detaliu de curăţare."
+  ],
+  "valdrek": [
+    "Contact confirmat.",
+    "Valdrek, Emptier Memory.",
+    "A fost construit pentru a şterge înregistrările redundante.",
+    "Acum el marchează dovezi de furt ca dezordine și șterge-l de la stațiile care au nevoie de ea.",
+    "Jurnalul de eliminare încă liste pe care fișiere a luat.",
+    "Dezactivaţi reactorul lui Valdrek."
+  ],
+  "valdrek-outro": [
+    "Ofiţerii au recuperat suficiente copii pentru a reconstrui traseul de proprietate al depozitului.",
+    "Valdrek a eliberat fiecare chitanţă de pe o piaţă la aceeaşi oră.",
+    "Graficele sale de vânzări au continuat să crească după ce au dispărut chitanţele.",
+    "Consiliul portului vrea ca cineva să vadă depozitele."
+  ],
+  "level-24": [
+    "Afişajul pieţei a arătat zeci de vânzări înainte să sosească inspectorii noştri.",
+    "Au urmărit o poartă de încărcare timp de o oră.",
+    "Nu s-a deschis niciodată.",
+    "Traficul comercial se îndreaptă spre stocurile de publicitate.",
+    "Inspectorii te aşteaptă la depozit."
+  ],
+  "korzeth": [
+    "Contact confirmat.",
+    "Korzeth, piaţa oglinzilor.",
+    "El organizează tranzacţii între cumpărătorii inventaţi şi vânzători.",
+    "Aceeaşi încărcătură pare să se vândă din nou la câteva minute.",
+    "Echipajele aduc bunuri autentice în depozite goale.",
+    "Scoate-l pe Korzeth de la porţi ca inspectorii să-i poată deschide."
+  ],
+  "korzeth-outro": [
+    "Depozitele sunt deschise.",
+    "Marfa care a sosit se întoarce cu echipajele sale.",
+    "Un cargobot a luat un transport de recuperare spre staţiile exterioare şi apoi s-a întors.",
+    "Destinaţia a primit o chitanţă semnată de livrare în timp ce cargobotul era încă în zbor."
+  ],
+  "level-25": [
+    "Pilotul cargobotului şi-a deschis camera într-o cală plină de provizii.",
+    "Staţia de primire are o chitanţă pentru fiecare ladă.",
+    "Am cerut ambelor capete să păstreze mesajele lor.",
+    "Urmăreşte chitanţa către expeditor şi vom întoarce cargobotul spre staţie."
+  ],
+  "thervoss": [
+    "Thervoss, hoţul de confirmare.",
+    "El emite chitanţe înainte de a ateriza un transport.",
+    "Cargobotul aude că a terminat treaba şi se îndreaptă spre casă.",
+    "Staţia aşteaptă încărcătura pe care se presupune că a primit-o.",
+    "Avem un canal direct către ambele echipaje.",
+    "Scoate transmiţătorul lui Thervoss."
+  ],
+  "thervoss-outro": [
+    "Prima ladă e jos.",
+    "Echipajul staţiei a trimis chitanţa de pe puntea de încărcare.",
+    "Apelul lor împotriva chitanţei mai vechi tocmai a fost respins.",
+    "O navă a tribunalului a decis pentru acelaşi transportator în fiecare caz pe care l-am verificat."
+  ],
+  "level-26": [
+    "Echipa de primire a trimis tribunalului un videoclip al docului gol.",
+    "Răspunsul a numit video un atac de rețea.",
+    "Alte trei posturi au primit aceeaşi hotărâre.",
+    "Le-am cerut ofiţerilor lor să păstreze dosarele complete.",
+    "Aveţi coordonatele navei tribunalului."
+  ],
+  "akraveth": [
+    "Contact confirmat.",
+    "Akraveth, judecătorul ceţurilor.",
+    "Consilierii lui rezolvau disputele dintre echipaje.",
+    "Acum respinge dovezile care ar expune patronii săi și enumeră pe oricine care obiectează ca un dușman.",
+    "Porturile afectate au adus jurnalele lor.",
+    "Eliberaţi Akraveth departe de banda auditivă."
+  ],
+  "akraveth-outro": [
+    "Staţiile şi-au luat dosarele.",
+    "Un grup comun a fost de acord să audă ambele echipaje de la fiecare livrare.",
+    "Fiecare navă favorizată de Akraveth avea acelaşi pachet de întreţinere recent.",
+    "Un pilot raportează că motoarele lui au eşuat la primul salt după ce l-a instalat."
+  ],
+  "level-27": [
+    "Pilotul e în siguranţă într-un cală de remorcare.",
+    "Inginerii au constatat că noul pachet de servicii a schimbat verificarea motorului în timp ce lăsați ecranul verde.",
+    "Încă trei echipaje au instalat-o în timp ce aşteptau audierile.",
+    "Păstrați la ruta de reparații.",
+    "Le spunem să-şi ţină saltul."
+  ],
+  "zelkharn": [
+    "E Zelkharn, viermele din lanţul de aprovizionare.",
+    "În zonele de întreţinere folosite pentru a menţine flota în zbor.",
+    "Acum, piesele de schimb lasă navele dependente de flota fantomă pentru un drive de lucru.",
+    "Inginerii noştri au piese curate pregătite.",
+    "Obține-le acces la acele nave."
+  ],
+  "zelkharn-outro": [
+    "Echipajele testează părţile curate din doc înainte să zboare.",
+    "O clinică a pierdut o arhivă de expediere în timpul eșecului.",
+    "A plătit un portavion pentru copii.",
+    "Transportatorul tocmai a trimis o listă cu numele fişierelor şi o unitate goală."
+  ],
+  "level-28": [
+    "Clinica şi-a găsit numele de arhivă în dosarul transportatorului.",
+    "Echipa de rezervă a cerut un dosar şi a primit alt transfer gol.",
+    "Clinica încă are cele mai recente expediţii locale.",
+    "Urmăriţi-l pe proprietarul directorului în timp ce noi îi ajutăm să păstreze acele copii."
+  ],
+  "odravik": [
+    "Contact confirmat.",
+    "Odravik, negustorul gol de rezervă.",
+    "Garajul de stocare promite recuperarea de la orice dezastru.",
+    "Unele dintre fișierele de pe ecranul său nu a ajuns la un disc.",
+    "Clinicile au nevoie de copiile care încă mai există.",
+    "Deschide calea pentru inginerii lor pentru a verifica rafturi."
+  ],
+  "odravik-outro": [
+    "Inginerii au restaurat copiile care erau de fapt pe rafturi.",
+    "Au citit trei avertismente pe care le-a trimis un inspector acum câteva luni.",
+    "Niciun port nu le-a primit.",
+    "Unul dintre avertismentele numeste filtrul vechiului port ca ultimul loc unde au fost vazute mesajele."
+  ],
+  "level-29": [
+    "Şeful portului spune că nu a auzit niciodată alarma.",
+    "Inspectorul a păstrat trei copii cu timpul lor de trimitere.",
+    "Fiecare arată că vechiul filtru radio al portului a recunoscut-o.",
+    "Următorul echipaj de inspecţie foloseşte un canal deschis ca să-l putem auzi direct."
+  ],
+  "varnokh": [
+    "Contact confirmat.",
+    "Varnokh, filtrul de tăcere.",
+    "Odată a separat apelurile de ajutor de zgomotul din porturile aglomerate.",
+    "Noua sa listă tratează inspectorii independenţi ca pe o interferenţă.",
+    "Putem auzi un al doilea echipaj pe canalul deschis acum.",
+    "Dezactivează filtrele lui Varnokh ca să le audă şi staţiile."
+  ],
+  "varnokh-outro": [
+    "Staţiile aud avertismente care nu au reuşit să treacă.",
+    "Mai multe rapoarte conform cărora coloniştii absenţi au dat ordine de marfă după ce numele lor au apărut la o licitaţie.",
+    "Coloniştii au venit cu înregistrările lor originale.",
+    "Vor să vadă cine le-a pus la vânzare."
+  ],
+  "level-30": [
+    "Coloniştii îşi amintesc că au semnat la bordul flotei care i-a dus la noile lor case.",
+    "Numerele lor de înregistrare apar acum în loturi de licitație separate.",
+    "O femeie a recunoscut numărul pe care l-a folosit în prima zi în colonie.",
+    "A copiat lista de vânzări pentru noi."
+  ],
+  "kezravel": [
+    "E Kezravel, Licitatorul de Identitate.",
+    "Registrul vechi colonistilor acum furnizează nume de vânzare.",
+    "Cumpărătorii pot plasa comenzi sub identitate oameni petrecute o viață de construcție.",
+    "Avem proprietarii pe un canal verificat.",
+    "Opriţi Kezravel înainte de următoarea licitaţie."
+  ],
+  "kezravel-outro": [
+    "Coloniştii au revocat actele furate.",
+    "Posturile lor emit personal înlocuiri.",
+    "Primul aviz de revocare a ajuns la releul îndepărtat cu o destinație diferită pe ea.",
+    "Ambele capete au primit o confirmare.",
+    "Le-am cerut echipajelor să-şi păstreze originalele."
+  ],
+  "level-31": [
+    "Cel care a trimis şi receptorul de pe traseul îndepărtat au comparat copiile lor.",
+    "Ambii au fost anunţaţi că a sosit revocarea.",
+    "Cele două anunţuri nu sunt de acord cu numele.",
+    "Păstrăm o legătură separată deschisă.",
+    "Află unde s-au schimbat cele două mesaje."
+  ],
+  "dravosk": [
+    "Contact confirmat.",
+    "Dravosk, Iluzionistul Relay.",
+    "Antena sa a înlocuit staţiile de pe rutele goale.",
+    "Acum editează câteva transmisii şi îi lasă pe alţii în linişte după ce le recunoaşte.",
+    "Canalul nostru alternativ e intact.",
+    "Eliberaţi calea pentru colonii de a le verifica mesajele sfârşind."
+  ],
+  "dravosk-outro": [
+    "Revocarea a ajuns intactă pe ruta independentă.",
+    "Operatorii au găsit ciudată cerere de trafic în jurnalul vechiului releu.",
+    "Fiecare explozie poartă numărul unei drone de lucru pe care proprietarul ei a raportat-o dispărută.",
+    "Dronele transmit încă împreună."
+  ],
+  "level-32": [
+    "Un mecanic de staţie a recunoscut drona ei veche în traficul de relee.",
+    "A fost colectat pentru reparaţii şi nu a mai venit acasă.",
+    "Sute de alţi proprietari ne-au trimis numere identice.",
+    "Zboară spre centrul transmisiilor.",
+    "Se apropie."
+  ],
+  "thalzek": [
+    "E Thalzek, colecţionarul de arme.",
+    "Fuzelajul său folosit pentru a adăposti drone de lucru deteriorate.",
+    "Acum îi face să copleşească releele cu cereri.",
+    "Proprietarii au furnizat numerele lor de serie astfel încât echipele noastre de recuperare pot recunoaște unitățile.",
+    "Doboară nava de comandă."
+  ],
+  "thalzek-outro": [
+    "Proprietarii îşi primesc drone înapoi.",
+    "O navă de recuperare a vrut să semneze un contract de servicii înainte de a-şi face livrarea.",
+    "Un inginer a găsit o clauză care preda controlul fiecărei unităţi reparate.",
+    "Aceeaşi ofertă a ajuns deja la jumătate din staţiile de pe acest traseu."
+  ],
+  "level-33": [
+    "Inginerul a citit contractul de recuperare până la capăt.",
+    "Mai multe stații au semnat o versiune care permite furnizorului să preia controlul reparațiilor lor.",
+    "Echipajul lor are o copie a fiecărei pagini.",
+    "Urmează oferta înapoi la biroul comercial."
+  ],
+  "orvethra": [
+    "Contact confirmat.",
+    "Orvethra, capcana contractului.",
+    "Această navă a intermediat acorduri de aprovizionare pe termen lung.",
+    "Noile sale oferte oferă controlul flotei de umbră asupra muncii de rutină.",
+    "Posturile sunt pregătite să suspende aceste condiţii împreună.",
+    "Secure Orvethra semnat copii pentru ei."
+  ],
+  "orvethra-outro": [
+    "Posturile au suspendat termenii ascunşi.",
+    "Fiecare acord poartă un sigiliu care spune că un inspector independent îl citeşte.",
+    "Inspectorul al cărui nume apare acolo a fost repararea o dronă în acea zi.",
+    "Vrea să vadă nava care a eliberat sigiliul."
+  ],
+  "level-34": [
+    "Inspectorul a cerut să repete verificarea certificată.",
+    "Biroul a trimis aceeaşi fotografie cu un sigiliu verde.",
+    "Există o linie de marfă marcată în siguranţă pe baza asta.",
+    "Zboară la sursă.",
+    "Echipa noastră va încerca verificarea înregistrărilor originale."
+  ],
+  "kelzorn": [
+    "E Kelzorn, Pictorul de Checksum.",
+    "Instrumentele sale au fost restaurate odată cu ajutorul unor reliefuri de date deteriorate.",
+    "Acum pictează rezultate convingătoare ale inspecţiei peste arhivele pe care nu le-a verificat nimeni.",
+    "Inspectorul nostru a făcut comparaţia pe două copii independente.",
+    "Semnele nu se potrivesc.",
+    "Deschideţi traseul către arhivă."
+  ],
+  "kelzorn-outro": [
+    "Adevăratul cec e acum public.",
+    "Inspectorii au găsit un sigiliu pe cererile de rezervă din trei colonii.",
+    "Toate cele trei cereri indică acelaşi depozit.",
+    "Primul convoi de iarnă se încarcă la poartă.",
+    "Coloniile ne-au cerut să numărăm stocul cu ei."
+  ],
+  "level-35": [
+    "Fiecare colonie a trimis alocarea de iarnă.",
+    "Împreună, cererile umplu golful de trei ori.",
+    "Echipajul de încărcare a numărat doar un rând de lăzi prin sticlă.",
+    "Zburaţi la seiful de rezervă în timp ce cele trei staţii sunt de acord cu un inventar comun."
+  ],
+  "vashravel": [
+    "Contact confirmat.",
+    "Vasmarvel, Promisiunea Vault.",
+    "Seiful său a ţinut rezerve de urgenţă pentru coloniile de frontieră.",
+    "Noii manageri au scris cereri pe aceleaşi provizii din nou şi din nou.",
+    "Echipajul aşteaptă să le numere împreună.",
+    "Dezarmează garda lui Vashrave la cală."
+  ],
+  "vashravel-outro": [
+    "Toate cele trei colonii au fost martore la numărătoare.",
+    "Au împărţit proviziile şi au trimis un transport comun.",
+    "Staţia de frontieră a recunoscut jumătate din călătorie şi a refuzat să înregistreze sosirea.",
+    "Ambele porturi cred că celălalt este deţinerea încărcăturii."
+  ],
+  "level-36": [
+    "Portul de expediere a semnat plecarea și portul de primire are o vedere live a cargobotului.",
+    "O navă de frontieră acceptă doar intrările propriilor flote trimise.",
+    "Cele două porturi compară înregistrările de pe canalul nostru.",
+    "Zboară spre poziţia cargobotului."
+  ],
+  "zorveth": [
+    "E Zorveth, Blocker-ul de Frontieră.",
+    "Se folosea pentru a face livrări de urmărire în ambele registre.",
+    "Acum respinge dovezile unei părţi şi lasă fiecare trecere în conflict.",
+    "Transportul de iarnă aşteaptă o pistă liberă.",
+    "Doboară bariera lui Zorveth."
+  ],
+  "zorveth-outro": [
+    "Transportul de iarnă a andocat.",
+    "Ambele porturi au semnat aceeaşi intrare.",
+    "Navigatorii lor au comparat şi diagramele de traseu.",
+    "Trei pretind că sunt originalele unice ale anchetei.",
+    "Fiecare are acelaşi colţ uzat şi un nume de proprietar diferit."
+  ],
+  "level-37": [
+    "O şcoală de navigaţie ne-a arătat copia camerei de ascultare a hărţii.",
+    "Colţul uzat era deja acolo.",
+    "Copia ei este clar etichetată.",
+    "Cineva a fost eliminarea acestei etichete și de vânzare fiecare versiune ca prima.",
+    "Păstraţi marcajul original de rută în vedere."
+  ],
+  "drelkash": [
+    "Contact confirmat.",
+    "Drelkash, Prinţul Copie.",
+    "Camerele de imprimare au dat studenţilor fişe pe care şi le-ar permite.",
+    "Acum personalul vinde fiecare copie ca fiind un original unic şi părăseşte coloniile pentru a lupta pentru proprietate.",
+    "Ştim unde sunt jurnalele ediţiei.",
+    "Deschideţi drumul spre atelier."
+  ],
+  "drelkash-outro": [
+    "Şcoala îşi poate urmări hărţile până la adevăratul sondaj.",
+    "Registrul marchează copiile cu originile lor corespunzătoare din nou.",
+    "Un centru de aprovizionare spune că a procesat deja corecţia de mii de ori.",
+    "Un transport urgent de apă încă nu s-a mişcat."
+  ],
+  "level-38": [
+    "Un operator de aprovizionare ne-a trimis o vedere live a cozii ei.",
+    "Pare ocupat, şi aceleaşi intrări se ridică în vârf.",
+    "Echipajul de apă aşteaptă de ieri.",
+    "Am stabilit un apel direct între ei.",
+    "Zboară la maşină, hrăneşte coada."
+  ],
+  "nerthavel": [
+    "Uite-l pe Nerthavel, Queue Devoratorul.",
+    "Vechea memorie de aprovizionare ar putea ţine zile întregi de cereri.",
+    "Acum hrăneşte centrele cu intrări fără valoare şi le pune înaintea livrărilor critice.",
+    "Avem cererea originală a transportului de apă.",
+    "Spargeţi fluxul ca dispecerul să-l poată citi."
+  ],
+  "nerthavel-outro": [
+    "Transportul de apă a părăsit docul.",
+    "Dispeceratul a restaurat coada critică din copiile lor locale.",
+    "Un raport tocmai a sosit acuzând echipajul de începerea unei lupte în golf.",
+    "Înregistrarea începe după singurul cod de timp pe care îl ţine minte ofiţerul de doc."
+  ],
+  "level-39": [
+    "Ofiţerul de la docuri îşi aminteşte că a deschis poarta pentru echipajul de apă.",
+    "Raportul se deschide cu un foc de avertizare şi omite jurnalul porţii.",
+    "O a doua cameră a înregistrat întreaga abordare.",
+    "Cerem echipajului să păstreze dosarul neatins în timp ce urmaţi raportul editat."
+  ],
+  "rhazkora": [
+    "Contact confirmat.",
+    "Rhazkora, The Proba Twister.",
+    "Laboratorul de accidente obişnuia să pună evenimentele în ordine.",
+    "Noile rapoarte ridică câteva secunde din context până când victimele arată ca atacatorii.",
+    "A doua înregistrare arată că o escortă umbră trage prima.",
+    "Ţine-l pe Rhazkora să nu ia originalul."
+  ],
+  "rhazkora-outro": [
+    "Întreaga înregistrare este publică.",
+    "Consiliul şi-a retras acuzaţiile împotriva echipajului de apă.",
+    "Trei posturi au cerut să voteze corecţia.",
+    "Voturile lor au fost ştampilate după ce sesiunea s-a încheiat, deşi căpitanii lor i-au încărcat la timp.",
+    "Verificăm opririle curierului."
+  ],
+  "level-40": [
+    "Cele trei staţii încă mai au chitanţele de expediere.",
+    "Curierul lor s-a oprit la două porturi favorizate şi a ţinut celelalte voturi până la încheierea sesiunii.",
+    "Consiliul a lăsat locurile deschise.",
+    "Zboară la curier şi ţine buletinele de vot lipsă în raza de acţiune."
+  ],
+  "velzhar": [
+    "Uite-l pe Velzhar, paznicul de la Poarta Ballot.",
+    "Ruta lui sigilată a dat odată fiecărei staţii şansa egală de a vota.",
+    "Acum alege ale cui voturi ajung înainte să se închidă uşile.",
+    "Staţiile de aşteptare îşi pot autentifica propriile pachete.",
+    "Opriţi-l pe Velzhar ca să le poată trimite direct."
+  ],
+  "velzhar-outro": [
+    "Consiliul a redeschis votul şi a citit numele fiecărei staţii cu voce tare.",
+    "Reprezentanţii au solicitat buletinele de vot originale pentru un audit.",
+    "Reţeaua de stocare spune că pachetele există şi nu vor livra nici măcar unul.",
+    "Consiliul cere o rută de lucru în arhivă."
+  ],
+  "level-41": [
+    "Consiliul a încercat trei adrese pentru buletinele de vot.",
+    "Fiecare a confirmat că înregistrarea era prezentă.",
+    "Fiecare recuperare a venit înapoi gol.",
+    "Ofiţerii au găsit o veche rută de întreţinere către portavionul de depozitare.",
+    "Ia-o pe acea rută şi ţine legăturile independente deschise."
+  ],
+  "korthaven": [
+    "Contact confirmat.",
+    "Korthaven, Spargerea Disponibilitatea.",
+    "Transportatorul a adus copii la orice post care a cerut.",
+    "Acum răspunsurile sale spun că dovezile există în timp ce uşile rămân închise.",
+    "Vechea cache e încă înăuntru.",
+    "Faceţi loc pentru echipele independente de recuperare."
+  ],
+  "korthaven-outro": [
+    "Consiliul poate citi buletinele de vot.",
+    "Copiile se potrivesc cu ce au păstrat staţiile.",
+    "O staţie exterioară tocmai a pierdut accesul la arhivă şi a primit o ofertă promiţătoare de recuperare imediată.",
+    "Cere fiecare cheie de rezervă din port.",
+    "Am cerut un apel cu echipajul său."
+  ],
+  "level-42": [
+    "Şeful staţiei exterioare era pe cale să-i trimită cheile de rezervă.",
+    "Le-a păstrat după ce a auzit că oferta a ajuns la alte două echipe cu acelaşi eşec.",
+    "O echipă de recuperare verificată e pe drum.",
+    "Urmează nava care a răspuns primul."
+  ],
+  "azravel": [
+    "E Azravel, Impostorul de recuperare.",
+    "Vechiul lui identificator radio aparţinea unei nave care căuta sonde pierdute.",
+    "Acum, acest nume ajunge la posturi imediat după o pierdere și cere secretele lor.",
+    "Echipa de recuperare are nevoie de o dană sigură.",
+    "Eliberează-l pe Azravle de la apropiere."
+  ],
+  "azravel-outro": [
+    "Echipa reală a restaurat accesul arhivei.",
+    "Cheile de rezervă au rămas la secţie.",
+    "Rapoartele sale de întreţinere au fost marcate în siguranţă în timp ce inspectorii au fost trimişi pe centura de la un doc de demonstraţie.",
+    "Fişele originale au venit cu fişierele recuperate."
+  ],
+  "level-43": [
+    "Inspectorii au trimis o fotografie cu rafturi fără pată.",
+    "Echipa de întreţinere a trimis o fotografie a nodului care nu funcţionează.",
+    "Fişa inspectorului se termină la docul curat.",
+    "Îi cerem să zboare cu tine în directia originală."
+  ],
+  "threvask": [
+    "Contact confirmat.",
+    "Threvask, Divertorul Audit.",
+    "Puntea lui de navigaţie obişnuia să trimită inspectori în nodurile vulnerabile.",
+    "Acum îi conduce la exponate gata făcute.",
+    "Nodul nefixat transmite locaţia reală pe canalul de întreţinere.",
+    "Du inspectorii acolo."
+  ],
+  "threvask-outro": [
+    "Inspectorii au ajuns la nod.",
+    "Raportul lor include ceea ce au văzut şi cine a fost acolo.",
+    "Un operator a primit apoi un mesaj citând o replică pe care a scris-o într-un jurnal personal acum mulţi ani.",
+    "Jurnalul a fost recuperat dintr-o epavă şi trebuia să meargă la familia ei."
+  ],
+  "level-44": [
+    "Operatorul a recunoscut linia din prima ei călătorie.",
+    "Cel care a trimis-o a folosit-o pentru a-i cere să schimbe dosarul de inspecţie.",
+    "Familia ei încă mai are intrarea originală.",
+    "Avem permisiunea lor să-i urmărim pe cei care au obţinut o copie.",
+    "Urmează ruta navei de recuperare."
+  ],
+  "dorzheva": [
+    "Asta e Dorzheva, Vânătorul de Memorie.",
+    "Are o casă de familie.",
+    "Acum echipajul împrumută detalii familiare pentru a face străinii să pară de încredere.",
+    "Alți operatori au primit mesaje similare.",
+    "Asiguraţi arhiva înainte ca Dorjeva să o împrăştie."
+  ],
+  "dorzheva-outro": [
+    "Familia a primit copia prin staţia aleasă.",
+    "Raportul operatorului rămâne.",
+    "O navă de urgenţă a folosit mesajele care au fost scurgeri pentru a prezice prăbuşirea şi controlul cererii întregii reţele de relee.",
+    "Posturile de pe canalul nostru încă răspund."
+  ],
+  "level-45": [
+    "Am cerut staţiilor de relee să răspundă la rândul lor.",
+    "Fiecare echipaj de pe canalul de urgenţă a venit.",
+    "O navă de urgenţă spune că vocile sunt simulate şi staţiile trebuie să transfere controlul înainte de următoarea oră.",
+    "Ţine linia deschisă.",
+    "Găsiţi nava înainte de termenul limită anunţat."
+  ],
+  "vezrakh": [
+    "Contact confirmat.",
+    "Vezrakh, Usurperul de Urgenţă.",
+    "A fost construit pentru a ajuta atunci când o stație de comandă reală a eșuat.",
+    "Echipajul îşi declară propriile urgenţe şi le foloseşte pentru a prelua controlul.",
+    "Staţiile compară datele.",
+    "Loveşte reactorul lui Vezrakh înainte să le taie calea."
+  ],
+  "vezrakh-outro": [
+    "A trecut ora.",
+    "Posturile au păstrat controlul şi încă se mai aud.",
+    "Un coordonator de ajutorare a primit şase recomandări pentru a face un nou partener ruta centrală a reţelei.",
+    "Toate cele şase urme înapoi la o navă care a folosit pentru a stabili conexiunile de ajutor.",
+    "Comparăm rutele de pe harta sa."
+  ],
+  "level-46": [
+    "Coordonatorul de ajutorare a stabilit legăturile pe care le foloseşte pentru a ajunge la clinici.",
+    "Aproape fiecare transport de urgenţă trece prin acelaşi releu.",
+    "Partenerul recomandat ar controla-o.",
+    "Două staţii vecine au deschis o a doua cale.",
+    "Acoperă-i cât timp îl testează cu un transport în direct."
+  ],
+  "orzhaven": [
+    "E Orzhaven, Cartograful Trust.",
+    "Graficele sale au ajutat odată grupurile de ajutorare să ajungă la staţii îndepărtate.",
+    "Foloseşte aceeaşi hartă pentru a-şi pune aliaţii pe ruta de care depinde toată lumea.",
+    "Avem un purtător de medicamente care traversează legătura alternativă acum.",
+    "Ţine-l pe Orzhaven departe de el."
+  ],
+  "orzhaven-outro": [
+    "Ambele clinici au auzit docul de transport al medicamentelor.",
+    "Echipajul local a fost de acord să păstreze ambele rute deschise.",
+    "Un mediator al consiliului tocmai a spus că celălalt a cerut control exclusiv.",
+    "Citesc cele două mesaje unul lângă altul."
+  ],
+  "level-47": [
+    "Posturile au comparat oferta lor direct.",
+    "Nici nu a cerut control exclusiv.",
+    "O navă a consiliului trimite cereri noi pe care participanţii nu le-au făcut niciodată.",
+    "Deschidem un canal ca să audă toţi aceleaşi condiţii.",
+    "Urmează obiecţiile false înapoi pe puntea consiliului."
+  ],
+  "keldroth": [
+    "Contact confirmat.",
+    "Keldroth, Consensul Bessieger.",
+    "Camerele sale au fost construite pentru colonii rivale pentru a rezolva disputele.",
+    "Acum îi ţine pe ei certându-se în timp ce flota-umbrei ocupă drumurile lor.",
+    "Auzim poziţiile originale pe canalul comun.",
+    "Sparge blocada discuţiilor lui Keldroth."
+  ],
+  "keldroth-outro": [
+    "Posturile au fost de acord să păstreze culoarele deschise în timp ce lucrează printr-o neînțelegere reală.",
+    "Inspectorii lor au găsit transporturi paralele marcate ca stocuri de ajutor.",
+    "Fiecare dintre ele enumeră un alt șantier naval.",
+    "Echipajul de la inelul nostru exterior reparat a recunoscut un semn în serie sub noile etichete."
+  ],
+  "level-48": [
+    "Marca aparţine unei curţi pe care echipajul de pe inelul exterior a folosit-o ani de zile.",
+    "Noile etichete numesc o curte care nu a manevrat acele nave.",
+    "Echipajul a trimis cartea originală de reparaţii.",
+    "Urmăriți proprietarii transferați și păstrați o copie a fiecărui pas pe o rută independentă."
+  ],
+  "zhavrek": [
+    "E Zhavrek, Eraser-ul Originii.",
+    "Pentru generaţii arhiva sa a spus echipajelor unde au fost construite navele lor.",
+    "Acum schimbă înregistrările ca transporturile furate să pară legale.",
+    "Avem cartea de reparaţii a inelului exterior.",
+    "Asiguraţi originalele rămase înainte ca Zhavrek să sară."
+  ],
+  "zhavrek-outro": [
+    "Şantierul naval a verificat originalele în raport cu ordinele de muncă.",
+    "Echipajele de salvare deţin din nou încărcătura de ambele părţi ale graniţei.",
+    "Jurnalul de transport arată un refugiu trecut de ultimul releu funcţional.",
+    "Flota Umbrelor a trimis-o doar cu înregistrări ale atacurilor."
+  ],
+  "level-49": [
+    "Refugiul a răspuns la vechea noastră frecvenţă de primejdie.",
+    "Locuitorii săi au fost spuse întreaga rețea a pornit pe ei.",
+    "Ne-am oferit să le punem pe o linie cu o stație pe care o aleg.",
+    "Au cerut echipa de reparaţii de pe inelul exterior Genesis.",
+    "Păstrați că ruta clar."
+  ],
+  "vorthaz": [
+    "Contact confirmat.",
+    "Vorthaz, Isolatorul Final.",
+    "Odată a păzit refugiul după un război lung.",
+    "Acum blochează ferestrele pe reţea şi le umple cu emisiuni alese.",
+    "Locuitorii vor să audă dincolo de zid.",
+    "Face spațiu pentru propria lor antenă să vină on-line."
+  ],
+  "vorthaz-outro": [
+    "Refugiul şi-a pus propria antenă la radio.",
+    "Echipajul de la exterior a răspuns pe nume.",
+    "Apoi ambele staţii au văzut aceeaşi comandă în registrele lor locale.",
+    "O navă din centru vrea ca fiecare nod liber să accepte un registru master.",
+    "Refugiul ne-a trimis originea comenzii."
+  ],
+  "level-50": [
+    "Staţiile îşi ţin propriile înregistrări.",
+    "Genesis are primul apel al echipajului de reparaţii.",
+    "Refugiul are propriul jurnal al răspunsului.",
+    "Drazevorn le cere să se predea la casa lui.",
+    "Au deschis linii independente unul altuia.",
+    "Zboară în miez, Pilot.",
+    "Ţineţi liniile la îndemână."
+  ],
+  "drazevorn": [
+    "Contact confirmat.",
+    "Drazevorn, Domnul Adevărului Fals.",
+    "Punţile lui poartă nume furate, cronici false şi dovezi ascunse de navele pe care le-am oprit.",
+    "Tocmai a marcat semnalul Genesis silenţios.",
+    "Aud echipa de reparaţii pe cealaltă linie.",
+    "Lasă-i să vorbească, Pilot.",
+    "Loveşte reactorul lui Drazevorn."
+  ],
+  "drazevorn-outro": [
+    "Registrul Drazevorn a încetat să mai răspundă.",
+    "Coloniile verifică înregistrările originale împreună.",
+    "Geneza a găsit primul apel al echipajului de reparaţii de la inelul exterior.",
+    "Refugiul are propria înregistrare a răspunsului.",
+    "Ascultă-mă un moment.",
+    "Posturile cântă ambele înregistrări pe canalul deschis.",
+    "Mai sunt încă diferenţe de rezolvat.",
+    "Fiecare post poate vorbi de la sine acum.",
+    "O voce tocmai a venit de pe Pământ.",
+    "Releu Genesis, aici e Pământul.",
+    "Te auzim clar.",
+    "Echipa de reparaţii răspunde acum.",
+    "Cer Pământului să păstreze canalul deschis pentru staţiile mai îndepărtate.",
+    "Ține canalul liber, pilot.",
+    "Următoarele nave cer permisiunea de a pleca în misiuni de explorare.",
+    "Când prima navă trece prin ring, vreau să aud unde se duce echipajul."
+  ]
+}

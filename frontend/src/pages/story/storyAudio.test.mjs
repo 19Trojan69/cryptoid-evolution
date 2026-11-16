@@ -58,7 +58,7 @@ function setup({ withAudio = true, startAudio, artwork = false, reducedMotion = 
     onFinish: () => transitions.push('finish'),
   }, {
     useMemo: () => cues, useLocale: () => ({ locale: 'de' }),
-    storySubtitle: () => undefined, storyCopy: () => ['Überspringen', 'Story-Vorspänne', 'Ton abspielen'],
+    loadStorySubtitles: async () => undefined, storyCopy: () => ['Überspringen', 'Story-Vorspänne', 'Ton abspielen'],
     storyScenes: { korvessa: definition }, storyFadeMs,
     performance: { now: () => time }, window, document, sessionStorage: new Map(),
     Image: class { async decode() { if (!artwork) throw new Error('Artwork unavailable in audio fixture'); } },

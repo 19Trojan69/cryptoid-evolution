@@ -1,0 +1,1091 @@
+{
+  "campaign": [
+    "Az első kriptovaluta lehetővé tette a közvetlen, határokon átnyúló kereskedelmet.",
+    "Évszázadokkal később a mélyűri kolóniák ezen a hálózaton keresztül jutottak élelemhez, üzemanyaghoz és gyógyszerhez.",
+    "Aztán megjelent a spam. Hamis üzenetekkel ürítették ki a számlákat.",
+    "A csalók a lopott pénzből felfegyvereztek egy flottát.",
+    "A Cryptoids.",
+    "Az önkéntesek a kezdetektől leleplezték a csalásokat.",
+    "Utódaik a csillagok felé indultak, hogy utánpótlásszállító hajókat kísérjenek és segélyhívásokra válaszoljanak.",
+    "Néhány perce egy hamis segélyhívás elcsalta járőreinket a Föld közeléből.",
+    "Most a Genesis-kolóniák elnémulnak.",
+    "Egy napon, amikor véget ér ez a háború, hajóink újra útra kelnek…",
+    "… hogy felfedezzék az eddig csak távcsövön át látott világokat.",
+    "Pilóta, felszállás engedélyezve."
+  ],
+  "varneth": [
+    "Kontaktus megerősítve.",
+    "Varneth.",
+    "Egykor ellátási nyilvántartásokat szállított a Genesis-kolóniák között.",
+    "Eltűnt egy elhagyott átjátszó közelében.",
+    "Most visszatért. Az adásai minden segélyhívást elnyomnak.",
+    "Pilóta, szakítsd meg a jelét."
+  ],
+  "varneth-outro": [
+    "Pilóta.",
+    "Varneth jele eltűnt.",
+    "Egy hangot hallok a Genesis átjátszóján.",
+    "A külső gyűrű javítócsapata hajnal óta segítséget kér.",
+    "Megvannak a koordinátáik.",
+    "A mentők úton vannak.",
+    "Hagyd szabadon a csatornát, pilóta.",
+    "Ma először…",
+    "…valaki ott választ fog hallani."
+  ],
+  "level-two": [
+    "Varneth meghalt.",
+    "A Genesis relék megint vészhívásokat szállítanak.",
+    "Egy utánpótlás-konvoj épp most módosította útvonalát egy határállomás parancsára.",
+    "Az állomás állítja, hogy sosem küldött ilyen parancsot.",
+    "A konvoj még mindig odakint van.",
+    "Pilóta, kövesd az utolsó adást.",
+    "Hozzuk haza a legénységeket."
+  ],
+  "korvessa": [
+    "Pilóta, bemértük a jelet. Korvessától érkezik.",
+    "Egyszer volt diplomáciai kirendelése.",
+    "A határnál minden állomás ismerte a rádióazonosítóját.",
+    "Most minden csatornán más hívójelet használ.",
+    "A konvoj követte őt egy csapdába.",
+    "A hajója pont előttünk van.",
+    "Fegyverek szabadon, Pilóta.",
+    "Nyisson egy utat hazafelé."
+  ],
+  "korvessa-outro": [
+    "Pilóta, Korvessa átjátszója leállt.",
+    "Az élen haladó teherhajó felkapcsolta a rakodófényeit.",
+    "A legénysége átjárót jelöl ki a roncsok között.",
+    "Egyszerre egy hajón hívom a konvojt.",
+    "Már kettő válaszolt.",
+    "Tartsd szabadon az útvonalat a többieknek, pilóta.",
+    "Hallani akarom, ahogy az utolsó legénység is bejelentkezik."
+  ],
+  "level-three": [
+    "Pilóta, Korvessa halott.",
+    "Minden konvoj kijutott.",
+    "Az utolsó teherhajó elhozta a rajtaütés felvételét.",
+    "Amíg Korvessával harcoltunk, egy második hajó átsiklott a törmeléken, és Genesis felé vette az irányt.",
+    "A legénység családjai ott várnak az óvóhelyeken.",
+    "Maradj annak a hajónak a nyomában.",
+    "Átnézem Korvessa archívumát, amíg úton vagy."
+  ],
+  "drelvorn": [
+    "Pilóta, Korvessa archívuma megerősíti.",
+    "A hajó, amelyet követtél, Drelvorn, a Pecsétlopó.",
+    "Az őrzője a felkelés idején ellopta a flottaparancsnokok pecsétjeit.",
+    "Genesis most kapott egy kiürítési parancsot az egyik ellopott pecséttel.",
+    "A menedékajtók kinyílnak.",
+    "A konvoj legénységi családjai még mindig bent vannak.",
+    "Figyelmeztetem őket.",
+    "- A Drelvorn reaktorba."
+  ],
+  "drelvorn-outro": [
+    "Genesis, vonják vissza a kiürítést.",
+    "Drelvorn adója elhallgatott.",
+    "Az óvóhelyek őrei biztosították az ajtókat.",
+    "A konvoj legénységének családtagjai odabent vannak. Mindenki biztonságban van.",
+    "A lopott pecsétet érvénytelenítették.",
+    "Egy gyarmati nyilvántartás miatt a hamis parancs minden ellenőrzésen átment.",
+    "Ugyanaz a nyilvántartás üresnek jelzi az óvóhelyeket.",
+    "Előkeresem az eredeti bejegyzéseket."
+  ],
+  "level-four": [
+    "A konvoj legénysége beszélt a családjukkal.",
+    "A Genezis kitart.",
+    "Valaki már Drelvorn parancsa előtt kitörölte a családokat az óvóhelyi névsorból.",
+    "A szállítási bizonylatokon még ott vannak az eredeti bejegyzések.",
+    "Rakd őket az új kasszához.",
+    "Láthatod, hol változott meg.",
+    "Kövesd az első meghamisított másolat nyomát, pilóta."
+  ],
+  "talvrek": [
+    "Kapcsolat megerősítve.",
+    "Talvrek, a Krónikahamisító.",
+    "Ez a hajó egykor új gyarmatokat térképezett fel, és megőrizte az első feljegyzéseiket.",
+    "A másolatai most azt állítják, hogy ezek az emberek sosem éltek ott.",
+    "A kikötő ennek alapján fordítja vissza az élelmet és a gyógyszert.",
+    "Az eredeti bizonylatok már nálunk vannak.",
+    "Találd el Talvrek reaktorát, mielőtt újabb másolatot küld."
+  ],
+  "talvrek-outro": [
+    "Talvrek adója elhallgatott.",
+    "Két gyarmat ellenőrizte az eredeti bizonylatokat, és helyreállította az óvóhelyi névsorokat.",
+    "Az első gyógyszerszállító megkapta a dokkolási engedélyt.",
+    "Egy állomás továbbra sem válaszol.",
+    "Egy Zeraveth nevű javítóplatform elzárja a megközelítést.",
+    "A karbantartók kint várnak az állomásnak szükséges alkatrészekkel."
+  ],
+  "level-five": [
+    "A Genesis külső gyűrűjének segélycsapata alkatrészeket küldött nekünk.",
+    "A Talvrek által elnémított állomásnak mindegyikre szüksége van.",
+    "A karbantartók a várakozóhelyükről látják a dokk fényeit.",
+    "Juttasd el a csapatot az állomásig.",
+    "Pilóta."
+  ],
+  "zeraveth": [
+    "Kapcsolat megerősítve.",
+    "Zeraveth, a Csomópontok Ostromlója.",
+    "Régen teljes átjátszógyűrűket javított.",
+    "A dokkolókarjai most az egyetlen megközelítési útvonalat zárják el.",
+    "Az állomás utolsó működő adója is kezd leállni.",
+    "Találd el Zeraveth reaktorát…",
+    "és nyiss utat a javítóhajóknak."
+  ],
+  "zeraveth-outro": [
+    "A hajók bejutottak.",
+    "A központ üzemeltetője most hívott a dokkból, és a relé a hangján van.",
+    "Ugyanekkor egy másik engedély is beérkezett.",
+    "Emlékszik, hogy évekkel ezelőtt adta ki.",
+    "Mindkét felvételt elmentettem."
+  ],
+  "level-six": [
+    "A megjavított átjátszó ismét jeleket fog…",
+    "amelyeket a legénység elveszettnek hitt.",
+    "Egy vontató indulna a kapitánya hivatalba lépése előtt rögzített engedéllyel.",
+    "Megkértük az állomást, hogy tartsa vissza a vontatót.",
+    "Kövesd a régi felvétel nyomát…",
+    "egészen a forrásáig."
+  ],
+  "orvask": [
+    "Ez Orvask…",
+    "a Visszhangvadász.",
+    "Konvojokat kísért, és minden hallott engedélyt rögzített.",
+    "Most újra sugározza azokat a parancsokat…",
+    "mintha ma adták volna ki őket.",
+    "Egy vontató és egy teherhajó…",
+    "ugyanazt az indulási időablakot kapta.",
+    "Szakítsd meg Orvask adását."
+  ],
+  "orvask-outro": [
+    "A vontató új engedélyt kapott.",
+    "Hallottuk, ahogy a forgalomirányító élőben megadta.",
+    "Orvask naplójából kiderül, hol cseréltek gazdát a legrégebbi felvételek.",
+    "Ez egy átrakódokk két kolónia között.",
+    "Mindkettő továbbra is kap bizonylatokat…",
+    "egy rakományról…",
+    "amely sosem érkezett meg."
+  ],
+  "level-seven": [
+    "Mindkét kolónia elküldte a rakodási jegyzékét.",
+    "Mindkettőnek van egy bizonylata a másik pecsétjével.",
+    "Az utolsó teherhajók legénységének még megvannak a rakodási fotói.",
+    "Egyeztetjük a konténerek számait…",
+    "miközben az átrakódokkhoz közeledsz."
+  ],
+  "keldrava": [
+    "Kapcsolat megerősítve.",
+    "Keldrava…",
+    "az Árnyhíd.",
+    "Régen a kolóniák legénysége a zsilipjeiben adta át a rakományt.",
+    "Most az egyik rekesz lepecsételi a bizonylatot, a másik elviszi a ládát.",
+    "A szerelőnyíláson át látjuk az eltűnt konténereket.",
+    "Tedd szabaddá az utat…",
+    "a rakomány visszaszerzéséhez."
+  ],
+  "keldrava-outro": [
+    "A két kolónia közös csatornán számolja a rakományt.",
+    "Megtalálták az üvegházi szivattyúkat és a vésztartalékot.",
+    "Egy híradós hajó azt jelenti a szomszédoknak…",
+    "hogy a híd összeomlott, miközben mindenki a fedélzeten volt.",
+    "A két legénység…",
+    "felajánlotta, hogy élőben megszólal."
+  ],
+  "level-eight": [
+    "A híd legénysége adásban van.",
+    "Valaki épp most mutatott a kamerába egy visszaszerzett szivattyút.",
+    "A figyelmeztetések után három szomszédos kikötő mégis lezárta az útvonalait.",
+    "A legénység beszámolóját elküldjük minden forgalomirányítónak.",
+    "Repülj ahhoz az adóhoz…",
+    "ahonnan az egész elindult."
+  ],
+  "veshkorn": [
+    "Kapcsolat megerősítve.",
+    "Veshkorn…",
+    "a Pletykaterjesztő.",
+    "Ismerjük ezt a fanfárt a régi hírszolgálatából.",
+    "Most olyan katasztrófákat jelent be vele, amelyek meg sem történtek.",
+    "Legutóbbi híre szerint ismét lezárják az ellátási útvonalakat.",
+    "A kikötők készek meghallgatni a saját pilótáikat.",
+    "Némítsd el…",
+    "az adóját."
+  ],
+  "veshkorn-outro": [
+    "A forgalomirányítás épp most nyitotta meg újra az útvonalakat.",
+    "Az irányítók a küldőkkel együtt olvassák a rakomány- és időjárás-jelentéseket.",
+    "A kapitány szerint a pánik idején egy raktérnyi vetőmagot ajánlottak neki.",
+    "Már küldi a rakományjegyzéket.",
+    "Egyetlen rakodási fotó sincs."
+  ],
+  "level-nine": [
+    "Az útvonalak újra nyitva vannak.",
+    "A kapitány elküldte a vetőmag rakományjegyzékét.",
+    "A berakodásról hiányoznak a fotók.",
+    "Egész éjjel a rakodórámpánál várt.",
+    "A kijelzője szerint tele volt a raktér.",
+    "A hajó ugyanannyit nyomott, mint érkezéskor.",
+    "Üres raktérrel tér vissza a kolóniára.",
+    "Kövesd a jegyzéken szereplő címet, pilóta."
+  ],
+  "neravoss": [
+    "Kontaktus megerősítve.",
+    "Neravoss, az Egyenlegilluzionista.",
+    "Ez a hajó egykor valódi árukat mutatott be egy vásáron.",
+    "A kijelzői most kitalált készleteket hirdetnek.",
+    "Ezek az ígéretek valódi készleteket szállító teherhajókat csaltak ide.",
+    "A kijelző mögött ott vannak a lerakodó és várakozó teherhajók nevei.",
+    "Iktasd ki a raktér védelmét."
+  ],
+  "neravoss-outro": [
+    "Az ellenőrök valódi vetőmagot találtak a fedélzeten.",
+    "Olyan teherhajók hozták, amelyeket Neravoss kifizetetlenként jelölt meg.",
+    "A legénységek a kristályátjárón át viszik haza a magokat.",
+    "Egy hajó a szűkületnél mindegyiküknek számlát küldött.",
+    "Még az egészségügyi egységeknek is fizetniük kell."
+  ],
+  "level-10": [
+    "A magot szállító teherhajók egy sorban várnak a folyosón.",
+    "Egy orvosi hajó vár köztük, és a betegei látják az állomás fényeit.",
+    "A kikötői hatóság nem talált jogalapot az új díjakra.",
+    "Repülj a kapuhoz.",
+    "Segítünk a csapatoknak, hogy nyugodtak maradjanak."
+  ],
+  "thalverik": [
+    "Ez itt Thalverik, az útdíjszedés.",
+    "Hajókat kísért ezen az átjárón át.",
+    "Ma is felszámolja a kereszteződést, és újra felszámolja a segítséget.",
+    "A csatorna túloldalán tartja a vonalat.",
+    "A vágót azonnal el kell távolítani, amint a vonal elszakad.",
+    "Célozz a thalvinik reaktorra."
+  ],
+  "thalverik-outro": [
+    "Az orvosi hajó átjutott az átjárón.",
+    "A teherhajók követnek, és a kikötői bizottság lemondta a vádakat.",
+    "Visszaszereztünk egy számlát, ami majdnem minden kifizetést megkapott.",
+    "Több ezer szavazatot vett egy olyan tanácsi állomáson, amiről azt hittük, hogy csak harminc pilótája van."
+  ],
+  "level-11": [
+    "A tanács meghívott minket, hogy nézzük meg a névsort.",
+    "A nyilvántartás több ezer pilótát mutat, de csak harminc horgonyzóhelyet foglalnak el.",
+    "Egy gyakornok felismerte a régi szimulátor rádióazonosítóját a szavazáson.",
+    "Megadta a kiképző hajó címét."
+  ],
+  "skorveth": [
+    "Ott van Skorveth, a Many- Faced.",
+    "A kiképzőmagjai megtanították a pilótákat repülni.",
+    "A rendszer a szimulált legénységet olyan lakosoknak számolja, akik megerősítik egymás személyazonosságát.",
+    "A szavazatuk már tisztázta az árnyflotta ellátását.",
+    "Kapcsolja le a magokat."
+  ],
+  "skorveth-outro": [
+    "A harminc pilóta egy új tekercset írt alá együtt.",
+    "A gyakornok segített a tanácsnak eltávolítani a régi rádióazonosítóját.",
+    "Egy engedélyezett kitérő még mindig a főkönyvben van.",
+    "Egy mentőhajó vette el hajnalban.",
+    "Két csekk-inről is lemaradt."
+  ],
+  "level-12": [
+    "A mentőhajó jeladója még mindig sugároz.",
+    "A legközelebbi állomás látja a fényt a ködön keresztül.",
+    "A közvetítés két ugrással odébb van.",
+    "Mi vezetjük az állomást a fényhez, amíg te követed a hamis útvonalat."
+  ],
+  "azhrel": [
+    "Azhrel, a Méregkeverő.",
+    "Az a hajó rajzolta az első ugrási térképet ezen a peremen.",
+    "Az új bejegyzések vészjelzést küldenek az árnyflotta irányítására.",
+    "A mentőhajó vezetősége üres térben ért véget.",
+    "Megvannak a régi kórlapok.",
+    "- Vidd el Azhrelt a kereszteződéstől!"
+  ],
+  "azhrel-outro": [
+    "A mentőcsapat ismét az állomás hatósugarában van.",
+    "Az állomások ellenőrizték a régi koordinátákat, és a közvetlen útvonalat újra üzembe helyezték.",
+    "Van egy régi felvevő a mentőhajón.",
+    "Valaki, aki felajánlotta, hogy elmenti az adatait, elvitte a meghajtót és hagyott egy sérült másolatot."
+  ],
+  "level-13": [
+    "A mentőcsapat kézzel írt naplót vezetett.",
+    "Egy mentőhajó, ami a hamis útvonal felvételeinek védelmére szolgál.",
+    "Még mindig tudjuk bizonyítani, mikor érkezett a mentőhajó.",
+    "Szükségünk van a meghajtóra, hogy megmutassuk, mit hallott a legénység befelé menet."
+  ],
+  "dornavik": [
+    "Kontaktus megerősítve.",
+    "Dornavik, az Archive Arsonist.",
+    "Szigetelt kamrái egyszer életben tartották az archívumot az égő roncsok belsejében.",
+    "Most már a sértetlen meghajtókat is megőrzi, és a legénység is megrongálódott.",
+    "A villogó hangárban van a mentőhajó.",
+    "Állítsák meg Dornavik-ot, hogy ne ugorjon."
+  ],
+  "dornavik-outro": [
+    "Megtaláltuk a meghajtót.",
+    "A legénység minden bejegyzéshez egyezett.",
+    "A helyetteseik ma reggel három kolóniára értek.",
+    "Egy helyőrséget nem kezeltek a múlt hét óta.",
+    "Egy archívum hordozója még mindig tartja a frissítéseket."
+  ],
+  "level-14": [
+    "Az előőrs megpróbál kikötni egy teherhajót egy kikötőbe, ami zárva van javításra.",
+    "A helyi hírlevél egy hetes.",
+    "Hangüzenetet küldtünk a kikötőből, és a teherhajó megfordult.",
+    "A tervezett frissítés még mindig a szállító fedélzetén van, ami szállította volna."
+  ],
+  "velkrath": [
+    "Ez a Velmrath, a blokkőr.",
+    "A lezárt hordozói egyszer sértetlenül tárolták a kutatási feljegyzéseket a külső állomásokon.",
+    "A frissítések még mindig bent vannak, időrendben.",
+    "Ha bajt okozhat, kienged egy régit.",
+    "Nyisson utat a konténerekhez."
+  ],
+  "velkrath-outro": [
+    "Az őrsön van a legfrissebb közlemény.",
+    "Két személyzeti napló szerint ugyanez a frissítés érkezett időben és a határidő után.",
+    "Mindkét óra egy precíziós hajóról vett jeleket.",
+    "A forgalomirányító küldi a gépi óráját."
+  ],
+  "level-15": [
+    "A mechanikus óra egyetért a kínálat személyzet eltelt idő.",
+    "Az előőrs órája előre haladt.",
+    "Két karbantartási járatot mondtak, hogy ugyanazt a légzsilipet használják különböző órákban, és mindkettő közeledik.",
+    "A dokk tiszt megállította őket a jelzőpontoknál."
+  ],
+  "irdavoss": [
+    "Kontaktus megerősítve.",
+    "Irdavoss, az Óra Twister.",
+    "Az egész flotta egyszer az állomás felé terelte a manővereit.",
+    "Láttuk, ahogy a jel egy érvényes repülési engedélyt a határidő után.",
+    "Három állomás hasonlítja össze a saját óráit.",
+    "Üsd le Irdavoss reaktorát, amíg befejezik a csekket."
+  ],
+  "irdavoss-outro": [
+    "Mindkét karbantartó csapat biztonságosan leszállt a külön repülési engedélyeken.",
+    "A klinikának meg kellett volna kapnia a feljegyzéseit, amikor az órákat kijavították.",
+    "A feljegyzések még mindig el vannak zárva.",
+    "A gondnokuk most nevezett meg egy árat a kulcsért."
+  ],
+  "level-16": [
+    "A klinika dolgozói papírpapírból dolgoznak, míg a feljegyzéseik zárva vannak.",
+    "A közelben található raktárból a rendelkezésre álló gyógyszerek listája is elveszett.",
+    "Mindketten ugyanazt a követelést kapták.",
+    "Kövesse a hajóhoz, ami az archívumukat szállítja."
+  ],
+  "rhazvorn": [
+    "Az a rabszállító Rhazvorn, a Key Gaoler.",
+    "A sejtjei embereket tartottak fogva.",
+    "Most már zárt archívumokat tartanak a klinikákon és ellátják a raktárakat.",
+    "Lenyomoztuk az eredeti hozzáférési kérelmeket a központi páncélterembe.",
+    "Tartsák itt Rhazvornt, amíg a csapat a közelébe nem ér."
+  ],
+  "rhazvorn-outro": [
+    "A klinika megnyitotta az aktáit.",
+    "A raktár a gyógyszert a restaurált készletlistájához számolja.",
+    "Az időjárás-jelentés szerint az útvonal le van zárva, bár a legénység látja, hogy tiszta.",
+    "A furcsa értékek mind ugyanabból a hajóból származnak."
+  ],
+  "level-17": [
+    "A raktáros személyzet küldött egy képet egy tiszta megközelítésről.",
+    "A hangszerei vihart mutatnak, a leltárképei pedig teljes raktárt.",
+    "A legénység két gyógyszeres ládát számolt.",
+    "Az automata kiszállítás addig tart, amíg meg nem tudjuk nézni a forrást."
+  ],
+  "kelvash": [
+    "Kontaktus megerősítve.",
+    "Kelvash, az Orákulum Csaló.",
+    "A felmérési jelentései a raktárat irányítják.",
+    "A hajó idő- és leltáradatokat talál, és a komputerek valódi rakományt küldenek el.",
+    "A legközelebbi klinikának szüksége van a felszerelésre.",
+    "Kelvash-t kikapcsolni."
+  ],
+  "kelvash-outro": [
+    "A raktár megint gyógyszert küldött a klinikára.",
+    "Két ellátó központ ugyanazt a fotót használta, hogy frissítsék a feljegyzéseiket.",
+    "Az új nyilvántartásuk még mindig nem ért egyet.",
+    "Mindkét központ kapott egy üzenetet, hogy az övék az egyetlen érvényes másolat."
+  ],
+  "level-18": [
+    "A két ellátó központ beleegyezett, hogy ugyanazzal a hívással nyitják meg a nyilvántartásukat.",
+    "Tegnap is találtak hasonló bejegyzéseket.",
+    "Egy utazó tanács hajó adta ki az ellentmondó oldalakat.",
+    "A kísérői a két állomás között gyülekeznek.",
+    "Kövesse az iratbélyegzőket."
+  ],
+  "othravel": [
+    "Ott van Othravel, a Villa Lord.",
+    "A konkurens kolóniákat a konferenciafedélzetére hozta.",
+    "Most külön főkönyvet küld nekik, és elmondja, hogy a másik meghamisította a bejegyzéseit.",
+    "Mindkét állomás letette a fegyvereit.",
+    "Ne beszéljenek Othravelről."
+  ],
+  "othravel-outro": [
+    "A két nyilvántartás most már egyetért az utolsó ellenőrzött oldalon.",
+    "A központok közösen oldják meg a későbbi bejegyzéseket.",
+    "Mindkettőt független mentőrelék kínálták.",
+    "Az ajánlat arra kéri a dokk tiszteket, hogy küldjék el a privát repülési engedélyüket.",
+    "Azt mondtuk nekik, hogy várjanak."
+  ],
+  "level-19": [
+    "Egy dokkoló tiszt látta már korábban az aranyrakétát.",
+    "Egy igazi mentőcsapat használta, hogy hazahozzák egy vihar után.",
+    "Ez a feladó csak akkor nyitja meg az övét, ha megosztja a repülési engedélyét.",
+    "A dokk tiszt a csatornánknál marad, amíg maga közelít."
+  ],
+  "zarnvek": [
+    "Az a jelzőfény Zarnvek-é, a hamis megmentőé.",
+    "A mentőhajó régi jele még mindig ugyanúgy néz ki.",
+    "A dokkoló dokkban a nyílás felé mutató nyomkövető felszerelés van, és a repülési engedély iránti kérelmek még mindig kimennek.",
+    "Jelölje meg az igazi mentőcsatornát.",
+    "Akkor Zarnvek-et le kell kapcsolni."
+  ],
+  "zarnvek-outro": [
+    "Egy ellenőrzött mentőhajó felvette a várakozó személyzetet.",
+    "A kapitány azt mondja, elvesztette a kikötőhelyét, mielőtt felvette a hívást.",
+    "A napló szerint egy árnyék teherhajó másodpercekkel később vette át a rést.",
+    "A Tug 's eredeti időbélyegzője még mindig a naplójában van."
+  ],
+  "level-20": [
+    "A tug-i napló megegyezik az első sorban álló halakkal.",
+    "Azóta valaki minden mentési kérelmet ugyanazon hat teherhajó mögé helyezett.",
+    "Az egyik vonal oxigénpalackokat tart a javítószemélyzet számára.",
+    "Kövesse a mozgó kikötő ütemtervet, amíg a személyzet megjelöli az eredeti sorrendben."
+  ],
+  "vorathen": [
+    "Kontaktus megerősítve.",
+    "Vorathen, a Raider-i rakpart.",
+    "A fedélzeten több ezer érkezőt tartottak rendben.",
+    "Most pedig eladja a helyüket a szövetségeseinek.",
+    "Az oxigénszállítmány volt az első, amikor a kapuk bezárultak.",
+    "A Vorathen-i fogást megtörni, hogy a dokk bejelenthesse."
+  ],
+  "vorathen-outro": [
+    "Az oxigén a dokkban van.",
+    "A kikötő az eredeti időpontokat is kitöltötte, a várószemélyzet pedig a nyugtákat hasonlítja össze.",
+    "Minden hajó kapott egy kis csomagot, amit senki sem kért.",
+    "Egy megfigyelő figyeli, hogy melyik csapat ismeri el a szállítást."
+  ],
+  "level-21": [
+    "A kikötői személyzet nem ismerte el a kéretlen csomagokat.",
+    "Ugyanezt a kis szállítmányt találtuk a magánszállásokon, a kereskedelmi útvonalak körül.",
+    "A feladó nyomon követi, ki válaszol, és ki ad át egy csomagot.",
+    "Kövesse a következőt a kilövőöbölig."
+  ],
+  "drazkell": [
+    "Kontaktus megerősítve.",
+    "Drazkell, a Porszóró.",
+    "A rakterek egyszer energiacellákat szállítottak a navigációs jeladóknak.",
+    "Minden kéretlen szállítmány felfedhet még egy privát kapcsolatot az állomások között.",
+    "A felvevő még mindig gyűjti a válaszokat.",
+    "Állítsák meg a kilövőállomást, mielőtt a következő adagot elküldi."
+  ],
+  "drazkell-outro": [
+    "A csomagok leálltak.",
+    "Az állomások lezárták a válasznaplóikat, és a legénység megváltoztatja, hogy melyik csatornát használják magánhívásokra.",
+    "Az ellenőrök ugyanazt a hivatalos bélyegzőt találták minden Drazkell-i ládán.",
+    "A kibocsátója már jóváhagyta a jövő heti utánpótlást."
+  ],
+  "level-22": [
+    "A kikötői felügyelő összehasonlította a bélyegeket a szolgálati beosztásával.",
+    "A rendőrök nem látogatták meg a rakteret.",
+    "Az újonnan jóváhagyott konvoj egy igazi vizsgálatra vár.",
+    "Repülj a mobil iroda felé, ami a bizonyítványokat kiállította."
+  ],
+  "nethrava": [
+    "Ez a Nethrava, a hamis felvigyázó.",
+    "A bizonyítványai minden ellenőrzést felsorolnak, ahogy azt elmondták.",
+    "A legénység megbízott a bélyegekben, és ellátmányt adott a hajóknak, amiket soha nem vizsgálhattak meg.",
+    "A kikötő újra megnyithatja a vizsgálatokat, amint a hamis iroda elveszíti a kapcsolatot.",
+    "Vedd le azt a linket."
+  ],
+  "nethrava-outro": [
+    "A kikötői tisztek személyesen ellenőrizték a konvojt.",
+    "Most már lenyomozhatják a ládákat az eredeti legénységükhöz.",
+    "Egy hajó átjött az éjjel, és kitörölte a vizsgálati előzményeket, mint rutin takarítást.",
+    "Egy tiszt egy másolatot tartott a megrendelésről."
+  ],
+  "level-23": [
+    "A rendőrtiszt másolata szerint a vizsgálati előzmények eldobhatóak.",
+    "Ugyanaz a hajó meglátogatott egy raktárat, aminek a tulajdonosi adatai most már egy szállítmány felénél megállnak.",
+    "Megvannak a hiányzó oldalszámok.",
+    "Keresse meg a hajót, mielőtt a következő takarító egység kimegy."
+  ],
+  "valdrek": [
+    "Kontaktus megerősítve.",
+    "Valdrekben, az emlékemelő.",
+    "A felesleges feljegyzések tisztázására építették.",
+    "Most pedig lopást mutat, ami a szükséges állomásokon történt.",
+    "A kitárolási napló még mindig tartalmazza, hogy mely aktákat vitte el.",
+    "Valdreks reaktor kikapcsolása."
+  ],
+  "valdrek-outro": [
+    "A tisztek elég másolatot szereztek, hogy újjáépítsék a raktári tulajdoni nyomokat.",
+    "Valdreknek minden számlát egy piacon egy időben kellett átvennie.",
+    "Az eladási grafikonjai folyamatosan emelkedtek, miután a bevételek eltűntek.",
+    "A kikötői bizottság azt akarja, hogy valaki lássa a raktárakat."
+  ],
+  "level-24": [
+    "A piaci bemutatón több tucat eladás volt, mielőtt a felügyelőink megérkeztek.",
+    "Egy órán át figyelték a rakodókaput.",
+    "Sosem nyílt ki.",
+    "A forgalom a meghirdetett készletek felé tart.",
+    "A felügyelők a raktárnál várnak."
+  ],
+  "korzeth": [
+    "Kontaktus megerősítve.",
+    "Korzeth, a Tükörpiac.",
+    "A boltokban üzletel a vásárlók és az eladók között.",
+    "Úgy tűnik, ugyanaz a rakomány újra eladja a dolgokat néhány percenként.",
+    "A legénység valódi árut hoz az üres raktárakba.",
+    "Tisztítsátok meg Korzetet a kaputól, hogy az ellenőrök kinyithassák."
+  ],
+  "korzeth-outro": [
+    "A raktárak nyitva vannak.",
+    "A szállítmány, ami megérkezett, a legénységével együtt megy vissza.",
+    "Egy teherhajó a külső állomásokra vitt egy teherszállítmányt, majd megfordult.",
+    "A célállomás kapott egy aláírt szállítási elismervényt, amíg a teherhajó még mindig repült."
+  ],
+  "level-25": [
+    "A teherszállító pilóta egy raktérben nyitotta ki a kameráját.",
+    "A fogadó állomásnak van egy nyugtája minden ládáról.",
+    "Megkértük mindkét végét, hogy tartsák meg az üzeneteiket.",
+    "Kövesse a blokkot a feladójához, és visszafordítjuk a teherhajót az állomás felé."
+  ],
+  "thervoss": [
+    "Thervoss, a visszaigazoló tolvaj.",
+    "Még azelőtt ad ki nyugtákat, hogy leszállna a szállítmány.",
+    "A teherhajó meghallja, hogy befejezte a munkát, és hazamegy.",
+    "Az állomás vár a szállítmányra, amit állítólag kapott.",
+    "Mindkét legénységhez van közvetlen csatornánk.",
+    "Tervoss jeladó kilőve."
+  ],
+  "thervoss-outro": [
+    "Az első láda kilőve.",
+    "A saját legénysége küldte a blokkot a rakodófedélzetről.",
+    "A régi elismervény ellen benyújtott fellebbezésüket elutasították.",
+    "Minden egyes ellenőrzésnél egy bírósági hajó volt a felelős ugyanazért a fuvarozásért."
+  ],
+  "level-26": [
+    "A fogadó személyzet küldött a bíróságnak egy videót az üres dokkjáról.",
+    "A válasz szerint a videó hálózati támadás.",
+    "Három másik állomás is ugyanazt a döntést hozta.",
+    "Megkértük a tisztjeiket, hogy tartsák meg a teljes aktát.",
+    "Megvan a kormányhajó koordinátái."
+  ],
+  "akraveth": [
+    "Kontaktus megerősítve.",
+    "Akraveth, a Köd Bíró.",
+    "A tanácsadói a személyzet közötti teherszállítási vitákat rendezték.",
+    "Most pedig elutasítja a bizonyítékot, ami leleplezné a pártfogóit, és mindenkit felsorol, aki ellenségnek tekinti.",
+    "Az érintett kikötők elhozták a naplóbejegyzésüket.",
+    "Takarítsák el Akravethet a hallósávtól."
+  ],
+  "akraveth-outro": [
+    "Az állomások visszavették az aktáikat.",
+    "Egy közös bizottság beleegyezett, hogy mindkét csapatot meghallgatják minden szállítmányból.",
+    "Minden Akraveth által kedvelt hajónak ugyanaz a karbantartási csomagja volt.",
+    "Egy pilóta azt jelenti, hogy a hajtóművei az első ugráskor leálltak, miután telepítette."
+  ],
+  "level-27": [
+    "A pilóta biztonságban van a vontatótérben.",
+    "A mérnökök megállapították, hogy az új szervizcsomag megváltoztatta a motor ellenőrzését, miközben zöld maradt a kijelző.",
+    "Három másik csapat szerelte fel, amíg várták a meghallgatásukat.",
+    "Tartsa a javítási útvonalat.",
+    "Azt mondjuk nekik, hogy ne ugorjanak."
+  ],
+  "zelkharn": [
+    "Ez Zelkharn, a Szupply- Láncféreg.",
+    "A karbantartó öblök segítségével a flotta tovább repült.",
+    "A cserealkatrészek most a flottától függő hajókat hagyják egy működő meghajtásra.",
+    "A mérnökeink tiszta alkatrészeket készítettek.",
+    "Be kell jutniuk a hajókba."
+  ],
+  "zelkharn-outro": [
+    "A legénység teszteli a tiszta részeket a dokkban, mielőtt repülnének.",
+    "Az egyik klinika elvesztette a diszpécser archívumát a kudarc alatt.",
+    "Kifizette a raktárt a másolatokért.",
+    "A szállító most küldött vissza egy listát a fájlnevekről és egy üres meghajtót."
+  ],
+  "level-28": [
+    "A klinika az archívumot a vivőanyag könyvtárban találta.",
+    "A tartalék csapat kért egy fájlt, és kapott egy másik üres átutalást.",
+    "A klinikán még mindig vannak a legutóbbi jelentések.",
+    "Kövesse a könyvtár tulajdonosa, amíg segítünk megőrizni a másolatokat."
+  ],
+  "odravik": [
+    "Kontaktus megerősítve.",
+    "Odravik, az üres tartalék kereskedő.",
+    "A tárolórendszere azt ígéri, hogy minden katasztrófa után felépül.",
+    "Néhány fájl a kijelzőjén nem ért el egy lemezt sem.",
+    "A klinikáknak szükségük van a még létező másolatokra.",
+    "Nyissák meg az utat a saját mérnökeik számára, hogy ellenőrizzék a rakteret."
+  ],
+  "odravik-outro": [
+    "A mérnökök visszaállították a másolatokat, amik a rekeszeken voltak.",
+    "Három figyelmeztetést olvastak, amit egy ellenőr küldött hónapokkal ezelőtt.",
+    "Egy kikötő sem fogadta őket.",
+    "Az egyik figyelmeztetés szerint a régi kikötő szűrőt látták utoljára."
+  ],
+  "level-29": [
+    "A kikötőfőnök azt mondja, hogy nem hallott riasztást.",
+    "A felügyelő három példányt tartott meg a kiküldésük idejével.",
+    "Minden azt mutatja, hogy a port while régi rádió szűrő elismerte.",
+    "A következő ellenőrző személyzet nyílt csatornát használ, hogy közvetlenül halljuk."
+  ],
+  "varnokh": [
+    "Kontaktus megerősítve.",
+    "Varnokh, a csendszűrő.",
+    "Egyszer elválasztotta a segélyhívásokat a zajtól, ami forgalmas kikötőkben volt.",
+    "Az új lista a független ellenőröket beavatkozásnak tekinti.",
+    "Most már egy másik csapatot is hallunk a nyílt csatornán.",
+    "Varnokh szűrőket hatástalanítani, hogy az állomások is hallhassák őket."
+  ],
+  "varnokh-outro": [
+    "Az állomások olyan figyelmeztetéseket hallanak, amik nem jutottak át.",
+    "Több jelentés szerint a hiányzó telepesek a szállítmányozási megrendelések után jelentek meg, miután a nevük megjelent egy árverésen.",
+    "A telepesek előjöttek az eredeti feljegyzéseikkel.",
+    "Látni akarják, ki adta el őket."
+  ],
+  "level-30": [
+    "A telepesek emlékeznek, hogy a flotta fedélzetén vannak, ami az új otthonaikba vitte őket.",
+    "A regisztrációs számuk most már külön aukciós tételekben jelenik meg.",
+    "Egy nő felismerte a számot, amit az első napján használt a kolóniában.",
+    "Lemásolta a eladási listát."
+  ],
+  "kezravel": [
+    "Ez itt a Kezravel, a személyazonosság árverés.",
+    "A régi telepesek regisztere már értékesítésre is ad ki neveket.",
+    "A vásárlók a rendeléseket olyan személyazonosság alá helyezhetik, amit az emberek egy életen át építettek.",
+    "A tulajdonosok egy ellenőrzött csatornán vannak.",
+    "Állítsák meg Kezravelt, mielőtt a következő aukció megnyílik."
+  ],
+  "kezravel-outro": [
+    "A telepesek visszavonták a lopott igazolványt.",
+    "A helyük személyesen ad ki helyetteseket.",
+    "Az első visszavonási értesítés elérte a távoli relét, egy másik célállomással rajta.",
+    "Mindkét végén elismerték.",
+    "Megkértük a legénységet, hogy tartsák meg az eredetiket."
+  ],
+  "level-31": [
+    "A feladó és a vevő a távolabbi úton összehasonlította a másolatait.",
+    "Mindkettőnek azt mondták, hogy a visszavonás megérkezett.",
+    "A két közlemény nem ért egyet a név tulajdonosával.",
+    "Külön kapcsolatot tartunk.",
+    "Keresse meg, hol tért el a két üzenet."
+  ],
+  "dravosk": [
+    "Kontaktus megerősítve.",
+    "Dravosk, a Relay Illusionist.",
+    "Az antennák üres útvonalakon cserélték le az állomásokat.",
+    "Most átszerkeszti az adást, és csendben eldob másokat, miután elismerte őket.",
+    "Az alternatív csatornánk sértetlen.",
+    "Tisztítsák meg az utat, hogy a kolóniák ellenőrizzék az üzeneteiket."
+  ],
+  "dravosk-outro": [
+    "A visszavonás sértetlenül érkezett meg a független útvonalon.",
+    "Az operátorok furcsa forgalom keresését találták a régi relé naplóban.",
+    "Minden kitörés egy dolgozó drón számát hordozza, amit a tulajdonosa eltűntnek jelentett.",
+    "A drónok még mindig együtt sugároznak."
+  ],
+  "level-32": [
+    "Egy szerelő felismerte a régi vontató drónját a váltóforgalomban.",
+    "Javításra gyűjtötték, és nem jött haza.",
+    "Több száz tulajdonos küldött nekünk egyező számokat.",
+    "Repülj az adás közepe felé.",
+    "Egyre közelebb kerülnek egymáshoz."
+  ],
+  "thalzek": [
+    "Ez a Thalzek, a Sway Gyűjtő.",
+    "A hajótest a sérült drónok védelmére szolgál.",
+    "Most arra utasítja őket, hogy a reléket elborítsák kérésekkel.",
+    "A tulajdonosok megadták a sorozatszámukat, hogy a mentőcsapatok felismerhessék az egységeket.",
+    "Szedjék le a parancsnoki hajót."
+  ],
+  "thalzek-outro": [
+    "A tulajdonosok visszakapják a drónjaikat.",
+    "Egy mentőhajó azt akarta, hogy aláírják a szerződést, mielőtt elszállítják.",
+    "Egy mérnök talált egy záradékot, ami átengedi az irányítást minden javított egység felett.",
+    "Ugyanez az ajánlat már elérte az állomás felét ezen az útvonalon."
+  ],
+  "level-33": [
+    "A mérnök végig olvasta a helyreállítási szerződést.",
+    "Több állomás aláírt egy változatot, amely lehetővé teszi a szolgáltató átvenni az irányítást a javítások.",
+    "A legénységük minden oldalról egy példányt tart.",
+    "Kövesse az ajánlatot vissza a kereskedelmi irodába."
+  ],
+  "orvethra": [
+    "Kontaktus megerősítve.",
+    "Orvethra, a szerződés csapda.",
+    "Ez a hajó hosszú távú ellátási megállapodásokat kötött.",
+    "Az új ajánlatok az árnyflotta irányítása alá helyezik a rutinmunkát.",
+    "Az állomások készen állnak, hogy közösen felfüggesszék ezeket a feltételeket.",
+    "A biztonságos Orvethra-k aláírták a másolatokat."
+  ],
+  "orvethra-outro": [
+    "Az állomások felfüggesztették a rejtett feltételeket.",
+    "Minden megállapodásban van egy pecsét, ami azt mondja, hogy egy független ellenőr olvasta.",
+    "A felügyelő, akinek a neve úgy tűnik, hogy egy drónt javított aznap.",
+    "Látni akarja a hajót, ami a pecsétet adta."
+  ],
+  "level-34": [
+    "A felügyelő kérte, hogy ismételjék meg a hitelesített ellenőrzést.",
+    "Az iroda ugyanazt a képet küldte egy zöld pecsétről.",
+    "Csak egy rakományvonal van, ami biztonságos.",
+    "Repülj a forráshoz.",
+    "A csapatunk megpróbálja ellenőrizni az eredeti feljegyzéseket."
+  ],
+  "kelzorn": [
+    "Az ott Kelsorn, a Checksum Festő.",
+    "Szerszámai egyszer helyreállították a sérült adatokat.",
+    "Most meggyőző vizsgálati eredményeket festenek az archívumokon, amit senki sem ellenőrzött.",
+    "A felügyelőnk két független példányban is lefuttatta az összehasonlítást.",
+    "A jelek egyeznek.",
+    "Nyissa meg az utat az archívumba."
+  ],
+  "kelzorn-outro": [
+    "Az igazi csekk már nyilvános.",
+    "Az ellenőrök találtak egy pecsétet három kolónia tartalékigénye alapján.",
+    "Mindhárom állítás ugyanarra a raktárra mutat.",
+    "Az első téli konvoj a kapunál van.",
+    "A kolóniák megkértek, hogy számoljuk meg velük a részvényeket."
+  ],
+  "level-35": [
+    "Minden kolónia elküldte a téli kiosztását.",
+    "Együtt, a követelések háromszor is megtöltik az öblöt.",
+    "A rakodószemélyzet csak egy ládát számolt az üvegen keresztül.",
+    "Repülj a tartalék páncélterembe, amíg a három állomás közös leltárba nem megy bele."
+  ],
+  "vashravel": [
+    "Kontaktus megerősítve.",
+    "Vashravel, a széfes ígérő.",
+    "A páncélterem vésztartalékokat tartott a határkolóniáknak.",
+    "Az új vezetők újra és újra ugyanazon készletre vonatkozó követeléseket írtak.",
+    "A legénység együtt várja őket.",
+    "Vashravel-i őrséget hatástalanítani a raktérnél."
+  ],
+  "vashravel-outro": [
+    "Mindhárom kolónia látta a számolást.",
+    "Elosztották az igazi készleteket, és egy közös szállítmányt küldtek.",
+    "A határállomás elismerte az út felét, és nem volt hajlandó feljegyezni az érkezést.",
+    "Mindkét kikötő azt hiszi, hogy a másik tartja a rakományt."
+  ],
+  "level-36": [
+    "A küldő kikötő aláírta az indulást, a fogadó kikötő pedig élő képet ad a teherhajóról.",
+    "Egy határhajó csak a saját flottájának a bejegyzéseit fogadja el.",
+    "A két kikötő összehasonlítja a csatornánk adatait.",
+    "Repülj a teherhajó felé!"
+  ],
+  "zorveth": [
+    "Ez itt Zorveth, a határzár.",
+    "Mindkét nyilvántartásban lenyomozhatóvá tette a szállításokat.",
+    "Most visszautasítja az egyik oldal bizonyítékát, és minden átkelést meghagy.",
+    "A téli szállítmány egy tiszta sávra vár.",
+    "Vegyétek le a Zorveth-i gátot."
+  ],
+  "zorveth-outro": [
+    "A téli szállítmány dokkolt.",
+    "Mindkét kikötő ugyanazt az érkezési bejegyzést írta alá.",
+    "A navigátoraik összevetették az útvonaltérképeket is.",
+    "Három állítás szerint az egyedi felmérés eredeti.",
+    "Mindegyiknek ugyanaz a használt sarka és egy másik tulajdonos neve."
+  ],
+  "level-37": [
+    "Egy navigációs iskola megmutatta a felmérési diagram hallgatószobáját.",
+    "A kopott sarok már ott volt.",
+    "A másolata egyértelműen fel van címkézve.",
+    "Valaki eltávolította a címkét, és minden egyes verziót elsőnek adott el.",
+    "Az eredeti útvonaljelző a láthatáron marad."
+  ],
+  "drelkash": [
+    "Kontaktus megerősítve.",
+    "Drelkash, a másoló herceg.",
+    "A nyomtatási szobái egyszer olyan kórlapokat adtak a diákoknak, amiket megengedhettek maguknak.",
+    "A személyzet minden példányt egyedi eredetinek ad el, és hagyja a kolóniákat, hogy harcoljanak a tulajdonért.",
+    "Tudjuk, hol vannak a kiadói naplók.",
+    "Nyissák meg az utat a műhelyig."
+  ],
+  "drelkash-outro": [
+    "Az iskola le tudja nyomozni a térképeit az igazi felméréshez.",
+    "A nyilvántartások ismét megjelölik a másolatokat a megfelelő eredetükkel.",
+    "Egy ellátó központ szerint már több ezerszer feldolgozta a korrekciót.",
+    "Egy sürgős vízszállítmány még mindig nem érkezett meg."
+  ],
+  "level-38": [
+    "Egy ellátó küldött egy élő képet a soráról.",
+    "Elfoglaltnak tűnik, és ugyanazok a bejegyzések emelkednek a csúcsra.",
+    "A vízügyi személyzet már tegnap óta vár.",
+    "Közvetlen hívást indítottunk el közöttük.",
+    "Repülj a gépbe, és etesd a sort."
+  ],
+  "nerthavel": [
+    "Ott van Nerthavel, a \"Tér-devourer\".",
+    "A régi készlete napokig tartó kéréseket tarthatott.",
+    "Most a központokat értéktelen bejegyzésekkel táplálja, és a kritikus szállítmányok elé helyezi őket.",
+    "Megvan a vízszállítmány eredeti kérése.",
+    "Törd fel a patakot, hogy a diszpécser elolvashassa."
+  ],
+  "nerthavel-outro": [
+    "A vízszállítmány elhagyta a dokkot.",
+    "A diszpécserek visszaállították a kritikus sort a helyi másolataikból.",
+    "Most érkezett a jelentés, miszerint a legénység verekedést kezdett az öbölben.",
+    "A felvétel azután kezdődik, hogy a dokk tiszt csak az időkódot emlékszik."
+  ],
+  "level-39": [
+    "A dokk tiszt emlékszik, hogy kinyitotta a kaput a vízügyi személyzet számára.",
+    "A jelentés egy figyelmeztető lövéssel nyit, és kihagyja a kapu naplóját.",
+    "Egy másik kamera rögzítette az egész megközelítést.",
+    "Megkérjük a legénységét, hogy tartsák meg a érintetlen fájlt, amíg maguk követik a szerkesztett jelentést."
+  ],
+  "rhazkora": [
+    "Kontaktus megerősítve.",
+    "Rhazkora, a bizonyíték Twister.",
+    "A labor rendezte az eseményeket.",
+    "Az új jelentések néhány másodpercet kitesznek a szövegkörnyezetből, amíg az áldozatok támadónak nem tűnnek.",
+    "A második felvétel szerint egy árnyék-kísérő tüzel először.",
+    "Tartsd távol Rhazkorát az eredetitől."
+  ],
+  "rhazkora-outro": [
+    "Az egész felvétel nyilvános.",
+    "A tanács visszavonta a vádakat a vízügyi személyzet ellen.",
+    "Három állomás kért szavazást a korrekcióról.",
+    "A szavazólapokat a szavazás után pecsételték le, bár a kapitányok időben megtöltötték őket.",
+    "Ellenőrizzük a futármegállókat."
+  ],
+  "level-40": [
+    "A három állomásnál még megvannak a feladási nyugták.",
+    "A futáruk két előkelő kikötőnél megállt, és a többi szavazatot megtartotta, amíg az ülés véget nem ért.",
+    "A tanács nyitva hagyta a székeket.",
+    "Repülj a futárhoz, és tartsd a hiányzó szavazólapokat lőtávolon belül."
+  ],
+  "velzhar": [
+    "Ott van Velzhar, a Ballot Kapuőr.",
+    "A lezárt útvonala egyszer minden állomásnak egyenlő esélyt adott a szavazásra.",
+    "Most azt választja, kinek a szavazata érkezik meg, mielőtt bezárják az ajtókat.",
+    "A váróállomások hitelesíthetik a saját csomagjaikat.",
+    "Állítsák meg Velzhart, hogy közvetlenül küldhessék őket."
+  ],
+  "velzhar-outro": [
+    "A tanács újra megnyitotta a szavazást, és felolvasta az összes állomást.",
+    "A képviselők az eredeti szavazólapokat kérték ellenőrzésre.",
+    "A raktárhálózat szerint a csomagok léteznek, és a nyeremény egyetlen egyet is szállít.",
+    "A tanács egy működő útvonalat kér az archívumba."
+  ],
+  "level-41": [
+    "A tanács három címet próbált a szavazófülkéknek.",
+    "Mindegyik megerősítette, hogy a felvétel jelen volt.",
+    "Minden visszavétel üres.",
+    "A tisztek találtak egy régi karbantartási útvonalat a tárolóhoz.",
+    "Menj arra az útra, és tartsd nyitva a független linkeket."
+  ],
+  "korthaven": [
+    "Kontaktus megerősítve.",
+    "Korthaven, a Megközelíthetőség Breaker.",
+    "A szállító minden állomáshoz hozott másolatot, amelyik kérte.",
+    "A válaszai szerint a bizonyíték létezik, amíg az ajtók zárva maradnak.",
+    "A régi kincstár még mindig bent van.",
+    "Helyet a független felderítő csapatnak."
+  ],
+  "korthaven-outro": [
+    "A tanács el tudja olvasni a szavazatokat.",
+    "A másolatok megegyeznek azzal, amit az állomások tároltak.",
+    "Egy külső állomás elvesztette az archívum hozzáférését, és kapott egy ajánlatot, ami azonnali felépülést ígért.",
+    "Minden biztonsági kulcsot kér a kikötőben.",
+    "Hívást kértünk a legénységétől."
+  ],
+  "level-42": [
+    "A külső állomás főnöke épp a tartalék kulcsait akarta küldeni.",
+    "Megtartotta őket, miután megtudta, hogy az ajánlat két másik legénységet is megérintett, akik ugyanezzel a bukással.",
+    "Egy ellenőrzött mentőcsapat már úton van.",
+    "Kövesse a hajót, amelyik először válaszolt."
+  ],
+  "azravel": [
+    "Azravel, a Recovery Impostor.",
+    "A régi rádióazonosítója egy hajóé volt, ami elveszett szondákat keresett.",
+    "A név a veszteségük után ér el a állomásokhoz, és a titkaikat kéri.",
+    "A mentőosztagnak biztonságos helyre van szüksége.",
+    "Ürítsék ki Azravelt a közelükből."
+  ],
+  "azravel-outro": [
+    "Az igazi csapat visszaállította az archívum hozzáférést.",
+    "A tartalék kulcsok az állomáson maradtak.",
+    "A karbantartási jelentéseit biztonságosnak jelölték, míg az ellenőröket átküldték a biztonsági övön egy demonstrációs dokkba.",
+    "Az eredeti megközelítési térképeik a visszahozott aktákkal jöttek vissza."
+  ],
+  "level-43": [
+    "A felügyelők küldtek egy fényképet a makulátlan állványokról.",
+    "A karbantartó személyzet küldött egy képet a megbukott csomópontról, ahol ténylegesen dolgoznak.",
+    "A felügyelő-lista a tiszta dokknál ér véget.",
+    "Megkérjük, hogy repüljön veled az eredeti megközelítéssel."
+  ],
+  "threvask": [
+    "Kontaktus megerősítve.",
+    "Threvask, az Audit Diverter.",
+    "A navigációs fedélzete ellenőröket küldött a sebezhető csomópontokba.",
+    "Most már a kiállítottra is ránéz.",
+    "A nem rögzített csomópont a valós helyét sugározza a karbantartó csatornán.",
+    "Küldjék oda a felügyelőket."
+  ],
+  "threvask-outro": [
+    "A felügyelők elérték a csomópontot.",
+    "A jelentésük tartalmazza, amit láttak, és aki ott volt.",
+    "Egy operátor kapott egy üzenetet, amiben idézett egy sort, amit évekkel ezelőtt írt egy személyes naplóba.",
+    "A naplót egy roncsból találták meg, és a családjához kellett volna mennie."
+  ],
+  "level-44": [
+    "Az operátor felismerte a vonalat az első útjáról.",
+    "A feladó arra használta, hogy megkérdezze, hogy módosítsa-e a vizsgálati jegyzőkönyvet.",
+    "A családjánál van az eredeti bejegyzés.",
+    "Engedélyt kaptunk, hogy lenyomozzuk, ki szerezte meg a másolatot.",
+    "Kövesse a mentőhajó útvonalát."
+  ],
+  "dorzheva": [
+    "Ez Dorzheva, az Emlékezés vadász.",
+    "A fogdák a személyes naplóbejegyzéseket hozták haza a családoknak.",
+    "A legénység kölcsönkért ismerős részleteket, hogy az idegenek megbízhatónak tűnjenek.",
+    "Más üzemeltetők is kaptak hasonló üzeneteket.",
+    "Biztosítsa az archívumot, mielőtt Dorzheva szétszórná."
+  ],
+  "dorzheva-outro": [
+    "A család a saját példányát az általuk választott állomáson kapta meg.",
+    "A központ jelentése áll.",
+    "Egy mentőhajó a kiszivárgott üzenetekkel megjósolta az összeomlást és a kereslet ellenőrzését az egész relé hálózat.",
+    "A csatorna állomásai még mindig válaszolnak."
+  ],
+  "level-45": [
+    "Megkértük a reléállomásokat, hogy válaszoljanak.",
+    "A vészcsatornán minden legénység átjött.",
+    "A mentőhajó szerint a hangokat szimulálták, és az állomásoknak át kell irányítaniuk a vezérlést egy óra előtt.",
+    "Tartsátok nyitva a vonalat.",
+    "Találják meg a hajót, mielőtt a határidőt bejelentik."
+  ],
+  "vezrakh": [
+    "Kontaktus megerősítve.",
+    "Vezrakh, a vészdugó.",
+    "Azért építették, hogy segítsen, amikor egy igazi parancsnoki állomás elbukott.",
+    "A legénység most már saját vészhelyzetet jelent, és arra használja őket, hogy megszerezze a vezérlést.",
+    "Az állomások összehasonlítják az adatokat.",
+    "Üsd el a vezrak reaktorát, mielőtt elvágná őket."
+  ],
+  "vezrakh-outro": [
+    "Eltelt az óra.",
+    "Az állomások megtartották a vezérlést, és még mindig hallják egymást.",
+    "Egy segélykoordinátor hat ajánlást kapott, hogy egy új partnert tegyenek a hálózat központi útvonalává.",
+    "Mind a hat nyom egy hajóhoz vezet, ami segélykapcsolatokat tervezett.",
+    "Összehasonlítjuk a térképen szereplő útvonalakat."
+  ],
+  "level-46": [
+    "A segélykoordinátor meghatározta a kapcsolatokat, amiket a klinikák eléréséhez használ.",
+    "Majdnem minden vészszállítmány áthalad ugyanazon a relén.",
+    "Az ajánlott partner irányítaná.",
+    "Két szomszédos állomás nyitott egy második utat.",
+    "Fedezze őket, amíg élő szállítmánnyal tesztelik."
+  ],
+  "orzhaven": [
+    "Az ott Orzhaven, a Trust Cartographer.",
+    "A térképek egyszer segített a segélycsoportoknak elérni a távoli állomásokat.",
+    "Ugyanazon a térképen teszi a szövetségeseit az útvonalra, amin mindenki függ.",
+    "Egy gyógyszerszállító áthalad az alternatív vonalon.",
+    "Tartsd távol tőle Orzhavent."
+  ],
+  "orzhaven-outro": [
+    "Mindkét klinika hallotta a gyógyszeres szállítót.",
+    "A helyi személyzet beleegyezett, hogy mindkét útvonalat nyitva tartják.",
+    "Egy tanácsközvetítő most mondta el az állomásoknak, hogy a másik kizárólagos irányítást követel.",
+    "A két üzenetet egymás mellett olvassák."
+  ],
+  "level-47": [
+    "Az állomások közvetlenül összehasonlították az ajánlataikat.",
+    "És nem is kért kizárólagos irányítást.",
+    "Egy tanács hajó újabb követeléseket küld, amiket a résztvevők nem tettek meg.",
+    "Egy csatornát nyitottunk, hogy mindenki ugyanazt hallja.",
+    "Kövesse a hamis tiltakozásokat a tanács fedélzetére."
+  ],
+  "keldroth": [
+    "Kontaktus megerősítve.",
+    "Keldroth, a Consensus Besieger.",
+    "A kamarákat rivális kolóniáknak építették, hogy rendezhessék a vitákat.",
+    "Most már vitatkoznak, amíg az árnyflotta elfoglalja a pályájukat.",
+    "Halljuk az eredeti pozíciókat a közös csatornán.",
+    "Megszakítjuk a Keldroth-i blokádot a tárgyalásokról."
+  ],
+  "keldroth-outro": [
+    "Az állomások megállapodtak, hogy nyitva tartják a sávokat, amíg ők valódi nézeteltérésen mennek keresztül.",
+    "Az ellenőrök árnyékos szállítmányokat találtak, melyek a segélyszállítmányok.",
+    "Mindegyik egy másik hajógyárat sorol fel.",
+    "A legénység a javított külső gyűrűnkben felismerte az új címkék alatt lévő sorozatjelet."
+  ],
+  "level-48": [
+    "A jel egy olyan udvaré, amit a gyűrűs csapat évek óta használ.",
+    "Az új címkék egy udvart neveznek meg, ami sosem foglalkozott azokkal a hajókkal.",
+    "A legénység elküldte az eredeti javítókönyvét.",
+    "Kövesse az átadott tulajdonosokat, és tartsa meg az egyes lépések egy példányát egy független útvonalon."
+  ],
+  "zhavrek": [
+    "Ez itt Zhavrek, az Eredeti Törlő.",
+    "Az archívuma generációk óta elárulta a legénységnek, hol építették a hajóikat.",
+    "Most cseréli a feljegyzéseket, hogy a lopott szállítmányok törvényesnek tűnjenek.",
+    "Megvan a külső gyűrű javítási könyv.",
+    "Biztosítsd a megmaradt eredetit, mielőtt Zhavrek leugrik."
+  ],
+  "zhavrek-outro": [
+    "A hajógyár ellenőrizte az eredetit a megrendelések alapján.",
+    "A mentőcsapatok ismét a határnál vannak.",
+    "A szállítási napló szerint az utolsó működő relé mögött van egy menedék.",
+    "Az árnyflotta csak támadásokról készített felvételeket továbbít."
+  ],
+  "level-49": [
+    "A menedékhely válaszolt a régi vészfrekvenciánkra.",
+    "A lakói azt mondták, hogy az egész hálózat ellenük fordult.",
+    "Felajánlottuk, hogy egy olyan állomással kapcsoljuk őket, amit ők választanak.",
+    "A Genesis külső gyűrűjén lévő javítószemélyzetet kérték.",
+    "Tartsd az utat távol."
+  ],
+  "vorthaz": [
+    "Kontaktus megerősítve.",
+    "Vorthaz, a Végső Izolátor.",
+    "Egyszer egy hosszú háború után őrizte a menedéket.",
+    "Most már a hálózatba zárja az ablakokat, és megtölti őket kiválasztott adásokkal.",
+    "A lakók a falon túl akarnak hallani.",
+    "Helyet kell teremteni a saját antennájuknak."
+  ],
+  "vorthaz-outro": [
+    "A menedékhely saját antennát tett a rádióra.",
+    "A gyűrűs csapat név szerint válaszolt.",
+    "Aztán mindkét állomás látta ugyanazt a parancsot megjelenni a helyi főkönyvben.",
+    "Egy hajó a központban minden szabad csomópontot el akar fogadni egy mester regisztert.",
+    "A menedékhely küldte a parancsnoki eredetét."
+  ],
+  "level-50": [
+    "Az állomások saját nyilvántartást vezetnek.",
+    "A Genesis a javítókat hívta először.",
+    "A menedéknek saját naplója van a válaszról.",
+    "Drazevorn arra kéri őket, hogy adják át mindkettőt a nyilvántartásának.",
+    "Független vonalakat nyitottak meg egymásnak.",
+    "Repülj a magba, Pilóta.",
+    "Tartsd a vonalakat a közelben."
+  ],
+  "drazevorn": [
+    "Kontaktus megerősítve.",
+    "Drazevorn, a Hamis Igazság Ura.",
+    "A fedélzete lopott neveket, hamis krónikákat és bizonyítékokat rejt el a hajók, amiket megállítottunk.",
+    "Most jelölte meg a Genesis-relét.",
+    "Hallom a szerelőket a másik vonalon.",
+    "Hadd beszéljenek, Pilóta.",
+    "- A Drazevorn reaktorba."
+  ],
+  "drazevorn-outro": [
+    "A Drazevorn Register nem válaszol.",
+    "A kolóniák közösen ellenőrzik az eredeti feljegyzéseket.",
+    "A Genesis megtalálta a javítókat, a külső gyűrűből hívták őket.",
+    "A menedéknek megvan a saját felvétele a válaszról.",
+    "Figyelj egy pillanatra.",
+    "A állomások mindkét felvételt lejátszják a nyílt csatornán.",
+    "Még mindig vannak különbségek, amiket meg kell oldani.",
+    "Minden állomás tud beszélni a saját nevében.",
+    "Most jött egy hang a Földről.",
+    "Genesis relé, itt a Föld.",
+    "Tisztán halljuk.",
+    "A javítószemélyzet most válaszol.",
+    "Megkérik a Földet, hogy távolabbra is tartsa nyitva a csatornát.",
+    "Hagyd szabadon a csatornát, pilóta.",
+    "A következő hajók engedélyt kérnek, hogy elinduljanak a felderítő küldetésekre.",
+    "Amikor az első hajó áthalad a ringen, hallani akarom, hogy hova megy a legénysége."
+  ]
+}

@@ -4,7 +4,7 @@ import { useLocale } from '../../i18n';
 import type { MusicPlayer } from '../musicPlayback';
 import { createCinematic } from './cinematic.js';
 import { documentLanguage } from '../../locales/config';
-import { storyCues, storySubtitle } from './storyCaptions';
+import { loadStorySubtitles, storyCues, type StorySubtitles } from './storyCaptions';
 import { storyScenes, type StoryScene } from './storyScenes';
 import { storyCopy } from './storyCopy';
 import { storyFadeMs } from './storyFades';
@@ -66,10 +66,11 @@ export default function StoryBriefing({ scene, withAudio, volume, prepareAudio, 
   const [coverBlend, setCoverBlend] = useState(false);
   const [cueIndex, setCueIndex] = useState(-1);
   const [offerAudioRetry, setOfferAudioRetry] = useState(false);
+  const [subtitles, setSubtitles] = useState<{ locale: typeof locale; captions: StorySubtitles }>();
   const [skipLabel, , retryLabel] = storyCopy(locale);
   const definition = storyScenes[scene];
   const cues = useMemo(() => storyCues(scene, definition.timing), [scene, definition]);
-  const translation = storySubtitle(scene, locale, cueIndex);
+  const translation = subtitles?.locale === locale ? subtitles.captions[scene]?.[cueIndex] : undefined;
   const caption = translation ?? (!artReady ? cues[cueIndex]?.text : undefined);
 
   useEffect(() => {
@@ -79,6 +80,14 @@ export default function StoryBriefing({ scene, withAudio, volume, prepareAudio, 
     volumeRef.current = volume;
   }, [onCovered, onReturn, onFinish, volume]);
   useEffect(() => { dialogRef.current?.focus({ preventScroll: true }); }, []);
+
+  useEffect(() => {
+    let active = true;
+    void loadStorySubtitles(locale).then(captions => {
+      if (active && captions) setSubtitles({ locale, captions });
+    }).catch(() => { /* The English crawl remains available if captions cannot load. */ });
+    return () => { active = false; };
+  }, [locale]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
