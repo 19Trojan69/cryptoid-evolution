@@ -2,7 +2,7 @@
 const changes = [
   {
     "before": "",
-    "after": "import StoryBriefing from \"./story/StoryBriefing\";\nimport { storyBriefingsEnabled } from \"./story/storyPreferences\";\nimport { bossStoryAtSector, levelStoryAtSector, storyScenes, type StoryScene } from \"./story/storyScenes\";\nimport { storyFadeMs } from \"./story/storyFades\";\n"
+    "after": "import StoryBriefing from \"./story/StoryBriefing\";\nimport { storyBriefingsEnabled } from \"./story/storyPreferences\";\nimport { bossOutroAtSector, bossStoryAtSector, levelStoryAtSector, storyScenes, type StoryScene } from \"./story/storyScenes\";\nimport { storyFadeMs } from \"./story/storyFades\";\n"
   },
   {
     "before": "  useEffect(() => { wakeGameLoopRef.current?.(); }, [game.status]);\n",
@@ -58,7 +58,7 @@ const changes = [
   },
   {
     "before": "            }\n            forceScene = true;\n            return;\n          }\n        }\n        performanceProbeRef.current?.mark('transitions');\n",
-    "after": "            }\n            const levelBriefing = clearEncounter === 'bonus' ? levelStoryAtSector(next.sector) : undefined;\n            if (levelBriefing) queueStory(levelBriefing);\n            forceScene = true;\n            return;\n          }\n        }\n        performanceProbeRef.current?.mark('transitions');\n"
+    "after": "            }\n            const nextBriefing = clearEncounter === 'boss-clear' ? bossOutroAtSector(next.sector)\n              : clearEncounter === 'bonus' ? levelStoryAtSector(next.sector) : undefined;\n            if (nextBriefing) queueStory(nextBriefing);\n            forceScene = true;\n            return;\n          }\n        }\n        performanceProbeRef.current?.mark('transitions');\n"
   },
   {
     "before": "  }, [showRewardCards, diagnosticContext, beginBossSummary]);\n",

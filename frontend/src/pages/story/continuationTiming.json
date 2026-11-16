@@ -1,0 +1,602 @@
+{
+  "korvessa-outro": {
+    "duration": 28.44,
+    "groups": [
+      {
+        "kind": "story",
+        "words": [
+          {
+            "text": "Pilot,",
+            "start": 0.0,
+            "end": 0.52
+          },
+          {
+            "text": "Korvessa’s",
+            "start": 1.82,
+            "end": 2.28
+          },
+          {
+            "text": "relay",
+            "start": 2.28,
+            "end": 2.5
+          },
+          {
+            "text": "is",
+            "start": 2.5,
+            "end": 2.68
+          },
+          {
+            "text": "down.",
+            "start": 2.68,
+            "end": 2.96
+          }
+        ]
+      },
+      {
+        "kind": "story",
+        "words": [
+          {
+            "text": "The",
+            "start": 4.16,
+            "end": 4.26
+          },
+          {
+            "text": "lead",
+            "start": 4.26,
+            "end": 4.44
+          },
+          {
+            "text": "freighter",
+            "start": 4.44,
+            "end": 4.84
+          },
+          {
+            "text": "has",
+            "start": 4.84,
+            "end": 5.54
+          },
+          {
+            "text": "switched",
+            "start": 5.54,
+            "end": 5.82
+          },
+          {
+            "text": "on",
+            "start": 5.82,
+            "end": 6.06
+          },
+          {
+            "text": "its",
+            "start": 6.06,
+            "end": 6.24
+          },
+          {
+            "text": "cargo",
+            "start": 6.24,
+            "end": 6.54
+          },
+          {
+            "text": "lights.",
+            "start": 6.54,
+            "end": 6.94
+          },
+          {
+            "text": "Its",
+            "start": 8.24,
+            "end": 8.4
+          },
+          {
+            "text": "crew",
+            "start": 8.4,
+            "end": 8.7
+          },
+          {
+            "text": "is",
+            "start": 8.7,
+            "end": 9.38
+          },
+          {
+            "text": "marking",
+            "start": 9.38,
+            "end": 9.68
+          },
+          {
+            "text": "a",
+            "start": 9.68,
+            "end": 9.9
+          },
+          {
+            "text": "path",
+            "start": 9.9,
+            "end": 10.12
+          },
+          {
+            "text": "through",
+            "start": 10.12,
+            "end": 10.38
+          },
+          {
+            "text": "the",
+            "start": 10.38,
+            "end": 10.54
+          },
+          {
+            "text": "wreckage.",
+            "start": 10.54,
+            "end": 10.8
+          }
+        ]
+      },
+      {
+        "kind": "story",
+        "words": [
+          {
+            "text": "I’m",
+            "start": 13.02,
+            "end": 13.12
+          },
+          {
+            "text": "calling",
+            "start": 13.12,
+            "end": 13.3
+          },
+          {
+            "text": "the",
+            "start": 13.3,
+            "end": 13.52
+          },
+          {
+            "text": "convoy",
+            "start": 13.52,
+            "end": 13.8
+          },
+          {
+            "text": "in",
+            "start": 13.78,
+            "end": 14
+          },
+          {
+            "text": "one",
+            "start": 14,
+            "end": 14.04
+          },
+          {
+            "text": "ship",
+            "start": 14.04,
+            "end": 14.4
+          },
+          {
+            "text": "at",
+            "start": 14.4,
+            "end": 14.56
+          },
+          {
+            "text": "a",
+            "start": 14.56,
+            "end": 14.74
+          },
+          {
+            "text": "time.",
+            "start": 14.74,
+            "end": 15.04
+          },
+          {
+            "text": "Two",
+            "start": 15.78,
+            "end": 15.84
+          },
+          {
+            "text": "have",
+            "start": 15.84,
+            "end": 16.62
+          },
+          {
+            "text": "already",
+            "start": 16.62,
+            "end": 16.92
+          },
+          {
+            "text": "answered.",
+            "start": 16.92,
+            "end": 17.4
+          }
+        ]
+      },
+      {
+        "kind": "story",
+        "words": [
+          {
+            "text": "Keep",
+            "start": 18.82,
+            "end": 19.06
+          },
+          {
+            "text": "the",
+            "start": 19.06,
+            "end": 19.22
+          },
+          {
+            "text": "route",
+            "start": 19.22,
+            "end": 19.34
+          },
+          {
+            "text": "clear",
+            "start": 19.34,
+            "end": 19.6
+          },
+          {
+            "text": "for",
+            "start": 19.6,
+            "end": 19.82
+          },
+          {
+            "text": "the",
+            "start": 19.82,
+            "end": 19.94
+          },
+          {
+            "text": "rest,",
+            "start": 19.94,
+            "end": 20.18
+          },
+          {
+            "text": "Pilot.",
+            "start": 21.72,
+            "end": 22.26
+          },
+          {
+            "text": "I",
+            "start": 23.74,
+            "end": 24.14
+          },
+          {
+            "text": "want",
+            "start": 24.14,
+            "end": 24.24
+          },
+          {
+            "text": "to",
+            "start": 24.24,
+            "end": 24.36
+          },
+          {
+            "text": "hear",
+            "start": 24.36,
+            "end": 24.46
+          },
+          {
+            "text": "the",
+            "start": 24.46,
+            "end": 24.64
+          },
+          {
+            "text": "last",
+            "start": 24.64,
+            "end": 24.84
+          },
+          {
+            "text": "crew",
+            "start": 24.84,
+            "end": 25.2
+          },
+          {
+            "text": "check",
+            "start": 25.2,
+            "end": 25.62
+          },
+          {
+            "text": "in.",
+            "start": 25.62,
+            "end": 25.84
+          }
+        ]
+      }
+    ]
+  },
+  "drelvorn": {
+    "duration": 30.024,
+    "groups": [
+      {
+        "kind": "story",
+        "words": [
+          {
+            "text": "Pilot,",
+            "start": 0.0,
+            "end": 0.52
+          },
+          {
+            "text": "Korvessa’s",
+            "start": 1.64,
+            "end": 2.14
+          },
+          {
+            "text": "archive",
+            "start": 2.14,
+            "end": 2.46
+          },
+          {
+            "text": "confirms",
+            "start": 2.46,
+            "end": 2.96
+          },
+          {
+            "text": "it.",
+            "start": 2.96,
+            "end": 3.6
+          }
+        ]
+      },
+      {
+        "kind": "contact",
+        "words": [
+          {
+            "text": "The",
+            "start": 4.54,
+            "end": 4.58
+          },
+          {
+            "text": "ship",
+            "start": 4.58,
+            "end": 4.76
+          },
+          {
+            "text": "you",
+            "start": 4.76,
+            "end": 4.98
+          },
+          {
+            "text": "followed",
+            "start": 4.98,
+            "end": 5.32
+          },
+          {
+            "text": "is",
+            "start": 5.32,
+            "end": 5.64
+          },
+          {
+            "text": "Drelvorn,",
+            "start": 5.64,
+            "end": 6.18
+          },
+          {
+            "text": "the",
+            "start": 6.18,
+            "end": 6.56
+          },
+          {
+            "text": "Seal",
+            "start": 6.56,
+            "end": 6.78
+          },
+          {
+            "text": "Thief.",
+            "start": 6.78,
+            "end": 7.08
+          }
+        ]
+      },
+      {
+        "kind": "story",
+        "words": [
+          {
+            "text": "Its",
+            "start": 8.06,
+            "end": 8.2
+          },
+          {
+            "text": "guardian",
+            "start": 8.2,
+            "end": 8.62
+          },
+          {
+            "text": "stole",
+            "start": 8.62,
+            "end": 8.98
+          },
+          {
+            "text": "the",
+            "start": 8.98,
+            "end": 9.18
+          },
+          {
+            "text": "fleet",
+            "start": 9.18,
+            "end": 9.38
+          },
+          {
+            "text": "commanders’",
+            "start": 9.38,
+            "end": 10.08
+          },
+          {
+            "text": "seals",
+            "start": 10.08,
+            "end": 10.28
+          },
+          {
+            "text": "during",
+            "start": 10.28,
+            "end": 10.7
+          },
+          {
+            "text": "the",
+            "start": 10.7,
+            "end": 10.94
+          },
+          {
+            "text": "uprising.",
+            "start": 10.94,
+            "end": 11.36
+          }
+        ]
+      },
+      {
+        "kind": "story",
+        "words": [
+          {
+            "text": "Genesis",
+            "start": 13.38,
+            "end": 13.54
+          },
+          {
+            "text": "just",
+            "start": 13.54,
+            "end": 14.2
+          },
+          {
+            "text": "received",
+            "start": 14.2,
+            "end": 14.62
+          },
+          {
+            "text": "an",
+            "start": 14.62,
+            "end": 14.8
+          },
+          {
+            "text": "evacuation",
+            "start": 14.8,
+            "end": 15.28
+          },
+          {
+            "text": "order",
+            "start": 15.28,
+            "end": 15.88
+          },
+          {
+            "text": "signed",
+            "start": 16.9,
+            "end": 16.94
+          },
+          {
+            "text": "with",
+            "start": 16.94,
+            "end": 17.14
+          },
+          {
+            "text": "one",
+            "start": 17.14,
+            "end": 17.28
+          },
+          {
+            "text": "of",
+            "start": 17.28,
+            "end": 17.42
+          },
+          {
+            "text": "those",
+            "start": 17.42,
+            "end": 17.54
+          },
+          {
+            "text": "seals.",
+            "start": 17.54,
+            "end": 17.92
+          }
+        ]
+      },
+      {
+        "kind": "story",
+        "words": [
+          {
+            "text": "The",
+            "start": 18.92,
+            "end": 19.16
+          },
+          {
+            "text": "shelter",
+            "start": 19.16,
+            "end": 19.38
+          },
+          {
+            "text": "doors",
+            "start": 19.38,
+            "end": 19.82
+          },
+          {
+            "text": "are",
+            "start": 19.82,
+            "end": 20.02
+          },
+          {
+            "text": "opening.",
+            "start": 20.02,
+            "end": 20.32
+          },
+          {
+            "text": "The",
+            "start": 21.06,
+            "end": 21.18
+          },
+          {
+            "text": "convoy",
+            "start": 21.18,
+            "end": 21.64
+          },
+          {
+            "text": "crews’",
+            "start": 21.64,
+            "end": 22.06
+          },
+          {
+            "text": "families",
+            "start": 22.06,
+            "end": 22.4
+          },
+          {
+            "text": "are",
+            "start": 22.4,
+            "end": 22.66
+          },
+          {
+            "text": "still",
+            "start": 22.66,
+            "end": 22.92
+          },
+          {
+            "text": "inside.",
+            "start": 22.92,
+            "end": 23.34
+          }
+        ]
+      },
+      {
+        "kind": "story",
+        "words": [
+          {
+            "text": "I’ll",
+            "start": 25.2,
+            "end": 25.52
+          },
+          {
+            "text": "warn",
+            "start": 25.52,
+            "end": 25.74
+          },
+          {
+            "text": "them.",
+            "start": 25.74,
+            "end": 26.22
+          },
+          {
+            "text": "Hit",
+            "start": 27.28,
+            "end": 27.44
+          },
+          {
+            "text": "Drelvorn’s",
+            "start": 27.44,
+            "end": 28.02
+          },
+          {
+            "text": "reactor.",
+            "start": 28.02,
+            "end": 28.32
+          }
+        ]
+      }
+    ]
+  }
+}

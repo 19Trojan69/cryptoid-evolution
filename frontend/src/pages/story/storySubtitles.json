@@ -35,6 +35,14 @@
       "Der Konvoi folgte ihr direkt in einen Hinterhalt. Ihr Schiff liegt genau vor uns.",
       "Feuer frei, Pilot. Mach den Heimweg frei."
     ],
+    "korvessa-outro": [
+      "Pilot, Korvessas Relais ist ausgefallen.",
+      "Der vorderste Frachter hat seine Ladelichter eingeschaltet.",
+      "Seine Crew markiert einen Weg durch die Trümmer.",
+      "Ich rufe die Frachter einzeln auf. Zwei haben schon geantwortet.",
+      "Halte den Weg für die anderen frei, Pilot.",
+      "Ich will hören, wie sich auch die letzte Crew meldet."
+    ],
     "level-three": [
       "Pilot, Korvessa ist besiegt. Alle Besatzungen des Konvois sind in Sicherheit.",
       "Der letzte Frachter brachte eine Aufnahme des Hinterhalts mit.",
@@ -42,6 +50,14 @@
       "Ihre Familien warten dort in Schutzräumen.",
       "Bleib an dem Schiff dran.",
       "Ich durchsuche Korvessas Archiv, während du unterwegs bist."
+    ],
+    "drelvorn": [
+      "Pilot, Korvessas Archiv bestätigt es.",
+      "Das Schiff, dem du gefolgt bist, ist Drelvorn, der Siegelräuber.",
+      "Sein Wächter stahl während des Aufstands die Siegel der Flottenkommandanten.",
+      "Genesis hat gerade einen Evakuierungsbefehl erhalten. Er trägt eines dieser Siegel.",
+      "Die Türen der Schutzräume öffnen sich. Die Familien der Konvoi-Crews sind noch drinnen.",
+      "Ich warne sie. Triff Drelvorns Reaktor."
     ]
   },
   "es": {
@@ -80,6 +96,14 @@
       "El convoy la siguió directo a una emboscada. Su nave está justo enfrente.",
       "Fuego a discreción, piloto. Abre una ruta de regreso."
     ],
+    "korvessa-outro": [
+      "Piloto, el repetidor de Korvessa ha caído.",
+      "El carguero que va al frente ha encendido las luces de carga.",
+      "Su tripulación está señalando un paso entre los restos.",
+      "Estoy llamando a las naves del convoy una por una. Dos ya han respondido.",
+      "Mantén la ruta despejada para las demás, piloto.",
+      "Quiero oír cómo se reporta la última tripulación."
+    ],
     "level-three": [
       "Piloto, Korvessa ha caído. Todas las tripulaciones del convoy se han salvado.",
       "El último carguero trajo una grabación de la emboscada.",
@@ -87,6 +111,14 @@
       "Sus familias esperan allí, en los refugios.",
       "Sigue el rastro de esa nave.",
       "Revisaré el archivo de Korvessa mientras estés en vuelo."
+    ],
+    "drelvorn": [
+      "Piloto, el archivo de Korvessa lo confirma.",
+      "La nave que seguiste es Drelvorn, el ladrón de sellos.",
+      "Su guardián robó los sellos de los comandantes de la flota durante la revuelta.",
+      "Génesis acaba de recibir una orden de evacuación firmada con uno de esos sellos.",
+      "Las puertas de los refugios se están abriendo. Las familias de las tripulaciones del convoy siguen dentro.",
+      "Voy a avisarles. Ataca el reactor de Drelvorn."
     ]
   },
   "fr": {
@@ -125,6 +157,14 @@
       "Le convoi l’a suivie droit dans une embuscade. Son vaisseau est droit devant.",
       "Feu à volonté, pilote. Ouvre une voie de retour."
     ],
+    "korvessa-outro": [
+      "Pilote, le relais de Korvessa est hors service.",
+      "Le cargo de tête a allumé ses feux de chargement.",
+      "Son équipage balise un passage à travers les débris.",
+      "J’appelle les vaisseaux du convoi un par un. Deux ont déjà répondu.",
+      "Dégage la voie pour les autres, pilote.",
+      "Je veux entendre le dernier équipage se signaler."
+    ],
     "level-three": [
       "Pilote, Korvessa est vaincue. Tous les équipages du convoi s’en sont sortis.",
       "Le dernier cargo a rapporté un enregistrement de l’embuscade.",
@@ -132,6 +172,14 @@
       "Leurs familles attendent dans les abris là-bas.",
       "Suis la trace de ce vaisseau.",
       "Je fouillerai les archives de Korvessa pendant ton vol."
+    ],
+    "drelvorn": [
+      "Pilote, les archives de Korvessa le confirment.",
+      "Le vaisseau que tu as suivi est Drelvorn, le voleur de sceaux.",
+      "Son gardien a volé les sceaux des commandants de flotte pendant le soulèvement.",
+      "Genesis vient de recevoir un ordre d’évacuation signé avec l’un de ces sceaux.",
+      "Les portes des abris s’ouvrent. Les familles des équipages du convoi sont encore à l’intérieur.",
+      "Je vais les prévenir. Vise le réacteur de Drelvorn."
     ]
   },
   "pt": {
@@ -170,6 +218,14 @@
       "O comboio seguiu-a diretamente para uma emboscada. A nave dela está mesmo à frente.",
       "Fogo à vontade, piloto. Abre um caminho de regresso."
     ],
+    "korvessa-outro": [
+      "Piloto, o retransmissor de Korvessa caiu.",
+      "O cargueiro da frente acendeu as luzes de carga.",
+      "A tripulação está a assinalar uma passagem entre os destroços.",
+      "Estou a chamar as naves do comboio uma a uma. Duas já responderam.",
+      "Mantém a rota livre para as restantes, piloto.",
+      "Quero ouvir a última tripulação responder."
+    ],
     "level-three": [
       "Piloto, Korvessa caiu. Todas as tripulações do comboio escaparam.",
       "O último cargueiro trouxe uma gravação da emboscada.",
@@ -177,6 +233,14 @@
       "As suas famílias esperam lá, nos abrigos.",
       "Segue o rasto dessa nave.",
       "Vou examinar o arquivo de Korvessa enquanto estiveres em voo."
+    ],
+    "drelvorn": [
+      "Piloto, o arquivo de Korvessa confirma-o.",
+      "A nave que seguiste é Drelvorn, o ladrão de selos.",
+      "O seu guardião roubou os selos dos comandantes da frota durante a revolta.",
+      "Genesis acaba de receber uma ordem de evacuação assinada com um desses selos.",
+      "As portas dos abrigos estão a abrir-se. As famílias das tripulações do comboio ainda estão lá dentro.",
+      "Vou avisá-las. Ataca o reator de Drelvorn."
     ]
   },
   "it": {
@@ -215,6 +279,14 @@
       "Il convoglio l’ha seguita dritto in un’imboscata. La sua nave è proprio davanti a noi.",
       "Fuoco a volontà, pilota. Apri una via per tornare a casa."
     ],
+    "korvessa-outro": [
+      "Pilota, il ripetitore di Korvessa è fuori uso.",
+      "Il cargo in testa ha acceso le luci di carico.",
+      "Il suo equipaggio sta segnalando un passaggio tra i rottami.",
+      "Sto chiamando le navi del convoglio una alla volta. Due hanno già risposto.",
+      "Tieni libera la rotta per le altre, pilota.",
+      "Voglio sentire l’ultimo equipaggio rispondere all’appello."
+    ],
     "level-three": [
       "Pilota, Korvessa è caduta. Tutti gli equipaggi del convoglio sono in salvo.",
       "L’ultimo cargo ha riportato una registrazione dell’imboscata.",
@@ -222,6 +294,14 @@
       "Le loro famiglie aspettano nei rifugi, laggiù.",
       "Resta sulla scia di quella nave.",
       "Esaminerò l’archivio di Korvessa mentre sei in volo."
+    ],
+    "drelvorn": [
+      "Pilota, l’archivio di Korvessa lo conferma.",
+      "La nave che hai seguito è Drelvorn, il Ladro di Sigilli.",
+      "Il suo guardiano ha rubato i sigilli dei comandanti della flotta durante la rivolta.",
+      "Genesis ha appena ricevuto un ordine di evacuazione firmato con uno di quei sigilli.",
+      "Le porte dei rifugi si stanno aprendo. Le famiglie degli equipaggi del convoglio sono ancora dentro.",
+      "Le avverto io. Colpisci il reattore di Drelvorn."
     ]
   },
   "pl": {
@@ -260,6 +340,14 @@
       "Konwój poleciał za nią prosto w zasadzkę. Jej statek jest tuż przed nami.",
       "Ognia, pilocie. Otwórz drogę powrotną."
     ],
+    "korvessa-outro": [
+      "Pilocie, przekaźnik Korvessy przestał działać.",
+      "Pierwszy frachtowiec włączył światła ładunkowe.",
+      "Jego załoga wyznacza przejście przez szczątki.",
+      "Wywołuję statki konwoju po kolei. Dwa już odpowiedziały.",
+      "Utrzymaj wolną drogę dla reszty, pilocie.",
+      "Chcę usłyszeć meldunek ostatniej załogi."
+    ],
     "level-three": [
       "Pilocie, Korvessa pokonana. Wszystkie załogi konwoju ocalały.",
       "Ostatni frachtowiec przywiózł nagranie zasadzki.",
@@ -267,6 +355,14 @@
       "Rodziny załóg czekają tam w schronach.",
       "Leć za tym statkiem.",
       "Przejrzę archiwum Korvessy, gdy będziesz w drodze."
+    ],
+    "drelvorn": [
+      "Pilocie, archiwum Korvessy to potwierdza.",
+      "Statek, za którym leciałeś, to Drelvorn, Złodziej Pieczęci.",
+      "Jego strażnik ukradł pieczęcie dowódców floty podczas powstania.",
+      "Genesis właśnie otrzymało rozkaz ewakuacji podpisany jedną z tych pieczęci.",
+      "Drzwi schronów się otwierają. Rodziny załóg konwoju wciąż są w środku.",
+      "Ostrzegę ich. Uderz w reaktor Drelvorna."
     ]
   },
   "cs": {
@@ -305,6 +401,14 @@
       "Konvoj ji následoval přímo do léčky. Její loď je přímo před námi.",
       "Palba povolena, pilote. Uvolněte cestu domů."
     ],
+    "korvessa-outro": [
+      "Pilote, Korvessin retranslátor je mimo provoz.",
+      "První nákladní loď rozsvítila nákladová světla.",
+      "Její posádka vyznačuje průlet mezi troskami.",
+      "Volám lodě konvoje jednu po druhé. Dvě už se ozvaly.",
+      "Udrž průlet volný pro ostatní, pilote.",
+      "Chci slyšet hlášení i od poslední posádky."
+    ],
     "level-three": [
       "Pilote, Korvessa je poražena. Všechny posádky konvoje se zachránily.",
       "Poslední nákladní loď přivezla záznam přepadení.",
@@ -312,6 +416,14 @@
       "Rodiny posádek tam čekají v krytech.",
       "Drž se té lodi.",
       "Prohledám archiv Korvessy, zatímco budeš na cestě."
+    ],
+    "drelvorn": [
+      "Pilote, Korvessin archiv to potvrzuje.",
+      "Loď, kterou jsi sledoval, je Drelvorn, Zloděj pečetí.",
+      "Jeho strážce během povstání ukradl pečeti velitelů flotily.",
+      "Genesis právě obdržela evakuační příkaz podepsaný jednou z těch pečetí.",
+      "Dveře krytů se otevírají. Rodiny posádek konvoje jsou stále uvnitř.",
+      "Varuji je. Zasáhni Drelvornův reaktor."
     ]
   },
   "sk": {
@@ -350,6 +462,14 @@
       "Konvoj ju nasledoval priamo do pasce. Jej loď je rovno pred nami.",
       "Paľba povolená, pilot. Uvoľnite cestu domov."
     ],
+    "korvessa-outro": [
+      "Pilot, Korvessin retranslátor je mimo prevádzky.",
+      "Vedúca nákladná loď rozsvietila nákladné svetlá.",
+      "Jej posádka vyznačuje priechod medzi troskami.",
+      "Volám lode konvoja jednu po druhej. Dve sa už ozvali.",
+      "Udržuj priechod voľný pre ostatné lode, pilot.",
+      "Chcem počuť hlásenie aj od poslednej posádky."
+    ],
     "level-three": [
       "Pilot, Korvessa je porazená. Všetky posádky konvoja sa zachránili.",
       "Posledná nákladná loď priniesla záznam prepadu.",
@@ -357,6 +477,14 @@
       "Rodiny posádok tam čakajú v krytoch.",
       "Drž sa stopy tej lode.",
       "Kým budeš na ceste, prehľadám archív Korvessy."
+    ],
+    "drelvorn": [
+      "Pilot, Korvessin archív to potvrdzuje.",
+      "Loď, ktorú si sledoval, je Drelvorn, Zlodej pečatí.",
+      "Jeho strážca počas povstania ukradol pečate veliteľov flotily.",
+      "Genesis práve dostala príkaz na evakuáciu podpísaný jednou z tých pečatí.",
+      "Dvere krytov sa otvárajú. Rodiny posádok konvoja sú stále vnútri.",
+      "Varujem ich. Zasiahni Drelvornov reaktor."
     ]
   },
   "ru": {
@@ -395,6 +523,14 @@
       "Конвой последовал за ней прямо в засаду. Её корабль прямо по курсу.",
       "Огонь разрешён, пилот. Проложи путь домой."
     ],
+    "korvessa-outro": [
+      "Пилот, ретранслятор Корвессы вышел из строя.",
+      "Ведущий грузовой корабль включил грузовые огни.",
+      "Его экипаж обозначает проход среди обломков.",
+      "Вызываю корабли конвоя по очереди. Два уже ответили.",
+      "Сохраняй проход для остальных, пилот.",
+      "Хочу услышать доклад последнего экипажа."
+    ],
     "level-three": [
       "Пилот, Корвесса повержена. Все экипажи конвоя спаслись.",
       "Последний грузовой корабль привёз запись засады.",
@@ -402,6 +538,14 @@
       "Семьи экипажей ждут там, в укрытиях.",
       "Следуй за этим кораблём.",
       "Я изучу архив Корвессы, пока ты в полёте."
+    ],
+    "drelvorn": [
+      "Пилот, архив Корвессы это подтверждает.",
+      "Корабль, за которым ты следил, — Дрелворн, Похититель печатей.",
+      "Во время восстания его страж похитил печати командиров флота.",
+      "На Генезис только что поступил приказ об эвакуации с одной из этих печатей.",
+      "Двери убежищ открываются. Семьи экипажей конвоя всё ещё внутри.",
+      "Я их предупрежу. Бей по реактору Дрелворна."
     ]
   },
   "uk": {
@@ -440,6 +584,14 @@
       "Конвой пішов за нею просто в засідку. Її корабель прямо попереду.",
       "Вогонь дозволено, пілоте. Відкрий шлях додому."
     ],
+    "korvessa-outro": [
+      "Пілоте, ретранслятор Корвесси вийшов з ладу.",
+      "Головне вантажне судно ввімкнуло вантажні вогні.",
+      "Його екіпаж позначає прохід крізь уламки.",
+      "Викликаю кораблі конвою по одному. Два вже відповіли.",
+      "Тримай шлях вільним для решти, пілоте.",
+      "Хочу почути доповідь і від останнього екіпажу."
+    ],
     "level-three": [
       "Пілоте, Корвессу переможено. Усі екіпажі конвою врятувалися.",
       "Останнє вантажне судно привезло запис засідки.",
@@ -447,6 +599,14 @@
       "Родини екіпажів чекають там, в укриттях.",
       "Тримайся сліду того корабля.",
       "Я перегляну архів Корвесси, поки ти в польоті."
+    ],
+    "drelvorn": [
+      "Пілоте, архів Корвесси це підтверджує.",
+      "Корабель, за яким ти стежив, — Дрелворн, Викрадач печаток.",
+      "Під час повстання його вартовий викрав печатки командувачів флоту.",
+      "На Генезис щойно надійшов наказ про евакуацію з однією з цих печаток.",
+      "Двері укриттів відчиняються. Родини екіпажів конвою все ще всередині.",
+      "Я їх попереджу. Влуч у реактор Дрелворна."
     ]
   },
   "hr": {
@@ -485,6 +645,14 @@
       "Konvoj ju je slijedio ravno u zasjedu. Njezin je brod točno ispred nas.",
       "Vatra po volji, pilote. Otvori put kući."
     ],
+    "korvessa-outro": [
+      "Pilote, Korvessin je relej izvan pogona.",
+      "Vodeći teretnjak upalio je teretna svjetla.",
+      "Njegova posada označava prolaz kroz olupine.",
+      "Prozivam brodove konvoja jedan po jedan. Dva su se već javila.",
+      "Drži prolaz slobodnim za ostale, pilote.",
+      "Želim čuti da se javila i posljednja posada."
+    ],
     "level-three": [
       "Pilote, Korvessa je poražena. Sve posade konvoja su se izvukle.",
       "Posljednji teretni brod donio je snimku zasjede.",
@@ -492,6 +660,14 @@
       "Obitelji posada čekaju ondje u skloništima.",
       "Prati trag tog broda.",
       "Pregledat ću Korvessinu arhivu dok si u letu."
+    ],
+    "drelvorn": [
+      "Pilote, Korvessin arhiv to potvrđuje.",
+      "Brod koji si slijedio je Drelvorn, Kradljivac pečata.",
+      "Njegov je čuvar tijekom pobune ukrao pečate zapovjednika flote.",
+      "Genesis je upravo primio naredbu za evakuaciju potpisanu jednim od tih pečata.",
+      "Vrata skloništa se otvaraju. Obitelji posada konvoja još su unutra.",
+      "Upozorit ću ih. Pogodi Drelvornov reaktor."
     ]
   },
   "sr": {
@@ -530,6 +706,14 @@
       "Конвој ју је пратио право у заседу. Њен брод је право испред нас.",
       "Отвори ватру, пилоте. Пробиј пут кући."
     ],
+    "korvessa-outro": [
+      "Пилоте, Корвесин релеј је ван строја.",
+      "Водећи теретњак је упалио утоварна светла.",
+      "Његова посада обележава пролаз кроз олупине.",
+      "Прозивам бродове конвоја један по један. Два су се већ јавила.",
+      "Држи пролаз слободним за остале, пилоте.",
+      "Желим да чујем да се јавила и последња посада."
+    ],
     "level-three": [
       "Пилоте, Корвеса је поражена. Све посаде конвоја су се извукле.",
       "Последњи теретни брод донео је снимак заседе.",
@@ -537,6 +721,14 @@
       "Породице посада тамо чекају у склоништима.",
       "Прати траг тог брода.",
       "Прегледаћу архиву Корвесе док си у лету."
+    ],
+    "drelvorn": [
+      "Пилоте, Корвесин архив то потврђује.",
+      "Брод који си пратио је Дрелворн, Крадљивац печата.",
+      "Његов чувар је током побуне украо печате команданата флоте.",
+      "Генезис је управо примио наредбу за евакуацију потписану једним од тих печата.",
+      "Врата склоништа се отварају. Породице посада конвоја још су унутра.",
+      "Упозорићу их. Погоди Дрелворнов реактор."
     ]
   },
   "tr": {
@@ -575,6 +767,14 @@
       "Konvoy onu izleyip doğrudan pusuya düştü. Gemisi tam karşımızda.",
       "Ateş serbest, pilot. Eve dönüş yolunu aç."
     ],
+    "korvessa-outro": [
+      "Pilot, Korvessa’nın aktarıcısı devre dışı.",
+      "Öndeki yük gemisi kargo ışıklarını yaktı.",
+      "Mürettebatı enkazın arasından bir geçit işaretliyor.",
+      "Konvoydaki gemileri tek tek çağırıyorum. İkisi şimdiden yanıt verdi.",
+      "Kalanlar için rotayı açık tut, pilot.",
+      "Son mürettebatın da haber verdiğini duymak istiyorum."
+    ],
     "level-three": [
       "Pilot, Korvessa yenildi. Konvoydaki tüm mürettebat kurtuldu.",
       "Son yük gemisi pusunun kaydını getirdi.",
@@ -582,6 +782,14 @@
       "Aileleri oradaki sığınaklarda bekliyor.",
       "O geminin izini sür.",
       "Sen uçarken Korvessa’nın arşivini inceleyeceğim."
+    ],
+    "drelvorn": [
+      "Pilot, Korvessa’nın arşivi bunu doğruluyor.",
+      "Takip ettiğin gemi, Mühür Hırsızı Drelvorn.",
+      "Muhafızı, ayaklanma sırasında filo komutanlarının mühürlerini çaldı.",
+      "Genesis az önce o mühürlerden biriyle imzalanmış bir tahliye emri aldı.",
+      "Sığınak kapıları açılıyor. Konvoy mürettebatının aileleri hâlâ içeride.",
+      "Onları uyaracağım. Drelvorn’un reaktörünü vur."
     ]
   },
   "hu": {
@@ -620,6 +828,14 @@
       "A konvoj őt követte, egyenesen a csapdába. A hajója épp előttünk van.",
       "Szabad a tűz, pilóta. Nyiss utat hazafelé."
     ],
+    "korvessa-outro": [
+      "Pilóta, Korvessa átjátszója leállt.",
+      "Az élen haladó teherhajó felkapcsolta a rakodófényeit.",
+      "A legénysége átjárót jelöl ki a roncsok között.",
+      "Egyenként hívom a konvoj hajóit. Kettő már válaszolt.",
+      "Tartsd szabadon az útvonalat a többieknek, pilóta.",
+      "Hallani akarom, ahogy az utolsó legénység is bejelentkezik."
+    ],
     "level-three": [
       "Pilóta, Korvessa elesett. A konvoj minden tagja megmenekült.",
       "Az utolsó teherhajó elhozta a rajtaütés felvételét.",
@@ -627,6 +843,14 @@
       "A legénység családjai ott várnak az óvóhelyeken.",
       "Maradj annak a hajónak a nyomában.",
       "Átnézem Korvessa archívumát, amíg úton vagy."
+    ],
+    "drelvorn": [
+      "Pilóta, Korvessa archívuma megerősíti.",
+      "A hajó, amelyet követtél, Drelvorn, a Pecsétlopó.",
+      "Az őrzője a felkelés idején ellopta a flottaparancsnokok pecsétjeit.",
+      "Genesis most kapott egy kiürítési parancsot az egyik ellopott pecséttel.",
+      "Az óvóhelyek ajtói nyílnak. A konvoj legénységének családjai még bent vannak.",
+      "Figyelmeztetem őket. Célozd Drelvorn reaktorát."
     ]
   },
   "ro": {
@@ -665,6 +889,14 @@
       "Convoiul a urmat-o drept într-o ambuscadă. Nava ei e chiar în fața noastră.",
       "Foc la discreție, pilot. Deschide drumul spre casă."
     ],
+    "korvessa-outro": [
+      "Pilot, releul Korvessei a căzut.",
+      "Nava de marfă din frunte și-a aprins luminile de marfă.",
+      "Echipajul ei marchează un culoar prin resturi.",
+      "Chem navele convoiului una câte una. Două au răspuns deja.",
+      "Ține culoarul liber pentru celelalte, pilot.",
+      "Vreau să aud cum răspunde și ultimul echipaj."
+    ],
     "level-three": [
       "Pilotule, Korvessa a căzut. Toate echipajele convoiului au scăpat.",
       "Ultima navă de marfă a adus o înregistrare a ambuscadei.",
@@ -672,6 +904,14 @@
       "Familiile echipajelor așteaptă acolo, în adăposturi.",
       "Urmărește nava aceea.",
       "Voi cerceta arhiva lui Korvessa cât timp ești în zbor."
+    ],
+    "drelvorn": [
+      "Pilot, arhiva Korvessei confirmă.",
+      "Nava pe care ai urmărit-o este Drelvorn, Hoțul Sigiliilor.",
+      "Paznicul ei a furat sigiliile comandanților flotei în timpul revoltei.",
+      "Genesis tocmai a primit un ordin de evacuare semnat cu unul dintre acele sigilii.",
+      "Ușile adăposturilor se deschid. Familiile echipajelor convoiului sunt încă înăuntru.",
+      "Îi avertizez eu. Lovește reactorul lui Drelvorn."
     ]
   },
   "th": {
@@ -710,6 +950,14 @@
       "ขบวนยานตามเธอเข้าไปติดกับดัก ยานของเธออยู่ตรงหน้าเรา",
       "นักบิน อนุญาตให้เปิดฉากยิง เปิดทางกลับบ้านให้พวกเขา"
     ],
+    "korvessa-outro": [
+      "นักบิน สถานีถ่ายทอดสัญญาณของ คอร์เวสซา ดับแล้ว",
+      "ยานขนส่งลำนำเปิดไฟขนถ่ายสินค้าแล้ว",
+      "ลูกเรือกำลังใช้ไฟทำเครื่องหมายเส้นทางผ่านซากยาน",
+      "ฉันกำลังเรียกยานในขบวนทีละลำ สองลำตอบกลับแล้ว",
+      "เปิดทางให้ยานลำที่เหลือด้วย นักบิน",
+      "ฉันอยากได้ยินลูกเรือลำสุดท้ายรายงานตัว"
+    ],
     "level-three": [
       "นักบิน คอร์เวสซาพ่ายแล้ว ลูกเรือทุกลำในขบวนรอดมาได้",
       "เรือบรรทุกสินค้าลำสุดท้ายนำบันทึกการซุ่มโจมตีกลับมาด้วย",
@@ -717,6 +965,14 @@
       "ครอบครัวของลูกเรือรออยู่ในที่หลบภัยที่นั่น",
       "ตามรอยยานลำนั้นไป",
       "ระหว่างที่คุณบินไป ฉันจะค้นดูข้อมูลในคลังของคอร์เวสซา"
+    ],
+    "drelvorn": [
+      "นักบิน คลังข้อมูลของ คอร์เวสซา ยืนยันแล้ว",
+      "ยานที่คุณตามมาคือ เดรลวอร์น จอมขโมยตราประทับ",
+      "ผู้พิทักษ์ของยานขโมยตราประทับของผู้บัญชาการกองยานระหว่างการก่อกบฏ",
+      "เจเนซิส เพิ่งได้รับคำสั่งอพยพที่ลงนามด้วยตราประทับดวงหนึ่ง",
+      "ประตูที่หลบภัยกำลังเปิด ครอบครัวของลูกเรือในขบวนยังอยู่ข้างใน",
+      "ฉันจะเตือนพวกเขา โจมตีเตาปฏิกรณ์ของ เดรลวอร์น"
     ]
   },
   "zh": {
@@ -755,6 +1011,14 @@
       "补给船队跟着她一头闯进了伏击圈。她的飞船就在正前方。",
       "飞行员，可以自由开火。为他们打开回家的路。"
     ],
+    "korvessa-outro": [
+      "飞行员，科尔维萨的中继器已瘫痪。",
+      "领航货船打开了货舱照明灯。",
+      "船员正在用灯光标出穿过残骸的路线。",
+      "我在逐艘呼叫船队。已有两艘回应。",
+      "飞行员，给其余货船留出通道。",
+      "我要听到最后一组船员报到。"
+    ],
     "level-three": [
       "飞行员，科尔维萨已被击败。船队的所有船员都脱险了。",
       "最后一艘货船带回了伏击的记录。",
@@ -762,6 +1026,14 @@
       "船员的家属正在那里的避难所等待。",
       "跟上那艘飞船。",
       "你在航行时，我会查阅科尔维萨的档案。"
+    ],
+    "drelvorn": [
+      "飞行员，科尔维萨的档案证实了这一点。",
+      "你追踪的飞船是德雷尔沃恩，印记窃贼。",
+      "它的守卫在叛乱期间偷走了舰队指挥官的印章。",
+      "创世星刚收到撤离命令，上面盖着其中一枚印章。",
+      "避难所的大门正在开启。船队船员的家属还在里面。",
+      "我来警告他们。击中德雷尔沃恩的反应堆。"
     ]
   },
   "vi": {
@@ -800,6 +1072,14 @@
       "Đoàn tàu theo cô ta vào thẳng ổ phục kích. Tàu của cô ta ở ngay phía trước.",
       "Được phép khai hỏa, phi công. Mở đường về nhà cho họ."
     ],
+    "korvessa-outro": [
+      "Phi công, trạm tiếp sóng của Korvessa đã ngừng hoạt động.",
+      "Tàu hàng dẫn đầu đã bật đèn khoang hàng.",
+      "Thủy thủ đoàn đang dùng đèn để đánh dấu lối đi qua mảnh vỡ.",
+      "Tôi đang gọi từng tàu trong đoàn. Hai tàu đã trả lời.",
+      "Giữ lối đi thông thoáng cho các tàu còn lại nhé, phi công.",
+      "Tôi muốn nghe cả đội cuối cùng báo đã qua."
+    ],
     "level-three": [
       "Phi công, Korvessa đã bị đánh bại. Toàn bộ thủy thủ đoàn của đoàn tàu đã thoát hiểm.",
       "Tàu chở hàng cuối cùng đã mang về bản ghi của cuộc phục kích.",
@@ -807,6 +1087,14 @@
       "Gia đình các thủy thủ đang chờ trong hầm trú ẩn ở đó.",
       "Bám theo con tàu đó.",
       "Tôi sẽ xem hồ sơ của Korvessa trong lúc anh đang bay."
+    ],
+    "drelvorn": [
+      "Phi công, kho lưu trữ của Korvessa xác nhận điều đó.",
+      "Con tàu anh bám theo là Drelvorn, Kẻ Trộm Ấn Tín.",
+      "Kẻ canh giữ nó đã đánh cắp ấn tín của các chỉ huy hạm đội trong cuộc nổi dậy.",
+      "Genesis vừa nhận lệnh sơ tán mang một trong những ấn tín ấy.",
+      "Cửa hầm trú ẩn đang mở. Gia đình các thủy thủ trong đoàn vẫn ở bên trong.",
+      "Tôi sẽ cảnh báo họ. Hãy đánh vào lò phản ứng của Drelvorn."
     ]
   }
 }

@@ -101,7 +101,7 @@ import { activateCollectedPower } from "./collectedPower";
 import { leaveGameFullscreen } from "./gameFullscreen";
 import StoryBriefing from "./story/StoryBriefing";
 import { storyBriefingsEnabled } from "./story/storyPreferences";
-import { bossStoryAtSector, levelStoryAtSector, storyScenes, type StoryScene } from "./story/storyScenes";
+import { bossOutroAtSector, bossStoryAtSector, levelStoryAtSector, storyScenes, type StoryScene } from "./story/storyScenes";
 import { storyFadeMs } from "./story/storyFades";
 import { levelDifficulty, MAX_DIFFICULTY_LEVEL } from "./levelDifficulty";
 import { createDoubleKillCombo, creditComboDefeat, DOUBLE_KILL_SCORE, DOUBLE_KILL_SHARDS, type DoubleKillCombo } from "./doubleKillCombo";
@@ -1915,8 +1915,9 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
               if (state.encounter === 'bonus') recordOwnerResourceSnapshot('resource-bonus-start');
               else if (state.encounter === 'normal') recordOwnerResourceSnapshot('resource-normal-start');
             }
-            const levelBriefing = clearEncounter === 'bonus' ? levelStoryAtSector(next.sector) : undefined;
-            if (levelBriefing) queueStory(levelBriefing);
+            const nextBriefing = clearEncounter === 'boss-clear' ? bossOutroAtSector(next.sector)
+              : clearEncounter === 'bonus' ? levelStoryAtSector(next.sector) : undefined;
+            if (nextBriefing) queueStory(nextBriefing);
             forceScene = true;
             return;
           }

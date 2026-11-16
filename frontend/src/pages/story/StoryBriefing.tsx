@@ -44,7 +44,7 @@ function chooseAppearance() {
 
 const loadImage = (name: string) => {
   const image = new Image();
-  image.src = '/story/' + name;
+  image.src = name.startsWith('/') ? name : '/story/' + name;
   return image.decode().then(() => image);
 };
 
