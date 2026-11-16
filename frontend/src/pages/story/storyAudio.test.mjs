@@ -7,7 +7,7 @@ const definition = { title: 'Korvessa', audio: 'korvessa-intro.mp3', timing: { d
 const cues = [{ text: 'Pilot', start: .2, end: 10 }];
 const source = '/story/' + definition.audio;
 
-function setup({ withAudio = true, startAudio, artwork = false, reducedMotion = false } = {}) {
+function setup({ preview, withAudio = true, startAudio, artwork = false, reducedMotion = false } = {}) {
   let time = 1000;
   let frameId = 0;
   const frames = new Map();
@@ -40,7 +40,7 @@ function setup({ withAudio = true, startAudio, artwork = false, reducedMotion = 
   };
   const elements = { section: { focus() {} }, canvas };
   const host = componentHost('src/pages/story/StoryBriefing.tsx', 'StoryBriefing', {
-    scene: 'korvessa', withAudio, volume: 60, unlocked: false,
+    scene: 'korvessa', preview, withAudio, volume: 60, unlocked: false,
     prepareAudio: path => {
       preparations.push(path);
       player.currentSource = path;
@@ -237,20 +237,19 @@ test('reduced motion still gives audible tracks their full fade', async () => {
   story.unmount();
 });
 
-test('admin preview primes the narration muted and unmutes after rewinding', () => {
+test('admin preview starts narration on the tap without muting the media element or rewinding', () => {
   const scene = 'korvessa-outro';
   const source = '/story/korvessa-outro.mp3';
+  const playback = Promise.resolve(true);
   let primed;
-  let paused;
   class PreviewPlayer {
     audio = { muted: false, loop: true, currentTime: 0 };
-    constructor(src) { this.currentSource = src; }
+    constructor(src, volume) { this.currentSource = src; this.volume = volume; }
     play() {
-      primed = { ...this.audio };
+      primed = { ...this.audio, volume: this.volume };
       this.audio.currentTime = .6;
-      return Promise.resolve(true);
+      return playback;
     }
-    pause() { paused = { ...this.audio }; }
     close() {}
   }
   const preview = componentHost('src/pages/AdminStoryScenes.tsx', 'AdminStoryScenes', {
@@ -277,9 +276,52 @@ test('admin preview primes the narration muted and unmutes after rewinding', () 
     node.props.children.some(child => child.props?.children.includes('Clear the Route'))).props.onClick();
   preview.render();
   const briefing = preview.nodes().find(node => node.type === preview.env.StoryBriefing);
-  assert.deepEqual(primed, { muted: true, loop: false, currentTime: 0 });
+  assert.equal(briefing.props.preview.playback, playback);
+  assert.deepEqual(primed, { muted: false, loop: false, currentTime: 0, volume: 0 });
   const player = briefing.props.prepareAudio(source);
-  assert.deepEqual(paused, { muted: true, loop: false, currentTime: .6 });
-  assert.deepEqual(player.audio, { muted: false, loop: false, currentTime: 0 });
+  assert.deepEqual(player.audio, { muted: false, loop: false, currentTime: .6 });
+  assert.equal(briefing.props.prepareAudio('/other.mp3'), null);
   preview.unmount();
+});
+
+test('admin preview keeps its crawl and offers audio retry when the media ends too early', async () => {
+  const story = setup({ preview: {}, artwork: true });
+  await story.flush();
+  assert.equal(story.phase(), 'briefing');
+  assert.deepEqual(story.starts, [0]);
+  story.audio.currentTime = .6;
+  story.tick(600);
+  story.audio.currentTime = definition.timing.duration;
+  story.audio.ended = true;
+  story.tick(16);
+  assert.equal(story.phase(), 'briefing');
+  story.audio.dispatchEvent(new Event('ended'));
+  story.tick(1000);
+  assert.ok(story.retry());
+  assert.ok(story.drawings.at(-1) > .6 && story.drawings.at(-1) < 2);
+  assert.deepEqual(story.transitions, []);
+  story.tick(8400);
+  assert.equal(story.phase(), 'leaving');
+  story.tick(storyFadeMs.briefingOut);
+  story.tick(storyFadeMs.gameIn);
+  assert.deepEqual(story.transitions, ['reveal', 'finish']);
+  story.unmount();
+});
+
+test('admin preview retains the tap playback request while a recording loads', async () => {
+  let loaded;
+  const playback = new Promise(resolve => { loaded = resolve; });
+  const story = setup({ preview: { playback } });
+  story.tick(5000);
+  assert.equal(story.retry(), undefined);
+  assert.deepEqual(story.starts, []);
+  story.player.playing = true;
+  loaded(true);
+  await story.flush();
+  story.audio.currentTime = 1;
+  story.tick(1000);
+  assert.equal(story.phase(), 'briefing');
+  assert.equal(story.retry(), undefined);
+  assert.ok(story.player.volume > 0);
+  story.unmount();
 });

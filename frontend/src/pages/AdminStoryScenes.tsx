@@ -18,7 +18,7 @@ const seconds = new Intl.NumberFormat('de-AT', { maximumFractionDigits: 1 });
 const ignoreReturn = () => {};
 
 export default function AdminStoryScenes({ onStartPreview }: { onStartPreview: () => void }) {
-  const [preview, setPreview] = useState<{ scene: StoryScene; volume: number; unlocked: boolean } | null>(null);
+  const [preview, setPreview] = useState<{ scene: StoryScene; volume: number; unlocked: boolean; playback?: Promise<boolean> } | null>(null);
   const dialogRef = useRef<HTMLDialogElement>(null);
   const playerRef = useRef<MusicPlayer | null>(null);
 
@@ -36,21 +36,13 @@ export default function AdminStoryScenes({ onStartPreview }: { onStartPreview: (
     playerRef.current?.close();
     const player = volume > 0 ? new MusicPlayer('/story/' + storyScenes[scene].audio, 0) : null;
     playerRef.current = player;
-    if (player) {
-      player.audio.loop = false;
-      // Mute the tap-initiated playback even when the host ignores media volume.
-      player.audio.muted = true;
-      void player.play();
-    }
-    setPreview({ scene, volume, unlocked });
+    if (player) player.audio.loop = false;
+    // Keep the playback request made during the tap. The briefing fades in its gain.
+    setPreview({ scene, volume, unlocked, playback: player?.play() });
   };
   const prepareAudio = useCallback((source: string) => {
     const player = playerRef.current;
-    if (!player || player.currentSource !== source) return null;
-    player.pause();
-    player.audio.currentTime = 0;
-    player.audio.muted = false;
-    return player;
+    return player?.currentSource === source ? player : null;
   }, []);
   const finish = useCallback(() => {
     playerRef.current?.close();
@@ -83,7 +75,7 @@ export default function AdminStoryScenes({ onStartPreview }: { onStartPreview: (
     ))}
     {preview && <dialog ref={dialogRef} className="admin-story-preview" aria-label={storyScenes[preview.scene].chapterTitle}
       onCancel={event => { event.preventDefault(); finish(); }}>
-      <StoryBriefing scene={preview.scene} withAudio={preview.volume > 0} volume={preview.volume}
+      <StoryBriefing preview={preview} scene={preview.scene} withAudio={preview.volume > 0} volume={preview.volume}
         unlocked={preview.unlocked} prepareAudio={prepareAudio} onReturn={ignoreReturn} onFinish={finish} />
     </dialog>}
   </section>;

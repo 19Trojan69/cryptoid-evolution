@@ -12,6 +12,7 @@ import './storyBriefing.css';
 
 type Props = {
   scene: StoryScene;
+  preview?: { playback?: Promise<boolean> };
   withAudio: boolean;
   volume: number;
   prepareAudio: (source: string) => MusicPlayer | null;
@@ -49,7 +50,7 @@ const loadImage = (name: string) => {
   return image.decode().then(() => image);
 };
 
-export default function StoryBriefing({ scene, withAudio, volume, prepareAudio, unlocked, onCovered, onReturn, onFinish }: Props) {
+export default function StoryBriefing({ scene, preview, withAudio, volume, prepareAudio, unlocked, onCovered, onReturn, onFinish }: Props) {
   const { locale } = useLocale();
   const dialogRef = useRef<HTMLElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -62,7 +63,8 @@ export default function StoryBriefing({ scene, withAudio, volume, prepareAudio, 
   const exitRef = useRef<() => void>(() => {});
   const retryAudioRef = useRef<() => void>(() => {});
   const [artReady, setArtReady] = useState(false);
-  const [phase, setPhase] = useState<Phase>('covering');
+  const initialPhase = preview ? 'briefing' : 'covering';
+  const [phase, setPhase] = useState<Phase>(initialPhase);
   const [coverBlend, setCoverBlend] = useState(false);
   const [cueIndex, setCueIndex] = useState(-1);
   const [offerAudioRetry, setOfferAudioRetry] = useState(false);
@@ -97,7 +99,7 @@ export default function StoryBriefing({ scene, withAudio, volume, prepareAudio, 
     const boss = definition.boss;
     const media = window.matchMedia('(prefers-reduced-motion: reduce)');
     const reduced = () => media.matches || document.documentElement.dataset.motion === 'reduced';
-    const transition = transitionRef.current ??= { phase: 'covering', startedAt: performance.now() };
+    const transition = transitionRef.current ??= { phase: initialPhase, startedAt: performance.now() };
     const enterPhase = (next: Phase, now: number) => {
       transition.phase = next;
       transition.startedAt = now;
@@ -108,14 +110,20 @@ export default function StoryBriefing({ scene, withAudio, volume, prepareAudio, 
     let silentMs = 0, silentStart = performance.now();
     let visualMs = 0, lastVisualAt = silentStart;
     let player: MusicPlayer | null = null;
+    let previewPlayback = preview?.playback;
     let followsAudio = false, playPending = false, playGeneration = 0, suspended = false;
     let lastAudioMs = 0, lastAdvanceAt = silentStart, fadeInAt = 0;
     let audioLevel = 0, exitVolume = 0;
 
     const position = (now: number) => {
       if (suspended) return silentMs;
-      if (followsAudio && player) return Math.max(silentMs, player.audio.currentTime * 1000);
-      return silentMs + Math.max(0, now - silentStart);
+      const elapsed = silentMs + Math.max(0, now - silentStart);
+      if (!followsAudio || !player) return elapsed;
+      const mediaMs = player.audio.currentTime * 1000;
+      // A freshly started preview has no user seek. Ignore a clock that jumps
+      // ahead of the time the scene has actually had to play.
+      if (preview && (!Number.isFinite(mediaMs) || mediaMs > elapsed + 1000)) return lastAudioMs;
+      return Math.max(silentMs, mediaMs);
     };
     const setAudioLevel = (level: number) => {
       if (player?.currentSource !== source || Math.abs(audioLevel - level) < .25) return;
@@ -186,7 +194,7 @@ export default function StoryBriefing({ scene, withAudio, volume, prepareAudio, 
       const ms = position(now);
       if (followsAudio) {
         if (player?.playing && ms !== lastAudioMs) { lastAudioMs = ms; lastAdvanceAt = now; }
-        else if (now - lastAdvanceAt >= 3200) { continueSilently(); return; }
+        else if (now - lastAdvanceAt >= (preview && playPending ? 8000 : 3200)) { continueSilently(); return; }
         setAudioLevel(volumeRef.current * Math.min(1, Math.max(0, ms - fadeInAt) / 240));
       }
       if (ms >= story.duration * 1000) { exit(); return; }
@@ -260,14 +268,19 @@ export default function StoryBriefing({ scene, withAudio, volume, prepareAudio, 
       const played = (ok: boolean) => {
         if (generation !== playGeneration || disposed || transition.phase !== 'briefing') return;
         playPending = false;
-        if (ok) setOfferAudioRetry(false);
+        if (ok) {
+          if (preview) lastAdvanceAt = performance.now();
+          setOfferAudioRetry(false);
+        }
         else continueSilently();
       };
       try {
         if (player.audio.error) player.audio.load();
         if (silentMs > 0) player.audio.currentTime = silentMs / 1000;
         if (fromGesture) void player.unlock(true);
-        void player.play().then(played, () => played(false));
+        const playback = previewPlayback ?? player.play();
+        previewPlayback = undefined;
+        void playback.then(played, () => played(false));
       } catch { played(false); }
     };
     const suspend = () => {
@@ -289,7 +302,9 @@ export default function StoryBriefing({ scene, withAudio, volume, prepareAudio, 
       else schedule();
     };
     const ended = () => {
-      if (followsAudio && player?.currentSource === source && player.audio.ended && transition.phase === 'briefing') exit();
+      if (!followsAudio || player?.currentSource !== source || !player.audio.ended || transition.phase !== 'briefing') return;
+      if (preview && position(performance.now()) < story.duration * 1000 - 250) continueSilently();
+      else exit();
     };
     const audioError = () => { if (player?.currentSource === source && player.audio.error) continueSilently(); };
     const resizeObserver = typeof ResizeObserver === 'undefined' ? undefined : new ResizeObserver(resize);
@@ -324,7 +339,8 @@ export default function StoryBriefing({ scene, withAudio, volume, prepareAudio, 
       } catch { if (!disposed && transition.phase !== 'leaving' && transition.phase !== 'returning') showCaptions(); }
     };
     if (transition.phase === 'covering' || transition.phase === 'briefing') void prepare();
-    visibility();
+    if (preview && !document.hidden) play(silentStart);
+    else visibility();
     return () => {
       disposed = true;
       document.removeEventListener('visibilitychange', visibility);
@@ -339,7 +355,7 @@ export default function StoryBriefing({ scene, withAudio, volume, prepareAudio, 
       cinematic?.dispose();
       canvas.width = canvas.height = 0;
     };
-  }, [definition, cues, withAudio, unlocked, prepareAudio]);
+  }, [definition, cues, initialPhase, preview, withAudio, unlocked, prepareAudio]);
 
   return <section ref={dialogRef} className="story-briefing" role="dialog" aria-modal="true" tabIndex={-1} aria-label={definition.title}
     data-phase={phase} data-overlap={phase === 'covering' && coverBlend ? true : undefined} style={fadeStyle}
