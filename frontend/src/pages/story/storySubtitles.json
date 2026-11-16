@@ -179,6 +179,32 @@
       "die Brücke sei mit allen Besatzungen eingestürzt.",
       "Die beiden Crews …",
       "haben angeboten, sich live zu melden."
+    ],
+    "level-eight": [
+      "Die Brückencrews sind auf Sendung.",
+      "Einer hat gerade eine geborgene Pumpe in die Kamera gehalten.",
+      "Drei Nachbarhäfen haben nach den Warnungen trotzdem ihre Routen geschlossen.",
+      "Wir schicken den Bericht der Crews direkt an jede Leitstelle.",
+      "Flieg zu dem Sender …",
+      "bei dem es angefangen hat."
+    ],
+    "veshkorn": [
+      "Kontakt bestätigt.",
+      "Veshkorn …",
+      "der Gerüchtesender.",
+      "Wir kennen die Fanfare von seinem alten Nachrichtendienst.",
+      "Er warnt damit vor Katastrophen, die es nie gegeben hat.",
+      "Laut seiner jüngsten Meldung sollen die Versorgungsrouten wieder schließen.",
+      "Die Häfen sind bereit, ihre eigenen Piloten anzuhören.",
+      "Bring seinen Sender …",
+      "zum Schweigen."
+    ],
+    "veshkorn-outro": [
+      "Die Verkehrsleitstelle hat die Routen wieder geöffnet.",
+      "Die Funker gehen Wetter- und Frachtberichte mit den Crews durch, von denen sie stammen.",
+      "Ein Kapitän sagt, man habe ihm in der Panik einen ganzen Laderaum Saatgut angeboten.",
+      "Er schickt uns das Manifest.",
+      "Es gibt kein einziges Foto von der Verladung."
     ]
   },
   "es": {
@@ -361,6 +387,32 @@
       "que el puente se derrumbó con todos a bordo.",
       "Las dos tripulaciones…",
       "se han ofrecido a hablar en directo."
+    ],
+    "level-eight": [
+      "Las tripulaciones del puente están en directo.",
+      "Un tripulante acaba de mostrar a cámara una bomba recuperada.",
+      "Tras las alertas, tres puertos vecinos cerraron sus rutas de todos modos.",
+      "Enviamos el testimonio de las tripulaciones a cada centro de control.",
+      "Vuela hacia el transmisor…",
+      "donde empezó todo."
+    ],
+    "veshkorn": [
+      "Contacto confirmado.",
+      "Veshkorn…",
+      "el Portador de Rumores.",
+      "Reconocemos la fanfarria de su antiguo servicio de noticias.",
+      "La usa para alertar de catástrofes que jamás ocurrieron.",
+      "Su último boletín dice que las rutas de suministro volverán a cerrarse.",
+      "Los puertos ya están dispuestos a escuchar a sus pilotos.",
+      "Saca su transmisor…",
+      "del aire."
+    ],
+    "veshkorn-outro": [
+      "Control de tráfico acaba de reabrir las rutas.",
+      "Los operadores revisan los partes de clima y carga con las tripulaciones que los enviaron.",
+      "Un capitán dice que en pleno pánico le ofrecieron una bodega entera de semillas.",
+      "Nos envía el manifiesto.",
+      "No hay ni una sola foto de la carga."
     ]
   },
   "fr": {
@@ -543,6 +595,32 @@
       "que le pont s’est effondré avec tout le monde à bord.",
       "Les deux équipages…",
       "ont proposé de parler en direct."
+    ],
+    "level-eight": [
+      "Les équipages du pont sont à l’antenne.",
+      "L’un vient de montrer une pompe récupérée devant la caméra.",
+      "Après les alertes, trois ports voisins ont tout de même fermé leurs routes.",
+      "Nous transmettons leur témoignage à chaque poste de contrôle.",
+      "Vole vers l’émetteur…",
+      "d’où tout est parti."
+    ],
+    "veshkorn": [
+      "Contact confirmé.",
+      "Veshkorn…",
+      "le Porteur de rumeurs.",
+      "Nous reconnaissons la fanfare de son ancien service d’information.",
+      "Il s’en sert pour annoncer des catastrophes inventées.",
+      "Son dernier bulletin annonce une nouvelle fermeture des voies de ravitaillement.",
+      "Les ports sont prêts à écouter leurs propres pilotes.",
+      "Réduis son émetteur…",
+      "au silence."
+    ],
+    "veshkorn-outro": [
+      "Le contrôle du trafic vient de rouvrir les routes.",
+      "Les contrôleurs relisent les rapports météo et de fret avec leurs équipages d’origine.",
+      "Un capitaine dit qu’en pleine panique, on lui a proposé une soute entière de semences.",
+      "Il nous envoie le manifeste de chargement.",
+      "Il n’y a pas une seule photo du chargement."
     ]
   },
   "pt": {
@@ -725,6 +803,32 @@
       "que a ponte desabou com todos a bordo.",
       "As duas tripulações…",
       "se ofereceram para falar ao vivo."
+    ],
+    "level-eight": [
+      "As tripulações da ponte estão no ar.",
+      "Um tripulante acabou de mostrar uma bomba recuperada à câmera.",
+      "Mesmo assim, três portos vizinhos fecharam suas rotas após os avisos.",
+      "Estamos enviando o depoimento das tripulações a cada central.",
+      "Voe até o transmissor…",
+      "que iniciou tudo."
+    ],
+    "veshkorn": [
+      "Contato confirmado.",
+      "Veshkorn…",
+      "o Portador de Rumores.",
+      "Reconhecemos a fanfarra do antigo serviço de notícias dele.",
+      "Ele a usa para anunciar desastres que nunca aconteceram.",
+      "O último boletim diz que as rotas de suprimento vão fechar de novo.",
+      "Os portos estão prontos para ouvir seus próprios pilotos.",
+      "Tire o transmissor dele…",
+      "do ar."
+    ],
+    "veshkorn-outro": [
+      "O controle de tráfego acabou de reabrir as rotas.",
+      "Os operadores leem os relatórios de clima e carga com as tripulações que os enviaram.",
+      "Um capitão diz que, durante o pânico, lhe ofereceram um porão cheio de sementes.",
+      "Ele está nos enviando o manifesto.",
+      "Não há uma única foto do carregamento."
     ]
   },
   "it": {
@@ -907,6 +1011,32 @@
       "che il ponte è crollato con tutti a bordo.",
       "I due equipaggi…",
       "si sono offerti di parlare in diretta."
+    ],
+    "level-eight": [
+      "Gli equipaggi del ponte sono in diretta.",
+      "Uno ha appena mostrato alla telecamera una pompa recuperata.",
+      "Dopo gli avvisi, tre porti vicini hanno comunque chiuso le loro rotte.",
+      "Stiamo inviando la testimonianza degli equipaggi a ogni centrale.",
+      "Vola verso il trasmettitore…",
+      "da cui è partito tutto."
+    ],
+    "veshkorn": [
+      "Contatto confermato.",
+      "Veshkorn…",
+      "il Portatore di voci.",
+      "Riconosciamo la fanfara del suo vecchio notiziario.",
+      "La usa per annunciare disastri mai accaduti.",
+      "L’ultimo bollettino dice che le rotte di rifornimento chiuderanno di nuovo.",
+      "I porti sono pronti ad ascoltare i propri piloti.",
+      "Metti a tacere…",
+      "il suo trasmettitore."
+    ],
+    "veshkorn-outro": [
+      "Il controllo del traffico ha appena riaperto le rotte.",
+      "I controllori leggono i rapporti sul meteo e sul carico con gli equipaggi che li hanno inviati.",
+      "Un capitano dice che nel panico gli hanno offerto una stiva piena di sementi.",
+      "Ci sta mandando il manifesto di carico.",
+      "Non c’è neppure una foto del carico."
     ]
   },
   "pl": {
@@ -1089,6 +1219,32 @@
       "że most się zawalił, gdy wszyscy byli jeszcze na pokładzie.",
       "Obie załogi…",
       "zgłosiły się do rozmowy na żywo."
+    ],
+    "level-eight": [
+      "Załogi mostu są na antenie.",
+      "Jeden z załogantów właśnie pokazał do kamery odzyskaną pompę.",
+      "Mimo to po ostrzeżeniach trzy pobliskie porty zamknęły trasy.",
+      "Przesyłamy relację załóg do każdego punktu kontroli.",
+      "Leć do nadajnika…",
+      "od którego wszystko się zaczęło."
+    ],
+    "veshkorn": [
+      "Kontakt potwierdzony.",
+      "Veshkorn…",
+      "Rozsiewacz Plotek.",
+      "Znamy tę fanfarę z jego dawnego serwisu informacyjnego.",
+      "Używa jej, by ostrzegać przed katastrofami, które się nie wydarzyły.",
+      "W najnowszym komunikacie zapowiada ponowne zamknięcie tras zaopatrzenia.",
+      "Porty są gotowe wysłuchać własnych pilotów.",
+      "Wyłącz jego nadajnik…",
+      "i przerwij emisję."
+    ],
+    "veshkorn-outro": [
+      "Kontrola ruchu właśnie otworzyła trasy.",
+      "Operatorzy czytają raporty pogodowe i ładunkowe razem z załogami, które je wysłały.",
+      "Kapitan mówi, że podczas paniki zaoferowano mu ładownię pełną nasion.",
+      "Wysyła nam manifest ładunkowy.",
+      "Nie ma ani jednego zdjęcia załadunku."
     ]
   },
   "cs": {
@@ -1271,6 +1427,32 @@
       "že se most zřítil a všichni zůstali na palubě.",
       "Obě posádky…",
       "se nabídly, že promluví živě."
+    ],
+    "level-eight": [
+      "Posádky mostu vysílají živě.",
+      "Jeden člen posádky právě ukázal do kamery získané čerpadlo.",
+      "Po varováních přesto tři sousední přístavy uzavřely své trasy.",
+      "Posíláme svědectví posádek každému dispečinku.",
+      "Leť k vysílači…",
+      "od kterého to začalo."
+    ],
+    "veshkorn": [
+      "Kontakt potvrzen.",
+      "Veshkorn…",
+      "Šiřitel zvěstí.",
+      "Tu fanfáru známe z jeho starého zpravodajství.",
+      "Ohlašuje s ní katastrofy, ke kterým nikdy nedošlo.",
+      "V poslední zprávě tvrdí, že se zásobovací trasy zase zavřou.",
+      "Přístavy jsou připravené vyslechnout vlastní piloty.",
+      "Umlč jeho vysílač…",
+      "a ukonči vysílání."
+    ],
+    "veshkorn-outro": [
+      "Řízení provozu právě otevřelo trasy.",
+      "Dispečeři čtou zprávy o počasí a nákladu s posádkami, které je poslaly.",
+      "Kapitán říká, že mu během paniky nabídli nákladový prostor plný osiva.",
+      "Posílá nám seznam nákladu.",
+      "Není tu jediná fotka z nakládky."
     ]
   },
   "sk": {
@@ -1453,6 +1635,32 @@
       "že sa most zrútil so všetkými na palube.",
       "Obe posádky…",
       "sa ponúkli, že prehovoria naživo."
+    ],
+    "level-eight": [
+      "Posádky mosta vysielajú naživo.",
+      "Jeden člen posádky práve ukázal do kamery zachránené čerpadlo.",
+      "Po varovaniach aj tak uzavreli svoje trasy tri susedné prístavy.",
+      "Posielame výpoveď posádok každému dispečingu.",
+      "Leť k vysielaču…",
+      "od ktorého sa to začalo."
+    ],
+    "veshkorn": [
+      "Kontakt potvrdený.",
+      "Veshkorn…",
+      "Šíriteľ chýrov.",
+      "Tú fanfáru poznáme z jeho starého spravodajstva.",
+      "Ohlasuje ňou pohromy, ktoré sa nikdy nestali.",
+      "V poslednej správe tvrdí, že zásobovacie trasy sa znova uzavrú.",
+      "Prístavy sú pripravené vypočuť si vlastných pilotov.",
+      "Umlč jeho vysielač…",
+      "a zastav vysielanie."
+    ],
+    "veshkorn-outro": [
+      "Riadenie prevádzky práve otvorilo trasy.",
+      "Dispečeri čítajú správy o počasí a náklade s posádkami, ktoré ich poslali.",
+      "Kapitán hovorí, že mu počas paniky ponúkli podpalubie plné osiva.",
+      "Posiela nám zoznam nákladu.",
+      "Nie je tu jediná fotka z nakládky."
     ]
   },
   "ru": {
@@ -1635,6 +1843,32 @@
       "что мост рухнул со всеми, кто был на борту.",
       "Оба экипажа…",
       "предложили выступить в прямом эфире."
+    ],
+    "level-eight": [
+      "Экипажи моста вышли в эфир.",
+      "Один из них только что показал в камеру возвращённый насос.",
+      "После всех предупреждений три соседних порта всё же закрыли маршруты.",
+      "Мы передаём слова экипажей каждому диспетчерскому пункту.",
+      "Лети к передатчику…",
+      "с которого всё началось."
+    ],
+    "veshkorn": [
+      "Контакт подтверждён.",
+      "Вешкорн…",
+      "Разносчик слухов.",
+      "Мы узнали фанфару его прежней службы новостей.",
+      "Под неё он предупреждает о катастрофах, которых не было.",
+      "В последней сводке он обещает, что маршруты снабжения снова закроются.",
+      "Порты готовы выслушать своих пилотов.",
+      "Отключи его передатчик…",
+      "и прекрати вещание."
+    ],
+    "veshkorn-outro": [
+      "Диспетчеры только что открыли маршруты.",
+      "Они разбирают сводки о погоде и грузе с экипажами, которые их прислали.",
+      "Капитан говорит, что во время паники ему предложили целый трюм семян.",
+      "Он пересылает нам грузовой манифест.",
+      "Нет ни одной фотографии погрузки."
     ]
   },
   "uk": {
@@ -1817,6 +2051,32 @@
       "що міст обвалився з усіма, хто був на борту.",
       "Обидва екіпажі…",
       "запропонували виступити наживо."
+    ],
+    "level-eight": [
+      "Екіпажі мосту в ефірі.",
+      "Один із них щойно показав у камеру повернений насос.",
+      "Після всіх попереджень три сусідні порти все ж закрили маршрути.",
+      "Передаємо свідчення екіпажів у кожен диспетчерський пункт.",
+      "Лети до передавача…",
+      "з якого все почалося."
+    ],
+    "veshkorn": [
+      "Контакт підтверджено.",
+      "Вешкорн…",
+      "Поширювач чуток.",
+      "Ми впізнали фанфару його старої служби новин.",
+      "Під неї він оголошує катастрофи, яких не було.",
+      "В останньому зведенні він обіцяє знову закрити маршрути постачання.",
+      "Порти готові вислухати власних пілотів.",
+      "Вимкни його передавач…",
+      "і припини трансляцію."
+    ],
+    "veshkorn-outro": [
+      "Диспетчери щойно відкрили маршрути.",
+      "Вони читають звіти про погоду й вантаж разом з екіпажами, які їх надіслали.",
+      "Капітан каже, що під час паніки йому запропонували цілий трюм насіння.",
+      "Він надсилає нам вантажний маніфест.",
+      "Немає жодного фото завантаження."
     ]
   },
   "hr": {
@@ -1999,6 +2259,32 @@
       "da se most srušio dok su svi još bili na brodu.",
       "Obje posade…",
       "ponudile su se javiti uživo."
+    ],
+    "level-eight": [
+      "Posade mosta javljaju se uživo.",
+      "Jedan član posade upravo je pokazao pronađenu pumpu pred kamerom.",
+      "Nakon upozorenja tri susjedne luke ipak su zatvorile rute.",
+      "Šaljemo izjave posada svakom prometnom centru.",
+      "Leti prema odašiljaču…",
+      "od kojega je sve počelo."
+    ],
+    "veshkorn": [
+      "Kontakt potvrđen.",
+      "Veshkorn…",
+      "Širitelj glasina.",
+      "Prepoznajemo fanfare njegove stare novinske službe.",
+      "Njima upozorava na nesreće koje se nikada nisu dogodile.",
+      "U posljednjoj objavi tvrdi da će se opskrbne rute opet zatvoriti.",
+      "Luke su spremne poslušati vlastite pilote.",
+      "Utišaj njegov odašiljač…",
+      "i prekini program."
+    ],
+    "veshkorn-outro": [
+      "Nadzor prometa upravo je ponovno otvorio rute.",
+      "Dispečeri čitaju izvješća o vremenu i teretu s posadama koje su ih poslale.",
+      "Kapetan kaže da su mu usred panike ponudili spremište puno sjemena.",
+      "Šalje nam popis tereta.",
+      "Nema nijedne fotografije utovara."
     ]
   },
   "sr": {
@@ -2181,6 +2467,32 @@
       "да се мост срушио док су сви били на броду.",
       "Обе посаде…",
       "понудиле су да се јаве уживо."
+    ],
+    "level-eight": [
+      "Посаде моста јављају се уживо.",
+      "Један члан посаде управо је показао враћену пумпу пред камером.",
+      "После упозорења три суседне луке ипак су затвориле руте.",
+      "Шаљемо исказе посада сваком саобраћајном центру.",
+      "Лети ка предајнику…",
+      "од кога је све почело."
+    ],
+    "veshkorn": [
+      "Контакт потврђен.",
+      "Вешкорн…",
+      "Ширилац гласина.",
+      "Препознајемо фанфаре његове старе службе вести.",
+      "Њима најављује несреће које се никада нису догодиле.",
+      "У последњем билтену каже да ће се руте снабдевања поново затворити.",
+      "Луке су спремне да саслушају своје пилоте.",
+      "Утишај његов предајник…",
+      "и прекини емисију."
+    ],
+    "veshkorn-outro": [
+      "Контрола саобраћаја управо је отворила руте.",
+      "Диспечери читају извештаје о времену и терету с посадама које су их послале.",
+      "Капетан каже да су му усред панике понудили складиште пуно семена.",
+      "Шаље нам списак терета.",
+      "Нема ниједне фотографије утовара."
     ]
   },
   "tr": {
@@ -2363,6 +2675,32 @@
       "köprü çökmüş ve herkes hâlâ gemideymiş.",
       "İki mürettebat da…",
       "canlı yayında konuşmayı teklif etti."
+    ],
+    "level-eight": [
+      "Köprünün mürettebatı yayında.",
+      "Bir mürettebat üyesi az önce geri alınan bir pompayı kameraya gösterdi.",
+      "Uyarıların ardından üç komşu liman yine de rotalarını kapattı.",
+      "Mürettebatın sözlerini her trafik merkezine iletiyoruz.",
+      "O vericiye doğru uç…",
+      "her şey orada başladı."
+    ],
+    "veshkorn": [
+      "Temas doğrulandı.",
+      "Veshkorn…",
+      "Söylenti Taşıyıcısı.",
+      "Bu tantanayı eski haber servisinden tanıyoruz.",
+      "Onu hiç yaşanmamış felaketleri duyurmak için kullanıyor.",
+      "Son bültenine göre ikmal rotaları yeniden kapanacak.",
+      "Limanlar kendi pilotlarını dinlemeye hazır.",
+      "Vericisini devre dışı bırak…",
+      "ve yayını kes."
+    ],
+    "veshkorn-outro": [
+      "Trafik kontrolü rotaları az önce yeniden açtı.",
+      "Kontrolörler hava ve yük raporlarını onları gönderen mürettebatla okuyor.",
+      "Bir kaptan, panik sırasında bir ambar dolusu tohum teklif edildiğini söylüyor.",
+      "Yük manifestosunu bize gönderiyor.",
+      "Yüklemeye ait tek bir fotoğraf bile yok."
     ]
   },
   "hu": {
@@ -2545,6 +2883,32 @@
       "hogy a híd összeomlott, miközben mindenki a fedélzeten volt.",
       "A két legénység…",
       "felajánlotta, hogy élőben megszólal."
+    ],
+    "level-eight": [
+      "A híd legénysége adásban van.",
+      "Valaki épp most mutatott a kamerába egy visszaszerzett szivattyút.",
+      "A figyelmeztetések után három szomszédos kikötő mégis lezárta az útvonalait.",
+      "A legénység beszámolóját elküldjük minden forgalomirányítónak.",
+      "Repülj ahhoz az adóhoz…",
+      "ahonnan az egész elindult."
+    ],
+    "veshkorn": [
+      "Kapcsolat megerősítve.",
+      "Veshkorn…",
+      "a Pletykaterjesztő.",
+      "Ismerjük ezt a fanfárt a régi hírszolgálatából.",
+      "Most olyan katasztrófákat jelent be vele, amelyek meg sem történtek.",
+      "Legutóbbi híre szerint ismét lezárják az ellátási útvonalakat.",
+      "A kikötők készek meghallgatni a saját pilótáikat.",
+      "Némítsd el…",
+      "az adóját."
+    ],
+    "veshkorn-outro": [
+      "A forgalomirányítás épp most nyitotta meg újra az útvonalakat.",
+      "Az irányítók a küldőkkel együtt olvassák a rakomány- és időjárás-jelentéseket.",
+      "A kapitány szerint a pánik idején egy raktérnyi vetőmagot ajánlottak neki.",
+      "Már küldi a rakományjegyzéket.",
+      "Egyetlen rakodási fotó sincs."
     ]
   },
   "ro": {
@@ -2727,6 +3091,32 @@
       "că podul s-a prăbușit cu toată lumea la bord.",
       "Cele două echipaje…",
       "s-au oferit să vorbească în direct."
+    ],
+    "level-eight": [
+      "Echipajele podului sunt în direct.",
+      "Un membru al echipajului tocmai a arătat o pompă recuperată la cameră.",
+      "Trei porturi vecine și-au închis totuși rutele după avertismente.",
+      "Trimitem mărturia echipajelor fiecărui centru de control.",
+      "Zboară spre emițătorul…",
+      "de la care a pornit totul."
+    ],
+    "veshkorn": [
+      "Contact confirmat.",
+      "Veshkorn…",
+      "Purtătorul de zvonuri.",
+      "Recunoaștem fanfara vechiului său serviciu de știri.",
+      "O folosește pentru a anunța dezastre care nu s-au întâmplat.",
+      "Ultimul său buletin spune că rutele de aprovizionare se vor închide iar.",
+      "Porturile sunt gata să-și asculte propriii piloți.",
+      "Scoate-i emițătorul…",
+      "din emisie."
+    ],
+    "veshkorn-outro": [
+      "Controlul traficului tocmai a redeschis rutele.",
+      "Dispecerii citesc rapoartele despre vreme și marfă cu echipajele care le-au trimis.",
+      "Un căpitan spune că i s-a oferit o cală plină de semințe în timpul panicii.",
+      "Ne trimite manifestul de încărcare.",
+      "Nu există nicio fotografie de la încărcare."
     ]
   },
   "th": {
@@ -2909,6 +3299,32 @@
       "ว่าสะพานถล่มลงมาขณะที่ทุกคนยังอยู่บนยาน",
       "ลูกเรือทั้งสองชุด…",
       "เสนอที่จะออกอากาศสด"
+    ],
+    "level-eight": [
+      "ลูกเรือสะพานกำลังออกอากาศสด",
+      "ลูกเรือคนหนึ่งเพิ่งยกปั๊มที่กู้คืนมาให้กล้องเห็น",
+      "หลังคำเตือน ท่าเรือข้างเคียงสามแห่งก็ยังปิดเส้นทาง",
+      "เรากำลังส่งคำให้การจากลูกเรือไปยังศูนย์ควบคุมทุกแห่ง",
+      "บินไปหาเครื่องส่งสัญญาณ…",
+      "ที่เป็นต้นตอของเรื่องทั้งหมด"
+    ],
+    "veshkorn": [
+      "ยืนยันการพบเป้าหมาย",
+      "เวชคอร์น…",
+      "ผู้แพร่ข่าวลือ",
+      "เราจำเสียงประโคมจากสถานีข่าวเก่าของมันได้",
+      "มันใช้เสียงนั้นเตือนภัยพิบัติที่ไม่เคยเกิดขึ้น",
+      "ข่าวล่าสุดของมันอ้างว่าเส้นทางส่งเสบียงจะปิดอีกครั้ง",
+      "ท่าเรือพร้อมฟังนักบินของตัวเองแล้ว",
+      "จัดการเครื่องส่งสัญญาณของมัน…",
+      "ให้หยุดออกอากาศ"
+    ],
+    "veshkorn-outro": [
+      "ศูนย์ควบคุมเพิ่งเปิดเส้นทางอีกครั้ง",
+      "เจ้าหน้าที่กำลังอ่านรายงานอากาศและสินค้ากับลูกเรือผู้ส่งรายงาน",
+      "กัปตันคนหนึ่งบอกว่าช่วงชุลมุนมีคนเสนอเมล็ดพันธุ์ให้เต็มห้องเก็บสินค้า",
+      "เขากำลังส่งบัญชีสินค้าให้เรา",
+      "ไม่มีภาพตอนขนสินค้าเลยแม้แต่ภาพเดียว"
     ]
   },
   "zh": {
@@ -3091,6 +3507,32 @@
       "那座桥已经坍塌，所有人当时都还在船上。",
       "两边的船员都……",
       "主动提出在直播中发言。"
+    ],
+    "level-eight": [
+      "大桥的船员正在直播。",
+      "一名船员刚把找回的水泵举到镜头前。",
+      "听了那些警报，三个邻近港口还是关闭了航道。",
+      "我们正把船员的证词发给各个调度中心。",
+      "飞向那台发射机……",
+      "一切都是从它开始的。"
+    ],
+    "veshkorn": [
+      "确认接触目标。",
+      "维什科恩……",
+      "谣言传播者。",
+      "我们认得那段旧新闻频道的号角声。",
+      "他用它来预警根本没发生过的灾难。",
+      "他最新的公告说补给航道会再次关闭。",
+      "各港口已准备好听取自家飞行员的说法。",
+      "切断他的发射机……",
+      "让它停止广播。"
+    ],
+    "veshkorn-outro": [
+      "调度中心刚重新开放航道。",
+      "调度员正与上报的船员一起核对天气和货物报告。",
+      "有位船长说，恐慌期间有人向他兜售了一整舱种子。",
+      "他正在把装货清单发给我们。",
+      "连一张装货时的照片都没有。"
     ]
   },
   "vi": {
@@ -3273,6 +3715,32 @@
       "rằng cây cầu đã sập khi mọi người vẫn còn trên tàu.",
       "Cả hai đoàn thủy thủ…",
       "đều đề nghị lên sóng trực tiếp."
+    ],
+    "level-eight": [
+      "Các đoàn thủy thủ của cây cầu đang lên sóng.",
+      "Một người vừa giơ chiếc máy bơm thu hồi được cho máy quay thấy.",
+      "Sau các cảnh báo, ba cảng lân cận vẫn đóng tuyến của họ.",
+      "Chúng ta đang gửi lời kể của thủy thủ tới từng trạm điều phối.",
+      "Bay về phía máy phát…",
+      "nơi mọi chuyện bắt đầu."
+    ],
+    "veshkorn": [
+      "Xác nhận tiếp xúc.",
+      "Veshkorn…",
+      "Kẻ Truyền Tin Đồn.",
+      "Chúng ta nhận ra đoạn nhạc hiệu từ kênh tin cũ của hắn.",
+      "Hắn dùng nó để cảnh báo những thảm họa chưa hề xảy ra.",
+      "Bản tin mới nhất nói các tuyến tiếp tế sẽ lại đóng cửa.",
+      "Các cảng đã sẵn sàng lắng nghe chính phi công của họ.",
+      "Vô hiệu hóa máy phát của hắn…",
+      "để ngừng phát sóng."
+    ],
+    "veshkorn-outro": [
+      "Trạm điều phối vừa mở lại các tuyến.",
+      "Điều phối viên đọc báo cáo thời tiết và hàng hóa cùng những thủy thủ đã gửi chúng.",
+      "Một thuyền trưởng nói lúc hoảng loạn có người chào bán cả khoang hạt giống.",
+      "Ông ấy đang gửi bảng kê hàng cho chúng ta.",
+      "Không có lấy một tấm ảnh chất hàng."
     ]
   }
 }

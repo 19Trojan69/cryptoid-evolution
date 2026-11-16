@@ -16,7 +16,8 @@ export type StoryScene =
   | 'level-four' | 'talvrek' | 'talvrek-outro'
   | 'level-five' | 'zeraveth' | 'zeraveth-outro'
   | 'level-six' | 'orvask' | 'orvask-outro'
-  | 'level-seven' | 'keldrava' | 'keldrava-outro';
+  | 'level-seven' | 'keldrava' | 'keldrava-outro'
+  | 'level-eight' | 'veshkorn' | 'veshkorn-outro';
 
 type BossStory = NonNullable<StoryPresentation['boss']> & {
   outline: string;
@@ -66,6 +67,12 @@ const keldrava: BossStory = {
 };
 const keldravaIntroTitle = `Intro ${keldrava.name}`;
 const keldravaOutroTitle = `Outro ${keldrava.name}`;
+const veshkorn: BossStory = {
+  id: 8, name: bossName(8), subtitle: 'The Rumour Carrier',
+  outline: 'veshkorn-outline.webp', ship: '/ships/bosses/evolved/boss-08-hull.webp',
+};
+const veshkornIntroTitle = `Intro ${veshkorn.name}`;
+const veshkornOutroTitle = `Outro ${veshkorn.name}`;
 
 export const storyScenes: Record<StoryScene, StoryDefinition> = {
   campaign: {
@@ -228,6 +235,29 @@ export const storyScenes: Record<StoryScene, StoryDefinition> = {
     timing: genesisTiming['keldrava-outro'],
     boss: keldrava,
   },
+  'level-eight': {
+    title: 'Level 8',
+    chapterTitle: 'Two People Who Were There',
+    heading: 'LEVEL 08',
+    audio: 'level-eight.mp3',
+    timing: genesisTiming['level-eight'],
+  },
+  veshkorn: {
+    title: veshkornIntroTitle,
+    chapterTitle: veshkornIntroTitle,
+    heading: veshkornIntroTitle,
+    audio: 'veshkorn-intro.mp3',
+    timing: genesisTiming.veshkorn,
+    boss: veshkorn,
+  },
+  'veshkorn-outro': {
+    title: veshkornOutroTitle,
+    chapterTitle: veshkornOutroTitle,
+    heading: veshkornOutroTitle,
+    audio: 'veshkorn-outro.mp3',
+    timing: genesisTiming['veshkorn-outro'],
+    boss: veshkorn,
+  },
 };
 
 export function levelStoryAtSector(sector: number): StoryScene | undefined {
@@ -237,6 +267,7 @@ export function levelStoryAtSector(sector: number): StoryScene | undefined {
   if (sector === 41) return 'level-five';
   if (sector === 51) return 'level-six';
   if (sector === 61) return 'level-seven';
+  if (sector === 71) return 'level-eight';
 }
 
 export function bossStoryAtSector(sector: number): StoryScene | undefined {
@@ -247,6 +278,7 @@ export function bossStoryAtSector(sector: number): StoryScene | undefined {
   if (sector === 50) return 'zeraveth';
   if (sector === 60) return 'orvask';
   if (sector === 70) return 'keldrava';
+  if (sector === 80) return 'veshkorn';
 }
 
 export function bossOutroAtSector(sector: number): StoryScene | undefined {
@@ -257,4 +289,5 @@ export function bossOutroAtSector(sector: number): StoryScene | undefined {
   if (sector === 50) return 'zeraveth-outro';
   if (sector === 60) return 'orvask-outro';
   if (sector === 70) return 'keldrava-outro';
+  if (sector === 80) return 'veshkorn-outro';
 }

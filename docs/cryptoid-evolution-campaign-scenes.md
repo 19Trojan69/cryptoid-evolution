@@ -24,7 +24,8 @@ Drehbuch für Kampagnenstart, Level-Briefings, Boss-Intros und Sieges-Outros. Je
 | Briefing 5 | Sprechtext und deutsche Untertitel | Eingereichte Suno-Aufnahme mit Wortzeitplan |
 | Briefing 6, Intro Orvask und Outro Orvask | Sprechtext und deutsche Untertitel | Eingereichte Suno-Aufnahmen mit Wortzeitplan |
 | Briefing 7, Intro Keldrava und Outro Keldrava | Sprechtext und deutsche Untertitel | Eingereichte Suno-Aufnahmen mit Wortzeitplan |
-| Level 8–50 | 129 Drehbuchfassungen bis zum Finale | Aufnahmen, Zeitpläne und Einbau folgen je Szene |
+| Briefing 8, Intro Veshkorn und Outro Veshkorn | Sprechtext und deutsche Untertitel | Eingereichte Suno-Aufnahmen mit Wortzeitplan |
+| Level 9–50 | 126 Drehbuchfassungen bis zum Finale | Aufnahmen, Zeitpläne und Einbau folgen je Szene |
 
 Die Testaufnahme für Briefing 4 wurde mit der Stimme am_onyx aus [Kokoro](https://huggingface.co/hexgrad/Kokoro-82M) produziert. Die Suno-Fassung kann diese Aufnahme samt Wortzeitplan ersetzen.
 
@@ -521,19 +522,28 @@ Der Gerüchtesender · The Rumour Carrier
 
 #### Level-Briefing · Two People Who Were There
 
+Suno-Aufnahme „Fly Toward the Transmitter“. level-eight.mp3 · 27,48 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. An intimate chamber-string bed, with room for the image of the crews talking. Around 26–31 seconds.
 
 **Englischer Sprechtext**
 
-The bridge crews are on the air. One just held a recovered pump up to the camera. Three neighboring ports still shut their lanes after all those warnings. We’re sending the crews’ own words to each traffic desk. Fly toward the transmitter that started it.
+The bridge crews are on the air. One just held a recovered pump up to the camera. Three neighboring ports still shut their lanes after all those warnings. We’re sending the crews’ own words to each traffic desk. Fly toward the transmitter… that started it.
 
 **Deutsche Untertitel**
 
-Die Brückencrews sind auf Sendung. Einer hat gerade eine geborgene Pumpe in die Kamera gehalten. Drei Nachbarhäfen haben nach den Warnungen trotzdem ihre Routen geschlossen. Wir schicken den Bericht der Crews direkt an jede Leitstelle. Flieg zu dem Sender, bei dem es angefangen hat.
+- Die Brückencrews sind auf Sendung.
+- Einer hat gerade eine geborgene Pumpe in die Kamera gehalten.
+- Drei Nachbarhäfen haben nach den Warnungen trotzdem ihre Routen geschlossen.
+- Wir schicken den Bericht der Crews direkt an jede Leitstelle.
+- Flieg zu dem Sender …
+- bei dem es angefangen hat.
 
-#### Boss-Intro · The Familiar Fanfare
+#### Boss-Intro · Intro Veshkorn
+
+Suno-Aufnahme „Take His Transmitter Off the“. veshkorn-intro.mp3 · 34,03 s.
 
 **Suno-Stil**
 
@@ -541,13 +551,23 @@ English spoken-word fleet command. Keep one clear narrator up front. Allow an au
 
 **Englischer Sprechtext**
 
-Contact confirmed. Veshkorn, the Rumour Carrier. We know that fanfare from his old news service. He’s using it to warn of disasters that never happened. His latest bulletin says the supply lanes will close again. The ports are ready to hear their own pilots. Take his transmitter off the air.
+Contact confirmed. Veshkorn… the Rumour Carrier. We know that fanfare from his old news service. He’s using it to warn of disasters that never happened. His latest bulletin says the supply lanes will close again. The ports are ready to hear their own pilots. Take his transmitter… off the air.
 
 **Deutsche Untertitel**
 
-Kontakt bestätigt. Veshkorn, der Gerüchtesender. Wir kennen die Fanfare von seinem alten Nachrichtendienst. Er warnt damit vor Katastrophen, die es nie gegeben hat. In seiner jüngsten Meldung heißt es, die Versorgungsrouten würden gleich wieder schließen. Die Häfen sind bereit, ihre eigenen Piloten anzuhören. Bring seinen Sender zum Schweigen.
+- Kontakt bestätigt.
+- Veshkorn …
+- der Gerüchtesender.
+- Wir kennen die Fanfare von seinem alten Nachrichtendienst.
+- Er warnt damit vor Katastrophen, die es nie gegeben hat.
+- Laut seiner jüngsten Meldung sollen die Versorgungsrouten wieder schließen.
+- Die Häfen sind bereit, ihre eigenen Piloten anzuhören.
+- Bring seinen Sender …
+- zum Schweigen.
 
-#### Boss-Outro · The Manifest on the Air
+#### Boss-Outro · Outro Veshkorn
+
+Suno-Aufnahme „No Loading Photos“. veshkorn-outro.mp3 · 30,02 s.
 
 **Suno-Stil**
 
@@ -559,7 +579,11 @@ Traffic control just reopened the lanes. Their operators are reading weather and
 
 **Deutsche Untertitel**
 
-Die Verkehrsleitstelle hat die Routen wieder geöffnet. Die Funker gehen Wetter- und Frachtberichte mit den Crews durch, von denen sie stammen. Ein Kapitän erzählt, ihm sei während der Panik ein ganzer Laderaum Saatgut angeboten worden. Er schickt uns das Manifest. Es gibt kein einziges Foto von der Verladung.
+- Die Verkehrsleitstelle hat die Routen wieder geöffnet.
+- Die Funker gehen Wetter- und Frachtberichte mit den Crews durch, von denen sie stammen.
+- Ein Kapitän sagt, man habe ihm in der Panik einen ganzen Laderaum Saatgut angeboten.
+- Er schickt uns das Manifest.
+- Es gibt kein einziges Foto von der Verladung.
 
 ### Level 09 · Neravoss
 
