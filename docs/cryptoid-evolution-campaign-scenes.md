@@ -17,10 +17,11 @@ Drehbuch für Kampagnenstart, Level-Briefings, Boss-Intros und Sieges-Outros. Je
 | --- | --- | --- |
 | Kampagneneinleitung, Intros von Varneth bis Drelvorn, Korvessas Outro, Briefings 2 und 3 | Sprechtext und deutsche Untertitel | Sieben Aufnahmen im ausgelieferten Testnet 08758df |
 | Varneth · The First Reply | Originale Suno-Vorlage und 9 Untertitelabschnitte für den eingesandten Take | Suno-MP3 von Marcus Wolf im Kandidaten, vollständiges Sprachsignal aus dem Upload |
-| Drelvorns Outro, Briefing 4, Talvreks Intro und Outro | Sprechtext und deutsche Untertitel | Im Kandidaten mit englischer Teststimme und eigens produzierten leisen Streicher- und Klavierklängen |
+| Drelvorns Outro (Seal Revoked) | Sprechtext und acht Untertitelabschnitte | Eingereichte Suno-Aufnahme im Story-Zweig |
+| Briefing 4, Talvreks Intro und Outro | Sprechtext und deutsche Untertitel | Englische Teststimme mit eigens produzierten leisen Streicher- und Klavierklängen |
 | Level 5–50 | 138 Drehbuchfassungen bis zum Finale | Aufnahmen, Zeitpläne und Einbau folgen je Szene |
 
-Die vier Testaufnahmen wurden für die Prüfung der Übergänge mit der Stimme am_onyx aus [Kokoro](https://huggingface.co/hexgrad/Kokoro-82M) produziert. Finale Suno-Fassungen können für jede Szene die Testaufnahme samt Wortzeitplan ersetzen.
+Die drei übrigen Testaufnahmen wurden für die Prüfung der Übergänge mit der Stimme am_onyx aus [Kokoro](https://huggingface.co/hexgrad/Kokoro-82M) produziert. Finale Suno-Fassungen können für jede Szene die Testaufnahme samt Wortzeitplan ersetzen.
 
 ## Genesis und die falschen Befehle
 
@@ -216,7 +217,7 @@ Pilot, Korvessa’s archive confirms it. The ship you followed is Drelvorn, the 
 
 #### Boss-Outro · Seal Revoked
 
-Testaufnahme im Kandidaten. drelvorn-outro.mp3 · 40,37 s.
+Suno-Aufnahme von Marcus Wolf. Eingereicht als „Pulling the Original Records“. drelvorn-outro.mp3 · 41,59 s.
 
 **Suno-Stil**
 
@@ -228,7 +229,8 @@ Genesis, cancel evacuation. Drelvorn’s transmitter is down. The shelter warden
 
 **Deutsche Untertitel**
 
-- Genesis, Evakuierung abbrechen. Drelvorns Sender ist ausgefallen.
+- Genesis, Evakuierung abbrechen.
+- Drelvorns Sender ist ausgefallen.
 - Die Schutzraumwarte haben die Türen gesichert.
 - Alle Familien der Konvoi-Crews sind in den Schutzräumen in Sicherheit.
 - Das gestohlene Siegel wurde gesperrt.

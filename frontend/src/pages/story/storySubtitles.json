@@ -71,7 +71,8 @@
       "… wird dort draußen jemand eine Antwort hören."
     ],
     "drelvorn-outro": [
-      "Genesis, Evakuierung abbrechen. Drelvorns Sender ist ausgefallen.",
+      "Genesis, Evakuierung abbrechen.",
+      "Drelvorns Sender ist ausgefallen.",
       "Die Schutzraumwarte haben die Türen gesichert.",
       "Alle Familien der Konvoi-Crews sind in den Schutzräumen in Sicherheit.",
       "Das gestohlene Siegel wurde gesperrt.",
@@ -175,7 +176,8 @@
       "…alguien ahí fuera va a oír una respuesta."
     ],
     "drelvorn-outro": [
-      "Génesis, cancelad la evacuación. El transmisor de Drelvorn ha caído.",
+      "Génesis, cancelad la evacuación.",
+      "El transmisor de Drelvorn ha caído.",
       "Los responsables de los refugios han asegurado las puertas.",
       "Las familias de las tripulaciones del convoy están dentro y a salvo.",
       "Hemos revocado el sello robado.",
@@ -279,7 +281,8 @@
       "…quelqu’un là-bas va entendre une réponse."
     ],
     "drelvorn-outro": [
-      "Genesis, annulez l’évacuation. L’émetteur de Drelvorn est hors service.",
+      "Genesis, annulez l’évacuation.",
+      "L’émetteur de Drelvorn est hors service.",
       "Les responsables des abris ont sécurisé les portes.",
       "Les familles des équipages sont à l’intérieur et en sécurité.",
       "Le sceau volé a été révoqué.",
@@ -383,7 +386,8 @@
       "…alguém lá fora vai ouvir uma resposta."
     ],
     "drelvorn-outro": [
-      "Genesis, cancele a evacuação. O transmissor de Drelvorn parou.",
+      "Genesis, cancele a evacuação.",
+      "O transmissor de Drelvorn parou.",
       "Os responsáveis pelos abrigos protegeram as portas.",
       "As famílias das tripulações do comboio estão dentro, todas em segurança.",
       "O selo roubado foi revogado.",
@@ -487,7 +491,8 @@
       "…là fuori qualcuno sentirà una risposta."
     ],
     "drelvorn-outro": [
-      "Genesis, annullate l’evacuazione. Il trasmettitore di Drelvorn è fuori uso.",
+      "Genesis, annullate l’evacuazione.",
+      "Il trasmettitore di Drelvorn è fuori uso.",
       "Gli addetti ai rifugi hanno messo in sicurezza le porte.",
       "Le famiglie degli equipaggi sono dentro e tutte al sicuro.",
       "Il sigillo rubato è stato revocato.",
@@ -591,7 +596,8 @@
       "…ktoś tam usłyszy odpowiedź."
     ],
     "drelvorn-outro": [
-      "Genesis, odwołajcie ewakuację. Nadajnik Drelvorna nie działa.",
+      "Genesis, odwołajcie ewakuację.",
+      "Nadajnik Drelvorna nie działa.",
       "Strażnicy schronów zabezpieczyli drzwi.",
       "Rodziny załóg konwoju są w środku. Wszyscy są bezpieczni.",
       "Unieważniliśmy skradzioną pieczęć.",
@@ -695,7 +701,8 @@
       "…tam někdo uslyší odpověď."
     ],
     "drelvorn-outro": [
-      "Genesis, zrušte evakuaci. Drelvornův vysílač je mimo provoz.",
+      "Genesis, zrušte evakuaci.",
+      "Drelvornův vysílač je mimo provoz.",
       "Správci krytů zajistili dveře.",
       "Rodiny posádek konvoje jsou uvnitř. Všichni jsou v bezpečí.",
       "Platnost ukradené pečeti byla zrušena.",
@@ -799,7 +806,8 @@
       "…tam niekto začuje odpoveď."
     ],
     "drelvorn-outro": [
-      "Genesis, zrušte evakuáciu. Drelvornov vysielač je mimo prevádzky.",
+      "Genesis, zrušte evakuáciu.",
+      "Drelvornov vysielač je mimo prevádzky.",
       "Správcovia krytov zaistili dvere.",
       "Rodiny posádok konvoja sú vnútri. Všetci sú v bezpečí.",
       "Platnosť ukradnutej pečate bola zrušená.",
@@ -903,7 +911,8 @@
       "…там услышат ответ."
     ],
     "drelvorn-outro": [
-      "Генезис, отмените эвакуацию. Передатчик Дрелворна отключён.",
+      "Генезис, отмените эвакуацию.",
+      "Передатчик Дрелворна отключён.",
       "Смотрители убежищ заблокировали двери.",
       "Семьи экипажей конвоя внутри. Все на месте и в безопасности.",
       "Украденная печать аннулирована.",
@@ -1007,7 +1016,8 @@
       "…там почують відповідь."
     ],
     "drelvorn-outro": [
-      "Генезисе, скасуйте евакуацію. Передавач Дрелворна вимкнено.",
+      "Генезисе, скасуйте евакуацію.",
+      "Передавач Дрелворна вимкнено.",
       "Чергові в укриттях заблокували двері.",
       "Родини екіпажів конвою всередині. Усі в безпеці.",
       "Викрадену печатку анульовано.",
@@ -1111,7 +1121,8 @@
       "…netko će ondje čuti odgovor."
     ],
     "drelvorn-outro": [
-      "Genesis, otkažite evakuaciju. Drelvornov odašiljač je ugašen.",
+      "Genesis, otkažite evakuaciju.",
+      "Drelvornov odašiljač je ugašen.",
       "Čuvari skloništa osigurali su vrata.",
       "Obitelji posada konvoja su unutra. Svi su na sigurnom.",
       "Ukradeni je pečat poništen.",
@@ -1215,7 +1226,8 @@
       "…неко ће тамо чути одговор."
     ],
     "drelvorn-outro": [
-      "Генезис, обуставите евакуацију. Дрелворнов предајник је угашен.",
+      "Генезис, обуставите евакуацију.",
+      "Дрелворнов предајник је угашен.",
       "Чувари склоништа су обезбедили врата.",
       "Породице посада конвоја су унутра. Сви су на сигурном.",
       "Украдени печат је поништен.",
@@ -1319,7 +1331,8 @@
       "…orada birileri yanıt duyacak."
     ],
     "drelvorn-outro": [
-      "Genesis, tahliyeyi iptal edin. Drelvorn’un vericisi devre dışı.",
+      "Genesis, tahliyeyi iptal edin.",
+      "Drelvorn’un vericisi devre dışı.",
       "Sığınak görevlileri kapıları güvene aldı.",
       "Konvoy mürettebatının aileleri içeride. Hepsi güvende.",
       "Çalıntı mühür iptal edildi.",
@@ -1423,7 +1436,8 @@
       "…valaki ott választ fog hallani."
     ],
     "drelvorn-outro": [
-      "Genesis, vonják vissza a kiürítést. Drelvorn adója elhallgatott.",
+      "Genesis, vonják vissza a kiürítést.",
+      "Drelvorn adója elhallgatott.",
       "Az óvóhelyek őrei biztosították az ajtókat.",
       "A konvoj legénységének családtagjai odabent vannak. Mindenki biztonságban van.",
       "A lopott pecsétet érvénytelenítették.",
@@ -1527,7 +1541,8 @@
       "…cineva de acolo va auzi un răspuns."
     ],
     "drelvorn-outro": [
-      "Genesis, anulați evacuarea. Emițătorul lui Drelvorn a căzut.",
+      "Genesis, anulați evacuarea.",
+      "Emițătorul lui Drelvorn a căzut.",
       "Personalul adăposturilor a securizat ușile.",
       "Familiile echipajelor sunt înăuntru. Toate sunt în siguranță.",
       "Sigiliul furat a fost revocat.",
@@ -1631,7 +1646,8 @@
       "…คนที่นั่นจะได้ยินคำตอบ"
     ],
     "drelvorn-outro": [
-      "เจเนซิส ยกเลิกการอพยพ เครื่องส่งสัญญาณของเดรลวอร์นหยุดทำงานแล้ว",
+      "เจเนซิส ยกเลิกการอพยพ",
+      "เครื่องส่งสัญญาณของเดรลวอร์นหยุดทำงานแล้ว",
       "เจ้าหน้าที่ล็อกประตูหลุมหลบภัยแล้ว",
       "ครอบครัวลูกเรือในขบวนอยู่ข้างในและปลอดภัยครบทุกคน",
       "ยกเลิกสิทธิ์ของตราที่ถูกขโมยแล้ว",
@@ -1735,7 +1751,8 @@
       "他们会听到有人回应。"
     ],
     "drelvorn-outro": [
-      "创世星，取消撤离。德雷尔沃恩的发射器已停机。",
+      "创世星，取消撤离。",
+      "德雷尔沃恩的发射器已停机。",
       "避难所值守人员已锁好门。",
       "运输船队船员的家属都在里面，人数已核对，全员安全。",
       "被盗的印章已作废。",
@@ -1839,7 +1856,8 @@
       "…sẽ có người ngoài kia nghe được lời đáp."
     ],
     "drelvorn-outro": [
-      "Genesis, hủy lệnh sơ tán. Máy phát của Drelvorn đã ngừng hoạt động.",
+      "Genesis, hủy lệnh sơ tán.",
+      "Máy phát của Drelvorn đã ngừng hoạt động.",
       "Nhân viên trực đã khóa cửa các hầm trú ẩn.",
       "Gia đình các thủy thủ đoàn đều ở trong hầm và đã được xác nhận an toàn.",
       "Ấn tín bị đánh cắp đã bị vô hiệu hóa.",
