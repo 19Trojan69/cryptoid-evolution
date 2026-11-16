@@ -14,7 +14,8 @@ export type StoryScene =
   | 'level-two' | 'korvessa' | 'korvessa-outro'
   | 'level-three' | 'drelvorn' | 'drelvorn-outro'
   | 'level-four' | 'talvrek' | 'talvrek-outro'
-  | 'level-five' | 'zeraveth' | 'zeraveth-outro';
+  | 'level-five' | 'zeraveth' | 'zeraveth-outro'
+  | 'level-six' | 'orvask' | 'orvask-outro';
 
 type BossStory = NonNullable<StoryPresentation['boss']> & {
   outline: string;
@@ -52,6 +53,12 @@ const zeraveth: BossStory = {
 };
 const zeravethIntroTitle = `Intro ${zeraveth.name}`;
 const zeravethOutroTitle = `Outro ${zeraveth.name}`;
+const orvask: BossStory = {
+  id: 6, name: bossName(6), subtitle: 'The Echo Hunter',
+  outline: 'orvask-outline.webp', ship: '/ships/bosses/evolved/boss-06-hull.webp',
+};
+const orvaskIntroTitle = `Intro ${orvask.name}`;
+const orvaskOutroTitle = `Outro ${orvask.name}`;
 
 export const storyScenes: Record<StoryScene, StoryDefinition> = {
   campaign: {
@@ -168,6 +175,29 @@ export const storyScenes: Record<StoryScene, StoryDefinition> = {
     timing: genesisTiming['zeraveth-outro'],
     boss: zeraveth,
   },
+  'level-six': {
+    title: 'Level 6',
+    chapterTitle: 'An Old Clearance',
+    heading: 'LEVEL 06',
+    audio: 'level-six.mp3',
+    timing: genesisTiming['level-six'],
+  },
+  orvask: {
+    title: orvaskIntroTitle,
+    chapterTitle: orvaskIntroTitle,
+    heading: orvaskIntroTitle,
+    audio: 'orvask-intro.mp3',
+    timing: genesisTiming.orvask,
+    boss: orvask,
+  },
+  'orvask-outro': {
+    title: orvaskOutroTitle,
+    chapterTitle: orvaskOutroTitle,
+    heading: orvaskOutroTitle,
+    audio: 'orvask-outro.mp3',
+    timing: genesisTiming['orvask-outro'],
+    boss: orvask,
+  },
 };
 
 export function levelStoryAtSector(sector: number): StoryScene | undefined {
@@ -175,6 +205,7 @@ export function levelStoryAtSector(sector: number): StoryScene | undefined {
   if (sector === 21) return 'level-three';
   if (sector === 31) return 'level-four';
   if (sector === 41) return 'level-five';
+  if (sector === 51) return 'level-six';
 }
 
 export function bossStoryAtSector(sector: number): StoryScene | undefined {
@@ -183,6 +214,7 @@ export function bossStoryAtSector(sector: number): StoryScene | undefined {
   if (sector === 30) return 'drelvorn';
   if (sector === 40) return 'talvrek';
   if (sector === 50) return 'zeraveth';
+  if (sector === 60) return 'orvask';
 }
 
 export function bossOutroAtSector(sector: number): StoryScene | undefined {
@@ -191,4 +223,5 @@ export function bossOutroAtSector(sector: number): StoryScene | undefined {
   if (sector === 30) return 'drelvorn-outro';
   if (sector === 40) return 'talvrek-outro';
   if (sector === 50) return 'zeraveth-outro';
+  if (sector === 60) return 'orvask-outro';
 }

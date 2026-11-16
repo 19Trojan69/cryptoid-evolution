@@ -127,6 +127,33 @@
       "Das Wartungsteam sieht von seiner Warteposition aus die Docklichter.",
       "Bring es bis zur Station.",
       "Pilot."
+    ],
+    "level-six": [
+      "Das reparierte Relais empfängt wieder Signale …",
+      "die die Crew für verloren hielt.",
+      "Ein Schlepper will mit einer Freigabe starten, die älter ist als das Kommando seines Kapitäns.",
+      "Wir haben die Station gebeten, ihn am Dock zu halten.",
+      "Verfolge die alte Aufnahme …",
+      "bis zu ihrer Quelle."
+    ],
+    "orvask": [
+      "Das ist Orvask …",
+      "der Wiederholungsjäger.",
+      "Er eskortierte Konvois und speicherte jede empfangene Freigabe.",
+      "Jetzt sendet er die alten Befehle erneut …",
+      "als wären sie von heute.",
+      "Ein Schlepper und ein Frachter …",
+      "haben dasselbe Startfenster bekommen.",
+      "Unterbrich Orvasks Signal."
+    ],
+    "orvask-outro": [
+      "Der Schlepper hat eine neue Freigabe.",
+      "Wir haben gehört, wie die Funkerin sie live erteilt hat.",
+      "Orvasks Logbuch zeigt, wo die ältesten Aufnahmen weitergegeben wurden.",
+      "Es ist ein Umschlagdock zwischen zwei Kolonien.",
+      "Beide erhalten noch immer Quittungen …",
+      "für Fracht …",
+      "die nie angekommen ist."
     ]
   },
   "es": {
@@ -257,6 +284,33 @@
       "El equipo de mantenimiento ve las luces del muelle desde donde espera.",
       "Lleva al equipo hasta la estación.",
       "Piloto."
+    ],
+    "level-six": [
+      "El repetidor reparado volvió a recibir señales…",
+      "que la tripulación creía perdidas.",
+      "Un remolcador va a partir con un permiso grabado antes de que su capitán asumiera el mando.",
+      "Pedimos a la estación que retuviera al remolcador.",
+      "Sigue la grabación antigua…",
+      "hasta su origen."
+    ],
+    "orvask": [
+      "Ese es Orvask…",
+      "el Cazador de Ecos.",
+      "Escoltaba convoyes y guardaba cada autorización que oía.",
+      "Ahora retransmite esas órdenes…",
+      "como si las hubieran dado hoy.",
+      "Un remolcador y un carguero…",
+      "han recibido la misma ventana de salida.",
+      "Corta la señal de Orvask."
+    ],
+    "orvask-outro": [
+      "El remolcador tiene una autorización nueva.",
+      "Oímos a la operadora darla en directo.",
+      "El registro de Orvask indica dónde cambiaron de manos las grabaciones más antiguas.",
+      "Es un muelle de transbordo entre dos colonias.",
+      "Ambas siguen recibiendo recibos…",
+      "por una carga…",
+      "que jamás llegó."
     ]
   },
   "fr": {
@@ -387,6 +441,33 @@
       "L’équipe de maintenance voit les feux du quai depuis sa position d’attente.",
       "Amène l’équipe jusqu’à la station.",
       "Pilote."
+    ],
+    "level-six": [
+      "Le relais réparé capte de nouveau des signaux…",
+      "que l’équipage croyait perdus.",
+      "Un remorqueur va partir avec une autorisation enregistrée avant la prise de poste du capitaine.",
+      "Nous avons demandé à la station de retenir le remorqueur.",
+      "Remonte la piste de cet ancien enregistrement…",
+      "jusqu’à sa source."
+    ],
+    "orvask": [
+      "C’est Orvask…",
+      "le Chasseur d’échos.",
+      "Il escortait des convois et conservait chaque autorisation reçue.",
+      "Il retransmet maintenant ces ordres…",
+      "comme s’ils venaient d’être donnés.",
+      "Un remorqueur et un cargo…",
+      "ont reçu le même créneau de départ.",
+      "Coupe le signal d’Orvask."
+    ],
+    "orvask-outro": [
+      "Le remorqueur a une nouvelle autorisation.",
+      "Nous avons entendu l’opératrice la donner en direct.",
+      "Le journal d’Orvask indique où les enregistrements les plus anciens ont changé de mains.",
+      "C’est un quai de transbordement entre deux colonies.",
+      "Toutes deux reçoivent encore des reçus…",
+      "pour une cargaison…",
+      "qui n’est jamais arrivée."
     ]
   },
   "pt": {
@@ -517,6 +598,33 @@
       "A equipe de manutenção vê as luzes da doca de onde está esperando.",
       "Leve a equipe até a estação.",
       "Piloto."
+    ],
+    "level-six": [
+      "O retransmissor reparado voltou a captar sinais…",
+      "que a tripulação achava perdidos.",
+      "Um rebocador vai partir com uma autorização gravada antes de seu capitão assumir o comando.",
+      "Pedimos à estação que segurasse o rebocador no cais.",
+      "Siga a gravação antiga…",
+      "até a origem."
+    ],
+    "orvask": [
+      "É Orvask…",
+      "o Caçador de Ecos.",
+      "Ele escoltava comboios e guardava cada autorização que ouvia.",
+      "Agora ele retransmite essas ordens…",
+      "como se tivessem sido dadas hoje.",
+      "Um rebocador e um cargueiro…",
+      "receberam a mesma janela de saída.",
+      "Corte o sinal de Orvask."
+    ],
+    "orvask-outro": [
+      "O rebocador tem uma nova autorização.",
+      "Ouvimos a operadora concedê-la ao vivo.",
+      "O registro de Orvask mostra onde as gravações mais antigas mudaram de mãos.",
+      "É uma doca de transbordo entre duas colônias.",
+      "Ambas ainda recebem recibos…",
+      "de uma carga…",
+      "que nunca chegou."
     ]
   },
   "it": {
@@ -647,6 +755,33 @@
       "La squadra di manutenzione vede le luci del molo da dove aspetta.",
       "Portala fino alla stazione.",
       "Pilota."
+    ],
+    "level-six": [
+      "Il ripetitore riparato ha ripreso a ricevere segnali…",
+      "che l’equipaggio credeva perduti.",
+      "Un rimorchiatore sta per partire con un’autorizzazione registrata prima che il capitano assumesse il comando.",
+      "Abbiamo chiesto alla stazione di trattenere il rimorchiatore.",
+      "Segui la vecchia registrazione…",
+      "fino alla sorgente."
+    ],
+    "orvask": [
+      "È Orvask…",
+      "il Cacciatore di echi.",
+      "Scortava i convogli e archiviava ogni autorizzazione ricevuta.",
+      "Ora ritrasmette quegli ordini…",
+      "come se fossero stati impartiti oggi.",
+      "Un rimorchiatore e un mercantile…",
+      "hanno ricevuto la stessa finestra di partenza.",
+      "Interrompi il segnale di Orvask."
+    ],
+    "orvask-outro": [
+      "Il rimorchiatore ha una nuova autorizzazione.",
+      "Abbiamo sentito l’operatrice concederla in diretta.",
+      "Il registro di Orvask mostra dove sono passate di mano le registrazioni più vecchie.",
+      "È un molo di trasbordo tra due colonie.",
+      "A entrambe arrivano ancora ricevute…",
+      "per un carico…",
+      "che non è mai arrivato."
     ]
   },
   "pl": {
@@ -777,6 +912,33 @@
       "Ekipa serwisowa widzi światła doku z miejsca, w którym czeka.",
       "Doprowadź ekipę do stacji.",
       "Pilocie."
+    ],
+    "level-six": [
+      "Naprawiony przekaźnik znów odbiera sygnały…",
+      "które załoga uznała za stracone.",
+      "Holownik ma wystartować na podstawie zgody nagranej, zanim jego kapitan objął dowództwo.",
+      "Poprosiliśmy stację, by zatrzymała holownik.",
+      "Podążaj za starym nagraniem…",
+      "aż do jego źródła."
+    ],
+    "orvask": [
+      "To Orvask…",
+      "Łowca Ech.",
+      "Eskortował konwoje i zapisywał każdą usłyszaną zgodę.",
+      "Teraz nadaje te rozkazy ponownie…",
+      "jakby wydano je dzisiaj.",
+      "Holownik i frachtowiec…",
+      "dostały to samo okno startowe.",
+      "Przerwij sygnał Orvaska."
+    ],
+    "orvask-outro": [
+      "Holownik ma nową zgodę na start.",
+      "Słyszeliśmy, jak operatorka wydała ją na żywo.",
+      "Dziennik Orvaska pokazuje, gdzie przekazano najstarsze nagrania.",
+      "To dok przeładunkowy między dwiema koloniami.",
+      "Obie nadal otrzymują pokwitowania…",
+      "za ładunek…",
+      "który nigdy nie dotarł."
     ]
   },
   "cs": {
@@ -907,6 +1069,33 @@
       "Servisní tým vidí světla doku z místa, kde čeká.",
       "Dostaň tým ke stanici.",
       "Pilote."
+    ],
+    "level-six": [
+      "Opravené relé znovu přijímá signály…",
+      "které posádka považovala za ztracené.",
+      "Remorkér se chystá odletět na povolení nahrané před nástupem svého kapitána.",
+      "Požádali jsme stanici, aby remorkér zadržela.",
+      "Sleduj starou nahrávku…",
+      "až k jejímu zdroji."
+    ],
+    "orvask": [
+      "To je Orvask…",
+      "Lovec ozvěn.",
+      "Doprovázel konvoje a zaznamenával každé povolení, které zaslechl.",
+      "Teď ty příkazy vysílá znovu…",
+      "jako by byly vydány dnes.",
+      "Remorkér a nákladní loď…",
+      "dostaly stejné odletové okno.",
+      "Přeruš Orvaskův signál."
+    ],
+    "orvask-outro": [
+      "Remorkér má nové povolení.",
+      "Slyšeli jsme operátorku, jak ho udělila živě.",
+      "Orvaskův záznam ukazuje, kde nejstarší nahrávky změnily majitele.",
+      "Je to překladiště mezi dvěma koloniemi.",
+      "Obě stále dostávají potvrzení…",
+      "za náklad…",
+      "který nikdy nedorazil."
     ]
   },
   "sk": {
@@ -1037,6 +1226,33 @@
       "Servisný tím vidí svetlá doku z miesta, kde čaká.",
       "Dostaň tím k stanici.",
       "Pilot."
+    ],
+    "level-six": [
+      "Opravené relé opäť prijíma signály…",
+      "ktoré posádka považovala za stratené.",
+      "Remorkér sa chystá odletieť na povolenie nahrané ešte pred nástupom jeho kapitána.",
+      "Požiadali sme stanicu, aby remorkér zadržala.",
+      "Sleduj starú nahrávku…",
+      "až k jej zdroju."
+    ],
+    "orvask": [
+      "To je Orvask…",
+      "Lovec ozvien.",
+      "Sprevádzal konvoje a zaznamenával každé povolenie, ktoré zachytil.",
+      "Teraz tie rozkazy vysiela znova…",
+      "akoby ich vydali dnes.",
+      "Remorkér a nákladná loď…",
+      "dostali rovnaké odletové okno.",
+      "Preruš Orvaskov signál."
+    ],
+    "orvask-outro": [
+      "Remorkér má nové povolenie.",
+      "Počuli sme operátorku, ako ho udelila naživo.",
+      "Orvaskov záznam ukazuje, kde najstaršie nahrávky zmenili majiteľa.",
+      "Je to prekladisko medzi dvoma kolóniami.",
+      "Obe stále dostávajú potvrdenia…",
+      "za náklad…",
+      "ktorý nikdy nedorazil."
     ]
   },
   "ru": {
@@ -1167,6 +1383,33 @@
       "Ремонтники видят огни дока с того места, где ждут.",
       "Доставь бригаду к станции.",
       "Пилот."
+    ],
+    "level-six": [
+      "Отремонтированный ретранслятор снова принимает сигналы…",
+      "которые экипаж считал потерянными.",
+      "Буксир готовится к вылету по разрешению, записанному ещё до назначения его капитана.",
+      "Мы попросили станцию задержать буксир.",
+      "Проследи старую запись…",
+      "до её источника."
+    ],
+    "orvask": [
+      "Это Орваск…",
+      "Охотник за эхом.",
+      "Он сопровождал конвои и сохранял каждое услышанное разрешение.",
+      "Теперь он снова передаёт эти приказы…",
+      "словно их отдали сегодня.",
+      "Буксир и грузовой корабль…",
+      "получили одно и то же окно вылета.",
+      "Прерви сигнал Орваска."
+    ],
+    "orvask-outro": [
+      "У буксира есть новое разрешение.",
+      "Мы слышали, как оператор выдала его в прямом эфире.",
+      "В журнале Орваска видно, где передали самые старые записи.",
+      "Это перегрузочный док между двумя колониями.",
+      "Обе всё ещё получают квитанции…",
+      "за груз…",
+      "который так и не прибыл."
     ]
   },
   "uk": {
@@ -1297,6 +1540,33 @@
       "Ремонтна команда бачить вогні дока з місця, де чекає.",
       "Доправ команду до станції.",
       "Пілоте."
+    ],
+    "level-six": [
+      "Відремонтований ретранслятор знову приймає сигнали…",
+      "які екіпаж вважав утраченими.",
+      "Буксир готується до вильоту за дозволом, записаним до вступу його капітана на посаду.",
+      "Ми попросили станцію затримати буксир.",
+      "Простеж старий запис…",
+      "до його джерела."
+    ],
+    "orvask": [
+      "Це Орваск…",
+      "Мисливець на відлуння.",
+      "Він супроводжував конвої та зберігав кожен почутий дозвіл.",
+      "Тепер він знову передає ці накази…",
+      "ніби їх віддали сьогодні.",
+      "Буксир і вантажний корабель…",
+      "отримали одне й те саме вікно вильоту.",
+      "Перерви сигнал Орваска."
+    ],
+    "orvask-outro": [
+      "Буксир має новий дозвіл.",
+      "Ми чули, як операторка видала його наживо.",
+      "Журнал Орваска показує, де передали найстаріші записи.",
+      "Це перевантажувальний док між двома колоніями.",
+      "Обидві досі отримують квитанції…",
+      "за вантаж…",
+      "який так і не прибув."
     ]
   },
   "hr": {
@@ -1427,6 +1697,33 @@
       "Ekipa za održavanje vidi svjetla doka s mjesta na kojem čeka.",
       "Dovedi ekipu do postaje.",
       "Pilote."
+    ],
+    "level-six": [
+      "Popravljeni relej opet prima signale…",
+      "koje je posada smatrala izgubljenima.",
+      "Tegljač će poletjeti prema odobrenju snimljenom prije dolaska njegova kapetana.",
+      "Zamolili smo postaju da zadrži tegljač.",
+      "Slijedi staru snimku…",
+      "do njezina izvora."
+    ],
+    "orvask": [
+      "To je Orvask…",
+      "Lovac na odjeke.",
+      "Pratio je konvoje i čuvao svako odobrenje koje je čuo.",
+      "Sad iznova odašilje te zapovijedi…",
+      "kao da su izdane danas.",
+      "Tegljač i teretni brod…",
+      "dobili su isti termin polaska.",
+      "Prekini Orvaskov signal."
+    ],
+    "orvask-outro": [
+      "Tegljač ima novo odobrenje.",
+      "Čuli smo operaterku kako ga izdaje uživo.",
+      "Orvaskov dnevnik pokazuje gdje su predane najstarije snimke.",
+      "To je pretovarni dok između dviju kolonija.",
+      "Obje još primaju potvrde…",
+      "za teret…",
+      "koji nikad nije stigao."
     ]
   },
   "sr": {
@@ -1557,6 +1854,33 @@
       "Екипа за одржавање види светла дока са места на ком чека.",
       "Доведи екипу до станице.",
       "Пилоте."
+    ],
+    "level-six": [
+      "Поправљени релеј поново прима сигнале…",
+      "које је посада сматрала изгубљеним.",
+      "Тегљач се спрема за полетање по одобрењу снимљеном пре доласка његовог капетана.",
+      "Замолили смо станицу да задржи тегљач.",
+      "Прати стари снимак…",
+      "до његовог извора."
+    ],
+    "orvask": [
+      "То је Орваск…",
+      "Ловац на одјеке.",
+      "Пратио је конвоје и чувао свако одобрење које је чуо.",
+      "Сад поново емитује те команде…",
+      "као да су издате данас.",
+      "Тегљач и теретни брод…",
+      "добили су исти термин поласка.",
+      "Прекини Орвасков сигнал."
+    ],
+    "orvask-outro": [
+      "Тегљач има ново одобрење.",
+      "Чули смо оператерку како га издаје уживо.",
+      "Орвасков дневник показује где су предати најстарији снимци.",
+      "То је претоварни док између две колоније.",
+      "Обе још примају потврде…",
+      "за терет…",
+      "који никада није стигао."
     ]
   },
   "tr": {
@@ -1687,6 +2011,33 @@
       "Bakım ekibi beklediği yerden rıhtım ışıklarını görebiliyor.",
       "Ekibi istasyona ulaştır.",
       "Pilot."
+    ],
+    "level-six": [
+      "Onarılan aktarıcı sinyalleri yeniden almaya başladı…",
+      "mürettebat bunların kaybolduğunu sanıyordu.",
+      "Bir römorkör, kaptanı göreve gelmeden önce kaydedilmiş bir izinle kalkmak üzere.",
+      "İstasyondan römorkörü bekletmesini istedik.",
+      "Eski kaydı takip et…",
+      "kaynağına kadar."
+    ],
+    "orvask": [
+      "Bu Orvask…",
+      "Yankı Avcısı.",
+      "Konvoylara eşlik eder, duyduğu her izni kaydederdi.",
+      "Şimdi o emirleri yeniden yayınlıyor…",
+      "sanki bugün verilmişler gibi.",
+      "Bir römorkörle bir yük gemisine…",
+      "aynı kalkış aralığı verilmiş.",
+      "Orvask’ın sinyalini kes."
+    ],
+    "orvask-outro": [
+      "Römorkör yeni bir izin aldı.",
+      "Operatörün izni canlı yayında verdiğini duyduk.",
+      "Orvask’ın günlüğü en eski kayıtların nerede el değiştirdiğini gösteriyor.",
+      "Burası iki koloni arasındaki bir aktarma iskelesi.",
+      "İkisine de hâlâ teslim makbuzları geliyor…",
+      "bir yük için…",
+      "ama o yük hiç ulaşmadı."
     ]
   },
   "hu": {
@@ -1817,6 +2168,33 @@
       "A karbantartók a várakozóhelyükről látják a dokk fényeit.",
       "Juttasd el a csapatot az állomásig.",
       "Pilóta."
+    ],
+    "level-six": [
+      "A megjavított átjátszó ismét jeleket fog…",
+      "amelyeket a legénység elveszettnek hitt.",
+      "Egy vontató indulna a kapitánya hivatalba lépése előtt rögzített engedéllyel.",
+      "Megkértük az állomást, hogy tartsa vissza a vontatót.",
+      "Kövesd a régi felvétel nyomát…",
+      "egészen a forrásáig."
+    ],
+    "orvask": [
+      "Ez Orvask…",
+      "a Visszhangvadász.",
+      "Konvojokat kísért, és minden hallott engedélyt rögzített.",
+      "Most újra sugározza azokat a parancsokat…",
+      "mintha ma adták volna ki őket.",
+      "Egy vontató és egy teherhajó…",
+      "ugyanazt az indulási időablakot kapta.",
+      "Szakítsd meg Orvask adását."
+    ],
+    "orvask-outro": [
+      "A vontató új engedélyt kapott.",
+      "Hallottuk, ahogy a forgalomirányító élőben megadta.",
+      "Orvask naplójából kiderül, hol cseréltek gazdát a legrégebbi felvételek.",
+      "Ez egy átrakódokk két kolónia között.",
+      "Mindkettő továbbra is kap bizonylatokat…",
+      "egy rakományról…",
+      "amely sosem érkezett meg."
     ]
   },
   "ro": {
@@ -1947,6 +2325,33 @@
       "Echipa de întreținere vede luminile docului de unde așteaptă.",
       "Du echipa până la stație.",
       "Pilotule."
+    ],
+    "level-six": [
+      "Releul reparat recepționează din nou semnale…",
+      "pe care echipajul le credea pierdute.",
+      "Un remorcher va pleca cu o aprobare înregistrată înainte să preia comanda căpitanul.",
+      "Am cerut stației să țină remorcherul la doc.",
+      "Urmărește vechea înregistrare…",
+      "până la sursă."
+    ],
+    "orvask": [
+      "Ăsta e Orvask…",
+      "Vânătorul de ecouri.",
+      "Escorta convoaie și păstra fiecare autorizare auzită.",
+      "Acum retransmite acele ordine…",
+      "de parcă ar fi fost date astăzi.",
+      "Un remorcher și un cargou…",
+      "au primit aceeași fereastră de plecare.",
+      "Întrerupe semnalul lui Orvask."
+    ],
+    "orvask-outro": [
+      "Remorcherul are o nouă autorizare.",
+      "Am auzit-o pe operatoare acordând-o în direct.",
+      "Jurnalul lui Orvask arată unde au fost predate cele mai vechi înregistrări.",
+      "Este un doc de transbordare între două colonii.",
+      "Ambele încă primesc chitanțe…",
+      "pentru o marfă…",
+      "care n-a ajuns niciodată."
     ]
   },
   "th": {
@@ -2077,6 +2482,33 @@
       "ทีมซ่อมบำรุงมองเห็นไฟท่าเทียบยานจากจุดที่รออยู่",
       "พาทีมซ่อมบำรุงเข้าไปให้ถึงสถานี",
       "นักบิน"
+    ],
+    "level-six": [
+      "รีเลย์ที่ซ่อมแล้วรับสัญญาณได้อีกครั้ง…",
+      "สัญญาณที่ลูกเรือคิดว่าสูญหายไปแล้ว",
+      "ยานลากกำลังจะออกเดินทางตามคำอนุญาตที่บันทึกไว้ก่อนกัปตันเข้ารับตำแหน่ง",
+      "เราขอให้สถานีระงับการออกเดินทางของยานลากไว้",
+      "ตามรอยบันทึกเสียงเก่านี้…",
+      "ไปจนถึงต้นทาง"
+    ],
+    "orvask": [
+      "นั่นคือออร์วาสก์…",
+      "นักล่าเสียงสะท้อน",
+      "มันเคยคุ้มกันขบวนยานและบันทึกคำอนุญาตทุกฉบับที่ได้ยิน",
+      "ตอนนี้มันส่งคำสั่งเหล่านั้นซ้ำ…",
+      "ราวกับเพิ่งออกคำสั่งวันนี้",
+      "ยานลากกับยานขนสินค้า…",
+      "ได้รับช่วงเวลาออกเดินทางเดียวกัน",
+      "ตัดสัญญาณของออร์วาสก์"
+    ],
+    "orvask-outro": [
+      "ยานลากได้รับคำอนุญาตใหม่แล้ว",
+      "เราได้ยินเจ้าหน้าที่ออกคำอนุญาตให้สด ๆ",
+      "บันทึกของออร์วาสก์ระบุจุดที่บันทึกเสียงชุดเก่าสุดเปลี่ยนมือ",
+      "เป็นท่าขนถ่ายสินค้าระหว่างสองอาณานิคม",
+      "ทั้งสองแห่งยังได้รับใบรับสินค้า…",
+      "สำหรับสินค้า…",
+      "ที่ไม่เคยมาถึง"
     ]
   },
   "zh": {
@@ -2207,6 +2639,33 @@
       "维护队在等候点已经能看到码头的灯光。",
       "把维护队送到空间站。",
       "飞行员。"
+    ],
+    "level-six": [
+      "修复后的中继器再次收到了信号……",
+      "船员们原以为这些信号已经丢失。",
+      "一艘拖船即将按照一份旧许可启航。许可在船长接任前就已录制。",
+      "我们已请空间站暂留拖船。",
+      "追踪那段旧录音……",
+      "找到它的源头。"
+    ],
+    "orvask": [
+      "那是奥尔瓦斯克……",
+      "回声猎手。",
+      "它曾护送船队，保存听到的每一道许可。",
+      "如今它把那些命令重新播出……",
+      "仿佛是今天下达的一样。",
+      "一艘拖船和一艘货船……",
+      "获准在同一时段启航。",
+      "切断奥尔瓦斯克的信号。"
+    ],
+    "orvask-outro": [
+      "拖船拿到了新的许可。",
+      "我们听到调度员当场发出了许可。",
+      "奥尔瓦斯克的日志显示了最早一批录音的交接地点。",
+      "那是两座殖民地之间的一处转运码头。",
+      "两个殖民地至今仍在收到回执……",
+      "签收的是一批货物……",
+      "而这批货从未送达。"
     ]
   },
   "vi": {
@@ -2337,6 +2796,33 @@
       "Đội bảo trì thấy được đèn bến từ chỗ họ đang chờ.",
       "Đưa đội bảo trì tới trạm.",
       "Phi công."
+    ],
+    "level-six": [
+      "Bộ tiếp sóng đã sửa bắt lại được những tín hiệu…",
+      "mà thủy thủ đoàn tưởng đã mất.",
+      "Tàu kéo sắp rời bến theo lệnh ghi âm từ trước khi thuyền trưởng nhậm chức.",
+      "Chúng tôi đã yêu cầu trạm giữ tàu kéo lại.",
+      "Lần theo bản ghi cũ…",
+      "đến tận nguồn."
+    ],
+    "orvask": [
+      "Đó là Orvask…",
+      "Kẻ Săn Tiếng Vọng.",
+      "Nó từng hộ tống các đoàn tàu và lưu mọi lệnh cấp phép nghe được.",
+      "Giờ nó phát lại những mệnh lệnh ấy…",
+      "như thể chúng vừa được ban hành hôm nay.",
+      "Một tàu kéo và một tàu chở hàng…",
+      "được cấp cùng một khung giờ khởi hành.",
+      "Cắt tín hiệu của Orvask."
+    ],
+    "orvask-outro": [
+      "Tàu kéo đã có lệnh cấp phép mới.",
+      "Chúng tôi nghe điều hành viên cấp phép trực tiếp.",
+      "Nhật ký của Orvask cho thấy nơi những bản ghi lâu đời nhất được trao tay.",
+      "Đó là bến trung chuyển giữa hai thuộc địa.",
+      "Cả hai vẫn nhận được biên nhận…",
+      "cho số hàng…",
+      "chưa từng đến nơi."
     ]
   }
 }

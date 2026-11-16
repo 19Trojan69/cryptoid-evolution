@@ -22,7 +22,8 @@ Drehbuch für Kampagnenstart, Level-Briefings, Boss-Intros und Sieges-Outros. Je
 | Briefing 4 | Sprechtext und deutsche Untertitel | Englische Teststimme mit eigens produzierten leisen Streicher- und Klavierklängen |
 | Intro Zeraveth und Outro Zeraveth | Sprechtext und deutsche Untertitel | Eingereichte Suno-Aufnahmen mit Wortzeitplan |
 | Briefing 5 | Sprechtext und deutsche Untertitel | Eingereichte Suno-Aufnahme mit Wortzeitplan |
-| Level 6–50 | 135 Drehbuchfassungen bis zum Finale | Aufnahmen, Zeitpläne und Einbau folgen je Szene |
+| Briefing 6, Intro Orvask und Outro Orvask | Sprechtext und deutsche Untertitel | Eingereichte Suno-Aufnahmen mit Wortzeitplan |
+| Level 7–50 | 132 Drehbuchfassungen bis zum Finale | Aufnahmen, Zeitpläne und Einbau folgen je Szene |
 
 Die Testaufnahme für Briefing 4 wurde mit der Stimme am_onyx aus [Kokoro](https://huggingface.co/hexgrad/Kokoro-82M) produziert. Die Suno-Fassung kann diese Aufnahme samt Wortzeitplan ersetzen.
 
@@ -381,19 +382,28 @@ Der Wiederholungsjäger · The Echo Hunter
 
 #### Level-Briefing · An Old Clearance
 
+Suno-Aufnahme „Follow the Old Recording“. level-six.mp3 · 20,04 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Soft violas, one repeated figure with a pause before the last instruction. Around 24–29 seconds.
 
 **Englischer Sprechtext**
 
-The repaired relay brought back traffic the crew thought had been lost. A tug is about to launch on a clearance recorded before its captain took command. We asked the station to hold the tug. Follow the old recording to its source.
+The repaired relay brought back traffic… the crew thought had been lost. A tug is about to launch on a clearance recorded before its captain took command. We asked the station to hold the tug. Follow the old recording… to its source.
 
 **Deutsche Untertitel**
 
-Das reparierte Relais empfängt wieder Signale, die die Crew für verloren hielt. Ein Schlepper will nach einer Freigabe starten, die älter ist als das Kommando seines Kapitäns. Wir haben die Station gebeten, ihn am Dock zu halten. Verfolge die alte Aufnahme bis zu ihrer Quelle.
+- Das reparierte Relais empfängt wieder Signale …
+- die die Crew für verloren hielt.
+- Ein Schlepper will mit einer Freigabe starten, die älter ist als das Kommando seines Kapitäns.
+- Wir haben die Station gebeten, ihn am Dock zu halten.
+- Verfolge die alte Aufnahme …
+- bis zu ihrer Quelle.
 
-#### Boss-Intro · Echoes in Command
+#### Boss-Intro · Intro Orvask
+
+Suno-Aufnahme „Cut Orvask’s Signal“. orvask-intro.mp3 · 28,44 s.
 
 **Suno-Stil**
 
@@ -401,13 +411,22 @@ English spoken-word fleet command. Keep one clear narrator up front. Allow an au
 
 **Englischer Sprechtext**
 
-That’s Orvask, the Echo Hunter. It escorted convoys and saved every clearance it heard. Now it sends those orders back as if they were issued today. A tug and a freighter have both been given the same departure slot. Cut Orvask’s signal.
+That’s Orvask… the Echo Hunter. It escorted convoys and saved every clearance it heard. Now it sends those orders back… as if they were issued today. A tug and a freighter… have both been given the same departure slot. Cut Orvask’s signal.
 
 **Deutsche Untertitel**
 
-Das ist Orvask, der Wiederholungsjäger. Er eskortierte Konvois und speicherte jede empfangene Freigabe. Jetzt sendet er die alten Befehle erneut, als wären sie von heute. Ein Schlepper und ein Frachter haben dasselbe Startfenster bekommen. Unterbrich Orvasks Signal.
+- Das ist Orvask …
+- der Wiederholungsjäger.
+- Er eskortierte Konvois und speicherte jede empfangene Freigabe.
+- Jetzt sendet er die alten Befehle erneut …
+- als wären sie von heute.
+- Ein Schlepper und ein Frachter …
+- haben dasselbe Startfenster bekommen.
+- Unterbrich Orvasks Signal.
 
-#### Boss-Outro · Say It Again Now
+#### Boss-Outro · Outro Orvask
+
+Suno-Aufnahme „Cargo That Never Arrived“. orvask-outro.mp3 · 27,62 s.
 
 **Suno-Stil**
 
@@ -415,11 +434,17 @@ English spoken-word fleet command. Keep one clear narrator up front. Allow an au
 
 **Englischer Sprechtext**
 
-The tug has a fresh clearance. We heard the operator give it live. Orvask’s log shows where the oldest recordings traded hands. It’s a transfer dock between two colonies. Both are still receiving receipts for cargo that never arrived.
+The tug has a fresh clearance. We heard the operator give it live. Orvask’s log shows where the oldest recordings traded hands. It’s a transfer dock between two colonies. Both are still receiving receipts… for cargo… that never arrived.
 
 **Deutsche Untertitel**
 
-Der Schlepper hat eine neue Freigabe. Wir haben gehört, wie die Funkerin sie live erteilt hat. Orvasks Logbuch zeigt, wo die ältesten Aufnahmen weitergegeben wurden. Es ist ein Umschlagdock zwischen zwei Kolonien. Beide erhalten noch immer Quittungen für Fracht, die nie angekommen ist.
+- Der Schlepper hat eine neue Freigabe.
+- Wir haben gehört, wie die Funkerin sie live erteilt hat.
+- Orvasks Logbuch zeigt, wo die ältesten Aufnahmen weitergegeben wurden.
+- Es ist ein Umschlagdock zwischen zwei Kolonien.
+- Beide erhalten noch immer Quittungen …
+- für Fracht …
+- die nie angekommen ist.
 
 ### Level 07 · Keldrava
 
