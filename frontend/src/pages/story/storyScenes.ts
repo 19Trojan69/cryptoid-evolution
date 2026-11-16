@@ -13,7 +13,8 @@ export type StoryScene =
   | 'varneth' | 'varneth-outro'
   | 'level-two' | 'korvessa' | 'korvessa-outro'
   | 'level-three' | 'drelvorn' | 'drelvorn-outro'
-  | 'level-four' | 'talvrek' | 'talvrek-outro';
+  | 'level-four' | 'talvrek' | 'talvrek-outro'
+  | 'zeraveth' | 'zeraveth-outro';
 
 type BossStory = NonNullable<StoryPresentation['boss']> & {
   outline: string;
@@ -45,6 +46,12 @@ const talvrek: BossStory = {
   id: 4, name: bossName(4), subtitle: 'The Chronicle Forger',
   outline: 'talvrek-outline.webp', ship: '/ships/bosses/evolved/boss-04-hull.webp',
 };
+const zeraveth: BossStory = {
+  id: 5, name: bossName(5), subtitle: 'The Node Besieger',
+  outline: 'zeraveth-outline.webp', ship: '/ships/bosses/evolved/boss-05-hull.webp',
+};
+const zeravethIntroTitle = `Intro ${zeraveth.name}`;
+const zeravethOutroTitle = `Outro ${zeraveth.name}`;
 
 export const storyScenes: Record<StoryScene, StoryDefinition> = {
   campaign: {
@@ -138,6 +145,22 @@ export const storyScenes: Record<StoryScene, StoryDefinition> = {
     timing: genesisTiming['talvrek-outro'],
     boss: talvrek,
   },
+  zeraveth: {
+    title: zeravethIntroTitle,
+    chapterTitle: zeravethIntroTitle,
+    heading: zeravethIntroTitle,
+    audio: 'zeraveth-intro.mp3',
+    timing: genesisTiming.zeraveth,
+    boss: zeraveth,
+  },
+  'zeraveth-outro': {
+    title: zeravethOutroTitle,
+    chapterTitle: zeravethOutroTitle,
+    heading: zeravethOutroTitle,
+    audio: 'zeraveth-outro.mp3',
+    timing: genesisTiming['zeraveth-outro'],
+    boss: zeraveth,
+  },
 };
 
 export function levelStoryAtSector(sector: number): StoryScene | undefined {
@@ -151,6 +174,7 @@ export function bossStoryAtSector(sector: number): StoryScene | undefined {
   if (sector === 20) return 'korvessa';
   if (sector === 30) return 'drelvorn';
   if (sector === 40) return 'talvrek';
+  if (sector === 50) return 'zeraveth';
 }
 
 export function bossOutroAtSector(sector: number): StoryScene | undefined {
@@ -158,4 +182,5 @@ export function bossOutroAtSector(sector: number): StoryScene | undefined {
   if (sector === 20) return 'korvessa-outro';
   if (sector === 30) return 'drelvorn-outro';
   if (sector === 40) return 'talvrek-outro';
+  if (sector === 50) return 'zeraveth-outro';
 }

@@ -58,5 +58,28 @@
       {"kind":"story","words":[{"text":"A","start":17.12,"end":17.62},{"text":"repair","start":17.62,"end":17.92},{"text":"platform","start":17.92,"end":18.4},{"text":"named","start":18.4,"end":18.74},{"text":"Zeraveth","start":18.74,"end":19.28},{"text":"is","start":19.28,"end":20.0},{"text":"parked","start":20.0,"end":20.26},{"text":"across","start":20.26,"end":20.58},{"text":"its","start":20.58,"end":20.8},{"text":"approach.","start":20.8,"end":21.12}]},
       {"kind":"story","words":[{"text":"The","start":23.040000000000003,"end":23.42},{"text":"maintenance","start":23.42,"end":23.7},{"text":"crew","start":23.7,"end":24.08},{"text":"is","start":24.08,"end":24.94},{"text":"waiting","start":24.94,"end":25.18},{"text":"outside","start":25.18,"end":25.66},{"text":"with","start":25.66,"end":25.94},{"text":"the","start":25.94,"end":26.06},{"text":"parts","start":26.06,"end":26.34},{"text":"that","start":26.34,"end":27.44},{"text":"station","start":27.44,"end":27.84},{"text":"needs.","start":27.84,"end":28.24}]}
     ]
+  },
+  "zeraveth": {
+    "duration": 29.592,
+    "groups": [
+      {"kind":"story","words":[{"text":"Contact","start":0.15,"end":0.52},{"text":"confirmed.","start":0.52,"end":1.2}]},
+      {"kind":"contact","words":[{"text":"Zeraveth,","start":3.16,"end":3.66},{"text":"the","start":4.06,"end":4.26},{"text":"Node","start":4.26,"end":4.5},{"text":"Besieger.","start":4.5,"end":5.02}]},
+      {"kind":"story","words":[{"text":"It","start":6.66,"end":6.94},{"text":"used","start":6.94,"end":7.16},{"text":"to","start":7.16,"end":7.34},{"text":"repair","start":7.34,"end":7.64},{"text":"entire","start":7.64,"end":8.06},{"text":"relay","start":8.06,"end":8.32},{"text":"rings.","start":8.32,"end":8.86}]},
+      {"kind":"story","words":[{"text":"Its","start":10.24,"end":10.38},{"text":"docking","start":10.38,"end":10.66},{"text":"arms","start":10.66,"end":11.12},{"text":"now","start":11.12,"end":11.32},{"text":"hold","start":11.32,"end":11.52},{"text":"a","start":11.52,"end":11.7},{"text":"siege","start":11.7,"end":11.9},{"text":"line","start":11.9,"end":12.28},{"text":"across","start":12.28,"end":12.56},{"text":"the","start":12.56,"end":12.82},{"text":"only","start":12.82,"end":13.04},{"text":"approach.","start":13.04,"end":13.54}]},
+      {"kind":"story","words":[{"text":"The","start":15.6,"end":15.98},{"text":"station","start":15.98,"end":16.28},{"text":"is","start":17.32,"end":17.44},{"text":"losing","start":17.44,"end":17.66},{"text":"its","start":17.66,"end":17.9},{"text":"last","start":17.9,"end":18.14},{"text":"working","start":18.14,"end":18.54},{"text":"transmitter.","start":18.54,"end":19.1}]},
+      {"kind":"order","words":[{"text":"Hit","start":20.78,"end":21.04},{"text":"Zeraveth’s","start":21.04,"end":21.64},{"text":"reactor…","start":21.64,"end":22.0}]},
+      {"kind":"order","words":[{"text":"and","start":23.24,"end":23.37},{"text":"clear","start":23.37,"end":23.64},{"text":"the","start":23.64,"end":24.18},{"text":"way","start":24.18,"end":24.34},{"text":"for","start":24.34,"end":24.56},{"text":"the","start":24.56,"end":24.68},{"text":"repair","start":24.68,"end":24.92},{"text":"boats.","start":24.92,"end":25.24}]}
+    ]
+  },
+  "zeraveth-outro": {
+    "duration": 25.224,
+    "groups": [
+      {"kind":"contact","words":[{"text":"The","start":0.2,"end":0.34},{"text":"boats","start":0.34,"end":0.58},{"text":"are","start":0.58,"end":0.84},{"text":"in.","start":0.84,"end":1.24}]},
+      {"kind":"story","words":[{"text":"The","start":2.9,"end":3.1},{"text":"station’s","start":3.1,"end":3.66},{"text":"operator","start":3.66,"end":4.02},{"text":"just","start":4.02,"end":4.34},{"text":"called","start":4.34,"end":4.62},{"text":"from","start":4.62,"end":4.86},{"text":"the","start":4.86,"end":5.0},{"text":"dock,","start":5.0,"end":5.24}]},
+      {"kind":"story","words":[{"text":"and","start":5.92,"end":6.02},{"text":"the","start":6.02,"end":6.16},{"text":"relay","start":6.16,"end":6.38},{"text":"is","start":6.38,"end":6.6},{"text":"carrying","start":6.6,"end":6.88},{"text":"her","start":6.88,"end":7.1},{"text":"voice.","start":7.1,"end":7.44}]},
+      {"kind":"story","words":[{"text":"A","start":9.1,"end":9.26},{"text":"second","start":9.26,"end":9.54},{"text":"clearance","start":9.54,"end":10.0},{"text":"came","start":10.0,"end":10.28},{"text":"through","start":10.28,"end":10.54},{"text":"at","start":10.54,"end":10.66},{"text":"the","start":10.66,"end":10.78},{"text":"same","start":10.78,"end":11.0},{"text":"time.","start":11.0,"end":11.68}]},
+      {"kind":"story","words":[{"text":"She","start":13.4,"end":13.92},{"text":"remembers","start":13.92,"end":14.2},{"text":"issuing","start":14.2,"end":14.6},{"text":"that","start":14.6,"end":14.82},{"text":"one","start":14.82,"end":15.0},{"text":"years","start":15.0,"end":15.26},{"text":"ago.","start":15.26,"end":15.6}]},
+      {"kind":"story","words":[{"text":"I’ve","start":18.74,"end":18.94},{"text":"kept","start":18.94,"end":19.1},{"text":"both","start":19.1,"end":19.42},{"text":"recordings.","start":19.42,"end":19.94}]}
+    ]
   }
 }

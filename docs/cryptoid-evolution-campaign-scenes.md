@@ -20,7 +20,8 @@ Drehbuch für Kampagnenstart, Level-Briefings, Boss-Intros und Sieges-Outros. Je
 | Drelvorns Outro (Seal Revoked) | Sprechtext und acht Untertitelabschnitte | Eingereichte Suno-Aufnahme im Story-Zweig |
 | Talvreks Intro und Outro | Sprechtext und deutsche Untertitel | Zwei eingereichte Suno-Aufnahmen im Story-Zweig |
 | Briefing 4 | Sprechtext und deutsche Untertitel | Englische Teststimme mit eigens produzierten leisen Streicher- und Klavierklängen |
-| Level 5–50 | 138 Drehbuchfassungen bis zum Finale | Aufnahmen, Zeitpläne und Einbau folgen je Szene |
+| Intro Zeraveth und Outro Zeraveth | Sprechtext und deutsche Untertitel | Eingereichte Suno-Aufnahmen mit Wortzeitplan |
+| Briefing 5 und Level 6–50 | 136 Drehbuchfassungen bis zum Finale | Aufnahmen, Zeitpläne und Einbau folgen je Szene |
 
 Die Testaufnahme für Briefing 4 wurde mit der Stimme am_onyx aus [Kokoro](https://huggingface.co/hexgrad/Kokoro-82M) produziert. Die Suno-Fassung kann diese Aufnahme samt Wortzeitplan ersetzen.
 
@@ -324,7 +325,9 @@ The relief crew from the Genesis outer ring sent us a set of parts. The station 
 
 Der Hilfstrupp vom Genesis-Außenring hat uns Ersatzteile geschickt. Die Station, die nach Talvrek verstummte, braucht jedes einzelne davon. Das Wartungsteam sieht von seiner Warteposition aus die Docklichter. Bring es bis zur Station, Pilot.
 
-#### Boss-Intro · The Closed Approach
+#### Boss-Intro · Intro Zeraveth
+
+Suno-Aufnahme „Zeraveth, the Node Besieger“. zeraveth-intro.mp3 · 29,59 s.
 
 **Suno-Stil**
 
@@ -332,13 +335,21 @@ English spoken-word fleet command. Keep one clear narrator up front. Allow an au
 
 **Englischer Sprechtext**
 
-Contact confirmed. Zeraveth, the Node Besieger. It used to repair entire relay rings. Its docking arms now hold a siege line across the only approach. The station is losing its last working transmitter. Hit Zeraveth's reactor and clear the way for the repair boats.
+Contact confirmed. Zeraveth, the Node Besieger. It used to repair entire relay rings. Its docking arms now hold a siege line across the only approach. The station is losing its last working transmitter. Hit Zeraveth’s reactor… and clear the way for the repair boats.
 
 **Deutsche Untertitel**
 
-Kontakt bestätigt. Zeraveth, der Knotenbelagerer. Er hat früher ganze Relaisringe repariert. Seine Andockarme halten jetzt die Belagerungslinie am einzigen Zugang. Die Station verliert gerade ihren letzten funktionierenden Sender. Triff Zeraveths Reaktor und mach den Weg für die Reparaturboote frei.
+- Kontakt bestätigt.
+- Zeraveth, der Knotenbelagerer.
+- Er hat früher ganze Relaisringe repariert.
+- Seine Andockarme halten jetzt die Belagerungslinie am einzigen Zugang.
+- Die Station verliert gerade ihren letzten funktionierenden Sender.
+- Triff Zeraveths Reaktor …
+- und mach den Weg für die Reparaturboote frei.
 
-#### Boss-Outro · A Voice From the Dock
+#### Boss-Outro · Outro Zeraveth
+
+Suno-Aufnahme „Both Recordings“. zeraveth-outro.mp3 · 25,22 s.
 
 **Suno-Stil**
 
@@ -350,7 +361,12 @@ The boats are in. The station’s operator just called from the dock, and the re
 
 **Deutsche Untertitel**
 
-Die Boote sind drin. Die Stationsfunkerin hat sich gerade vom Dock gemeldet. Das Relais überträgt ihre Stimme. Gleichzeitig kam eine zweite Freigabe durch. Sie erinnert sich, dass sie die vor Jahren erteilt hat. Ich habe beide Aufnahmen gesichert.
+- Die Boote sind drin.
+- Die Stationsfunkerin hat sich gerade vom Dock gemeldet.
+- Das Relais überträgt ihre Stimme.
+- Gleichzeitig kam eine zweite Freigabe durch.
+- Sie erinnert sich, dass sie die vor Jahren erteilt hat.
+- Ich habe beide Aufnahmen gesichert.
 
 ### Level 06 · Orvask
 

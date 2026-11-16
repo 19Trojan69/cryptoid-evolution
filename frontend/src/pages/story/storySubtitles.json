@@ -103,6 +103,23 @@
       "Eine Station hat immer noch nicht geantwortet.",
       "Eine Reparaturplattform namens Zeraveth versperrt den Anflug.",
       "Das Wartungsteam wartet draußen mit den Ersatzteilen für die Station."
+    ],
+    "zeraveth": [
+      "Kontakt bestätigt.",
+      "Zeraveth, der Knotenbelagerer.",
+      "Er hat früher ganze Relaisringe repariert.",
+      "Seine Andockarme halten jetzt die Belagerungslinie am einzigen Zugang.",
+      "Die Station verliert gerade ihren letzten funktionierenden Sender.",
+      "Triff Zeraveths Reaktor …",
+      "und mach den Weg für die Reparaturboote frei."
+    ],
+    "zeraveth-outro": [
+      "Die Boote sind drin.",
+      "Die Stationsfunkerin hat sich gerade vom Dock gemeldet.",
+      "Das Relais überträgt ihre Stimme.",
+      "Gleichzeitig kam eine zweite Freigabe durch.",
+      "Sie erinnert sich, dass sie die vor Jahren erteilt hat.",
+      "Ich habe beide Aufnahmen gesichert."
     ]
   },
   "es": {
@@ -209,6 +226,23 @@
       "Una estación sigue sin responder.",
       "Una plataforma de reparación llamada Zeraveth bloquea el acceso.",
       "El equipo de mantenimiento espera fuera con las piezas que necesita la estación."
+    ],
+    "zeraveth": [
+      "Contacto confirmado.",
+      "Zeraveth, el Sitiador de Nodos.",
+      "Antes reparaba anillos de relés enteros.",
+      "Ahora sus brazos de atraque mantienen el asedio en el único acceso.",
+      "La estación está perdiendo el último transmisor que le funciona.",
+      "Golpea el reactor de Zeraveth…",
+      "y abre paso a las embarcaciones de reparación."
+    ],
+    "zeraveth-outro": [
+      "Las embarcaciones ya están dentro.",
+      "La operadora de la estación acaba de llamar desde el muelle.",
+      "El relé está transmitiendo su voz.",
+      "Al mismo tiempo llegó una segunda autorización.",
+      "Recuerda haberla dado hace años.",
+      "He guardado ambas grabaciones."
     ]
   },
   "fr": {
@@ -315,6 +349,23 @@
       "Une station n’a toujours pas répondu.",
       "Une plateforme de réparation nommée Zeraveth bloque l’approche.",
       "L’équipe de maintenance attend dehors avec les pièces dont la station a besoin."
+    ],
+    "zeraveth": [
+      "Contact confirmé.",
+      "Zeraveth, l’Assiégeur de nœuds.",
+      "Il réparait autrefois des anneaux relais entiers.",
+      "Ses bras d’amarrage bloquent aujourd’hui le seul accès.",
+      "La station est en train de perdre son dernier émetteur en état de marche.",
+      "Touche le réacteur de Zeraveth…",
+      "et ouvre le passage aux navettes de réparation."
+    ],
+    "zeraveth-outro": [
+      "Les navettes sont entrées.",
+      "L’opératrice de la station vient d’appeler depuis le quai.",
+      "Le relais transmet sa voix.",
+      "Une deuxième autorisation est arrivée au même moment.",
+      "Elle se souvient de l’avoir donnée il y a des années.",
+      "J’ai conservé les deux enregistrements."
     ]
   },
   "pt": {
@@ -421,6 +472,23 @@
       "Uma estação ainda não respondeu.",
       "Uma plataforma de reparo chamada Zeraveth bloqueia o acesso.",
       "A equipe de manutenção espera do lado de fora com as peças de que a estação precisa."
+    ],
+    "zeraveth": [
+      "Contato confirmado.",
+      "Zeraveth, o Sitiador de Nós.",
+      "Ele costumava reparar anéis inteiros de retransmissão.",
+      "Agora seus braços de atracação bloqueiam o único acesso.",
+      "A estação está perdendo seu último transmissor em funcionamento.",
+      "Acerte o reator de Zeraveth…",
+      "e abra caminho para as naves de reparo."
+    ],
+    "zeraveth-outro": [
+      "As naves já entraram.",
+      "A operadora da estação acabou de chamar da doca.",
+      "O retransmissor está levando a voz dela.",
+      "Uma segunda autorização chegou ao mesmo tempo.",
+      "Ela se lembra de ter dado essa autorização anos atrás.",
+      "Guardei as duas gravações."
     ]
   },
   "it": {
@@ -527,6 +595,23 @@
       "Una stazione non ha ancora risposto.",
       "Una piattaforma di riparazione chiamata Zeraveth blocca l’accesso.",
       "La squadra di manutenzione aspetta fuori con i pezzi che servono alla stazione."
+    ],
+    "zeraveth": [
+      "Contatto confermato.",
+      "Zeraveth, l’Assediatore dei nodi.",
+      "Un tempo riparava interi anelli di ripetitori.",
+      "Ora i suoi bracci d’attracco bloccano l’unico accesso.",
+      "La stazione sta perdendo l’ultimo trasmettitore funzionante.",
+      "Colpisci il reattore di Zeraveth…",
+      "e apri un varco per le navette di riparazione."
+    ],
+    "zeraveth-outro": [
+      "Le navette sono entrate.",
+      "L’operatrice della stazione ha appena chiamato dal molo.",
+      "Il ripetitore sta trasmettendo la sua voce.",
+      "Nello stesso istante è arrivata una seconda autorizzazione.",
+      "Ricorda di averla concessa anni fa.",
+      "Ho conservato entrambe le registrazioni."
     ]
   },
   "pl": {
@@ -633,6 +718,23 @@
       "Jedna stacja nadal nie odpowiada.",
       "Drogę do niej blokuje platforma naprawcza Zeraveth.",
       "Ekipa serwisowa czeka na zewnątrz z częściami dla stacji."
+    ],
+    "zeraveth": [
+      "Kontakt potwierdzony.",
+      "Zeraveth, Oblegający Węzły.",
+      "Dawniej naprawiał całe pierścienie przekaźników.",
+      "Teraz jego ramiona dokujące blokują jedyne podejście.",
+      "Stacja traci ostatni działający nadajnik.",
+      "Traf w reaktor Zeravetha…",
+      "i otwórz drogę dla promów serwisowych."
+    ],
+    "zeraveth-outro": [
+      "Promy już dotarły.",
+      "Operatorka stacji właśnie odezwała się z doku.",
+      "Przekaźnik nadaje jej głos.",
+      "W tym samym czasie nadeszła druga zgoda.",
+      "Pamięta, że wydała ją wiele lat temu.",
+      "Zachowałem oba nagrania."
     ]
   },
   "cs": {
@@ -739,6 +841,23 @@
       "Jedna stanice stále neodpovídá.",
       "Přílet k ní blokuje opravárenská plošina Zeraveth.",
       "Údržbáři čekají venku s díly, které stanice potřebuje."
+    ],
+    "zeraveth": [
+      "Kontakt potvrzen.",
+      "Zeraveth, Obléhatel uzlů.",
+      "Kdysi opravoval celé prstence relé.",
+      "Jeho dokovací ramena teď blokují jedinou příletovou trasu.",
+      "Stanice přichází o poslední funkční vysílač.",
+      "Zasáhni Zeravethův reaktor…",
+      "a uvolni cestu pro servisní čluny."
+    ],
+    "zeraveth-outro": [
+      "Čluny jsou uvnitř.",
+      "Operátorka stanice se právě ozvala z doku.",
+      "Relé přenáší její hlas.",
+      "Ve stejnou chvíli dorazilo druhé povolení.",
+      "Pamatuje si, že ho vydala před lety.",
+      "Uložil jsem obě nahrávky."
     ]
   },
   "sk": {
@@ -845,6 +964,23 @@
       "Jedna stanica stále neodpovedá.",
       "Prílet k nej blokuje opravárenská plošina Zeraveth.",
       "Údržbári čakajú vonku s dielmi, ktoré stanica potrebuje."
+    ],
+    "zeraveth": [
+      "Kontakt potvrdený.",
+      "Zeraveth, Obliehateľ uzlov.",
+      "Kedysi opravoval celé prstence relé.",
+      "Jeho dokovacie ramená teraz blokujú jedinú príletovú trasu.",
+      "Stanica prichádza o posledný funkčný vysielač.",
+      "Zasiahni Zeravethov reaktor…",
+      "a uvoľni cestu pre servisné člny."
+    ],
+    "zeraveth-outro": [
+      "Člny sú dnu.",
+      "Operátorka stanice sa práve ozvala z doku.",
+      "Relé prenáša jej hlas.",
+      "V rovnakom čase prišlo druhé povolenie.",
+      "Pamätá si, že ho vydala pred rokmi.",
+      "Uložil som obe nahrávky."
     ]
   },
   "ru": {
@@ -951,6 +1087,23 @@
       "Одна станция всё ещё не отвечает.",
       "Подлёт к ней перекрыла ремонтная платформа Зеравет.",
       "Ремонтная бригада ждёт снаружи с деталями, нужными станции."
+    ],
+    "zeraveth": [
+      "Контакт подтверждён.",
+      "Зеравет, Осаждающий узлы.",
+      "Когда-то он ремонтировал целые кольца ретрансляторов.",
+      "Теперь его стыковочные рукава перекрывают единственный подлёт.",
+      "У станции отказывает последний работающий передатчик.",
+      "Порази реактор Зеравета…",
+      "и открой путь ремонтным катерам."
+    ],
+    "zeraveth-outro": [
+      "Катера уже внутри.",
+      "Оператор станции только что вышла на связь из дока.",
+      "Ретранслятор передаёт её голос.",
+      "В то же время пришло второе разрешение.",
+      "Она помнит, что выдала его много лет назад.",
+      "Я сохранил обе записи."
     ]
   },
   "uk": {
@@ -1057,6 +1210,23 @@
       "Одна станція досі не відповідає.",
       "Підліт до неї перекрила ремонтна платформа Зеравет.",
       "Ремонтна бригада чекає зовні з деталями, потрібними станції."
+    ],
+    "zeraveth": [
+      "Контакт підтверджено.",
+      "Зеравет, Облягач вузлів.",
+      "Колись він ремонтував цілі кільця ретрансляторів.",
+      "Тепер його стикувальні рукави перекривають єдиний підліт.",
+      "На станції відмовляє останній справний передавач.",
+      "Влуч у реактор Зеравета…",
+      "і відкрий шлях ремонтним катерам."
+    ],
+    "zeraveth-outro": [
+      "Катери вже всередині.",
+      "Операторка станції щойно вийшла на зв’язок із доку.",
+      "Ретранслятор передає її голос.",
+      "Водночас надійшов другий дозвіл.",
+      "Вона пам’ятає, що видала його багато років тому.",
+      "Я зберіг обидва записи."
     ]
   },
   "hr": {
@@ -1163,6 +1333,23 @@
       "Jedna postaja još ne odgovara.",
       "Servisna platforma Zeraveth blokira prilaz.",
       "Ekipa za održavanje čeka izvana s dijelovima koji postaji trebaju."
+    ],
+    "zeraveth": [
+      "Kontakt potvrđen.",
+      "Zeraveth, Opsjedatelj čvorišta.",
+      "Nekada je popravljao cijele prstenove releja.",
+      "Njegovi krakovi za pristajanje sada blokiraju jedini prilaz.",
+      "Postaja gubi posljednji ispravni odašiljač.",
+      "Pogodi Zeravethov reaktor…",
+      "i oslobodi prolaz servisnim brodovima."
+    ],
+    "zeraveth-outro": [
+      "Brodovi su unutra.",
+      "Operaterka postaje upravo se javila s doka.",
+      "Relej prenosi njezin glas.",
+      "U isti je trenutak stiglo drugo odobrenje.",
+      "Sjeća se da ga je izdala prije više godina.",
+      "Sačuvao sam obje snimke."
     ]
   },
   "sr": {
@@ -1269,6 +1456,23 @@
       "Једна станица још не одговара.",
       "Сервисна платформа Зеревет блокира прилаз.",
       "Екипа за одржавање чека напољу са деловима који су станици потребни."
+    ],
+    "zeraveth": [
+      "Контакт потврђен.",
+      "Зеревет, Опсадник чворишта.",
+      "Некада је поправљао читаве прстенове релеја.",
+      "Његови кракови за пристајање сада блокирају једини прилаз.",
+      "Станица губи последњи исправан предајник.",
+      "Погоди Зереветов реактор…",
+      "и ослободи пролаз сервисним бродовима."
+    ],
+    "zeraveth-outro": [
+      "Бродови су унутра.",
+      "Оператерка станице управо се јавила са дока.",
+      "Релеј преноси њен глас.",
+      "У исто време стигло је друго одобрење.",
+      "Сећа се да га је издала пре много година.",
+      "Сачувао сам оба снимка."
     ]
   },
   "tr": {
@@ -1375,6 +1579,23 @@
       "Bir istasyon hâlâ yanıt vermedi.",
       "Zeraveth adlı bir onarım platformu yaklaşma yolunu kesiyor.",
       "Bakım ekibi istasyonun ihtiyacı olan parçalarla dışarıda bekliyor."
+    ],
+    "zeraveth": [
+      "Temas doğrulandı.",
+      "Düğüm Kuşatıcısı Zeraveth.",
+      "Eskiden bütün aktarma halkalarını onarırdı.",
+      "Kenetlenme kolları şimdi tek yaklaşma yolunu kapatıyor.",
+      "İstasyonun çalışır durumdaki son vericisi arızalanıyor.",
+      "Zeraveth’in reaktörünü vur…",
+      "ve onarım teknelerine yol aç."
+    ],
+    "zeraveth-outro": [
+      "Tekneler içeri girdi.",
+      "İstasyon operatörü az önce rıhtımdan seslendi.",
+      "Aktarma sistemi onun sesini iletiyor.",
+      "Aynı anda ikinci bir izin ulaştı.",
+      "Bu izni yıllar önce verdiğini hatırlıyor.",
+      "Her iki kaydı da sakladım."
     ]
   },
   "hu": {
@@ -1481,6 +1702,23 @@
       "Egy állomás továbbra sem válaszol.",
       "Egy Zeraveth nevű javítóplatform elzárja a megközelítést.",
       "A karbantartók kint várnak az állomásnak szükséges alkatrészekkel."
+    ],
+    "zeraveth": [
+      "Kapcsolat megerősítve.",
+      "Zeraveth, a Csomópontok Ostromlója.",
+      "Régen teljes átjátszógyűrűket javított.",
+      "A dokkolókarjai most az egyetlen megközelítési útvonalat zárják el.",
+      "Az állomás utolsó működő adója is kezd leállni.",
+      "Találd el Zeraveth reaktorát…",
+      "és nyiss utat a javítóhajóknak."
+    ],
+    "zeraveth-outro": [
+      "A hajók bejutottak.",
+      "Az állomás operátora épp most jelentkezett a dokkból.",
+      "Az átjátszó továbbítja a hangját.",
+      "Ugyanekkor egy másik engedély is beérkezett.",
+      "Emlékszik, hogy évekkel ezelőtt adta ki.",
+      "Mindkét felvételt elmentettem."
     ]
   },
   "ro": {
@@ -1587,6 +1825,23 @@
       "O stație încă nu răspunde.",
       "O platformă de reparații numită Zeraveth îi blochează accesul.",
       "Echipa de mentenanță așteaptă afară, cu piesele necesare stației."
+    ],
+    "zeraveth": [
+      "Contact confirmat.",
+      "Zeraveth, Asediatorul nodurilor.",
+      "Odinioară repara inele întregi de relee.",
+      "Brațele sale de andocare blochează acum singura cale de acces.",
+      "Stația își pierde ultimul emițător funcțional.",
+      "Lovește reactorul lui Zeraveth…",
+      "și eliberează calea pentru navele de reparații."
+    ],
+    "zeraveth-outro": [
+      "Navele au intrat.",
+      "Operatoarea stației tocmai a sunat de la doc.",
+      "Releul îi transmite vocea.",
+      "O a doua autorizare a sosit în același timp.",
+      "Își amintește că a emis-o cu ani în urmă.",
+      "Am păstrat ambele înregistrări."
     ]
   },
   "th": {
@@ -1693,6 +1948,23 @@
       "ยังมีสถานีหนึ่งไม่ตอบ",
       "แท่นซ่อมชื่อเซราเวธจอดขวางทางเข้าสถานี",
       "ทีมช่างรออยู่ข้างนอกพร้อมอะไหล่ที่สถานีต้องใช้"
+    ],
+    "zeraveth": [
+      "ยืนยันการพบเป้าหมาย",
+      "เซราเวธ ผู้ปิดล้อมโหนด",
+      "ครั้งหนึ่งยานลำนี้ซ่อมวงแหวนรีเลย์ได้ทั้งวง",
+      "ตอนนี้แขนเทียบท่าของมันปิดล้อมทางเข้าเพียงทางเดียว",
+      "เครื่องส่งสัญญาณตัวสุดท้ายที่ยังใช้ได้ของสถานีกำลังจะดับ",
+      "โจมตีเตาปฏิกรณ์ของเซราเวธ…",
+      "แล้วเปิดทางให้ยานซ่อมบำรุง"
+    ],
+    "zeraveth-outro": [
+      "ยานเข้ามาแล้ว",
+      "เจ้าหน้าที่หญิงประจำสถานีเพิ่งติดต่อมาจากท่าเทียบยาน",
+      "รีเลย์กำลังส่งเสียงของเธอ",
+      "มีข้อความอนุญาตอีกฉบับเข้ามาพร้อมกัน",
+      "เธอจำได้ว่าเคยออกคำอนุญาตฉบับนั้นหลายปีก่อน",
+      "ฉันเก็บบันทึกเสียงทั้งสองฉบับไว้แล้ว"
     ]
   },
   "zh": {
@@ -1799,6 +2071,23 @@
       "还有一座空间站没有回应。",
       "一座叫泽拉韦斯的维修平台堵住了进站航线。",
       "维修队在外面等候，带着空间站需要的零件。"
+    ],
+    "zeraveth": [
+      "确认接触目标。",
+      "泽拉韦斯，节点围攻者。",
+      "它曾经能修复整座中继环。",
+      "如今它的对接臂封锁了唯一的进站航线。",
+      "站里最后一台还能工作的发射机就要失灵了。",
+      "击中泽拉韦斯的反应堆……",
+      "为维修艇打开通道。"
+    ],
+    "zeraveth-outro": [
+      "维修艇已经进站。",
+      "站务员刚刚从码头呼叫。",
+      "中继器正在传送她的声音。",
+      "与此同时传来了第二道许可。",
+      "她记得自己多年前就发过那道许可。",
+      "我已保存下两段录音。"
     ]
   },
   "vi": {
@@ -1905,6 +2194,23 @@
       "Vẫn còn một trạm chưa trả lời.",
       "Một giàn sửa chữa mang tên Zeraveth đang chặn lối vào.",
       "Đội bảo trì đang chờ bên ngoài với linh kiện trạm cần."
+    ],
+    "zeraveth": [
+      "Xác nhận tiếp xúc.",
+      "Zeraveth, Kẻ Vây Hãm Nút Mạng.",
+      "Nó từng sửa được cả một vòng tiếp sóng.",
+      "Các cánh tay cập bến của nó giờ phong tỏa lối tiếp cận duy nhất.",
+      "Trạm sắp mất máy phát cuối cùng còn hoạt động.",
+      "Đánh trúng lò phản ứng của Zeraveth…",
+      "và dọn đường cho các tàu sửa chữa."
+    ],
+    "zeraveth-outro": [
+      "Các tàu đã vào trong.",
+      "Nữ điều hành viên của trạm vừa gọi từ bến.",
+      "Bộ tiếp sóng đang truyền giọng của cô ấy.",
+      "Một lệnh cho phép khác đến cùng lúc.",
+      "Cô nhớ mình đã ban lệnh đó nhiều năm trước.",
+      "Tôi đã lưu cả hai bản ghi."
     ]
   }
 }
