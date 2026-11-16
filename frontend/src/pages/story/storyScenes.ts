@@ -23,6 +23,7 @@ type BossStory = NonNullable<StoryPresentation['boss']> & {
 
 type StoryDefinition = StoryPresentation & {
   title: string;
+  chapterTitle: string;
   audio: string;
   timing: StoryTiming;
   boss?: BossStory;
@@ -48,12 +49,14 @@ const talvrek: BossStory = {
 export const storyScenes: Record<StoryScene, StoryDefinition> = {
   campaign: {
     title: 'Cryptoid Evolution',
+    chapterTitle: 'Cleared for Launch',
     heading: 'CRYPTOID EVOLUTION',
     audio: 'campaign-intro-phrased.mp3',
     timing: originalTiming.campaign,
   },
   varneth: {
     title: varneth.name,
+    chapterTitle: 'Cut That Signal',
     heading: 'CRYPTOID EVOLUTION',
     audio: 'varneth-intro-phrased.mp3',
     timing: originalTiming.varneth,
@@ -61,6 +64,7 @@ export const storyScenes: Record<StoryScene, StoryDefinition> = {
   },
   'varneth-outro': {
     title: `${varneth.name} · The First Reply`,
+    chapterTitle: 'The First Reply',
     heading: 'THE FIRST REPLY',
     audio: 'varneth-outro.mp3',
     timing: genesisTiming['varneth-outro'],
@@ -68,12 +72,14 @@ export const storyScenes: Record<StoryScene, StoryDefinition> = {
   },
   'level-two': {
     title: 'Level 2',
+    chapterTitle: 'Bring Those Crews Home',
     heading: 'LEVEL 02',
     audio: 'level-two-intro-phrased.mp3',
     timing: chapterTwoTiming['level-two'],
   },
   korvessa: {
     title: korvessa.name,
+    chapterTitle: 'Open a Way Home',
     heading: 'INCOMING TRANSMISSION',
     audio: 'korvessa-intro.mp3',
     timing: chapterTwoTiming.korvessa,
@@ -81,18 +87,21 @@ export const storyScenes: Record<StoryScene, StoryDefinition> = {
   },
   'korvessa-outro': {
     title: `${korvessa.name} · Clear the Route`,
+    chapterTitle: 'Clear the Route',
     heading: 'CLEAR THE ROUTE',
     audio: 'korvessa-outro.mp3',
     timing: continuationTiming['korvessa-outro'],
   },
   'level-three': {
     title: 'Level 3',
+    chapterTitle: 'Stay on the Trail',
     heading: 'LEVEL 03',
     audio: 'level-three-intro-phrased.mp3',
     timing: levelThreeTiming,
   },
   drelvorn: {
     title: drelvorn.name,
+    chapterTitle: 'Buy Us Time',
     heading: 'INCOMING TRANSMISSION',
     audio: 'drelvorn-intro.mp3',
     timing: continuationTiming.drelvorn,
@@ -100,6 +109,7 @@ export const storyScenes: Record<StoryScene, StoryDefinition> = {
   },
   'drelvorn-outro': {
     title: `${drelvorn.name} · Seal Revoked`,
+    chapterTitle: 'Seal Revoked',
     heading: 'SEAL REVOKED',
     audio: 'drelvorn-outro.mp3',
     timing: genesisTiming['drelvorn-outro'],
@@ -107,12 +117,14 @@ export const storyScenes: Record<StoryScene, StoryDefinition> = {
   },
   'level-four': {
     title: 'Level 4',
+    chapterTitle: 'The Missing Ledger',
     heading: 'LEVEL 04',
     audio: 'level-four.mp3',
     timing: genesisTiming['level-four'],
   },
   talvrek: {
     title: talvrek.name,
+    chapterTitle: 'What the Books Say',
     heading: 'INCOMING TRANSMISSION',
     audio: 'talvrek.mp3',
     timing: genesisTiming.talvrek,
@@ -120,6 +132,7 @@ export const storyScenes: Record<StoryScene, StoryDefinition> = {
   },
   'talvrek-outro': {
     title: `${talvrek.name} · Names on the Roll`,
+    chapterTitle: 'Names on the Roll',
     heading: 'NAMES ON THE ROLL',
     audio: 'talvrek-outro.mp3',
     timing: genesisTiming['talvrek-outro'],

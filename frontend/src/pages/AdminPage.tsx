@@ -27,6 +27,7 @@ import { primeCardSound } from "./cardSound";
 import "./admin.css";
 import AdminUsage from "./AdminUsage";
 import AdminPlayers from './AdminPlayers';
+import AdminStoryScenes from './AdminStoryScenes';
 import { paymentEvidenceLinks } from "./paymentEvidenceLinks";
 import { useAdminLocale } from "../adminLocale";
 import { nftGalleryCopy } from "../locales/bossNftGallery";
@@ -40,6 +41,7 @@ const tabs = [
   ["overview", "Übersicht"],
   ["ships", "Raumschiffe"],
   ["levels", "Levels & Bosse"],
+  ["story", "Story-Szenen"],
   ["payments", "Zahlungseingänge"],
   ["scores", "Eigene Rekorde"],
   ["players", "Spieler verwalten"],
@@ -574,6 +576,11 @@ export default function AdminPage() {
     });
   };
 
+  const stopAudio = () => {
+    audioRequest.current += 1;
+    audioRef.current?.pause();
+    setPlayingAudio("");
+  };
   const testAudio = async (name: string, file: string) => {
     const request = ++audioRequest.current;
     setError("");
@@ -700,12 +707,14 @@ export default function AdminPage() {
           {view === "usage" && <AdminUsage />}
           {view === "diagnostics" && <OwnerStabilityReport />}
           {view === 'players' && <AdminPlayers />}
+          {view === 'story' && <AdminStoryScenes onStartPreview={stopAudio} />}
           {view === "overview" && (
             <>
               <section className="admin-shortcuts" aria-label={t("Schnellzugriff")}>
                 {[
                   ["ships", "Raumschiffe testen", "Alle 20 Modelle · Standard, Advanced und Elite"],
                   ["levels", "Level oder Boss starten", "Block, Bosskampf und Bonusrunde direkt öffnen"],
+                  ["story", "Story-Szenen ansehen", "Spieleinleitung, Level-Briefings, Boss-Intros und Boss-Outros"],
                   ["payments", "Zahlungseingänge ansehen", "Echte Pi, Test-Pi, Details und CSV-Download"],
                   ["scores", "Eigene Rekorde", "Karrierepunkte und Best Run nur für dieses Netzwerk zurücksetzen"],
                 ].map(([key, title, description]) => (
@@ -1224,11 +1233,7 @@ export default function AdminPage() {
                   <h2>{t("Sounds & Musik testen")}</h2>
                   <button
                     className="admin-button"
-                    onClick={() => {
-                      audioRequest.current += 1;
-                      audioRef.current?.pause();
-                      setPlayingAudio("");
-                    }}
+                    onClick={stopAudio}
                   >
                     {t("Ton stoppen")} </button>
                 </div>
