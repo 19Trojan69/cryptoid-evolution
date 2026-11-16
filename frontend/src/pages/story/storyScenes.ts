@@ -14,7 +14,7 @@ export type StoryScene =
   | 'level-two' | 'korvessa' | 'korvessa-outro'
   | 'level-three' | 'drelvorn' | 'drelvorn-outro'
   | 'level-four' | 'talvrek' | 'talvrek-outro'
-  | 'zeraveth' | 'zeraveth-outro';
+  | 'level-five' | 'zeraveth' | 'zeraveth-outro';
 
 type BossStory = NonNullable<StoryPresentation['boss']> & {
   outline: string;
@@ -145,6 +145,13 @@ export const storyScenes: Record<StoryScene, StoryDefinition> = {
     timing: genesisTiming['talvrek-outro'],
     boss: talvrek,
   },
+  'level-five': {
+    title: 'Level 5',
+    chapterTitle: 'A Station in the Dark',
+    heading: 'LEVEL 05',
+    audio: 'level-five.mp3',
+    timing: genesisTiming['level-five'],
+  },
   zeraveth: {
     title: zeravethIntroTitle,
     chapterTitle: zeravethIntroTitle,
@@ -167,6 +174,7 @@ export function levelStoryAtSector(sector: number): StoryScene | undefined {
   if (sector === 11) return 'level-two';
   if (sector === 21) return 'level-three';
   if (sector === 31) return 'level-four';
+  if (sector === 41) return 'level-five';
 }
 
 export function bossStoryAtSector(sector: number): StoryScene | undefined {

@@ -23,7 +23,7 @@ const { bossOutroAtSector, bossStoryAtSector, levelStoryAtSector, storyScenes,
   storyCues, storySubtitle, supportedLanguages, BOSS_NAMES } = await import('data:text/javascript;base64,' + Buffer.from(outputFiles[0].contents).toString('base64'));
 
 test('each registered boss story and briefing appears at the correct campaign sector', () => {
-  const briefings = [undefined, 'level-two', 'level-three', 'level-four'];
+  const briefings = [undefined, 'level-two', 'level-three', 'level-four', 'level-five'];
   for (const [index, name] of BOSS_NAMES.entries()) {
     const level = index + 1;
     const sector = level * 10;
@@ -79,6 +79,7 @@ test('corrected sentence pauses separate the spoken phrases on the caption clock
     ['varneth', 'confirmed.', 'Varneth.'],
     ['level-two', 'there.', 'Pilot,'],
     ['level-three', 'down.', 'Every'],
+    ['level-five', 'reach…', 'Pilot.'],
   ];
   for (const [scene, stop, next] of boundaries) {
     const words = storyScenes[scene].timing.groups.flatMap(group => group.words);
@@ -89,7 +90,7 @@ test('corrected sentence pauses separate the spoken phrases on the caption clock
 });
 
 test('the new recordings give each sentence its own audible pause', () => {
-  for (const scene of ['varneth-outro', 'drelvorn-outro', 'level-four', 'talvrek', 'talvrek-outro', 'zeraveth', 'zeraveth-outro']) {
+  for (const scene of ['varneth-outro', 'drelvorn-outro', 'level-four', 'talvrek', 'talvrek-outro', 'level-five', 'zeraveth', 'zeraveth-outro']) {
     const words = storyScenes[scene].timing.groups.flatMap(group => group.words);
     for (const [index, word] of words.slice(0, -1).entries()) {
       if (/[.!?]$/.test(word.text)) {

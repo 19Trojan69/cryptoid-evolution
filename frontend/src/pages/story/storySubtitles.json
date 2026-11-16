@@ -120,6 +120,13 @@
       "Gleichzeitig kam eine zweite Freigabe durch.",
       "Sie erinnert sich, dass sie die vor Jahren erteilt hat.",
       "Ich habe beide Aufnahmen gesichert."
+    ],
+    "level-five": [
+      "Der Hilfstrupp vom Genesis-Außenring hat uns Ersatzteile geschickt.",
+      "Die Station, die nach Talvrek verstummte, braucht jedes einzelne davon.",
+      "Das Wartungsteam sieht von seiner Warteposition aus die Docklichter.",
+      "Bring es bis zur Station.",
+      "Pilot."
     ]
   },
   "es": {
@@ -243,6 +250,13 @@
       "Al mismo tiempo llegó una segunda autorización.",
       "Recuerda haberla dado hace años.",
       "He guardado ambas grabaciones."
+    ],
+    "level-five": [
+      "El equipo de auxilio del anillo exterior de Genesis nos envió repuestos.",
+      "La estación que Talvrek dejó en silencio los necesita todos.",
+      "El equipo de mantenimiento ve las luces del muelle desde donde espera.",
+      "Lleva al equipo hasta la estación.",
+      "Piloto."
     ]
   },
   "fr": {
@@ -366,6 +380,13 @@
       "Une deuxième autorisation est arrivée au même moment.",
       "Elle se souvient de l’avoir donnée il y a des années.",
       "J’ai conservé les deux enregistrements."
+    ],
+    "level-five": [
+      "L’équipe de secours de l’anneau extérieur de Genesis nous a envoyé des pièces.",
+      "La station que Talvrek a réduite au silence a besoin de chacune d’elles.",
+      "L’équipe de maintenance voit les feux du quai depuis sa position d’attente.",
+      "Amène l’équipe jusqu’à la station.",
+      "Pilote."
     ]
   },
   "pt": {
@@ -489,6 +510,13 @@
       "Uma segunda autorização chegou ao mesmo tempo.",
       "Ela se lembra de ter dado essa autorização anos atrás.",
       "Guardei as duas gravações."
+    ],
+    "level-five": [
+      "A equipe de socorro do anel externo de Genesis nos mandou peças de reposição.",
+      "A estação que Talvrek deixou em silêncio precisa de todas elas.",
+      "A equipe de manutenção vê as luzes da doca de onde está esperando.",
+      "Leve a equipe até a estação.",
+      "Piloto."
     ]
   },
   "it": {
@@ -612,6 +640,13 @@
       "Nello stesso istante è arrivata una seconda autorizzazione.",
       "Ricorda di averla concessa anni fa.",
       "Ho conservato entrambe le registrazioni."
+    ],
+    "level-five": [
+      "La squadra di soccorso dell’anello esterno di Genesis ci ha inviato dei ricambi.",
+      "La stazione che Talvrek ha lasciato in silenzio ha bisogno di tutti quei pezzi.",
+      "La squadra di manutenzione vede le luci del molo da dove aspetta.",
+      "Portala fino alla stazione.",
+      "Pilota."
     ]
   },
   "pl": {
@@ -735,6 +770,13 @@
       "W tym samym czasie nadeszła druga zgoda.",
       "Pamięta, że wydała ją wiele lat temu.",
       "Zachowałem oba nagrania."
+    ],
+    "level-five": [
+      "Ekipa ratunkowa z zewnętrznego pierścienia Genesis przesłała nam części zamienne.",
+      "Stacja, którą uciszył Talvrek, potrzebuje każdej z nich.",
+      "Ekipa serwisowa widzi światła doku z miejsca, w którym czeka.",
+      "Doprowadź ekipę do stacji.",
+      "Pilocie."
     ]
   },
   "cs": {
@@ -858,6 +900,13 @@
       "Ve stejnou chvíli dorazilo druhé povolení.",
       "Pamatuje si, že ho vydala před lety.",
       "Uložil jsem obě nahrávky."
+    ],
+    "level-five": [
+      "Záchranný tým z vnějšího prstence Genesis nám poslal náhradní díly.",
+      "Stanice, kterou Talvrek umlčel, potřebuje každý z nich.",
+      "Servisní tým vidí světla doku z místa, kde čeká.",
+      "Dostaň tým ke stanici.",
+      "Pilote."
     ]
   },
   "sk": {
@@ -981,6 +1030,13 @@
       "V rovnakom čase prišlo druhé povolenie.",
       "Pamätá si, že ho vydala pred rokmi.",
       "Uložil som obe nahrávky."
+    ],
+    "level-five": [
+      "Záchranný tím z vonkajšieho prstenca Genesis nám poslal náhradné diely.",
+      "Stanica, ktorú Talvrek umlčal, potrebuje každý z nich.",
+      "Servisný tím vidí svetlá doku z miesta, kde čaká.",
+      "Dostaň tím k stanici.",
+      "Pilot."
     ]
   },
   "ru": {
@@ -1104,6 +1160,13 @@
       "В то же время пришло второе разрешение.",
       "Она помнит, что выдала его много лет назад.",
       "Я сохранил обе записи."
+    ],
+    "level-five": [
+      "Бригада помощи с внешнего кольца «Генезиса» прислала нам запчасти.",
+      "Станции, которую заставил замолчать Талврек, нужна каждая из них.",
+      "Ремонтники видят огни дока с того места, где ждут.",
+      "Доставь бригаду к станции.",
+      "Пилот."
     ]
   },
   "uk": {
@@ -1227,6 +1290,13 @@
       "Водночас надійшов другий дозвіл.",
       "Вона пам’ятає, що видала його багато років тому.",
       "Я зберіг обидва записи."
+    ],
+    "level-five": [
+      "Рятувальна бригада із зовнішнього кільця «Генезиса» надіслала нам запчастини.",
+      "Станції, яку змусив замовкнути Талврек, потрібна кожна з них.",
+      "Ремонтна команда бачить вогні дока з місця, де чекає.",
+      "Доправ команду до станції.",
+      "Пілоте."
     ]
   },
   "hr": {
@@ -1350,6 +1420,13 @@
       "U isti je trenutak stiglo drugo odobrenje.",
       "Sjeća se da ga je izdala prije više godina.",
       "Sačuvao sam obje snimke."
+    ],
+    "level-five": [
+      "Ekipa za pomoć s vanjskog prstena Genesisa poslala nam je rezervne dijelove.",
+      "Postaji koju je Talvrek ušutkao potreban je svaki od njih.",
+      "Ekipa za održavanje vidi svjetla doka s mjesta na kojem čeka.",
+      "Dovedi ekipu do postaje.",
+      "Pilote."
     ]
   },
   "sr": {
@@ -1473,6 +1550,13 @@
       "У исто време стигло је друго одобрење.",
       "Сећа се да га је издала пре много година.",
       "Сачувао сам оба снимка."
+    ],
+    "level-five": [
+      "Екипа за помоћ са спољног прстена Генезиса послала нам је резервне делове.",
+      "Станици коју је Талврек ућуткао потребан је сваки од њих.",
+      "Екипа за одржавање види светла дока са места на ком чека.",
+      "Доведи екипу до станице.",
+      "Пилоте."
     ]
   },
   "tr": {
@@ -1596,6 +1680,13 @@
       "Aynı anda ikinci bir izin ulaştı.",
       "Bu izni yıllar önce verdiğini hatırlıyor.",
       "Her iki kaydı da sakladım."
+    ],
+    "level-five": [
+      "Genesis’in dış halkasındaki yardım ekibi bize yedek parçalar gönderdi.",
+      "Talvrek’in susturduğu istasyonun bu parçaların hepsine ihtiyacı var.",
+      "Bakım ekibi beklediği yerden rıhtım ışıklarını görebiliyor.",
+      "Ekibi istasyona ulaştır.",
+      "Pilot."
     ]
   },
   "hu": {
@@ -1719,6 +1810,13 @@
       "Ugyanekkor egy másik engedély is beérkezett.",
       "Emlékszik, hogy évekkel ezelőtt adta ki.",
       "Mindkét felvételt elmentettem."
+    ],
+    "level-five": [
+      "A Genesis külső gyűrűjének segélycsapata alkatrészeket küldött nekünk.",
+      "A Talvrek által elnémított állomásnak mindegyikre szüksége van.",
+      "A karbantartók a várakozóhelyükről látják a dokk fényeit.",
+      "Juttasd el a csapatot az állomásig.",
+      "Pilóta."
     ]
   },
   "ro": {
@@ -1842,6 +1940,13 @@
       "O a doua autorizare a sosit în același timp.",
       "Își amintește că a emis-o cu ani în urmă.",
       "Am păstrat ambele înregistrări."
+    ],
+    "level-five": [
+      "Echipa de intervenție de pe inelul exterior Genesis ne-a trimis piese de schimb.",
+      "Stația pe care Talvrek a redus-o la tăcere are nevoie de toate.",
+      "Echipa de întreținere vede luminile docului de unde așteaptă.",
+      "Du echipa până la stație.",
+      "Pilotule."
     ]
   },
   "th": {
@@ -1965,6 +2070,13 @@
       "มีข้อความอนุญาตอีกฉบับเข้ามาพร้อมกัน",
       "เธอจำได้ว่าเคยออกคำอนุญาตฉบับนั้นหลายปีก่อน",
       "ฉันเก็บบันทึกเสียงทั้งสองฉบับไว้แล้ว"
+    ],
+    "level-five": [
+      "ทีมช่วยเหลือจากวงแหวนรอบนอกของเจเนซิสส่งอะไหล่มาให้เรา",
+      "สถานีที่ทัลเวรกทำให้เงียบหายต้องใช้อะไหล่ทุกชิ้น",
+      "ทีมซ่อมบำรุงมองเห็นไฟท่าเทียบยานจากจุดที่รออยู่",
+      "พาทีมซ่อมบำรุงเข้าไปให้ถึงสถานี",
+      "นักบิน"
     ]
   },
   "zh": {
@@ -2088,6 +2200,13 @@
       "与此同时传来了第二道许可。",
       "她记得自己多年前就发过那道许可。",
       "我已保存下两段录音。"
+    ],
+    "level-five": [
+      "创世外环的救援队给我们送来了一批备件。",
+      "被塔尔弗雷克弄得失联的空间站需要其中每一件。",
+      "维护队在等候点已经能看到码头的灯光。",
+      "把维护队送到空间站。",
+      "飞行员。"
     ]
   },
   "vi": {
@@ -2211,6 +2330,13 @@
       "Một lệnh cho phép khác đến cùng lúc.",
       "Cô nhớ mình đã ban lệnh đó nhiều năm trước.",
       "Tôi đã lưu cả hai bản ghi."
+    ],
+    "level-five": [
+      "Đội cứu viện từ vành đai ngoài Genesis đã gửi phụ tùng cho chúng ta.",
+      "Trạm bị Talvrek làm cho im tiếng cần từng món phụ tùng đó.",
+      "Đội bảo trì thấy được đèn bến từ chỗ họ đang chờ.",
+      "Đưa đội bảo trì tới trạm.",
+      "Phi công."
     ]
   }
 }

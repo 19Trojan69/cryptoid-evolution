@@ -81,5 +81,15 @@
       {"kind":"story","words":[{"text":"She","start":13.4,"end":13.92},{"text":"remembers","start":13.92,"end":14.2},{"text":"issuing","start":14.2,"end":14.6},{"text":"that","start":14.6,"end":14.82},{"text":"one","start":14.82,"end":15.0},{"text":"years","start":15.0,"end":15.26},{"text":"ago.","start":15.26,"end":15.6}]},
       {"kind":"story","words":[{"text":"I’ve","start":18.74,"end":18.94},{"text":"kept","start":18.94,"end":19.1},{"text":"both","start":19.1,"end":19.42},{"text":"recordings.","start":19.42,"end":19.94}]}
     ]
+  },
+  "level-five": {
+    "duration": 19.992,
+    "groups": [
+      {"kind":"story","words":[{"text":"The","start":0.27,"end":0.38},{"text":"relief","start":0.38,"end":0.66},{"text":"crew","start":0.66,"end":1.02},{"text":"from","start":1.02,"end":1.28},{"text":"the","start":1.28,"end":1.38},{"text":"Genesis","start":1.38,"end":1.8},{"text":"outer","start":1.8,"end":2.08},{"text":"ring","start":2.08,"end":2.52},{"text":"sent","start":3.09,"end":3.28},{"text":"us","start":3.28,"end":3.48},{"text":"a","start":3.48,"end":3.62},{"text":"set","start":3.62,"end":3.76},{"text":"of","start":3.76,"end":3.88},{"text":"parts.","start":3.88,"end":4.38}]},
+      {"kind":"story","words":[{"text":"The","start":6.08,"end":6.14},{"text":"station","start":6.14,"end":6.52},{"text":"Talvrek","start":6.52,"end":7.08},{"text":"left","start":7.08,"end":7.38},{"text":"silent","start":7.38,"end":7.82},{"text":"needs","start":7.82,"end":8.14},{"text":"every","start":8.14,"end":8.48},{"text":"one","start":8.48,"end":8.66},{"text":"of","start":8.66,"end":8.78},{"text":"them.","start":8.78,"end":9.1}]},
+      {"kind":"story","words":[{"text":"Its","start":10.38,"end":10.58},{"text":"maintenance","start":10.58,"end":10.92},{"text":"team","start":10.92,"end":11.34},{"text":"can","start":11.34,"end":11.68},{"text":"see","start":11.68,"end":11.9},{"text":"the","start":11.9,"end":12.08},{"text":"dock","start":12.08,"end":12.3},{"text":"lights","start":12.3,"end":12.56},{"text":"from","start":12.56,"end":12.82},{"text":"where","start":12.82,"end":12.98},{"text":"they","start":12.98,"end":13.08},{"text":"are","start":13.08,"end":13.22},{"text":"waiting.","start":13.22,"end":13.58}]},
+      {"kind":"order","words":[{"text":"Get","start":15.86,"end":16.02},{"text":"them","start":16.02,"end":16.26},{"text":"within","start":16.26,"end":16.52},{"text":"reach…","start":16.52,"end":17.0}]},
+      {"kind":"order","words":[{"text":"Pilot.","start":17.9,"end":18.27}]}
+    ]
   }
 }

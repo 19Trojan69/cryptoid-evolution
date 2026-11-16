@@ -21,7 +21,8 @@ Drehbuch für Kampagnenstart, Level-Briefings, Boss-Intros und Sieges-Outros. Je
 | Talvreks Intro und Outro | Sprechtext und deutsche Untertitel | Zwei eingereichte Suno-Aufnahmen im Story-Zweig |
 | Briefing 4 | Sprechtext und deutsche Untertitel | Englische Teststimme mit eigens produzierten leisen Streicher- und Klavierklängen |
 | Intro Zeraveth und Outro Zeraveth | Sprechtext und deutsche Untertitel | Eingereichte Suno-Aufnahmen mit Wortzeitplan |
-| Briefing 5 und Level 6–50 | 136 Drehbuchfassungen bis zum Finale | Aufnahmen, Zeitpläne und Einbau folgen je Szene |
+| Briefing 5 | Sprechtext und deutsche Untertitel | Eingereichte Suno-Aufnahme mit Wortzeitplan |
+| Level 6–50 | 135 Drehbuchfassungen bis zum Finale | Aufnahmen, Zeitpläne und Einbau folgen je Szene |
 
 Die Testaufnahme für Briefing 4 wurde mit der Stimme am_onyx aus [Kokoro](https://huggingface.co/hexgrad/Kokoro-82M) produziert. Die Suno-Fassung kann diese Aufnahme samt Wortzeitplan ersetzen.
 
@@ -313,17 +314,23 @@ Der Knotenbelagerer · The Node Besieger
 
 #### Level-Briefing · A Station in the Dark
 
+Suno-Aufnahme „Get Them Within Reach“. level-five.mp3 · 19,99 s.
+
 **Suno-Stil**
 
 English spoken-word fleet command. Keep one clear narrator up front. Allow an audible pause at every full stop. Low chamber orchestra, no singing or drums. Soft cello and distant strings, with a little warmth under the crew's reply. Around 24–29 seconds.
 
 **Englischer Sprechtext**
 
-The relief crew from the Genesis outer ring sent us a set of parts. The station Talvrek left silent needs every one of them. Its maintenance team can see the dock lights from where they are waiting. Get them within reach, Pilot.
+The relief crew from the Genesis outer ring sent us a set of parts. The station Talvrek left silent needs every one of them. Its maintenance team can see the dock lights from where they are waiting. Get them within reach… Pilot.
 
 **Deutsche Untertitel**
 
-Der Hilfstrupp vom Genesis-Außenring hat uns Ersatzteile geschickt. Die Station, die nach Talvrek verstummte, braucht jedes einzelne davon. Das Wartungsteam sieht von seiner Warteposition aus die Docklichter. Bring es bis zur Station, Pilot.
+- Der Hilfstrupp vom Genesis-Außenring hat uns Ersatzteile geschickt.
+- Die Station, die nach Talvrek verstummte, braucht jedes einzelne davon.
+- Das Wartungsteam sieht von seiner Warteposition aus die Docklichter.
+- Bring es bis zur Station.
+- Pilot.
 
 #### Boss-Intro · Intro Zeraveth
 
