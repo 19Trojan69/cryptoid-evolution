@@ -102,6 +102,7 @@ import { leaveGameFullscreen } from "./gameFullscreen";
 import StoryBriefing from "./story/StoryBriefing";
 import { storyBriefingsEnabled } from "./story/storyPreferences";
 import { bossStoryAtSector, storyScenes, type StoryScene } from "./story/storyScenes";
+import { storyFadeMs } from "./story/storyFades";
 import { levelDifficulty, MAX_DIFFICULTY_LEVEL } from "./levelDifficulty";
 import { createDoubleKillCombo, creditComboDefeat, DOUBLE_KILL_SCORE, DOUBLE_KILL_SHARDS, type DoubleKillCombo } from "./doubleKillCombo";
 import { missionShardBase, missionShardTotal, uncreditedGuestShards, BONUS_TARGET_SHARD_REWARD, bossPoints, bossShardReward, creditReward } from "./shardEarnings";
@@ -505,6 +506,7 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
   const [extraLifeVisible,setExtraLifeVisible]=useState(false);
   const [game, setGame] = useState<GameState>(() => createInitialState(authenticated));
   const [story, setStory] = useState<StoryScene | null>(() => game.status === 'playing' && storyBriefingsEnabled() ? 'campaign' : null);
+  const [storyReturning, setStoryReturning] = useState(false);
   const storyRef = useRef(story);
   const queueStory = useCallback((scene: StoryScene) => {
     if (!storyBriefingsEnabled()) return false;
@@ -1272,11 +1274,11 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
   useEffect(() => {
     const track = musicRef.current;
     if (!track) return;
-    if (story) {
+    if (story && !storyReturning) {
       if (!track.playing) { track.pause(); return; }
-      track.setVolume(0, .055);
+      track.setVolume(0, .10);
       let fading = true;
-      const pauseAfterFade = window.setTimeout(() => { fading = false; track.pause(); }, 260);
+      const pauseAfterFade = window.setTimeout(() => { fading = false; track.pause(); }, storyFadeMs.gameOut);
       return () => { window.clearTimeout(pauseAfterFade); if (fading) track.pause(); };
     }
     const normalSource = "/audio/battle-orbit.mp3";
@@ -1307,10 +1309,10 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
         fadeMusicAfterStoryRef.current = false;
         track.setVolume(0);
         void track.play();
-        track.setVolume(readMusicVolume(), .14);
+        track.setVolume(readMusicVolume(), .13);
       } else void track.play();
     } else if (game.status !== "loading") track.pause();
-  }, [game.status, game.encounter, musicEnabled, hasBonusMusic, bonusMusicEnding, hasCompletionMusic, completionMusicVisible, story]);
+  }, [game.status, game.encounter, musicEnabled, hasBonusMusic, bonusMusicEnding, hasCompletionMusic, completionMusicVisible, story, storyReturning]);
   useEffect(() => {
     if (storyRef.current) return;
     const fadeBonus = bonusMusicEnding && !hasCompletionMusic;
@@ -2395,7 +2397,7 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
           simulate(present ? time : time - frame.simulatedMs + frame.stepMs * (index + 1), frame.stepMs, present);
         }
         projectilesRef.current?.present(stateRef.current);
-        if (forceScene || requestScene) {
+        if ((forceScene || requestScene) && !storyRef.current) {
           const current = stateRef.current;
           lastPaintRef.current = time;
           probe?.sceneRequested();
@@ -2829,13 +2831,20 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
       {story && briefingVisible && <StoryBriefing key={story} scene={story}
         unlocked={briefingBoss !== undefined && (rewardProgressRef.current.bossWins[briefingBoss.id] ?? 0) > 0}
         withAudio={musicEnabled && !ownerAudioDisabled() && musicVolume > 0} volume={musicVolume}
+        onReturn={() => {
+          if (storyRef.current !== story) return;
+          fadeMusicAfterStoryRef.current = musicRef.current !== null;
+          setGame({ ...stateRef.current });
+          setStoryReturning(true);
+        }}
         onFinish={() => {
           if (storyRef.current !== story) return;
           storyRef.current = null;
           clearControls();
           lastFrameRef.current = 0;
-          fadeMusicAfterStoryRef.current = musicRef.current !== null;
+          backgroundHiddenAtRef.current = 0;
           if (briefingBoss) soundRef.current?.play('boss');
+          setStoryReturning(false);
           setStory(null);
         }} />}
       {rewardCards[0] && <CardReveal reward={rewardCards[0]} remaining={rewardCards.length} onContinue={continueRewardCard}/>}
@@ -2883,7 +2892,7 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
           {startError && <div className="modal-actions"><button className="button button-primary" type="button" onClick={() => { setStartError(""); setRecoveryError(false); void activateLoadout(); }}>{t("Try again")}</button>{recoveryError && <button className="button button-secondary" type="button" onClick={() => { saveQueueRef.current?.archive(); saveQueueReadyRef.current = true; setRecoveryError(false); setStartError(""); setSaveNotice("Pending data set aside. Using the confirmed account save."); void activateLoadout(); }}>{t("Use confirmed save")}</button>}</div>}
           {(startError || resumeOffer) && <button className="button button-secondary mission-back-button" type="button" onClick={() => { leaveGameFullscreen(); navigate(sessionStorage.getItem(ADMIN_MODE_KEY) === "1" ? "/admin" : "/"); }}>{t("Back")}</button>}
         </div></div>}
-        {(game.status === "playing" || game.status === "paused") && !levelComplete && !blockExplosionActive && !extraLifeVisible && !bossDestructionActive && !reinforcementIntro && (game.phase === "SECTOR_INTRO" || game.phase === "SECTOR_CLEAR") && <div key={`${game.section}:${game.encounter}:${game.phase}`} data-encounter={game.encounter} style={{ "--transition-duration": `${transitionDurationMs}ms` } as CSSProperties} className={`sector-banner readable-transition${game.phase === "SECTOR_INTRO" ? " sector-transition" : " sector-clear-message"}${game.encounter === "boss-intro" ? " boss-intro-banner" : ""}${levelIntro ? " level-intro-banner" : ""}${levelComplete ? " level-complete-banner" : ""}`} aria-live="polite">
+        {!briefingVisible && (game.status === "playing" || game.status === "paused") && !levelComplete && !blockExplosionActive && !extraLifeVisible && !bossDestructionActive && !reinforcementIntro && (game.phase === "SECTOR_INTRO" || game.phase === "SECTOR_CLEAR") && <div key={`${game.section}:${game.encounter}:${game.phase}`} data-encounter={game.encounter} style={{ "--transition-duration": `${transitionDurationMs}ms` } as CSSProperties} className={`sector-banner readable-transition${game.phase === "SECTOR_INTRO" ? " sector-transition" : " sector-clear-message"}${game.encounter === "boss-intro" ? " boss-intro-banner" : ""}${levelIntro ? " level-intro-banner" : ""}${levelComplete ? " level-complete-banner" : ""}`} aria-live="polite">
           <span>{levelComplete || levelIntro ? sectorName(game.sector) : game.encounter === "bonus" ? game.phase === "SECTOR_CLEAR" ? t("BONUS COMPLETE") : `${t("LEVEL")} ${levelLabel} · ${sectorName(game.sector)}` : game.encounter !== "normal" ? `${t("LEVEL")} ${levelLabel} · ${sectorName(game.sector)}` : game.phase === "SECTOR_CLEAR" ? t("BLOCK LINKED") : `${t("LEVEL")} ${levelLabel} · ${sectorName(game.sector)}`}</span>
           <strong>{transitionHeadline}</strong>
           {game.encounter === 'boss-intro' && <small className="boss-callsign">{bossName(Math.ceil(game.sector / 10))}</small>}

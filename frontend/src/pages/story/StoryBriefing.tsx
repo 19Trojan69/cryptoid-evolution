@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
 import { requestGameFrame, cancelGameFrame } from '../../lib/frameScheduler';
 import { useLocale } from '../../i18n';
 import { createCinematic } from './cinematic.js';
@@ -6,10 +6,24 @@ import { documentLanguage } from '../../locales/config';
 import { storyCues, storySubtitle } from './storyCaptions';
 import { storyScenes, type StoryScene } from './storyScenes';
 import { storyCopy } from './storyCopy';
+import { storyFadeMs } from './storyFades';
 import './storyBriefing.css';
 
-type Props = { scene: StoryScene; withAudio: boolean; volume: number; unlocked: boolean; onFinish: () => void };
-const exitFadeMs = 480;
+type Props = {
+  scene: StoryScene;
+  withAudio: boolean;
+  volume: number;
+  unlocked: boolean;
+  onReturn: () => void;
+  onFinish: () => void;
+};
+type Phase = 'covering' | 'briefing' | 'leaving' | 'returning';
+const fadeStyle = {
+  '--story-game-out': `${storyFadeMs.gameOut}ms`,
+  '--story-briefing-in': `${storyFadeMs.briefingIn}ms`,
+  '--story-briefing-out': `${storyFadeMs.briefingOut}ms`,
+  '--story-game-in': `${storyFadeMs.gameIn}ms`,
+} as CSSProperties;
 const backdrops = ['nebula.webp', 'amber-galaxy.webp', 'ringed-world.webp'];
 const backdropKey = 'cryptoid-story-backdrop';
 let lastBackdrop: string | undefined;
@@ -32,20 +46,19 @@ const loadImage = (name: string) => {
   return image.decode().then(() => image);
 };
 
-export default function StoryBriefing({ scene, withAudio, volume, unlocked, onFinish }: Props) {
+export default function StoryBriefing({ scene, withAudio, volume, unlocked, onReturn, onFinish }: Props) {
   const { locale } = useLocale();
   const dialogRef = useRef<HTMLElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
   const appearanceRef = useRef<ReturnType<typeof chooseAppearance> | null>(null);
+  const returnRef = useRef(onReturn);
   const finishRef = useRef(onFinish);
   const volumeRef = useRef(volume);
-  const exitAtRef = useRef<number | null>(null);
+  const transitionRef = useRef<{ phase: Phase; startedAt: number } | null>(null);
   const exitRef = useRef<() => void>(() => {});
-  finishRef.current = onFinish;
-  volumeRef.current = volume;
   const [artReady, setArtReady] = useState(false);
-  const [closing, setClosing] = useState(false);
+  const [phase, setPhase] = useState<Phase>('covering');
   const [cueIndex, setCueIndex] = useState(-1);
   const [skipLabel] = storyCopy(locale);
   const definition = storyScenes[scene];
@@ -53,6 +66,11 @@ export default function StoryBriefing({ scene, withAudio, volume, unlocked, onFi
   const translation = storySubtitle(scene, locale, cueIndex);
   const caption = translation ?? (!artReady ? cues[cueIndex]?.text : undefined);
 
+  useEffect(() => {
+    returnRef.current = onReturn;
+    finishRef.current = onFinish;
+    volumeRef.current = volume;
+  }, [onReturn, onFinish, volume]);
   useEffect(() => { dialogRef.current?.focus({ preventScroll: true }); }, []);
 
   useEffect(() => {
@@ -63,6 +81,12 @@ export default function StoryBriefing({ scene, withAudio, volume, unlocked, onFi
     const boss = definition.boss;
     const media = window.matchMedia('(prefers-reduced-motion: reduce)');
     const reduced = () => media.matches || document.documentElement.dataset.motion === 'reduced';
+    const transition = transitionRef.current ??= { phase: 'covering', startedAt: performance.now() };
+    const enterPhase = (next: Phase, now: number) => {
+      transition.phase = next;
+      transition.startedAt = now;
+      setPhase(next);
+    };
     let cinematic: ReturnType<typeof createCinematic> | undefined;
     let disposed = false, finished = false, frame = 0, lastCue = -1;
     let silentMs = 0, silentStart = performance.now();
@@ -75,7 +99,7 @@ export default function StoryBriefing({ scene, withAudio, volume, unlocked, onFi
       if (!audio || Math.abs(audio.volume - level) < .004) return;
       try { audio.volume = level; } catch { /* The host may manage volume itself. */ }
     };
-    const useCaptions = () => {
+    const showCaptions = () => {
       cinematic?.dispose(); cinematic = undefined;
       resizeObserver?.disconnect();
       canvas.width = canvas.height = 0;
@@ -91,17 +115,31 @@ export default function StoryBriefing({ scene, withAudio, volume, unlocked, onFi
       try {
         canvas.width = w; canvas.height = h;
         cinematic.resize(w, h);
-        cinematic.draw(position(performance.now()) / 1000, reduced(), unlocked);
-      } catch { useCaptions(); }
+        const seconds = transition.phase === 'covering' ? 0 : position(performance.now()) / 1000;
+        cinematic.draw(seconds, reduced(), unlocked);
+      } catch { showCaptions(); }
     };
     const tick = (now: number) => {
       frame = 0;
       if (disposed || finished || document.hidden) return;
-      if (exitAtRef.current !== null) {
-        const progress = reduced() ? 1 : Math.min(1, Math.max(0, (now - exitAtRef.current) / exitFadeMs));
+      const elapsed = Math.max(0, now - transition.startedAt);
+      if (transition.phase === 'covering') {
+        if (reduced() || elapsed >= storyFadeMs.gameOut) {
+          enterPhase('briefing', now);
+          play();
+        } else schedule();
+        return;
+      }
+      if (transition.phase === 'leaving') {
+        const progress = reduced() ? 1 : Math.min(1, elapsed / storyFadeMs.briefingOut);
         setAudioLevel(exitVolume * (1 - progress) ** 2);
-        if (progress >= 1) { complete(); return; }
-        schedule();
+        if (progress >= 1) revealGame(now);
+        else schedule();
+        return;
+      }
+      if (transition.phase === 'returning') {
+        if (reduced() || elapsed >= storyFadeMs.gameIn) complete();
+        else schedule();
         return;
       }
       const ms = position(now);
@@ -114,7 +152,7 @@ export default function StoryBriefing({ scene, withAudio, volume, unlocked, onFi
       const seconds = ms / 1000;
       const cue = cues.findIndex(line => seconds >= line.start && seconds < line.end);
       if (cue !== lastCue) { lastCue = cue; setCueIndex(cue); }
-      try { cinematic?.draw(seconds, reduced(), unlocked); } catch { useCaptions(); }
+      try { cinematic?.draw(seconds, reduced(), unlocked); } catch { showCaptions(); }
       schedule();
     };
     const schedule = () => { if (!frame && !document.hidden && !disposed && !finished) frame = requestGameFrame(tick); };
@@ -123,16 +161,25 @@ export default function StoryBriefing({ scene, withAudio, volume, unlocked, onFi
       if (finished || disposed) return;
       finished = true; stop(); audio?.pause(); finishRef.current();
     };
+    const revealGame = (now: number) => {
+      audio?.pause();
+      enterPhase('returning', now);
+      returnRef.current();
+      if (reduced()) complete();
+      else schedule();
+    };
     const exit = () => {
-      if (disposed || exitAtRef.current !== null) return;
-      exitAtRef.current = performance.now();
+      if (disposed || finished || transition.phase === 'leaving' || transition.phase === 'returning') return;
+      const now = performance.now();
       exitVolume = audio?.volume ?? 0;
-      if (reduced()) { complete(); return; }
-      setClosing(true);
-      schedule();
+      if (reduced()) revealGame(now);
+      else {
+        enterPhase('leaving', now);
+        schedule();
+      }
     };
     const continueSilently = () => {
-      if (!followsAudio || disposed || exitAtRef.current !== null) return;
+      if (!followsAudio || disposed || transition.phase !== 'briefing') return;
       const now = performance.now();
       silentMs = position(now);
       silentStart = now;
@@ -141,10 +188,11 @@ export default function StoryBriefing({ scene, withAudio, volume, unlocked, onFi
       schedule();
     };
     const play = () => {
-      if (document.hidden || disposed || exitAtRef.current !== null || frame) return;
+      if (document.hidden || disposed || finished || frame) return;
       silentStart = lastAdvanceAt = performance.now();
       schedule();
       if (!audio || !followsAudio) return;
+      if (audio.error) { continueSilently(); return; }
       const generation = ++playGeneration;
       setAudioLevel(volumeRef.current / 100 * Math.min(1, audio.currentTime / .24));
       try {
@@ -155,22 +203,22 @@ export default function StoryBriefing({ scene, withAudio, volume, unlocked, onFi
     };
     const suspend = () => {
       ++playGeneration;
-      if (!followsAudio && frame && exitAtRef.current === null) silentMs = position(performance.now());
+      if (!followsAudio && frame && transition.phase === 'briefing') silentMs = position(performance.now());
       stop(); audio?.pause();
     };
     const visibility = () => {
       if (document.hidden) { suspend(); return; }
-      if (exitAtRef.current !== null) schedule();
-      else play();
+      if (transition.phase === 'briefing') play();
+      else schedule();
     };
-    const playing = () => { if (!followsAudio || document.hidden) audio?.pause(); };
-    const ended = () => { if (followsAudio) exit(); };
+    const playing = () => { if (!followsAudio || document.hidden || transition.phase !== 'briefing') audio?.pause(); };
+    const ended = () => { if (followsAudio && transition.phase === 'briefing') exit(); };
     const resizeObserver = typeof ResizeObserver === 'undefined' ? undefined : new ResizeObserver(resize);
     exitRef.current = exit;
     document.addEventListener('visibilitychange', visibility);
     window.addEventListener('pagehide', suspend);
     window.addEventListener('pageshow', visibility);
-    canvas.addEventListener('contextlost', useCaptions);
+    canvas.addEventListener('contextlost', showCaptions);
     audio?.addEventListener('playing', playing);
     audio?.addEventListener('ended', ended);
     audio?.addEventListener('error', continueSilently);
@@ -184,7 +232,7 @@ export default function StoryBriefing({ scene, withAudio, volume, unlocked, onFi
           boss && unlocked ? loadImage(boss.ship) : undefined,
           document.fonts.load('600 20px Barlow'),
         ]);
-        if (disposed || exitAtRef.current !== null) return;
+        if (disposed || transition.phase === 'leaving' || transition.phase === 'returning') return;
         const context = canvas.getContext('2d');
         if (!context) throw new Error('Canvas unavailable');
         canvas.width = 0;
@@ -195,20 +243,17 @@ export default function StoryBriefing({ scene, withAudio, volume, unlocked, onFi
         }, appearance, definition);
         resize();
         if (cinematic) { resizeObserver?.observe(canvas); setArtReady(true); }
-      } catch { if (!disposed && exitAtRef.current === null) useCaptions(); }
+      } catch { if (!disposed && transition.phase !== 'leaving' && transition.phase !== 'returning') showCaptions(); }
     };
-    if (exitAtRef.current !== null) schedule();
-    else {
-      if (audio?.error) continueSilently();
-      play();
-      void prepare();
-    }
+    if (transition.phase === 'covering' && reduced()) enterPhase('briefing', performance.now());
+    if (transition.phase === 'covering' || transition.phase === 'briefing') void prepare();
+    visibility();
     return () => {
       disposed = true;
       document.removeEventListener('visibilitychange', visibility);
       window.removeEventListener('pagehide', suspend);
       window.removeEventListener('pageshow', visibility);
-      canvas.removeEventListener('contextlost', useCaptions);
+      canvas.removeEventListener('contextlost', showCaptions);
       audio?.removeEventListener('playing', playing);
       audio?.removeEventListener('ended', ended);
       audio?.removeEventListener('error', continueSilently);
@@ -220,14 +265,17 @@ export default function StoryBriefing({ scene, withAudio, volume, unlocked, onFi
   }, [definition, cues, withAudio, unlocked]);
 
   return <section ref={dialogRef} className="story-briefing" role="dialog" aria-modal="true" tabIndex={-1} aria-label={definition.title}
-    data-closing={closing || undefined} style={{ transitionDuration: `${exitFadeMs}ms` }}
+    data-phase={phase} style={fadeStyle}
     onKeyDown={event => { if (event.key === 'Escape') exitRef.current(); }}>
-    <div className="story-briefing-frame" data-ready={artReady || undefined}>
-      <canvas ref={canvasRef} aria-hidden="true" />
-      {caption && <p className={artReady ? 'story-briefing-subtitle' : 'story-briefing-caption'}
-        lang={translation ? documentLanguage(locale) : 'en'}>{caption}</p>}
+    <div className="story-briefing-content">
+      <div className="story-briefing-frame" data-ready={artReady || undefined}>
+        <canvas ref={canvasRef} aria-hidden="true" />
+        {caption && <p className={artReady ? 'story-briefing-subtitle' : 'story-briefing-caption'}
+          data-translated={Boolean(translation) || undefined}
+          lang={translation ? documentLanguage(locale) : 'en'}>{caption}</p>}
+      </div>
+      <button className="story-briefing-skip" type="button" disabled={phase !== 'briefing'} onClick={() => exitRef.current()}>{skipLabel}</button>
     </div>
     {withAudio && <audio ref={audioRef} preload="auto" src={'/story/' + definition.audio} />}
-    <button className="story-briefing-skip" type="button" disabled={closing} onClick={() => exitRef.current()}>{skipLabel}</button>
   </section>;
 }

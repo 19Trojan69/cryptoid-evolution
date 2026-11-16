@@ -122,12 +122,16 @@ export function paintVortex(ctx, width, height, unit, variant, seed) {
   return { x, y, radius, look, tilt, curl, motes };
 }
 
-export function vortexPosition(vortex, y, pull) {
+export function vortexPosition(vortex, y, pull, offsetX = 0) {
   const bearing = vortex.look.direction * vortex.curl * pull ** 1.55;
-  const distance = (y - vortex.y) * (1 - pull) ** 1.25 + vortex.radius * .76 * pull;
+  const contraction = (1 - pull) ** 1.25;
+  const dx = offsetX * contraction;
+  const dy = (y - vortex.y) * contraction + vortex.radius * .76 * pull;
+  const sine = Math.sin(bearing);
+  const cosine = Math.cos(bearing);
   return {
-    x: vortex.x - Math.sin(bearing) * distance,
-    y: vortex.y + Math.cos(bearing) * distance,
+    x: vortex.x + dx * cosine - dy * sine,
+    y: vortex.y + dx * sine + dy * cosine,
     rotation: bearing * .96,
   };
 }

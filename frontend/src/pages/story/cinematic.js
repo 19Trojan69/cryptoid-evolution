@@ -64,12 +64,14 @@ export function createCinematic(ctx, assets, timeline, createSurface, appearance
         const width = ctx.measureText(text).width;
         let advance = 0;
         let prefix = '';
+        let index = 0;
         const letters = Array.from(text, letter => {
           prefix += letter;
           const next = ctx.measureText(prefix).width;
           const x = (advance + next - width) * .5;
+          const order = ((index++ * 17 + row * 11 + appearance.seed) % 31) / 31;
           advance = next;
-          return { letter, x };
+          return { letter, x, order };
         });
         rows.push({
           text,
@@ -156,15 +158,18 @@ export function createCinematic(ctx, assets, timeline, createSurface, appearance
     ctx.clip('evenodd');
   }
 
-  function bendLetters(row, pull) {
-    const halfWidth = row.width * .5;
-    const curve = typeSize * .85 * smooth(pull, .14, .83);
-    for (const { letter, x } of row.letters) {
+  function pullLetters(row, y, pull, stretch, scale, opacity) {
+    for (const { letter, x, order } of row.letters) {
       if (letter === ' ') continue;
-      const offset = x / halfWidth;
+      const progress = smooth(pull, .12 + order * .31, .93 + order * .045);
+      const alpha = opacity * (1 - smooth(progress, .68, .96));
+      if (alpha < .015) continue;
+      const position = vortexPosition(vortex, y, progress, x * stretch);
       ctx.save();
-      ctx.translate(x, curve * offset ** 2);
-      ctx.rotate(Math.atan(2 * curve * offset / halfWidth));
+      ctx.globalAlpha = alpha;
+      ctx.translate(position.x, position.y);
+      ctx.rotate(position.rotation + (order - .5) * progress * 1.6);
+      ctx.scale(stretch * (1 - .8 * progress), scale * (1 - .59 * progress));
       ctx.fillText(letter, 0, 0);
       ctx.restore();
     }
@@ -200,22 +205,22 @@ export function createCinematic(ctx, assets, timeline, createSurface, appearance
         if (pull > .99) continue;
         const distanceFade = smooth(y, height * .294, height * .517) + smooth(pull, .1, .65) * .27;
         const entranceFade = 1 - smooth(y, height * .739, height * .848);
-        const opacity = distanceFade * entranceFade * (1 - reveal) * (1 - smooth(pull, .83, .99));
+        const opacity = distanceFade * entranceFade * (1 - reveal);
         if (opacity < .015) continue;
         drawIntake(ctx, vortex, y, pull, opacity);
+        const stretch = Math.min(scale ** .77, width * .922 / row.width);
+        const verticalScale = scale * .88;
         ctx.save();
-        const position = vortexPosition(vortex, y, pull);
-        ctx.translate(position.x, position.y);
-        ctx.rotate(position.rotation);
-        const stretch = Math.min(Math.pow(scale, .77), width * .922 / row.width);
-        ctx.scale(stretch * (1 - .84 * pull), scale * .88 * (1 - .59 * pull));
-        ctx.globalAlpha = opacity;
         ctx.font = row.font;
-        ctx.shadowBlur = pull < .14 ? unit * .013 : 0;
+        ctx.shadowBlur = pull < .12 ? unit * .013 : 0;
         ctx.shadowColor = 'rgba(0, 0, 0, .91)';
         ctx.fillStyle = index === active || row.kind !== 'story' ? '#ffe1a0' : '#f0c575';
-        if (pull < .14) ctx.fillText(row.text, 0, 0);
-        else bendLetters(row, pull);
+        if (pull < .12) {
+          ctx.globalAlpha = opacity;
+          ctx.translate(width / 2, y);
+          ctx.scale(stretch, verticalScale);
+          ctx.fillText(row.text, 0, 0);
+        } else pullLetters(row, y, pull, stretch, verticalScale, opacity);
         ctx.restore();
       }
     }
