@@ -7,7 +7,7 @@ const definition = { title: 'Korvessa', audio: 'korvessa-intro.mp3', timing: { d
 const cues = [{ text: 'Pilot', start: .2, end: 10 }];
 const source = '/story/' + definition.audio;
 
-function setup({ withAudio = true, startAudio, artwork = false } = {}) {
+function setup({ withAudio = true, startAudio, artwork = false, reducedMotion = false } = {}) {
   let time = 1000;
   let frameId = 0;
   const frames = new Map();
@@ -16,7 +16,7 @@ function setup({ withAudio = true, startAudio, artwork = false } = {}) {
   const preparations = [];
   const transitions = [];
   const drawings = [];
-  const window = Object.assign(new EventTarget(), { matchMedia: () => ({ matches: false }) });
+  const window = Object.assign(new EventTarget(), { matchMedia: () => ({ matches: reducedMotion }) });
   const document = Object.assign(new EventTarget(), { hidden: false, documentElement: { dataset: {} },
     fonts: { load: async () => [] } });
   const canvas = Object.assign(new EventTarget(), { getBoundingClientRect: () => ({ width: 430, height: 932 }),
@@ -193,5 +193,25 @@ test('the crawl advances between media time samples and continues through the fa
   story.tick(120);
   assert.equal(story.phase(), 'leaving');
   assert.ok(story.drawings.at(-1) > previous);
+  story.unmount();
+});
+
+test('reduced motion still gives audible tracks their full fade', async () => {
+  const story = setup({ reducedMotion: true });
+  story.tick(storyFadeMs.gameOut - 1);
+  assert.deepEqual(story.starts, []);
+  story.tick(1);
+  await story.flush();
+  story.audio.currentTime = .8;
+  story.tick(800);
+  assert.equal(story.player.volume, 60);
+  story.skip();
+  story.tick(storyFadeMs.briefingOut / 2);
+  assert.equal(story.phase(), 'leaving');
+  assert.ok(story.player.playing && story.player.volume > 0 && story.player.volume < 60);
+  assert.deepEqual(story.transitions, []);
+  story.tick(storyFadeMs.briefingOut / 2);
+  assert.equal(story.phase(), 'returning');
+  assert.deepEqual(story.transitions, ['reveal', 'finish']);
   story.unmount();
 });

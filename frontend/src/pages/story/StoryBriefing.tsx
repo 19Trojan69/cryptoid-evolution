@@ -141,7 +141,7 @@ export default function StoryBriefing({ scene, withAudio, volume, prepareAudio, 
       if (disposed || finished || suspended || document.hidden) return;
       const elapsed = Math.max(0, now - transition.startedAt);
       if (transition.phase === 'covering') {
-        if (reduced() || elapsed >= storyFadeMs.gameOut) {
+        if ((reduced() && !withAudio) || elapsed >= storyFadeMs.gameOut) {
           enterPhase('briefing', now);
           silentStart = lastVisualAt = now;
           play(now);
@@ -149,7 +149,7 @@ export default function StoryBriefing({ scene, withAudio, volume, prepareAudio, 
         return;
       }
       if (transition.phase === 'leaving') {
-        const progress = reduced() ? 1 : Math.min(1, elapsed / storyFadeMs.briefingOut);
+        const progress = Math.min(1, elapsed / storyFadeMs.briefingOut);
         setAudioLevel(exitVolume * (1 - progress) ** 2);
         if (progress >= 1) revealGame(now);
         else {
@@ -202,9 +202,9 @@ export default function StoryBriefing({ scene, withAudio, volume, prepareAudio, 
     const exit = () => {
       if (disposed || finished || transition.phase === 'leaving' || transition.phase === 'returning') return;
       const now = performance.now();
-      if (playPending) pauseAudio();
+      if (playPending && !player?.playing) pauseAudio();
       exitVolume = audioLevel;
-      if (reduced()) revealGame(now);
+      if (reduced() && (!player?.playing || exitVolume === 0)) revealGame(now);
       else {
         enterPhase('leaving', now);
         schedule();

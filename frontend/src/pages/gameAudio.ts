@@ -179,9 +179,6 @@ export class GameAudio {
     this.weaponBus.gain.value = Math.min(1, budget / Math.max(peak, budget));
   }
 
-  stopBossWeapons(){
-    for(const voice of [...this.bossVoices])this.retireBossVoice(voice);
-  }
   private retireBossVoice(voice: WeaponVoice){
     const index=this.bossVoices.indexOf(voice);if(index>=0)this.bossVoices.splice(index,1);
     try{const at=this.context!.currentTime;voice.gain.gain.cancelScheduledValues(at);voice.gain.gain.setTargetAtTime(0,at,.003);voice.source.stop(at+.018);voice.endsAt=Math.min(voice.endsAt,at+.018);}catch{/* Already ended. */}
@@ -410,10 +407,13 @@ export class GameAudio {
     return true;
   }
 
-  setPaused(paused: boolean) {
+  setPaused(paused: boolean, { letVoicesFinish = false } = {}) {
     this.paused = paused;
     if(paused) {
       this.clockHealth.pause();
+      // Reward and completion screens stop new sounds while active voices
+      // finish on their own envelopes, independently of the music fade.
+      if (letVoicesFinish) return;
       for (const voice of [...this.weaponMixVoices]) {
         try { voice.source.stop(); } catch { /* Already ended. */ }
         this.releaseWeaponVoice(voice);

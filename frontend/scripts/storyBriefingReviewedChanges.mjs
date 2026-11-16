@@ -1,6 +1,34 @@
 // Restore exact story changes before the historical gameplay fingerprints.
 const changes = [
   {
+    "before": "    if (bonusMusicEnding && !hasCompletionMusic\n      && (bossSummaryRef.current?.accepted || track.currentSource !== BONUS_MUSIC_SOURCE)) {\n      track.pause();\n      return;\n    }\n",
+    "after": "    if (bonusMusicEnding && !hasCompletionMusic\n      && (bossSummaryRef.current?.accepted || track.currentSource !== BONUS_MUSIC_SOURCE)) {\n      if (!bossSummaryRef.current?.accepted || track.currentSource !== COMPLETION_MUSIC_SOURCE) track.pause();\n      return;\n    }\n"
+  },
+  {
+    "before": "    if (storyRef.current) return;\n    const fadeBonus = bonusMusicEnding && !hasCompletionMusic;\n    const volume = game.status === \"playing\" && game.encounter === \"boss-clear\"\n      ? Math.min(100, musicVolume * BOSS_VICTORY_VOLUME_BOOST)\n      : fadeBonus ? 0 : musicVolume;\n    musicRef.current?.setVolume(volume, fadeBonus ? .12 : undefined);\n  }, [musicVolume, game.encounter, game.status, bonusMusicEnding, hasCompletionMusic]);\n  const startBossVictory = () => {\n",
+    "after": "    if (storyRef.current) return;\n    const fadeBonus = bonusMusicEnding && !hasCompletionMusic;\n    const fadeBossMusic = game.encounter === \"boss-clear\" && bossVictoryPendingRef.current;\n    const volume = game.status === \"playing\" && game.encounter === \"boss-clear\"\n      ? Math.min(100, musicVolume * BOSS_VICTORY_VOLUME_BOOST)\n      : fadeBonus ? 0 : musicVolume;\n    musicRef.current?.setVolume(fadeBossMusic ? 0 : volume,\n      fadeBossMusic ? BOSS_VICTORY_START_MS / 6000 : fadeBonus ? .12 : undefined);\n  }, [musicVolume, game.encounter, game.status, bonusMusicEnding, hasCompletionMusic]);\n  const startBossVictory = () => {\n"
+  },
+  {
+    "before": "    const track = musicRef.current;\n    if (!track) return;\n    track.audio.loop = false;\n    track.setSource(\"/audio/boss-victory-v2.mp3\");\n    void track.play();\n  };\n  const saveReward = (award: (progress: RewardProgress) => { progress: RewardProgress; notice: string }, event: { kind: \"block\" | \"boss\" | \"chain\" | \"bonus\"; level: number; stage: number; hits?: number; summaryPlacement?: 'level-end' }) => {\n",
+    "after": "    const track = musicRef.current;\n    if (!track) return;\n    track.setVolume(0);\n    track.audio.loop = false;\n    track.setSource(\"/audio/boss-victory-v2.mp3\");\n    void track.play();\n    track.setVolume(Math.min(100, readMusicVolume() * BOSS_VICTORY_VOLUME_BOOST), .12);\n  };\n  const saveReward = (award: (progress: RewardProgress) => { progress: RewardProgress; notice: string }, event: { kind: \"block\" | \"boss\" | \"chain\" | \"bonus\"; level: number; stage: number; hits?: number; summaryPlacement?: 'level-end' }) => {\n"
+  },
+  {
+    "before": "    performanceProbeRef.current?.lifecycle('boss-defeat-start');\n    if (ownerDiagnostics) recordReloadEvent('boss-defeat-start');\n    soundRef.current?.stopBossWeapons();\n    const boss = state.boss;\n    if (!boss) return;\n",
+    "after": "    performanceProbeRef.current?.lifecycle('boss-defeat-start');\n    if (ownerDiagnostics) recordReloadEvent('boss-defeat-start');\n    const boss = state.boss;\n    if (!boss) return;\n"
+  },
+  {
+    "before": "    soundRef.current?.setSector(game.sector);\n    if (game.status !== \"playing\") { stateRef.current.combo.pendingAt = null; gameHaptics.stop(); }\n    soundRef.current?.setPaused(game.status === \"loading\" || game.status === \"paused\" || game.status === \"game-over\" || game.status === \"victory\");\n  }, [game.sector, game.status]);\n\n  const startEffects = useCallback((restartPausedGraph = false) => {\n",
+    "after": "    soundRef.current?.setSector(game.sector);\n    if (game.status !== \"playing\") { stateRef.current.combo.pendingAt = null; gameHaptics.stop(); }\n    const letVoicesFinish = game.status === \"paused\" && Boolean(bossSummary || firstRewardCard?.boss);\n    soundRef.current?.setPaused(game.status === \"loading\" || game.status === \"paused\" || game.status === \"game-over\" || game.status === \"victory\",\n      { letVoicesFinish });\n  }, [game.sector, game.status, bossSummary, firstRewardCard]);\n\n  const startEffects = useCallback((restartPausedGraph = false) => {\n"
+  },
+  {
+    "before": "    bossSummaryRef.current = { summary, accepted: false, restored };\n    state.status = 'paused'; clearControls();\n    soundRef.current?.setPaused(true); musicRef.current?.pause();\n    // Bonus rewards have already been credited before this level-completion stop.\n    state.effects = []; state.shots = []; state.enemyShots = []; state.asteroids = [];\n",
+    "after": "    bossSummaryRef.current = { summary, accepted: false, restored };\n    state.status = 'paused'; clearControls();\n    soundRef.current?.setPaused(true, { letVoicesFinish: true }); musicRef.current?.pause();\n    // Bonus rewards have already been credited before this level-completion stop.\n    state.effects = []; state.shots = []; state.enemyShots = []; state.asteroids = [];\n"
+  },
+  {
+    "before": "    const generation = bossPreparationRef.current;\n    const current = () => weaponMountedRef.current && generation === bossPreparationRef.current && bossSummaryRef.current === pending && scoreRunRef.current === runId;\n    musicRef.current?.pause();\n    unlockAudioForResume(); setBossSummaryContinuing(true); setBossSummaryFailed(false); setBossSummaryContinueFailed(false);\n    try {\n",
+    "after": "    const generation = bossPreparationRef.current;\n    const current = () => weaponMountedRef.current && generation === bossPreparationRef.current && bossSummaryRef.current === pending && scoreRunRef.current === runId;\n    const track = musicRef.current;\n    const nextBriefing = !pending.restored && storyBriefingsEnabled() && levelStoryAtSector(pending.summary.stage + 1);\n    if (nextBriefing && track?.currentSource === COMPLETION_MUSIC_SOURCE) track.setVolume(0, .10);\n    else track?.pause();\n    unlockAudioForResume(); setBossSummaryContinuing(true); setBossSummaryFailed(false); setBossSummaryContinueFailed(false);\n    try {\n"
+  },
+  {
     "before": "",
     "after": "import StoryBriefing from \"./story/StoryBriefing\";\nimport { storyBriefingsEnabled } from \"./story/storyPreferences\";\nimport { bossOutroAtSector, bossStoryAtSector, levelStoryAtSector, storyScenes, type StoryScene } from \"./story/storyScenes\";\nimport { storyFadeMs } from \"./story/storyFades\";\n"
   },

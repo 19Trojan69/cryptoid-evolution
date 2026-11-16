@@ -37,6 +37,8 @@ async function handlers(){
   completionSaveFailure,hasLocalLevelBackup:()=>false,localExitAvailable:false,bossSummaryFailure:"",
   weaponBusy:false,bossSummary:null,bossSummaryPrepared:false,bossSummarySaving:false,bossSummaryFailed:false,bossSummaryContinuing:false,bossSummaryContinueFailed:false,
   clearControls(){calls.push('controls');},soundRef:ref({setPaused(){calls.push('audio-pause');}}),musicRef:ref({pause(){}}),
+  storyBriefingsEnabled:()=>true,levelStoryAtSector:sector=>sector===11?'level-two':undefined,
+  COMPLETION_MUSIC_SOURCE:'/audio/level-complete.mp3',
   unlockAudioForResume(){calls.push('gesture');},ownerDiagnostics:true,sessionDiagnostic(kind,data){calls.push(data.operation||kind);},ownerResourceContext:()=>({effects:state.effects.length}),
   releaseIdleCanvasEffects(){calls.push('cleanup');return env.idle!==false;},releaseCompletedLevelHulls(stage){calls.push(`release-hulls-${stage}`);},syncSelectedWeapon(){},setWeaponStock(){},
   saveQueueRef:ref({async drain(){calls.push('drain');if(env.failSave)throw Error('offline');}}),
@@ -77,6 +79,16 @@ test('continuing a completed level changes no rewards and a repeated click is ig
  assert.deepEqual(f.h.profile(),before);const gestures=f.calls.filter(v=>v==='gesture').length;
  await f.continueBossSummary();assert.equal(f.calls.filter(v=>v==='gesture').length,gestures);
  assert.ok(!f.calls.includes('/progress/boss-summary/continue'));
+});
+test('Continue fades an audible completion track while handing over to the next briefing',async()=>{
+ const f=await handlers();f.beginBossSummary();await f.prepareBossSummary();
+ f.env.musicRef.current={currentSource:f.env.COMPLETION_MUSIC_SOURCE,
+  setVolume(volume,timeConstant){f.calls.push(['fade',volume,timeConstant]);},
+  pause(){f.calls.push('music-pause');}};
+ await f.continueBossSummary();
+ assert.equal(f.state.status,'playing');
+ assert.deepEqual(f.calls.filter(Array.isArray),[['fade',0,.10]]);
+ assert.ok(!f.calls.includes('music-pause'));
 });
 test('late preparation and continuation replies cannot resume an unmounted game',async()=>{
  const f=await handlers();f.beginBossSummary();const load=f.env.loadAccountSave;f.env.loadAccountSave=async()=>{f.env.weaponMountedRef.current=false;return load();};await f.prepareBossSummary();assert.equal(f.env.bossSummaryPrepared,false);assert.equal(f.state.status,'paused');

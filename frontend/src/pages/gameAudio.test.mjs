@@ -282,8 +282,17 @@ test('enemy shots use their own cached buffer and share the boss voice cap, slid
     assert.equal(audio.playEnemyShot(), false);
     assert.equal(sources.length, count);
     audio.setEffectsVolume(35);
+    audio.setPaused(true, { letVoicesFinish: true });
+    assert.equal(stopped, 7);
+    assert.equal(audio.activeVoiceCount, 28);
+    assert.equal(audio.playEnemyShot(), false);
+    audio.play('explosion');
+    assert.equal(sources.length, count);
+    sources[0].onended();
+    sources[1].onended();
+    assert.equal(audio.activeVoiceCount, 26);
     audio.setPaused(true);
-    assert.equal(stopped, 35); // Pause stops all 28 registered sources, including seven previously fading voices.
+    assert.equal(stopped, 33); // Manual pause stops every source that is still active.
     assert.equal(audio.activeVoiceCount, 0);
     assert.equal(audio.playEnemyShot(), false);
     audio.setPaused(false);

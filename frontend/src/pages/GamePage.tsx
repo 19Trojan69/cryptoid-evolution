@@ -1302,7 +1302,7 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
     const waitingForExplosion = game.encounter === "boss-clear" && bossVictoryPendingRef.current;
     if (bonusMusicEnding && !hasCompletionMusic
       && (bossSummaryRef.current?.accepted || track.currentSource !== BONUS_MUSIC_SOURCE)) {
-      track.pause();
+      if (!bossSummaryRef.current?.accepted || track.currentSource !== COMPLETION_MUSIC_SOURCE) track.pause();
       return;
     }
     const desiredSource = game.status === "game-over" ? "/audio/last-signal.mp3"
@@ -1333,10 +1333,12 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
   useEffect(() => {
     if (storyRef.current) return;
     const fadeBonus = bonusMusicEnding && !hasCompletionMusic;
+    const fadeBossMusic = game.encounter === "boss-clear" && bossVictoryPendingRef.current;
     const volume = game.status === "playing" && game.encounter === "boss-clear"
       ? Math.min(100, musicVolume * BOSS_VICTORY_VOLUME_BOOST)
       : fadeBonus ? 0 : musicVolume;
-    musicRef.current?.setVolume(volume, fadeBonus ? .12 : undefined);
+    musicRef.current?.setVolume(fadeBossMusic ? 0 : volume,
+      fadeBossMusic ? BOSS_VICTORY_START_MS / 6000 : fadeBonus ? .12 : undefined);
   }, [musicVolume, game.encounter, game.status, bonusMusicEnding, hasCompletionMusic]);
   const startBossVictory = () => {
     performanceProbeRef.current?.lifecycle('boss-victory-start');
@@ -1344,9 +1346,11 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
     bossVictoryPendingRef.current = false;
     const track = musicRef.current;
     if (!track) return;
+    track.setVolume(0);
     track.audio.loop = false;
     track.setSource("/audio/boss-victory-v2.mp3");
     void track.play();
+    track.setVolume(Math.min(100, readMusicVolume() * BOSS_VICTORY_VOLUME_BOOST), .12);
   };
   const saveReward = (award: (progress: RewardProgress) => { progress: RewardProgress; notice: string }, event: { kind: "block" | "boss" | "chain" | "bonus"; level: number; stage: number; hits?: number; summaryPlacement?: 'level-end' }) => {
     if (adminRunRef.current) return "";
@@ -1366,7 +1370,6 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
   const destroyBoss = (state: GameState, time: number) => {
     performanceProbeRef.current?.lifecycle('boss-defeat-start');
     if (ownerDiagnostics) recordReloadEvent('boss-defeat-start');
-    soundRef.current?.stopBossWeapons();
     const boss = state.boss;
     if (!boss) return;
     state.bossHeartCollected = false;
@@ -1432,8 +1435,10 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
   useEffect(() => {
     soundRef.current?.setSector(game.sector);
     if (game.status !== "playing") { stateRef.current.combo.pendingAt = null; gameHaptics.stop(); }
-    soundRef.current?.setPaused(game.status === "loading" || game.status === "paused" || game.status === "game-over" || game.status === "victory");
-  }, [game.sector, game.status]);
+    const letVoicesFinish = game.status === "paused" && Boolean(bossSummary || firstRewardCard?.boss);
+    soundRef.current?.setPaused(game.status === "loading" || game.status === "paused" || game.status === "game-over" || game.status === "victory",
+      { letVoicesFinish });
+  }, [game.sector, game.status, bossSummary, firstRewardCard]);
 
   const startEffects = useCallback((restartPausedGraph = false) => {
     if (!soundRef.current) {
@@ -1473,7 +1478,7 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
       destroyed: state.destroyed, hearts: state.hearts, combos: state.combo.total };
     bossSummaryRef.current = { summary, accepted: false, restored };
     state.status = 'paused'; clearControls();
-    soundRef.current?.setPaused(true); musicRef.current?.pause();
+    soundRef.current?.setPaused(true, { letVoicesFinish: true }); musicRef.current?.pause();
     // Bonus rewards have already been credited before this level-completion stop.
     state.effects = []; state.shots = []; state.enemyShots = []; state.asteroids = [];
     state.rocks = []; state.rockEffects = []; state.bonusTargets = [];
@@ -1558,7 +1563,10 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
     if (!pending || pending.accepted || !bossSummaryPrepared || bossSummarySaving || (bossSummaryFailed && !retry) || bossSummaryContinuing) return;
     const generation = bossPreparationRef.current;
     const current = () => weaponMountedRef.current && generation === bossPreparationRef.current && bossSummaryRef.current === pending && scoreRunRef.current === runId;
-    musicRef.current?.pause();
+    const track = musicRef.current;
+    const nextBriefing = !pending.restored && storyBriefingsEnabled() && levelStoryAtSector(pending.summary.stage + 1);
+    if (nextBriefing && track?.currentSource === COMPLETION_MUSIC_SOURCE) track.setVolume(0, .10);
+    else track?.pause();
     unlockAudioForResume(); setBossSummaryContinuing(true); setBossSummaryFailed(false); setBossSummaryContinueFailed(false);
     try {
       if (!current()) return;
