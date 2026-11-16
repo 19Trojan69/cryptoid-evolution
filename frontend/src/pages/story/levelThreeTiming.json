@@ -1,0 +1,95 @@
+{
+  "duration": 32.424,
+  "groups": [
+    {
+      "kind": "story",
+      "words": [
+        { "text": "Pilot,", "start": 1.35, "end": 1.78 },
+        { "text": "Korvessa", "start": 2.48, "end": 3.16 },
+        { "text": "is", "start": 3.6, "end": 3.78 },
+        { "text": "down.", "start": 3.78, "end": 3.98 },
+        { "text": "Every", "start": 3.98, "end": 4.24 },
+        { "text": "convoy", "start": 4.24, "end": 4.58 },
+        { "text": "crew", "start": 4.58, "end": 4.9 },
+        { "text": "made", "start": 4.9, "end": 5.06 },
+        { "text": "it", "start": 5.06, "end": 5.16 },
+        { "text": "out.", "start": 5.16, "end": 5.56 }
+      ]
+    },
+    {
+      "kind": "story",
+      "words": [
+        { "text": "The", "start": 6.52, "end": 6.6 },
+        { "text": "last", "start": 6.6, "end": 6.86 },
+        { "text": "freighter", "start": 6.86, "end": 7.18 },
+        { "text": "brought", "start": 7.18, "end": 7.42 },
+        { "text": "back", "start": 7.42, "end": 7.62 },
+        { "text": "a", "start": 7.62, "end": 7.74 },
+        { "text": "recording", "start": 7.74, "end": 8.08 },
+        { "text": "of", "start": 8.08, "end": 8.24 },
+        { "text": "the", "start": 8.24, "end": 8.34 },
+        { "text": "ambush.", "start": 8.34, "end": 8.76 }
+      ]
+    },
+    {
+      "kind": "story",
+      "words": [
+        { "text": "While", "start": 10.24, "end": 10.54 },
+        { "text": "we", "start": 10.54, "end": 10.62 },
+        { "text": "were", "start": 10.62, "end": 10.72 },
+        { "text": "fighting", "start": 10.72, "end": 10.98 },
+        { "text": "Korvessa,", "start": 10.98, "end": 11.88 },
+        { "text": "a", "start": 12.24, "end": 12.5 },
+        { "text": "second", "start": 12.5, "end": 12.74 },
+        { "text": "ship", "start": 12.74, "end": 13.02 },
+        { "text": "slipped", "start": 13.02, "end": 13.28 },
+        { "text": "through", "start": 13.28, "end": 13.5 },
+        { "text": "the", "start": 13.5, "end": 13.62 },
+        { "text": "debris", "start": 13.62, "end": 13.92 },
+        { "text": "and", "start": 14.48, "end": 14.78 },
+        { "text": "set", "start": 14.78, "end": 15.02 },
+        { "text": "course", "start": 15.02, "end": 15.3 },
+        { "text": "for", "start": 15.3, "end": 15.56 },
+        { "text": "Genesis.", "start": 15.56, "end": 15.88 }
+      ]
+    },
+    {
+      "kind": "story",
+      "words": [
+        { "text": "The", "start": 17.34, "end": 17.76 },
+        { "text": "crews’", "start": 18.16, "end": 18.46 },
+        { "text": "families", "start": 18.46, "end": 18.78 },
+        { "text": "are", "start": 18.78, "end": 18.94 },
+        { "text": "waiting", "start": 18.94, "end": 19.1 },
+        { "text": "in", "start": 19.1, "end": 19.3 },
+        { "text": "the", "start": 19.3, "end": 19.42 },
+        { "text": "shelters", "start": 19.42, "end": 19.62 },
+        { "text": "there.", "start": 19.62, "end": 20.16 }
+      ]
+    },
+    {
+      "kind": "order",
+      "words": [
+        { "text": "Stay", "start": 21.4, "end": 21.66 },
+        { "text": "on", "start": 21.66, "end": 21.8 },
+        { "text": "that", "start": 21.8, "end": 21.94 },
+        { "text": "ship’s", "start": 21.94, "end": 22.22 },
+        { "text": "trail.", "start": 22.22, "end": 22.5 }
+      ]
+    },
+    {
+      "kind": "story",
+      "words": [
+        { "text": "I’ll", "start": 24.03, "end": 24.26 },
+        { "text": "go", "start": 24.26, "end": 24.36 },
+        { "text": "through", "start": 24.36, "end": 24.52 },
+        { "text": "Korvessa’s", "start": 24.52, "end": 25.04 },
+        { "text": "archive", "start": 25.04, "end": 25.42 },
+        { "text": "while", "start": 26.98, "end": 27.1 },
+        { "text": "you’re", "start": 27.1, "end": 27.26 },
+        { "text": "in", "start": 27.26, "end": 27.4 },
+        { "text": "flight.", "start": 27.4, "end": 27.64 }
+      ]
+    }
+  ]
+}

@@ -2,7 +2,7 @@
 const changes = [
   {
     "before": "",
-    "after": "import StoryBriefing from \"./story/StoryBriefing\";\nimport { storyBriefingsEnabled } from \"./story/storyPreferences\";\nimport { bossStoryAtSector, storyScenes, type StoryScene } from \"./story/storyScenes\";\nimport { storyFadeMs } from \"./story/storyFades\";\n"
+    "after": "import StoryBriefing from \"./story/StoryBriefing\";\nimport { storyBriefingsEnabled } from \"./story/storyPreferences\";\nimport { bossStoryAtSector, levelStoryAtSector, storyScenes, type StoryScene } from \"./story/storyScenes\";\nimport { storyFadeMs } from \"./story/storyFades\";\n"
   },
   {
     "before": "  useEffect(() => { wakeGameLoopRef.current?.(); }, [game.status]);\n",
@@ -10,7 +10,7 @@ const changes = [
   },
   {
     "before": "",
-    "after": "      if (!adminRunRef.current && saveChoiceRef.current === 'new' && data.startSector === 1 && !data.checkpoint) {\n        queueStory('campaign');\n      } else if (adminRunRef.current) {\n        const encounter = stateRef.current.encounter;\n        const preview = encounter === 'boss-intro' ? bossStoryAtSector(data.startSector)\n          : encounter === 'normal' && data.startSector === 11 ? 'level-two' : undefined;\n        if (preview) queueStory(preview);\n      }\n"
+    "after": "      if (!adminRunRef.current && saveChoiceRef.current === 'new' && data.startSector === 1 && !data.checkpoint) {\n        queueStory('campaign');\n      } else if (adminRunRef.current) {\n        const encounter = stateRef.current.encounter;\n        const preview = encounter === 'boss-intro' ? bossStoryAtSector(data.startSector)\n          : encounter === 'normal' ? levelStoryAtSector(data.startSector) : undefined;\n        if (preview) queueStory(preview);\n      }\n"
   },
   {
     "before": "",
@@ -58,7 +58,7 @@ const changes = [
   },
   {
     "before": "            }\n            forceScene = true;\n            return;\n          }\n        }\n        performanceProbeRef.current?.mark('transitions');\n",
-    "after": "            }\n            if (clearEncounter === 'bonus' && next.sector === 11) queueStory('level-two');\n            forceScene = true;\n            return;\n          }\n        }\n        performanceProbeRef.current?.mark('transitions');\n"
+    "after": "            }\n            const levelBriefing = clearEncounter === 'bonus' ? levelStoryAtSector(next.sector) : undefined;\n            if (levelBriefing) queueStory(levelBriefing);\n            forceScene = true;\n            return;\n          }\n        }\n        performanceProbeRef.current?.mark('transitions');\n"
   },
   {
     "before": "  }, [showRewardCards, diagnosticContext, beginBossSummary]);\n",

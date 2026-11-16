@@ -1,10 +1,11 @@
 import type { StoryPresentation, StoryTiming } from './cinematic.js';
 import originalTiming from './storyTiming.json';
 import chapterTwoTiming from './chapterTwoTiming.json';
+import levelThreeTiming from './levelThreeTiming.json';
 import varnethMuzzles from './muzzles.json';
 import korvessaMuzzles from './korvessaMuzzles.json';
 
-export type StoryScene = 'campaign' | 'varneth' | 'level-two' | 'korvessa';
+export type StoryScene = 'campaign' | 'varneth' | 'level-two' | 'korvessa' | 'level-three';
 
 type BossStory = NonNullable<StoryPresentation['boss']> & {
   outline: string;
@@ -46,7 +47,18 @@ export const storyScenes: Record<StoryScene, StoryDefinition> = {
     timing: chapterTwoTiming.korvessa,
     boss: { id: 2, name: 'Korvessa', subtitle: 'The Mask Bearer', outline: 'korvessa-outline.webp', ship: 'korvessa-ship.webp', muzzles: korvessaMuzzles },
   },
+  'level-three': {
+    title: 'Level 3',
+    heading: 'LEVEL 03',
+    audio: 'level-three-intro.mp3',
+    timing: levelThreeTiming,
+  },
 };
+
+export function levelStoryAtSector(sector: number): StoryScene | undefined {
+  if (sector === 11) return 'level-two';
+  if (sector === 21) return 'level-three';
+}
 
 export function bossStoryAtSector(sector: number): StoryScene | undefined {
   if (sector === 10) return 'varneth';

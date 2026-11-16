@@ -101,7 +101,7 @@ import { activateCollectedPower } from "./collectedPower";
 import { leaveGameFullscreen } from "./gameFullscreen";
 import StoryBriefing from "./story/StoryBriefing";
 import { storyBriefingsEnabled } from "./story/storyPreferences";
-import { bossStoryAtSector, storyScenes, type StoryScene } from "./story/storyScenes";
+import { bossStoryAtSector, levelStoryAtSector, storyScenes, type StoryScene } from "./story/storyScenes";
 import { storyFadeMs } from "./story/storyFades";
 import { levelDifficulty, MAX_DIFFICULTY_LEVEL } from "./levelDifficulty";
 import { createDoubleKillCombo, creditComboDefeat, DOUBLE_KILL_SCORE, DOUBLE_KILL_SHARDS, type DoubleKillCombo } from "./doubleKillCombo";
@@ -1118,7 +1118,7 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
       } else if (adminRunRef.current) {
         const encounter = stateRef.current.encounter;
         const preview = encounter === 'boss-intro' ? bossStoryAtSector(data.startSector)
-          : encounter === 'normal' && data.startSector === 11 ? 'level-two' : undefined;
+          : encounter === 'normal' ? levelStoryAtSector(data.startSector) : undefined;
         if (preview) queueStory(preview);
       }
     } catch (error) {
@@ -1898,7 +1898,8 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
               if (state.encounter === 'bonus') recordOwnerResourceSnapshot('resource-bonus-start');
               else if (state.encounter === 'normal') recordOwnerResourceSnapshot('resource-normal-start');
             }
-            if (clearEncounter === 'bonus' && next.sector === 11) queueStory('level-two');
+            const levelBriefing = clearEncounter === 'bonus' ? levelStoryAtSector(next.sector) : undefined;
+            if (levelBriefing) queueStory(levelBriefing);
             forceScene = true;
             return;
           }

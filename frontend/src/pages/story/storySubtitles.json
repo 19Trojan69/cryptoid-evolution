@@ -34,6 +34,14 @@
       "Jetzt nutzt sie auf jedem Kanal ein anderes.",
       "Der Konvoi folgte ihr direkt in einen Hinterhalt. Ihr Schiff liegt genau vor uns.",
       "Feuer frei, Pilot. Mach den Heimweg frei."
+    ],
+    "level-three": [
+      "Pilot, Korvessa ist besiegt. Alle Besatzungen des Konvois sind in Sicherheit.",
+      "Der letzte Frachter brachte eine Aufnahme des Hinterhalts mit.",
+      "Während des Kampfs gegen Korvessa schlüpfte ein zweites Schiff durch die Trümmer und nahm Kurs auf Genesis.",
+      "Ihre Familien warten dort in Schutzräumen.",
+      "Bleib an dem Schiff dran.",
+      "Ich durchsuche Korvessas Archiv, während du unterwegs bist."
     ]
   },
   "es": {
@@ -71,6 +79,14 @@
       "Ahora usa uno distinto en cada canal.",
       "El convoy la siguió directo a una emboscada. Su nave está justo enfrente.",
       "Fuego a discreción, piloto. Abre una ruta de regreso."
+    ],
+    "level-three": [
+      "Piloto, Korvessa ha caído. Todas las tripulaciones del convoy se han salvado.",
+      "El último carguero trajo una grabación de la emboscada.",
+      "Mientras combatíamos contra Korvessa, una segunda nave se abrió paso entre los restos y puso rumbo a Génesis.",
+      "Sus familias esperan allí, en los refugios.",
+      "Sigue el rastro de esa nave.",
+      "Revisaré el archivo de Korvessa mientras estés en vuelo."
     ]
   },
   "fr": {
@@ -108,6 +124,14 @@
       "Elle en utilise désormais un différent sur chaque canal.",
       "Le convoi l’a suivie droit dans une embuscade. Son vaisseau est droit devant.",
       "Feu à volonté, pilote. Ouvre une voie de retour."
+    ],
+    "level-three": [
+      "Pilote, Korvessa est vaincue. Tous les équipages du convoi s’en sont sortis.",
+      "Le dernier cargo a rapporté un enregistrement de l’embuscade.",
+      "Pendant le combat contre Korvessa, un second vaisseau s’est faufilé parmi les débris et a mis le cap sur Genesis.",
+      "Leurs familles attendent dans les abris là-bas.",
+      "Suis la trace de ce vaisseau.",
+      "Je fouillerai les archives de Korvessa pendant ton vol."
     ]
   },
   "pt": {
@@ -145,6 +169,14 @@
       "Agora usa um indicativo diferente em cada canal.",
       "O comboio seguiu-a diretamente para uma emboscada. A nave dela está mesmo à frente.",
       "Fogo à vontade, piloto. Abre um caminho de regresso."
+    ],
+    "level-three": [
+      "Piloto, Korvessa caiu. Todas as tripulações do comboio escaparam.",
+      "O último cargueiro trouxe uma gravação da emboscada.",
+      "Enquanto combatíamos Korvessa, uma segunda nave esgueirou-se por entre os destroços e rumou a Génesis.",
+      "As suas famílias esperam lá, nos abrigos.",
+      "Segue o rasto dessa nave.",
+      "Vou examinar o arquivo de Korvessa enquanto estiveres em voo."
     ]
   },
   "it": {
@@ -182,6 +214,14 @@
       "Ora ne usa uno diverso su ogni canale.",
       "Il convoglio l’ha seguita dritto in un’imboscata. La sua nave è proprio davanti a noi.",
       "Fuoco a volontà, pilota. Apri una via per tornare a casa."
+    ],
+    "level-three": [
+      "Pilota, Korvessa è caduta. Tutti gli equipaggi del convoglio sono in salvo.",
+      "L’ultimo cargo ha riportato una registrazione dell’imboscata.",
+      "Mentre combattevamo contro Korvessa, una seconda nave è sgusciata tra i detriti e ha fatto rotta verso Genesis.",
+      "Le loro famiglie aspettano nei rifugi, laggiù.",
+      "Resta sulla scia di quella nave.",
+      "Esaminerò l’archivio di Korvessa mentre sei in volo."
     ]
   },
   "pl": {
@@ -219,6 +259,14 @@
       "Teraz na każdym kanale używa innego.",
       "Konwój poleciał za nią prosto w zasadzkę. Jej statek jest tuż przed nami.",
       "Ognia, pilocie. Otwórz drogę powrotną."
+    ],
+    "level-three": [
+      "Pilocie, Korvessa pokonana. Wszystkie załogi konwoju ocalały.",
+      "Ostatni frachtowiec przywiózł nagranie zasadzki.",
+      "Gdy walczyliśmy z Korvessą, drugi statek przemknął przez szczątki i obrał kurs na Genesis.",
+      "Rodziny załóg czekają tam w schronach.",
+      "Leć za tym statkiem.",
+      "Przejrzę archiwum Korvessy, gdy będziesz w drodze."
     ]
   },
   "cs": {
@@ -256,6 +304,14 @@
       "Teď na každém kanálu používá jiný.",
       "Konvoj ji následoval přímo do léčky. Její loď je přímo před námi.",
       "Palba povolena, pilote. Uvolněte cestu domů."
+    ],
+    "level-three": [
+      "Pilote, Korvessa je poražena. Všechny posádky konvoje se zachránily.",
+      "Poslední nákladní loď přivezla záznam přepadení.",
+      "Zatímco jsme bojovali s Korvessou, druhá loď proklouzla troskami a zamířila ke Genesis.",
+      "Rodiny posádek tam čekají v krytech.",
+      "Drž se té lodi.",
+      "Prohledám archiv Korvessy, zatímco budeš na cestě."
     ]
   },
   "sk": {
@@ -293,6 +349,14 @@
       "Teraz na každom kanáli používa iný.",
       "Konvoj ju nasledoval priamo do pasce. Jej loď je rovno pred nami.",
       "Paľba povolená, pilot. Uvoľnite cestu domov."
+    ],
+    "level-three": [
+      "Pilot, Korvessa je porazená. Všetky posádky konvoja sa zachránili.",
+      "Posledná nákladná loď priniesla záznam prepadu.",
+      "Kým sme bojovali s Korvessou, druhá loď prekĺzla troskami a zamierila ku Genesis.",
+      "Rodiny posádok tam čakajú v krytoch.",
+      "Drž sa stopy tej lode.",
+      "Kým budeš na ceste, prehľadám archív Korvessy."
     ]
   },
   "ru": {
@@ -330,6 +394,14 @@
       "Теперь на каждом канале у неё новый позывной.",
       "Конвой последовал за ней прямо в засаду. Её корабль прямо по курсу.",
       "Огонь разрешён, пилот. Проложи путь домой."
+    ],
+    "level-three": [
+      "Пилот, Корвесса повержена. Все экипажи конвоя спаслись.",
+      "Последний грузовой корабль привёз запись засады.",
+      "Пока мы сражались с Корвессой, второй корабль проскользнул сквозь обломки и взял курс на Генезис.",
+      "Семьи экипажей ждут там, в укрытиях.",
+      "Следуй за этим кораблём.",
+      "Я изучу архив Корвессы, пока ты в полёте."
     ]
   },
   "uk": {
@@ -367,6 +439,14 @@
       "Тепер на кожному каналі вона використовує інший.",
       "Конвой пішов за нею просто в засідку. Її корабель прямо попереду.",
       "Вогонь дозволено, пілоте. Відкрий шлях додому."
+    ],
+    "level-three": [
+      "Пілоте, Корвессу переможено. Усі екіпажі конвою врятувалися.",
+      "Останнє вантажне судно привезло запис засідки.",
+      "Поки ми билися з Корвессою, другий корабель прослизнув крізь уламки й узяв курс на Генезис.",
+      "Родини екіпажів чекають там, в укриттях.",
+      "Тримайся сліду того корабля.",
+      "Я перегляну архів Корвесси, поки ти в польоті."
     ]
   },
   "hr": {
@@ -404,6 +484,14 @@
       "Sad na svakom kanalu upotrebljava drugi.",
       "Konvoj ju je slijedio ravno u zasjedu. Njezin je brod točno ispred nas.",
       "Vatra po volji, pilote. Otvori put kući."
+    ],
+    "level-three": [
+      "Pilote, Korvessa je poražena. Sve posade konvoja su se izvukle.",
+      "Posljednji teretni brod donio je snimku zasjede.",
+      "Dok smo se borili protiv Korvesse, drugi se brod provukao kroz krhotine i krenuo prema Genesisu.",
+      "Obitelji posada čekaju ondje u skloništima.",
+      "Prati trag tog broda.",
+      "Pregledat ću Korvessinu arhivu dok si u letu."
     ]
   },
   "sr": {
@@ -441,6 +529,14 @@
       "Сада на сваком каналу користи други.",
       "Конвој ју је пратио право у заседу. Њен брод је право испред нас.",
       "Отвори ватру, пилоте. Пробиј пут кући."
+    ],
+    "level-three": [
+      "Пилоте, Корвеса је поражена. Све посаде конвоја су се извукле.",
+      "Последњи теретни брод донео је снимак заседе.",
+      "Док смо се борили против Корвесе, други брод се провукао кроз олупине и кренуо ка Генезису.",
+      "Породице посада тамо чекају у склоништима.",
+      "Прати траг тог брода.",
+      "Прегледаћу архиву Корвесе док си у лету."
     ]
   },
   "tr": {
@@ -478,6 +574,14 @@
       "Şimdi her kanalda farklı bir kod kullanıyor.",
       "Konvoy onu izleyip doğrudan pusuya düştü. Gemisi tam karşımızda.",
       "Ateş serbest, pilot. Eve dönüş yolunu aç."
+    ],
+    "level-three": [
+      "Pilot, Korvessa yenildi. Konvoydaki tüm mürettebat kurtuldu.",
+      "Son yük gemisi pusunun kaydını getirdi.",
+      "Korvessa’yla savaşırken ikinci bir gemi enkazın arasından sıyrılıp Genesis’e yöneldi.",
+      "Aileleri oradaki sığınaklarda bekliyor.",
+      "O geminin izini sür.",
+      "Sen uçarken Korvessa’nın arşivini inceleyeceğim."
     ]
   },
   "hu": {
@@ -515,6 +619,14 @@
       "Most minden csatornán más hívójelet használ.",
       "A konvoj őt követte, egyenesen a csapdába. A hajója épp előttünk van.",
       "Szabad a tűz, pilóta. Nyiss utat hazafelé."
+    ],
+    "level-three": [
+      "Pilóta, Korvessa elesett. A konvoj minden tagja megmenekült.",
+      "Az utolsó teherhajó elhozta a rajtaütés felvételét.",
+      "Amíg Korvessával harcoltunk, egy második hajó átsiklott a törmeléken, és Genesis felé vette az irányt.",
+      "A legénység családjai ott várnak az óvóhelyeken.",
+      "Maradj annak a hajónak a nyomában.",
+      "Átnézem Korvessa archívumát, amíg úton vagy."
     ]
   },
   "ro": {
@@ -552,6 +664,14 @@
       "Acum folosește un indicativ diferit pe fiecare canal.",
       "Convoiul a urmat-o drept într-o ambuscadă. Nava ei e chiar în fața noastră.",
       "Foc la discreție, pilot. Deschide drumul spre casă."
+    ],
+    "level-three": [
+      "Pilotule, Korvessa a căzut. Toate echipajele convoiului au scăpat.",
+      "Ultima navă de marfă a adus o înregistrare a ambuscadei.",
+      "În timp ce luptam cu Korvessa, o a doua navă s-a strecurat printre resturi și a pornit spre Genesis.",
+      "Familiile echipajelor așteaptă acolo, în adăposturi.",
+      "Urmărește nava aceea.",
+      "Voi cerceta arhiva lui Korvessa cât timp ești în zbor."
     ]
   },
   "th": {
@@ -589,6 +709,14 @@
       "ตอนนี้เธอใช้รหัสเรียกขานต่างกันในแต่ละช่องสัญญาณ",
       "ขบวนยานตามเธอเข้าไปติดกับดัก ยานของเธออยู่ตรงหน้าเรา",
       "นักบิน อนุญาตให้เปิดฉากยิง เปิดทางกลับบ้านให้พวกเขา"
+    ],
+    "level-three": [
+      "นักบิน คอร์เวสซาพ่ายแล้ว ลูกเรือทุกลำในขบวนรอดมาได้",
+      "เรือบรรทุกสินค้าลำสุดท้ายนำบันทึกการซุ่มโจมตีกลับมาด้วย",
+      "ระหว่างที่เราสู้กับคอร์เวสซา ยานอีกลำเล็ดลอดผ่านซากยานและมุ่งหน้าไปเจเนซิส",
+      "ครอบครัวของลูกเรือรออยู่ในที่หลบภัยที่นั่น",
+      "ตามรอยยานลำนั้นไป",
+      "ระหว่างที่คุณบินไป ฉันจะค้นดูข้อมูลในคลังของคอร์เวสซา"
     ]
   },
   "zh": {
@@ -626,6 +754,14 @@
       "现在，她在每个频道都使用不同的呼号。",
       "补给船队跟着她一头闯进了伏击圈。她的飞船就在正前方。",
       "飞行员，可以自由开火。为他们打开回家的路。"
+    ],
+    "level-three": [
+      "飞行员，科尔维萨已被击败。船队的所有船员都脱险了。",
+      "最后一艘货船带回了伏击的记录。",
+      "我们与科尔维萨交战时，第二艘飞船穿过残骸，朝创世星区飞去。",
+      "船员的家属正在那里的避难所等待。",
+      "跟上那艘飞船。",
+      "你在航行时，我会查阅科尔维萨的档案。"
     ]
   },
   "vi": {
@@ -663,6 +799,14 @@
       "Giờ mỗi kênh cô ta lại dùng một hô hiệu khác.",
       "Đoàn tàu theo cô ta vào thẳng ổ phục kích. Tàu của cô ta ở ngay phía trước.",
       "Được phép khai hỏa, phi công. Mở đường về nhà cho họ."
+    ],
+    "level-three": [
+      "Phi công, Korvessa đã bị đánh bại. Toàn bộ thủy thủ đoàn của đoàn tàu đã thoát hiểm.",
+      "Tàu chở hàng cuối cùng đã mang về bản ghi của cuộc phục kích.",
+      "Trong lúc chúng ta giao chiến với Korvessa, một con tàu thứ hai lách qua đống đổ nát và hướng về Genesis.",
+      "Gia đình các thủy thủ đang chờ trong hầm trú ẩn ở đó.",
+      "Bám theo con tàu đó.",
+      "Tôi sẽ xem hồ sơ của Korvessa trong lúc anh đang bay."
     ]
   }
 }

@@ -8,6 +8,7 @@ const cueEnds: Record<StoryScene, readonly number[]> = {
   varneth: [3, 12, 18, 31, 35],
   'level-two': [11, 23, 30, 41, 46],
   korvessa: [7, 21, 30, 43, 50],
+  'level-three': [10, 20, 37, 46, 51, 60],
 };
 
 export function storyCues(scene: StoryScene, timing: StoryTiming) {
