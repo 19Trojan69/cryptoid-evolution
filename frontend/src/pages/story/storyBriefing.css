@@ -5,6 +5,14 @@
   font-display: swap;
 }
 
+.game-shell[data-campaign-opening="true"] {
+  background: #03060b;
+}
+
+.game-shell[data-campaign-opening="true"] > .game-field {
+  visibility: hidden;
+}
+
 .story-briefing {
   position: fixed;
   inset: 0;
@@ -36,7 +44,8 @@
   transition: opacity calc(var(--story-briefing-out) * var(--story-motion)) ease-in-out;
 }
 
-.story-briefing[data-phase="briefing"] .story-briefing-content {
+.story-briefing[data-phase="briefing"] .story-briefing-content,
+.game-shell[data-campaign-opening="true"] > .story-briefing[data-phase="covering"] .story-briefing-content {
   opacity: 1;
   transition-duration: calc(var(--story-briefing-in) * var(--story-motion));
 }
@@ -109,6 +118,7 @@
 }
 
 .story-briefing-skip { right: max(.55rem, env(safe-area-inset-right)); }
+.story-briefing[data-phase="covering"] .story-briefing-skip { visibility: hidden; }
 .story-briefing-audio { left: max(.55rem, env(safe-area-inset-left)); }
 
 .story-briefing-skip::after {

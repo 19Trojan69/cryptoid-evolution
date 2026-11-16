@@ -70,7 +70,7 @@ const changes = [
   },
   {
     "before": "\n  return (\n    <main className=\"game-shell\" data-effects-paused={game.status === \"paused\" || game.status === \"loading\"} onPointerDownCapture={() => { primeCardSound(); if(rewardCardsRef.current.length)return; retryAudio(); }}>\n",
-    "after": "\n  const briefingBoss = story ? storyScenes[story].boss : undefined;\n  const briefingVisible = Boolean(story) && !rewardCards.length;\n  return (\n    <main className=\"game-shell\" data-effects-paused={briefingVisible || game.status === \"paused\" || game.status === \"loading\"} onPointerDownCapture={() => { primeCardSound(); if(rewardCardsRef.current.length)return; retryAudio(); }}>\n"
+    "after": "\n  const briefingBoss = story ? storyScenes[story].boss : undefined;\n  const briefingVisible = Boolean(story) && !rewardCards.length;\n  return (\n    <main className=\"game-shell\" data-campaign-opening={story === 'campaign' && !storyReturning}\n      data-effects-paused={briefingVisible || game.status === \"paused\" || game.status === \"loading\"} onPointerDownCapture={() => { primeCardSound(); if(rewardCardsRef.current.length)return; retryAudio(); }}>\n"
   },
   {
     "before": "",

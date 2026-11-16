@@ -2846,7 +2846,8 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
   const briefingBoss = story ? storyScenes[story].boss : undefined;
   const briefingVisible = Boolean(story) && !rewardCards.length;
   return (
-    <main className="game-shell" data-effects-paused={briefingVisible || game.status === "paused" || game.status === "loading"} onPointerDownCapture={() => { primeCardSound(); if(rewardCardsRef.current.length)return; retryAudio(); }}>
+    <main className="game-shell" data-campaign-opening={story === 'campaign' && !storyReturning}
+      data-effects-paused={briefingVisible || game.status === "paused" || game.status === "loading"} onPointerDownCapture={() => { primeCardSound(); if(rewardCardsRef.current.length)return; retryAudio(); }}>
       {story && briefingVisible && <StoryBriefing key={story} scene={story}
         unlocked={briefingBoss !== undefined && (rewardProgressRef.current.bossWins[briefingBoss.id] ?? 0) > 0}
         withAudio={musicEnabled && !ownerAudioDisabled() && musicVolume > 0} volume={musicVolume}

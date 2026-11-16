@@ -1,7 +1,11 @@
 /* Mission checkpoint dialog, aligned with the floating navy/champagne phone menus. */
+.game-route .game-overlay:has(> .mission-start-modal) {
+  background: #03060b;
+}
+
 @media (max-width: 600px) {
-  .game-overlay:has(.mission-start-modal) {
-    background: radial-gradient(ellipse at 50% 46%, #25395170, #050b17eb 70%);
+  .game-route .game-overlay:has(> .mission-start-modal) {
+    background-image: radial-gradient(ellipse at 50% 46%, #25395170, #050b17eb 70%);
   }
   .game-modal.mission-start-modal {
     position: relative; isolation: isolate; overflow-y: auto;
