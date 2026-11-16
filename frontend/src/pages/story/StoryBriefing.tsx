@@ -93,6 +93,7 @@ export default function StoryBriefing({ scene, withAudio, volume, prepareAudio, 
     let cinematic: ReturnType<typeof createCinematic> | undefined;
     let disposed = false, finished = false, frame = 0, lastCue = -1;
     let silentMs = 0, silentStart = performance.now();
+    let visualMs = 0, lastVisualAt = silentStart;
     let player: MusicPlayer | null = null;
     let followsAudio = false, playPending = false, playGeneration = 0, suspended = false;
     let lastAudioMs = 0, lastAdvanceAt = silentStart, fadeInAt = 0;
@@ -118,6 +119,9 @@ export default function StoryBriefing({ scene, withAudio, volume, prepareAudio, 
       canvas.width = canvas.height = 0;
       if (!disposed) setArtReady(false);
     };
+    const paint = (ms: number) => {
+      try { cinematic?.draw(ms / 1000, reduced(), unlocked); } catch { showCaptions(); }
+    };
     const resize = () => {
       if (!cinematic) return;
       const { width, height } = canvas.getBoundingClientRect();
@@ -128,8 +132,8 @@ export default function StoryBriefing({ scene, withAudio, volume, prepareAudio, 
       try {
         canvas.width = w; canvas.height = h;
         cinematic.resize(w, h);
-        const seconds = transition.phase === 'covering' ? 0 : position(performance.now()) / 1000;
-        cinematic.draw(seconds, reduced(), unlocked);
+        const fadeElapsed = transition.phase === 'leaving' ? Math.max(0, performance.now() - transition.startedAt) : 0;
+        paint(visualMs + fadeElapsed);
       } catch { showCaptions(); }
     };
     const tick = (now: number) => {
@@ -139,7 +143,7 @@ export default function StoryBriefing({ scene, withAudio, volume, prepareAudio, 
       if (transition.phase === 'covering') {
         if (reduced() || elapsed >= storyFadeMs.gameOut) {
           enterPhase('briefing', now);
-          silentStart = now;
+          silentStart = lastVisualAt = now;
           play(now);
         } else schedule();
         return;
@@ -148,7 +152,10 @@ export default function StoryBriefing({ scene, withAudio, volume, prepareAudio, 
         const progress = reduced() ? 1 : Math.min(1, elapsed / storyFadeMs.briefingOut);
         setAudioLevel(exitVolume * (1 - progress) ** 2);
         if (progress >= 1) revealGame(now);
-        else schedule();
+        else {
+          paint(visualMs + elapsed);
+          schedule();
+        }
         return;
       }
       if (transition.phase === 'returning') {
@@ -166,7 +173,17 @@ export default function StoryBriefing({ scene, withAudio, volume, prepareAudio, 
       const seconds = ms / 1000;
       const cue = cues.findIndex(line => seconds >= line.start && seconds < line.end);
       if (cue !== lastCue) { lastCue = cue; setCueIndex(cue); }
-      try { cinematic?.draw(seconds, reduced(), unlocked); } catch { showCaptions(); }
+      if (followsAudio && player?.playing) {
+        // The media clock may update less often than the frames. Keep the
+        // crawl moving between samples and correct its pace within one cue.
+        const delta = Math.max(0, now - lastVisualAt);
+        const projected = visualMs + delta;
+        const limit = delta * .18;
+        const correction = Math.max(-limit, Math.min(limit, (ms - projected) * .18));
+        visualMs = Math.max(visualMs, Math.min(ms + 56, Math.max(ms - 64, projected + correction)));
+      } else visualMs = Math.max(visualMs, ms);
+      lastVisualAt = now;
+      paint(visualMs);
       schedule();
     };
     const schedule = () => { if (!frame && !suspended && !document.hidden && !disposed && !finished) frame = requestGameFrame(tick); };
@@ -246,7 +263,7 @@ export default function StoryBriefing({ scene, withAudio, volume, prepareAudio, 
       const now = performance.now();
       if (suspended) {
         suspended = false;
-        silentStart = now;
+        silentStart = lastVisualAt = now;
       }
       if (transition.phase === 'briefing') play(now);
       else schedule();

@@ -7,7 +7,7 @@ const definition = { title: 'Korvessa', audio: 'korvessa-intro.mp3', timing: { d
 const cues = [{ text: 'Pilot', start: .2, end: 10 }];
 const source = '/story/' + definition.audio;
 
-function setup({ withAudio = true, startAudio } = {}) {
+function setup({ withAudio = true, startAudio, artwork = false } = {}) {
   let time = 1000;
   let frameId = 0;
   const frames = new Map();
@@ -15,10 +15,12 @@ function setup({ withAudio = true, startAudio } = {}) {
   const unlocks = [];
   const preparations = [];
   const transitions = [];
+  const drawings = [];
   const window = Object.assign(new EventTarget(), { matchMedia: () => ({ matches: false }) });
   const document = Object.assign(new EventTarget(), { hidden: false, documentElement: { dataset: {} },
     fonts: { load: async () => [] } });
-  const canvas = Object.assign(new EventTarget(), { getBoundingClientRect: () => ({ width: 0, height: 0 }) });
+  const canvas = Object.assign(new EventTarget(), { getBoundingClientRect: () => ({ width: 430, height: 932 }),
+    getContext: () => ({}) });
   const audio = Object.assign(new EventTarget(), { currentTime: 0, ended: false, error: null, load() {} });
   const player = {
     audio,
@@ -57,7 +59,8 @@ function setup({ withAudio = true, startAudio } = {}) {
     storySubtitle: () => undefined, storyCopy: () => ['Überspringen', 'Story-Vorspänne', 'Ton abspielen'],
     storyScenes: { korvessa: definition }, storyFadeMs,
     performance: { now: () => time }, window, document, sessionStorage: new Map(),
-    Image: class { async decode() { throw new Error('Artwork unavailable in audio fixture'); } },
+    Image: class { async decode() { if (!artwork) throw new Error('Artwork unavailable in audio fixture'); } },
+    createCinematic: () => ({ resize() {}, draw(seconds) { drawings.push(seconds); }, dispose() {} }),
     requestGameFrame(callback) { frames.set(++frameId, callback); return frameId; },
     cancelGameFrame: id => frames.delete(id),
     element(type, props, ...children) {
@@ -67,7 +70,7 @@ function setup({ withAudio = true, startAudio } = {}) {
   });
   const find = name => host.nodes().find(node => node.props.className === name)?.props;
   return {
-    ...host, player, audio, starts, unlocks, preparations, transitions,
+    ...host, player, audio, starts, unlocks, preparations, transitions, drawings,
     tick(ms) {
       time += ms;
       const callbacks = [...frames.values()];
@@ -166,5 +169,29 @@ test('muted briefings finish without preparing or retrying audio', () => {
   story.tick(storyFadeMs.briefingOut);
   story.tick(storyFadeMs.gameIn);
   assert.deepEqual(story.transitions, ['reveal', 'finish']);
+  story.unmount();
+});
+
+test('the crawl advances between media time samples and continues through the fade', async () => {
+  const story = setup({ artwork: true });
+  await story.flush();
+  story.tick(storyFadeMs.gameOut);
+  await story.flush();
+  let previous = 0;
+  for (let frame = 1; frame <= 75; frame++) {
+    const frameMs = frame * 1000 / 60;
+    const reportedMs = Math.floor(frameMs / 24) * 24;
+    story.audio.currentTime = reportedMs / 1000;
+    story.tick(1000 / 60);
+    const displayed = story.drawings.at(-1);
+    assert.ok(displayed > previous, `Frame ${frame} did not move forward`);
+    assert.ok(displayed * 1000 - reportedMs <= 56.01);
+    assert.ok(reportedMs - displayed * 1000 <= 64.01);
+    previous = displayed;
+  }
+  story.skip();
+  story.tick(120);
+  assert.equal(story.phase(), 'leaving');
+  assert.ok(story.drawings.at(-1) > previous);
   story.unmount();
 });

@@ -7,6 +7,10 @@ const smooth = (value, from, to) => {
   return x * x * (3 - 2 * x);
 };
 const typeface = 'Barlow, Arial, sans-serif';
+const scrollSmoothingSeconds = .85;
+const rowPerspective = .133;
+const brightText = '#ffe1a0';
+const goldText = '#f0c575';
 
 function cover(ctx, image, w, h) {
   const zoom = Math.max(w / image.width, h / image.height);
@@ -40,6 +44,17 @@ export function createCinematic(ctx, assets, timeline, createSurface, appearance
   const contactTime = timeline.groups.find(group => group.kind === 'contact')?.words.at(-1).start;
   const revealTime = Math.min(lastWord + .42, timeline.duration - 1.3);
 
+  function addAnchor(time, row) {
+    const prior = anchors.at(-1);
+    const area = prior.area + (time - prior.time) * (prior.row + row) / 2;
+    anchors.push({ time, row, area });
+  }
+
+  function releaseBackdrop() {
+    if (backdrop) backdrop.width = backdrop.height = 0;
+    backdrop = undefined;
+  }
+
   function resize(w, h) {
     width = w;
     height = h;
@@ -47,7 +62,7 @@ export function createCinematic(ctx, assets, timeline, createSurface, appearance
     typeSize = unit * 0.059;
     const maxWidth = Math.min(w * 0.715, h * 0.79);
     rows = [];
-    anchors = [{ time: 0, row: firstWord < .15 ? -.13 : -3.1 }];
+    anchors = [{ time: 0, row: firstWord < .15 ? -.13 : -3.1, area: 0 }];
     let position = 0;
 
     for (const group of timeline.groups) {
@@ -64,15 +79,16 @@ export function createCinematic(ctx, assets, timeline, createSurface, appearance
         const width = ctx.measureText(text).width;
         let advance = 0;
         let prefix = '';
-        let index = 0;
-        const letters = Array.from(text, letter => {
+        const letters = [];
+        for (const [index, letter] of Array.from(text).entries()) {
           prefix += letter;
           const next = ctx.measureText(prefix).width;
           const x = (advance + next - width) * .5;
-          const order = ((index++ * 17 + row * 11 + appearance.seed) % 31) / 31;
           advance = next;
-          return { letter, x, order };
-        });
+          if (letter === ' ') continue;
+          const order = ((index * 17 + row * 11 + appearance.seed) % 31) / 31;
+          letters.push({ letter, x, order });
+        }
         rows.push({
           text,
           width,
@@ -84,7 +100,7 @@ export function createCinematic(ctx, assets, timeline, createSurface, appearance
           end: line.at(-1).end,
         });
         const prior = anchors.at(-1);
-        anchors.push({ time: Math.max(start, prior.time + 0.035), row: row - 0.10 });
+        addAnchor(Math.max(start, prior.time + 0.035), row - 0.10);
         line = [];
       }
 
@@ -98,10 +114,10 @@ export function createCinematic(ctx, assets, timeline, createSurface, appearance
     }
 
     const finalRow = rows.at(-1).position;
-    anchors.push({ time: Math.max(lastWord + 0.15, anchors.at(-1).time + 0.12), row: finalRow + 0.20 });
-    anchors.push({ time: Math.max(revealTime + 1.2, lastWord + 1.35), row: finalRow + 10 });
+    addAnchor(Math.max(lastWord + 0.15, anchors.at(-1).time + 0.12), finalRow + 0.20);
+    addAnchor(Math.max(revealTime + 1.2, lastWord + 1.35), finalRow + 10);
 
-    if (backdrop) backdrop.width = backdrop.height = 0;
+    releaseBackdrop();
     backdrop = createSurface(w, h);
     const base = backdrop.getContext('2d');
     base.fillStyle = '#060b13';
@@ -123,13 +139,20 @@ export function createCinematic(ctx, assets, timeline, createSurface, appearance
     vortex = paintVortex(base, w, h, unit, appearance.variant, appearance.seed);
   }
 
-  function scrollAt(time) {
+  function scrollAreaAt(time) {
     const nextIndex = anchors.findIndex(anchor => time <= anchor.time);
-    if (nextIndex < 0) return anchors.at(-1).row;
-    if (nextIndex === 0) return anchors[0].row;
-    const a = anchors[nextIndex - 1];
+    if (nextIndex === 0) return anchors[0].row * time;
+    const a = nextIndex < 0 ? anchors.at(-1) : anchors[nextIndex - 1];
     const b = anchors[nextIndex];
-    return a.row + (b.row - a.row) * range(time, a.time, b.time);
+    const row = b ? a.row + (b.row - a.row) * range(time, a.time, b.time) : a.row;
+    return a.area + (time - a.time) * (a.row + row) / 2;
+  }
+
+  function scrollAt(time) {
+    // Average the narration's scroll positions across a short window so the
+    // crawl has continuous velocity when it crosses a line's timing marker.
+    return (scrollAreaAt(time + scrollSmoothingSeconds) - scrollAreaAt(time - scrollSmoothingSeconds))
+      / (2 * scrollSmoothingSeconds);
   }
 
   function openingTitle(time) {
@@ -160,18 +183,19 @@ export function createCinematic(ctx, assets, timeline, createSurface, appearance
 
   function pullLetters(row, y, pull, stretch, scale, opacity) {
     for (const { letter, x, order } of row.letters) {
-      if (letter === ' ') continue;
       const progress = smooth(pull, .12 + order * .31, .93 + order * .045);
       const alpha = opacity * (1 - smooth(progress, .68, .96));
       if (alpha < .015) continue;
       const position = vortexPosition(vortex, y, progress, x * stretch);
-      ctx.save();
+      const angle = position.rotation + (order - .5) * progress * 1.6;
+      const sine = Math.sin(angle);
+      const cosine = Math.cos(angle);
+      const horizontalScale = stretch * (1 - .8 * progress);
+      const verticalScale = scale * (1 - .59 * progress);
       ctx.globalAlpha = alpha;
-      ctx.translate(position.x, position.y);
-      ctx.rotate(position.rotation + (order - .5) * progress * 1.6);
-      ctx.scale(stretch * (1 - .8 * progress), scale * (1 - .59 * progress));
+      ctx.setTransform(horizontalScale * cosine, horizontalScale * sine,
+        -verticalScale * sine, verticalScale * cosine, position.x, position.y);
       ctx.fillText(letter, 0, 0);
-      ctx.restore();
     }
   }
 
@@ -194,12 +218,14 @@ export function createCinematic(ctx, assets, timeline, createSurface, appearance
       }
     } else {
       clipOutsideVortex();
-      for (const [index, row] of rows.entries()) {
-        const depth = 1 - (row.position - scroll) * .115;
-        if (depth <= 0) continue;
+      for (let index = 0; index < rows.length; index++) {
+        const row = rows[index];
+        const depth = 1 - (row.position - scroll) * rowPerspective;
+        if (depth <= 0) break;
         const scale = 1 / depth;
         const y = opticalHorizon + scale * vanishingDistance;
-        if (y < height * .243 || y > height * .765) continue;
+        if (y > height * .765) break;
+        if (y < height * .243) continue;
         // Keep the scroll on the narration clock and warp only its distant projection.
         const pull = 1 - smooth(y, height * .368, height * .480);
         if (pull > .99) continue;
@@ -211,10 +237,11 @@ export function createCinematic(ctx, assets, timeline, createSurface, appearance
         const stretch = Math.min(scale ** .77, width * .922 / row.width);
         const verticalScale = scale * .88;
         ctx.save();
+        const highlighted = index === active || row.kind !== 'story';
         ctx.font = row.font;
-        ctx.shadowBlur = pull < .12 ? unit * .013 : 0;
+        ctx.shadowBlur = unit * .013 * (1 - smooth(pull, 0, .12));
         ctx.shadowColor = 'rgba(0, 0, 0, .91)';
-        ctx.fillStyle = index === active || row.kind !== 'story' ? '#ffe1a0' : '#f0c575';
+        ctx.fillStyle = highlighted ? brightText : goldText;
         if (pull < .12) {
           ctx.globalAlpha = opacity;
           ctx.translate(width / 2, y);
@@ -318,5 +345,5 @@ export function createCinematic(ctx, assets, timeline, createSurface, appearance
     if (presentation.boss && contactTime !== undefined) boss(reveal, time, unlocked, !reducedMotion);
   }
 
-  return { resize, draw, dispose: () => { if (backdrop) backdrop.width = backdrop.height = 0; backdrop = undefined; } };
+  return { resize, draw, dispose: releaseBackdrop };
 }
