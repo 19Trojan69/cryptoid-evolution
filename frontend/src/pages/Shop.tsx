@@ -5,7 +5,7 @@ import CareerDashboard from "./CareerDashboard";
 import FeedbackHub from "./FeedbackHub";
 import PilotProfile from "./PilotProfile";
 import PilotAvatar, { type Avatar } from "../components/PilotAvatar";
-import { bossCardAvailable } from './cardAvailability';
+import { bossCardAvailable, shipCardAvailable } from './cardAvailability';
 import CardReveal from './CardReveal';
 import { availableShipCards, unseenShipCards, type CardReward } from './cardRevealRules';
 import { mergeCardReveals, rememberCard, readCardReveals, syncCardReveals } from './cardRevealMemory';
@@ -310,11 +310,11 @@ const Shop = () => {
   const [loadoutMessage, setLoadoutMessage] = useState("");
   const [shipQuery, setShipQuery] = useState("");
   const [shipFilter, setShipFilter] = useState<"all" | "owned" | "available">("all");
-  const standardModelsAvailable = playerSkins.filter(skin => standardHullAvailable(skin.id, shipNftMainnetVisible)).length;
+  const standardModelsAvailable = playerSkins.filter(skin => standardHullAvailable(skin.id)).length;
   const shipSearchOptions = playerSkins.filter(skin => {
     const owned = fleetCount(visibleFleet, skin.id) > 0;
     return (shopView === "shop" || owned) && skin.name.toLocaleLowerCase(locale).includes(shipQuery.trim().toLocaleLowerCase(locale)) &&
-      (shopTarget?.skin === skin.id || shipFilter === "all" || (shipFilter === "owned" ? owned : standardHullAvailable(skin.id, shipNftMainnetVisible)));
+      (shopTarget?.skin === skin.id || shipFilter === "all" || (shipFilter === "owned" ? owned : standardHullAvailable(skin.id)));
   });
   useEffect(() => {
     let active = true;
@@ -347,7 +347,6 @@ const Shop = () => {
   const purchaseStandard = (previewSkin: typeof playerSkins[number]) => {
     primeCardSound();
     if (adminMode) return;
-    if (!standardHullAvailable(previewSkin.id, shipNftMainnetVisible)) { setHangarMessage("MAINNET READY"); return; }
     if (user) {
       if (!account) { setAccountError("Account save is loading or unavailable."); return; }
       if (shipSaveNetwork === "testnet" && !sessionStorage.getItem(PI_ACCESS_TOKEN_KEY)) { void signIn(); return; }
@@ -368,7 +367,9 @@ const Shop = () => {
     try { saveGuestShipPurchase(localStorage, previewSkin.id, purchase); }
     catch { setHangarMessage("Could not save loadout. Please retry."); return; }
     setFleet(purchase.fleet);
-    setNewCards(unseenShipCards([{key:`${previewSkin.id}-1`,ship:previewSkin.id,stage:1}],readCardReveals('guest')));
+    if (shipCardAvailable(previewSkin.sprite, 1)) {
+      setNewCards(unseenShipCards([{key:`${previewSkin.id}-1`,ship:previewSkin.id,stage:1}],readCardReveals('guest')));
+    }
 
     setShards(purchase.balance);
     setHangarMessage({ ship: previewSkin.name, status: "Owned", count: fleetCount(purchase.fleet, previewSkin.id) });

@@ -36,9 +36,8 @@ test("only the grey starter is free and the prepared Mainnet catalog covers all 
   assert.equal(new Set(playerSkins.map(skin => skin.sprite)).size, 20);
   assert.equal(EXTRA_STARTER_PRICE, 150);
   playerSkins.slice(1).forEach((skin, index) => assert.equal(skin.price, 150 + index * 250, skin.id));
-  assert.equal(playerSkins.filter(skin => standardHullAvailable(skin.id)).length, 10);
-  assert.equal(playerSkins.filter(skin => standardHullAvailable(skin.id, true)).length, 20);
-  assert.equal(standardHullAvailable("unknown", true), false);
+  assert.equal(playerSkins.filter(skin => standardHullAvailable(skin.id)).length, 20);
+  assert.equal(standardHullAvailable("unknown"), false);
 });
 
 test("later sectors field all 20 player hulls as enemy models", () => {
@@ -71,8 +70,10 @@ test("a skin purchase spends once and never grants an unaffordable or duplicate 
   assert.equal(buySkin("nova-wing", ["nova-wing"], 300), null);
   assert.equal(buySkin("grey-scout", [], 50), null);
   assert.equal(buySkin("nova-wing", [], Number.NaN), null);
-  assert.equal(buySkin("twin-core", [], 50_000), null);
-  assert.equal(buyStandardShip("twin-core", { "grey-scout": { grey: 1 } }, 50_000), null);
+  assert.deepEqual(buySkin("twin-core", [], 2400), { owned: ["twin-core"], balance: 0 });
+  assert.deepEqual(buyStandardShip("twin-core", { "grey-scout": { grey: 1 } }, 2400), {
+    fleet: { "grey-scout": { grey: 1 }, "twin-core": { grey: 1 } }, balance: 0,
+  });
   assert.equal(buyStandardShip("red-comet", { "grey-scout": { grey: 1 } }, 2_150)?.balance, 0);
 });
 

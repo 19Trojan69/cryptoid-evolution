@@ -207,8 +207,8 @@ test('owner earns Shards in a saved mission before buying the last Standard ship
   assert.deepEqual(h.profile().fleet['core-carrier'], { grey: 1 });
   assert.equal(h.profile().skin, 'grey-scout');
   assert.equal((await h.call('progress', '/me', null, { method: 'GET', network: 'mainnet' })).body.save.fleet['core-carrier'], undefined);
-  for (const skin of standardShips) assert.equal(typeof shipPrice(skin, true), 'number');
-  assert.equal(shipPrice('core-carrier'), null);
+  for (const skin of standardShips) assert.equal(typeof shipPrice(skin), 'number');
+  assert.equal(shipPrice('unknown'), null);
 });
 
 test('every Standard hull can be purchased, equipped and flown on a normal Testnet account', async t => {
@@ -219,7 +219,7 @@ test('every Standard hull can be purchased, equipped and flown on a normal Testn
   const save = () => h.docs[1].playerByNetwork.testnet;
   for (const skin of standardShips) {
     if (skin !== 'grey-scout') {
-      const price = shipPrice(skin, true);
+      const price = shipPrice(skin);
       const buy = () => h.call('progress', '/inventory', { action: 'buy', version: save().version, skin, color: 'grey' }, request);
       save().balance = price - 1;
       assert.equal((await buy()).body.error, 'not_enough_shards', skin);
@@ -238,16 +238,26 @@ test('every Standard hull can be purchased, equipped and flown on a normal Testn
   assert.equal(save().standardShipAcquisitions, undefined);
 });
 
-test('Mainnet keeps its existing Standard limits while the NFT launch is disabled', async t => {
-  const previous = process.env.CRYPTOID_MAINNET_SHIP_NFTS_ENABLED;
-  process.env.CRYPTOID_MAINNET_SHIP_NFTS_ENABLED = '0';
-  t.after(() => { if (previous === undefined) delete process.env.CRYPTOID_MAINNET_SHIP_NFTS_ENABLED; else process.env.CRYPTOID_MAINNET_SHIP_NFTS_ENABLED = previous; });
+test('Mainnet sells Standard hulls for earned Shards with the NFT launch disabled', async t => {
+  t.mock.method(require('../../build/shipNftEligibility.js'), 'shipNftMainnetEnabled', () => false);
   const h = harness();
   const request = { network: 'mainnet' };
-  const initialized = await h.call('progress', '/me', null, { method: 'GET', ...request });
-  const response = await h.call('progress', '/inventory', { action: 'buy', version: initialized.body.save.version, skin: 'core-carrier', color: 'grey', ownerTestnet: true }, request);
-  assert.equal(response.code, 400);
-  assert.equal(response.body.error, 'invalid_ship');
+  await h.call('progress', '/me', null, { method: 'GET', ...request });
+  const profile = () => h.docs[0].playerByNetwork.mainnet;
+  const buy = (skin = 'core-carrier') => h.call('progress', '/inventory', {
+    action: 'buy', version: profile().version, skin, color: 'grey',
+  }, request);
+  assert.equal((await buy('unknown')).body.error, 'invalid_ship');
+  assert.equal((await buy()).body.error, 'not_enough_shards');
+  profile().balance = 5000;
+  const purchase = await buy();
+  assert.equal(purchase.code, 200);
+  assert.equal(purchase.body.save.balance, 350);
+  assert.equal(purchase.body.save.totalShardsSpent, 4650);
+  assert.deepEqual(purchase.body.save.fleet['core-carrier'], { grey: 1 });
+  assert.equal((await buy()).body.error, 'ship_already_owned');
+  assert.equal(profile().balance, 350);
+  assert.equal(h.docs[0].playerByNetwork.testnet, undefined);
 });
 
 test('all paid catalog items require a confirmed Test-Pi payment, not free admin inventory', async t => {

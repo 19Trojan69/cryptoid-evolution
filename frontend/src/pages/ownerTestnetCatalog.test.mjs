@@ -44,17 +44,18 @@ test('owner permission expands every catalog item strictly on Pi Testnet',()=>{
  assert.equal(isTestnetWeaponPurchaseEnabled({id:'unknown',kind:'weapon'},true),false);
 });
 
-test('all Standard hulls in the prepared Mainnet catalog keep their original Shard prices',()=>{
- const MainnetPanel = component('./ShipSelectionPanel.tsx',{'./TestPiPurchase':{default:Purchase},'./shipNftVisibility':{shipNftMainnetVisible:true}});
+test('all Mainnet Standard hulls keep their original Shard prices while NFTs are disabled',()=>{
  for(const skin of fleet.playerSkins){
   const props={...defaults(),skin,fleet:{}};
-  const buy=p=>nodes(MainnetPanel({...props,...p})).find(n=>n.props.className?.includes('ship-shard-button'));
+  const buy=p=>nodes(Panel({...props,...p})).find(n=>n.props.className?.includes('ship-shard-button'));
   const price=fleet.standardShipPrice(skin);
   assert.equal(Boolean(buy({shards:price-1}).props.disabled),true);
   assert.equal(Boolean(buy({shards:price}).props.disabled),false);
   assert.equal(Boolean(buy({shards:price,purchaseBusy:true}).props.disabled),true);
  }
- assert.equal(fleet.standardHullAvailable('core-carrier'),false);
+ assert.deepEqual(fleet.buyStandardShip('core-carrier', {}, 4650), {
+  fleet: { 'core-carrier': { grey: 1 } }, balance: 0,
+ });
 });
 
 test('Advanced and Elite list planned Pi prices and keep checkout locked',()=>{

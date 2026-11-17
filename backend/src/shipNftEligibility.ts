@@ -21,7 +21,7 @@ export const shipNftCatalog = standardShips.flatMap(shipId => {
   const stories = shipNftStories[shipId as keyof typeof shipNftStories];
   const metallic = shipId === 'pi-vanguard';
   const starter = shipId === "grey-scout";
-  const standardPriceShards = starter ? 0 : shipPrice(shipId, true);
+  const standardPriceShards = starter ? 0 : shipPrice(shipId);
   return shipNftEditions.map((edition, index) => {
     const stage = (index + 1) as ShipStage;
     const number = String(sprite + 1).padStart(2, "0");

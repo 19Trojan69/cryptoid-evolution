@@ -17,9 +17,9 @@ export const cappedMission = (mission: Mission | null, maxHearts: number): Missi
   ? { ...mission, snapshot: cappedSnapshot(mission.snapshot, maxHearts) }
   : mission;
 export const publicSave = (s: PlayerSave) => ({ cardReveals: s.cardReveals || [], usedShipSkins: s.usedShipSkins || [], version: s.version, balance: s.balance, fleet: s.fleet, skin: s.skin, color: s.color, ...(s.shipStage === undefined ? {} : { shipStage: s.shipStage }), mission: cappedMission(s.mission, maxMissionHearts(s.lastStart?.armorBonus)), highestSector: s.highestSector || 1, totalDestroyed: s.totalDestroyed || 0, totalShardsEarned: s.totalShardsEarned || 0, totalShardsSpent: s.totalShardsSpent || 0, legacyImported: s.legacyImported, updatedAt: s.updatedAt });
-export const shipPrice = (skin: string, fullFleet = false) => {
+export const shipPrice = (skin: string) => {
   const index = standardShips.indexOf(skin);
-  if (index < 0 || (!fullFleet && index >= 10)) return null;
+  if (index < 0) return null;
   return index <= 1 ? 150 : 150 + (index - 1) * 250;
 };
 export const shipForSprite = (sprite: number) => standardShips[sprite === 0 ? 1 : sprite === 1 ? 0 : sprite];

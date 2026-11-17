@@ -60,12 +60,12 @@ test('owned shop colors preview before selecting and only the confirmed paint is
   assert.equal(nodes(Panel({ ...props, fleet: {} })).some(node => node.props.className === 'ship-one-colors'), false);
 });
 
-test('shard balance, released hulls, busy state and Pi locks still gate purchases',()=>{
+test('Shard balance and busy state gate Standard purchases, and Pi upgrades stay locked',()=>{
   const buy=props=>nodes(Panel({...defaults(),skin:fleet.playerSkins[1],...props})).find(x=>x.type==='button'&&x.props.className?.includes('ship-shard-button'));
   assert.equal(Boolean(buy({shards:149}).props.disabled),true);
   assert.equal(Boolean(buy({shards:150}).props.disabled),false);
   assert.equal(Boolean(buy({purchaseBusy:true}).props.disabled),true);
-  assert.equal(Boolean(buy({skin:fleet.playerSkins[19],shards:10000}).props.disabled),true);
+  assert.equal(Boolean(buy({skin:fleet.playerSkins[19],shards:4650}).props.disabled),false);
   assert.equal(buy({fleet:{'nova-wing':{gold:2}},shards:10000}),undefined);
   for(const focusStage of [2,3]){
     const buttons=nodes(Panel({...defaults(),focusStage})).filter(x=>x.type==='button'&&label(x).includes('Purchases locked'));

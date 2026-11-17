@@ -8,7 +8,6 @@ import { validResumedBonusScore, validRunScore } from "../leaderboardRules";
 import { restoreScoreRun } from "../restoreScoreRun";
 import { Router } from "express";
 import { rewardNetwork } from "../rewardNetwork";
-import { shipNftMainnetEnabled } from "../shipNftEligibility";
 import { isAdminMode, ownerTestnetOrderScope } from "../adminAccess";
 import { MAX_MISSION_HEARTS, maxMissionHearts } from "../lifeRules";
 import { standardHullInventoryColor } from "../shipLivery";
@@ -197,8 +196,7 @@ export default function mountProgressEndpoints(router: Router) {
         if (stage !== undefined && stage > ownedShipStage(sprite, ids)) return res.status(403).json({ error: "ship_stage_not_owned" });
         fields = { skin, color, shipStage: stage ?? selectedShipStage(sprite, ids, skin === save.skin ? save.shipStage : undefined) };
       } else {
-        const mainnetShipNfts = network === "mainnet" && shipNftMainnetEnabled();
-        const price = shipPrice(skin, network === "testnet" || mainnetShipNfts);
+        const price = shipPrice(skin);
         if (price === null || network === "mainnet" && !shipPaintAvailable(skin, color)) return res.status(400).json({ error: "invalid_ship" });
         if (Object.values(save.fleet[skin] ?? {}).some(count => count > 0))
           return res.status(409).json({ error: "ship_already_owned" });

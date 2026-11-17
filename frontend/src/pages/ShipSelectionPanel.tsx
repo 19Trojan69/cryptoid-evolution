@@ -50,7 +50,7 @@ export default function ShipSelectionPanel({
   const price = standardShipPrice(skin);
   const shardPrice = price.toLocaleString(locale);
   const piPrice = (amount: number) => <PiPrice amount={amount} locale={locale} />;
-  const standardAvailable = standardHullAvailable(skin.id, shipNftMainnetVisible);
+  const standardAvailable = standardHullAvailable(skin.id);
   const offerFor = (level: ShipStage) => offers.find(offer => offer.shipIndex === skin.sprite && offer.stage === level);
   const focusedOffer = offerFor(stage);
   const nftCopy = shipNftCopy(locale);

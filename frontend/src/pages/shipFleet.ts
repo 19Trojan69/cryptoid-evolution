@@ -57,11 +57,7 @@ export const playerSkins = [
   { id: "pi-vanguard", name: "Pi Vanguard", sprite: 18, price: 4400 },
   { id: "core-carrier", name: "Core Carrier", sprite: 19, price: 4650 },
 ] as const;
-export const RELEASED_STANDARD_SHIPS = 10;
-export const standardHullAvailable = (skinId: PlayerSkinId, mainnetNftsEnabled = false) => {
-  const index = playerSkins.findIndex(skin => skin.id === skinId);
-  return index >= 0 && (shipSaveNetwork === "testnet" || mainnetNftsEnabled || index < RELEASED_STANDARD_SHIPS);
-};
+export const standardHullAvailable = (skinId: string) => playerSkins.some(skin => skin.id === skinId);
 
 const legacyColors = [
   { id: "grey", name: "Graphite Grey", hue: "0deg", glow: "#a8b3c2" },
@@ -137,7 +133,7 @@ export const readShipFleet = (raw: string | null, oldOwned: string | null, oldCo
 export const buyStandardShip = (skinId: PlayerSkinId, fleet: ShipFleet, balance: number) => {
   const skin = playerSkins.find(item => item.id === skinId);
   const price = skin ? standardShipPrice(skin) : undefined;
-  if (!skin || !standardHullAvailable(skinId) || fleetCount(fleet, skinId) > 0 ||
+  if (!skin || fleetCount(fleet, skinId) > 0 ||
     price === undefined || !Number.isSafeInteger(balance) || balance < price) return null;
   return { fleet: { ...fleet, [skinId]: { [standardHullInventoryColor]: 1 } }, balance: balance - price };
 };
@@ -192,7 +188,7 @@ export const shardBalance = (raw: string | null) => {
 
 export const buySkin = (id: PlayerSkinId, owned: readonly PlayerSkinId[], balance: number) => {
   const skin = playerSkins.find(item => item.id === id);
-  if (!skin || !standardHullAvailable(id) || skin.price === 0 || owned.includes(id) || !Number.isSafeInteger(balance) || balance < skin.price) return null;
+  if (!skin || skin.price === 0 || owned.includes(id) || !Number.isSafeInteger(balance) || balance < skin.price) return null;
   return { owned: [...owned, id], balance: balance - skin.price };
 };
 
