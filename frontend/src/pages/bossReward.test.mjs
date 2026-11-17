@@ -4,6 +4,10 @@ import { collectBossHeart, BOSS_HEART_POSITION } from './bossReward.ts';
 import { bossDifficulty } from './bossDifficulty.ts';
 import { paintTurretHeat } from './bossTurretHeat.ts';
 import { languages, hasExplicitTranslation, translate } from '../i18n.ts';
+import { componentHost } from '../../scripts/componentTestHost.mjs';
+import { BOSS_STICKER_COUNT } from './rewardProgress.ts';
+import { bossName } from './bossNames.ts';
+import { createSectorBoss } from './sectorBoss.ts';
 test('a defeated boss awards no life until physical pickup, exactly once', () => {
   const state = { hearts: 2, maxHearts: 3, shards: 0, bossHeartCollected: false };
   assert.equal(collectBossHeart(state, {x:.1,y:.9},390,760),false);
@@ -62,6 +66,50 @@ test('each of 50 bosses has strictly increasing bounded attack pressure', () => 
     assert.ok(now.projectileScale<=1.38 && now.coreSpeed<=.17 && now.coreInterval>=2100);
     before=now;
   }
+});
+test('the phase guide only shows the hull and reactor of the selected, defeated boss', () => {
+  const BossPortrait = Symbol('BossPortrait');
+  const BossReactorView = Symbol('BossReactorView');
+  const opened = [];
+  const guide = componentHost('src/pages/BossPhaseGuide.tsx', 'BossPhaseGuide', { bossWins: { 1: 1 } }, {
+    useLocale: () => ({ t: text => text }),
+    useMemo: render => render(),
+    BossPortrait,
+    BossReactorView,
+    BossHealthView: Symbol('BossHealthView'),
+    BossWeaponsView: Symbol('BossWeaponsView'),
+    BOSS_STICKER_COUNT,
+    bossName,
+    createSectorBoss(...args) {
+      opened.push(args[0]);
+      return createSectorBoss(...args);
+    },
+  });
+  const choose = id => {
+    guide.nodes().find(node => node.type === 'select').props.onChange({ target: { value: String(id) } });
+    guide.render();
+  };
+  const assertSilhouette = id => {
+    const nodes = guide.nodes();
+    assert.ok(nodes.some(node => node.type === BossPortrait && node.props.id === id && node.props.silhouette));
+    assert.ok(!nodes.some(node => node.type === 'img' || node.type === BossReactorView));
+    assert.ok(nodes.filter(node => node.type === 'button').every(node => node.props.disabled));
+  };
+
+  const reactor = () => guide.nodes().find(node => node.type === BossReactorView);
+  assert.equal(reactor().props.boss.config.id, 1);
+  guide.nodes().find(node => node.type === 'button' && node.props.children.includes('Reactor weapon')).props.onClick();
+  guide.render();
+  assert.ok(reactor().props.boss.core);
+  for (let id = 2; id <= BOSS_STICKER_COUNT; id++) {
+    choose(id);
+    assertSilhouette(id);
+  }
+  assert.deepEqual(opened, [10, 10]);
+
+  guide.update({ bossWins: {} });
+  choose(1);
+  assertSilhouette(1);
 });
 test('the orange heat painter remains clipped to metal', () => {
   for(let step=1;step<=8;step++) {

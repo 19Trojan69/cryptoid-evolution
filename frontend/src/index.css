@@ -2635,7 +2635,9 @@ html[data-motion="reduced"] .hull-hotspot b, html[data-motion="reduced"] .hull-h
 .boss-phase-guide-tabs { display:flex; gap:8px; padding:10px; }
 .boss-phase-guide-tabs button { flex:1; min-width:0; padding:8px; border:1px solid #527989; border-radius:7px; color:#e3f8ff; background:#122b3c; font-size:13px; cursor:pointer; }
 .boss-phase-guide-tabs button[aria-pressed="true"] { border-color:#8fffc5; background:#194638; }
+.boss-phase-guide-tabs button:disabled { opacity:.55; cursor:default; }
 .boss-phase-guide-stage { position:relative; height:315px; }
+.boss-phase-guide-stage > .boss-portrait { height:100%; }
 /* The bay uses original hull pixels as shutters; only the recessed weapon lights up. */
 .boss-special-weapon { position:absolute; z-index:6; overflow:visible; pointer-events:none; }
 .boss-special-conductor { stroke:var(--weapon-energy); stroke-width:2.2; opacity:calc(.25 + var(--weapon-charge) * .75); }

@@ -32,7 +32,8 @@ export default function GalaxyMap() {
   const { t, locale } = useLocale();
   const navigate = useNavigate(), location = useLocation();
   const fromQuick = location.state?.fromQuick === true;
-  const { snapshot, status } = useGalaxyData(typeof location.state?.owner === 'string' ? location.state.owner : undefined);
+  const expectedOwner = typeof location.state?.owner === 'string' ? location.state.owner : undefined;
+  const { snapshot, status } = useGalaxyData(expectedOwner);
   const [selection, setSelection] = useState<GalaxySelection | null>(null);
   const [previewGames, setPreviewGames] = useState<GalaxyMiniGame[]>();
   const [officialArcade, setOfficialArcade] = useState<PublicArcade>();
@@ -142,7 +143,8 @@ export default function GalaxyMap() {
     close();
     requestGameFrame(() => document.getElementById('galaxy-preview-code')?.focus({ preventScroll: true }));
   };
-  const progress = status === 'ready' ? snapshot.progress : emptyGalaxyProgress();
+  const progress = status === 'ready' && (expectedOwner === undefined || expectedOwner === snapshot.owner)
+    ? snapshot.progress : emptyGalaxyProgress();
   const retroLevels = !previewAccess ? officialArcade?.levels : undefined;
   const unlocked = !previewAccess && status === 'ready' && officialArcade && officialArcade.owner === snapshot.owner ? officialArcade.stations : undefined;
   const nextRetroLevel = (unlocked?.find(game => game.level >= progress.currentLevel) ?? unlocked?.at(-1))?.level;

@@ -53,7 +53,7 @@ export default function BossDossier({ id, stars, onClose }: { id: number; stars:
         <span className="boss-dossier-hostile">{say('FEINDLICH', 'HOSTILE')}</span>
       </header>
       <div className="boss-dossier-scroll" tabIndex={0} aria-label={say('Schiffsgeschichte und Kampfdaten', 'Ship story and combat data')}>
-        <figure className="boss-dossier-hero"><BossPortrait id={id} /><figcaption>{say('Aktuelles Schiff mit montierten Geschützen', 'Current ship with mounted weapons')}</figcaption></figure>
+        <figure className="boss-dossier-hero"><BossPortrait id={id} silhouette={false} /><figcaption>{say('Aktuelles Schiff mit montierten Geschützen', 'Current ship with mounted weapons')}</figcaption></figure>
         <p className="boss-dossier-stars" aria-label={say(`${stars} von 3 Sternen`, t("{value0} of 3 stars", {value0: stars}))}>{'★'.repeat(Math.min(3, stars))}{'☆'.repeat(Math.max(0, 3 - stars))} <span>{say('Deine Auszeichnung', 'Your award')}</span></p>
         <section aria-labelledby="boss-lore-heading"><h3 id="boss-lore-heading">{say('Die Geschichte', 'The story')}</h3>
           <p className="boss-dossier-note">{say('Fiktive Geschichte aus dem Cryptoid-Universum. Keine zusätzlichen Kampffähigkeiten.', 'Fiction from the Cryptoid universe. Does not add combat abilities.')}</p>

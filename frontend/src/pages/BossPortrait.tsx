@@ -1,10 +1,10 @@
 import { memo, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { bossName } from './bossNames';
-import { loadBossArtwork } from './bossArtwork';
+import { drawBossPortrait, loadBossArtwork } from './bossArtwork';
 import './bossPortrait.css';
 
 /** Same composited model as the downloadable card, including every mounted turret. */
-export default memo(function BossPortrait({ id, silhouette = false }: { id: number; silhouette?: boolean }) {
+export default memo(function BossPortrait({ id, silhouette }: { id: number; silhouette: boolean }) {
   return <BossPortraitCanvas key={`${id}:${silhouette}`} id={id} silhouette={silhouette} />;
 });
 
@@ -31,19 +31,7 @@ function BossPortraitCanvas({ id, silhouette }: { id: number; silhouette: boolea
     if (!visible) return;
     void loadBossArtwork(id, 1200).then(art => {
       if (!current || !canvas.current) return;
-      const target = canvas.current;
-      target.width = art.width; target.height = art.height;
-      const context = target.getContext('2d');
-      if (!context) return;
-      context.drawImage(art, 0, 0);
-      if (silhouette) {
-        context.globalCompositeOperation = 'source-in';
-        context.fillStyle = '#858585';
-        context.fillRect(0, 0, target.width, target.height);
-        context.globalCompositeOperation = 'source-over';
-      }
-      Object.assign(target.dataset, art.dataset);
-      setReady(true);
+      if (drawBossPortrait(canvas.current, art, silhouette)) setReady(true);
     }, () => { /* No old model or hull-only fallback may expose incorrect artwork. */ });
     return () => { current = false; };
   }, [id, silhouette, visible]);

@@ -10,6 +10,7 @@ import { shipSaveNetwork } from "./shipFleet";
 import { bossNftEditions } from "./bossNftEditions";
 import { MAX_DIFFICULTY_LEVEL } from "./levelDifficulty";
 import { RELEASED_BOSS_CARDS } from "./cardAvailability";
+import type { RewardProgress } from "./rewardProgress";
 import { hangarCatalog, START_POWER_DURATION_MS } from "../../../backend/src/hangarCatalog";
 import { MAX_CHARGE_QUANTITY } from "../../../backend/src/chargePurchase";
 import { BOSS_STICKER_COUNT } from "../../../backend/src/rewardRules";
@@ -147,9 +148,10 @@ const eliteOffer = hangarCatalog.find(offer => offer.kind === "ship_upgrade" && 
 type GameGuideProps = {
   onClose: () => void; initialTopic: GuideTopic; backLabel: string;
   onNavigate: (destination: Destination) => void; nftPreviewAvailable: boolean; ownerTestnet: boolean; standardModelsAvailable: number;
+  bossWins: RewardProgress["bossWins"];
 };
 
-const GameGuide = ({ onClose, initialTopic, backLabel, onNavigate, nftPreviewAvailable, ownerTestnet, standardModelsAvailable }: GameGuideProps) => {
+const GameGuide = ({ onClose, initialTopic, backLabel, onNavigate, nftPreviewAvailable, ownerTestnet, standardModelsAvailable, bossWins }: GameGuideProps) => {
   const { locale, t } = useLocale();
   const [selected, setSelected] = useState<GuideTopic>(initialTopic);
   const topic = topics.find(item => item.id === selected) ?? topics[0];
@@ -183,9 +185,18 @@ const GameGuide = ({ onClose, initialTopic, backLabel, onNavigate, nftPreviewAva
         {destinations.length > 0 && <nav className="guide-related" aria-label={t("Game navigation")}>
           {destinations.map(destination => <button key={destination} className="button button-secondary" type="button" onClick={() => onNavigate(destination)}>{t(destinationLabels[destination])}</button>)}
         </nav>}
-        {topic.id === "visuals" && <div className="guide-ship-gallery">{([1, 2, 3] as const).map(stage => <figure key={stage}><ShipPortrait src={shipEvolutionAsset(0, stage)} name={t(stage === 1 ? "Standard ship" : stage === 2 ? "Advanced ship" : "Elite ship")} /><figcaption>{shipNftEditions[stage - 1]}</figcaption></figure>)}<figure className="guide-boss-example"><BossPortrait id={1} /><figcaption>#01 · {bossName(1)}</figcaption></figure></div>}
+        {topic.id === "visuals" && <div className="guide-ship-gallery">
+          {([1, 2, 3] as const).map(stage => <figure key={stage}>
+            <ShipPortrait src={shipEvolutionAsset(0, stage)} name={t(stage === 1 ? "Standard ship" : stage === 2 ? "Advanced ship" : "Elite ship")} />
+            <figcaption>{shipNftEditions[stage - 1]}</figcaption>
+          </figure>)}
+          <figure className="guide-boss-example">
+            <BossPortrait id={1} silhouette={(bossWins[1] ?? 0) <= 0} />
+            <figcaption>#01 · {bossName(1)}</figcaption>
+          </figure>
+        </div>}
         {(topic.id === "boosts" || topic.id === "controls") && <WeaponTutorial />}
-        {topic.id === "survival" && <BossPhaseGuide />}
+        {topic.id === "survival" && <BossPhaseGuide bossWins={bossWins} />}
         <ul>
           {topic.id === "collection" && !ownerTestnet && <li>{t("The first {count} boss cards are available to unlock.", { count: RELEASED_BOSS_CARDS })}</li>}
           {topic.details.map(detail => <li key={detail}>{t(detail, values)}</li>)}

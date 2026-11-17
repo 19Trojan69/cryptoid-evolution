@@ -220,6 +220,7 @@ const Shop = () => {
   const latestRewardLevel = Math.max(1, ...Object.keys(rewardProgress.linkedBlocks ?? {}).map(Number));
   useEffect(() => { setSelectedBoss(null); }, [shopView, user?.uid]);
   const rewardUserId = user?.uid;
+  const bossWins = authReady && rewardStatus === "ready" && rewardOwner === (rewardUserId ?? null) ? rewardProgress.bossWins : {};
   const rewardsVisible = shopView === 'rewards';
   useEffect(() => {
     if (!rewardUserId) {
@@ -613,14 +614,14 @@ const Shop = () => {
           <div className="boss-sticker-grid">{Array.from({ length: BOSS_STICKER_COUNT }, (_, index) => {
             const id = index + 1;
             const available = bossCardAvailable(id, ownerTestnet);
-            const stars = available ? rewardProgress.bossWins[id] ?? 0 : 0;
+            const stars = available ? bossWins[id] ?? 0 : 0;
             return <button type="button" key={id} disabled={!stars} onClick={() => setSelectedBoss(id)} className={`boss-sticker${stars ? " boss-sticker-earned" : ""}`} title={t("Boss {id}: {status}", { id, status: stars ? t("{stars}/3 stars", {stars}) : !available ? t("MAINNET READY") : t("Not defeated yet") })} aria-haspopup={stars ? 'dialog' : undefined} aria-label={`${bossName(id)} · ${t("Boss {id}: {status}", { id, status: stars ? t("{stars}/3 stars", {stars}) : !available ? t("MAINNET READY") : t("Locked") })}`}>
-              {stars ? <BossPortrait id={id} /> : <span className="boss-sticker-silhouette" aria-hidden="true"><BossPortrait id={id} /></span>}
+              {stars ? <BossPortrait id={id} silhouette={false} /> : <span className="boss-sticker-silhouette" aria-hidden="true"><BossPortrait id={id} silhouette /></span>}
               <small>#{String(id).padStart(2, "0")} · {bossName(id)}</small>{!!stars && <b>{"★".repeat(stars)}</b>}
               {!available && <small className="mainnet-ready-badge">{t("MAINNET READY")}</small>}{!!stars && <span className="boss-sticker-open">{bossDossierLabel(locale)}</span>}
             </button>;
           })}</div>
-          {selectedBoss !== null && bossCardAvailable(selectedBoss, ownerTestnet) && <BossDossier id={selectedBoss} stars={rewardProgress.bossWins[selectedBoss] ?? 0} onClose={() => setSelectedBoss(null)} />}
+          {selectedBoss !== null && bossCardAvailable(selectedBoss, ownerTestnet) && <BossDossier id={selectedBoss} stars={bossWins[selectedBoss] ?? 0} onClose={() => setSelectedBoss(null)} />}
           <h4 id="reward-medals">{t("Bonus medals")}</h4>
           <p>{Object.values(rewardProgress.bonusMedals).filter(medal => medal === "gold").length} {t("Gold")} · {Object.values(rewardProgress.bonusMedals).filter(medal => medal === "silver").length} {t("Silver")} · {Object.values(rewardProgress.bonusMedals).filter(medal => medal === "bronze").length} {t("Bronze")}</p>
           <div className="reward-medal-grid">{Object.entries(rewardProgress.bonusMedals).map(([level, medal]) => <span key={level} className={`reward-medal reward-medal-${medal}`}>✦ <b>{t("Level")} {level}</b> · {t(medal)}</span>)}</div>
@@ -740,6 +741,7 @@ const Shop = () => {
 
       {activePanel === "how" && <GameGuide initialTopic={guideTopic} backLabel={guideFromSystem ? "Back to system" : "Back to quick access"}
         onClose={closeGuide} nftPreviewAvailable={Boolean(nftPreviewPath)} ownerTestnet={ownerTestnet} standardModelsAvailable={standardModelsAvailable}
+        bossWins={bossWins}
         onNavigate={destination => {
           setActivePanel(null);
           if (destination === "cards") setCollectionOpen(true);

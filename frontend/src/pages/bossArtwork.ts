@@ -26,6 +26,23 @@ export const loadCardImage = (src: string) => {
   void task.then(settled, settled);
   return task;
 };
+
+export function drawBossPortrait(target: HTMLCanvasElement, artwork: HTMLCanvasElement, silhouette: boolean): boolean {
+  target.width = artwork.width;
+  target.height = artwork.height;
+  const context = target.getContext('2d');
+  if (!context) return false;
+  context.drawImage(artwork, 0, 0);
+  if (silhouette) {
+    context.globalCompositeOperation = 'source-in';
+    context.fillStyle = '#858585';
+    context.fillRect(0, 0, target.width, target.height);
+    context.globalCompositeOperation = 'source-over';
+  }
+  Object.assign(target.dataset, artwork.dataset);
+  return true;
+}
+
 export function loadBossArtwork(id: number, resolution = 1200): Promise<HTMLCanvasElement> {
   if (!Number.isInteger(id) || id < 1 || id > 50) return Promise.reject(new Error('Invalid boss id'));
   const pixels = Math.max(256, Math.min(2400, Math.round(resolution)));
