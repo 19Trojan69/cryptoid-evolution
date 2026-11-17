@@ -25,7 +25,7 @@ Die Freiwilligen bringen Notrufe, Konvois und Schutzräume wieder unter die Kont
 
 #### Kampagneneinleitung · Cleared for Launch
 
-Originalaufnahme mit neuem Schnitt. campaign-intro-phrased-v2.mp3 · 74,05 s. Nach „Then came the spam.“ lässt die Stimme rund 0,9 Sekunden Pause. Bei „Cryptoids“ ist der Schlusslaut angehoben.
+Originalaufnahme mit weichem Ausklang des „m“ in „Spam“. campaign-intro-phrased-v3.mp3 · 74,17 s. Zwischen „Then came the spam.“ und „Forged messages emptied accounts.“ liegen nach dem Ausklang rund 0,9 Sekunden Sprechpause. Bei „Cryptoids“ ist der Schlusslaut angehoben.
 
 **Suno-Stil**
 

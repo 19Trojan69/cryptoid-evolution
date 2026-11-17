@@ -6,6 +6,11 @@
   "outputDirectory": "frontend/dist",
   "redirects": [
     {
+      "source": "/story/campaign-intro-phrased-v2.mp3",
+      "destination": "/story/campaign-intro-phrased-v3.mp3",
+      "permanent": false
+    },
+    {
       "source": "/stability-report.html",
       "destination": "/",
       "permanent": false

@@ -26,7 +26,7 @@ const { bossOutroAtSector, bossStoryAtSector, levelStoryAtSector, storyScenes,
 test('the campaign provides all 50 boss pairs and briefings 2 through 50 at their existing handoffs', () => {
   assert.equal(Object.keys(storyScenes).length, 150);
   assert.equal(levelStoryAtSector(1), undefined);
-  assert.equal(storyScenes.campaign.audio, 'campaign-intro-phrased-v2.mp3');
+  assert.equal(storyScenes.campaign.audio, 'campaign-intro-phrased-v3.mp3');
   const openingBriefings = ['level-two', 'level-three', 'level-four', 'level-five', 'level-six', 'level-seven', 'level-eight', 'level-nine'];
   for (const [index, name] of BOSS_NAMES.entries()) {
     const level = index + 1;
