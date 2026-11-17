@@ -200,10 +200,12 @@ export default function mountProgressEndpoints(router: Router) {
         const mainnetShipNfts = network === "mainnet" && shipNftMainnetEnabled();
         const price = shipPrice(skin, network === "testnet" || mainnetShipNfts);
         if (price === null || network === "mainnet" && !shipPaintAvailable(skin, color)) return res.status(400).json({ error: "invalid_ship" });
+        if (Object.values(save.fleet[skin] ?? {}).some(count => count > 0))
+          return res.status(409).json({ error: "ship_already_owned" });
         if (save.balance < price) return res.status(403).json({ error: "not_enough_shards" });
         const inventoryColor = network === "testnet" ? standardHullInventoryColor : color;
-        fields = { balance: save.balance - price, totalShardsSpent: (save.totalShardsSpent || 0) + price, fleet: { ...save.fleet, [skin]: { ...save.fleet[skin], [inventoryColor]: (save.fleet[skin]?.[inventoryColor] || 0) + 1 } } };
-        if (mainnetShipNfts && !save.standardShipAcquisitions?.[skin]) {
+        fields = { balance: save.balance - price, totalShardsSpent: (save.totalShardsSpent || 0) + price, fleet: { ...save.fleet, [skin]: { [inventoryColor]: 1 } } };
+        if (network === "mainnet" && !save.standardShipAcquisitions?.[skin]) {
           fields.standardShipAcquisitions = { ...save.standardShipAcquisitions, [skin]: new Date().toISOString() };
         }
       }

@@ -248,4 +248,7 @@ test("a successful Mainnet Shard transaction records its proof with the atomic i
   assert.equal(conflicted.res.code, 409);
   assert.equal((await run("testnet", 1)).fields["playerByNetwork.testnet.standardShipAcquisitions"], undefined);
   assert.equal((await run("mainnet", 1, "import")).fields["playerByNetwork.mainnet.standardShipAcquisitions"], undefined);
+  process.env.CRYPTOID_MAINNET_SHIP_NFTS_ENABLED = "0";
+  const beforeLaunch = await run("mainnet", 1);
+  assert.ok(Date.parse(beforeLaunch.fields["playerByNetwork.mainnet.standardShipAcquisitions"]["nova-wing"]));
 });

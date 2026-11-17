@@ -303,6 +303,8 @@ const Shop = () => {
   const hangarMessageText = typeof hangarMessage === "string" ? t(hangarMessage) : `${hangarMessage.ship} · ${t(hangarMessage.status)}${hangarMessage.count ? ` ×${hangarMessage.count}` : ""}`;
   const [offers, setOffers] = useState<Offer[]>(() => [...hangarCatalog]);
   const [catalogReady, setCatalogReady] = useState(false);
+  const [catalogFailed, setCatalogFailed] = useState(false);
+  const [catalogAttempt, setCatalogAttempt] = useState(0);
   const [inventory, setInventory] = useState<Inventory | null>(null);
   const [loadoutMessage, setLoadoutMessage] = useState("");
   const [shipQuery, setShipQuery] = useState("");
@@ -354,12 +356,18 @@ const Shop = () => {
     const currentFleet = readShipFleet(localStorage.getItem(SHIP_FLEET_KEY), localStorage.getItem(SHIP_OWNED_KEY), localStorage.getItem(SHIP_COLORS_KEY));
     const currentBalance = shardBalance(localStorage.getItem(SHARD_BALANCE_KEY));
     setShards(currentBalance);
+    const owned = fleetCount(currentFleet, previewSkin.id);
+    if (owned) {
+      setFleet(currentFleet);
+      setHangarMessage({ ship: previewSkin.name, status: "Owned", count: owned });
+      return;
+    }
     const purchase = buyStandardShip(previewSkin.id, currentFleet, currentBalance);
     if (!purchase) { setHangarMessage("Not enough Shards yet. Earn them by defeating Cryptoids."); return; }
     try { saveGuestShipPurchase(localStorage, previewSkin.id, purchase); }
     catch { setHangarMessage("Could not save loadout. Please retry."); return; }
     setFleet(purchase.fleet);
-    if(!fleetCount(currentFleet,previewSkin.id))setNewCards(unseenShipCards([{key:`${previewSkin.id}-1`,ship:previewSkin.id,stage:1}],readCardReveals('guest')));
+    setNewCards(unseenShipCards([{key:`${previewSkin.id}-1`,ship:previewSkin.id,stage:1}],readCardReveals('guest')));
 
     setShards(purchase.balance);
     setHangarMessage({ ship: previewSkin.name, status: "Owned", count: fleetCount(purchase.fleet, previewSkin.id) });
@@ -416,11 +424,17 @@ const Shop = () => {
     }
     catch { setLoadoutMessage('Connect your Pi account to see your saved loadout.'); }
   };
-  useEffect(() => { axiosClient.get<{ offers: Offer[] }>("/hangar/catalog").then(({ data }) => {
-    if (!Array.isArray(data.offers)) throw new Error("Invalid catalog");
-    setOffers(data.offers);
-    setCatalogReady(true);
-  }).catch(() => setLoadoutMessage('Hangar catalog unavailable. Try again when the server is online.')); }, []);
+  useEffect(() => {
+    const request = new AbortController();
+    setCatalogFailed(false);
+    void axiosClient.get<{ offers: Offer[] }>("/hangar/catalog", { signal: request.signal }).then(({ data }) => {
+      if (request.signal.aborted) return;
+      if (!Array.isArray(data.offers)) throw new Error("Invalid catalog");
+      setOffers(data.offers);
+      setCatalogReady(true);
+    }).catch(() => { if (!request.signal.aborted) setCatalogFailed(true); });
+    return () => request.abort();
+  }, [catalogAttempt]);
   useEffect(() => {
     if (!isAuthenticated) return;
     let active = true;
@@ -681,7 +695,7 @@ const Shop = () => {
               offers={offers.filter(offer => offer.kind === "ship_upgrade")} selectedSkinId={selected.skin.id} selectedStage={selectedShipStage(selected.skin.sprite, inventory?.ownedShipUpgrades, account?.shipStage)} selectionConfirmed={!user || adminMode || account?.shipStage !== undefined}
               message={typeof hangarMessage === "object" && hangarMessage.ship === skin.name ? hangarMessageText : ""} t={t}
               requestedStage={shopTarget?.skin === skin.id ? shopTarget.stage : undefined}
-              purchaseBusy={accountBusy || isLoading || !catalogReady || Boolean(user && !account)}
+              purchaseBusy={accountBusy || isLoading || Boolean(user && !account)}
               onBuy={() => purchaseStandard(skin)}
               onEquip={stage => equipShip(skin, stage)}
               onStage={stage => { if (adminMode) sessionStorage.setItem(ADMIN_SHIP_STAGE_KEY, String(stage)); }}
@@ -691,6 +705,10 @@ const Shop = () => {
       </section>}
 
       {(shopView === "weapons" || shopView === "powers") && <section className="upgrade-section" aria-labelledby="upgrade-heading">
+        {catalogFailed && <div>
+          <p role="status">{t("Hangar catalog unavailable. Try again when the server is online.")}</p>
+          <button type="button" className="text-button" onClick={() => setCatalogAttempt(attempt => attempt + 1)}>{t("Retry")}</button>
+        </div>}
         <div className="section-heading"><div><p className="eyebrow">{t('POWER LAB')}</p><h2 id="upgrade-heading">{t('Weapons and start power-ups')}</h2></div><span className="section-line" /></div>
         {shopView === "weapons" ? <>
           <p className="testnet-shop-notice">{ownerTestnet ? t('Admin Testnet: earn Shards for all 20 ships. Paid items use Test-Pi only.') : shipSaveNetwork === "testnet" ? t("Testnet: Twin Laser and Rapid Twin can be bought with Test-Pi. Triple Laser and Plasma purchases are locked.") : t("Pi purchases are currently locked. Collect weapon upgrades in game.")}</p>

@@ -129,30 +129,29 @@ test("the ring hull has one centered drive, and boss preview anchors stay unchan
   ]);
 });
 
-test("legacy ships retain their counts and each Standard purchase adds one hull", () => {
-  const fleet = readShipFleet(null, '["nova-wing"]', '{"nova-wing":"coral"}');
+test("legacy copies stay owned and Standard Shards can buy distinct hulls once each", () => {
+  const fleet = readShipFleet('{"nova-wing":{"coral":1,"grey":2}}', null, null);
   assert.equal(fleetCount(fleet, "grey-scout", "grey"), 1);
-  assert.equal(fleetCount(fleet, "nova-wing", "coral"), 1);
-  assert.equal(buyStandardShip("nova-wing", fleet, 149), null);
-  const first = buyStandardShip("nova-wing", fleet, 300);
-  const second = buyStandardShip("nova-wing", first.fleet, first.balance);
+  assert.equal(fleetCount(fleet, "nova-wing"), 3);
+  assert.equal(buyStandardShip("nova-wing", fleet, 1050), null);
+  const first = buyStandardShip("solar-lance", fleet, 1050);
+  assert.equal(buyStandardShip("solar-lance", first.fleet, first.balance), null);
+  const second = buyStandardShip("dark-delta", first.fleet, first.balance);
   assert.equal(second.balance, 0);
-  assert.equal(fleetCount(second.fleet, "nova-wing"), 3);
-  assert.equal(fleetCount(second.fleet, "nova-wing", "grey"), 2);
-  assert.equal(fleetCount(second.fleet, "nova-wing", "coral"), 1);
+  assert.equal(fleetCount(second.fleet, "solar-lance"), 1);
+  assert.equal(fleetCount(second.fleet, "dark-delta"), 1);
+  assert.deepEqual(second.fleet["nova-wing"], fleet["nova-wing"]);
   assert.deepEqual(readShipFleet(JSON.stringify(second.fleet), null, null), second.fleet);
   const values = new Map([[SHIP_SKIN_KEY, "nova-wing"], [SHIP_COLOR_KEY, "bronze"], [SHIP_FLEET_KEY, JSON.stringify(second.fleet)], [SHIP_COLORS_KEY, '{"nova-wing":"bronze"}']]);
   globalThis.localStorage = { getItem: key => values.get(key) ?? null };
   assert.equal(selectedShip().color.id, "original");
 });
 
-test("the free starter remains owned and additional copies cost Shards", () => {
+test("the free starter is already owned and cannot spend Shards on a second copy", () => {
   const issued = readShipFleet(null, null, null);
   assert.equal(fleetCount(issued, "grey-scout"), 1);
   assert.equal(buyStandardShip("grey-scout", issued, 149), null);
-  const second = buyStandardShip("grey-scout", issued, 150);
-  assert.equal(fleetCount(second.fleet, "grey-scout"), 2);
-  assert.equal(second.balance, 0);
+  assert.equal(buyStandardShip("grey-scout", issued, 150), null);
 });
 
 

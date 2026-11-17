@@ -308,6 +308,33 @@ test('Mainnet payments, non-owner requests, incorrect totals and unverified comp
   assert.equal((await inventory(h)).body.consumables.find(item=>item.id==='start_shield').count,0);
 });
 
+test('ordinary Testnet pilots can buy Twin and Rapid Twin and see each payment credited once', async t => {
+  owner(t);
+  const h = harness();
+  const posts = pi(t, h);
+  const request = { session: { currentUser: { uid: 'pilot-b', username: 'Pilot' } } };
+  const stock = async () => (await h.call('hangar', '/inventory', null, { method: 'GET', ...request })).body;
+  for (const [productId, amount] of [['weapon_twin', .5], ['weapon_rapid_twin', .8]]) {
+    const txid = `tx-${productId}`;
+    const result = await payment(h, productId, {
+      id: productId, request,
+      payment: { user_uid: 'pilot-b', amount, metadata: { productId, quantity: 5, weaponModel: 2 } },
+    });
+    assert.equal(result.body.completed, true, productId);
+    assert.equal((await stock()).testnetCatalogAccess, false);
+    assert.equal((await stock()).weaponStock[productId], 5);
+    assert.equal((await h.call('payments', '/complete', { paymentId: productId, txid }, request)).body.completed, true);
+    assert.equal((await stock()).weaponStock[productId], 5);
+  }
+  assert.deepEqual(posts.map(path => path.split('/').at(-1)), ['approve', 'complete', 'approve', 'complete']);
+  h.orders.push({ user: 'pilot-b', product_id: 'armor_hull_mk1', paid: true, payment_network: 'Pi Network' });
+  assert.deepEqual((await stock()).ownedArmor, []);
+  const { body: mainnet } = await h.call('hangar', '/inventory', null, { method: 'GET', ...request, network: 'mainnet' });
+  assert.deepEqual(mainnet.weaponStock, {});
+  assert.deepEqual(mainnet.ownedWeapons, []);
+  assert.deepEqual(mainnet.ownedArmor, ['armor_hull_mk1']);
+});
+
 test('owner Plasma charges activate for 45 seconds and replay one receipt without another debit', async t => {
   owner(t); const h=harness();pi(t,h);
   await h.call('progress','/me',null,{method:'GET'});

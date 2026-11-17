@@ -199,9 +199,9 @@ test('save boundary requires authentication and separates users/networks', async
   assert.equal((await h.call('progress', '/inventory', { action: 'select', version: 0, skin: 'nova-wing', color: 'gold', uid: 'pilot-b' })).code, 403);
 });
 
-test('explicit import is one-time, strips paid ownership, and purchases use compare-and-swap', async () => {
+test('explicit import is one-time and each distinct hull is charged only once', async () => {
   const h = harness(); await init(h);
-  const body = { action: 'import', version: 0, confirm: true, balance: 1000, fleet: { 'grey-scout': { grey: 1 }, 'nova-wing': { gold: 1 }, 'paid-weapon': { gold: 999 } }, skin: 'nova-wing', color: 'gold' };
+  const body = { action: 'import', version: 0, confirm: true, balance: 1200, fleet: { 'grey-scout': { grey: 1 }, 'nova-wing': { gold: 2 }, 'paid-weapon': { gold: 999 } }, skin: 'nova-wing', color: 'gold' };
   assert.equal((await h.call('progress', '/inventory', { ...body, confirm: false })).code, 400);
   assert.equal((await h.call('progress', '/inventory', body)).code, 200);
   assert.equal(h.profile().fleet['paid-weapon'], undefined);
@@ -209,13 +209,23 @@ test('explicit import is one-time, strips paid ownership, and purchases use comp
   const purchase = { action: 'buy', version: 1, skin: 'solar-lance', color: 'gold' };
   const results = await Promise.all([h.call('progress', '/inventory', purchase), h.call('progress', '/inventory', purchase)]);
   assert.deepEqual(results.map(r => r.code).sort(), [200, 409]);
-  assert.equal(h.profile().balance, 600);
+  assert.equal(h.profile().balance, 800);
   assert.deepEqual(h.profile().fleet['solar-lance'], { grey: 1 });
   assert.equal(h.profile().totalShardsSpent, 400);
   assert.equal(h.profile().skin, 'nova-wing');
   assert.equal(h.profile().color, 'gold');
-  const next = await h.call('progress', '/inventory', { action: 'buy', version: h.profile().version, skin: 'nova-wing', color: 'silver' });
+  const owned = await h.call('progress', '/inventory', { ...purchase, version: h.profile().version });
+  assert.equal(owned.code, 409);
+  assert.equal(owned.body.error, 'ship_already_owned');
+  const legacy = await h.call('progress', '/inventory', { ...purchase, version: h.profile().version, skin: 'nova-wing', color: 'silver' });
+  assert.equal(legacy.body.error, 'ship_already_owned');
+  assert.equal(h.profile().balance, 800);
+  assert.deepEqual(h.profile().fleet['nova-wing'], { gold: 2 });
+  const next = await h.call('progress', '/inventory', { ...purchase, version: h.profile().version, skin: 'dark-delta' });
   assert.equal(next.code, 200);
+  assert.equal(next.body.save.balance, 150);
+  assert.equal(next.body.save.totalShardsSpent, 1050);
+  assert.deepEqual(next.body.save.fleet['dark-delta'], { grey: 1 });
   assert.equal(next.body.save.skin, 'nova-wing');
   assert.equal(next.body.save.color, 'gold');
   const failed = await h.call('progress', '/inventory', { action: 'buy', version: h.profile().version, skin: 'gold-streak', color: 'gold' });

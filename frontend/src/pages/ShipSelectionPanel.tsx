@@ -71,6 +71,7 @@ export default function ShipSelectionPanel({
 
   const equipped = selectedSkinId === skin.id && stage === selectedStage && selectionConfirmed;
   const canEquip = Boolean(adminPreview || stageOwned);
+  const showPurchase = view === "shop" && !adminPreview && (stage > 1 || !hullCount || shipNftMainnetVisible);
 
   return <div className="ship-one-screen ship-compact-configuration" data-stage={stage}>
     <div className="ship-version-tabs" role="group" aria-label={t("Three ship stages")}>
@@ -93,18 +94,17 @@ export default function ShipSelectionPanel({
         </span>
       </div>
       <div className="ship-configuration-summary">
-        {view === "shop" && !adminPreview && <div className="ship-inline-purchase">
+        {showPurchase && <div className="ship-inline-purchase">
           {locked && <p className="ship-lock-notice"><strong>{t("Purchases locked")}</strong> · <span className="mainnet-ready-badge">{t("MAINNET READY")}</span></p>}
-          <span className="ship-purchase-price">{stage === 1
+          {(stage > 1 || !hullCount) && <span className="ship-purchase-price">{stage === 1
             ? `◆ ${shardPrice} ${t("Shards")}`
-            : focusedOffer ? <>{t("Planned price")} · {piPrice(focusedOffer.pricePi)}</> : t("Price unavailable")}</span>
+            : focusedOffer ? <>{t("Planned price")} · {piPrice(focusedOffer.pricePi)}</> : t("Price unavailable")}</span>}
           {shipNftMainnetVisible && (stage === 1 || focusedOffer) && <small className="ship-nft-purchase-note">
             <strong>{`${skin.name} ${shipNftEditions[stage - 1]} NFT`}</strong> · {metallic ? factoryPaint.name : nftCopy.livery}. {nftPurchaseNote} {nftCopy.account}
           </small>}
-          {stage === 1 ? <>
-            {skin.price === 0 && <small>{t("Starter issued free; price is for an additional ship.")}</small>}
-            <button className="button button-secondary ship-shard-button" type="button" onClick={onBuyStandard} aria-label={`${t(hullCount ? "Buy another ship" : "Buy ship")} · ${skin.name} · ${shardPrice} ${t("Shards")}`} aria-busy={purchaseBusy || undefined} disabled={adminPreview || purchaseBusy || !standardAvailable || shards < price}>
-              {t(hullCount ? "Buy another ship" : "Buy ship")}
+          {stage === 1 ? !hullCount && <>
+            <button className="button button-secondary ship-shard-button" type="button" onClick={onBuyStandard} aria-label={`${t("Buy ship")} · ${skin.name} · ${shardPrice} ${t("Shards")}`} aria-busy={purchaseBusy || undefined} disabled={purchaseBusy || !standardAvailable || shards < price}>
+              {t("Buy ship")}
             </button>
             {standardAvailable && shards < price && <small className="ship-shortfall">◆ {(price - shards).toLocaleString(locale)} {t("more Shards needed")}</small>}
           </> : <>

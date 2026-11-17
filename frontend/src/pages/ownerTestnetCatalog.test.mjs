@@ -47,7 +47,7 @@ test('owner permission expands every catalog item strictly on Pi Testnet',()=>{
 test('all Standard hulls in the prepared Mainnet catalog keep their original Shard prices',()=>{
  const MainnetPanel = component('./ShipSelectionPanel.tsx',{'./TestPiPurchase':{default:Purchase},'./shipNftVisibility':{shipNftMainnetVisible:true}});
  for(const skin of fleet.playerSkins){
-  const props={...defaults(),skin};
+  const props={...defaults(),skin,fleet:{}};
   const buy=p=>nodes(MainnetPanel({...props,...p})).find(n=>n.props.className?.includes('ship-shard-button'));
   const price=fleet.standardShipPrice(skin);
   assert.equal(Boolean(buy({shards:price-1}).props.disabled),true);

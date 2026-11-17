@@ -38,11 +38,12 @@ test('all versions use one preview with the corresponding stage, fixed livery an
 });
 
 test('shard balance, released hulls, busy state and Pi locks still gate purchases',()=>{
-  const buy=props=>nodes(Panel({...defaults(),...props})).find(x=>x.type==='button'&&x.props.className?.includes('ship-shard-button'));
+  const buy=props=>nodes(Panel({...defaults(),skin:fleet.playerSkins[1],...props})).find(x=>x.type==='button'&&x.props.className?.includes('ship-shard-button'));
   assert.equal(Boolean(buy({shards:149}).props.disabled),true);
   assert.equal(Boolean(buy({shards:150}).props.disabled),false);
   assert.equal(Boolean(buy({purchaseBusy:true}).props.disabled),true);
   assert.equal(Boolean(buy({skin:fleet.playerSkins[19],shards:10000}).props.disabled),true);
+  assert.equal(buy({fleet:{'nova-wing':{gold:2}},shards:10000}),undefined);
   for(const focusStage of [2,3]){
     const buttons=nodes(Panel({...defaults(),focusStage})).filter(x=>x.type==='button'&&label(x).includes('Purchases locked'));
     assert.equal(buttons.length,1);assert.equal(buttons[0].props.disabled,true);

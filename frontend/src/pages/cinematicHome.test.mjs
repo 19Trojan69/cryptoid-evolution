@@ -122,12 +122,12 @@ test('home actions reach the existing game, ship shop, career, cards, feedback a
     if(binding&&ts.isNamedImports(binding))for(const item of binding.elements)entry[item.name.text]=()=>null;
     imports[statement.moduleSpecifier.text]=entry;
   }
-  let cursor=0,user=null,authRequests=0,fullscreen=0;
+  let cursor=0,user=null,canAdmin=false,authRequests=0,fullscreen=0;
   const memory=[],navigations=[],storage=new Map();
   imports.react={useState:initial=>{const id=cursor++;if(!(id in memory))memory[id]=typeof initial==='function'?initial():initial;return[memory[id],next=>memory[id]=typeof next==='function'?next(memory[id]):next];},useRef:initial=>{const id=cursor++;return memory[id]??(memory[id]={current:initial});},useCallback:fn=>fn,useEffect:()=>{}};
   imports['react-router-dom']={Link:()=>null,useLocation:()=>({state:null}),useNavigate:()=>target=>navigations.push(target)};
   imports['../i18n']={useLocale:()=>({locale:'de',t:source=>translate('de',source)})};
-  imports['../hooks/useAuth']={useAuth:()=>({user,authReady:true,isLoading:false,adminMode:false,requireAuth:()=>authRequests++})};
+  imports['../hooks/useAuth']={useAuth:()=>({user,canAdmin,isAuthenticated:Boolean(user),authReady:true,isLoading:false,adminMode:false,requireAuth:()=>authRequests++})};
   imports['../hooks/usePayments']={usePayments:()=>({isLoading:false})};
   const skin={id:'ship-01',sprite:1,name:'Scout'},color={id:'silver',name:'Silver'};
   Object.assign(imports['./shipFleet'],{shipSaveNetwork:'mainnet',playerSkins:[skin],playerColors:[color],allPlayerColors:[color],selectedShip:()=>({skin,color}),readShipFleet:()=>({}),fleetCount:()=>1,shardBalance:()=>150,standardHullAvailable:()=>true});
@@ -159,10 +159,12 @@ test('home actions reach the existing game, ship shop, career, cards, feedback a
   imports['./shipNftVisibility'].shipNftMainnetVisible=true;
   assert.equal(find(render(),'./CinematicHome').props.nftLink.props.to,'/nfts');
   imports['./shipFleet'].shipSaveNetwork='testnet';
+  assert.equal(find(render(),'./CinematicHome').props.nftLink,undefined);
+  canAdmin=true;
   nodes=render();home=find(nodes,'./CinematicHome');
-  assert.equal(home.props.nftLink.props.to,'/nfts');
+  assert.equal(home.props.nftLink.props.to,'/admin/nfts');
   home.props.onCards();
-  assert.equal(find(render(),'./Collection').props.nftPreviewPath,'/nfts');
+  assert.equal(find(render(),'./Collection').props.nftPreviewPath,'/admin/nfts');
 });
 
 test('animation stops for hidden pages, dialogs and reduced motion, and releases all listeners',()=>{

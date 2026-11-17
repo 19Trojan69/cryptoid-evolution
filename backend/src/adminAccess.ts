@@ -60,10 +60,13 @@ export const isAdminMode = (req: Request): boolean =>
 export const canUseOwnerTestnetCatalog = async (req: Request): Promise<boolean> =>
   testnetRequest(req) && !isAdminMode(req) && await canAdmin(req);
 
-// Expanded pre-release purchases never become Mainnet entitlements, even if an
-// installation shares user IDs and its orders collection between Pi apps.
+// Keep purchases with a verified network in that app's inventory, even when
+// both Pi apps share an account ID. Older unclassified receipts keep their
+// established treatment and do not prove ownership of a Mainnet NFT.
 export const ownerTestnetOrderScope = (req: Request) =>
-  testnetRequest(req) ? {} : { owner_testnet_catalog: { $ne: true } };
+  testnetRequest(req)
+    ? { payment_network: { $ne: "Pi Network" } }
+    : { owner_testnet_catalog: { $ne: true }, payment_network: { $ne: "Pi Testnet" } };
 
 // Pi Browser proxies can lose the cookie between requests. The browser's test
 // intent restores no privileges by itself: the verified owner is checked again.

@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { buyStandardShip, saveGuestShipPurchase, selectedShip, SHIP_FLEET_KEY, SHARD_BALANCE_KEY, SHIP_SKIN_KEY, SHIP_COLOR_KEY } from './shipFleet.ts';
 
 test('guest purchases preserve the selected ship until explicit selection, and restore failed writes', () => {
-  const data = new Map([[SHIP_FLEET_KEY, '{"grey-scout":{"grey":1}}'], [SHARD_BALANCE_KEY, '1000'], [SHIP_SKIN_KEY, 'grey-scout'], [SHIP_COLOR_KEY, 'grey']]);
+  const data = new Map([[SHIP_FLEET_KEY, '{"grey-scout":{"grey":1}}'], [SHARD_BALANCE_KEY, '1500'], [SHIP_SKIN_KEY, 'grey-scout'], [SHIP_COLOR_KEY, 'grey']]);
   let fail = false;
   const storage = { getItem: key => data.get(key) ?? null, removeItem: key => data.delete(key), setItem: (key, value) => { if (fail && key === SHARD_BALANCE_KEY) { fail = false; throw Error('quota'); } data.set(key, value); } };
   globalThis.localStorage = storage;
@@ -17,10 +17,12 @@ test('guest purchases preserve the selected ship until explicit selection, and r
   }
   const before = [...data];
   assert.equal(buyStandardShip('iron-guard', JSON.parse(storage.getItem(SHIP_FLEET_KEY)), Number(storage.getItem(SHARD_BALANCE_KEY))), null);
+  assert.equal(buyStandardShip('nova-wing', JSON.parse(storage.getItem(SHIP_FLEET_KEY)), Number(storage.getItem(SHARD_BALANCE_KEY))), null);
   assert.deepEqual([...data], before);
-  const purchase = buyStandardShip('nova-wing', JSON.parse(storage.getItem(SHIP_FLEET_KEY)), Number(storage.getItem(SHARD_BALANCE_KEY)));
+  const purchase = buyStandardShip('dark-delta', JSON.parse(storage.getItem(SHIP_FLEET_KEY)), Number(storage.getItem(SHARD_BALANCE_KEY)));
+  assert.ok(purchase);
   fail = true;
-  assert.throws(() => saveGuestShipPurchase(storage, 'nova-wing', purchase), /quota/);
+  assert.throws(() => saveGuestShipPurchase(storage, 'dark-delta', purchase), /quota/);
   assert.deepEqual([...data], before);
   assert.equal(selectedShip().skin.id, 'grey-scout');
   assert.equal(selectedShip().color.id, 'original');

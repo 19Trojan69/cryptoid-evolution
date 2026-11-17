@@ -145,10 +145,9 @@ export const readShipFleet = (raw: string | null, oldOwned: string | null, oldCo
 export const buyStandardShip = (skinId: PlayerSkinId, fleet: ShipFleet, balance: number) => {
   const skin = playerSkins.find(item => item.id === skinId);
   const price = skin ? standardShipPrice(skin) : undefined;
-  if (!skin || !standardHullAvailable(skinId) || price === undefined || !Number.isSafeInteger(balance) || balance < price) return null;
-  const count = fleetCount(fleet, skinId, standardHullInventoryColor);
-  if (!Number.isSafeInteger(count) || count >= Number.MAX_SAFE_INTEGER) return null;
-  return { fleet: { ...fleet, [skinId]: { ...fleet[skinId], [standardHullInventoryColor]: count + 1 } }, balance: balance - price };
+  if (!skin || !standardHullAvailable(skinId) || fleetCount(fleet, skinId) > 0 ||
+    price === undefined || !Number.isSafeInteger(balance) || balance < price) return null;
+  return { fleet: { ...fleet, [skinId]: { [standardHullInventoryColor]: 1 } }, balance: balance - price };
 };
 
 // Do not leave a deducted balance or changed selection when browser storage fails.
