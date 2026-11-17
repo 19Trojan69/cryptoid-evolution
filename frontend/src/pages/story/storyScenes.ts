@@ -58,7 +58,7 @@ export const storyScenes: Record<StoryScene, StoryDefinition> = {
     title: 'Cryptoid Evolution',
     chapterTitle: 'Cleared for Launch',
     heading: 'CRYPTOID EVOLUTION',
-    audio: 'campaign-intro-phrased.mp3',
+    audio: 'campaign-intro-phrased-v2.mp3',
     timing: originalTiming.campaign,
   },
   ...newScenes,
