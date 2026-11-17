@@ -3,7 +3,7 @@ import type { Collection } from "mongodb";
 import { canAdmin } from "../adminAccess";
 import { BOSS_NFT_PREVIEW_PAGE_SIZE as pageSize } from "../nftPreviewLimits";
 import { rewardNetwork } from "../rewardNetwork";
-import { BOSS_STICKER_COUNT, readRewardProgress } from "../rewardRules";
+import { BOSS_STICKER_COUNT, bossCardUnlockKey, readRewardProgress } from "../rewardRules";
 import "../types/session";
 
 export const BOSS_NFT_PREVIEW_ART_REVISION = "weapon-clearance-20261112";
@@ -17,6 +17,8 @@ const progressProjection = {
 type PreviewAccount = {
   uid: string;
   rewardsByNetwork?: { testnet?: unknown };
+  rewardRunId?: { testnet?: string };
+  rewardEventKeys?: { testnet?: string[] };
   testnetBossHoloInterest?: number[];
 };
 
@@ -29,6 +31,9 @@ function verifiedUser(req: Request) {
 const confirmedWins = (account: PreviewAccount) =>
   readRewardProgress(JSON.stringify(account.rewardsByNetwork?.testnet ?? {})).bossWins;
 
+const validArtwork = (webp: unknown): webp is string =>
+  typeof webp === "string" && webp.startsWith("UklGR") && webp.length <= 100_000;
+
 export default function mountBossNftPreview(router: Router) {
   router.use((req, res, next) => {
     res.setHeader("Cache-Control", "private, no-store");
@@ -36,6 +41,36 @@ export default function mountBossNftPreview(router: Router) {
       return res.status(404).json({ error: "not_found" });
     if (!verifiedUser(req)) return res.status(401).json({ error: "not_authenticated" });
     next();
+  });
+
+  router.get("/outro/:id", async (req, res) => {
+    const user = req.session.currentUser!;
+    const id = /^[1-9][0-9]?$/.test(req.params.id) ? Number(req.params.id) : 0;
+    if (id < 1 || id > BOSS_STICKER_COUNT) return res.status(404).json({ error: "not_found" });
+
+    try {
+      const users: Collection<PreviewAccount> = req.app.locals.userCollection;
+      const account = await users.findOne({ _id: user._id, uid: user.uid }, { projection: {
+        [`rewardsByNetwork.testnet.bossWins.${id}`]: 1,
+        "rewardRunId.testnet": 1,
+        "rewardEventKeys.testnet": 1,
+      } });
+      if (!account) return res.status(410).json({ error: "account_deleted" });
+      const identity = { owner: user.uid, id };
+      if (!confirmedWins(account)[id]) return res.json({ ...identity, card: null });
+      const artwork = await req.app.locals.bossNftPreviewCollection.findOne(
+        { _id: `${BOSS_NFT_PREVIEW_ART_REVISION}:victory:${id}` },
+        { projection: { _id: 0, webp: 1 } },
+      );
+      if (!validArtwork(artwork?.webp)) return res.json({ ...identity, card: null });
+      const run = req.query.run;
+      const keys = account.rewardEventKeys?.testnet;
+      const newlyUnlocked = typeof run === "string" && run === account.rewardRunId?.testnet
+        && Array.isArray(keys) && keys.includes(bossCardUnlockKey(id));
+      return res.json({ ...identity, card: { webp: artwork.webp, newlyUnlocked } });
+    } catch {
+      return res.status(503).json({ error: "artwork_unavailable" });
+    }
   });
 
   router.get("/", async (req, res) => {
@@ -75,8 +110,7 @@ export default function mountBossNftPreview(router: Router) {
       const interested: number[] = Array.isArray(account[interestField]) ? account[interestField] : [];
       const cards = bossIds.map((id, index) => {
         const art = artById.get(artIds[index]);
-        if (typeof art?.story !== "string" || typeof art.webp !== "string" ||
-            !art.webp.startsWith("UklGR") || art.webp.length > 100_000)
+        if (typeof art?.story !== "string" || !validArtwork(art.webp))
           throw new Error("Gallery artwork unavailable");
         return {
           id, story: art.story, webp: art.webp, defeated: true,

@@ -8,6 +8,8 @@ import { loadStorySubtitles, storyCues, type StorySubtitles } from './storyCapti
 import { storyScenes, type StoryScene } from './storyScenes';
 import { storyCopy } from './storyCopy';
 import { storyFadeMs } from './storyFades';
+import { createBossOutroCard, type BossOutroReward } from './bossOutroCard';
+import { bossNftEditions } from '../bossNftEditions';
 import './storyBriefing.css';
 
 type Props = {
@@ -17,6 +19,7 @@ type Props = {
   volume: number;
   prepareAudio: (source: string) => MusicPlayer | null;
   unlocked: boolean;
+  outroReward?: BossOutroReward;
   onCovered?: () => void;
   onReturn: () => void;
   onFinish: () => void;
@@ -50,10 +53,12 @@ const loadImage = (name: string) => {
   return image.decode().then(() => image);
 };
 
-export default function StoryBriefing({ scene, preview, withAudio, volume, prepareAudio, unlocked, onCovered, onReturn, onFinish }: Props) {
+export default function StoryBriefing({ scene, preview, withAudio, volume, prepareAudio, unlocked, outroReward, onCovered, onReturn, onFinish }: Props) {
   const { locale } = useLocale();
   const dialogRef = useRef<HTMLElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const cardRef = useRef<HTMLImageElement>(null);
+  const unlockNoticeRef = useRef<HTMLParagraphElement>(null);
   const appearanceRef = useRef<ReturnType<typeof chooseAppearance> | null>(null);
   const coveredRef = useRef(onCovered);
   const returnRef = useRef(onReturn);
@@ -69,8 +74,9 @@ export default function StoryBriefing({ scene, preview, withAudio, volume, prepa
   const [cueIndex, setCueIndex] = useState(-1);
   const [offerAudioRetry, setOfferAudioRetry] = useState(false);
   const [subtitles, setSubtitles] = useState<{ locale: typeof locale; captions: StorySubtitles }>();
-  const [skipLabel, , retryLabel] = storyCopy(locale);
+  const [skipLabel, , retryLabel, unlockLabel] = storyCopy(locale);
   const definition = storyScenes[scene];
+  const showOutroCard = definition.kind === 'outro' && Boolean(outroReward);
   const cues = useMemo(() => storyCues(scene, definition.timing), [scene, definition]);
   const translation = subtitles?.locale === locale ? subtitles.captions[scene]?.[cueIndex] : undefined;
   const caption = translation ?? (!artReady ? cues[cueIndex]?.text : undefined);
@@ -96,7 +102,10 @@ export default function StoryBriefing({ scene, preview, withAudio, volume, prepa
     if (!canvas) return;
     const source = '/story/' + definition.audio;
     const story = definition.timing;
-    const boss = definition.boss;
+    const outro = definition.kind === 'outro';
+    const boss = outro ? undefined : definition.boss;
+    const card = outro && outroReward && cardRef.current && unlockNoticeRef.current
+      ? createBossOutroCard(cardRef.current, unlockNoticeRef.current, story, outroReward) : undefined;
     const media = window.matchMedia('(prefers-reduced-motion: reduce)');
     const reduced = () => media.matches || document.documentElement.dataset.motion === 'reduced';
     const transition = transitionRef.current ??= { phase: initialPhase, startedAt: performance.now() };
@@ -212,6 +221,7 @@ export default function StoryBriefing({ scene, preview, withAudio, volume, prepa
       } else visualMs = Math.max(visualMs, ms);
       lastVisualAt = now;
       paint(visualMs);
+      card?.draw(ms, reduced());
       schedule();
     };
     const schedule = () => { if (!frame && !suspended && !document.hidden && !disposed && !finished) frame = requestGameFrame(tick); };
@@ -230,6 +240,7 @@ export default function StoryBriefing({ scene, preview, withAudio, volume, prepa
     const exit = () => {
       if (disposed || finished || transition.phase === 'leaving' || transition.phase === 'returning') return;
       const now = performance.now();
+      card?.stopSound();
       if (playPending && !player?.playing) pauseAudio();
       exitVolume = audioLevel;
       if (reduced() && (!player?.playing || exitVolume === 0)) revealGame(now);
@@ -290,6 +301,7 @@ export default function StoryBriefing({ scene, preview, withAudio, volume, prepa
       followsAudio = false;
       stop();
       pauseAudio();
+      card?.stopSound();
     };
     const visibility = () => {
       if (document.hidden) { suspend(); return; }
@@ -333,7 +345,7 @@ export default function StoryBriefing({ scene, preview, withAudio, volume, prepa
           const surface = document.createElement('canvas');
           surface.width = width; surface.height = height;
           return surface;
-        }, appearance, definition);
+        }, appearance, outro ? { heading: definition.heading } : definition);
         resize();
         if (cinematic) { resizeObserver?.observe(canvas); setArtReady(true); }
       } catch { if (!disposed && transition.phase !== 'leaving' && transition.phase !== 'returning') showCaptions(); }
@@ -352,10 +364,11 @@ export default function StoryBriefing({ scene, preview, withAudio, volume, prepa
       player?.audio.removeEventListener('error', audioError);
       stop(); resizeObserver?.disconnect();
       pauseAudio();
+      card?.dispose();
       cinematic?.dispose();
       canvas.width = canvas.height = 0;
     };
-  }, [definition, cues, initialPhase, preview, withAudio, unlocked, prepareAudio]);
+  }, [definition, cues, initialPhase, preview, withAudio, unlocked, prepareAudio, outroReward]);
 
   return <section ref={dialogRef} className="story-briefing" role="dialog" aria-modal="true" tabIndex={-1} aria-label={definition.title}
     data-phase={phase} data-overlap={phase === 'covering' && coverBlend ? true : undefined} style={fadeStyle}
@@ -363,6 +376,10 @@ export default function StoryBriefing({ scene, preview, withAudio, volume, prepa
     <div className="story-briefing-content">
       <div className="story-briefing-frame" data-ready={artReady || undefined}>
         <canvas ref={canvasRef} aria-hidden="true" />
+        {showOutroCard && <>
+          <img ref={cardRef} className="story-outro-card" alt={`${definition.boss?.name} · ${bossNftEditions.victory.name}`} hidden />
+          <p ref={unlockNoticeRef} className="story-outro-unlock" role="status" hidden>{unlockLabel}</p>
+        </>}
         {caption && <p className={artReady ? 'story-briefing-subtitle' : 'story-briefing-caption'}
           data-translated={Boolean(translation) || undefined}
           lang={translation ? documentLanguage(locale) : 'en'}>{caption}</p>}

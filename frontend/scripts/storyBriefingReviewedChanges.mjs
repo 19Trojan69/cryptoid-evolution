@@ -1,6 +1,34 @@
 // Restore exact story changes before the historical gameplay fingerprints.
 const changes = [
   {
+    before: "",
+    after: "import type { BossOutroReward } from './story/bossOutroCard';\n",
+  },
+  {
+    before: "",
+    after: "  const outroRewardRef = useRef<BossOutroReward | null>(null);\n",
+  },
+  {
+    before: "",
+    after: "            const runId = scoreRunRef.current;\n            outroRewardRef.current = shipSaveNetwork === 'testnet' && !adminRunRef.current && runId && cardOwnerRef.current !== 'guest'\n              ? { bossId, owner: cardOwnerRef.current, runId, saving: pendingRewardsRef.current } : null;\n",
+  },
+  {
+    before: "",
+    after: "    outroRewardRef.current = null;\n",
+  },
+  {
+    before: "",
+    after: "  const briefingOutro = story && storyScenes[story].kind === 'outro' && outroRewardRef.current?.bossId === briefingBoss?.id\n    ? outroRewardRef.current ?? undefined : undefined;\n",
+  },
+  {
+    before: "",
+    after: "        outroReward={briefingOutro}\n",
+  },
+  {
+    before: "",
+    after: "          if (briefingOutro) outroRewardRef.current = null;\n",
+  },
+  {
     before: "          if (briefingBoss) soundRef.current?.play('boss');\n",
     after: "          if (briefingBoss && stateRef.current.encounter === 'boss-intro') soundRef.current?.play('boss');\n",
   },

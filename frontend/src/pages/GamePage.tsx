@@ -102,6 +102,7 @@ import { leaveGameFullscreen } from "./gameFullscreen";
 import StoryBriefing from "./story/StoryBriefing";
 import { storyBriefingsEnabled } from "./story/storyPreferences";
 import { bossOutroAtSector, bossStoryAtSector, levelStoryAtSector, storyScenes, type StoryScene } from "./story/storyScenes";
+import type { BossOutroReward } from './story/bossOutroCard';
 import { storyFadeMs } from "./story/storyFades";
 import { levelDifficulty, MAX_DIFFICULTY_LEVEL } from "./levelDifficulty";
 import { createDoubleKillCombo, creditComboDefeat, DOUBLE_KILL_SCORE, DOUBLE_KILL_SHARDS, type DoubleKillCombo } from "./doubleKillCombo";
@@ -503,6 +504,7 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
   const cardOwnerRef=useRef('guest');
   const bossLifeRemainingRef=useRef(0);
   const pendingBossCardRef=useRef<CardReward|null>(null);
+  const outroRewardRef = useRef<BossOutroReward | null>(null);
   const [extraLifeVisible,setExtraLifeVisible]=useState(false);
   const [game, setGame] = useState<GameState>(() => createInitialState(authenticated));
   const [story, setStory] = useState<StoryScene | null>(() => game.status === 'playing' && storyBriefingsEnabled() ? 'campaign' : null);
@@ -1843,6 +1845,9 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
               const rank = rewardRank(next);
               return { progress: next, notice: `Boss stickers · ${bossId}/50 · ${result.stars}★${rank !== previousRank ? ` · New rank · ${rank}` : ''}` };
             }, { kind: 'boss', level: bossId, stage: state.sector, summaryPlacement: 'level-end' });
+            const runId = scoreRunRef.current;
+            outroRewardRef.current = shipSaveNetwork === 'testnet' && !adminRunRef.current && runId && cardOwnerRef.current !== 'guest'
+              ? { bossId, owner: cardOwnerRef.current, runId, saving: pendingRewardsRef.current } : null;
             if(firstUnlock&&!adminRunRef.current&&bossCardAvailable(bossId, ownerDiagnostics && shipSaveNetwork === 'testnet')&&!hasSeenCard(cardOwnerRef.current,`boss-${bossId}`))
               pendingBossCardRef.current={key:`boss-${bossId}`,boss:bossId,stars:rewardProgressRef.current.bossWins[bossId]||1};
 
@@ -2676,6 +2681,7 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
     stateRef.current.shardBase = shardBalance(localStorage.getItem(SHARD_BALANCE_KEY));
     guestCreditedShardsRef.current = 0;
     bossLifeRemainingRef.current=0;pendingBossCardRef.current=null;setExtraLifeVisible(false);
+    outroRewardRef.current = null;
     shipStageRef.current = 1;
     setShipStage(1);
     recordsSavedRef.current = false;
@@ -2855,6 +2861,8 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
     }}>{t("Retry save")}</button>}</p>;
 
   const briefingBoss = story ? storyScenes[story].boss : undefined;
+  const briefingOutro = story && storyScenes[story].kind === 'outro' && outroRewardRef.current?.bossId === briefingBoss?.id
+    ? outroRewardRef.current ?? undefined : undefined;
   const briefingVisible = Boolean(story) && !rewardCards.length;
   const displayedSummary = bossSummary ?? (game.status === 'playing' ? departingSummary : null);
   return (
@@ -2862,6 +2870,7 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
       data-effects-paused={briefingVisible || game.status === "paused" || game.status === "loading"} onPointerDownCapture={() => { primeCardSound(); if(rewardCardsRef.current.length)return; retryAudio(); }}>
       {story && briefingVisible && <StoryBriefing key={story} scene={story}
         unlocked={briefingBoss !== undefined && (rewardProgressRef.current.bossWins[briefingBoss.id] ?? 0) > 0}
+        outroReward={briefingOutro}
         withAudio={musicEnabled && !ownerAudioDisabled() && musicVolume > 0} volume={musicVolume}
         prepareAudio={prepareStoryAudio}
         onCovered={() => setDepartingSummary(null)}
@@ -2875,6 +2884,7 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
         onFinish={() => {
           if (storyRef.current !== story) return;
           storyRef.current = null;
+          if (briefingOutro) outroRewardRef.current = null;
           clearControls();
           lastFrameRef.current = 0;
           backgroundHiddenAtRef.current = 0;

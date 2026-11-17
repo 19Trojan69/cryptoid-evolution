@@ -15,6 +15,7 @@ type BossStory = NonNullable<StoryPresentation['boss']> & {
 };
 
 type StoryDefinition = StoryPresentation & {
+  kind: 'opening' | 'briefing' | 'intro' | 'outro';
   title: string;
   chapterTitle: string;
   audio: string;
@@ -22,7 +23,7 @@ type StoryDefinition = StoryPresentation & {
   boss?: BossStory;
 };
 
-type RobotRecording = Omit<StoryDefinition, 'boss'> & {
+type RobotRecording = Omit<StoryDefinition, 'boss' | 'kind'> & {
   level: number;
   kind: 'briefing' | 'intro' | 'outro';
   bossSubtitle?: string;
@@ -50,11 +51,12 @@ function storyBoss(level: number, subtitle: string): BossStory {
 const recordings = Object.entries(robotCampaign) as [RobotScene, RobotRecording][];
 const newScenes = Object.fromEntries(recordings.map(([id, { level, kind, bossSubtitle, ...definition }]) => {
   sceneIds[kind].set(level, id);
-  return [id, kind === 'briefing' ? definition : { ...definition, boss: storyBoss(level, bossSubtitle ?? '') }];
+  return [id, { ...definition, kind, ...(kind !== 'briefing' && { boss: storyBoss(level, bossSubtitle ?? '') }) }];
 })) as Record<RobotScene, StoryDefinition>;
 
 export const storyScenes: Record<StoryScene, StoryDefinition> = {
   campaign: {
+    kind: 'opening',
     title: 'Cryptoid Evolution',
     chapterTitle: 'Cleared for Launch',
     heading: 'CRYPTOID EVOLUTION',

@@ -1,6 +1,6 @@
 import { verifiedBlockBadges } from "../pilotRules";
 import { Router } from "express";
-import { awardBlock, awardBonusMedal, awardBossSticker, awardChain, emptyRewardProgress, reachLevel, readRewardProgress, rewardRank } from "../rewardRules";
+import { awardBlock, awardBonusMedal, awardBossSticker, awardChain, bossCardUnlockKey, emptyRewardProgress, reachLevel, readRewardProgress, rewardRank } from "../rewardRules";
 import { isAdminMode } from "../adminAccess";
 import { rewardNetwork } from "../rewardNetwork";
 import "../types/session";
@@ -74,6 +74,10 @@ export default function mountRewardEndpoints(router: Router) {
         // in the same write so another device can resume immediately.
         const closesChain = !!snapshot && event.kind === "block" && event.stage % 10 === 9;
         if (closesChain) next = awardChain(next, event.level).progress;
+        // Keep the first unlock in the same run receipt as the win so a lost
+        // response or a retried save still produces the right outro.
+        const extraKey = closesChain ? `chain:${event.level}` :
+          network === "testnet" && event.kind === "boss" && !progress.bossWins[event.level] ? bossCardUnlockKey(event.level) : undefined;
         const version = user.rewardVersion?.[network] as number | undefined;
         const previous = player?.mission?.snapshot;
         const heartLimit = maxMissionHearts(player?.lastStart?.armorBonus);
@@ -93,7 +97,7 @@ export default function mountRewardEndpoints(router: Router) {
           ...(snapshot ? { [`${playerKey}.activeRunId`]: run.id, [`${playerKey}.version`]: player.version } : {}) },
         { ...appliedPower, $set: { ...(event.kind === "boss" ? { [`badgeEvidenceByNetwork.${network}.bossDefeats`]: Math.max(user.badgeEvidenceByNetwork?.[network]?.bossDefeats || 0, Object.values(progress.bossWins).reduce((sum,n)=>sum+n,0)) + 1 } : {}), ...Object.fromEntries(Object.keys(badgeEvidence).map(id=>[`badgeEvidenceByNetwork.${network}.${id}`,true])), [`rewardsByNetwork.${network}`]: next, [`rewardVersion.${network}`]: (version ?? 0) + 1,
           ...(snapshot ? { [`${playerKey}.mission`]: mission, [`${playerKey}.creditedShards`]: snapshot.shards, [`${playerKey}.creditedDestroyed`]: snapshot.destroyed, [`${playerKey}.updatedAt`]: new Date().toISOString() } : {}) },
-          ...(snapshot ? { $max: { [`${playerKey}.highestSector`]: mission?.sector || event.stage }, $inc: { [`${playerKey}.balance`]: deltaShards, [`${playerKey}.totalShardsEarned`]: deltaShards, [`${playerKey}.totalDestroyed`]: deltaDestroyed, [`${playerKey}.version`]: 1 } } : {}), $addToSet: { [`rewardEventKeys.${network}`]: closesChain ? { $each: [key, `chain:${event.level}`] } : key } });
+          ...(snapshot ? { $max: { [`${playerKey}.highestSector`]: mission?.sector || event.stage }, $inc: { [`${playerKey}.balance`]: deltaShards, [`${playerKey}.totalShardsEarned`]: deltaShards, [`${playerKey}.totalDestroyed`]: deltaDestroyed, [`${playerKey}.version`]: 1 } } : {}), $addToSet: { [`rewardEventKeys.${network}`]: extraKey ? { $each: [key, extraKey] } : key } });
         if (result.modifiedCount) return res.json({ network, progress: next, awarded: true, rank: rewardRank(next), ...(snapshot ? { save: publicSave({ ...player, balance: player.balance + deltaShards, totalShardsEarned: (player.totalShardsEarned || 0) + deltaShards, totalDestroyed: (player.totalDestroyed || 0) + deltaDestroyed, highestSector: Math.max(player.highestSector || 1, mission?.sector || event.stage), version: player.version + 1, mission }) } : {}) });
       }
       return res.status(409).json({ error: "Reward update busy; retry" });

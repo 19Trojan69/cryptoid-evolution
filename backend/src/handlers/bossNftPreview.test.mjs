@@ -14,11 +14,14 @@ const response = () => ({
 });
 
 function fixture(account) {
-  let authorize, read, update;
+  let authorize, read, outro, update;
   const artLookups = [], writes = [];
   mountBossNftPreview({
     use(handler) { authorize = handler; },
-    get(path, handler) { assert.equal(path, "/"); read = handler; },
+    get(path, handler) {
+      if (path === "/outro/:id") outro = handler;
+      else { assert.equal(path, "/"); read = handler; }
+    },
     put(path, handler) { assert.equal(path, "/holo/:id/interest"); update = handler; },
   });
   const user = { uid: "pilot", _id: "pilot-id", accessToken: "valid-token" };
@@ -40,6 +43,10 @@ function fixture(account) {
       aggregate() { return { async toArray() { return [{ id: 9, count: 3 }]; } }; },
     },
     bossNftPreviewCollection: {
+      async findOne({ _id }) {
+        artLookups.push([_id]);
+        return _id.endsWith(':3') ? null : { webp: "UklGRpreview" };
+      },
       find(filter) {
         artLookups.push(filter._id.$in);
         return { async toArray() {
@@ -50,7 +57,7 @@ function fixture(account) {
   };
   return {
     artLookups, writes,
-    async request({ network = "testnet", testnetSave = true, token = user.accessToken, query = {}, id, body } = {}) {
+    async request({ network = "testnet", testnetSave = true, token = user.accessToken, query = {}, id, body, outroCard = false } = {}) {
       const req = {
         query, params: { id }, body, testnetSave,
         session: { currentUser: user },
@@ -61,7 +68,7 @@ function fixture(account) {
       const res = response();
       let authorized = false;
       await authorize(req, res, () => { authorized = true; });
-      if (authorized) await (id === undefined ? read : update)(req, res);
+      if (authorized) await (outroCard ? outro : id === undefined ? read : update)(req, res);
       return res;
     },
   };
@@ -80,6 +87,50 @@ test("the former public Boss NFT preview is retired on Testnet for every session
   assert.equal(await check("cryptoid-evolution.vercel.app", "Bearer token"), 404);
   assert.equal(await check(headers.host), 404);
   assert.equal(await check(headers.host, "Bearer token"), 404);
+});
+
+test("the Testnet gateway only forwards the signed, read-only individual boss outro", async () => {
+  const forwarded = [];
+  const gateway = project => createApiGateway(async () => ({
+    async start() {},
+    app(req, res) {
+      forwarded.push([req.url, req.headers["x-cryptoid-app-network"], req.testnetSave]);
+      res.status(200);
+    },
+  }), () => ({ VERCEL_ENV: "production", VERCEL_PROJECT_PRODUCTION_URL: project }));
+  const testnet = "cryptoid-evolution-testnet.vercel.app";
+  const check = async ({ path = "boss-nft-preview/outro/1", project = testnet, method = "GET", authorization = "Bearer token" } = {}) => {
+    const res = response();
+    await gateway(project)({ method, url: `/api/index?path=${path}&run=round`, headers: { host: project, authorization } }, res);
+    assert.equal(res.headers["Cache-Control"], path.endsWith("/51") ? undefined : "private, no-store");
+    return res.code;
+  };
+  assert.equal(await check({ project: "cryptoid-evolution.vercel.app" }), 404);
+  assert.equal(await check({ authorization: "" }), 401);
+  assert.equal(await check({ method: "POST" }), 405);
+  assert.equal(await check({ path: "boss-nft-preview/outro/51" }), 404);
+  assert.equal(await check(), 200);
+  assert.deepEqual(forwarded, [["/boss-nft-preview/outro/1?run=round", "testnet", true]]);
+});
+
+test("an outro returns only the confirmed boss Victory card, with the unlock tied to the same run", async () => {
+  const f = fixture({
+    rewardsByNetwork: { testnet: { bossWins: { 1: 1, 3: 1 } }, mainnet: { bossWins: { 2: 1 } } },
+    rewardRunId: { testnet: "round" },
+    rewardEventKeys: { testnet: ["boss:1", "boss-card:1"] },
+    testnetBossHoloInterest: [1],
+  });
+  const card = (id, query = {}, token) => f.request({ id, query, token, outroCard: true });
+  assert.equal((await card("1", {}, "someone-else")).code, 401);
+  assert.equal((await card("51")).code, 404);
+  assert.deepEqual((await card("2")).body, { owner: "pilot", id: 2, card: null });
+  assert.deepEqual(f.artLookups, []);
+  assert.deepEqual((await card("3", { run: "round" })).body, { owner: "pilot", id: 3, card: null });
+  const first = await card("1", { run: "round", edition: "holo" });
+  assert.equal(first.headers["Cache-Control"], "private, no-store");
+  assert.deepEqual(first.body, { owner: "pilot", id: 1, card: { webp: "UklGRpreview", newlyUnlocked: true } });
+  assert.deepEqual((await card("1", { run: "previous" })).body.card, { webp: "UklGRpreview", newlyUnlocked: false });
+  assert.deepEqual(f.artLookups, ["3", "1", "1"].map(id => [`${BOSS_NFT_PREVIEW_ART_REVISION}:victory:${id}`]));
 });
 
 test("neither a mismatched token nor reaching a boss exposes artwork without a confirmed Testnet win", async () => {

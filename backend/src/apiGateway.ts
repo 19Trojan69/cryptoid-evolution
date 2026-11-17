@@ -202,10 +202,18 @@ export const createApiGateway = (
         if (!/^Bearer\s+\S+$/i.test(req.headers?.authorization || ""))
           return res.status(401).json({ error: "not_authenticated" });
       }
-      if (testnet && /^(?:boss-nft-preview|testnet-ship-nft-preview)(?:\/|$)/i.test(path))
+      const bossOutroCard = /^boss-nft-preview\/outro\/(?:[1-4][0-9]|50|[1-9])$/.test(path);
+      if (bossOutroCard) {
+        res.setHeader("Cache-Control", "private, no-store");
+        if (!testnet) return res.status(404).json({ error: "not_found" });
+        if (req.method !== "GET") return res.status(405).json({ error: "method_not_allowed" });
+        if (!/^Bearer\s+\S+$/i.test(req.headers?.authorization || ""))
+          return res.status(401).json({ error: "not_authenticated" });
+      }
+      if (testnet && !bossOutroCard && /^(?:boss-nft-preview|testnet-ship-nft-preview)(?:\/|$)/i.test(path))
         return res.status(404).json({ error: "not_found" });
       // Serve network-scoped features locally. Account sign-in and payments use the existing proxy.
-      const localFeature = powerRoute || testnetSave || testnetInventory || bossNftGallery || adminNftCollection || !!arcadeRating || arcadeProgress || arcadeStickerBackup || testnet && (/^progress\/boss-summary\/(?:prepare|continue)$/.test(path)
+      const localFeature = powerRoute || testnetSave || testnetInventory || bossNftGallery || bossOutroCard || adminNftCollection || !!arcadeRating || arcadeProgress || arcadeStickerBackup || testnet && (/^progress\/boss-summary\/(?:prepare|continue)$/.test(path)
         || /^admin\/players(?:\/|$)/.test(path));
       // The public catalog must match this deployment's Shop, even while
       // account and payment requests use the established Pi service.
@@ -295,7 +303,7 @@ export const createApiGateway = (
         req.headers ??= {};
         req.headers["x-cryptoid-app-network"] = "testnet";
       }
-      if (testnetSave || testnetInventory || bossNftGallery || adminNftCollection || powerRoute || arcadeRating || arcadeProgress || arcadeStickerBackup) req.testnetSave = true;
+      if (testnetSave || testnetInventory || bossNftGallery || bossOutroCard || adminNftCollection || powerRoute || arcadeRating || arcadeProgress || arcadeStickerBackup) req.testnetSave = true;
       ready ??= loadBackend().then(async (backend) => {
         await backend.start(false);
         return backend;

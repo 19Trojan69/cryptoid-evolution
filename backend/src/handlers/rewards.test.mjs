@@ -27,7 +27,8 @@ test('signed-in rewards follow mission order and Testnet stays separate from Mai
       user.rewardsByNetwork[network] = structuredClone(update.$set[`rewardsByNetwork.${network}`]);
       user.rewardVersion[network] = update.$set[`rewardVersion.${network}`];
       user.rewardEventKeys[network] ??= [];
-      user.rewardEventKeys[network].push(update.$addToSet[`rewardEventKeys.${network}`]);
+      const keys = update.$addToSet[`rewardEventKeys.${network}`];
+      user.rewardEventKeys[network].push(...(keys.$each ?? [keys]));
       return { modifiedCount: 1 };
     },
   };
@@ -48,6 +49,9 @@ test('signed-in rewards follow mission order and Testnet stays separate from Mai
   const boss = await call('pilot-a', 'run-a', { runId: 'run-a', kind: 'boss', level: 1, stage: 10 });
   assert.equal(boss.body.progress.bossWins[1], 1);
   assert.equal(boss.body.rank, 'Pilot');
+  const replayedSave = await call('pilot-a', 'run-a', { runId: 'run-a', kind: 'boss', level: 1, stage: 10 });
+  assert.equal(replayedSave.body.awarded, false);
+  assert.deepEqual(users.get('pilot-a').rewardEventKeys.testnet.filter(key => key.startsWith('boss-card:')), ['boss-card:1']);
   assert.equal((await call('pilot-a', 'run-a', { runId: 'run-b', kind: 'bonus', level: 1, stage: 10, hits: 12 })).code, 403);
   assert.equal((await call('pilot-a', 'run-a', { runId: 'run-a', kind: 'bonus', level: 1, stage: 10, hits: 12 })).body.progress.bonusMedals[1], 'gold');
   assert.equal((await call('pilot-a', 'run-a', null, 'GET')).body.progress.perfectBonuses, 1);
@@ -61,4 +65,9 @@ test('signed-in rewards follow mission order and Testnet stays separate from Mai
   users.get('pilot-a').rewardEventKeys.mainnet = [];
   assert.equal((await call('pilot-a', 'mainnet-run', { runId: 'mainnet-run', kind: 'block', level: 1, stage: 1 }, 'POST', 'mainnet')).body.progress.linkedBlocks[1], 1);
   assert.equal((await call('pilot-a', 'run-a', null, 'GET')).body.progress.bonusMedals[1], 'gold');
+  users.get('pilot-a').rewardRunId.testnet = 'new-run';
+  users.get('pilot-a').rewardEventKeys.testnet = ['chain:1'];
+  const secondWin = await call('pilot-a', 'new-run', { runId: 'new-run', kind: 'boss', level: 1, stage: 10 });
+  assert.equal(secondWin.body.progress.bossWins[1], 2);
+  assert.deepEqual(users.get('pilot-a').rewardEventKeys.testnet, ['chain:1', 'boss:1']);
 });

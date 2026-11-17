@@ -1,5 +1,6 @@
 // Collectible gameplay progress. These awards have no Pi or cash value.
 export const BOSS_STICKER_COUNT = 50;
+export const bossCardUnlockKey = (bossId: number) => `boss-card:${bossId}`;
 export const CHAIN_MILESTONES = [1, 3, 10, 25, 50] as const;
 
 export type BonusMedal = "bronze" | "silver" | "gold";
