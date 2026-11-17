@@ -62,6 +62,7 @@
   ],
   "git": {
     "deploymentEnabled": {
+      "codex/recorded-campaign-levels-01-12-20261117": false,
       "codex/testnet-fleet-and-links-20261117": false,
       "codex/testnet-earned-boss-silhouettes-20261117": false,
       "codex/level-two-korvessa-briefings-20261115": false,

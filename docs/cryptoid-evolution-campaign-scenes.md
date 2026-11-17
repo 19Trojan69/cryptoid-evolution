@@ -13,7 +13,9 @@ Drehbuch für Kampagnenstart, Level-Briefings, Boss-Intros und Sieges-Outros. Je
 
 ### Stand der Aufnahmen
 
-Für Level 1 bis 50 stehen 149 neu vertonte Szenen zur Verfügung. Der Flottencomputer spricht alle Briefings, Boss-Intros und Boss-Outros mit derselben englischen Roboterstimme. Die eigens komponierten Orchesterbegleitungen variieren je Szene und beginnen und enden leise. Die Untertitel der 18 weiteren Spielsprachen folgen den Sprechpausen und werden pro Sprache geladen. Drazevorns Finale „Earth, We Read You“ erhält einen längeren Ausklang. [Kokoro](https://huggingface.co/hexgrad/Kokoro-82M) · [GeneralUser GS](https://github.com/mrbumpy409/GeneralUser-GS)
+Die ersten 35 Szenen verwenden die eingereichte englische Sprecheraufnahme. Das umfasst die Boss-Szenen für Level 1 und alle Briefings, Intros und Outros für Level 2 bis 12. Die Sprecheraufnahme setzt jeweils nach der Slate-Ansage ein. Als leise Begleitung dienen Auszüge aus „Galactic Chain (Remastered)“, „Dreadnought Duel“ und eine Instrumentalfassung des Auszugs aus „Beyond the Last Star“. Die Sprachpausen, die englische Laufschrift und die Untertitel der 18 weiteren Spielsprachen sind auf die neuen Schnitte abgestimmt.
+
+Für die weiteren Level stehen die bereits vertonten Szenen zur Verfügung. Der Flottencomputer spricht die weiteren Briefings, Boss-Intros und Boss-Outros mit der englischen Roboterstimme. Die eigens komponierten Orchesterbegleitungen variieren je Szene und beginnen und enden leise. Die Untertitel der 18 weiteren Spielsprachen folgen den Sprechpausen und werden pro Sprache geladen. Drazevorns Finale „Earth, We Read You“ erhält einen längeren Ausklang. [Kokoro](https://huggingface.co/hexgrad/Kokoro-82M) · [GeneralUser GS](https://github.com/mrbumpy409/GeneralUser-GS)
 
 ## Genesis und die falschen Befehle
 
@@ -54,7 +56,7 @@ Der Spam-Verbreiter · The Spam Broadcaster
 
 #### Boss-Intro · Cut That Signal
 
-Roboteraufnahme · robot/level-01-intro.mp3 · 24,38 s.
+Sprecheraufnahme · robot/level-01-intro.mp3 · 18,64 s.
 
 **Suno-Stil**
 
@@ -74,7 +76,7 @@ Contact confirmed. Varneth. It once carried supply records between the Genesis c
 
 #### Boss-Outro · The First Reply
 
-Roboteraufnahme · robot/level-01-outro.mp3 · 31,85 s.
+Sprecheraufnahme · robot/level-01-outro.mp3 · 22,20 s.
 
 **Suno-Stil**
 
@@ -102,7 +104,7 @@ Die Maskenträgerin · The Mask Bearer
 
 #### Level-Briefing · Bring Those Crews Home
 
-Roboteraufnahme · robot/level-02-briefing.mp3 · 28,01 s.
+Sprecheraufnahme · robot/level-02-briefing.mp3 · 21,56 s.
 
 **Suno-Stil**
 
@@ -122,7 +124,7 @@ Varneth is down. The Genesis relays are carrying distress calls again. A supply 
 
 #### Boss-Intro · Open a Way Home
 
-Roboteraufnahme · robot/level-02-intro.mp3 · 31,13 s.
+Sprecheraufnahme · robot/level-02-intro.mp3 · 22,96 s.
 
 **Suno-Stil**
 
@@ -142,7 +144,7 @@ Pilot, we traced the signal to Korvessa. She once carried diplomatic dispatches.
 
 #### Boss-Outro · Clear the Route
 
-Roboteraufnahme · robot/level-02-outro.mp3 · 28,87 s.
+Sprecheraufnahme · robot/level-02-outro.mp3 · 21,32 s.
 
 **Suno-Stil**
 
@@ -167,7 +169,7 @@ Der Siegelräuber · The Seal Thief
 
 #### Level-Briefing · Stay on the Trail
 
-Roboteraufnahme · robot/level-03-briefing.mp3 · 30,58 s.
+Sprecheraufnahme · robot/level-03-briefing.mp3 · 24,73 s.
 
 **Suno-Stil**
 
@@ -188,7 +190,7 @@ Pilot, Korvessa is down. Every convoy crew made it out. The last freighter broug
 
 #### Boss-Intro · Buy Us Time
 
-Roboteraufnahme · robot/level-03-intro.mp3 · 34,46 s.
+Sprecheraufnahme · robot/level-03-intro.mp3 · 26,41 s.
 
 **Suno-Stil**
 
@@ -209,7 +211,7 @@ Pilot, Korvessa’s archive confirms it. The ship you followed is Drelvorn, the 
 
 #### Boss-Outro · Seal Revoked
 
-Roboteraufnahme · robot/level-03-outro.mp3 · 34,73 s.
+Sprecheraufnahme · robot/level-03-outro.mp3 · 26,22 s.
 
 **Suno-Stil**
 
@@ -236,7 +238,7 @@ Der Chronikfälscher · The Chronicle Forger
 
 #### Level-Briefing · The Missing Ledger
 
-Roboteraufnahme · robot/level-04-briefing.mp3 · 30,12 s.
+Sprecheraufnahme · robot/level-04-briefing.mp3 · 23,81 s.
 
 **Suno-Stil**
 
@@ -256,7 +258,7 @@ The convoy crews have spoken to their families. Genesis is holding. Before Drelv
 
 #### Boss-Intro · What the Books Say
 
-Roboteraufnahme · robot/level-04-intro.mp3 · 32,54 s.
+Sprecheraufnahme · robot/level-04-intro.mp3 · 24,93 s.
 
 **Suno-Stil**
 
@@ -278,7 +280,7 @@ Contact confirmed. Talvrek, the Chronicle Forger. That ship once surveyed new co
 
 #### Boss-Outro · Names on the Roll
 
-Roboteraufnahme · robot/level-04-outro.mp3 · 30,17 s.
+Sprecheraufnahme · robot/level-04-outro.mp3 · 22,79 s.
 
 **Suno-Stil**
 
@@ -303,7 +305,7 @@ Der Knotenbelagerer · The Node Besieger
 
 #### Level-Briefing · A Station in the Dark
 
-Roboteraufnahme · robot/level-05-briefing.mp3 · 20,88 s.
+Sprecheraufnahme · robot/level-05-briefing.mp3 · 16,65 s.
 
 **Suno-Stil**
 
@@ -323,7 +325,7 @@ The relief crew from the Genesis outer ring sent us a set of parts. The station 
 
 #### Boss-Intro · Intro Zeraveth
 
-Roboteraufnahme · robot/level-05-intro.mp3 · 29,16 s.
+Sprecheraufnahme · robot/level-05-intro.mp3 · 21,49 s.
 
 **Suno-Stil**
 
@@ -345,7 +347,7 @@ Contact confirmed. Zeraveth, the Node Besieger. It used to repair entire relay r
 
 #### Boss-Outro · Outro Zeraveth
 
-Roboteraufnahme · robot/level-05-outro.mp3 · 22,63 s.
+Sprecheraufnahme · robot/level-05-outro.mp3 · 16,42 s.
 
 **Suno-Stil**
 
@@ -370,7 +372,7 @@ Der Wiederholungsjäger · The Echo Hunter
 
 #### Level-Briefing · An Old Clearance
 
-Roboteraufnahme · robot/level-06-briefing.mp3 · 22,30 s.
+Sprecheraufnahme · robot/level-06-briefing.mp3 · 17,66 s.
 
 **Suno-Stil**
 
@@ -391,7 +393,7 @@ The repaired relay brought back traffic… the crew thought had been lost. A tug
 
 #### Boss-Intro · Intro Orvask
 
-Roboteraufnahme · robot/level-06-intro.mp3 · 27,65 s.
+Sprecheraufnahme · robot/level-06-intro.mp3 · 20,23 s.
 
 **Suno-Stil**
 
@@ -414,7 +416,7 @@ That’s Orvask… the Echo Hunter. It escorted convoys and saved every clearanc
 
 #### Boss-Outro · Outro Orvask
 
-Roboteraufnahme · robot/level-06-outro.mp3 · 26,02 s.
+Sprecheraufnahme · robot/level-06-outro.mp3 · 19,47 s.
 
 **Suno-Stil**
 
@@ -440,7 +442,7 @@ Die Schattenbrücke · The Shadow Bridge
 
 #### Level-Briefing · Two Ends of the Route
 
-Roboteraufnahme · robot/level-07-briefing.mp3 · 20,98 s.
+Sprecheraufnahme · robot/level-07-briefing.mp3 · 16,19 s.
 
 **Suno-Stil**
 
@@ -460,7 +462,7 @@ The two colonies copied us on their loading logs. Each has a receipt stamped by 
 
 #### Boss-Intro · Intro Keldrava
 
-Roboteraufnahme · robot/level-07-intro.mp3 · 28,15 s.
+Sprecheraufnahme · robot/level-07-intro.mp3 · 21,68 s.
 
 **Suno-Stil**
 
@@ -483,7 +485,7 @@ Contact confirmed. Keldrava… the Shadow Bridge. The colony crews used to hand 
 
 #### Boss-Outro · Outro Keldrava
 
-Roboteraufnahme · robot/level-07-outro.mp3 · 24,53 s.
+Sprecheraufnahme · robot/level-07-outro.mp3 · 18,54 s.
 
 **Suno-Stil**
 
@@ -508,7 +510,7 @@ Der Gerüchtesender · The Rumour Carrier
 
 #### Level-Briefing · Two People Who Were There
 
-Roboteraufnahme · robot/level-08-briefing.mp3 · 23,54 s.
+Sprecheraufnahme · robot/level-08-briefing.mp3 · 18,58 s.
 
 **Suno-Stil**
 
@@ -529,7 +531,7 @@ The bridge crews are on the air. One just held a recovered pump up to the camera
 
 #### Boss-Intro · Intro Veshkorn
 
-Roboteraufnahme · robot/level-08-intro.mp3 · 31,58 s.
+Sprecheraufnahme · robot/level-08-intro.mp3 · 23,24 s.
 
 **Suno-Stil**
 
@@ -553,7 +555,7 @@ Contact confirmed. Veshkorn… the Rumour Carrier. We know that fanfare from his
 
 #### Boss-Outro · Outro Veshkorn
 
-Roboteraufnahme · robot/level-08-outro.mp3 · 24,98 s.
+Sprecheraufnahme · robot/level-08-outro.mp3 · 18,91 s.
 
 **Suno-Stil**
 
@@ -579,7 +581,7 @@ Die drei vorläufigen Aufnahmen verwenden Kokoro am_onyx als Roboterstimme. Die 
 
 #### Level-Briefing · No Weight on the Scales
 
-Roboteraufnahme · robot/level-09-briefing.mp3 · 30,26 s.
+Sprecheraufnahme · robot/level-09-briefing.mp3 · 22,20 s.
 
 **Suno-Stil**
 
@@ -616,7 +618,7 @@ Follow the address on the manifest, Pilot.
 
 #### Boss-Intro · Intro Neravoss
 
-Roboteraufnahme · robot/level-09-intro.mp3 · 32,21 s.
+Sprecheraufnahme · robot/level-09-intro.mp3 · 24,36 s.
 
 **Suno-Stil**
 
@@ -650,7 +652,7 @@ Break the guard on that hold.
 
 #### Boss-Outro · Outro Neravoss
 
-Roboteraufnahme · robot/level-09-outro.mp3 · 24,17 s.
+Sprecheraufnahme · robot/level-09-outro.mp3 · 18,20 s.
 
 **Suno-Stil**
 
@@ -682,7 +684,7 @@ Der Gebührenzöllner · The Toll Tyrant
 
 #### Level-Briefing · The Crystal Passage
 
-Roboteraufnahme · robot/level-10-briefing.mp3 · 21,12 s.
+Sprecheraufnahme · robot/level-10-briefing.mp3 · 16,74 s.
 
 **Suno-Stil**
 
@@ -698,7 +700,7 @@ Die Saatgutfrachter warten vor der Passage. Ein Sanitätsschiff steht zwischen i
 
 #### Boss-Intro · A Price for Every Call
 
-Roboteraufnahme · robot/level-10-intro.mp3 · 27,26 s.
+Sprecheraufnahme · robot/level-10-intro.mp3 · 20,11 s.
 
 **Suno-Stil**
 
@@ -714,7 +716,7 @@ Das ist Thalverik, der Gebührenzöllner. Er hat früher Schiffe durch diese Pas
 
 #### Boss-Outro · One More Ship Through
 
-Roboteraufnahme · robot/level-10-outro.mp3 · 21,98 s.
+Sprecheraufnahme · robot/level-10-outro.mp3 · 16,51 s.
 
 **Suno-Stil**
 
@@ -738,7 +740,7 @@ Der Vielgesichtige · The Many-Faced
 
 #### Level-Briefing · Thirty Pilots
 
-Roboteraufnahme · robot/level-11-briefing.mp3 · 21,02 s.
+Sprecheraufnahme · robot/level-11-briefing.mp3 · 16,95 s.
 
 **Suno-Stil**
 
@@ -754,7 +756,7 @@ Die Ratsstation hat uns zum Namensaufruf eingeladen. Das Register zählt Tausend
 
 #### Boss-Intro · The Simulated Majority
 
-Roboteraufnahme · robot/level-11-intro.mp3 · 23,64 s.
+Sprecheraufnahme · robot/level-11-intro.mp3 · 18,04 s.
 
 **Suno-Stil**
 
@@ -770,7 +772,7 @@ Da ist Skorveth, der Vielgesichtige. In seinen Trainingskernen lernten Piloten f
 
 #### Boss-Outro · The Actual Voters
 
-Roboteraufnahme · robot/level-11-outro.mp3 · 22,08 s.
+Sprecheraufnahme · robot/level-11-outro.mp3 · 16,24 s.
 
 **Suno-Stil**
 
@@ -790,7 +792,7 @@ Der Pfadvergifter · The Route Poisoner
 
 #### Level-Briefing · The Missing Check-In
 
-Roboteraufnahme · robot/level-12-briefing.mp3 · 19,80 s.
+Sprecheraufnahme · robot/level-12-briefing.mp3 · 15,57 s.
 
 **Suno-Stil**
 
@@ -806,7 +808,7 @@ Die Bake des Rettungsschiffs sendet noch. Unsere nächste Station sieht ihr Lich
 
 #### Boss-Intro · The Route Through Nowhere
 
-Roboteraufnahme · robot/level-12-intro.mp3 · 27,05 s.
+Sprecheraufnahme · robot/level-12-intro.mp3 · 20,57 s.
 
 **Suno-Stil**
 
@@ -822,7 +824,7 @@ Azhrel, der Pfadvergifter. Dieses Schiff zeichnete die ersten Sprungkarten am Ra
 
 #### Boss-Outro · The Way the Light Came
 
-Roboteraufnahme · robot/level-12-outro.mp3 · 23,14 s.
+Sprecheraufnahme · robot/level-12-outro.mp3 · 17,58 s.
 
 **Suno-Stil**
 
