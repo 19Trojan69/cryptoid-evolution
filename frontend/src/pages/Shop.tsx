@@ -27,7 +27,7 @@ import { accountSelection, loadAccountSave, localInventory, mutateAccountInvento
 import { usePayments } from "../hooks/usePayments";
 import { axiosClient, PI_ACCESS_TOKEN_KEY } from "../lib/axiosClient.ts";
 import { BEST_SCORE_KEY, HIGHEST_SECTOR_KEY, TOTAL_DESTROYED_KEY } from "../lib/localRecordKeys";
-import { buyStandardShip, fleetCount, ownedShipInventoryColor, playerSkins, readShipFleet, selectedShip, shardBalance, shipFactoryPaint, shipSaveNetwork, standardHullAvailable, ADMIN_SHIP_SKIN_KEY, ADMIN_SHIP_STAGE_KEY, ADMIN_START_SECTOR_KEY, SHARD_BALANCE_KEY, SHIP_COLORS_KEY, SHIP_FLEET_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY, type ShipFleet } from "./shipFleet";
+import { buyStandardShip, fleetCount, ownedShipInventoryColor, playerSkins, readShipFleet, saveGuestShipSelection, selectedShip, shardBalance, shipPaintForSelection, shipSaveNetwork, standardHullAvailable, ADMIN_SHIP_SKIN_KEY, ADMIN_SHIP_STAGE_KEY, ADMIN_START_SECTOR_KEY, SHARD_BALANCE_KEY, SHIP_COLORS_KEY, SHIP_FLEET_KEY, SHIP_OWNED_KEY, type PlayerColorId, type ShipFleet } from "./shipFleet";
 import { ownedShipStage, selectedShipStage, type ShipStage } from "./shipEvolution";
 import { standardHullInventoryColor } from '../../../backend/src/shipLivery.ts';
 
@@ -306,6 +306,7 @@ const Shop = () => {
   const [catalogFailed, setCatalogFailed] = useState(false);
   const [catalogAttempt, setCatalogAttempt] = useState(0);
   const [inventory, setInventory] = useState<Inventory | null>(null);
+  const equippedStage = selectedShipStage(selected.skin.sprite, inventory?.ownedShipUpgrades, account?.shipStage);
   const [loadoutMessage, setLoadoutMessage] = useState("");
   const [shipQuery, setShipQuery] = useState("");
   const [shipFilter, setShipFilter] = useState<"all" | "owned" | "available">("all");
@@ -372,10 +373,9 @@ const Shop = () => {
     setShards(purchase.balance);
     setHangarMessage({ ship: previewSkin.name, status: "Owned", count: fleetCount(purchase.fleet, previewSkin.id) });
   };
-  const equipShip = (skin: typeof playerSkins[number], stage: ShipStage) => {
-    const inventoryColor = ownedShipInventoryColor(visibleFleet, skin.id);
-    if (!inventoryColor) return;
-    const color = shipFactoryPaint(skin.id);
+  const equipShip = (skin: typeof playerSkins[number], stage: ShipStage, paint: PlayerColorId) => {
+    if (!ownedShipInventoryColor(visibleFleet, skin.id)) return;
+    const color = shipPaintForSelection(skin.id, paint, visibleFleet);
     if (adminMode) {
       sessionStorage.setItem(ADMIN_SHIP_SKIN_KEY, skin.id);
       sessionStorage.setItem(ADMIN_SHIP_STAGE_KEY, String(stage));
@@ -385,9 +385,10 @@ const Shop = () => {
     }
     if (user) {
       if (!account) { setAccountError("Account save is loading or unavailable."); return; }
-      void accountCommand({ action: "select", skin: skin.id, color: inventoryColor, shipStage: stage }); return;
+      void accountCommand({ action: "select", skin: skin.id, color: color.id, shipStage: stage }); return;
     }
-    localStorage.setItem(SHIP_SKIN_KEY, skin.id);
+    try { saveGuestShipSelection(localStorage, skin.id, color.id); }
+    catch { setHangarMessage("Could not save loadout. Please retry."); return; }
     setSelected({ skin, color });
     setHangarMessage({ ship: skin.name, status: "EQUIPPED" });
   };
@@ -670,6 +671,9 @@ const Shop = () => {
       {(shopView === "hangar" || shopView === "shop") && <section className={`ship-selector ship-selector-${shopView}`} aria-labelledby="hangar-heading">
         {shipSaveNetwork === "testnet" && <p className="ship-mainnet-notice" role="note">{t("Advanced and Elite upgrades will be available in the Mainnet app. The corresponding NFT is included.")}</p>}
         <div className="ship-panel-heading"><h2 id="hangar-heading">{t(shopView === "hangar" ? "Your fleet" : "Available ships")}</h2><strong className="shard-balance">◆ {number(displayedShards)} <small>{t("Shards")}</small></strong></div>
+        {authReady && !adminMode && (!user || account && inventory) && <p className="fleet-equipped" role="status">
+          <strong>{t("Selected")}</strong> · {selected.skin.name} · {["STANDARD", "ADVANCED", "ELITE"][equippedStage - 1]} · {t(selected.color.name)}
+        </p>}
         <div className="fleet-toolbar">
           <label>{t("Find a ship")}<input type="search" value={shipQuery} placeholder={t("Search ship name")} onChange={event => { setShipQuery(event.target.value); setShopTarget(null); }} /></label>
           <div className="fleet-filters" role="group" aria-label={t("Available ships")}>{(["all", "owned", "available"] as const).map(filter => <button type="button" key={filter} aria-pressed={shipFilter === filter} onClick={() => { setShipFilter(filter); setShopTarget(null); }}>{t(filter === "all" ? "All ships" : filter === "owned" ? "Owned ships" : "Available with Shards")}</button>)}</div>
@@ -692,12 +696,12 @@ const Shop = () => {
         <div className="fleet-scroll-list">
           {shipSearchOptions.map(skin => <article id={`fleet-${skin.id}`} key={`${shopView}:${skin.id}`} className="fleet-list-entry">
             <FleetShipPanel view={shopView} skin={skin} ownedStage={ownedShipStage(skin.sprite, inventory?.ownedShipUpgrades)} fleet={visibleFleet} shards={displayedShards} locale={locale} adminPreview={adminMode}
-              offers={offers.filter(offer => offer.kind === "ship_upgrade")} selectedSkinId={selected.skin.id} selectedStage={selectedShipStage(selected.skin.sprite, inventory?.ownedShipUpgrades, account?.shipStage)} selectionConfirmed={!user || adminMode || account?.shipStage !== undefined}
+              offers={offers.filter(offer => offer.kind === "ship_upgrade")} selectedSkinId={selected.skin.id} selectedColorId={selected.color.id} selectedStage={equippedStage} selectionConfirmed={!user || adminMode || account?.shipStage !== undefined}
               message={typeof hangarMessage === "object" && hangarMessage.ship === skin.name ? hangarMessageText : ""} t={t}
               requestedStage={shopTarget?.skin === skin.id ? shopTarget.stage : undefined}
               purchaseBusy={accountBusy || isLoading || Boolean(user && !account)}
               onBuy={() => purchaseStandard(skin)}
-              onEquip={stage => equipShip(skin, stage)}
+              onEquip={(stage, color) => equipShip(skin, stage, color)}
               onStage={stage => { if (adminMode) sessionStorage.setItem(ADMIN_SHIP_STAGE_KEY, String(stage)); }}
               onUpgrade={stage => { setShipQuery(""); setShipFilter("all"); setShopTarget({ skin: skin.id, stage }); setShopView("shop"); }} />
           </article>)}

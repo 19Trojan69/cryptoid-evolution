@@ -2,8 +2,8 @@ import { shipOverlayGeometry } from './shipOverlayGeometry.ts';
 import type { ShipStage } from './shipEvolution';
 import type { CSSProperties } from "react";
 import type { CryptoidClass } from "./cryptoidRoster";
-import { originalLivery, shipFactoryPaint, shipPaintMatchesHull as shipPaintAvailable, standardHullInventoryColor, vanguardMetallic } from '../../../backend/src/shipLivery.ts';
-export { shipFactoryPaint, shipPaintAvailable };
+import { hullCanUsePaint, originalLivery, shipFactoryPaint, shipPaintMatchesHull as shipPaintAvailable, shopShipPaints as playerColors, standardHullInventoryColor, vanguardMetallic } from '../../../backend/src/shipLivery.ts';
+export { playerColors, shipFactoryPaint, shipPaintAvailable };
 
 export const FLEET_IMAGE = "/ships/cryptoid-fleet.png";
 export type ShipSaveNetwork = "testnet" | "mainnet";
@@ -88,20 +88,6 @@ const legacyColors = [
   { id: "white", name: "Pearl White", hue: "0deg", glow: "#e9edf5" },
 ] as const;
 
-// Stable IDs are stored with each ship. Old paint IDs remain readable, but are
-// no longer offered for new purchases.
-export const playerColors = [
-  { id: "silver", name: "Silver", glow: "#b8c5ce", rgb: [184, 197, 206] },
-  { id: "gold", name: "Gold", glow: "#cda757", rgb: [205, 167, 87] },
-  { id: "anthracite", name: "Anthracite", glow: "#65717b", rgb: [101, 113, 123] },
-  { id: "bronze", name: "Bronze", glow: "#ae8557", rgb: [174, 133, 87] },
-  { id: "copper", name: "Copper", glow: "#bb795d", rgb: [187, 121, 93] },
-  { id: "metallic-blue", name: "Metallic Blue", glow: "#5483b2", rgb: [84, 131, 178] },
-  { id: "metallic-red", name: "Metallic Red", glow: "#ac5661", rgb: [172, 86, 97] },
-  { id: "metallic-green", name: "Metallic Green", glow: "#5c9b79", rgb: [92, 155, 121] },
-  { id: "pink", name: "Pink", glow: "#ce80aa", rgb: [206, 128, 170] },
-] as const;
-
 const metalColors = [...playerColors, ...legacyColors.filter(color => !playerColors.some(current => current.id === color.id))] as const;
 export const allPlayerColors = [...metalColors, originalLivery, vanguardMetallic] as const;
 
@@ -114,6 +100,12 @@ export const fleetCount = (fleet: ShipFleet, skin: PlayerSkinId, color?: PlayerC
 
 export const ownedShipInventoryColor = (fleet: ShipFleet, skin: PlayerSkinId) =>
   allPlayerColors.find(color => shipPaintAvailable(skin, color.id) && fleetCount(fleet, skin, color.id) > 0)?.id;
+
+export function shipPaintForSelection(skin: PlayerSkinId, colorId: string | null | undefined, fleet: ShipFleet) {
+  const paint = allPlayerColors.find(color => color.id === colorId);
+  return paint && paint.id !== standardHullInventoryColor && hullCanUsePaint(skin, paint.id, fleet[skin])
+    ? paint : shipFactoryPaint(skin);
+}
 
 export const readShipFleet = (raw: string | null, oldOwned: string | null, oldColors: string | null): ShipFleet => {
   if (raw !== null) {
@@ -150,13 +142,9 @@ export const buyStandardShip = (skinId: PlayerSkinId, fleet: ShipFleet, balance:
   return { fleet: { ...fleet, [skinId]: { [standardHullInventoryColor]: 1 } }, balance: balance - price };
 };
 
-// Do not leave a deducted balance or changed selection when browser storage fails.
-export function saveGuestShipPurchase(storage: Pick<Storage, 'getItem' | 'setItem' | 'removeItem'>, skin: PlayerSkinId, purchase: NonNullable<ReturnType<typeof buyStandardShip>>) {
-  if (!fleetCount(purchase.fleet, skin, standardHullInventoryColor)) throw new Error('Purchased ship is missing');
-  const values: [string, string][] = [
-    [SHIP_FLEET_KEY, JSON.stringify(purchase.fleet)],
-    [SHARD_BALANCE_KEY, String(purchase.balance)],
-  ];
+type ShipStorage = Pick<Storage, 'getItem' | 'setItem' | 'removeItem'>;
+
+function saveGuestShipFields(storage: ShipStorage, values: [string, string][]) {
   const previous = values.map(([key]) => [key, storage.getItem(key)] as const);
   try { for (const [key, value] of values) storage.setItem(key, value); }
   catch (error) {
@@ -165,6 +153,18 @@ export function saveGuestShipPurchase(storage: Pick<Storage, 'getItem' | 'setIte
     }
     throw error;
   }
+}
+
+export function saveGuestShipPurchase(storage: ShipStorage, skin: PlayerSkinId, purchase: NonNullable<ReturnType<typeof buyStandardShip>>) {
+  if (!fleetCount(purchase.fleet, skin, standardHullInventoryColor)) throw new Error('Purchased ship is missing');
+  saveGuestShipFields(storage, [
+    [SHIP_FLEET_KEY, JSON.stringify(purchase.fleet)],
+    [SHARD_BALANCE_KEY, String(purchase.balance)],
+  ]);
+}
+
+export function saveGuestShipSelection(storage: ShipStorage, skin: PlayerSkinId, paint: PlayerColorId) {
+  saveGuestShipFields(storage, [[SHIP_SKIN_KEY, skin], [SHIP_COLOR_KEY, paint]]);
 }
 
 export const savedShipColors = (raw: string | null): Partial<Record<PlayerSkinId, PlayerColorId>> => {
@@ -205,7 +205,8 @@ export const selectedShip = () => {
   }
   const fleet = readShipFleet(localStorage.getItem(SHIP_FLEET_KEY), localStorage.getItem(SHIP_OWNED_KEY), localStorage.getItem(SHIP_COLORS_KEY));
   const skin = stored && fleetCount(fleet, stored.id) ? stored : playerSkins[0];
-  return { skin, color: shipFactoryPaint(skin.id) };
+  const colorId = stored?.id === skin.id ? localStorage.getItem(SHIP_COLOR_KEY) : null;
+  return { skin, color: shipPaintForSelection(skin.id, colorId, fleet) };
 };
 
 // The 20 cells retain the reference sheet's row-major order.

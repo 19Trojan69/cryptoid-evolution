@@ -58,4 +58,14 @@ const fixedLiveryAccountChanges = [
     after: 'export const accountSelection = (save: AccountSave) => {\n  const skin = playerSkins.find(item => item.id === save.skin) ?? playerSkins[0];\n  return { skin, color: shipFactoryPaint(skin.id) };\n};',
   },
 ];
-export const restoreBalanceAccountChanges = source => restore(source, [...balanceAccountChanges, ...fixedLiveryAccountChanges]);
+const selectedPaintAccountChanges = [
+  {
+    before: 'import { playerSkins, readShipFleet, shardBalance, shipFactoryPaint, SHARD_BALANCE_KEY, SHIP_COLOR_KEY, SHIP_COLORS_KEY, SHIP_FLEET_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY } from "../pages/shipFleet";',
+    after: 'import { playerSkins, readShipFleet, shardBalance, shipPaintForSelection, SHARD_BALANCE_KEY, SHIP_COLOR_KEY, SHIP_COLORS_KEY, SHIP_FLEET_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY } from "../pages/shipFleet";',
+  },
+  {
+    before: '  return { skin, color: shipFactoryPaint(skin.id) };',
+    after: '  return { skin, color: shipPaintForSelection(skin.id, save.skin === skin.id ? save.color : null, save.fleet) };',
+  },
+];
+export const restoreBalanceAccountChanges = source => restore(source, [...balanceAccountChanges, ...fixedLiveryAccountChanges, ...selectedPaintAccountChanges]);

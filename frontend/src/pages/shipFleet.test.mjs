@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import { allPlayerColors, bossNozzleStyles, buySkin, buyStandardShip, enemyAppearance, enemySprite, EXTRA_STARTER_PRICE, fleetCount, migrateLegacyTestnetShipSave, ownedSkins, playerColors, playerSkins, readShipFleet, ownedShipInventoryColor, savedShipColors, selectedShip, shardBalance, SHARD_BALANCE_KEY, SHIP_COLOR_KEY, SHIP_COLORS_KEY, SHIP_FLEET_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY, shipSaveKey, shipSaveNetworkForHost, shipNozzleStyles, spriteVisualOffset, standardHullAvailable } from "./shipFleet.ts";
 import { reinforcementCount } from "./sectorManager.ts";
+import { saveGuestShipSelection } from "./shipFleet.ts";
 
 globalThis.sessionStorage ??= { getItem: () => null };
 
@@ -144,7 +145,28 @@ test("legacy copies stay owned and Standard Shards can buy distinct hulls once e
   assert.deepEqual(readShipFleet(JSON.stringify(second.fleet), null, null), second.fleet);
   const values = new Map([[SHIP_SKIN_KEY, "nova-wing"], [SHIP_COLOR_KEY, "bronze"], [SHIP_FLEET_KEY, JSON.stringify(second.fleet)], [SHIP_COLORS_KEY, '{"nova-wing":"bronze"}']]);
   globalThis.localStorage = { getItem: key => values.get(key) ?? null };
+  assert.equal(selectedShip().color.id, "bronze");
+});
+
+test("a paint change saves the exact guest ship without spending shards, including after a retry", () => {
+  const values = new Map([[SHIP_SKIN_KEY, "grey-scout"], [SHIP_COLOR_KEY, "grey"], [SHIP_OWNED_KEY, '["nova-wing"]'], [SHARD_BALANCE_KEY, "210"]]);
+  let fail = true;
+  const storage = {
+    getItem: key => values.get(key) ?? null,
+    removeItem: key => values.delete(key),
+    setItem: (key, value) => {
+      if (fail && key === SHIP_COLOR_KEY) { fail = false; throw Error("quota"); }
+      values.set(key, value);
+    }
+  };
+  globalThis.localStorage = storage;
+  assert.throws(() => saveGuestShipSelection(storage, "nova-wing", "metallic-blue"), /quota/);
+  assert.equal(selectedShip().skin.id, "grey-scout");
   assert.equal(selectedShip().color.id, "original");
+  saveGuestShipSelection(storage, "nova-wing", "metallic-blue");
+  assert.equal(selectedShip().skin.id, "nova-wing");
+  assert.equal(selectedShip().color.id, "metallic-blue");
+  assert.equal(values.get(SHARD_BALANCE_KEY), "210");
 });
 
 test("the free starter is already owned and cannot spend Shards on a second copy", () => {

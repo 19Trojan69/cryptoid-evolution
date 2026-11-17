@@ -19,7 +19,7 @@ return exports.default;};
 const Panel=loadPanel(false);
 const nodes=tree=>{const out=[];function walk(node){if(!node||typeof node!=='object')return;if(node.type)out.push(node);for(const child of [node.props?.children].flat(Infinity))walk(child);}walk(tree);return out;};
 const label=node=>typeof node==='string'?node:Array.isArray(node)?node.map(label).join(''):node?.props?label(node.props.children):'';
-const defaults=()=>({view:'shop',skin:fleet.playerSkins[0],focusStage:1,ownedStage:1,fleet:{'grey-scout':{silver:1}},shards:500,locale:'de',offers:hangarCatalog.filter(x=>x.kind==='ship_upgrade'),message:'',selectedSkinId:'nova-wing',t:x=>x,onStageChange:()=>{},onBuyStandard:()=>{},onEquipPreview:()=>{},onOpenShop:()=>{}});
+const defaults=()=>({view:'shop',skin:fleet.playerSkins[0],focusStage:1,ownedStage:1,fleet:{'grey-scout':{silver:1}},shards:500,locale:'de',offers:hangarCatalog.filter(x=>x.kind==='ship_upgrade'),message:'',selectedSkinId:'nova-wing',t:x=>x,onStageChange:()=>{},onColorChange:()=>{},onBuyStandard:()=>{},onEquipPreview:()=>{},onOpenShop:()=>{}});
 
 test('all versions use one preview with the corresponding stage, fixed livery and actual offer',()=>{
   for(const stage of [1,2,3]){
@@ -29,12 +29,35 @@ test('all versions use one preview with the corresponding stage, fixed livery an
     assert.deepEqual(buttons.map(x=>x.props['aria-pressed']),[stage===1,stage===2,stage===3]);
     buttons.forEach(x=>x.props.onClick());assert.deepEqual(clicks,[1,2,3]);
     const artwork=tree.filter(x=>x.type===ShipPreview);assert.equal(artwork.length,1);assert.equal(artwork[0].props.stage,stage);assert.equal(artwork[0].props.color,'original');
-    assert.equal(tree.some(x=>x.props['data-paint'] || x.props.className==='ship-one-colors'),false);
+    assert.equal(tree.some(x=>x.props.className==='ship-one-colors'),true);
     const metallic = nodes(Panel({...props,skin:fleet.playerSkins[18]})).find(x=>x.type===ShipPreview);
     assert.equal(metallic.props.color,'vanguard-metallic');
     assert.equal(tree.some(x=>x.props.className==='ship-evolution-stage-art'),false);
   if(stage>1)assert.ok(tree.some(x=>x.type==='p'&&label(x).includes(stage===2?'10% larger pickup radius':'20% larger pickup radius')));
   }
+});
+
+test('owned shop colors preview before selecting and only the confirmed paint is equipped', () => {
+  const previews = [], equips = [];
+  const props = { ...defaults(), selectedSkinId: 'grey-scout', selectedColorId: 'silver',
+    previewColorId: 'bronze', onColorChange: color => previews.push(color),
+    onEquipPreview: (stage, color) => equips.push({ stage, color }) };
+  const tree = nodes(Panel(props));
+  const palette = tree.find(node => node.props.className === 'ship-color-dots');
+  const swatches = nodes(palette).filter(node => node.type === 'button');
+  assert.equal(swatches.length, 10);
+  const bronze = swatches.find(node => node.props['aria-label'] === 'Bronze');
+  assert.equal(bronze.props['aria-pressed'], true);
+  bronze.props.onClick();
+  assert.deepEqual(previews, ['bronze']);
+  assert.equal(tree.find(node => node.type === ShipPreview).props.color, 'bronze');
+  const equip = tree.find(node => node.props.className?.includes('ship-equip-button'));
+  assert.equal(label(equip), 'Select');
+  equip.props.onClick();
+  assert.deepEqual(equips, [{ stage: 1, color: 'bronze' }]);
+  const confirmed = nodes(Panel({ ...props, selectedColorId: 'bronze', previewColorId: undefined }));
+  assert.equal(label(confirmed.find(node => node.props.className?.includes('ship-equip-button'))), 'EQUIPPED');
+  assert.equal(nodes(Panel({ ...props, fleet: {} })).some(node => node.props.className === 'ship-one-colors'), false);
 });
 
 test('shard balance, released hulls, busy state and Pi locks still gate purchases',()=>{

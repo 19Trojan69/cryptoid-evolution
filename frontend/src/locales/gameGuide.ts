@@ -633,9 +633,128 @@ const overviewRows: Record<string, readonly string[]> = {
   ],
 };
 
+const fleetAndNftKeys = [
+  "Each Standard model can be acquired once. Choose a paint for an owned ship in the ship shop and press Select. Starting or resuming uses the selected ship, stage and paint.",
+  "Free boss NFTs earned through confirmed wins and additional NFTs for purchase with Pi are planned for Mainnet.",
+  "Platinum and Diamond are planned to unlock for purchase after {platinumWins} and {diamondWins} confirmed wins against the same boss, respectively.",
+  "Ship NFTs are planned for the free Grey Scout, eligible Standard ships acquired with Shards, and eligible Advanced and Elite upgrades. Elite requires Advanced.",
+] as const;
+
+const fleetAndNftRows: Record<string, readonly string[]> = {
+  de: [
+    "Jedes Standardmodell kannst du einmal erwerben. Wähle im Schiffshop eine Lackierung für ein Schiff aus deiner Flotte und tippe auf „Auswählen“. Beim Starten und Fortsetzen werden Schiff, Stufe und Lackierung aus deiner letzten Auswahl geladen.",
+    "Für das Mainnet sind kostenlose Boss-NFTs für bestätigte Siege und zusätzliche NFTs zum Kauf mit Pi geplant.",
+    "Platinum soll nach {platinumWins} bestätigten Siegen gegen denselben Boss zum Kauf freigeschaltet werden, Diamond nach {diamondWins}.",
+    "Schiffs-NFTs sind für den kostenlosen Grey Scout, berechtigte Standard-Schiffe aus Shard-Käufen und berechtigte Advanced- und Elite-Upgrades geplant. Elite setzt Advanced voraus.",
+  ],
+  es: [
+    "Puedes adquirir cada modelo Standard una vez. En la tienda, elige una pintura para una nave de tu flota y pulsa «Seleccionar». Al iniciar o reanudar se usa la nave, la etapa y la pintura seleccionadas.",
+    "En Mainnet están previstos NFT gratuitos de jefes por victorias confirmadas y NFT adicionales que se podrán comprar con Pi.",
+    "Está previsto desbloquear la compra de Platinum y Diamond tras {platinumWins} y {diamondWins} victorias confirmadas contra el mismo jefe, respectivamente.",
+    "Están previstos NFT para la nave gratuita Grey Scout, las naves Standard elegibles adquiridas con Shards y las mejoras Advanced y Elite elegibles. Elite requiere Advanced.",
+  ],
+  zh: [
+    "每种 Standard 飞船可获得一次。在飞船商店为已拥有的飞船挑选涂装，然后点击“选择”。开始或继续任务时会使用已选的飞船、阶段和涂装。",
+    "计划在 Mainnet 推出通过确认胜利免费获得的首领 NFT，以及可用 Pi 购买的其他 NFT。",
+    "计划在对同一首领取得 {platinumWins} 次和 {diamondWins} 次确认胜利后，分别解锁 Platinum 和 Diamond 的购买资格。",
+    "计划为免费 Grey Scout、符合条件且使用 Shards 获得的 Standard 飞船，以及符合条件的 Advanced 和 Elite 升级提供飞船 NFT。Elite 需要先获得 Advanced。",
+  ],
+  vi: [
+    "Mỗi mẫu Standard chỉ có thể sở hữu một lần. Trong cửa hàng tàu, hãy chọn màu sơn cho tàu bạn sở hữu rồi nhấn Chọn. Khi bắt đầu hoặc tiếp tục nhiệm vụ, trò chơi dùng tàu, cấp và màu sơn đã chọn.",
+    "Mainnet dự kiến có NFT trùm miễn phí từ các chiến thắng đã xác nhận và các NFT bổ sung có thể mua bằng Pi.",
+    "Dự kiến có thể mua Platinum sau {platinumWins} chiến thắng đã xác nhận trước cùng một trùm và Diamond sau {diamondWins} chiến thắng.",
+    "NFT tàu dự kiến dành cho Grey Scout miễn phí, tàu Standard đủ điều kiện mua bằng Shards và các nâng cấp Advanced và Elite đủ điều kiện. Elite yêu cầu có Advanced trước.",
+  ],
+  fr: [
+    "Chaque modèle Standard peut être acquis une fois. Dans la boutique, choisis une peinture pour un vaisseau que tu possèdes et appuie sur « Sélectionner ». Le vaisseau, le niveau et la peinture sélectionnés sont utilisés au lancement et à la reprise.",
+    "Des NFT de boss gratuits obtenus grâce à des victoires confirmées et d’autres NFT achetables en Pi sont prévus sur Mainnet.",
+    "L’achat des éditions Platinum et Diamond devrait se débloquer après respectivement {platinumWins} et {diamondWins} victoires confirmées contre le même boss.",
+    "Des NFT de vaisseau sont prévus pour le Grey Scout gratuit, les vaisseaux Standard éligibles acquis avec des Shards et les améliorations Advanced et Elite éligibles. Elite nécessite Advanced.",
+  ],
+  pt: [
+    "Cada modelo Standard pode ser adquirido uma vez. Na loja de naves, escolhe uma pintura para uma nave que já possuis e prime «Selecionar». Ao iniciar ou retomar, é usada a nave, o nível e a pintura selecionados.",
+    "Estão previstos NFT de chefes gratuitos por vitórias confirmadas e NFT adicionais para compra com Pi na Mainnet.",
+    "Está previsto desbloquear a compra de Platinum após {platinumWins} vitórias confirmadas contra o mesmo chefe e a de Diamond após {diamondWins}.",
+    "Estão previstos NFT de nave para o Grey Scout gratuito, naves Standard elegíveis adquiridas com Shards e melhorias Advanced e Elite elegíveis. Elite exige Advanced.",
+  ],
+  it: [
+    "Ogni modello Standard si può acquisire una volta. Nel negozio scegli una livrea per una nave della tua flotta e premi «Seleziona». All’avvio o alla ripresa vengono usati la nave, lo stadio e la livrea selezionati.",
+    "Per Mainnet sono previsti NFT gratuiti dei boss ottenibili con vittorie confermate e altri NFT acquistabili con Pi.",
+    "L’acquisto di Platinum e Diamond sarà sbloccato, secondo il piano, dopo rispettivamente {platinumWins} e {diamondWins} vittorie confermate contro lo stesso boss.",
+    "Sono previsti NFT per il Grey Scout gratuito, le navi Standard idonee acquisite con Shards e i potenziamenti Advanced ed Elite idonei. Elite richiede Advanced.",
+  ],
+  pl: [
+    "Każdy model Standard możesz zdobyć jeden raz. W sklepie wybierz malowanie statku ze swojej floty i naciśnij „Wybierz”. Rozpoczęcie lub wznowienie misji używa wybranego statku, poziomu i malowania.",
+    "Na Mainnet zaplanowano darmowe NFT bossów za potwierdzone zwycięstwa oraz dodatkowe NFT do kupienia za Pi.",
+    "Zakup Platinum i Diamond ma się odblokować odpowiednio po {platinumWins} i {diamondWins} potwierdzonych zwycięstwach nad tym samym bossem.",
+    "NFT statków są planowane dla darmowego Grey Scouta, kwalifikujących się statków Standard zdobytych za Shards oraz kwalifikujących się ulepszeń Advanced i Elite. Elite wymaga Advanced.",
+  ],
+  tr: [
+    "Her Standard model bir kez edinilebilir. Gemi mağazasında sahip olduğun bir gemi için boya seç ve Seç düğmesine bas. Görevi başlattığında veya sürdürdüğünde seçilen gemi, aşama ve boya kullanılır.",
+    "Mainnet için doğrulanmış zaferlerden kazanılan ücretsiz boss NFT'leri ve Pi ile satın alınabilen ek NFT'ler planlanıyor.",
+    "Aynı bossa karşı sırasıyla {platinumWins} ve {diamondWins} doğrulanmış zaferin ardından Platinum ve Diamond satın alımlarının açılması planlanıyor.",
+    "Ücretsiz Grey Scout, Shards ile edinilen uygun Standard gemiler ve uygun Advanced ve Elite yükseltmeleri için gemi NFT'leri planlanıyor. Elite için Advanced gerekir.",
+  ],
+  ru: [
+    "Каждую модель Standard можно получить один раз. В магазине выберите окраску для корабля из своего флота и нажмите «Выбрать». При начале или продолжении миссии используются выбранные корабль, ступень и окраска.",
+    "В Mainnet планируются бесплатные NFT боссов за подтверждённые победы и дополнительные NFT за Pi.",
+    "Покупку Platinum планируется открывать после {platinumWins} подтверждённых побед над тем же боссом, а Diamond — после {diamondWins}.",
+    "NFT кораблей планируются для бесплатного Grey Scout, подходящих кораблей Standard, полученных за Shards, и подходящих улучшений Advanced и Elite. Для Elite требуется Advanced.",
+  ],
+  hr: [
+    "Svaki model Standard možeš nabaviti jednom. U trgovini odaberi boju broda iz svoje flote i pritisni „Odaberi”. Pri pokretanju ili nastavku misije koriste se odabrani brod, stupanj i boja.",
+    "Za Mainnet su planirani besplatni NFT-ovi bossova nakon potvrđenih pobjeda i dodatni NFT-ovi za kupnju uz Pi.",
+    "Platinum se planira otključati za kupnju nakon {platinumWins} potvrđene pobjede protiv istog bossa, a Diamond nakon {diamondWins}.",
+    "NFT-ovi brodova planirani su za besplatni Grey Scout, prihvatljive brodove Standard nabavljene za Shards i prihvatljive nadogradnje Advanced i Elite. Elite zahtijeva Advanced.",
+  ],
+  cs: [
+    "Každý model Standard lze získat jednou. V obchodě vyber barvu pro loď ze své flotily a stiskni „Vybrat“. Při zahájení i pokračování mise se použije vybraná loď, stupeň a barva.",
+    "Pro Mainnet se plánují bezplatné NFT bossů za potvrzené výhry a další NFT za Pi.",
+    "Nákup Platinum se má odemknout po {platinumWins} potvrzených výhrách proti stejnému bossovi a nákup Diamond po {diamondWins}.",
+    "NFT lodí se plánují pro bezplatný Grey Scout, způsobilé lodě Standard získané za Shards a způsobilá vylepšení Advanced a Elite. Elite vyžaduje Advanced.",
+  ],
+  sk: [
+    "Každý model Standard možno získať raz. V obchode vyber farbu pre loď zo svojej flotily a stlač „Vybrať“. Pri začatí alebo pokračovaní misie sa použije vybraná loď, stupeň a farba.",
+    "Pre Mainnet sa plánujú bezplatné NFT bossov za potvrdené výhry a ďalšie NFT na nákup za Pi.",
+    "Nákup Platinum sa má odomknúť po {platinumWins} potvrdených výhrach proti tomu istému bossovi a nákup Diamond po {diamondWins}.",
+    "NFT lodí sa plánujú pre bezplatný Grey Scout, oprávnené lode Standard získané za Shards a oprávnené vylepšenia Advanced a Elite. Elite vyžaduje Advanced.",
+  ],
+  hu: [
+    "Minden Standard modell egyszer szerezhető meg. Az üzletben válassz festést a flottád egyik hajójához, majd nyomd meg a Kiválasztás gombot. Küldetés indításakor és folytatásakor a kiválasztott hajót, fokozatot és festést használod.",
+    "A Mainnetre megerősített győzelmekért járó ingyenes boss NFT-ket és Pi-ért megvásárolható további NFT-ket tervezünk.",
+    "A tervek szerint ugyanazon boss ellen {platinumWins} megerősített győzelem után a Platinum, {diamondWins} után a Diamond lesz megvásárolható.",
+    "Hajó-NFT-ket tervezünk az ingyenes Grey Scouthoz, a Shardsért szerzett jogosult Standard hajókhoz és a jogosult Advanced és Elite fejlesztésekhez. Az Elite feltétele az Advanced.",
+  ],
+  ro: [
+    "Fiecare model Standard poate fi obținut o singură dată. În magazin, alege o culoare pentru o navă din flota ta și apasă „Selectează”. La pornire sau reluare se folosesc nava, nivelul și culoarea selectate.",
+    "Pentru Mainnet sunt planificate NFT-uri gratuite ale șefilor pentru victorii confirmate și NFT-uri suplimentare care pot fi cumpărate cu Pi.",
+    "Achiziția Platinum și Diamond este planificată să se deblocheze după {platinumWins}, respectiv {diamondWins} victorii confirmate împotriva aceluiași șef.",
+    "Sunt planificate NFT-uri de nave pentru Grey Scout gratuit, navele Standard eligibile obținute cu Shards și upgrade-urile Advanced și Elite eligibile. Elite necesită Advanced.",
+  ],
+  sr: [
+    "Сваки модел Standard може да се набави једном. У продавници изабери боју за брод из своје флоте и притисни „Изабери”. При покретању или наставку мисије користе се изабрани брод, степен и боја.",
+    "За Mainnet су планирани бесплатни NFT-ови босова за потврђене победе и додатни NFT-ови за куповину Pi-јем.",
+    "Куповина Platinum издања планирана је после {platinumWins} потврђене победе против истог боса, а Diamond издања после {diamondWins}.",
+    "Бродски NFT-ови планирани су за бесплатни Grey Scout, подобне Standard бродове набављене за Shards и подобне Advanced и Elite надоградње. Elite захтева Advanced.",
+  ],
+  uk: [
+    "Кожну модель Standard можна отримати один раз. У магазині обери фарбування для корабля зі свого флоту й натисни «Вибрати». При початку або продовженні місії використовуються обрані корабель, ступінь і фарбування.",
+    "Для Mainnet заплановані безкоштовні NFT босів за підтверджені перемоги та додаткові NFT, які можна буде купити за Pi.",
+    "Купівлю Platinum планують відкрити після {platinumWins} підтверджених перемог над тим самим босом, а Diamond — після {diamondWins}.",
+    "NFT кораблів заплановані для безкоштовного Grey Scout, відповідних кораблів Standard, отриманих за Shards, і відповідних поліпшень Advanced та Elite. Для Elite потрібен Advanced.",
+  ],
+  th: [
+    "ยาน Standard แต่ละแบบรับได้หนึ่งครั้ง ในร้านขายยาน ให้เลือกสีสำหรับยานที่มีอยู่แล้วและกดเลือก เมื่อเริ่มหรือเล่นต่อ เกมจะใช้ยาน ขั้น และสีที่เลือกไว้",
+    "มีแผนให้รับ NFT บอสฟรีจากชัยชนะที่ยืนยันแล้ว และซื้อ NFT เพิ่มเติมด้วย Pi บน Mainnet",
+    "มีแผนปลดล็อกการซื้อ Platinum หลังชนะบอสตัวเดิมที่ยืนยันแล้ว {platinumWins} ครั้ง และ Diamond หลัง {diamondWins} ครั้ง",
+    "มีแผนออก NFT ยานสำหรับ Grey Scout ฟรี ยาน Standard ที่เข้าเงื่อนไขและได้มาด้วย Shards รวมถึงอัปเกรด Advanced และ Elite ที่เข้าเงื่อนไข รุ่น Elite ต้องมี Advanced ก่อน",
+  ],
+};
+
 export const gameGuideTranslations = Object.fromEntries(Object.entries(rows).map(([locale, row]) => [
   locale, {
     ...Object.fromEntries(keys.map((key, index) => [key, row[index]])),
     ...Object.fromEntries((overviewRows[locale] ?? []).map((value, index) => [overviewKeys[index], value])),
+    ...Object.fromEntries((fleetAndNftRows[locale] ?? []).map((value, index) => [fleetAndNftKeys[index], value])),
   },
 ]));

@@ -1,8 +1,9 @@
+import type { CSSProperties } from "react";
 import ShipPreview from "./ShipPreview";
 import PiPrice from "../components/PiPrice";
-import { fleetCount, shipFactoryPaint, standardHullAvailable, standardShipPrice, type ShipFleet } from "./shipFleet";
+import { allPlayerColors, fleetCount, playerColors, shipFactoryPaint, shipPaintAvailable, shipPaintForSelection, standardHullAvailable, standardShipPrice, type PlayerColorId, type ShipFleet } from "./shipFleet";
 import { stagePickupRadiusBonus, type ShipStage } from "./shipEvolution";
-import { vanguardMetallic } from '../../../backend/src/shipLivery.ts';
+import { standardHullInventoryColor, vanguardMetallic } from '../../../backend/src/shipLivery.ts';
 import { shipNftEditions } from "../../../backend/src/shipNftCatalog";
 import { shipNftCopy } from "../locales/shipNft";
 import { shipNftMainnetVisible } from "./shipNftVisibility";
@@ -24,12 +25,15 @@ type Props = {
   purchaseBusy?: boolean;
   message: string;
   selectedSkinId: string;
+  selectedColorId?: PlayerColorId;
   selectedStage?: ShipStage;
+  previewColorId?: PlayerColorId;
   selectionConfirmed?: boolean;
   t: (source: string) => string;
   onStageChange: (stage: ShipStage) => void;
+  onColorChange: (color: PlayerColorId) => void;
   onBuyStandard: () => void;
-  onEquipPreview: (stage: ShipStage) => void;
+  onEquipPreview: (stage: ShipStage, color: PlayerColorId) => void;
   onOpenShop: (stage: ShipStage) => void;
 };
 
@@ -38,7 +42,7 @@ const stageLabel = (stage: ShipStage) => shipNftEditions[stage - 1].toUpperCase(
 export default function ShipSelectionPanel({
   view, skin, focusStage, ownedStage, fleet, shards, locale, offers,
   adminPreview,
-  purchaseBusy, message, selectedSkinId, selectedStage = 1, selectionConfirmed = true, t, onStageChange,
+  purchaseBusy, message, selectedSkinId, selectedColorId, selectedStage = 1, previewColorId, selectionConfirmed = true, t, onStageChange, onColorChange,
   onBuyStandard, onEquipPreview, onOpenShop,
 }: Props) {
   const hullCount = fleetCount(fleet, skin.id);
@@ -54,6 +58,13 @@ export default function ShipSelectionPanel({
   const advancedOffer = offerFor(2);
   const factoryPaint = shipFactoryPaint(skin.id);
   const metallic = factoryPaint.id === vanguardMetallic.id;
+  const showPaint = view === "shop" && hullCount > 0 && !adminPreview;
+  const selectedPaint = shipPaintForSelection(skin.id, selectedSkinId === skin.id ? selectedColorId : undefined, fleet);
+  const color = showPaint && previewColorId ? shipPaintForSelection(skin.id, previewColorId, fleet) : selectedPaint;
+  const basePaints = [...playerColors, factoryPaint];
+  const paints = showPaint ? [...basePaints, ...allPlayerColors.filter(paint =>
+    paint.id !== standardHullInventoryColor && shipPaintAvailable(skin.id, paint.id)
+    && !basePaints.some(base => base.id === paint.id) && fleetCount(fleet, skin.id, paint.id) > 0)] : [];
   const description = stage === 1 ? t("Single fire. No free enemy projectile hits. An active shield protects against shots and ship collisions.") : t(focusedOffer?.description ?? "");
   const stageOwned = hullCount > 0 && ownedStage >= stage;
   const locked = stage === 1 ? !standardAvailable : !stageOwned;
@@ -69,7 +80,7 @@ export default function ShipSelectionPanel({
     : attributes.role === "rapid" ? t("Faster automatic firing is this hull's main advantage.")
       : t("Balanced shot strength and firing cadence.");
 
-  const equipped = selectedSkinId === skin.id && stage === selectedStage && selectionConfirmed;
+  const equipped = selectedSkinId === skin.id && stage === selectedStage && color.id === selectedPaint.id && selectionConfirmed;
   const canEquip = Boolean(adminPreview || stageOwned);
   const showPurchase = view === "shop" && !adminPreview && (stage > 1 || !hullCount || shipNftMainnetVisible);
 
@@ -86,14 +97,22 @@ export default function ShipSelectionPanel({
         <h3>{skin.name} <small>· {stageLabel(stage)}{metallic && ` · ${factoryPaint.name}`}</small></h3>
         <strong className="ship-stage-status" data-owned={stageOwned}>{status}{stage === 1 && hullCount > 0 ? ` ×${hullCount}` : ""}</strong>
       </div>
-      <div className="ship-one-art-wrap" role="img" aria-label={`${skin.name} · ${stageLabel(stage)}${metallic ? ` · ${factoryPaint.name}` : ''}`}>
+      <div className="ship-one-art-wrap" role="img" aria-label={`${skin.name} · ${stageLabel(stage)} · ${t(color.name)}`}>
         <span className="ship-one-art-frame">
           <span className="ship-one-art">
-            <ShipPreview sprite={skin.sprite} color={factoryPaint.id} stage={stage} />
+            <ShipPreview sprite={skin.sprite} color={color.id} stage={stage} />
           </span>
         </span>
       </div>
       <div className="ship-configuration-summary">
+        {showPaint && <div className="ship-one-colors">
+          <div className="ship-one-colors-heading"><strong>{t("Color variants")}</strong><span>{t(color.name)}</span></div>
+          <div className="ship-color-dots" role="group" aria-label={t("Color variants")}>
+            {paints.map(paint => <button key={paint.id} type="button" aria-pressed={paint.id === color.id}
+              aria-label={t(paint.name)} title={t(paint.name)} style={{ "--paint": paint.glow } as CSSProperties}
+              onClick={() => onColorChange(paint.id)}><span aria-hidden="true">{paint.id === color.id ? "✓" : ""}</span></button>)}
+          </div>
+        </div>}
         {showPurchase && <div className="ship-inline-purchase">
           {locked && <p className="ship-lock-notice"><strong>{t("Purchases locked")}</strong> · <span className="mainnet-ready-badge">{t("MAINNET READY")}</span></p>}
           {(stage > 1 || !hullCount) && <span className="ship-purchase-price">{stage === 1
@@ -135,9 +154,9 @@ export default function ShipSelectionPanel({
     </div>
     {(view === "hangar" || adminPreview || canEquip) && <div className="ship-one-checkout">
       {adminPreview
-        ? <button className="button button-secondary" type="button" onClick={() => onEquipPreview(stage)}>{t("Equip for next mission")}</button>
+        ? <button className="button button-secondary" type="button" onClick={() => onEquipPreview(stage, color.id)}>{t("Equip for next mission")}</button>
         : <>
-          {canEquip && <button className="button button-secondary ship-equip-button" type="button" onClick={() => onEquipPreview(stage)} disabled={equipped || purchaseBusy}>{t(equipped ? "EQUIPPED" : "Select")}</button>}
+          {canEquip && <button className="button button-secondary ship-equip-button" type="button" onClick={() => onEquipPreview(stage, color.id)} disabled={equipped || purchaseBusy}>{t(equipped ? "EQUIPPED" : "Select")}</button>}
           {view === "hangar" && ownedStage < 3 && <button className="button button-secondary ship-upgrade-button" type="button" onClick={() => onOpenShop(stage > ownedStage ? stage : ownedStage < 2 ? 2 : 3)}>{t("Shop")} · {stageLabel(stage > ownedStage ? stage : ownedStage < 2 ? 2 : 3)} ›</button>}
           {view === "hangar" && !canEquip && stage <= ownedStage && <button className="ship-standard-return" type="button" onClick={() => onStageChange(ownedStage)}>{stageLabel(ownedStage)} ›</button>}
         </>}

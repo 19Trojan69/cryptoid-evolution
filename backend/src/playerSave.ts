@@ -2,9 +2,9 @@ import type { CombatCheckpoint } from "./combatCheckpoint";
 import type { BossIntermission } from './bossIntermission';
 import type { MissionPowerActivation, SingleUseMissionPower } from "./missionPower";
 import { MAX_MISSION_HEARTS, cappedSnapshot, maxMissionHearts } from "./lifeRules";
-import { originalLivery, shipPaintMatchesHull, vanguardMetallic } from './shipLivery';
+import { hullCanUsePaint, originalLivery, shipPaintMatchesHull, shopShipPaints, vanguardMetallic } from './shipLivery';
 export const standardShips = ["grey-scout", "nova-wing", "solar-lance", "dark-delta", "gold-streak", "iron-guard", "vector", "verdant", "storm-wing", "red-comet", "twin-core", "orbit-arc", "night-guard", "striker", "cargo-hawk", "ring-flare", "sky-breaker", "olive-fortress", "pi-vanguard", "core-carrier"];
-export const shipColors = ["silver", "gold", "anthracite", "bronze", "copper", "metallic-blue", "metallic-red", "metallic-green", "pink", "grey", "violet", "cyan", "rose", "amber", "ruby", "scarlet", "coral", "orange", "lemon", "lime", "emerald", "mint", "teal", "ice", "azure", "cobalt", "indigo", "magenta", "white", originalLivery.id, vanguardMetallic.id];
+export const shipColors = [...shopShipPaints.map(paint => paint.id), "grey", "violet", "cyan", "rose", "amber", "ruby", "scarlet", "coral", "orange", "lemon", "lime", "emerald", "mint", "teal", "ice", "azure", "cobalt", "indigo", "magenta", "white", originalLivery.id, vanguardMetallic.id];
 export const shipPaintAvailable = (skin: string, color: unknown): color is string =>
   typeof color === 'string' && shipColors.includes(color) && shipPaintMatchesHull(skin, color);
 export type Fleet = Record<string, Record<string, number>>;
@@ -26,8 +26,7 @@ export const shipForSprite = (sprite: number) => standardShips[sprite === 0 ? 1 
 export const spriteForShip = (skin: string) => { const index = standardShips.indexOf(skin); return index >= 0 && index < 2 ? 1 - index : index; };
 export function validSelection(s: Pick<PlayerSave, 'fleet'>, skin: unknown, color: unknown) {
   if (typeof skin !== 'string' || !standardShips.includes(skin) || !shipPaintAvailable(skin, color)) return false;
-  const hull = s.fleet[skin];
-  return color === originalLivery.id ? Object.values(hull ?? {}).some(count => count > 0) : (hull?.[color] ?? 0) > 0;
+  return hullCanUsePaint(skin, color, s.fleet[skin]);
 }
 const integer = (value: unknown, max: number) => typeof value === "number" && Number.isSafeInteger(value) && value >= 0 && value <= max;
 export function readSnapshot(input: unknown): Snapshot | null {

@@ -28,16 +28,18 @@ test('confirmed Standard purchases add ownership and deduct once without changin
  assert.deepEqual({skin:h.profile().skin,color:h.profile().color,shipStage:h.profile().shipStage},before);
 });
 
-test('every owned stage can be explicitly selected and survives a new or resumed account start',async()=>{
+test('every owned stage and the selected paint survive a new or resumed account start',async()=>{
  const h=await prepared();upgrades(h);Object.assign(h.profile(),{version:1,legacyImported:true});
  for(const stage of [3,1,2]){
-  const selected=await choose(h,stage);assert.equal(selected.code,200);assert.equal(selected.body.save.shipStage,stage);
+  const selected=await choose(h,stage,{color:'bronze'});assert.equal(selected.code,200);assert.equal(selected.body.save.shipStage,stage);
   const started=await h.call('hangar','/start',{action:'new',version:h.profile().version,startKey:`selected-stage-${stage}-run-key`,rulesVersion:2});
   assert.equal(started.code,200);assert.equal(started.body.shipStage,stage);assert.equal(started.body.profile.shipStage,stage);
+  assert.equal(started.body.profile.skin,'grey-scout');assert.equal(started.body.profile.color,'bronze');
   assert.equal(started.body.ownedShipUpgrades.length,2);
   h.profile().mission={sector:1,phase:'normal',rulesVersion:2,snapshot:{...firstMissionSnapshot(3),score:100,shards:7},savedAt:new Date().toISOString()};
   const resumed=await h.call('hangar','/start',{action:'resume',version:h.profile().version,startKey:`selected-stage-${stage}-resume-key`,rulesVersion:2});
   assert.equal(resumed.code,200);assert.equal(resumed.body.shipStage,stage);assert.equal(resumed.body.checkpoint.score,100);assert.equal(resumed.body.checkpoint.shards,7);
+  assert.equal(resumed.body.profile.skin,'grey-scout');assert.equal(resumed.body.profile.color,'bronze');
  }
 });
 
@@ -53,21 +55,22 @@ test('selection rejects unpaid, orphan, foreign-hull and other-network upgrades 
  }
 });
 
-test('invalid stages, unowned paint and stale versions never change the confirmed selection',async()=>{
+test('invalid stages, unowned legacy paint and stale versions never change the confirmed selection',async()=>{
  const h=await prepared();upgrades(h);
  for(const stage of [0,4,1.5,'3',null])assert.equal((await choose(h,stage)).code,400);
- assert.equal((await choose(h,3,{color:'gold'})).code,403);
+ assert.equal((await choose(h,3,{color:'cyan'})).code,403);
  assert.equal((await choose(h,3,{version:99})).code,409);
  assert.equal(h.profile().shipStage,1);
 });
 
-test('existing hulls can equip their original livery at an owned stage without buying again',async()=>{
+test('existing hulls can equip a shop paint at an owned stage without buying again',async()=>{
  const h=await prepared();upgrades(h);h.profile().fleet['grey-scout']={silver:1};
  const before=structuredClone(h.profile().fleet);
- const selected=await choose(h,3,{color:'silver'});
+ const selected=await choose(h,3,{color:'gold'});
  assert.equal(selected.code,200);
- assert.equal(selected.body.save.color,'silver');
+ assert.equal(selected.body.save.color,'gold');
  assert.equal(selected.body.save.shipStage,3);
+ assert.equal(selected.body.save.balance,0);
  assert.deepEqual(selected.body.save.fleet,before);
  assert.equal((await choose(h,3,{color:'vanguard-metallic'})).code,403);
  assert.equal((await choose(h,1,{skin:'nova-wing',color:'original'})).code,403);

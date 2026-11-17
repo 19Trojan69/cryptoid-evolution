@@ -15,6 +15,7 @@ import { hangarCatalog, START_POWER_DURATION_MS } from "../../../backend/src/han
 import { MAX_CHARGE_QUANTITY } from "../../../backend/src/chargePurchase";
 import { BOSS_STICKER_COUNT } from "../../../backend/src/rewardRules";
 import { shipNftEditions, shipNftMaxSupply } from "../../../backend/src/shipNftCatalog";
+import { premiumBossEditions } from "../../../backend/src/premiumBossNft";
 
 const powerSeconds = {
   shield: START_POWER_DURATION_MS.shield / 1_000,
@@ -22,11 +23,26 @@ const powerSeconds = {
   rapid: START_POWER_DURATION_MS.rapid / 1_000,
 };
 
+const shardPurchases = "Grey Scout is free. Use earned Shards for available Standard ships.";
+const fleetPaint = "Each Standard model can be acquired once. Choose a paint for an owned ship in the ship shop and press Select. Starting or resuming uses the selected ship, stage and paint.";
+const bossNftPlan = "Free boss NFTs earned through confirmed wins and additional NFTs for purchase with Pi are planned for Mainnet.";
+
 const topics = [
   {
     id: "overview", label: "Game description", title: "Defend Earth. Evolve your fleet.",
     intro: "Cryptoid Evolution is an arcade space shooter. Pilot your ship, defeat formations and bosses, collect boosts and build your fleet.",
-    details: ["Each level has nine visible Blocks, then a boss fight and a bonus round.", "The campaign has {levels} levels. The Galaxy map numbers the {stages} campaign stages in order.", "Your ship fires automatically. Move to dodge and line up your shots.", "Between levels, the summary shows bonus rewards, battle statistics and save status. Choose Continue game once saving is confirmed.", "Boss hearts restore one lost heart up to your armor limit. At full hearts, collecting one grants 50 Shards instead.", "Open Rewards to see linked Blocks, boss stickers, stars, chain milestones, bonus medals and your current service rank."],
+    details: [
+      "Each level has nine visible Blocks, then a boss fight and a bonus round.",
+      "The campaign has {levels} levels. The Galaxy map numbers the {stages} campaign stages in order.",
+      "Explore the route and discover the boss stations. The map marks planned mini-game stations.",
+      "Your ship fires automatically. Move to dodge and line up your shots.",
+      "Between levels, the summary shows bonus rewards, battle statistics and save status. Choose Continue game once saving is confirmed.",
+      "Boss hearts restore one lost heart up to your armor limit. At full hearts, collecting one grants 50 Shards instead.",
+      shardPurchases,
+      fleetPaint,
+      "Open Rewards to see linked Blocks, boss stickers, stars, chain milestones, bonus medals and your current service rank.",
+      bossNftPlan,
+    ],
   },
   {
     id: "visuals", label: "Illustrated guide", title: "Ships at a glance",
@@ -105,10 +121,11 @@ const topics = [
   },
   {
     id: "hangar", label: "Shop & hangar", title: "Expand your fleet",
-    intro: "Grey Scout is free. Use earned Shards for available Standard ships.",
+    intro: shardPurchases,
     details: [
       "The ship shop offers {hulls} Standard models. Grey Scout is the free starter.",
-      "Advanced and Elite upgrades will be available in the Mainnet app. The corresponding NFT is included.",
+      fleetPaint,
+      "Planned ship upgrade prices are {advancedPrice} Pi for Advanced and {elitePrice} Pi for Elite.",
     ],
   },
   {
@@ -116,7 +133,8 @@ const topics = [
     intro: "NFT issuance is planned for Mainnet. In-game collection cards can be saved as images.",
     details: [
       "Per boss, the Victory Edition has {victory} copies and is free after a confirmed win. The Holo Edition has {holo} copies at a planned price of {price} Pi each.",
-      "Each confirmed Mainnet ship acquisition or upgrade includes the NFT for that edition. Elite requires Advanced.",
+      "Platinum and Diamond are planned to unlock for purchase after {platinumWins} and {diamondWins} confirmed wins against the same boss, respectively.",
+      "Ship NFTs are planned for the free Grey Scout, eligible Standard ships acquired with Shards, and eligible Advanced and Elite upgrades. Elite requires Advanced.",
       "Planned ship upgrade prices are {advancedPrice} Pi for Advanced and {elitePrice} Pi for Elite.",
       "Each ship model has up to {standard} Standard, {advanced} Advanced and {elite} Elite NFTs.",
     ],
@@ -162,6 +180,7 @@ const GameGuide = ({ onClose, initialTopic, backLabel, onNavigate, nftPreviewAva
     ...powerSeconds, levels: BOSS_STICKER_COUNT, stages: MAX_DIFFICULTY_LEVEL,
     hulls: standardModelsAvailable,
     victory: number(bossNftEditions.victory.supply), holo: number(bossNftEditions.holo.supply),
+    platinumWins: number(premiumBossEditions.platinum.requiredWins), diamondWins: number(premiumBossEditions.diamond.requiredWins),
     price: pi(bossNftEditions.holo.pricePi), advancedPrice: pi(advancedOffer.pricePi), elitePrice: pi(eliteOffer.pricePi),
     standard: number(shipNftMaxSupply.Standard), advanced: number(shipNftMaxSupply.Advanced), elite: number(shipNftMaxSupply.Elite),
   };
@@ -201,7 +220,7 @@ const GameGuide = ({ onClose, initialTopic, backLabel, onNavigate, nftPreviewAva
           {topic.id === "collection" && !ownerTestnet && <li>{t("The first {count} boss cards are available to unlock.", { count: RELEASED_BOSS_CARDS })}</li>}
           {topic.details.map(detail => <li key={detail}>{t(detail, values)}</li>)}
           {topic.id === "hangar" && shipSaveNetwork === "testnet" && <>
-            <li>{t("With a connected Pi account, Testnet pilots can buy Twin Laser and Rapid Twin charges with Test-Pi. Verified owner access also opens Triple Laser, Plasma, start power-ups and armor.")}</li>
+            <li>{t("With a connected Pi account, regular Testnet pilots can buy Twin Laser and Rapid Twin charges with Test-Pi. Verified owner access also opens Triple Laser, Plasma, start power-ups, armor and ship upgrades.")}</li>
             <li>{t("Choose 1, 5 or 10 charges, or enter a quantity from 1 to {max} before confirming a Test-Pi purchase.", { max: MAX_CHARGE_QUANTITY })}</li>
           </>}
         </ul>
