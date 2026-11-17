@@ -60,7 +60,12 @@ test('startup adds recovery and moves the identical SDK/init after root while pr
   assert.equal(blob, 'c9f7cc2058c56c35f1a4d470f0451c8371c97b09');
   const sdk = /    <!-- Pi Network SDK -->[\s\S]*?    <\/script>\n\n/.exec(before)?.[0];
   assert.ok(sdk); assert.ok(html.includes(sdk));
-  assert.equal(html.replace(marker, '').replace(sdk, ''), before.replace(sdk, ''));
+  // The pinned fixture predates the Mainnet description.
+  const expected = before.replace(sdk, '').replace(
+    'defeat bosses, collect power-ups and earn Testnet rewards',
+    'defeat bosses, and collect power-ups',
+  );
+  assert.equal(html.replace(marker, '').replace(sdk, ''), expected);
   assert.ok(html.indexOf('id="cryptoid-startup-recovery"') < html.indexOf('https://sdk.minepi.com/pi-sdk.js'));
   assert.ok(html.indexOf('<div id="root">') < html.indexOf('https://sdk.minepi.com/pi-sdk.js'));
   assert.ok(html.indexOf('Pi.init(') < html.indexOf('src="/src/main.tsx"'));
