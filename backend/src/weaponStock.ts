@@ -1,5 +1,5 @@
 import { hangarCatalog } from './hangarCatalog';
-import { isTestnetWeaponPurchaseEnabled } from './paymentPolicy';
+import { weaponChargesSupported } from './paymentPolicy';
 import { chargeQuantity } from './chargePurchase';
 
 export const WEAPON_CHARGE_MS = 45_000;
@@ -11,8 +11,9 @@ export function creditWeaponOrders(stock: WeaponStock, orders: any[], network: s
   for (const order of orders) {
     const offer = hangarCatalog.find(item => item.id === order.product_id);
     if (!offer || offer.kind !== 'weapon' || !order.paid || order.cancelled || !order.pi_payment_id) continue;
-    if (network !== 'testnet' || !isTestnetWeaponPurchaseEnabled(offer, ownerTestnet)) continue;
-    if (order.payment_network !== 'Pi Testnet') continue;
+    if (!weaponChargesSupported(offer, network, ownerTestnet)) continue;
+    if (order.payment_network !== (network === 'testnet' ? 'Pi Testnet' : 'Pi Network')) continue;
+    if (network === 'mainnet' && (order.weapon_model !== 2 || !order.mainnet_receiver || order.to_address !== order.mainnet_receiver)) continue;
     if (next.credited.includes(order.pi_payment_id)) continue;
     const quantity = order.weapon_model === 2 ? chargeQuantity(order.quantity) : 2;
     if (!quantity) continue;

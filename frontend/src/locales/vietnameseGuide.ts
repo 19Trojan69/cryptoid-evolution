@@ -385,6 +385,7 @@ export const vietnameseGuideTranslations: Record<string, string> = {
   "Browser-Verteilung": "Phân bố trình duyệt",
   "Buy another for": "Mua thêm với giá",
   "Buy with Test-Pi": "Mua bằng Test-Pi",
+  "Buy with Pi": "Mua bằng Pi",
   "CAMPAIGN COMPLETE": "HOÀN THÀNH CHIẾN DỊCH",
   "Captain": "Đại úy",
   "Career Score adds verified completed runs. Best Run is the highest single run with its reached level. Profile level is separate. Earlier records remain in the previous lists.": "Điểm Sự nghiệp cộng các lượt chơi hoàn thành đã được xác minh. Lượt Tốt nhất là lượt có điểm cao nhất cùng cấp đã đạt. Cấp hồ sơ được tính riêng. Các thành tích cũ vẫn nằm trong danh sách trước đây.",

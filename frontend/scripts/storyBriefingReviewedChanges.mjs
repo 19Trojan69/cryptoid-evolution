@@ -1,3 +1,5 @@
+import { restoreMainnetTwinGameChanges } from './mainnetTwinReviewedChanges.mjs';
+
 // Restore exact story changes before the historical gameplay fingerprints.
 const changes = [
   {
@@ -187,6 +189,7 @@ const changes = [
 ];
 
 export function restoreStoryBriefingChanges(source) {
+  source = restoreMainnetTwinGameChanges(source);
   if (!source.includes('import StoryBriefing from "./story/StoryBriefing";')) return source;
   for (const { before, after } of changes) {
     if (source.split(after).length !== 2) throw Error("Expected one exact story briefing change");

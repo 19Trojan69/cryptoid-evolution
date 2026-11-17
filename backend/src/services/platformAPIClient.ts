@@ -12,6 +12,11 @@ const testnetPlatformAPIClient = env.pi_testnet_api_key
   ? createClient(env.pi_testnet_api_key)
   : null;
 
+export function mainnetIncomingPaymentWallet() {
+  const address = process.env.PI_MAINNET_INCOMING_WALLET_ADDRESS?.trim();
+  return env.pi_api_key.trim() && address && /^G[A-Z2-7]{55}$/.test(address) ? address : undefined;
+}
+
 export const platformAPIClientForRequest = (req: { headers?: Record<string, unknown> }) => {
   const requestedNetwork = String(req.headers?.["x-cryptoid-app-network"] || "").toLowerCase();
 

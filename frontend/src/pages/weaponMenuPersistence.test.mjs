@@ -5,7 +5,7 @@ import {createHash} from 'node:crypto';
 import {transformSync} from 'esbuild';
 import {automaticStartWeapon} from './weaponAutoReload.ts';
 import {hangarCatalog} from '../../../backend/src/hangarCatalog.ts';
-import {isTestnetWeaponPurchaseEnabled} from '../../../backend/src/paymentPolicy.ts';
+import {weaponChargesSupported} from '../../../backend/src/paymentPolicy.ts';
 import {restoreWeaponMenuGameChanges} from '../../scripts/weaponMenuReviewedChanges.mjs';
 import {weaponMenu} from '../../scripts/weaponReloadRecoveryHost.mjs';
 
@@ -16,7 +16,7 @@ assert.ok(start>0&&end>start);
 const effectCode=transformSync(source.slice(start,end),{loader:'tsx'}).code;
 function startHost(overrides={}) {
  const requests=[];
- const env={useEffect:fn=>fn(),stateRef:{current:{status:'playing',weaponSource:'standard',weaponTimers:[0,0,0,0,0,0]}},scoreRunRef:{current:'run-a'},accountRun:true,adminRunRef:{current:false},automaticStartRunRef:{current:null},activationRef:{current:null},weaponBusyRef:{current:false},autoReloadRef:{current:{5:true}},stockRef:{current:{weapon_plasma:19}},hangarCatalog,shipSaveNetwork:'testnet',ownerDiagnostics:true,isTestnetWeaponPurchaseEnabled,automaticStartWeapon,reloadRequestRef:{current:level=>{requests.push(level);return true;}},game:{status:'playing'},autoReload:{},weaponStock:{},...overrides};
+ const env={useEffect:fn=>fn(),stateRef:{current:{status:'playing',weaponSource:'standard',weaponTimers:[0,0,0,0,0,0]}},scoreRunRef:{current:'run-a'},accountRun:true,adminRunRef:{current:false},automaticStartRunRef:{current:null},activationRef:{current:null},weaponBusyRef:{current:false},autoReloadRef:{current:{5:true}},stockRef:{current:{weapon_plasma:19}},hangarCatalog,shipSaveNetwork:'testnet',ownerDiagnostics:true,weaponChargesSupported,automaticStartWeapon,reloadRequestRef:{current:level=>{requests.push(level);return true;}},game:{status:'playing'},autoReload:{},weaponStock:{},...overrides};
  const run=()=>new Function('env','with(env){'+effectCode+'}')(env);
  return {env,requests,run};
 }
@@ -32,6 +32,18 @@ test('the actual confirmed-run effect honors saved Auto once without polling or 
   const f=startHost(patch);f.run();assert.deepEqual(f.requests,[]);
  }
  const failed=startHost({reloadRequestRef:{current:()=>false}});failed.run();assert.equal(failed.env.automaticStartRunRef.current,'run-a','a denied automatic attempt does not become an API retry loop');
+});
+
+test('Mainnet checkout appears for Twin Laser only and Auto uses its confirmed stock', () => {
+ const before = weaponMenu({}, { network: 'mainnet' });
+ assert.equal(before.nodes.filter(node => node.type === 'WeaponPurchase').length, 0);
+ const enabled = weaponMenu({}, { network: 'mainnet', mainnetTwinPayments: true });
+ const purchases = enabled.nodes.filter(node => node.type === 'WeaponPurchase');
+ assert.deepEqual(purchases.map(node => [node.props.id, node.props.testnet, node.props.price]), [['weapon_twin', false, .1]]);
+ const host = startHost({ shipSaveNetwork: 'mainnet', autoReloadRef: { current: { 2: true, 3: true, 5: true } },
+   stockRef: { current: { weapon_twin: 3, weapon_rapid_twin: 1, weapon_plasma: 19 } } });
+ host.run(); host.run();
+ assert.deepEqual(host.requests, [2]);
 });
 
 test('the real drawer marks only its scrollable offer body for the existing route touch lock',()=>{

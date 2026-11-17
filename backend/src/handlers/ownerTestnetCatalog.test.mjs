@@ -363,6 +363,73 @@ test('owner Plasma charges activate for 45 seconds and replay one receipt withou
   assert.equal(next.code,200);assert.equal(next.body.weaponStock.weapon_plasma,1);
 });
 
+test('Mainnet Twin Laser requires the configured recipient and credits signed charges once', async t => {
+  const h = harness();
+  const posts = pi(t, h);
+  const receiver = `G${'A'.repeat(55)}`;
+  const otherWallet = `G${'B'.repeat(55)}`;
+  let configuredWallet;
+  t.mock.method(platform, 'mainnetIncomingPaymentWallet', () => configuredWallet);
+  const request = { network: 'mainnet' };
+  const catalog = options => h.call('hangar', '/catalog', null, { method: 'GET', ...options });
+  const id = 'mainnet-twin-order';
+  h.locals.payment = {
+    identifier: id, user_uid: 'pilot-a', direction: 'user_to_app', network: 'Pi Network',
+    to_address: receiver, amount: .5, metadata: { productId: 'weapon_twin', quantity: 5, weaponModel: 2 },
+    status: {}, transaction: { txid: 'verified-twin-transaction' },
+  };
+  const approve = (options = request) => h.call('payments', '/approve', { paymentId: id }, options);
+  assert.equal((await catalog(request)).body.mainnetTwinPayments, false);
+  assert.equal((await approve()).code, 403);
+  configuredWallet = receiver;
+  assert.equal((await catalog(request)).body.mainnetTwinPayments, true);
+  assert.equal((await catalog({ network: 'testnet' })).body.mainnetTwinPayments, false);
+  assert.equal((await approve({ network: 'testnet' })).code, 403);
+  h.locals.payment.to_address = otherWallet;
+  assert.equal((await approve()).code, 403);
+  h.locals.payment.to_address = receiver;
+  h.locals.payment.metadata.productId = 'weapon_rapid_twin';
+  h.locals.payment.amount = .8;
+  assert.equal((await approve()).code, 403);
+  assert.deepEqual(posts, []);
+  assert.equal(h.orders.length, 0);
+
+  h.locals.payment.metadata.productId = 'weapon_twin';
+  h.locals.payment.amount = .49;
+  assert.equal((await approve()).code, 400);
+  h.locals.payment.amount = .5;
+  assert.equal((await approve()).code, 200);
+  assert.equal(h.orders[0].mainnet_receiver, receiver);
+  assert.equal(h.orders[0].paid, false);
+  await h.call('progress', '/me', null, { method: 'GET', ...request });
+  const inventoryFor = options => h.call('hangar', '/inventory', null, { method: 'GET', ...options });
+  assert.deepEqual((await inventoryFor(request)).body.weaponStock, {});
+  const complete = () => h.call('payments', '/complete', { paymentId: id, txid: h.locals.payment.transaction.txid }, request);
+  h.locals.payment.status = { developer_approved: true, transaction_verified: false };
+  assert.equal((await complete()).code, 400);
+  h.locals.payment.status.transaction_verified = true;
+  h.locals.payment.to_address = otherWallet;
+  assert.equal((await complete()).code, 403);
+  h.locals.payment.to_address = receiver;
+  configuredWallet = undefined;
+  assert.equal((await complete()).code, 200);
+  assert.equal((await complete()).code, 200);
+  assert.deepEqual(posts, [`/v2/payments/${id}/approve`, `/v2/payments/${id}/complete`]);
+  assert.deepEqual((await inventoryFor(request)).body.weaponStock, { weapon_twin: 5 });
+  assert.deepEqual((await inventoryFor({ network: 'testnet' })).body.weaponStock, {});
+
+  const mainnet = h.docs[0].playerByNetwork.mainnet;
+  const start = await h.call('hangar', '/start', { action: 'new', version: mainnet.version, startKey: 'mainnet-twin-start-001', rulesVersion: 2 }, request);
+  assert.equal(start.code, 200);
+  h.docs[0].playerByNetwork.mainnet.mission = { sector: 1, phase: 'normal', snapshot: firstMissionSnapshot(3), combat: {}, savedAt: new Date().toISOString() };
+  const activation = { runId: start.body.scoreRunId, level: 2, requestId: 'mainnet-twin-activation-001' };
+  const activated = await h.call('hangar', '/weapon/activate', activation, request);
+  assert.equal(activated.code, 200);
+  assert.equal(activated.body.remainingMs, 45_000);
+  assert.deepEqual(activated.body.weaponStock, { weapon_twin: 4 });
+  assert.deepEqual((await h.call('hangar', '/weapon/activate', activation, request)).body, activated.body);
+});
+
 test('paid armor and one-mission power enter a normal saved run once and never a Mainnet run', async t => {
   owner(t);const h=harness();pi(t,h);
   await h.call('progress','/me',null,{method:'GET'});

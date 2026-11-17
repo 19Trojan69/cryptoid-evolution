@@ -55,7 +55,9 @@ test('real expiry still makes the same fallback/activation/stock decisions, incl
       if (c.next) state.weaponTimers[4] = 30000;
       const env = { state, purchasedWeaponDelta: c.pickup ? 0 : 16, pickupWeaponDelta: 16, ownerDiagnostics: false,
         autoReloadRef: { current: { 2: !!c.auto, 4: !!c.next } }, stockRef: { current: { weapon_twin: c.stock ?? 0 } }, shipSaveNetwork: 'testnet',
-        hangarCatalog: [{ kind: 'weapon', level: 2 }], isTestnetWeaponPurchaseEnabled: () => c.allowed !== false,
+        hangarCatalog: [{ kind: 'weapon', level: 2 }],
+        isTestnetWeaponPurchaseEnabled: () => c.allowed !== false,
+        weaponChargesSupported: () => c.allowed !== false,
         syncSelectedWeapon() {}, nextActiveWeapon, shouldAutoReload, createWeaponSpentNotice,
         reloadRequestRef: { current: level => { requests.push(level); return c.start ?? false; } }, weaponSpentRef: { current: null }, reloadPendingRef: { current: false }, setWeaponSpent() {}, forceScene: false };
       runExpiry(text)(env); return { env, requests, state };
@@ -173,7 +175,7 @@ test('exact reviewed changes restore the entire published controller, original b
   assert.equal(hash(original),'ab979a75eef6698b84a0f015f10c50dc513cd7f211f790624a09b3dc45697be3');
   assert.throws(()=>restoreBinaryWeaponGameChanges(source.replace('onShown={markWeaponSpentShown}','onShown={()=>{}}')),/one exact/);
   assert.notEqual(hash(restoreBinaryWeaponGameChanges(source.replace('watch: callback => window.setInterval(callback, 500)','watch: callback => window.setInterval(callback, 1000)'))),hash(original));
-  assert.throws(()=>restoreBinaryWeaponGameChanges(source.replace("stockRef.current, shipSaveNetwork === 'testnet'","stockRef.current, shipSaveNetwork === 'mainnet'")),/one exact/);
+  assert.throws(()=>restoreBinaryWeaponGameChanges(source.replace('weaponChargesSupported(reloadOffer, shipSaveNetwork, ownerDiagnostics)','true')),/one exact/);
   const oldBinary=original.split('\n').find(line=>line.includes('className="formation-data-stream"'));
   const newBinary=restoreQuietFeedbackGameChanges(source).split('\n').find(line=>line.includes('className="formation-data-stream"')).replace('&& <><div className="formation-data-stream"','&& <div className="formation-data-stream"').replace(/<\/div>\{weaponSpent && !levelIntro && <WeaponSpentNotice[\s\S]*$/, '</div>}');
   assert.equal(newBinary,oldBinary);

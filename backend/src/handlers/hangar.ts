@@ -4,7 +4,8 @@ import { randomUUID } from "node:crypto";
 import { armorBonusFromPaid, findOffer, hangarCatalog } from "../hangarCatalog";
 import "../types/session";
 import { canUseOwnerTestnetCatalog, isAdminMode, ownerTestnetOrderScope } from "../adminAccess";
-import { isTestnetWeaponPurchaseEnabled } from "../paymentPolicy";
+import { isTestnetWeaponPurchaseEnabled, weaponChargesSupported } from "../paymentPolicy";
+import { mainnetIncomingPaymentWallet } from "../services/platformAPIClient";
 import { rewardNetwork } from "../rewardNetwork";
 import { loadPlayerSave } from "./progress";
 import { selectedShipStage } from "../shipLoadout";
@@ -21,7 +22,10 @@ const weaponEnabledForRequest = (req: any, offer: typeof hangarCatalog[number], 
 
 export default function mountHangarEndpoints(router: Router) {
   mountMissionPowerEndpoints(router);
-  router.get("/catalog", (_req, res) => res.json({ offers: hangarCatalog }));
+  router.get("/catalog", (req, res) => res.json({
+    offers: hangarCatalog,
+    mainnetTwinPayments: !isTestnetRequest(req) && Boolean(mainnetIncomingPaymentWallet()),
+  }));
 
   router.get("/inventory", async (req, res) => {
     const uid = req.session.currentUser?.uid;
@@ -59,7 +63,7 @@ export default function mountHangarEndpoints(router: Router) {
     const offer = hangarCatalog.find(item => item.kind === 'weapon' && item.level === level);
     const network = rewardNetwork(req), key = `playerByNetwork.${network}`, stockKey = `weaponStockByNetwork.${network}`;
     const ownerTestnet = await canUseOwnerTestnetCatalog(req);
-    if (network !== 'testnet' || !isTestnetWeaponPurchaseEnabled(offer, ownerTestnet) || typeof requestId !== 'string' || !/^[a-zA-Z0-9-]{16,80}$/.test(requestId)) return res.status(400).json({ error: 'invalid_activation' });
+    if (!weaponChargesSupported(offer, network, ownerTestnet) || typeof requestId !== 'string' || !/^[a-zA-Z0-9-]{16,80}$/.test(requestId)) return res.status(400).json({ error: 'invalid_activation' });
     try {
       const users = req.app.locals.userCollection, orders = req.app.locals.orderCollection;
       await syncWeaponStock(users, orders, uid, network, ownerTestnet);

@@ -244,6 +244,7 @@ const evolutionShopTranslations: Partial<Record<Locale, Record<string, string>>>
     "Purchases locked": "Kauf gesperrt", "Total with Advanced": "Gesamt mit Advanced",
     "Additional ship": "Weiteres Exemplar", "Starter issued free; price is for an additional ship.": "Startschiff kostenlos erhalten; der Preis gilt für ein weiteres Exemplar.",
     "Buy with Test-Pi": "Mit Test-Pi kaufen",
+    "Buy with Pi": "Mit Pi kaufen",
     "Choose a ship type to compare its stages. Advanced and Elite are permanent Pi upgrades; colors stay separate.": "Wähle ein Schiff und vergleiche seine Stufen. Advanced und Elite sind dauerhafte Pi-Upgrades; Farben bleiben separat.",
     "Discover Advanced & Elite for Pi": "Advanced & Elite mit Pi entdecken",
     "Ship evolution": "Schiffsentwicklung",

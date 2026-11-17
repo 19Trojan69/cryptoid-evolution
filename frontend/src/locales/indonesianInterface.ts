@@ -42,6 +42,7 @@ export const indonesianInterfaceTranslations: Record<string, string> = {
   "Bronze": "Perunggu",
   "Buy another for": "Beli lagi seharga",
   "Buy with Test-Pi": "Beli dengan Test-Pi",
+  "Buy with Pi": "Beli dengan Pi",
   "CAMPAIGN COMPLETE": "KAMPANYE SELESAI",
   "Captain": "Kapten",
   "Career & rewards": "Karier & hadiah",

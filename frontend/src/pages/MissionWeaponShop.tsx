@@ -14,7 +14,7 @@ import { weaponSymbols } from './weaponSymbols';
 import './missionWeaponShop.css';
 import { shipSaveNetwork, selectedShip } from './shipFleet';
 import { hangarCatalog } from '../../../backend/src/hangarCatalog';
-import { isTestnetWeaponPurchaseEnabled, testPiPurchaseAllowed } from '../../../backend/src/paymentPolicy';
+import { testPiPurchaseAllowed, weaponChargesSupported } from '../../../backend/src/paymentPolicy';
 import { missionPowerOffers, type MissionPowerInventory } from '../../../backend/src/missionPower';
 
 type Offer = { id: string; kind: string; name: string; description: string; pricePi: number; level?: number };
@@ -32,6 +32,7 @@ export default function MissionWeaponShop({ reloadLevel, autoReload = {}, onAuto
   const [tab, setTab] = useState<'weapons' | 'powers'>('weapons');
   const [powerRefreshing, setPowerRefreshing] = useState(false);
   const [powerRefreshFailed, setPowerRefreshFailed] = useState(false);
+  const [mainnetTwinPayments, setMainnetTwinPayments] = useState(false);
   const mounted = useRef(true);
   const refreshVersion = useRef(0);
   const titleRef = useRef<HTMLHeadingElement>(null);
@@ -66,12 +67,13 @@ export default function MissionWeaponShop({ reloadLevel, autoReload = {}, onAuto
     setReady(false);
     try {
       const [{ data: catalog }, ownerAccess] = await Promise.all([
-        axiosClient.get<{ offers: Offer[] }>('/hangar/catalog'),
+        axiosClient.get<{ offers: Offer[]; mainnetTwinPayments?: boolean }>('/hangar/catalog'),
         authenticated ? refreshInventory(force) : Promise.resolve(false),
       ]);
       if (!Array.isArray(catalog.offers)) throw new Error('Invalid catalog');
       if (!mounted.current || version !== refreshVersion.current) return;
       setOffers(catalog.offers.filter(offer => offer.kind === 'weapon'));
+      setMainnetTwinPayments(catalog.mainnetTwinPayments === true && shipSaveNetwork === 'mainnet');
       setOwnerTestnet(shipSaveNetwork === 'testnet' && !admin && ownerAccess);
       setReady(true);
       setNotice(authenticated ? '' : 'Connect your Pi account to see your saved loadout.');
@@ -89,6 +91,7 @@ export default function MissionWeaponShop({ reloadLevel, autoReload = {}, onAuto
     return () => { mounted.current = false; versionRef.current++; };
   }, [refresh]);
   const busy = isLoading || selectionBusy;
+  const testnet = shipSaveNetwork === 'testnet';
   const stockUnknown = authenticated && stock === undefined;
   const standard: Offer = { id: 'standard', kind: 'weapon', name: 'Standard', description: '', pricePi: 0, level: 1 };
   const items = [standard, ...offers].map(offer => {
@@ -112,11 +115,13 @@ export default function MissionWeaponShop({ reloadLevel, autoReload = {}, onAuto
     </header>
     <div ref={scrollRef} className="mission-shop-scroll" data-game-scroll>
     {tab === 'weapons' ? <>
-    <p className="testnet-shop-notice">{ownerTestnet ? t('Admin Testnet: earn Shards for all 20 ships. Paid items use Test-Pi only.') : shipSaveNetwork === 'testnet' ? t('Testnet: Twin Laser and Rapid Twin can be bought with Test-Pi. Triple Laser and Plasma purchases are locked.') : t('Pi purchases are currently locked. Collect weapon upgrades in game.')}</p>
+    {!mainnetTwinPayments && <p className="testnet-shop-notice">{ownerTestnet ? t('Admin Testnet: earn Shards for all 20 ships. Paid items use Test-Pi only.') : testnet ? t('Testnet: Twin Laser and Rapid Twin can be bought with Test-Pi. Triple Laser and Plasma purchases are locked.') : t('Pi purchases are currently locked. Collect weapon upgrades in game.')}</p>}
     {admin && <p>{t('Admin test mode: purchases and records are not saved.')}</p>}
     <details className="mission-reload-explanation"><summary>{t('Auto-reload')}</summary><p>{t('When a timed weapon expires, the strongest enabled weapon takes over; otherwise the standard laser. Auto-reload uses owned charges without pausing.')}</p></details>
     <div className="mission-weapon-offers">{items.map(({ offer, level, count, timer, pickup, available }) => {
-      const locked = shipSaveNetwork !== 'testnet' || !isTestnetWeaponPurchaseEnabled(offer, ownerTestnet);
+      const supported = weaponChargesSupported(offer, shipSaveNetwork, ownerTestnet);
+      const purchasable = supported && (testnet || mainnetTwinPayments);
+      const autoAvailable = supported && (testnet || purchasable || count > 0 || timer > 0);
       const selected = activeLevel === level && (source !== 'pickup' || pickup);
       const usablePaid = pendingLevel === level || level === 1 || admin || timer !== 0 || count > 0;
       const blocked = busy || (!!pendingLevel && pendingLevel !== level);
@@ -130,7 +135,7 @@ export default function MissionWeaponShop({ reloadLevel, autoReload = {}, onAuto
           {pickup && <p className="mission-time">{t('Weapon pickup')}: {Math.ceil(pickupMs / 1000)} s</p>}
           </div>
           {level > 1 && onAutoReload && <div className="mission-reload-setting">
-            <button type="button" role="switch" aria-checked={autoReload[level] === true} aria-label={`${t('Auto-reload')} · ${t(offer.name)}`} disabled={blocked || locked || !authenticated || admin || !ready} onClick={() => onAutoReload(level, !autoReload[level])}>
+            <button type="button" role="switch" aria-checked={autoReload[level] === true} aria-label={`${t('Auto-reload')} · ${t(offer.name)}`} disabled={blocked || !autoAvailable || !authenticated || admin || !ready} onClick={() => onAutoReload(level, !autoReload[level])}>
               <span>{t('Auto-reload')}</span><span className="mission-switch-state">{t(autoReload[level] ? 'On' : 'Off')}<i aria-hidden="true" /></span>
             </button>
           </div>}
@@ -138,7 +143,13 @@ export default function MissionWeaponShop({ reloadLevel, autoReload = {}, onAuto
           {onSelect && <button type="button" className="mission-select" aria-pressed={selected} disabled={!available || busy} onClick={() => { if (selected && !pendingLevel) return; if (!usablePaid && pickup) onPickup?.(); else onSelect(level); }}>{pendingLevel === level ? t('Retry') : selected ? t('Active weapon') : available ? t('Select') : stockUnknown ? '…' : t('Not in stock')}</button>}
           {pickup && usablePaid && onPickup && <button className="mission-pickup-select" type="button" disabled={busy} aria-pressed={source === 'pickup' && activeLevel === level} onClick={onPickup}>{t('Select')} · {t('Weapon pickup')}</button>}
         </div>
-        {level > 1 && (locked ? <details className="mission-locked"><summary>{t('Purchases locked')}</summary><strong>{t('MAINNET READY')}</strong><p>{t('Available only as a weapon pickup.')}</p><p>{t('Planned price')}: <PiPrice amount={offer.pricePi} locale={locale} /></p></details> : <WeaponPurchase showStock={false} id={offer.id} price={offer.pricePi} count={count} pending={isLoading && activeProductId === offer.id} status={activeProductId === offer.id ? paymentStatus : undefined} diagnostic={activeProductId === offer.id ? paymentDiagnostic : undefined} disabledReason={admin ? "Admin test mode: purchases and records are not saved." : !authenticated ? "Connect your Pi account to see your saved loadout." : !ready ? notice || "Loading account save…" : undefined} disabled={!ready || busy || !authenticated || admin || !!pendingLevel} onBuy={(quantity, total) => { void orderProduct(`Cryptoid ${offer.name} · ${quantity} × 45s · Test-Pi`, total, { productId: offer.id, quantity, weaponModel: 2 }, async () => { if (mounted.current) await refresh(true); }); }} />)}
+        {level > 1 && (purchasable ? <WeaponPurchase showStock={false} id={offer.id} price={offer.pricePi} count={count} testnet={testnet}
+          pending={isLoading && activeProductId === offer.id} status={activeProductId === offer.id ? paymentStatus : undefined}
+          diagnostic={activeProductId === offer.id ? paymentDiagnostic : undefined}
+          disabledReason={admin ? "Admin test mode: purchases and records are not saved." : !authenticated ? "Connect your Pi account to see your saved loadout." : !ready ? notice || "Loading account save…" : undefined}
+          disabled={!ready || busy || !authenticated || admin || !!pendingLevel}
+          onBuy={(quantity, total) => { void orderProduct(`Cryptoid ${offer.name} · ${quantity} × 45s · ${testnet ? "Test-Pi" : "Pi"}`, total, { productId: offer.id, quantity, weaponModel: 2 }, async () => { if (mounted.current) await refresh(true); }); }} />
+          : <details className="mission-locked"><summary>{t('Purchases locked')}</summary><strong>{t('MAINNET READY')}</strong>{!(count > 0 || timer > 0) && <p>{t('Available only as a weapon pickup.')}</p>}<p>{t('Planned price')}: <PiPrice amount={offer.pricePi} locale={locale} /></p></details>)}
       </article>;
     })}</div>
     <WeaponTutorial />

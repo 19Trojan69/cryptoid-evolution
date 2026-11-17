@@ -38,7 +38,7 @@ import { saveGuestShipPurchase } from "./shipFleet";
 import TermsDialog from "../components/TermsDialog";
 import { shipNftMainnetVisible } from "./shipNftVisibility";
 import { hangarCatalog, purchasePrerequisite } from "../../../backend/src/hangarCatalog";
-import { isTestnetWeaponPurchaseEnabled, testPiPurchaseAllowed } from "../../../backend/src/paymentPolicy";
+import { isMainnetTwinOffer, isTestnetWeaponPurchaseEnabled, testPiPurchaseAllowed } from "../../../backend/src/paymentPolicy";
 import { primeGameAudio } from "./gameAudio";
 import { EFFECTS_VOLUME_KEY, MUSIC_STORAGE_KEY, MUSIC_VOLUME_KEY, readEffectsVolume, readMusicVolume, resetAudioVolumeDefaults } from "./musicPreferences";
 import { handoffGameMusic, MusicPlayer } from "./musicPlayback";
@@ -303,6 +303,7 @@ const Shop = () => {
   const hangarMessageText = typeof hangarMessage === "string" ? t(hangarMessage) : `${hangarMessage.ship} · ${t(hangarMessage.status)}${hangarMessage.count ? ` ×${hangarMessage.count}` : ""}`;
   const [offers, setOffers] = useState<Offer[]>(() => [...hangarCatalog]);
   const [catalogReady, setCatalogReady] = useState(false);
+  const [mainnetTwinPayments, setMainnetTwinPayments] = useState(false);
   const [catalogFailed, setCatalogFailed] = useState(false);
   const [catalogAttempt, setCatalogAttempt] = useState(0);
   const [inventory, setInventory] = useState<Inventory | null>(null);
@@ -429,9 +430,10 @@ const Shop = () => {
   useEffect(() => {
     const request = new AbortController();
     setCatalogFailed(false);
-    void axiosClient.get<{ offers: Offer[] }>("/hangar/catalog", { signal: request.signal }).then(({ data }) => {
+    void axiosClient.get<{ offers: Offer[]; mainnetTwinPayments?: boolean }>("/hangar/catalog", { signal: request.signal }).then(({ data }) => {
       if (request.signal.aborted) return;
       if (!Array.isArray(data.offers)) throw new Error("Invalid catalog");
+      setMainnetTwinPayments(data.mainnetTwinPayments === true && shipSaveNetwork === "mainnet");
       setOffers(data.offers);
       setCatalogReady(true);
     }).catch(() => { if (!request.signal.aborted) setCatalogFailed(true); });
@@ -716,25 +718,36 @@ const Shop = () => {
         </div>}
         <div className="section-heading"><div><p className="eyebrow">{t('POWER LAB')}</p><h2 id="upgrade-heading">{t('Weapons and start power-ups')}</h2></div><span className="section-line" /></div>
         {shopView === "weapons" ? <>
-          <p className="testnet-shop-notice">{ownerTestnet ? t('Admin Testnet: earn Shards for all 20 ships. Paid items use Test-Pi only.') : shipSaveNetwork === "testnet" ? t("Testnet: Twin Laser and Rapid Twin can be bought with Test-Pi. Triple Laser and Plasma purchases are locked.") : t("Pi purchases are currently locked. Collect weapon upgrades in game.")}</p>
-          <p>{shipSaveNetwork === "testnet" ? t("45 seconds per charge") : t("The single laser is free. Collect other weapons as power-ups during the mission.")}</p>
+          {!mainnetTwinPayments && <p className="testnet-shop-notice">{ownerTestnet ? t('Admin Testnet: earn Shards for all 20 ships. Paid items use Test-Pi only.') : shipSaveNetwork === "testnet" ? t("Testnet: Twin Laser and Rapid Twin can be bought with Test-Pi. Triple Laser and Plasma purchases are locked.") : t("Pi purchases are currently locked. Collect weapon upgrades in game.")}</p>}
+          <p>{shipSaveNetwork === "testnet" || mainnetTwinPayments ? t("45 seconds per charge") : t("The single laser is free. Collect other weapons as power-ups during the mission.")}</p>
           <WeaponTutorial />
         </> : <p>{t("Fly through glowing drops to collect boosts that activate immediately.")}</p>}
         {([shopView === "weapons" ? "weapon" : "power"] as const).map(kind => <div key={kind} className="hangar-offers"><h3>{t(kind === "weapon" ? "Time-limited weapons" : "One-mission start bonuses")}</h3><div className="hangar-offer-grid">
           {offers.filter(offer => offer.kind === kind).map(offer => {
             const count = inventory?.consumables.find(item => item.id === offer.id)?.count ?? 0;
-            const testnetWeaponEnabled = kind !== "weapon" || shipSaveNetwork === "testnet" && isTestnetWeaponPurchaseEnabled(offer, ownerTestnet);
-            const owned = kind === "weapon" ? testnetWeaponEnabled && (inventory?.weaponStock?.[offer.id] || 0) > 0 : count > 0;
+            const testnet = shipSaveNetwork === "testnet";
+            const weaponPurchasable = testnet ? isTestnetWeaponPurchaseEnabled(offer, ownerTestnet) : mainnetTwinPayments && isMainnetTwinOffer(offer);
+            const weaponCount = inventory?.weaponStock?.[offer.id] ?? 0;
+            const owned = kind === "weapon" ? (testnet ? weaponPurchasable : isMainnetTwinOffer(offer)) && weaponCount > 0 : count > 0;
             const selected = kind === "weapon" ? false : inventory?.selectedPower === offer.id;
-            const lockedWeapon = kind === "weapon" && !testnetWeaponEnabled;
+            const lockedWeapon = kind === "weapon" && !weaponPurchasable;
             const powerPurchasable = kind === "power" && ownerTestnet && testPiPurchaseAllowed(offer, "Pi Testnet", true);
-            return <article key={offer.id} className={`hangar-offer hangar-offer-${kind}${selected ? " hangar-offer-selected" : ""}`}>{kind === "weapon" ? <WeaponPreview offerId={offer.id} sprite={selectedShip().skin.sprite} color={selectedShip().color.id} /> : <PowerPreview offerId={offer.id} />}<h4>{t(offer.name)}</h4><p>{t(offer.description)}</p><span className="offer-purchase-price">{lockedWeapon || kind === "power" && !powerPurchasable ? <>{t("Planned price")}: {piPrice(offer.pricePi)}</> : piPrice(offer.pricePi, true)}</span><span className={lockedWeapon || kind === "power" && !powerPurchasable ? "mainnet-ready-badge" : undefined}>{lockedWeapon ? shipSaveNetwork === "testnet" ? t("MAINNET READY") : t("Currently locked") : kind === "weapon" ? t("45 seconds per charge") : powerPurchasable ? t("Buy with Test-Pi") : t("MAINNET READY")}</span><strong>{lockedWeapon ? t("Locked") : selected ? t("EQUIPPED") : owned ? kind === "power" ? `${count} ${t("AVAILABLE")}` : t("Owned — activate in game") : kind === "power" && !powerPurchasable ? t("Locked") : t("NOT OWNED")}</strong>{lockedWeapon && <p className="testnet-shop-notice">{shipSaveNetwork === "testnet" ? t("Available only as a weapon pickup on Testnet.") : t("Available only as a weapon pickup.")}</p>}<div>
+            return <article key={offer.id} className={`hangar-offer hangar-offer-${kind}${selected ? " hangar-offer-selected" : ""}`}>
+              {kind === "weapon" ? <WeaponPreview offerId={offer.id} sprite={selectedShip().skin.sprite} color={selectedShip().color.id} /> : <PowerPreview offerId={offer.id} />}
+              <h4>{t(offer.name)}</h4><p>{t(offer.description)}</p>
+              <span className="offer-purchase-price">{lockedWeapon || kind === "power" && !powerPurchasable ? <>{t("Planned price")}: {piPrice(offer.pricePi)}</> : piPrice(offer.pricePi, testnet)}</span>
+              <span className={lockedWeapon || kind === "power" && !powerPurchasable ? "mainnet-ready-badge" : undefined}>{lockedWeapon ? testnet ? t("MAINNET READY") : t("Currently locked") : kind === "weapon" ? t("45 seconds per charge") : powerPurchasable ? t("Buy with Test-Pi") : t("MAINNET READY")}</span>
+              <strong>{selected ? t("EQUIPPED") : owned ? kind === "power" ? `${count} ${t("AVAILABLE")}` : t("Owned — activate in game") : lockedWeapon || kind === "power" && !powerPurchasable ? t("Locked") : t("NOT OWNED")}</strong>
+              {lockedWeapon && !owned && <p className="testnet-shop-notice">{testnet ? t("Available only as a weapon pickup on Testnet.") : t("Available only as a weapon pickup.")}</p>}<div>
               {powerPurchasable && <WeaponPurchase id={offer.id} price={offer.pricePi} count={count} disabled={isLoading || !catalogReady}
                 pending={isLoading && activeProductId === offer.id} status={activeProductId === offer.id ? paymentStatus : undefined}
                 diagnostic={activeProductId === offer.id ? paymentDiagnostic : undefined}
                 onBuy={(quantity, total) => buyTestPiOffer(offer, { quantity, total })} />}
               {owned && kind === "power" ? <button className="button button-secondary" type="button" disabled={Boolean(selected)} onClick={() => equip(null, offer.id)}>{t(selected ? "Selected" : "Equip for next mission")}</button> : null}
-              {kind === "weapon" && !lockedWeapon && <WeaponPurchase id={offer.id} price={offer.pricePi} count={inventory?.weaponStock?.[offer.id] || 0} pending={isLoading && activeProductId === offer.id} status={activeProductId === offer.id ? paymentStatus : undefined} diagnostic={activeProductId === offer.id ? paymentDiagnostic : undefined} disabled={adminMode || isLoading || !catalogReady} onBuy={(quantity, total) => { void orderProduct(`Cryptoid ${offer.name} · ${quantity} × 45s · Test-Pi`, total, { productId: offer.id, quantity, weaponModel: 2 }, async () => { setLoadoutMessage("purchase confirmed."); await refreshInventory(); }); }} />}
+              {kind === "weapon" && weaponPurchasable && <WeaponPurchase id={offer.id} price={offer.pricePi} count={weaponCount} testnet={testnet}
+                pending={isLoading && activeProductId === offer.id} status={activeProductId === offer.id ? paymentStatus : undefined}
+                diagnostic={activeProductId === offer.id ? paymentDiagnostic : undefined} disabled={adminMode || isLoading || !catalogReady}
+                onBuy={(quantity, total) => { void orderProduct(`Cryptoid ${offer.name} · ${quantity} × 45s · ${testnet ? "Test-Pi" : "Pi"}`, total, { productId: offer.id, quantity, weaponModel: 2 }, async () => { setLoadoutMessage("purchase confirmed."); await refreshInventory(); }); }} />}
             </div></article>;
           })}
         </div></div>)}

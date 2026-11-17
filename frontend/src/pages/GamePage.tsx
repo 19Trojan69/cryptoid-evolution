@@ -18,7 +18,7 @@ import { createWeaponSpentNotice, updateWeaponReloadNotice, canShowWeaponSpentNo
 import { enemyVisualDiameter } from './shipDisplayScale';
 import { automaticStartWeapon, autoReloadKey, nextActiveWeapon, parseAutoReload, shouldAutoReload, type AutoReloadPreferences } from './weaponAutoReload';
 import { shipSaveNetwork } from './shipFleet';
-import { isTestnetWeaponPurchaseEnabled } from '../../../backend/src/paymentPolicy';
+import { weaponChargesSupported } from '../../../backend/src/paymentPolicy';
 import { hangarCatalog, START_POWER_DURATION_MS } from '../../../backend/src/hangarCatalog';
 import { bossCardAvailable } from './cardAvailability';
 import { keepScreenAwake } from './screenWakeLock';
@@ -742,8 +742,8 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
     if (!accountRun || adminRunRef.current || !runId || state.status !== 'playing' || automaticStartRunRef.current === runId) return;
     automaticStartRunRef.current = runId;
     if (state.weaponSource !== 'standard' || activationRef.current || weaponBusyRef.current) return;
-    const allowed = hangarCatalog.flatMap(offer => offer.kind === 'weapon' && shipSaveNetwork === 'testnet'
-      && isTestnetWeaponPurchaseEnabled(offer, ownerDiagnostics) ? [offer.level] : []);
+    const allowed = hangarCatalog.flatMap(offer => offer.kind === 'weapon'
+      && weaponChargesSupported(offer, shipSaveNetwork, ownerDiagnostics) ? [offer.level] : []);
     const level = automaticStartWeapon(state.weaponTimers, autoReloadRef.current, stockRef.current, allowed);
     if (level !== undefined) reloadRequestRef.current(level);
   }, [accountRun, game.status, autoReload, weaponStock, ownerDiagnostics]);
@@ -1796,7 +1796,7 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
         syncSelectedWeapon(state);
         const expired = expiringMs > 0 && state.weaponTimers[expiringLevel] === 0;
         const reloadOffer = expired ? hangarCatalog.find(offer => offer.kind === 'weapon' && offer.level === expiringLevel) : undefined;
-        if (shouldAutoReload(expiringLevel, expiringSource, expiringMs, state.weaponTimers[expiringLevel] ?? 0, autoReloadRef.current, stockRef.current, shipSaveNetwork === 'testnet' && isTestnetWeaponPurchaseEnabled(reloadOffer, ownerDiagnostics))) reloadRequestRef.current(expiringLevel);
+        if (shouldAutoReload(expiringLevel, expiringSource, expiringMs, state.weaponTimers[expiringLevel] ?? 0, autoReloadRef.current, stockRef.current, weaponChargesSupported(reloadOffer, shipSaveNetwork, ownerDiagnostics))) reloadRequestRef.current(expiringLevel);
         if (selectedExpired) {
           const notice = createWeaponSpentNotice(expiringSource, expiringSource === 'pickup' ? expiringPickupLevel : expiringLevel,
             expiringSource === 'pickup' ? expiringPickupMs : expiringMs, expiringSource === 'pickup' ? state.pickupWeaponMs : state.weaponTimers[expiringLevel] ?? 0);

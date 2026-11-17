@@ -62,6 +62,7 @@ export const chineseGameplayTranslations: Record<string, string> = {
   "Bronze": "铜牌",
   "Buy another for": "再购买一件，价格为",
   "Buy with Test-Pi": "使用测试 Pi 购买",
+  "Buy with Pi": "使用Pi 购买",
   "CAMPAIGN COMPLETE": "战役完成",
   "Captain": "上尉",
   "Career Score adds verified completed runs. Best Run is the highest single run with its reached level. Profile level is separate. Earlier records remain in the previous lists.": "生涯积分累计所有经验证的已完成任务。单次最佳成绩记录最高的一次任务得分及到达关卡。个人资料等级单独计算。旧成绩保留在历史榜单中。",

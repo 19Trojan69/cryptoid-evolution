@@ -11,3 +11,9 @@ export const isTestnetWeaponPurchaseEnabled = (offer: { id?: string; kind: strin
 export const testPiPurchaseAllowed = (offer: { id?: string; kind: string } | undefined, network: unknown, ownerTestnet = false) =>
   network === "Pi Testnet" && Boolean(offer && (isTestnetWeaponPurchaseEnabled(offer, ownerTestnet) ||
     ownerTestnet === true && ["power", "armor", "ship_upgrade"].includes(offer.kind)));
+
+type WeaponOffer = Parameters<typeof isTestnetWeaponPurchaseEnabled>[0];
+export const isMainnetTwinOffer = (offer: WeaponOffer) => offer?.kind === "weapon" && offer.id === "weapon_twin";
+
+export const weaponChargesSupported = (offer: WeaponOffer, network: string, ownerTestnet = false) =>
+  network === "testnet" ? isTestnetWeaponPurchaseEnabled(offer, ownerTestnet) : network === "mainnet" && isMainnetTwinOffer(offer);
