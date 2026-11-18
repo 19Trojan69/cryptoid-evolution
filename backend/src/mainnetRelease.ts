@@ -5,13 +5,14 @@ const releaseId = "mainnet-release:v1";
 
 export type MainnetReadiness = {
   ready: boolean;
-  checks: { id: "database" | "piPayments" | "nftIssuance" | "nftMetadata"; ready: boolean }[];
+  checks: { id: "database" | "piPayments" | "walletCheckout" | "nftIssuance" | "nftMetadata"; ready: boolean }[];
 };
 
 export function inspectMainnetReadiness(req: Request): MainnetReadiness {
   const checks: MainnetReadiness["checks"] = [
     { id: "database", ready: Boolean(req.app.locals.adminCollection && req.app.locals.orderCollection && req.app.locals.userCollection) },
     { id: "piPayments", ready: Boolean(process.env.PI_API_KEY?.trim()) },
+    { id: "walletCheckout", ready: false },
     // The current application prepares artwork and eligibility. Actual issuance
     // and immutable metadata must be integrated before either check can pass.
     { id: "nftIssuance", ready: false },

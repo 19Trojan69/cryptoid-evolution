@@ -13,6 +13,7 @@ type ReleaseStatus = {
 const checkLabels: Record<string, string> = {
   database: "Datenbank und Kontospeicherung",
   piPayments: "Mainnet-Zahlungszugang konfiguriert",
+  walletCheckout: "Mainnet-Kaufablauf und Ziel-Wallet geprüft",
   nftIssuance: "NFT-Ausgabe mit bestätigter Blockchain-Transaktion",
   nftMetadata: "Dauerhafte Metadaten-Adressen aller NFT-Editionen",
 };

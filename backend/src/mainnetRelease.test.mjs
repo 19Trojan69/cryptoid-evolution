@@ -46,7 +46,7 @@ function harness(saved = null, inspect = release.inspectMainnetReadiness) {
 
 const prepared = () => ({
   ready: true,
-  checks: ["database", "piPayments", "nftIssuance", "nftMetadata"].map(id => ({ id, ready: true })),
+  checks: ["database", "piPayments", "walletCheckout", "nftIssuance", "nftMetadata"].map(id => ({ id, ready: true })),
 });
 
 test("a fresh installation stays in preparation without a database write", async () => {

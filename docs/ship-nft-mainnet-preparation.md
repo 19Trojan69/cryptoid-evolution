@@ -33,8 +33,9 @@ owner authorization. Testnet requests cannot change the Mainnet release.
 Updates compare the displayed revision with the stored revision, so an older
 screen cannot overwrite a newer change.
 
-The current readiness checks report NFT issuance and immutable NFT metadata as
-unfinished. The release control therefore stays blocked. A stored release flag
+The current readiness checks report real Mainnet checkout and wallet acceptance,
+NFT issuance and immutable NFT metadata as unfinished. The release control
+therefore stays blocked. A stored release flag
 and browser-supplied readiness fields cannot enable purchases while these server
 checks remain incomplete. Future implementation must connect these checks to
 the actual issuer and the verified, permanently hosted metadata.
