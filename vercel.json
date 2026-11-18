@@ -2,7 +2,7 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": null,
   "installCommand": "npm install --prefix frontend && npm install --include=optional --prefix backend",
-  "buildCommand": "env -u VERCEL npm test --prefix backend && VITE_CRYPTOID_DIAGNOSTICS=0 npm run build --prefix frontend",
+  "buildCommand": "env -u VERCEL -u CRYPTOID_TESTNET_ACCOUNT_DELETION npm test --prefix backend && VITE_CRYPTOID_DIAGNOSTICS=0 npm run build --prefix frontend",
   "outputDirectory": "frontend/dist",
   "redirects": [
     {
