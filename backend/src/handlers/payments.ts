@@ -10,6 +10,7 @@ import { capturePurchaseQuote } from "../purchaseQuote";
 import { chargePayment } from "../chargePurchase";
 import { loadPlayerSave } from "./progress";
 import { shipForSprite } from "../playerSave";
+import { mainnetPurchasesReleased } from "../mainnetRelease";
 
 const identifier = (value: unknown) => typeof value === "string" && /^[a-zA-Z0-9_-]{1,100}$/.test(value) ? value : null;
 const fetchPayment = async (req: any, id: string) => (await platformAPIClientForRequest(req).get(`/v2/payments/${id}`)).data;
@@ -17,9 +18,9 @@ const prerequisiteMessage = (prerequisite: string) => prerequisite === "armor_hu
   ? "Reinforced Hull required before Titanium Plating"
   : "Advanced stage required before Elite";
 
-const ownsStandardHull = async (req: any, offer: ReturnType<typeof findOffer>) => {
+const ownsStandardHull = async (req: any, offer: ReturnType<typeof findOffer>, network: "mainnet" | "testnet" = "testnet") => {
   if (offer?.kind !== "ship_upgrade") return true;
-  const save = await loadPlayerSave(req.app.locals.userCollection, req.session.currentUser.uid, "testnet");
+  const save = await loadPlayerSave(req.app.locals.userCollection, req.session.currentUser.uid, network);
   return Object.values(save.fleet[shipForSprite(offer.shipIndex)] || {}).some(count => count > 0);
 };
 
@@ -73,10 +74,18 @@ export default function mountPaymentsEndpoints(router: Router) {
         return res.status(400).json({ error: "payment_catalog_mismatch", stage: "approval", message: "Payment data does not match the signed-in user or catalog" });
       }
       const ownerTestnet = await canUseOwnerTestnetCatalog(req);
-      if (!testPiPurchaseAllowed(offer, payment.network, ownerTestnet)) return res.status(403).json({ error: "testnet_policy_rejected", stage: "approval", network: payment.network, message: "This Test-Pi purchase is not enabled for this account" });
       const orders = req.app.locals.orderCollection;
       const existing = await orders.findOne({ pi_payment_id: id });
       if (existing && (existing.user !== uid || existing.product_id !== offer.id || existing.cancelled)) return res.status(409).json({ error: "payment_conflict", stage: "approval", message: "Payment is already assigned or cancelled" });
+      const mainnet = payment.network === "Pi Network";
+      if (mainnet) {
+        const approvedRetry = Boolean(existing && payment.status?.developer_approved);
+        if (!approvedRetry && !await mainnetPurchasesReleased(req)) {
+          return res.status(403).json({ error: "mainnet_release_pending", stage: "approval", network: payment.network, message: "Mainnet purchases await the owner's release" });
+        }
+      } else if (!testPiPurchaseAllowed(offer, payment.network, ownerTestnet)) {
+        return res.status(403).json({ error: "testnet_policy_rejected", stage: "approval", network: payment.network, message: "This Test-Pi purchase is not enabled for this account" });
+      }
       const terms = {
         quantity: purchase.quantity,
         weapon_model: payment.metadata?.weaponModel === 2 ? 2 : 1,
@@ -88,7 +97,7 @@ export default function mountPaymentsEndpoints(router: Router) {
       if (!existing && (offer.kind === "armor" || offer.kind === "ship_upgrade") && await orders.findOne({ user: uid, product_id: offer.id, paid: true, cancelled: { $ne: true }, ...ownerTestnetOrderScope(req) })) return res.status(409).json({ error: "already_owned", stage: "approval", message: "Permanent upgrade already owned" });
       const prerequisite = purchasePrerequisite(offer);
       if (prerequisite && !await orders.findOne({ user: uid, product_id: prerequisite, paid: true, cancelled: { $ne: true }, ...ownerTestnetOrderScope(req) })) return res.status(403).json({ error: "prerequisite_missing", stage: "approval", prerequisite, message: prerequisiteMessage(prerequisite) });
-      if (ownerTestnet && !await ownsStandardHull(req, offer)) return res.status(403).json({ error: "standard_ship_required", stage: "approval" });
+      if ((ownerTestnet || mainnet) && !await ownsStandardHull(req, offer, mainnet ? "mainnet" : "testnet")) return res.status(403).json({ error: "standard_ship_required", stage: "approval" });
        if (!existing) {
         const purchaseQuote = await capturePurchaseQuote(payment);
         await orders.updateOne({ pi_payment_id: id }, { $setOnInsert: { pi_payment_id: id, product_id: offer.id, user: uid, username: req.session.currentUser?.username || null, paid: false, ...terms, ...(ownerTestnet ? { owner_testnet_catalog: true } : {}), created_at: new Date(), purchaseQuote } }, { upsert: true });
@@ -116,13 +125,14 @@ export default function mountPaymentsEndpoints(router: Router) {
       const purchase = offer && chargePayment(offer, payment.metadata);
       const txid = payment.transaction?.txid;
       const ownerTestnet = await canUseOwnerTestnetCatalog(req);
-      if (!testPiPurchaseAllowed(offer, payment.network, ownerTestnet)) return res.status(403).json({ error: "This Test-Pi purchase is not enabled for this account" });
+      const mainnet = payment.network === "Pi Network";
+      if (!mainnet && !testPiPurchaseAllowed(offer, payment.network, ownerTestnet)) return res.status(403).json({ error: "This Test-Pi purchase is not enabled for this account" });
       if (!offer || !purchase || purchase.quantity !== (order.quantity ?? 1) || (payment.metadata?.weaponModel === 2 ? 2 : 1) !== (order.weapon_model ?? 1) || payment.metadata?.powerModel !== order.power_model || payment.identifier !== id || payment.user_uid !== uid || payment.metadata?.productId !== offer.id || payment.direction !== "user_to_app" || payment.amount !== purchase.amount || !payment.status?.developer_approved || payment.status?.cancelled || payment.status?.user_cancelled || !payment.status?.transaction_verified || !txid || (suppliedTxid && suppliedTxid !== txid)) {
         return res.status(400).json({ error: "Payment not verified" });
       }
       const prerequisite = purchasePrerequisite(offer);
       if (prerequisite && !await orders.findOne({ user: uid, product_id: prerequisite, paid: true, cancelled: { $ne: true }, ...ownerTestnetOrderScope(req) })) return res.status(403).json({ error: prerequisiteMessage(prerequisite), prerequisite });
-      if (ownerTestnet && !await ownsStandardHull(req, offer)) return res.status(403).json({ error: "standard_ship_required" });
+      if ((ownerTestnet || mainnet) && !await ownsStandardHull(req, offer, mainnet ? "mainnet" : "testnet")) return res.status(403).json({ error: "standard_ship_required" });
       if (!payment.status?.developer_completed) await platformAPIClientForRequest(req).post(`/v2/payments/${id}/complete`, { txid });
       // Credit only after Pi has confirmed /complete (or reported already completed).
       const receipt = await readPaymentReceipt(payment);

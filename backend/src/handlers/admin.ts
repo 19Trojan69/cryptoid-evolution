@@ -18,6 +18,7 @@ import { bestRunField, careerField } from "../scoreRules";
 import { mountAdminPlayerEndpoints } from '../playerAdministration';
 import { mountBossNftGallery } from "../bossNftGallery";
 import { mountAdminNftCollection } from "./adminNftCollection";
+import { mountMainnetRelease } from "../mainnetRelease";
 
 const networks = ["all", "mainnet", "testnet", "unknown"] as const;
 const statuses = ["all", "confirmed", "pending", "cancelled"] as const;
@@ -37,6 +38,7 @@ const requireOwner: RequestHandler = async (req, res, next) => {
 export default function mountAdminEndpoints(router: Router) {
   // Authenticate every admin route independently of the optional gameplay mode.
   router.use(requireOwner);
+  mountMainnetRelease(router);
   mountAdminPlayerEndpoints(router);
   mountBossNftGallery(router);
   mountAdminNftCollection(router);

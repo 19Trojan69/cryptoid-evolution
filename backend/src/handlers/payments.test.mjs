@@ -18,7 +18,7 @@ function setup(t, enablePermanentPurchases = true) {
   if (enablePermanentPurchases) t.mock.method(policy, 'testPiPurchaseAllowed', () => true);
 }
 
-function harness(path, priorOrders = [], { productId = 'armor_hull_mk2', paid = false } = {}) {
+function harness(path, priorOrders = [], { productId = 'armor_hull_mk2', paid = false, network = 'Pi Testnet', approved = path !== '/approve' } = {}) {
   const paymentId = 'armor-payment-1';
   const orders = structuredClone(priorOrders);
   if (path !== '/approve') orders.push({ pi_payment_id: paymentId, user: 'pilot-a', product_id: productId, paid });
@@ -44,8 +44,8 @@ function harness(path, priorOrders = [], { productId = 'armor_hull_mk2', paid = 
       return { data: {
         identifier: paymentId, user_uid: 'pilot-a', direction: 'user_to_app',
         amount: productId === 'armor_hull_mk2' ? 29.9 : 19.9,
-        metadata: { productId }, network: 'Pi Testnet',
-        status: { developer_approved: path !== '/approve', transaction_verified: true },
+        metadata: { productId }, network,
+        status: { developer_approved: approved, transaction_verified: true },
         transaction: { txid: 'verified-transaction' },
       } };
     },
@@ -128,4 +128,39 @@ test('Elite still requires the matching Advanced ship rather than armor or anoth
     assert.equal(h.posts.length, 0);
     assert.equal(h.writes.length, 0);
   }
+});
+
+test('Mainnet approval stays closed before owner release', async t => {
+  setup(t);
+  const h = harness('/approve', [], { network: 'Pi Network' });
+  const response = await h.call();
+  assert.equal(response.code, 403);
+  assert.equal(response.body.error, 'mainnet_release_pending');
+  assert.equal(h.posts.length, 0);
+  assert.equal(h.writes.length, 0);
+});
+
+test('an existing approved Mainnet payment can finish during preparation', async t => {
+  setup(t, false);
+  for (const path of ['/complete', '/incomplete']) {
+    const h = harness(path, [{ user: 'pilot-a', product_id: 'armor_hull_mk1', paid: true }], { network: 'Pi Network' });
+    const response = await h.call();
+    assert.equal(response.code, 200);
+    assert.equal(response.body.completed, true);
+    assert.equal(h.posts.length, 1);
+    assert.ok(h.posts[0].url.endsWith('/complete'));
+    assert.equal(h.orders.find(order => order.product_id === 'armor_hull_mk2').paid, true);
+  }
+});
+
+test('a retry of an already approved Mainnet order does not require a new release', async t => {
+  setup(t, false);
+  const h = harness('/approve', [
+    { user: 'pilot-a', product_id: 'armor_hull_mk1', paid: true },
+    { pi_payment_id: 'armor-payment-1', user: 'pilot-a', product_id: 'armor_hull_mk2', paid: false },
+  ], { network: 'Pi Network', approved: true });
+  const response = await h.call();
+  assert.equal(response.code, 200);
+  assert.equal(response.body.approved, true);
+  assert.equal(h.posts.length, 0);
 });

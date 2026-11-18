@@ -50,6 +50,8 @@ test("all dashboard routes require verified ownership, including downloads and w
     await withApp(session, {}, async (request) => {
       for (const [path, body] of [
         ["/status"],
+        ["/mainnet-release"],
+        ["/mainnet-release", { action: "release", revision: 0 }],
         ["/usage"],
         ["/payments"],
         ["/payments/export"],

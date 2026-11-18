@@ -24,6 +24,28 @@ Build the backend and verify the extracted artwork bundle with `node backend/scr
 
 ## Blockchain integration still to do
 
+### Owner release control
+
+The Mainnet Admin overview contains a Mainnet release control. The server stores
+the requested state and revision in the existing owner-access collection. A
+missing record starts in preparation. Every request uses the existing verified
+owner authorization. Testnet requests cannot change the Mainnet release.
+Updates compare the displayed revision with the stored revision, so an older
+screen cannot overwrite a newer change.
+
+The current readiness checks report NFT issuance and immutable NFT metadata as
+unfinished. The release control therefore stays blocked. A stored release flag
+and browser-supplied readiness fields cannot enable purchases while these server
+checks remain incomplete. Future implementation must connect these checks to
+the actual issuer and the verified, permanently hosted metadata.
+
+New Mainnet payment approvals consult this release state. Previously approved,
+verified Mainnet transactions can still be completed and recovered while the
+application is in preparation. Existing Test-Pi policy continues to apply to
+Testnet purchases. Basic gameplay and earned-Shard purchases use their existing
+paths. The gate establishes controlled activation. Mainnet wallet checkout,
+on-chain issue verification and device acceptance remain release work.
+
 Confirm the Mainnet ship checkout and the wallet destination before enabling the feature. Use the successful server-side acquisition or payment completion as the trigger to persist an issuance job once per Mainnet account and card. Persist it with the acquisition or reconcile the verified record if completion is retried. Submit to the reviewed Mainnet contract, reconcile retries with the chain and mark the NFT issued only after verifying the chain transaction. Confirm the issuance policy for pre-launch purchases and imported saves. Verify those flows with real approved Mainnet test cases before going live.
 
 ## Verification
