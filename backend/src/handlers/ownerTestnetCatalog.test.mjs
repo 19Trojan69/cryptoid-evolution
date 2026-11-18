@@ -159,7 +159,7 @@ test('one confirmed power-up payment credits the entered quantity once and missi
   const wrong = await payment(h, metadata.productId, { id: 'wrong-total', payment: { amount: .08, metadata } });
   assert.equal(wrong.code, 400);
   assert.equal(await count(), 0);
-  const confirmed = await payment(h, metadata.productId, { id: 'shield-batch', payment: { amount: 1.2, metadata } });
+  const confirmed = await payment(h, metadata.productId, { id: 'shield-batch', payment: { amount: 2.25, metadata } });
   assert.equal(confirmed.code, 200);
   assert.equal(await count(), 15);
   assert.equal(h.orders.length, 1);
@@ -302,7 +302,7 @@ test('Mainnet payments, non-owner requests, incorrect totals and unverified comp
     assert.equal(posts.length, 0); assert.equal(h.orders.length, 0);
   }
   const h = harness(); pi(t, h);
-  h.locals.payment = { identifier:'pending-1',user_uid:'pilot-a',direction:'user_to_app',network:'Pi Testnet',amount:.08,metadata:{productId:'start_shield'},status:{developer_approved:true,transaction_verified:false},transaction:{txid:'tx-pending'} };
+  h.locals.payment = { identifier:'pending-1',user_uid:'pilot-a',direction:'user_to_app',network:'Pi Testnet',amount:.15,metadata:{productId:'start_shield'},status:{developer_approved:true,transaction_verified:false},transaction:{txid:'tx-pending'} };
   h.orders.push({ pi_payment_id:'pending-1',user:'pilot-a',product_id:'start_shield',paid:false });
   assert.equal((await h.call('payments','/complete',{paymentId:'pending-1',txid:'tx-pending'})).code,400);
   assert.equal((await inventory(h)).body.consumables.find(item=>item.id==='start_shield').count,0);
@@ -314,7 +314,7 @@ test('ordinary Testnet pilots can buy Twin and Rapid Twin and see each payment c
   const posts = pi(t, h);
   const request = { session: { currentUser: { uid: 'pilot-b', username: 'Pilot' } } };
   const stock = async () => (await h.call('hangar', '/inventory', null, { method: 'GET', ...request })).body;
-  for (const [productId, amount] of [['weapon_twin', .5], ['weapon_rapid_twin', .8]]) {
+  for (const [productId, amount] of [['weapon_twin', .75], ['weapon_rapid_twin', 1]]) {
     const txid = `tx-${productId}`;
     const result = await payment(h, productId, {
       id: productId, request,
@@ -338,7 +338,7 @@ test('ordinary Testnet pilots can buy Twin and Rapid Twin and see each payment c
 test('owner Plasma charges activate for 45 seconds and replay one receipt without another debit', async t => {
   owner(t); const h=harness();pi(t,h);
   await h.call('progress','/me',null,{method:'GET'});
-  assert.equal((await payment(h,'weapon_plasma',{payment:{amount:.9,metadata:{productId:'weapon_plasma',quantity:3,weaponModel:2}}})).code,200);
+  assert.equal((await payment(h,'weapon_plasma',{payment:{amount:1.2,metadata:{productId:'weapon_plasma',quantity:3,weaponModel:2}}})).code,200);
   assert.equal((await inventory(h)).body.weaponStock.weapon_plasma,3);
   const start=await h.call('hangar','/start',{action:'new',version:h.profile().version,startKey:'owner-plasma-run-0001',rulesVersion:2});
   h.profile().mission={sector:1,phase:'normal',snapshot:firstMissionSnapshot(3),combat:{},savedAt:new Date().toISOString()};

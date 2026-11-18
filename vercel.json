@@ -2,7 +2,7 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": null,
   "installCommand": "npm install --prefix frontend && npm install --include=optional --prefix backend",
-  "buildCommand": "VITE_CRYPTOID_DIAGNOSTICS=0 npm run build --prefix frontend",
+  "buildCommand": "env -u VERCEL npm test --prefix backend && VITE_CRYPTOID_DIAGNOSTICS=0 npm run build --prefix frontend",
   "outputDirectory": "frontend/dist",
   "redirects": [
     {
@@ -176,7 +176,8 @@
       "codex/testnet-power-up-dock-20261108": false,
       "codex/testnet-guide-power-timing-20261108": false,
       "codex/continue-level-cache-20261108": false,
-      "codex/quiet-combat-banner-20261108": false
+      "codex/quiet-combat-banner-20261108": false,
+      "codex/testnet-consumable-prices-20261118": false
     }
   }
 }
