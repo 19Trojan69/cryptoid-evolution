@@ -76,6 +76,15 @@ test("a stored release cannot bypass missing server readiness", async () => {
   assert.equal(await release.mainnetPurchasesReleased(h.req), false);
 });
 
+test("completed readiness never replaces the owner's explicit release", async () => {
+  const h = harness(null, prepared);
+  const response = await h.call();
+  assert.equal(response.body.ready, true);
+  assert.equal(response.body.released, false);
+  assert.equal(response.body.enabled, false);
+  assert.equal(h.writes.length, 0);
+});
+
 test("the prepared release persists the verified owner and increments its revision", async () => {
   const h = harness(null, prepared);
   const response = await h.call("POST", { action: "release", revision: 0 });
