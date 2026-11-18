@@ -33,7 +33,7 @@ export default function AdminMainnetRelease() {
   useEffect(() => {
     const controller = new AbortController();
     void load(controller.signal).catch(() => {
-      if (!controller.signal.aborted) setError("Der Freigabestatus konnte nicht geladen werden.");
+      if (!controller.signal.aborted) setError(adminText("Der Freigabestatus konnte nicht geladen werden."));
     });
     return () => controller.abort();
   }, [load]);
@@ -49,7 +49,7 @@ export default function AdminMainnetRelease() {
       });
       setStatus(data);
     } catch {
-      setError("Die Änderung wurde nicht bestätigt. Bitte den aktuellen Status prüfen.");
+      setError(adminText("Die Änderung wurde nicht bestätigt. Bitte den aktuellen Status prüfen."));
       try { await load(); } catch { setStatus(null); }
     } finally { setBusy(false); }
   };
@@ -70,7 +70,7 @@ export default function AdminMainnetRelease() {
         </button>
         <button type="button" className="admin-button" disabled={busy} onClick={() => {
           setError("");
-          void load().catch(() => setError("Der Freigabestatus konnte nicht geladen werden."));
+          void load().catch(() => setError(adminText("Der Freigabestatus konnte nicht geladen werden.")));
         }}>{adminText("Status aktualisieren")}</button>
       </div>
       {!status && !error && <p role="status">{adminText("Freigabestatus wird geladen…")}</p>}
