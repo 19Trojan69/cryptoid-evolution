@@ -88,10 +88,23 @@ test('the campaign opening leaves a full speech pause after spam', () => {
   assert.ok(words[stop + 1].start - words[stop].end >= .85);
 });
 
-test('the new voice tracks give cues audible separation and a quiet ending', () => {
-  for (const [scene, { audio, timing }] of Object.entries(storyScenes)) {
+test('levels 13 through 16 use their new recordings at all three story handoffs', () => {
+  for (let level = 13; level <= 16; level++) {
+    const bossSector = level * 10;
+    const handoffs = {
+      briefing: levelStoryAtSector(bossSector - 9),
+      intro: bossStoryAtSector(bossSector),
+      outro: bossOutroAtSector(bossSector),
+    };
+    for (const [kind, scene] of Object.entries(handoffs)) {
+      assert.equal(storyScenes[scene].audio, `recorded/level-${level}-${kind}.mp3`);
+    }
+  }
+});
+
+test('the voice tracks give cues audible separation and a quiet ending', () => {
+  for (const [scene, { timing }] of Object.entries(storyScenes)) {
     if (scene === 'campaign') continue;
-    assert.ok(audio.startsWith('robot/'), scene);
     const groups = timing.groups;
     assert.ok(groups[0].words[0].start >= .5, scene + ' has no lead-in');
     assert.ok(timing.duration - groups.at(-1).words.at(-1).end >= 1.6, scene + ' has no ending tail');

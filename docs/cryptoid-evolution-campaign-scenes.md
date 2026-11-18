@@ -15,7 +15,9 @@ Drehbuch für Kampagnenstart, Level-Briefings, Boss-Intros und Sieges-Outros. Je
 
 Die ersten 35 Szenen verwenden die eingereichte englische Sprecheraufnahme. Das umfasst die Boss-Szenen für Level 1 und alle Briefings, Intros und Outros für Level 2 bis 12. Die Sprecheraufnahme setzt jeweils nach der Slate-Ansage ein. Als leise Begleitung dienen Auszüge aus „Galactic Chain (Remastered)“, „Dreadnought Duel“ und eine Instrumentalfassung des Auszugs aus „Beyond the Last Star“. Die Sprachpausen, die englische Laufschrift und die Untertitel der 18 weiteren Spielsprachen sind auf die neuen Schnitte abgestimmt.
 
-Für die weiteren Level stehen die bereits vertonten Szenen zur Verfügung. Der Flottencomputer spricht die weiteren Briefings, Boss-Intros und Boss-Outros mit der englischen Roboterstimme. Die eigens komponierten Orchesterbegleitungen variieren je Szene und beginnen und enden leise. Die Untertitel der 18 weiteren Spielsprachen folgen den Sprechpausen und werden pro Sprache geladen. Drazevorns Finale „Earth, We Read You“ erhält einen längeren Ausklang. [Kokoro](https://huggingface.co/hexgrad/Kokoro-82M) · [GeneralUser GS](https://github.com/mrbumpy409/GeneralUser-GS)
+Die Aufnahmen ab Level 13 beginnen mit Dornaviks Briefing. Die zwölf Szenen für Level 13 bis 16 verwenden die neuen Aufnahmen aus Slate 036–047. Die Slate-Ansagen wurden an den Sprechpausen herausgeschnitten. Ein leiser Orchesterausschnitt aus „Cleared for Launch“ begleitet alle zwölf Szenen. Laufschrift und Untertitel folgen den neuen Satzpausen.
+
+Ab Level 17 stehen die bereits vertonten Szenen zur Verfügung. Der Flottencomputer spricht die weiteren Briefings, Boss-Intros und Boss-Outros mit der englischen Roboterstimme. Die eigens komponierten Orchesterbegleitungen variieren je Szene und beginnen und enden leise. Die Untertitel der 18 weiteren Spielsprachen folgen den Sprechpausen und werden pro Sprache geladen. Drazevorns Finale „Earth, We Read You“ erhält einen längeren Ausklang. [Kokoro](https://huggingface.co/hexgrad/Kokoro-82M) · [GeneralUser GS](https://github.com/mrbumpy409/GeneralUser-GS)
 
 ## Genesis und die falschen Befehle
 
@@ -844,7 +846,7 @@ Der Archivbrandstifter · The Archive Arsonist
 
 #### Level-Briefing · What the Recorder Saw
 
-Roboteraufnahme · robot/level-13-briefing.mp3 · 20,23 s.
+Sprecheraufnahme · recorded/level-13-briefing.mp3 · 16,85 s.
 
 **Suno-Stil**
 
@@ -860,7 +862,7 @@ Die Rettungscrew führte ein handschriftliches Logbuch. Darin steht, dass ein Be
 
 #### Boss-Intro · Salvage With the Fire Doors Shut
 
-Roboteraufnahme · robot/level-13-intro.mp3 · 28,08 s.
+Sprecheraufnahme · recorded/level-13-intro.mp3 · 21,90 s.
 
 **Suno-Stil**
 
@@ -876,7 +878,7 @@ Kontakt bestätigt. Dornavik, der Archivbrandstifter. Seine isolierten Kammern r
 
 #### Boss-Outro · Evidence Comes Home
 
-Roboteraufnahme · robot/level-13-outro.mp3 · 23,30 s.
+Sprecheraufnahme · recorded/level-13-outro.mp3 · 18,00 s.
 
 **Suno-Stil**
 
@@ -896,7 +898,7 @@ Der Blockzurückhalter · The Block Withholder
 
 #### Level-Briefing · Last Week at the Outpost
 
-Roboteraufnahme · robot/level-14-briefing.mp3 · 20,86 s.
+Sprecheraufnahme · recorded/level-14-briefing.mp3 · 17,29 s.
 
 **Suno-Stil**
 
@@ -912,7 +914,7 @@ Der Außenposten will einen Frachter an einem Hafen andocken lassen, der wegen R
 
 #### Boss-Intro · The Sealed Containers
 
-Roboteraufnahme · robot/level-14-intro.mp3 · 24,34 s.
+Sprecheraufnahme · recorded/level-14-intro.mp3 · 18,66 s.
 
 **Suno-Stil**
 
@@ -928,7 +930,7 @@ Das ist Velkrath, der Blockzurückhalter. Seine versiegelten Container schützte
 
 #### Boss-Outro · Same Page, Different Hour
 
-Roboteraufnahme · robot/level-14-outro.mp3 · 22,13 s.
+Sprecheraufnahme · recorded/level-14-outro.mp3 · 16,75 s.
 
 **Suno-Stil**
 
@@ -948,7 +950,7 @@ Der Zeitverdreher · The Clock Twister
 
 #### Level-Briefing · One Hour, Two Clocks
 
-Roboteraufnahme · robot/level-15-briefing.mp3 · 21,31 s.
+Sprecheraufnahme · recorded/level-15-briefing.mp3 · 17,77 s.
 
 **Suno-Stil**
 
@@ -964,7 +966,7 @@ Die mechanische Uhr stimmt mit der gemessenen Flugzeit der Versorgungscrews übe
 
 #### Boss-Intro · The Precision Signal
 
-Roboteraufnahme · robot/level-15-intro.mp3 · 27,14 s.
+Sprecheraufnahme · recorded/level-15-intro.mp3 · 20,60 s.
 
 **Suno-Stil**
 
@@ -980,7 +982,7 @@ Kontakt bestätigt. Irdavoss, der Zeitverdreher. Ganze Flotten richteten ihre Ma
 
 #### Boss-Outro · The Logs That Stayed Locked
 
-Roboteraufnahme · robot/level-15-outro.mp3 · 20,40 s.
+Sprecheraufnahme · recorded/level-15-outro.mp3 · 15,41 s.
 
 **Suno-Stil**
 
@@ -1000,7 +1002,7 @@ Der Schlüsselkerker · The Key Gaoler
 
 #### Level-Briefing · Hold the Clinic Open
 
-Roboteraufnahme · robot/level-16-briefing.mp3 · 20,16 s.
+Sprecheraufnahme · recorded/level-16-briefing.mp3 · 16,42 s.
 
 **Suno-Stil**
 
@@ -1016,7 +1018,7 @@ Die Klinik arbeitet mit Papiernotizen, solange ihre Unterlagen gesperrt sind. Ei
 
 #### Boss-Intro · The Cells Are Full Again
 
-Roboteraufnahme · robot/level-16-intro.mp3 · 25,68 s.
+Sprecheraufnahme · recorded/level-16-intro.mp3 · 19,67 s.
 
 **Suno-Stil**
 
@@ -1032,7 +1034,7 @@ Dieser Gefangenentransporter ist Rhazvorn, der Schlüsselkerker. In seinen Zelle
 
 #### Boss-Outro · Open the Clinic’s Files
 
-Roboteraufnahme · robot/level-16-outro.mp3 · 21,91 s.
+Sprecheraufnahme · recorded/level-16-outro.mp3 · 17,17 s.
 
 **Suno-Stil**
 

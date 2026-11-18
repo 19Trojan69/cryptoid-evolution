@@ -704,14 +704,14 @@
     "title": "Level 13",
     "chapterTitle": "What the Recorder Saw",
     "heading": "LEVEL 13",
-    "audio": "robot/level-13-briefing.mp3",
+    "audio": "recorded/level-13-briefing.mp3",
     "timing": {
-      "duration": 20.232,
+      "duration": 16.852,
       "groups": [
-        {"kind":"story","words":[{"text":"The","start":0.577,"end":0.724},{"text":"rescue","start":0.774,"end":1.199},{"text":"crew","start":1.274,"end":1.599},{"text":"kept","start":1.649,"end":1.874},{"text":"a","start":1.899,"end":1.924},{"text":"handwritten","start":1.974,"end":2.549},{"text":"log.","start":2.599,"end":3.519}]},
-        {"kind":"story","words":[{"text":"It","start":4.326,"end":4.497},{"text":"describes","start":4.547,"end":5.047},{"text":"a","start":5.072,"end":5.122},{"text":"salvage","start":5.197,"end":5.622},{"text":"ship","start":5.722,"end":6.097},{"text":"offering","start":6.272,"end":6.572},{"text":"to","start":6.622,"end":6.672},{"text":"protect","start":6.722,"end":7.072},{"text":"the","start":7.122,"end":7.172},{"text":"recordings","start":7.222,"end":7.797},{"text":"of","start":7.822,"end":7.922},{"text":"the","start":7.922,"end":7.997},{"text":"false","start":8.072,"end":8.397},{"text":"route.","start":8.447,"end":9.372}]},
-        {"kind":"story","words":[{"text":"We","start":10.265,"end":10.44},{"text":"can","start":10.49,"end":10.64},{"text":"still","start":10.69,"end":10.94},{"text":"prove","start":11.015,"end":11.44},{"text":"when","start":11.49,"end":11.565},{"text":"the","start":11.59,"end":11.64},{"text":"rescue","start":11.69,"end":12.115},{"text":"ship","start":12.19,"end":12.39},{"text":"arrived.","start":12.44,"end":13.559}]},
-        {"kind":"order","words":[{"text":"We","start":14.276,"end":14.477},{"text":"need","start":14.502,"end":14.652},{"text":"the","start":14.677,"end":14.727},{"text":"drive","start":14.777,"end":15.227},{"text":"to","start":15.277,"end":15.352},{"text":"show","start":15.427,"end":15.627},{"text":"what","start":15.677,"end":15.802},{"text":"the","start":15.852,"end":15.927},{"text":"crew","start":16.002,"end":16.302},{"text":"heard","start":16.377,"end":16.727},{"text":"on","start":16.777,"end":16.877},{"text":"its","start":16.902,"end":17.052},{"text":"way","start":17.102,"end":17.302},{"text":"in.","start":17.352,"end":18.27}]}
+        {"kind":"story","words":[{"text":"The","start":0.59,"end":0.709},{"text":"rescue","start":0.749,"end":1.09},{"text":"crew","start":1.15,"end":1.428},{"text":"kept","start":1.473,"end":1.714},{"text":"a","start":1.745,"end":1.771},{"text":"handwritten","start":1.814,"end":2.255},{"text":"log.","start":2.289,"end":2.87}]},
+        {"kind":"story","words":[{"text":"It","start":3.47,"end":3.601},{"text":"describes","start":3.64,"end":4.082},{"text":"a","start":4.107,"end":4.155},{"text":"salvage","start":4.223,"end":4.602},{"text":"ship","start":4.689,"end":5.011},{"text":"offering","start":5.16,"end":5.477},{"text":"to","start":5.54,"end":5.599},{"text":"protect","start":5.653,"end":6.021},{"text":"the","start":6.072,"end":6.123},{"text":"recordings","start":6.175,"end":6.769},{"text":"of","start":6.795,"end":6.898},{"text":"the","start":6.898,"end":6.968},{"text":"false","start":7.029,"end":7.27},{"text":"route.","start":7.304,"end":7.882}]},
+        {"kind":"story","words":[{"text":"We","start":8.482,"end":8.64},{"text":"can","start":8.679,"end":8.805},{"text":"still","start":8.849,"end":9.085},{"text":"prove","start":9.158,"end":9.633},{"text":"when","start":9.695,"end":9.8},{"text":"the","start":9.838,"end":9.897},{"text":"rescue","start":9.936,"end":10.275},{"text":"ship","start":10.336,"end":10.483},{"text":"arrived.","start":10.515,"end":11.212}]},
+        {"kind":"order","words":[{"text":"We","start":11.812,"end":12.0},{"text":"need","start":12.024,"end":12.178},{"text":"the","start":12.205,"end":12.252},{"text":"drive","start":12.292,"end":12.656},{"text":"to","start":12.696,"end":12.77},{"text":"show","start":12.855,"end":13.074},{"text":"what","start":13.127,"end":13.259},{"text":"the","start":13.312,"end":13.38},{"text":"crew","start":13.438,"end":13.676},{"text":"heard","start":13.738,"end":14.035},{"text":"on","start":14.078,"end":14.172},{"text":"its","start":14.197,"end":14.347},{"text":"way","start":14.397,"end":14.554},{"text":"in.","start":14.582,"end":15.022}]}
       ]
     }
   },
@@ -721,17 +721,17 @@
     "title": "Intro Dornavik",
     "chapterTitle": "Intro Dornavik",
     "heading": "Intro Dornavik",
-    "audio": "robot/level-13-intro.mp3",
+    "audio": "recorded/level-13-intro.mp3",
     "bossSubtitle": "The Archive Arsonist",
     "timing": {
-      "duration": 28.08,
+      "duration": 21.897,
       "groups": [
-        {"kind":"story","words":[{"text":"Contact","start":0.577,"end":1.32},{"text":"confirmed.","start":1.37,"end":2.558}]},
-        {"kind":"contact","words":[{"text":"Dornavik,","start":3.365,"end":4.031},{"text":"the","start":4.081,"end":4.181},{"text":"Archive","start":4.231,"end":4.781},{"text":"Arsonist.","start":4.831,"end":6.005}]},
-        {"kind":"story","words":[{"text":"Its","start":6.901,"end":7.098},{"text":"insulated","start":7.148,"end":7.623},{"text":"chambers","start":7.673,"end":8.173},{"text":"once","start":8.223,"end":8.448},{"text":"kept","start":8.498,"end":8.723},{"text":"archives","start":8.773,"end":9.298},{"text":"alive","start":9.348,"end":9.898},{"text":"inside","start":9.973,"end":10.398},{"text":"burning","start":10.448,"end":10.773},{"text":"wrecks.","start":10.823,"end":11.798}]},
-        {"kind":"story","words":[{"text":"Now","start":12.509,"end":12.83},{"text":"it","start":12.855,"end":12.905},{"text":"keeps","start":12.955,"end":13.18},{"text":"the","start":13.205,"end":13.305},{"text":"intact","start":13.355,"end":13.805},{"text":"drives","start":13.88,"end":14.53},{"text":"and","start":14.58,"end":14.655},{"text":"sends","start":14.705,"end":14.955},{"text":"the","start":14.98,"end":15.03},{"text":"crews","start":15.105,"end":15.405},{"text":"damaged","start":15.48,"end":15.905},{"text":"copies.","start":15.955,"end":17.105}]},
-        {"kind":"story","words":[{"text":"That","start":17.908,"end":18.155},{"text":"blinking","start":18.205,"end":18.555},{"text":"bay","start":18.605,"end":18.93},{"text":"holds","start":18.98,"end":19.33},{"text":"the","start":19.38,"end":19.455},{"text":"rescue","start":19.505,"end":19.93},{"text":"ship’s","start":20.03,"end":20.28},{"text":"recorder.","start":20.33,"end":21.471}]},
-        {"kind":"order","words":[{"text":"Stop","start":22.367,"end":22.86},{"text":"Dornavik","start":22.935,"end":23.41},{"text":"from","start":23.46,"end":23.61},{"text":"jumping.","start":23.66,"end":24.783}]}
+        {"kind":"story","words":[{"text":"Contact","start":0.59,"end":1.1},{"text":"confirmed.","start":1.13,"end":1.877}]},
+        {"kind":"contact","words":[{"text":"Dornavik,","start":2.477,"end":3.226},{"text":"the","start":3.283,"end":3.379},{"text":"Archive","start":3.419,"end":3.824},{"text":"Arsonist.","start":3.858,"end":4.614}]},
+        {"kind":"story","words":[{"text":"Its","start":5.214,"end":5.414},{"text":"insulated","start":5.464,"end":5.962},{"text":"chambers","start":6.016,"end":6.559},{"text":"once","start":6.613,"end":6.853},{"text":"kept","start":6.904,"end":7.128},{"text":"archives","start":7.176,"end":7.661},{"text":"alive","start":7.705,"end":8.208},{"text":"inside","start":8.278,"end":8.678},{"text":"burning","start":8.726,"end":8.978},{"text":"wrecks.","start":9.008,"end":9.588}]},
+        {"kind":"story","words":[{"text":"Now","start":10.188,"end":10.525},{"text":"it","start":10.55,"end":10.599},{"text":"keeps","start":10.648,"end":10.884},{"text":"the","start":10.912,"end":11.012},{"text":"intact","start":11.056,"end":11.447},{"text":"drives","start":11.512,"end":12.124},{"text":"and","start":12.175,"end":12.258},{"text":"sends","start":12.318,"end":12.618},{"text":"the","start":12.648,"end":12.704},{"text":"crews","start":12.783,"end":13.097},{"text":"damaged","start":13.175,"end":13.554},{"text":"copies.","start":13.591,"end":14.388}]},
+        {"kind":"story","words":[{"text":"That","start":14.988,"end":15.225},{"text":"blinking","start":15.272,"end":15.601},{"text":"bay","start":15.647,"end":15.93},{"text":"holds","start":15.971,"end":16.263},{"text":"the","start":16.306,"end":16.37},{"text":"rescue","start":16.412,"end":16.741},{"text":"ship’s","start":16.811,"end":16.985},{"text":"recorder.","start":17.02,"end":17.748}]},
+        {"kind":"order","words":[{"text":"Stop","start":18.348,"end":18.779},{"text":"Dornavik","start":18.845,"end":19.261},{"text":"from","start":19.304,"end":19.409},{"text":"jumping.","start":19.436,"end":20.067}]}
       ]
     }
   },
@@ -741,16 +741,16 @@
     "title": "Outro Dornavik",
     "chapterTitle": "Outro Dornavik",
     "heading": "Outro Dornavik",
-    "audio": "robot/level-13-outro.mp3",
+    "audio": "recorded/level-13-outro.mp3",
     "bossSubtitle": "The Archive Arsonist",
     "timing": {
-      "duration": 23.304,
+      "duration": 17.996,
       "groups": [
-        {"kind":"contact","words":[{"text":"We","start":0.577,"end":0.828},{"text":"recovered","start":0.878,"end":1.428},{"text":"the","start":1.478,"end":1.553},{"text":"drive.","start":1.628,"end":2.347}]},
-        {"kind":"story","words":[{"text":"The","start":3.144,"end":3.293},{"text":"crew","start":3.368,"end":3.593},{"text":"has","start":3.618,"end":3.743},{"text":"matched","start":3.793,"end":4.093},{"text":"the","start":4.118,"end":4.168},{"text":"recording","start":4.218,"end":4.693},{"text":"to","start":4.743,"end":4.818},{"text":"each","start":4.868,"end":5.093},{"text":"entry","start":5.143,"end":5.568},{"text":"in","start":5.618,"end":5.693},{"text":"its","start":5.743,"end":5.893},{"text":"log.","start":5.943,"end":6.897}]},
-        {"kind":"story","words":[{"text":"Their","start":7.794,"end":7.992},{"text":"replacements","start":8.041,"end":8.666},{"text":"reached","start":8.716,"end":9.017},{"text":"three","start":9.091,"end":9.341},{"text":"colonies","start":9.392,"end":9.992},{"text":"this","start":10.041,"end":10.216},{"text":"morning.","start":10.267,"end":11.242}]},
-        {"kind":"story","words":[{"text":"One","start":11.957,"end":12.257},{"text":"outpost","start":12.307,"end":12.807},{"text":"has","start":12.832,"end":12.957},{"text":"received","start":13.007,"end":13.432},{"text":"nothing","start":13.507,"end":13.932},{"text":"since","start":13.982,"end":14.157},{"text":"last","start":14.207,"end":14.557},{"text":"week.","start":14.607,"end":15.47}]},
-        {"kind":"story","words":[{"text":"An","start":16.276,"end":16.453},{"text":"archive","start":16.503,"end":16.953},{"text":"carrier","start":17.027,"end":17.477},{"text":"is","start":17.527,"end":17.602},{"text":"still","start":17.652,"end":17.902},{"text":"holding","start":17.953,"end":18.352},{"text":"all","start":18.427,"end":18.628},{"text":"its","start":18.677,"end":18.828},{"text":"updates.","start":18.878,"end":20.03}]}
+        {"kind":"contact","words":[{"text":"We","start":0.59,"end":0.768},{"text":"recovered","start":0.803,"end":1.2},{"text":"the","start":1.237,"end":1.291},{"text":"drive.","start":1.344,"end":1.88}]},
+        {"kind":"story","words":[{"text":"The","start":2.48,"end":2.6},{"text":"crew","start":2.66,"end":2.877},{"text":"has","start":2.905,"end":3.038},{"text":"matched","start":3.089,"end":3.394},{"text":"the","start":3.419,"end":3.471},{"text":"recording","start":3.523,"end":4.033},{"text":"to","start":4.088,"end":4.172},{"text":"each","start":4.228,"end":4.468},{"text":"entry","start":4.518,"end":4.877},{"text":"in","start":4.911,"end":4.963},{"text":"its","start":4.998,"end":5.101},{"text":"log.","start":5.136,"end":5.75}]},
+        {"kind":"story","words":[{"text":"Their","start":6.35,"end":6.524},{"text":"replacements","start":6.567,"end":7.14},{"text":"reached","start":7.188,"end":7.474},{"text":"three","start":7.544,"end":7.765},{"text":"colonies","start":7.807,"end":8.3},{"text":"this","start":8.34,"end":8.467},{"text":"morning.","start":8.498,"end":9.087}]},
+        {"kind":"story","words":[{"text":"One","start":9.687,"end":9.952},{"text":"outpost","start":9.995,"end":10.468},{"text":"has","start":10.493,"end":10.615},{"text":"received","start":10.661,"end":11.042},{"text":"nothing","start":11.107,"end":11.52},{"text":"since","start":11.573,"end":11.759},{"text":"last","start":11.812,"end":12.109},{"text":"week.","start":12.141,"end":12.657}]},
+        {"kind":"story","words":[{"text":"An","start":13.257,"end":13.41},{"text":"archive","start":13.453,"end":13.84},{"text":"carrier","start":13.904,"end":14.292},{"text":"is","start":14.335,"end":14.4},{"text":"still","start":14.443,"end":14.673},{"text":"holding","start":14.723,"end":15.118},{"text":"all","start":15.192,"end":15.351},{"text":"its","start":15.379,"end":15.467},{"text":"updates.","start":15.496,"end":16.166}]}
       ]
     }
   },
@@ -760,14 +760,14 @@
     "title": "Level 14",
     "chapterTitle": "Last Week at the Outpost",
     "heading": "LEVEL 14",
-    "audio": "robot/level-14-briefing.mp3",
+    "audio": "recorded/level-14-briefing.mp3",
     "timing": {
-      "duration": 20.856,
+      "duration": 17.291,
       "groups": [
-        {"kind":"story","words":[{"text":"The","start":0.577,"end":0.75},{"text":"outpost","start":0.85,"end":1.3},{"text":"is","start":1.325,"end":1.4},{"text":"trying","start":1.45,"end":1.675},{"text":"to","start":1.7,"end":1.75},{"text":"dock","start":1.8,"end":2.0},{"text":"a","start":2.025,"end":2.075},{"text":"freighter","start":2.15,"end":2.525},{"text":"at","start":2.575,"end":2.65},{"text":"a","start":2.65,"end":2.7},{"text":"port","start":2.75,"end":3.025},{"text":"closed","start":3.075,"end":3.425},{"text":"for","start":3.475,"end":3.575},{"text":"repairs.","start":3.625,"end":4.826}]},
-        {"kind":"story","words":[{"text":"Its","start":5.723,"end":5.975},{"text":"local","start":6.025,"end":6.375},{"text":"bulletin","start":6.425,"end":7.025},{"text":"is","start":7.1,"end":7.2},{"text":"a","start":7.225,"end":7.275},{"text":"week","start":7.35,"end":7.6},{"text":"old.","start":7.65,"end":8.646}]},
-        {"kind":"story","words":[{"text":"We","start":9.362,"end":9.537},{"text":"sent","start":9.587,"end":9.787},{"text":"a","start":9.812,"end":9.862},{"text":"voice","start":9.912,"end":10.212},{"text":"message","start":10.262,"end":10.637},{"text":"from","start":10.687,"end":10.837},{"text":"the","start":10.837,"end":10.912},{"text":"port","start":10.987,"end":11.437},{"text":"and","start":11.512,"end":11.587},{"text":"the","start":11.612,"end":11.662},{"text":"freighter","start":11.737,"end":12.087},{"text":"is","start":12.137,"end":12.237},{"text":"turning.","start":12.312,"end":13.337}]},
-        {"kind":"order","words":[{"text":"The","start":14.143,"end":14.315},{"text":"scheduled","start":14.365,"end":14.815},{"text":"update","start":14.865,"end":15.29},{"text":"is","start":15.34,"end":15.415},{"text":"still","start":15.465,"end":15.715},{"text":"aboard","start":15.765,"end":16.09},{"text":"the","start":16.115,"end":16.19},{"text":"carrier","start":16.265,"end":16.79},{"text":"that","start":16.84,"end":16.965},{"text":"was","start":17.015,"end":17.14},{"text":"meant","start":17.215,"end":17.49},{"text":"to","start":17.565,"end":17.64},{"text":"deliver","start":17.69,"end":18.115},{"text":"it.","start":18.165,"end":18.891}]}
+        {"kind":"story","words":[{"text":"The","start":0.59,"end":0.745},{"text":"outpost","start":0.835,"end":1.239},{"text":"is","start":1.261,"end":1.329},{"text":"trying","start":1.374,"end":1.6},{"text":"to","start":1.627,"end":1.68},{"text":"dock","start":1.73,"end":1.931},{"text":"a","start":1.956,"end":2.006},{"text":"freighter","start":2.082,"end":2.485},{"text":"at","start":2.542,"end":2.639},{"text":"a","start":2.639,"end":2.704},{"text":"port","start":2.761,"end":3.077},{"text":"closed","start":3.134,"end":3.526},{"text":"for","start":3.58,"end":3.668},{"text":"repairs.","start":3.701,"end":4.49}]},
+        {"kind":"story","words":[{"text":"Its","start":5.09,"end":5.279},{"text":"local","start":5.316,"end":5.592},{"text":"bulletin","start":5.633,"end":6.147},{"text":"is","start":6.213,"end":6.309},{"text":"a","start":6.336,"end":6.382},{"text":"week","start":6.442,"end":6.612},{"text":"old.","start":6.64,"end":7.142}]},
+        {"kind":"story","words":[{"text":"We","start":7.742,"end":7.903},{"text":"sent","start":7.944,"end":8.106},{"text":"a","start":8.127,"end":8.165},{"text":"voice","start":8.202,"end":8.446},{"text":"message","start":8.49,"end":8.819},{"text":"from","start":8.862,"end":9.017},{"text":"the","start":9.017,"end":9.104},{"text":"port","start":9.187,"end":9.687},{"text":"and","start":9.77,"end":9.857},{"text":"the","start":9.887,"end":9.934},{"text":"freighter","start":9.984,"end":10.218},{"text":"is","start":10.252,"end":10.319},{"text":"turning.","start":10.369,"end":11.014}]},
+        {"kind":"order","words":[{"text":"The","start":11.614,"end":11.734},{"text":"scheduled","start":11.773,"end":12.159},{"text":"update","start":12.205,"end":12.599},{"text":"is","start":12.645,"end":12.714},{"text":"still","start":12.76,"end":12.995},{"text":"aboard","start":13.042,"end":13.337},{"text":"the","start":13.358,"end":13.424},{"text":"carrier","start":13.49,"end":14.036},{"text":"that","start":14.096,"end":14.225},{"text":"was","start":14.267,"end":14.365},{"text":"meant","start":14.418,"end":14.623},{"text":"to","start":14.682,"end":14.743},{"text":"deliver","start":14.785,"end":15.083},{"text":"it.","start":15.111,"end":15.461}]}
       ]
     }
   },
@@ -777,16 +777,16 @@
     "title": "Intro Velkrath",
     "chapterTitle": "Intro Velkrath",
     "heading": "Intro Velkrath",
-    "audio": "robot/level-14-intro.mp3",
+    "audio": "recorded/level-14-intro.mp3",
     "bossSubtitle": "The Block Withholder",
     "timing": {
-      "duration": 24.336,
+      "duration": 18.657,
       "groups": [
-        {"kind":"contact","words":[{"text":"That’s","start":0.577,"end":0.901},{"text":"Velkrath,","start":0.951,"end":1.551},{"text":"the","start":1.601,"end":1.651},{"text":"Block","start":1.701,"end":2.051},{"text":"Withholder.","start":2.101,"end":3.425}]},
-        {"kind":"story","words":[{"text":"His","start":4.321,"end":4.52},{"text":"sealed","start":4.57,"end":4.845},{"text":"carriers","start":4.92,"end":5.37},{"text":"once","start":5.445,"end":5.67},{"text":"kept","start":5.72,"end":5.945},{"text":"research","start":5.995,"end":6.445},{"text":"records","start":6.495,"end":6.87},{"text":"intact","start":6.92,"end":7.42},{"text":"for","start":7.47,"end":7.57},{"text":"the","start":7.57,"end":7.67},{"text":"outer","start":7.77,"end":7.97},{"text":"stations.","start":8.02,"end":9.195}]},
-        {"kind":"story","words":[{"text":"The","start":9.906,"end":10.08},{"text":"updates","start":10.13,"end":10.505},{"text":"are","start":10.53,"end":10.605},{"text":"still","start":10.655,"end":10.905},{"text":"inside,","start":10.955,"end":11.68},{"text":"in","start":11.78,"end":11.88},{"text":"date","start":11.93,"end":12.155},{"text":"order.","start":12.205,"end":13.16}]},
-        {"kind":"story","words":[{"text":"He","start":13.966,"end":14.154},{"text":"releases","start":14.204,"end":14.679},{"text":"an","start":14.704,"end":14.754},{"text":"old","start":14.804,"end":15.029},{"text":"one","start":15.079,"end":15.354},{"text":"whenever","start":15.429,"end":15.804},{"text":"it","start":15.829,"end":15.904},{"text":"can","start":15.954,"end":16.079},{"text":"cause","start":16.154,"end":16.504},{"text":"trouble.","start":16.579,"end":17.531}]},
-        {"kind":"order","words":[{"text":"Open","start":18.427,"end":18.866},{"text":"a","start":18.916,"end":18.966},{"text":"path","start":19.041,"end":19.466},{"text":"to","start":19.516,"end":19.591},{"text":"the","start":19.616,"end":19.666},{"text":"containers.","start":19.716,"end":21.044}]}
+        {"kind":"contact","words":[{"text":"That’s","start":0.59,"end":0.937},{"text":"Velkrath,","start":0.998,"end":1.729},{"text":"the","start":1.79,"end":1.843},{"text":"Block","start":1.887,"end":2.132},{"text":"Withholder.","start":2.157,"end":2.817}]},
+        {"kind":"story","words":[{"text":"His","start":3.417,"end":3.595},{"text":"sealed","start":3.64,"end":3.899},{"text":"carriers","start":3.973,"end":4.418},{"text":"once","start":4.492,"end":4.706},{"text":"kept","start":4.753,"end":4.957},{"text":"research","start":5.002,"end":5.421},{"text":"records","start":5.47,"end":5.85},{"text":"intact","start":5.903,"end":6.431},{"text":"for","start":6.484,"end":6.597},{"text":"the","start":6.597,"end":6.693},{"text":"outer","start":6.765,"end":6.908},{"text":"stations.","start":6.944,"end":7.767}]},
+        {"kind":"story","words":[{"text":"The","start":8.367,"end":8.514},{"text":"updates","start":8.556,"end":8.892},{"text":"are","start":8.916,"end":8.99},{"text":"still","start":9.04,"end":9.282},{"text":"inside,","start":9.328,"end":10.03},{"text":"in","start":10.131,"end":10.216},{"text":"date","start":10.251,"end":10.406},{"text":"order.","start":10.44,"end":11.037}]},
+        {"kind":"story","words":[{"text":"He","start":11.637,"end":11.79},{"text":"releases","start":11.831,"end":12.262},{"text":"an","start":12.287,"end":12.334},{"text":"old","start":12.378,"end":12.573},{"text":"one","start":12.615,"end":12.861},{"text":"whenever","start":12.932,"end":13.299},{"text":"it","start":13.324,"end":13.396},{"text":"can","start":13.441,"end":13.545},{"text":"cause","start":13.603,"end":13.845},{"text":"trouble.","start":13.892,"end":14.487}]},
+        {"kind":"order","words":[{"text":"Open","start":15.087,"end":15.396},{"text":"a","start":15.429,"end":15.462},{"text":"path","start":15.512,"end":15.837},{"text":"to","start":15.88,"end":15.963},{"text":"the","start":15.998,"end":16.046},{"text":"containers.","start":16.075,"end":16.827}]}
       ]
     }
   },
@@ -796,15 +796,15 @@
     "title": "Outro Velkrath",
     "chapterTitle": "Outro Velkrath",
     "heading": "Outro Velkrath",
-    "audio": "robot/level-14-outro.mp3",
+    "audio": "recorded/level-14-outro.mp3",
     "bossSubtitle": "The Block Withholder",
     "timing": {
-      "duration": 22.128,
+      "duration": 16.746,
       "groups": [
-        {"kind":"contact","words":[{"text":"The","start":0.577,"end":0.751},{"text":"outpost","start":0.801,"end":1.401},{"text":"has","start":1.451,"end":1.601},{"text":"the","start":1.651,"end":1.726},{"text":"latest","start":1.776,"end":2.176},{"text":"bulletin.","start":2.251,"end":3.469}]},
-        {"kind":"story","words":[{"text":"Two","start":4.366,"end":4.634},{"text":"crew","start":4.709,"end":4.909},{"text":"logs","start":4.959,"end":5.334},{"text":"say","start":5.384,"end":5.559},{"text":"the","start":5.584,"end":5.659},{"text":"same","start":5.734,"end":5.984},{"text":"update","start":6.034,"end":6.384},{"text":"arrived","start":6.434,"end":6.809},{"text":"on","start":6.834,"end":6.984},{"text":"time","start":7.059,"end":7.584},{"text":"and","start":7.659,"end":7.734},{"text":"after","start":7.784,"end":8.034},{"text":"the","start":8.059,"end":8.109},{"text":"deadline.","start":8.159,"end":9.255}]},
-        {"kind":"story","words":[{"text":"Both","start":9.962,"end":10.313},{"text":"clocks","start":10.363,"end":10.738},{"text":"were","start":10.763,"end":10.838},{"text":"taking","start":10.888,"end":11.213},{"text":"signals","start":11.288,"end":11.763},{"text":"from","start":11.813,"end":11.913},{"text":"a","start":11.938,"end":11.963},{"text":"precision","start":12.013,"end":12.513},{"text":"ship.","start":12.613,"end":13.503}]},
-        {"kind":"story","words":[{"text":"The","start":14.31,"end":14.455},{"text":"traffic","start":14.505,"end":14.88},{"text":"controller","start":14.93,"end":15.43},{"text":"is","start":15.48,"end":15.58},{"text":"sending","start":15.655,"end":16.005},{"text":"us","start":16.055,"end":16.355},{"text":"her","start":16.43,"end":16.605},{"text":"mechanical","start":16.655,"end":17.33},{"text":"clock’s","start":17.405,"end":17.78},{"text":"reading.","start":17.83,"end":18.855}]}
+        {"kind":"contact","words":[{"text":"The","start":0.59,"end":0.731},{"text":"outpost","start":0.768,"end":1.239},{"text":"has","start":1.279,"end":1.409},{"text":"the","start":1.455,"end":1.523},{"text":"latest","start":1.568,"end":1.857},{"text":"bulletin.","start":1.899,"end":2.582}]},
+        {"kind":"story","words":[{"text":"Two","start":3.182,"end":3.383},{"text":"crew","start":3.439,"end":3.605},{"text":"logs","start":3.65,"end":3.989},{"text":"say","start":4.035,"end":4.21},{"text":"the","start":4.238,"end":4.312},{"text":"same","start":4.378,"end":4.618},{"text":"update","start":4.669,"end":5.014},{"text":"arrived","start":5.062,"end":5.415},{"text":"on","start":5.439,"end":5.564},{"text":"time","start":5.618,"end":6.155},{"text":"and","start":6.255,"end":6.346},{"text":"after","start":6.403,"end":6.694},{"text":"the","start":6.724,"end":6.768},{"text":"deadline.","start":6.796,"end":7.386}]},
+        {"kind":"story","words":[{"text":"Both","start":7.986,"end":8.289},{"text":"clocks","start":8.333,"end":8.698},{"text":"were","start":8.726,"end":8.8},{"text":"taking","start":8.845,"end":9.14},{"text":"signals","start":9.209,"end":9.679},{"text":"from","start":9.733,"end":9.855},{"text":"a","start":9.889,"end":9.919},{"text":"precision","start":9.97,"end":10.385},{"text":"ship.","start":10.449,"end":10.956}]},
+        {"kind":"story","words":[{"text":"The","start":11.556,"end":11.672},{"text":"traffic","start":11.711,"end":12.027},{"text":"controller","start":12.072,"end":12.527},{"text":"is","start":12.573,"end":12.664},{"text":"sending","start":12.732,"end":13.018},{"text":"us","start":13.054,"end":13.22},{"text":"her","start":13.249,"end":13.349},{"text":"mechanical","start":13.386,"end":13.892},{"text":"clock’s","start":13.948,"end":14.227},{"text":"reading.","start":14.264,"end":14.916}]}
       ]
     }
   },
@@ -814,14 +814,14 @@
     "title": "Level 15",
     "chapterTitle": "One Hour, Two Clocks",
     "heading": "LEVEL 15",
-    "audio": "robot/level-15-briefing.mp3",
+    "audio": "recorded/level-15-briefing.mp3",
     "timing": {
-      "duration": 21.312,
+      "duration": 17.769,
       "groups": [
-        {"kind":"story","words":[{"text":"The","start":0.577,"end":0.7},{"text":"mechanical","start":0.75,"end":1.325},{"text":"clock","start":1.375,"end":1.7},{"text":"agrees","start":1.75,"end":2.3},{"text":"with","start":2.35,"end":2.475},{"text":"the","start":2.475,"end":2.55},{"text":"supply","start":2.6,"end":3.0},{"text":"crews’","start":3.05,"end":3.325},{"text":"elapsed","start":3.375,"end":3.75},{"text":"time.","start":3.8,"end":4.801}]},
-        {"kind":"story","words":[{"text":"The","start":5.517,"end":5.71},{"text":"outpost","start":5.76,"end":6.26},{"text":"clock","start":6.31,"end":6.635},{"text":"has","start":6.685,"end":6.81},{"text":"moved","start":6.885,"end":7.185},{"text":"ahead.","start":7.235,"end":8.185}]},
-        {"kind":"story","words":[{"text":"Two","start":8.991,"end":9.233},{"text":"maintenance","start":9.283,"end":9.758},{"text":"flights","start":9.808,"end":10.133},{"text":"have","start":10.158,"end":10.258},{"text":"been","start":10.258,"end":10.408},{"text":"told","start":10.458,"end":10.708},{"text":"to","start":10.758,"end":10.833},{"text":"use","start":10.883,"end":11.058},{"text":"the","start":11.108,"end":11.183},{"text":"same","start":11.258,"end":11.508},{"text":"airlock","start":11.608,"end":11.983},{"text":"at","start":12.033,"end":12.108},{"text":"different","start":12.158,"end":12.408},{"text":"hours,","start":12.533,"end":13.058},{"text":"and","start":13.183,"end":13.258},{"text":"both","start":13.333,"end":13.683},{"text":"are","start":13.733,"end":13.808},{"text":"on","start":13.883,"end":13.933},{"text":"approach.","start":13.983,"end":15.158}]},
-        {"kind":"order","words":[{"text":"The","start":16.05,"end":16.224},{"text":"dock","start":16.274,"end":16.524},{"text":"officer","start":16.574,"end":16.999},{"text":"has","start":17.049,"end":17.149},{"text":"stopped","start":17.224,"end":17.599},{"text":"them","start":17.649,"end":17.824},{"text":"at","start":17.874,"end":17.949},{"text":"the","start":17.974,"end":18.024},{"text":"beacons.","start":18.074,"end":19.341}]}
+        {"kind":"story","words":[{"text":"The","start":0.59,"end":0.685},{"text":"mechanical","start":0.725,"end":1.211},{"text":"clock","start":1.256,"end":1.542},{"text":"agrees","start":1.585,"end":2.046},{"text":"with","start":2.086,"end":2.212},{"text":"the","start":2.212,"end":2.291},{"text":"supply","start":2.337,"end":2.689},{"text":"crews’","start":2.731,"end":2.963},{"text":"elapsed","start":3.006,"end":3.323},{"text":"time.","start":3.365,"end":4.042}]},
+        {"kind":"story","words":[{"text":"The","start":4.642,"end":4.782},{"text":"outpost","start":4.823,"end":5.256},{"text":"clock","start":5.301,"end":5.601},{"text":"has","start":5.648,"end":5.759},{"text":"moved","start":5.822,"end":6.037},{"text":"ahead.","start":6.067,"end":6.592}]},
+        {"kind":"story","words":[{"text":"Two","start":7.192,"end":7.378},{"text":"maintenance","start":7.416,"end":7.829},{"text":"flights","start":7.877,"end":8.219},{"text":"have","start":8.247,"end":8.364},{"text":"been","start":8.364,"end":8.521},{"text":"told","start":8.566,"end":8.811},{"text":"to","start":8.864,"end":8.943},{"text":"use","start":8.994,"end":9.166},{"text":"the","start":9.214,"end":9.287},{"text":"same","start":9.363,"end":9.625},{"text":"airlock","start":9.735,"end":10.144},{"text":"at","start":10.198,"end":10.279},{"text":"different","start":10.332,"end":10.588},{"text":"hours,","start":10.713,"end":11.308},{"text":"and","start":11.466,"end":11.547},{"text":"both","start":11.614,"end":11.919},{"text":"are","start":11.962,"end":12.027},{"text":"on","start":12.092,"end":12.13},{"text":"approach.","start":12.163,"end":12.909}]},
+        {"kind":"order","words":[{"text":"The","start":13.509,"end":13.644},{"text":"dock","start":13.687,"end":13.915},{"text":"officer","start":13.963,"end":14.373},{"text":"has","start":14.421,"end":14.512},{"text":"stopped","start":14.577,"end":14.895},{"text":"them","start":14.936,"end":15.076},{"text":"at","start":15.115,"end":15.183},{"text":"the","start":15.208,"end":15.247},{"text":"beacons.","start":15.274,"end":15.939}]}
       ]
     }
   },
@@ -831,17 +831,17 @@
     "title": "Intro Irdavoss",
     "chapterTitle": "Intro Irdavoss",
     "heading": "Intro Irdavoss",
-    "audio": "robot/level-15-intro.mp3",
+    "audio": "recorded/level-15-intro.mp3",
     "bossSubtitle": "The Clock Twister",
     "timing": {
-      "duration": 27.144,
+      "duration": 20.603,
       "groups": [
-        {"kind":"story","words":[{"text":"Contact","start":0.577,"end":1.319},{"text":"confirmed.","start":1.369,"end":2.559}]},
-        {"kind":"contact","words":[{"text":"Irdavoss,","start":3.276,"end":4.093},{"text":"the","start":4.143,"end":4.218},{"text":"Clock","start":4.268,"end":4.593},{"text":"Twister.","start":4.668,"end":5.771}]},
-        {"kind":"story","words":[{"text":"Entire","start":6.578,"end":7.099},{"text":"fleets","start":7.174,"end":7.499},{"text":"once","start":7.549,"end":7.774},{"text":"set","start":7.824,"end":7.999},{"text":"their","start":8.049,"end":8.199},{"text":"maneuvers","start":8.249,"end":8.774},{"text":"to","start":8.824,"end":8.899},{"text":"his","start":8.924,"end":9.024},{"text":"station","start":9.074,"end":9.524},{"text":"time.","start":9.599,"end":10.599}]},
-        {"kind":"story","words":[{"text":"We","start":11.493,"end":11.666},{"text":"watched","start":11.716,"end":12.041},{"text":"his","start":12.066,"end":12.191},{"text":"signal","start":12.266,"end":12.616},{"text":"push","start":12.666,"end":12.866},{"text":"a","start":12.891,"end":12.941},{"text":"valid","start":12.991,"end":13.316},{"text":"clearance","start":13.391,"end":13.791},{"text":"past","start":13.866,"end":14.191},{"text":"its","start":14.241,"end":14.391},{"text":"deadline.","start":14.441,"end":15.536}]},
-        {"kind":"story","words":[{"text":"Three","start":16.243,"end":16.541},{"text":"stations","start":16.591,"end":17.141},{"text":"are","start":17.166,"end":17.241},{"text":"comparing","start":17.291,"end":17.791},{"text":"their","start":17.841,"end":17.991},{"text":"own","start":18.041,"end":18.241},{"text":"clocks.","start":18.316,"end":19.416}]},
-        {"kind":"order","words":[{"text":"Hit","start":20.221,"end":20.496},{"text":"Irdavoss’s","start":20.546,"end":21.221},{"text":"reactor","start":21.271,"end":21.946},{"text":"while","start":21.996,"end":22.121},{"text":"they","start":22.146,"end":22.271},{"text":"finish","start":22.346,"end":22.671},{"text":"the","start":22.721,"end":22.796},{"text":"check.","start":22.871,"end":23.847}]}
+        {"kind":"story","words":[{"text":"Contact","start":0.59,"end":1.105},{"text":"confirmed.","start":1.136,"end":1.882}]},
+        {"kind":"contact","words":[{"text":"Irdavoss,","start":2.482,"end":3.374},{"text":"the","start":3.428,"end":3.491},{"text":"Clock","start":3.52,"end":3.709},{"text":"Twister.","start":3.753,"end":4.396}]},
+        {"kind":"story","words":[{"text":"Entire","start":4.996,"end":5.502},{"text":"fleets","start":5.578,"end":5.91},{"text":"once","start":5.961,"end":6.174},{"text":"set","start":6.218,"end":6.371},{"text":"their","start":6.415,"end":6.546},{"text":"maneuvers","start":6.59,"end":7.049},{"text":"to","start":7.093,"end":7.161},{"text":"his","start":7.184,"end":7.276},{"text":"station","start":7.323,"end":7.666},{"text":"time.","start":7.711,"end":8.236}]},
+        {"kind":"story","words":[{"text":"We","start":8.836,"end":9.004},{"text":"watched","start":9.049,"end":9.362},{"text":"his","start":9.387,"end":9.505},{"text":"signal","start":9.57,"end":9.903},{"text":"push","start":9.955,"end":10.163},{"text":"a","start":10.189,"end":10.24},{"text":"valid","start":10.291,"end":10.623},{"text":"clearance","start":10.7,"end":11.065},{"text":"past","start":11.124,"end":11.383},{"text":"its","start":11.422,"end":11.541},{"text":"deadline.","start":11.581,"end":12.323}]},
+        {"kind":"story","words":[{"text":"Three","start":12.923,"end":13.185},{"text":"stations","start":13.228,"end":13.72},{"text":"are","start":13.743,"end":13.811},{"text":"comparing","start":13.856,"end":14.298},{"text":"their","start":14.342,"end":14.468},{"text":"own","start":14.508,"end":14.65},{"text":"clocks.","start":14.697,"end":15.383}]},
+        {"kind":"order","words":[{"text":"Hit","start":15.983,"end":16.217},{"text":"Irdavoss’s","start":16.258,"end":16.817},{"text":"reactor","start":16.859,"end":17.498},{"text":"while","start":17.551,"end":17.687},{"text":"they","start":17.714,"end":17.833},{"text":"finish","start":17.893,"end":18.169},{"text":"the","start":18.214,"end":18.266},{"text":"check.","start":18.302,"end":18.773}]}
       ]
     }
   },
@@ -851,15 +851,15 @@
     "title": "Outro Irdavoss",
     "chapterTitle": "Outro Irdavoss",
     "heading": "Outro Irdavoss",
-    "audio": "robot/level-15-outro.mp3",
+    "audio": "recorded/level-15-outro.mp3",
     "bossSubtitle": "The Clock Twister",
     "timing": {
-      "duration": 20.4,
+      "duration": 15.41,
       "groups": [
-        {"kind":"contact","words":[{"text":"Both","start":0.577,"end":0.926},{"text":"maintenance","start":0.976,"end":1.426},{"text":"crews","start":1.476,"end":1.826},{"text":"have","start":1.851,"end":1.976},{"text":"docked","start":2.026,"end":2.351},{"text":"safely","start":2.451,"end":2.951},{"text":"on","start":3.001,"end":3.151},{"text":"separate","start":3.226,"end":3.526},{"text":"clearances.","start":3.576,"end":4.826}]},
-        {"kind":"story","words":[{"text":"A","start":5.54,"end":5.662},{"text":"clinic","start":5.712,"end":6.037},{"text":"should","start":6.087,"end":6.187},{"text":"have","start":6.187,"end":6.262},{"text":"received","start":6.312,"end":6.762},{"text":"its","start":6.787,"end":6.937},{"text":"records","start":6.987,"end":7.537},{"text":"when","start":7.587,"end":7.662},{"text":"the","start":7.687,"end":7.762},{"text":"clocks","start":7.837,"end":8.237},{"text":"were","start":8.287,"end":8.362},{"text":"corrected.","start":8.412,"end":9.577}]},
-        {"kind":"story","words":[{"text":"The","start":10.383,"end":10.552},{"text":"records","start":10.602,"end":11.027},{"text":"are","start":11.052,"end":11.127},{"text":"still","start":11.177,"end":11.452},{"text":"locked","start":11.502,"end":11.827},{"text":"away.","start":11.877,"end":12.831}]},
-        {"kind":"story","words":[{"text":"Their","start":13.727,"end":13.977},{"text":"keeper","start":14.027,"end":14.402},{"text":"has","start":14.452,"end":14.602},{"text":"just","start":14.652,"end":14.852},{"text":"named","start":14.902,"end":15.152},{"text":"a","start":15.177,"end":15.227},{"text":"price","start":15.302,"end":15.752},{"text":"for","start":15.802,"end":15.902},{"text":"the","start":15.902,"end":16.002},{"text":"key.","start":16.102,"end":17.121}]}
+        {"kind":"contact","words":[{"text":"Both","start":0.59,"end":0.886},{"text":"maintenance","start":0.927,"end":1.325},{"text":"crews","start":1.372,"end":1.683},{"text":"have","start":1.704,"end":1.809},{"text":"docked","start":1.851,"end":2.125},{"text":"safely","start":2.209,"end":2.65},{"text":"on","start":2.696,"end":2.836},{"text":"separate","start":2.908,"end":3.165},{"text":"clearances.","start":3.203,"end":4.1}]},
+        {"kind":"story","words":[{"text":"A","start":4.7,"end":4.799},{"text":"clinic","start":4.842,"end":5.171},{"text":"should","start":5.228,"end":5.379},{"text":"have","start":5.379,"end":5.484},{"text":"received","start":5.53,"end":5.935},{"text":"its","start":5.957,"end":6.091},{"text":"records","start":6.135,"end":6.642},{"text":"when","start":6.689,"end":6.77},{"text":"the","start":6.8,"end":6.876},{"text":"clocks","start":6.937,"end":7.298},{"text":"were","start":7.348,"end":7.411},{"text":"corrected.","start":7.446,"end":8.24}]},
+        {"kind":"story","words":[{"text":"The","start":8.84,"end":8.966},{"text":"records","start":9.005,"end":9.367},{"text":"are","start":9.39,"end":9.46},{"text":"still","start":9.507,"end":9.765},{"text":"locked","start":9.812,"end":10.053},{"text":"away.","start":10.081,"end":10.55}]},
+        {"kind":"story","words":[{"text":"Their","start":11.15,"end":11.343},{"text":"keeper","start":11.385,"end":11.718},{"text":"has","start":11.765,"end":11.908},{"text":"just","start":11.955,"end":12.143},{"text":"named","start":12.189,"end":12.412},{"text":"a","start":12.434,"end":12.473},{"text":"price","start":12.527,"end":12.848},{"text":"for","start":12.884,"end":12.973},{"text":"the","start":12.973,"end":13.048},{"text":"key.","start":13.093,"end":13.58}]}
       ]
     }
   },
@@ -869,14 +869,14 @@
     "title": "Level 16",
     "chapterTitle": "Hold the Clinic Open",
     "heading": "LEVEL 16",
-    "audio": "robot/level-16-briefing.mp3",
+    "audio": "recorded/level-16-briefing.mp3",
     "timing": {
-      "duration": 20.16,
+      "duration": 16.421,
       "groups": [
-        {"kind":"story","words":[{"text":"The","start":0.577,"end":0.7},{"text":"clinic’s","start":0.75,"end":1.05},{"text":"staff","start":1.1,"end":1.45},{"text":"are","start":1.475,"end":1.55},{"text":"working","start":1.6,"end":1.925},{"text":"from","start":1.975,"end":2.125},{"text":"paper","start":2.175,"end":2.525},{"text":"notes","start":2.575,"end":3.0},{"text":"while","start":3.05,"end":3.175},{"text":"their","start":3.2,"end":3.35},{"text":"records","start":3.4,"end":3.825},{"text":"are","start":3.875,"end":3.975},{"text":"locked.","start":4.05,"end":5.075}]},
-        {"kind":"story","words":[{"text":"A","start":5.881,"end":6.028},{"text":"supply","start":6.078,"end":6.478},{"text":"depot","start":6.528,"end":6.853},{"text":"nearby","start":6.928,"end":7.428},{"text":"lost","start":7.503,"end":7.828},{"text":"its","start":7.878,"end":8.028},{"text":"list","start":8.078,"end":8.278},{"text":"of","start":8.303,"end":8.353},{"text":"available","start":8.403,"end":8.903},{"text":"medicines","start":8.953,"end":9.578},{"text":"as","start":9.678,"end":9.778},{"text":"well.","start":9.853,"end":10.753}]},
-        {"kind":"story","words":[{"text":"Both","start":11.647,"end":12.121},{"text":"received","start":12.171,"end":12.646},{"text":"the","start":12.671,"end":12.746},{"text":"same","start":12.821,"end":13.071},{"text":"demand.","start":13.121,"end":14.287}]},
-        {"kind":"order","words":[{"text":"Follow","start":15.003,"end":15.467},{"text":"it","start":15.517,"end":15.592},{"text":"to","start":15.642,"end":15.692},{"text":"the","start":15.717,"end":15.792},{"text":"ship","start":15.892,"end":16.092},{"text":"carrying","start":16.167,"end":16.567},{"text":"their","start":16.617,"end":16.767},{"text":"archives.","start":16.817,"end":18.185}]}
+        {"kind":"story","words":[{"text":"The","start":0.59,"end":0.709},{"text":"clinic’s","start":0.758,"end":1.048},{"text":"staff","start":1.096,"end":1.437},{"text":"are","start":1.462,"end":1.536},{"text":"working","start":1.585,"end":1.898},{"text":"from","start":1.945,"end":2.083},{"text":"paper","start":2.127,"end":2.459},{"text":"notes","start":2.509,"end":2.985},{"text":"while","start":3.047,"end":3.194},{"text":"their","start":3.222,"end":3.368},{"text":"records","start":3.411,"end":3.774},{"text":"are","start":3.817,"end":3.884},{"text":"locked.","start":3.919,"end":4.4}]},
+        {"kind":"story","words":[{"text":"A","start":5.0,"end":5.105},{"text":"supply","start":5.144,"end":5.491},{"text":"depot","start":5.538,"end":5.842},{"text":"nearby","start":5.911,"end":6.373},{"text":"lost","start":6.442,"end":6.754},{"text":"its","start":6.803,"end":6.953},{"text":"list","start":7.002,"end":7.262},{"text":"of","start":7.302,"end":7.365},{"text":"available","start":7.411,"end":7.856},{"text":"medicines","start":7.899,"end":8.4},{"text":"as","start":8.475,"end":8.542},{"text":"well.","start":8.587,"end":9.142}]},
+        {"kind":"story","words":[{"text":"Both","start":9.742,"end":10.1},{"text":"received","start":10.14,"end":10.523},{"text":"the","start":10.543,"end":10.608},{"text":"same","start":10.678,"end":10.868},{"text":"demand.","start":10.898,"end":11.531}]},
+        {"kind":"order","words":[{"text":"Follow","start":12.131,"end":12.5},{"text":"it","start":12.538,"end":12.601},{"text":"to","start":12.648,"end":12.701},{"text":"the","start":12.731,"end":12.814},{"text":"ship","start":12.915,"end":13.124},{"text":"carrying","start":13.205,"end":13.606},{"text":"their","start":13.652,"end":13.765},{"text":"archives.","start":13.795,"end":14.591}]}
       ]
     }
   },
@@ -886,16 +886,16 @@
     "title": "Intro Rhazvorn",
     "chapterTitle": "Intro Rhazvorn",
     "heading": "Intro Rhazvorn",
-    "audio": "robot/level-16-intro.mp3",
+    "audio": "recorded/level-16-intro.mp3",
     "bossSubtitle": "The Key Gaoler",
     "timing": {
-      "duration": 25.68,
+      "duration": 19.671,
       "groups": [
-        {"kind":"contact","words":[{"text":"That","start":0.577,"end":0.825},{"text":"prison","start":0.875,"end":1.175},{"text":"transport","start":1.225,"end":1.825},{"text":"is","start":1.875,"end":1.975},{"text":"Rhazvorn,","start":2.05,"end":2.75},{"text":"the","start":2.85,"end":2.925},{"text":"Key","start":3.0,"end":3.2},{"text":"Gaoler.","start":3.25,"end":4.401}]},
-        {"kind":"story","words":[{"text":"Its","start":5.207,"end":5.451},{"text":"cells","start":5.526,"end":5.901},{"text":"used","start":5.976,"end":6.226},{"text":"to","start":6.276,"end":6.351},{"text":"hold","start":6.401,"end":6.701},{"text":"people.","start":6.751,"end":7.775}]},
-        {"kind":"story","words":[{"text":"Now","start":8.671,"end":9.043},{"text":"they","start":9.068,"end":9.143},{"text":"hold","start":9.193,"end":9.418},{"text":"sealed","start":9.493,"end":9.743},{"text":"archives","start":9.843,"end":10.368},{"text":"from","start":10.418,"end":10.568},{"text":"the","start":10.568,"end":10.643},{"text":"clinics","start":10.693,"end":11.243},{"text":"and","start":11.318,"end":11.393},{"text":"supply","start":11.443,"end":11.843},{"text":"depots.","start":11.893,"end":13.021}]},
-        {"kind":"story","words":[{"text":"We’ve","start":13.737,"end":14.011},{"text":"tracked","start":14.061,"end":14.361},{"text":"the","start":14.386,"end":14.461},{"text":"original","start":14.511,"end":14.986},{"text":"access","start":15.036,"end":15.536},{"text":"requests","start":15.586,"end":16.161},{"text":"to","start":16.236,"end":16.311},{"text":"the","start":16.336,"end":16.411},{"text":"center","start":16.486,"end":16.761},{"text":"vault.","start":16.811,"end":17.711}]},
-        {"kind":"order","words":[{"text":"Keep","start":18.517,"end":18.84},{"text":"Rhazvorn","start":18.89,"end":19.44},{"text":"here","start":19.49,"end":19.79},{"text":"while","start":19.84,"end":19.965},{"text":"the","start":19.99,"end":20.04},{"text":"retrieval","start":20.09,"end":20.615},{"text":"team","start":20.69,"end":20.965},{"text":"gets","start":21.015,"end":21.265},{"text":"close.","start":21.34,"end":22.391}]}
+        {"kind":"contact","words":[{"text":"That","start":0.59,"end":0.834},{"text":"prison","start":0.878,"end":1.147},{"text":"transport","start":1.193,"end":1.732},{"text":"is","start":1.776,"end":1.872},{"text":"Rhazvorn,","start":1.951,"end":2.681},{"text":"the","start":2.786,"end":2.854},{"text":"Key","start":2.912,"end":3.039},{"text":"Gaoler.","start":3.064,"end":3.632}]},
+        {"kind":"story","words":[{"text":"Its","start":4.232,"end":4.407},{"text":"cells","start":4.46,"end":4.729},{"text":"used","start":4.783,"end":4.962},{"text":"to","start":4.997,"end":5.051},{"text":"hold","start":5.087,"end":5.302},{"text":"people.","start":5.337,"end":5.974}]},
+        {"kind":"story","words":[{"text":"Now","start":6.574,"end":6.866},{"text":"they","start":6.887,"end":6.957},{"text":"hold","start":7.007,"end":7.233},{"text":"sealed","start":7.308,"end":7.56},{"text":"archives","start":7.66,"end":8.178},{"text":"from","start":8.226,"end":8.379},{"text":"the","start":8.379,"end":8.452},{"text":"clinics","start":8.495,"end":8.968},{"text":"and","start":9.032,"end":9.099},{"text":"supply","start":9.146,"end":9.47},{"text":"depots.","start":9.504,"end":10.234}]},
+        {"kind":"story","words":[{"text":"We’ve","start":10.834,"end":11.07},{"text":"tracked","start":11.112,"end":11.387},{"text":"the","start":11.412,"end":11.48},{"text":"original","start":11.522,"end":11.918},{"text":"access","start":11.96,"end":12.399},{"text":"requests","start":12.445,"end":13.0},{"text":"to","start":13.076,"end":13.159},{"text":"the","start":13.189,"end":13.268},{"text":"center","start":13.335,"end":13.546},{"text":"vault.","start":13.578,"end":14.104}]},
+        {"kind":"order","words":[{"text":"Keep","start":14.704,"end":14.989},{"text":"Rhazvorn","start":15.033,"end":15.519},{"text":"here","start":15.563,"end":15.902},{"text":"while","start":15.97,"end":16.108},{"text":"the","start":16.129,"end":16.171},{"text":"retrieval","start":16.212,"end":16.638},{"text":"team","start":16.697,"end":16.918},{"text":"gets","start":16.959,"end":17.139},{"text":"close.","start":17.185,"end":17.841}]}
       ]
     }
   },
@@ -905,15 +905,15 @@
     "title": "Outro Rhazvorn",
     "chapterTitle": "Outro Rhazvorn",
     "heading": "Outro Rhazvorn",
-    "audio": "robot/level-16-outro.mp3",
+    "audio": "recorded/level-16-outro.mp3",
     "bossSubtitle": "The Key Gaoler",
     "timing": {
-      "duration": 21.912,
+      "duration": 17.172,
       "groups": [
-        {"kind":"contact","words":[{"text":"The","start":0.577,"end":0.746},{"text":"clinic","start":0.821,"end":1.196},{"text":"opened","start":1.246,"end":1.621},{"text":"its","start":1.671,"end":1.821},{"text":"files.","start":1.896,"end":3.071}]},
-        {"kind":"story","words":[{"text":"The","start":3.877,"end":3.999},{"text":"depot","start":4.049,"end":4.374},{"text":"is","start":4.424,"end":4.524},{"text":"counting","start":4.574,"end":4.924},{"text":"the","start":4.949,"end":4.999},{"text":"medicine","start":5.049,"end":5.574},{"text":"against","start":5.649,"end":6.024},{"text":"its","start":6.074,"end":6.224},{"text":"restored","start":6.274,"end":6.799},{"text":"stock","start":6.849,"end":7.174},{"text":"list.","start":7.224,"end":8.124}]},
-        {"kind":"story","words":[{"text":"Their","start":9.014,"end":9.236},{"text":"weather","start":9.286,"end":9.511},{"text":"report","start":9.56,"end":9.96},{"text":"still","start":10.011,"end":10.261},{"text":"says","start":10.31,"end":10.511},{"text":"the","start":10.56,"end":10.636},{"text":"route","start":10.685,"end":10.935},{"text":"is","start":10.986,"end":11.085},{"text":"closed,","start":11.161,"end":11.786},{"text":"though","start":11.886,"end":11.986},{"text":"the","start":12.011,"end":12.085},{"text":"crew","start":12.161,"end":12.335},{"text":"can","start":12.386,"end":12.511},{"text":"see","start":12.585,"end":12.736},{"text":"it","start":12.761,"end":12.81},{"text":"is","start":12.861,"end":12.96},{"text":"clear.","start":13.036,"end":14.036}]},
-        {"kind":"story","words":[{"text":"The","start":14.752,"end":14.925},{"text":"strange","start":14.975,"end":15.4},{"text":"readings","start":15.45,"end":15.9},{"text":"all","start":16.025,"end":16.175},{"text":"came","start":16.225,"end":16.475},{"text":"from","start":16.525,"end":16.675},{"text":"the","start":16.675,"end":16.775},{"text":"same","start":16.875,"end":17.2},{"text":"survey","start":17.3,"end":17.675},{"text":"ship.","start":17.775,"end":18.626}]}
+        {"kind":"contact","words":[{"text":"The","start":0.59,"end":0.708},{"text":"clinic","start":0.76,"end":1.042},{"text":"opened","start":1.083,"end":1.356},{"text":"its","start":1.388,"end":1.484},{"text":"files.","start":1.532,"end":2.27}]},
+        {"kind":"story","words":[{"text":"The","start":2.87,"end":2.983},{"text":"depot","start":3.028,"end":3.322},{"text":"is","start":3.367,"end":3.458},{"text":"counting","start":3.503,"end":3.819},{"text":"the","start":3.842,"end":3.887},{"text":"medicine","start":3.932,"end":4.442},{"text":"against","start":4.52,"end":4.876},{"text":"its","start":4.919,"end":5.047},{"text":"restored","start":5.09,"end":5.564},{"text":"stock","start":5.611,"end":5.88},{"text":"list.","start":5.915,"end":6.5}]},
+        {"kind":"story","words":[{"text":"Their","start":7.1,"end":7.295},{"text":"weather","start":7.339,"end":7.536},{"text":"report","start":7.579,"end":7.93},{"text":"still","start":7.975,"end":8.227},{"text":"says","start":8.283,"end":8.51},{"text":"the","start":8.564,"end":8.637},{"text":"route","start":8.676,"end":8.873},{"text":"is","start":8.913,"end":9.001},{"text":"closed,","start":9.077,"end":9.729},{"text":"though","start":9.839,"end":9.947},{"text":"the","start":9.974,"end":10.05},{"text":"crew","start":10.126,"end":10.316},{"text":"can","start":10.377,"end":10.523},{"text":"see","start":10.607,"end":10.81},{"text":"it","start":10.849,"end":10.908},{"text":"is","start":10.95,"end":11.018},{"text":"clear.","start":11.058,"end":11.592}]},
+        {"kind":"story","words":[{"text":"The","start":12.192,"end":12.323},{"text":"strange","start":12.363,"end":12.74},{"text":"readings","start":12.787,"end":13.208},{"text":"all","start":13.323,"end":13.486},{"text":"came","start":13.55,"end":13.835},{"text":"from","start":13.886,"end":14.043},{"text":"the","start":14.043,"end":14.131},{"text":"same","start":14.198,"end":14.442},{"text":"survey","start":14.526,"end":14.796},{"text":"ship.","start":14.857,"end":15.342}]}
       ]
     }
   },
