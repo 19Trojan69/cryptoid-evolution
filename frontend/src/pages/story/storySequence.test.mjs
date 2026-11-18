@@ -26,7 +26,7 @@ const { bossOutroAtSector, bossStoryAtSector, levelStoryAtSector, storyScenes,
 test('the campaign provides all 50 boss pairs and briefings 2 through 50 at their existing handoffs', () => {
   assert.equal(Object.keys(storyScenes).length, 150);
   assert.equal(levelStoryAtSector(1), undefined);
-  assert.equal(storyScenes.campaign.audio, 'campaign-intro-phrased.mp3');
+  assert.equal(storyScenes.campaign.audio, 'campaign-intro-phrased-v3.mp3');
   const openingBriefings = ['level-two', 'level-three', 'level-four', 'level-five', 'level-six', 'level-seven', 'level-eight', 'level-nine'];
   for (const [index, name] of BOSS_NAMES.entries()) {
     const level = index + 1;
@@ -81,10 +81,30 @@ test('each recording has complete timed captions in every selectable language', 
   }
 });
 
-test('the new voice tracks give cues audible separation and a quiet ending', () => {
-  for (const [scene, { audio, timing }] of Object.entries(storyScenes)) {
+test('the campaign opening leaves a full speech pause after spam', () => {
+  const words = storyScenes.campaign.timing.groups.flatMap(group => group.words);
+  const stop = words.findIndex((word, index) => word.text === 'spam.' && words[index + 1]?.text === 'Forged');
+  assert.ok(stop >= 0, 'the two original sentences must be consecutive');
+  assert.ok(words[stop + 1].start - words[stop].end >= .85);
+});
+
+test('levels 13 through 50 use recorded narration at all three story handoffs', () => {
+  for (let level = 13; level <= 50; level++) {
+    const bossSector = level * 10;
+    const handoffs = {
+      briefing: levelStoryAtSector(bossSector - 9),
+      intro: bossStoryAtSector(bossSector),
+      outro: bossOutroAtSector(bossSector),
+    };
+    for (const [kind, scene] of Object.entries(handoffs)) {
+      assert.equal(storyScenes[scene].audio, `recorded/level-${level}-${kind}.mp3`);
+    }
+  }
+});
+
+test('the voice tracks give cues audible separation and a quiet ending', () => {
+  for (const [scene, { timing }] of Object.entries(storyScenes)) {
     if (scene === 'campaign') continue;
-    assert.ok(audio.startsWith('robot/'), scene);
     const groups = timing.groups;
     assert.ok(groups[0].words[0].start >= .5, scene + ' has no lead-in');
     assert.ok(timing.duration - groups.at(-1).words.at(-1).end >= 1.6, scene + ' has no ending tail');

@@ -6,6 +6,11 @@
   "outputDirectory": "frontend/dist",
   "redirects": [
     {
+      "source": "/story/campaign-intro-phrased-v2.mp3",
+      "destination": "/story/campaign-intro-phrased-v3.mp3",
+      "permanent": false
+    },
+    {
       "source": "/stability-report.html",
       "destination": "/",
       "permanent": false
@@ -62,6 +67,7 @@
   ],
   "git": {
     "deploymentEnabled": {
+      "codex/mainnet-campaign-score-20261118": false,
       "codex/testnet-fleet-and-links-20261117": false,
       "codex/testnet-earned-boss-silhouettes-20261117": false,
       "codex/level-two-korvessa-briefings-20261115": false,
