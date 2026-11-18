@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { axiosClient } from '../lib/axiosClient';
-import { useAdminLocale } from '../adminLocale';
+import { adminText, useAdminLocale } from '../adminLocale';
 import { shipSaveNetwork } from './shipFleet';
 
 type Player = { uid: string; username: string; network: string; careerScore: number;
@@ -69,7 +69,7 @@ export default function AdminPlayers() {
   return <section className="admin-panel">
     <h2>{t('Manage players')}</h2>
     <p>{t('Network')}: <strong>{shipSaveNetwork}</strong></p>
-    {shipSaveNetwork === 'mainnet' && <p>{t('Hier verwaltest du Spielkonten von Cryptoid Evolution. Eine Löschung betrifft die Spieldaten; das Pi-Network-Konto und die Pi-Wallet bleiben bestehen.')}</p>}
+    {shipSaveNetwork === 'mainnet' && <p>{adminText('Hier verwaltest du Spielkonten von Cryptoid Evolution. Eine Löschung betrifft die Spieldaten; das Pi-Network-Konto und die Pi-Wallet bleiben bestehen.')}</p>}
     <form onSubmit={event => { event.preventDefault(); void find(); }}>
       <label>{t('Full Pi name')} <input value={username} maxLength={80} autoComplete="off" disabled={busy}
         onChange={event => { setUsername(event.target.value); setPlayers([]); setSelected(null); resetReview(); }} /></label>

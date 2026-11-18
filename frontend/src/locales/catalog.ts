@@ -1,4 +1,5 @@
 import { combatVarietyTranslations } from './combatVariety.ts';
+import { adminOperationsTranslations } from './adminOperations.ts';
 import { spanishLoreCompletionTranslations } from './spanishLoreCompletion.ts';
 import { germanLoreCompletionTranslations } from './germanLoreCompletion.ts';
 import { russianAdminTranslations } from './russianAdmin.ts';
@@ -5642,3 +5643,4 @@ for (const [locale, entries] of Object.entries(combatVarietyTranslations)) Objec
 for (const [locale, entries] of Object.entries(fullSessionTranslations)) Object.assign(localeCatalog[locale] ??= {}, entries);
 
 for (const [locale, translations] of Object.entries(weaponNoticeTranslations)) Object.assign(localeCatalog[locale] ??= {}, translations);
+for (const [locale, translations] of Object.entries(adminOperationsTranslations)) Object.assign(localeCatalog[locale] ??= {}, translations);

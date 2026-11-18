@@ -41,7 +41,7 @@ export default function AdminUsage() {
     <p>{t("Nur stündliche Summen. Keine Namen, Pi-IDs, IP-Adressen, Besuchskennungen, Cookies oder Fingerprints in dieser Statistik. Keine Verknüpfung mit Anmeldung, Zahlungen oder Bestenliste.")}</p>
     <div className="admin-actions">
       <label>{t("Zeitraum")} <select value={days} onChange={e => change(() => setDays(Number(e.target.value)))}>{[1, 7, 30, 90].map(n => <option key={n} value={n}>{n === 1 ? t("Letzte 24 Stunden") : t("Letzte {value0} Tage", {value0: n})}</option>)}</select></label>
-      {shipSaveNetwork === "mainnet" ? <span>{t("Umgebung")}: Mainnet</span> : <label>{t("Umgebung")} <select value={network} onChange={e => change(() => setNetwork(e.target.value))}><option value="mainnet">Mainnet</option><option value="testnet">Testnet</option><option value="all">{t("Beide")}</option></select></label>}
+      {shipSaveNetwork === "mainnet" ? <span>{t("Umgebung")}: {t("Mainnet")}</span> : <label>{t("Umgebung")} <select value={network} onChange={e => change(() => setNetwork(e.target.value))}><option value="mainnet">Mainnet</option><option value="testnet">Testnet</option><option value="all">{t("Beide")}</option></select></label>}
       <button className="admin-button" onClick={() => change(() => setReload(n => n + 1))}>{t("Aktualisieren")}</button>
     </div>
     {error ? <p role="alert">{t(error)}</p> : !result ? <p role="status">{t("Statistik wird geladen …")}</p> : <>

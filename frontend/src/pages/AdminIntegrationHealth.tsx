@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { axiosClient } from "../lib/axiosClient";
+import { adminText, useAdminLocale } from "../adminLocale";
 
 type Check = { id: string; label: string; status: "ok" | "warning" | "error" | "unknown"; detail: string; responseMs: number };
 type Report = {
@@ -15,6 +16,7 @@ const nftNames: Record<string, string> = {
   nftMetadata: "Dauerhafte Bild- und Metadatenadressen vollständig",
 };
 export default function AdminIntegrationHealth() {
+  useAdminLocale();
   const [report, setReport] = useState<Report | null>(null);
   const [busy, setBusy] = useState(false), [error, setError] = useState("");
   const load = useCallback(async (signal?: AbortSignal) => {
@@ -34,26 +36,26 @@ export default function AdminIntegrationHealth() {
   const sdk = typeof window === "undefined" ? undefined : (window as unknown as { Pi?: { authenticate?: unknown; createPayment?: unknown } }).Pi;
   return <section className="admin-panel" aria-labelledby="pi-integration-title">
     <div className="admin-section-head">
-      <h2 id="pi-integration-title">Pi-Anbindung & NFT-Status</h2>
-      <button className="admin-button" type="button" disabled={busy} onClick={() => void load()}>Status aktualisieren</button>
+      <h2 id="pi-integration-title">{adminText("Pi-Anbindung & NFT-Status")}</h2>
+      <button className="admin-button" type="button" disabled={busy} onClick={() => void load()}>{adminText("Status aktualisieren")}</button>
     </div>
-    <p>Aktuelle Leseabfragen ohne Zahlung, Mint, Reservierung oder gespeicherte Prüfhistorie.</p>
-    <p>Pi-SDK in diesem Browser: <strong>{typeof sdk?.authenticate === "function" && typeof sdk?.createPayment === "function" ? "Funktionen vorhanden" : "Nicht verfügbar"}</strong></p>
-    {busy && <p role="status">Verbindungen werden abgefragt …</p>}
-    {error && <p className="admin-error" role="alert">{error}</p>}
+    <p>{adminText("Aktuelle Leseabfragen ohne Zahlung, Mint, Reservierung oder gespeicherte Prüfhistorie.")}</p>
+    <p>{adminText("Pi-SDK in diesem Browser:")} <strong>{adminText(typeof sdk?.authenticate === "function" && typeof sdk?.createPayment === "function" ? "Funktionen vorhanden" : "Nicht verfügbar")}</strong></p>
+    {busy && <p role="status">{adminText("Verbindungen werden abgefragt …")}</p>}
+    {error && <p className="admin-error" role="alert">{adminText(error)}</p>}
     {report && <>
-      <p>Stand: {new Date(report.checkedAt).toLocaleString("de-AT", { timeZone: "Europe/Vienna", timeZoneName: "shortOffset" })}</p>
+      <p>{adminText("Stand:")} {new Date(report.checkedAt).toLocaleString("de-AT", { timeZone: "Europe/Vienna", timeZoneName: "shortOffset" })}</p>
       <dl className="admin-checks">{report.checks.map(check => <div key={check.id}>
-        <dt>{check.label}</dt><dd><strong className={`admin-service-status ${check.status}`}>{statusNames[check.status]}</strong> · {check.responseMs.toLocaleString("de-AT")} ms<br />{check.detail}</dd>
+        <dt>{adminText(check.label)}</dt><dd><strong className={`admin-service-status ${check.status}`}>{adminText(statusNames[check.status])}</strong> · {check.responseMs.toLocaleString("de-AT")} {adminText("ms")}<br />{adminText(check.detail)}</dd>
       </div>)}</dl>
-      <h3>NFT-Käufe im Mainnet: {report.nfts.purchasable ? "Freigegeben" : "Noch nicht verfügbar"}</h3>
-      <ul>{report.nfts.checks.map(check => <li key={check.id}>{nftNames[check.id] || check.id}: <strong>{check.ready ? "Nachgewiesen" : "Offen"}</strong></li>)}
-        <li>Wallet-Signierung für NFT-Smart-Contracts: <strong>{report.nfts.walletSigning === "verified" ? "Nachgewiesen" : "Noch nicht nachgewiesen"}</strong></li>
-        <li>Deine Freigabe: <strong>{report.nfts.ownerReleased === null ? "Nicht abrufbar" : report.nfts.ownerReleased ? "Erteilt" : "Zurückgehalten"}</strong></li>
+      <h3>{adminText("NFT-Käufe im Mainnet:")} {adminText(report.nfts.purchasable ? "Freigegeben" : "Noch nicht verfügbar")}</h3>
+      <ul>{report.nfts.checks.map(check => <li key={check.id}>{adminText(nftNames[check.id] || check.id)}: <strong>{adminText(check.ready ? "Nachgewiesen" : "Offen")}</strong></li>)}
+        <li>{adminText("Wallet-Signierung für NFT-Smart-Contracts:")} <strong>{adminText(report.nfts.walletSigning === "verified" ? "Nachgewiesen" : "Noch nicht nachgewiesen")}</strong></li>
+        <li>{adminText("Deine Freigabe:")} <strong>{adminText(report.nfts.ownerReleased === null ? "Nicht abrufbar" : report.nfts.ownerReleased ? "Erteilt" : "Zurückgehalten")}</strong></li>
       </ul>
-      <p>{report.nfts.explanation}</p>
-      <p>Es werden keine vorläufigen NFT-Ansprüche oder Kaufreservierungen angelegt. Die Statusanzeige allein aktiviert keine Käufe.</p>
-      <p>Momentaufnahme der technischen Verbindung. Sie zeigt keinen Bearbeitungsstand deiner Anträge beim Pi Core Team.</p>
+      <p>{adminText(report.nfts.explanation)}</p>
+      <p>{adminText("Es werden keine vorläufigen NFT-Ansprüche oder Kaufreservierungen angelegt. Die Statusanzeige allein aktiviert keine Käufe.")}</p>
+      <p>{adminText("Momentaufnahme der technischen Verbindung. Sie zeigt keinen Bearbeitungsstand deiner Anträge beim Pi Core Team.")}</p>
     </>}
   </section>;
 }
