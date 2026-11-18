@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link, Navigate, useSearchParams } from 'react-router-dom';
+import { retroNftTerms as retroTerms } from '../../../backend/src/nftCollectionTerms.ts';
 import { arcadeRankIds, arcadeStickerAlbumName } from '../../../backend/src/galaxyArcadeStickerSchema.ts';
 import { arcadeLocale } from '../../../backend/src/galaxyArcadeCopy';
 import { arcadeStickerLabels } from '../../../backend/src/galaxyArcadeStickerCopy';
@@ -30,15 +31,6 @@ const bossEditions = { ...bossNftEditions, ...premiumBossEditions };
 const bossEditionKeys = Object.keys(bossEditions) as Array<keyof typeof bossEditions>;
 const bossIds = Array.from({ length: BOSS_STICKER_COUNT }, (_, i) => i + 1);
 const stationLevels = Object.keys(retroNftScenes).map(Number);
-const retroTerms = {
-  copper: { supply: 31_414, pricePi: 2 },
-  brass: { supply: 15_707, pricePi: 4 },
-  silver: { supply: 7_854, pricePi: 6 },
-  gold: { supply: 3_141, pricePi: 8 },
-  platinum: { supply: 1_570, pricePi: 10 },
-  diamond: { supply: 314, pricePi: 12 },
-} as const;
-
 function NftTerms({ supply, price, currency }: { supply: number; price?: number; currency: 'Pi' | 'Shards' }) {
   const { locale, t } = useLocale();
   const priceFormat = currency === 'Pi' ? { minimumFractionDigits: 2, maximumFractionDigits: 2 } : undefined;

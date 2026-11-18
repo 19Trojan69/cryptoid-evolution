@@ -51,6 +51,8 @@ test("all dashboard routes require verified ownership, including downloads and w
       for (const [path, body] of [
         ["/status"],
         ["/mainnet-release"],
+        ["/nft-preparation"],
+        ["/nft-preparation?download=1"],
         ["/mainnet-release", { action: "release", revision: 0 }],
         ["/usage"],
         ["/payments"],

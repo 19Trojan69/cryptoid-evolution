@@ -29,6 +29,7 @@ import AdminUsage from "./AdminUsage";
 import AdminPlayers from './AdminPlayers';
 import AdminStoryScenes from './AdminStoryScenes';
 import AdminMainnetRelease from './AdminMainnetRelease';
+import AdminNftPreparation from './AdminNftPreparation';
 import { paymentEvidenceLinks } from "./paymentEvidenceLinks";
 import { useAdminLocale } from "../adminLocale";
 import { nftGalleryCopy } from "../locales/bossNftGallery";
@@ -712,6 +713,7 @@ export default function AdminPage() {
           {view === "overview" && (
             <>
               {shipSaveNetwork === "mainnet" && <AdminMainnetRelease />}
+              {shipSaveNetwork === "mainnet" && <AdminNftPreparation />}
               <section className="admin-shortcuts" aria-label={t("Schnellzugriff")}>
                 {[
                   ["ships", "Raumschiffe testen", "Alle 20 Modelle · Standard, Advanced und Elite"],

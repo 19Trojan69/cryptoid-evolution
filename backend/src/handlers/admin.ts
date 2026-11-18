@@ -19,6 +19,7 @@ import { mountAdminPlayerEndpoints } from '../playerAdministration';
 import { mountBossNftGallery } from "../bossNftGallery";
 import { mountAdminNftCollection } from "./adminNftCollection";
 import { mountMainnetRelease } from "../mainnetRelease";
+import { mountNftPreparation } from "../nftPreparation";
 
 const networks = ["all", "mainnet", "testnet", "unknown"] as const;
 const statuses = ["all", "confirmed", "pending", "cancelled"] as const;
@@ -39,6 +40,7 @@ export default function mountAdminEndpoints(router: Router) {
   // Authenticate every admin route independently of the optional gameplay mode.
   router.use(requireOwner);
   mountMainnetRelease(router);
+  mountNftPreparation(router);
   mountAdminPlayerEndpoints(router);
   mountBossNftGallery(router);
   mountAdminNftCollection(router);

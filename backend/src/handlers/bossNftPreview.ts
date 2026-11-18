@@ -6,7 +6,8 @@ import { rewardNetwork } from "../rewardNetwork";
 import { BOSS_STICKER_COUNT, readRewardProgress } from "../rewardRules";
 import "../types/session";
 
-export const BOSS_NFT_PREVIEW_ART_REVISION = "weapon-clearance-20261112";
+import { BOSS_NFT_PREVIEW_ART_REVISION } from "../nftCollectionTerms";
+export { BOSS_NFT_PREVIEW_ART_REVISION } from "../nftCollectionTerms";
 const interestField = "testnetBossHoloInterest";
 const maxPage = Math.ceil(BOSS_STICKER_COUNT / pageSize);
 const progressProjection = {
