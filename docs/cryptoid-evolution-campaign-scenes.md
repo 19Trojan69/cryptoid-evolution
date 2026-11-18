@@ -15,9 +15,9 @@ Drehbuch für Kampagnenstart, Level-Briefings, Boss-Intros und Sieges-Outros. Je
 
 Die ersten 35 Szenen verwenden die eingereichte englische Sprecheraufnahme. Das umfasst die Boss-Szenen für Level 1 und alle Briefings, Intros und Outros für Level 2 bis 12. Die Sprecheraufnahme setzt jeweils nach der Slate-Ansage ein. Als leise Begleitung dienen Auszüge aus „Galactic Chain (Remastered)“, „Dreadnought Duel“ und eine Instrumentalfassung des Auszugs aus „Beyond the Last Star“. Die Sprachpausen, die englische Laufschrift und die Untertitel der 18 weiteren Spielsprachen sind auf die neuen Schnitte abgestimmt.
 
-Die Aufnahmen ab Level 13 beginnen mit Dornaviks Briefing. Die zwölf Szenen für Level 13 bis 16 verwenden die neuen Aufnahmen aus Slate 036–047. Die Slate-Ansagen wurden an den Sprechpausen herausgeschnitten. Ein leiser Orchesterausschnitt aus „Cleared for Launch“ begleitet alle zwölf Szenen. Laufschrift und Untertitel folgen den neuen Satzpausen.
+Die 60 Szenen für Level 13 bis 32 verwenden die Sprecheraufnahmen aus Slate 036–095. Die gesprochenen Slate-Ansagen wurden an den Sprechpausen herausgeschnitten. Ein leiser Orchesterausschnitt aus „Cleared for Launch“ begleitet alle 60 Szenen. Laufschrift und Untertitel folgen den neuen Satzpausen.
 
-Ab Level 17 stehen die bereits vertonten Szenen zur Verfügung. Der Flottencomputer spricht die weiteren Briefings, Boss-Intros und Boss-Outros mit der englischen Roboterstimme. Die eigens komponierten Orchesterbegleitungen variieren je Szene und beginnen und enden leise. Die Untertitel der 18 weiteren Spielsprachen folgen den Sprechpausen und werden pro Sprache geladen. Drazevorns Finale „Earth, We Read You“ erhält einen längeren Ausklang. [Kokoro](https://huggingface.co/hexgrad/Kokoro-82M) · [GeneralUser GS](https://github.com/mrbumpy409/GeneralUser-GS)
+Ab Level 33 stehen die bereits vertonten Szenen zur Verfügung. Der Flottencomputer spricht die weiteren Briefings, Boss-Intros und Boss-Outros mit der englischen Roboterstimme. Die eigens komponierten Orchesterbegleitungen variieren je Szene und beginnen und enden leise. Die Untertitel der 18 weiteren Spielsprachen folgen den Sprechpausen und werden pro Sprache geladen. Drazevorns Finale „Earth, We Read You“ erhält einen längeren Ausklang. [Kokoro](https://huggingface.co/hexgrad/Kokoro-82M) · [GeneralUser GS](https://github.com/mrbumpy409/GeneralUser-GS)
 
 ## Genesis und die falschen Befehle
 
@@ -1054,7 +1054,7 @@ Der Orakeltrüger · The Oracle Deceiver
 
 #### Level-Briefing · Look Out the Window
 
-Roboteraufnahme · robot/level-17-briefing.mp3 · 20,81 s.
+Sprecheraufnahme · recorded/level-17-briefing.mp3 · 17,25 s.
 
 **Suno-Stil**
 
@@ -1070,7 +1070,7 @@ Die Depotcrew hat ein Bild vom freien Anflug geschickt. Ihre Instrumente melden 
 
 #### Boss-Intro · A Ship That Reports the Weather
 
-Roboteraufnahme · robot/level-17-intro.mp3 · 27,96 s.
+Sprecheraufnahme · recorded/level-17-intro.mp3 · 21,24 s.
 
 **Suno-Stil**
 
@@ -1086,7 +1086,7 @@ Kontakt bestätigt. Kelvash, der Orakeltrüger. Seine Messberichte leiteten frü
 
 #### Boss-Outro · Medicine on the Right Course
 
-Roboteraufnahme · robot/level-17-outro.mp3 · 22,94 s.
+Sprecheraufnahme · recorded/level-17-outro.mp3 · 17,18 s.
 
 **Suno-Stil**
 
@@ -1106,7 +1106,7 @@ Der Gabelherr · The Fork Lord
 
 #### Level-Briefing · Put Both Copies on the Table
 
-Roboteraufnahme · robot/level-18-briefing.mp3 · 23,71 s.
+Sprecheraufnahme · recorded/level-18-briefing.mp3 · 18,54 s.
 
 **Suno-Stil**
 
@@ -1122,7 +1122,7 @@ Die beiden Versorgungszentren haben ihre Register in derselben Funkverbindung ge
 
 #### Boss-Intro · One Copy for Each Colony
 
-Roboteraufnahme · robot/level-18-intro.mp3 · 25,49 s.
+Sprecheraufnahme · recorded/level-18-intro.mp3 · 19,40 s.
 
 **Suno-Stil**
 
@@ -1138,7 +1138,7 @@ Da ist Othravel, der Gabelherr. Früher brachte er verfeindete Kolonien auf sein
 
 #### Boss-Outro · The Page They Share
 
-Roboteraufnahme · robot/level-18-outro.mp3 · 24,65 s.
+Sprecheraufnahme · recorded/level-18-outro.mp3 · 18,86 s.
 
 **Suno-Stil**
 
@@ -1158,7 +1158,7 @@ Der Lockrufer · The False Rescuer
 
 #### Level-Briefing · The Gold Flare
 
-Roboteraufnahme · robot/level-19-briefing.mp3 · 20,78 s.
+Sprecheraufnahme · recorded/level-19-briefing.mp3 · 17,11 s.
 
 **Suno-Stil**
 
@@ -1174,7 +1174,7 @@ Eine Leitstellenoffizierin kennt die goldene Fackel. Eine echte Rettungscrew bra
 
 #### Boss-Intro · The Offer at the Bay
 
-Roboteraufnahme · robot/level-19-intro.mp3 · 25,73 s.
+Sprecheraufnahme · recorded/level-19-intro.mp3 · 19,90 s.
 
 **Suno-Stil**
 
@@ -1190,7 +1190,7 @@ Die Fackel gehört Zarnvek, dem Lockrufer. Das alte Signal des Rettungsschiffs s
 
 #### Boss-Outro · A Safe Berth
 
-Roboteraufnahme · robot/level-19-outro.mp3 · 22,15 s.
+Sprecheraufnahme · recorded/level-19-outro.mp3 · 17,09 s.
 
 **Suno-Stil**
 
@@ -1210,7 +1210,7 @@ Der Reihenfolgenräuber · The Queue Raider
 
 #### Level-Briefing · Who Was First
 
-Roboteraufnahme · robot/level-20-briefing.mp3 · 21,89 s.
+Sprecheraufnahme · recorded/level-20-briefing.mp3 · 18,34 s.
 
 **Suno-Stil**
 
@@ -1226,7 +1226,7 @@ Das Schlepperlogbuch stimmt mit der ursprünglichen Hafenliste überein. Danach 
 
 #### Boss-Intro · The Purchased Place
 
-Roboteraufnahme · robot/level-20-intro.mp3 · 25,90 s.
+Sprecheraufnahme · recorded/level-20-intro.mp3 · 19,41 s.
 
 **Suno-Stil**
 
@@ -1242,7 +1242,7 @@ Kontakt bestätigt. Vorathen, der Reihenfolgenräuber. Sein Deck koordinierte fr
 
 #### Boss-Outro · An Unrequested Parcel
 
-Roboteraufnahme · robot/level-20-outro.mp3 · 22,44 s.
+Sprecheraufnahme · recorded/level-20-outro.mp3 · 17,59 s.
 
 **Suno-Stil**
 
@@ -1266,7 +1266,7 @@ Der Staubstreuer · The Dust Scatterer
 
 #### Level-Briefing · Someone Is Counting Replies
 
-Roboteraufnahme · robot/level-21-briefing.mp3 · 21,72 s.
+Sprecheraufnahme · recorded/level-21-briefing.mp3 · 18,11 s.
 
 **Suno-Stil**
 
@@ -1282,7 +1282,7 @@ Die Hafencrews bestätigen die unbestellten Pakete nicht mehr. Wir haben dieselb
 
 #### Boss-Intro · One Million Small Parcels
 
-Roboteraufnahme · robot/level-21-intro.mp3 · 29,04 s.
+Sprecheraufnahme · recorded/level-21-intro.mp3 · 22,81 s.
 
 **Suno-Stil**
 
@@ -1298,7 +1298,7 @@ Kontakt bestätigt. Drazkell, der Staubstreuer. Seine Laderäume versorgten frü
 
 #### Boss-Outro · The Stamp on the Parcel
 
-Roboteraufnahme · robot/level-21-outro.mp3 · 23,78 s.
+Sprecheraufnahme · recorded/level-21-outro.mp3 · 18,77 s.
 
 **Suno-Stil**
 
@@ -1318,7 +1318,7 @@ Die falsche Hüterin · The False Custodian
 
 #### Level-Briefing · A Stamp for an Empty Check
 
-Roboteraufnahme · robot/level-22-briefing.mp3 · 21,22 s.
+Sprecheraufnahme · recorded/level-22-briefing.mp3 · 17,19 s.
 
 **Suno-Stil**
 
@@ -1334,7 +1334,7 @@ Eine Hafenprüferin hat die Stempel mit ihrem Dienstplan verglichen. Die eingetr
 
 #### Boss-Intro · The False Custodian
 
-Roboteraufnahme · robot/level-22-intro.mp3 · 25,92 s.
+Sprecheraufnahme · recorded/level-22-intro.mp3 · 20,60 s.
 
 **Suno-Stil**
 
@@ -1350,7 +1350,7 @@ Das ist Nethrava, die falsche Hüterin. Seine Bescheinigungen führen jede Prüf
 
 #### Boss-Outro · The Kept Carbon Copy
 
-Roboteraufnahme · robot/level-22-outro.mp3 · 23,04 s.
+Sprecheraufnahme · recorded/level-22-outro.mp3 · 17,58 s.
 
 **Suno-Stil**
 
@@ -1370,7 +1370,7 @@ Der Gedächtnisleerer · The Memory Emptier
 
 #### Level-Briefing · Routine Cleanup
 
-Roboteraufnahme · robot/level-23-briefing.mp3 · 21,14 s.
+Sprecheraufnahme · recorded/level-23-briefing.mp3 · 17,42 s.
 
 **Suno-Stil**
 
@@ -1386,7 +1386,7 @@ Auf der Kopie der Prüferin gelten die Prüfverläufe als entbehrlich. Dasselbe 
 
 #### Boss-Intro · The Last Pages
 
-Roboteraufnahme · robot/level-23-intro.mp3 · 26,83 s.
+Sprecheraufnahme · recorded/level-23-intro.mp3 · 20,21 s.
 
 **Suno-Stil**
 
@@ -1402,7 +1402,7 @@ Kontakt bestätigt. Valdrek, der Gedächtnisleerer. Er sollte überflüssige Dat
 
 #### Boss-Outro · Deleted at the Same Hour
 
-Roboteraufnahme · robot/level-23-outro.mp3 · 22,90 s.
+Sprecheraufnahme · recorded/level-23-outro.mp3 · 17,88 s.
 
 **Suno-Stil**
 
@@ -1422,7 +1422,7 @@ Der Spiegelmarkt · The Mirror Market
 
 #### Level-Briefing · All Those Sales
 
-Roboteraufnahme · robot/level-24-briefing.mp3 · 22,49 s.
+Sprecheraufnahme · recorded/level-24-briefing.mp3 · 18,07 s.
 
 **Suno-Stil**
 
@@ -1438,7 +1438,7 @@ Die Marktanzeige meldete Dutzende Verkäufe, bevor unsere Prüfer ankamen. Sie b
 
 #### Boss-Intro · Trades With a Reflection
 
-Roboteraufnahme · robot/level-24-intro.mp3 · 27,79 s.
+Sprecheraufnahme · recorded/level-24-intro.mp3 · 21,10 s.
 
 **Suno-Stil**
 
@@ -1454,7 +1454,7 @@ Kontakt bestätigt. Korzeth, der Spiegelmarkt. Er spielt Geschäfte zwischen erf
 
 #### Boss-Outro · The Goods That Never Left
 
-Roboteraufnahme · robot/level-24-outro.mp3 · 22,54 s.
+Sprecheraufnahme · recorded/level-24-outro.mp3 · 17,11 s.
 
 **Suno-Stil**
 
@@ -1474,7 +1474,7 @@ Der Bestätigungsdieb · The Confirmation Thief
 
 #### Level-Briefing · The Hold Is Still Full
 
-Roboteraufnahme · robot/level-25-briefing.mp3 · 20,64 s.
+Sprecheraufnahme · recorded/level-25-briefing.mp3 · 16,94 s.
 
 **Suno-Stil**
 
@@ -1490,7 +1490,7 @@ Der Frachterpilot hat seinen vollen Laderaum per Kamera gezeigt. Die Zielstation
 
 #### Boss-Intro · Delivery Marked Complete
 
-Roboteraufnahme · robot/level-25-intro.mp3 · 27,65 s.
+Sprecheraufnahme · recorded/level-25-intro.mp3 · 20,60 s.
 
 **Suno-Stil**
 
@@ -1506,7 +1506,7 @@ Da ist Thervoss, der Bestätigungsdieb. Er verschickt Empfangsbestätigungen, be
 
 #### Boss-Outro · The Receipt From the Receiver
 
-Roboteraufnahme · robot/level-25-outro.mp3 · 21,02 s.
+Sprecheraufnahme · recorded/level-25-outro.mp3 · 15,83 s.
 
 **Suno-Stil**
 
@@ -1526,7 +1526,7 @@ Der Nebelrichter · The Fog Judge
 
 #### Level-Briefing · The Same Ruling Every Time
 
-Roboteraufnahme · robot/level-26-briefing.mp3 · 23,26 s.
+Sprecheraufnahme · recorded/level-26-briefing.mp3 · 18,37 s.
 
 **Suno-Stil**
 
@@ -1542,7 +1542,7 @@ Die Zielcrew schickte dem Gericht ein Video ihres leeren Docks. Die Antwort erkl
 
 #### Boss-Intro · The Judge in the Fog
 
-Roboteraufnahme · robot/level-26-intro.mp3 · 28,80 s.
+Sprecheraufnahme · recorded/level-26-intro.mp3 · 22,04 s.
 
 **Suno-Stil**
 
@@ -1558,7 +1558,7 @@ Kontakt bestätigt. Akraveth, der Nebelrichter. Seine Berater schlichteten früh
 
 #### Boss-Outro · The Common Service Mark
 
-Roboteraufnahme · robot/level-26-outro.mp3 · 23,78 s.
+Sprecheraufnahme · recorded/level-26-outro.mp3 · 18,66 s.
 
 **Suno-Stil**
 
@@ -1578,7 +1578,7 @@ Der Lieferkettenwurm · The Supply-Chain Worm
 
 #### Level-Briefing · The Next Jump
 
-Roboteraufnahme · robot/level-27-briefing.mp3 · 22,85 s.
+Sprecheraufnahme · recorded/level-27-briefing.mp3 · 18,12 s.
 
 **Suno-Stil**
 
@@ -1594,7 +1594,7 @@ Der Pilot ist in einer Schleppbucht in Sicherheit. Techniker haben festgestellt,
 
 #### Boss-Intro · A Repair That Took Control
 
-Roboteraufnahme · robot/level-27-intro.mp3 · 24,43 s.
+Sprecheraufnahme · recorded/level-27-intro.mp3 · 18,33 s.
 
 **Suno-Stil**
 
@@ -1610,7 +1610,7 @@ Das ist Zelkharn, der Lieferkettenwurm. Seine Wartungsbuchten hielten früher di
 
 #### Boss-Outro · Where the Backup Should Be
 
-Roboteraufnahme · robot/level-27-outro.mp3 · 21,14 s.
+Sprecheraufnahme · recorded/level-27-outro.mp3 · 16,33 s.
 
 **Suno-Stil**
 
@@ -1630,7 +1630,7 @@ Der Leerkopienhändler · The Empty Backup Merchant
 
 #### Level-Briefing · A Directory Full of Names
 
-Roboteraufnahme · robot/level-28-briefing.mp3 · 21,82 s.
+Sprecheraufnahme · recorded/level-28-briefing.mp3 · 18,05 s.
 
 **Suno-Stil**
 
@@ -1646,7 +1646,7 @@ Die Klinik fand den Namen ihres Archivs im Verzeichnis des Frachters. Das Sicher
 
 #### Boss-Intro · The Empty Storage Array
 
-Roboteraufnahme · robot/level-28-intro.mp3 · 27,55 s.
+Sprecheraufnahme · recorded/level-28-intro.mp3 · 20,73 s.
 
 **Suno-Stil**
 
@@ -1662,7 +1662,7 @@ Kontakt bestätigt. Odravik, der Leerkopienhändler. Sein Speichersystem verspri
 
 #### Boss-Outro · The Report No One Heard
 
-Roboteraufnahme · robot/level-28-outro.mp3 · 22,37 s.
+Sprecheraufnahme · recorded/level-28-outro.mp3 · 17,06 s.
 
 **Suno-Stil**
 
@@ -1682,7 +1682,7 @@ Der Schweigefilter · The Silence Filter
 
 #### Level-Briefing · A Harbor Too Quiet
 
-Roboteraufnahme · robot/level-29-briefing.mp3 · 21,24 s.
+Sprecheraufnahme · recorded/level-29-briefing.mp3 · 17,36 s.
 
 **Suno-Stil**
 
@@ -1698,7 +1698,7 @@ Die Hafenchefin sagt, sie habe nie einen Alarm gehört. Der Prüfer hat drei Kop
 
 #### Boss-Intro · What Counted as Noise
 
-Roboteraufnahme · robot/level-29-intro.mp3 · 28,56 s.
+Sprecheraufnahme · recorded/level-29-intro.mp3 · 22,15 s.
 
 **Suno-Stil**
 
@@ -1714,7 +1714,7 @@ Kontakt bestätigt. Varnokh, der Schweigefilter. Früher hob er Notrufe aus dem 
 
 #### Boss-Outro · The Owners Answered
 
-Roboteraufnahme · robot/level-29-outro.mp3 · 23,11 s.
+Sprecheraufnahme · recorded/level-29-outro.mp3 · 17,94 s.
 
 **Suno-Stil**
 
@@ -1734,7 +1734,7 @@ Der Identitätsauktionator · The Identity Auctioneer
 
 #### Level-Briefing · The Names in the Lots
 
-Roboteraufnahme · robot/level-30-briefing.mp3 · 21,19 s.
+Sprecheraufnahme · recorded/level-30-briefing.mp3 · 17,58 s.
 
 **Suno-Stil**
 
@@ -1750,7 +1750,7 @@ Die Siedler erinnern sich an die Registrierung auf der Flotte, die sie in ihre n
 
 #### Boss-Intro · The Auction of Names
 
-Roboteraufnahme · robot/level-30-intro.mp3 · 25,27 s.
+Sprecheraufnahme · recorded/level-30-intro.mp3 · 19,46 s.
 
 **Suno-Stil**
 
@@ -1766,7 +1766,7 @@ Das ist Kezravel, der Identitätsauktionator. Aus seinem alten Siedlerregister s
 
 #### Boss-Outro · Their Own Signatures
 
-Roboteraufnahme · robot/level-30-outro.mp3 · 24,77 s.
+Sprecheraufnahme · recorded/level-30-outro.mp3 · 18,45 s.
 
 **Suno-Stil**
 
@@ -1790,7 +1790,7 @@ Der Relaisblender · The Relay Illusionist
 
 #### Level-Briefing · Two Acknowledgments
 
-Roboteraufnahme · robot/level-31-briefing.mp3 · 21,98 s.
+Sprecheraufnahme · recorded/level-31-briefing.mp3 · 17,29 s.
 
 **Suno-Stil**
 
@@ -1806,7 +1806,7 @@ Absender und Empfänger der Fernroute haben ihre Kopien verglichen. Beide bekame
 
 #### Boss-Intro · The Relay With Two Faces
 
-Roboteraufnahme · robot/level-31-intro.mp3 · 28,54 s.
+Sprecheraufnahme · recorded/level-31-intro.mp3 · 21,32 s.
 
 **Suno-Stil**
 
@@ -1822,7 +1822,7 @@ Kontakt bestätigt. Dravosk, der Relaisblender. Seine Antennen ersetzten Station
 
 #### Boss-Outro · A Reply at Both Ends
 
-Roboteraufnahme · robot/level-31-outro.mp3 · 22,61 s.
+Sprecheraufnahme · recorded/level-31-outro.mp3 · 17,17 s.
 
 **Suno-Stil**
 
@@ -1842,7 +1842,7 @@ Der Schwarmsammler · The Swarm Collector
 
 #### Level-Briefing · The Machines That Didn’t Come Home
 
-Roboteraufnahme · robot/level-32-briefing.mp3 · 23,11 s.
+Sprecheraufnahme · recorded/level-32-briefing.mp3 · 18,00 s.
 
 **Suno-Stil**
 
@@ -1858,7 +1858,7 @@ Eine Stationsmechanikerin erkannte ihre alte Schleppdrohne im Funkverkehr. Sie w
 
 #### Boss-Intro · One Command for the Swarm
 
-Roboteraufnahme · robot/level-32-intro.mp3 · 25,54 s.
+Sprecheraufnahme · recorded/level-32-intro.mp3 · 19,45 s.
 
 **Suno-Stil**
 
@@ -1874,7 +1874,7 @@ Das ist Thalzek, der Schwarmsammler. Unter seinem Rumpf fanden beschädigte Arbe
 
 #### Boss-Outro · The Return Contract
 
-Roboteraufnahme · robot/level-32-outro.mp3 · 23,04 s.
+Sprecheraufnahme · recorded/level-32-outro.mp3 · 17,66 s.
 
 **Suno-Stil**
 

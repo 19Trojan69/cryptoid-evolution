@@ -88,8 +88,8 @@ test('the campaign opening leaves a full speech pause after spam', () => {
   assert.ok(words[stop + 1].start - words[stop].end >= .85);
 });
 
-test('levels 13 through 16 use their new recordings at all three story handoffs', () => {
-  for (let level = 13; level <= 16; level++) {
+test('levels 13 through 32 use recorded narration at all three story handoffs', () => {
+  for (let level = 13; level <= 32; level++) {
     const bossSector = level * 10;
     const handoffs = {
       briefing: levelStoryAtSector(bossSector - 9),
