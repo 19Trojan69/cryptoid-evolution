@@ -13,9 +13,7 @@ Drehbuch für Kampagnenstart, Level-Briefings, Boss-Intros und Sieges-Outros. Je
 
 ### Stand der Aufnahmen
 
-Die ersten 35 Szenen verwenden die eingereichte englische Sprecheraufnahme. Das umfasst die Boss-Szenen für Level 1 und alle Briefings, Intros und Outros für Level 2 bis 12. Die Sprecheraufnahme setzt jeweils nach der Slate-Ansage ein. Als leise Begleitung dienen Auszüge aus „Galactic Chain (Remastered)“, „Dreadnought Duel“ und eine Instrumentalfassung des Auszugs aus „Beyond the Last Star“. Die Sprachpausen, die englische Laufschrift und die Untertitel der 18 weiteren Spielsprachen sind auf die neuen Schnitte abgestimmt.
-
-Die 114 Szenen für Level 13 bis 50 verwenden die Sprecheraufnahmen aus Slate 036–149. Die gesprochenen Slate-Ansagen wurden an den Sprechpausen herausgeschnitten. Ein leiser Orchesterausschnitt aus „Cleared for Launch“ begleitet alle 114 Szenen. Laufschrift und Untertitel folgen den neuen Satzpausen.
+Slate 001–149 verwenden die eingereichten englischen Sprecheraufnahmen mit demselben leisen Orchesterausschnitt aus „Cleared for Launch“. Der Abgleich der ersten 35 Szenen umfasst Varneths Boss-Intro und -Outro sowie die Briefings, Boss-Intros und Boss-Outros für Level 2 bis 12. Die gesprochenen Slate-Ansagen sind entfernt. Laufschrift und Untertitel der 18 weiteren Spielsprachen folgen den Sprechpausen.
 
 Die letzten fünf Uploads enthalten Slate 096–149 in Reihenfolge. Sie beginnen mit Orvethras Briefing „Read the Last Page“ und enden mit Drazevorns „Earth, We Read You“. Das Finale dauert 69,72 Sekunden. Die längeren Pausen geben dem Funkspruch von der Erde und der Antwort des Reparaturtrupps Raum. Die Untertitel der 18 weiteren Spielsprachen folgen den Sprechpausen und werden pro Sprache geladen.
 
