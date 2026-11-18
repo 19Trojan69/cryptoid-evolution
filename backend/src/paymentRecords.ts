@@ -43,6 +43,8 @@ export const paymentRecordHeaders = [
   "Historischer USD je Pi", "Historischer EUR je Pi", "Kaufgegenwert USD", "Kaufgegenwert EUR",
   "Kaufkursquelle", "Kaufkurszeitpunkt UTC", "Kaufkursverfuegbarkeit", "Kurserfassung UTC",
   "EUR-Methode", "USD-EUR Wechselkurs", "Wechselkursquelle", "Wechselkurszeitpunkt UTC",
+  "Eingangskurs USD je Pi", "Eingangskurs EUR je Pi", "Eingangsgegenwert USD", "Eingangsgegenwert EUR",
+  "Eingangskursquelle", "Eingangskurszeitpunkt UTC", "Eingangskursverfuegbarkeit", "Eingangskurserfassung UTC",
 ];
 
 const safeCell = (value: unknown): string => {
@@ -75,7 +77,11 @@ export const purchasePriceView = (order: any) => {
     fxAt: usable ? quote.fxAt || null : null,
   };
 };
-export const paymentRecord = (order: any): unknown[] => { const price = purchasePriceView(order); return [
+export const receiptPriceView = (order: any) => {
+  const price = purchasePriceView({ ...order, purchaseQuote: order.receiptQuote });
+  return { ...price, receivedAt: order.wallet_received_at || null };
+};
+export const paymentRecord = (order: any): unknown[] => { const price = purchasePriceView(order); const received = receiptPriceView(order); return [
   piNetwork(order.payment_network),
   order.cancelled ? "Storniert" : order.paid ? "Bestaetigt" : "Offen",
   order.pi_payment_id,
@@ -103,6 +109,8 @@ export const paymentRecord = (order: any): unknown[] => { const price = purchase
   price.purchaseAt, price.usdPerPi, price.eurPerPi, price.usdAmount, price.eurAmount,
   price.source, price.quotedAt, price.availability === "test_payment" ? "Testzahlung - kein Geldwert" : price.availability === "available" ? "verfuegbar" : "nicht verfuegbar",
   price.recordedAt, price.eurMethod, price.fxRate, price.fxSource, price.fxAt,
+  received.usdPerPi, received.eurPerPi, received.usdAmount, received.eurAmount,
+  received.source, received.quotedAt, received.availability, received.recordedAt,
 ]; };
 
 export type LedgerNetwork = "mainnet" | "testnet" | "unknown" | "all";
@@ -136,6 +144,7 @@ export const paymentView = (order: any) => ({
   productName: order.product_name || order.product_id || "Unbekanntes Produkt",
   userUid: order.user,
   username: order.username || null, quantity: order.quantity ?? null, purchasePrice: purchasePriceView(order),
+  receiptPrice: receiptPriceView(order),
   amountPi:
     typeof order.payment_amount_pi === "number" &&
     Number.isFinite(order.payment_amount_pi)

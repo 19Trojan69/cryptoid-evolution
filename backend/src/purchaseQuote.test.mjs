@@ -23,3 +23,13 @@ test('Test-Pi never has a monetary value, even with a legacy valuation or mainne
   assert.equal(row[17], null); assert.equal(row[18], null);
   assert.match(row.join(' '), /Testzahlung/);
 });
+
+test('receipt valuation is separate from initiation and never falls back to an old purchase quote', () => {
+  const purchase = quotes.quoteFromResponse('Pi Network', at, data, now);
+  const order = { payment_network: 'Pi Network', payment_amount_pi: 10, purchaseQuote: purchase,
+    wallet_received_at: at, receiptQuote: { ...purchase, eurPerPi: .20 } };
+  assert.equal(records.purchasePriceView(order).eurAmount, 2.2);
+  assert.equal(records.receiptPriceView(order).eurAmount, 2);
+  assert.equal(records.receiptPriceView({ ...order, receiptQuote: undefined }).availability, 'unavailable');
+  assert.equal(records.receiptPriceView({ ...order, payment_network: 'Pi Testnet' }).eurAmount, null);
+});

@@ -136,7 +136,10 @@ export default function mountPaymentsEndpoints(router: Router) {
       if (!payment.status?.developer_completed) await platformAPIClientForRequest(req).post(`/v2/payments/${id}/complete`, { txid });
       // Credit only after Pi has confirmed /complete (or reported already completed).
       const receipt = await readPaymentReceipt(payment);
-      await orders.updateOne({ pi_payment_id: id, user: uid, paid: false, cancelled: { $ne: true } }, { $set: { paid: true, txid, completed_at: new Date(), ...paymentSnapshot(payment, offer.name), ...receipt } });
+      const receiptQuote = receipt.wallet_received_at
+        ? await capturePurchaseQuote({ ...payment, created_at: receipt.wallet_received_at.toISOString() })
+        : null;
+      await orders.updateOne({ pi_payment_id: id, user: uid, paid: false, cancelled: { $ne: true } }, { $set: { paid: true, txid, completed_at: new Date(), ...paymentSnapshot(payment, offer.name), ...receipt, ...(receiptQuote ? { receiptQuote } : {}) } });
       return res.json({ completed: true });
     } catch (error) {
       console.error("Payment completion failed", error);

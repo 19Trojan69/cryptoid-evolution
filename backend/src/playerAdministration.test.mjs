@@ -89,7 +89,10 @@ function community(h){
  h.docs.orders.push({_id:'paid',user:'pilot-a',paid:true,pi_payment_id:'payment-id',product_id:'weapon_twin',quantity:1,accessToken:'private-token',wallet:'private-wallet',payment_network:'Pi Testnet'},{_id:'unpaid',user:'pilot-a',paid:false},{_id:'other-order',user:'other',paid:true});
 }
 test('account deletion atomically removes personal data and sessions, unlinks paid references and revokes previous tokens',async t=>{
- const h=setup(t);community(h);const p=await h.prepare('account');
+ const h=setup(t);community(h);
+ Object.assign(h.docs.orders.find(order=>order._id==='paid'),{txid:'a'.repeat(64),wallet_received_at:new Date('2026-11-18T12:00:00Z'),
+  receiptQuote:{availability:'available',eurPerPi:.2,source:'https://rate.example/observed'},valuation:{eurPerPi:.2,eurAmount:2}});
+ const p=await h.prepare('account');
  assert.equal((await h.execute(p.body,{playerRequestedDeletion:false})).code,400);
  assert.equal((await h.execute(p.body)).code,200);assert.equal(h.ended,1);
  assert.equal(h.docs.users.some(u=>u.uid==='pilot-a'),false);
@@ -97,6 +100,8 @@ test('account deletion atomically removes personal data and sessions, unlinks pa
  assert.deepEqual(h.docs.votes,[{uid:'other',postId:'other-post'}]);assert.deepEqual(h.docs.translations,[{postId:'unrelated',text:'keep'}]);
  assert.equal(h.docs.sessions.length,1);assert.equal(h.docs.orders.length,2);
  const paid=h.docs.orders.find(o=>o._id==='paid');assert.equal(paid.pi_payment_id,'payment-id');assert.equal(paid.playerUnlinked,true);assert.equal(paid.user,undefined);assert.equal(paid.accessToken,undefined);
+ assert.equal(paid.txid,'a'.repeat(64));assert.equal(paid.receiptQuote.eurPerPi,.2);assert.equal(paid.valuation.eurAmount,2);
+ assert.equal(paid.wallet_received_at.toISOString(),'2026-11-18T12:00:00.000Z');assert.equal(paid.username,undefined);
  assert.ok(!JSON.stringify(h.docs).includes('private-'));assert.ok(!JSON.stringify(h.docs).includes('pilot-a'));
  assert.equal(await deletedAccessToken(h.locals.adminCollection,'pilot-a','private-token'),true);
  assert.equal(await deletedAccessToken(h.locals.adminCollection,'pilot-a',''),true);

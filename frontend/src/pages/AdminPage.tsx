@@ -29,7 +29,7 @@ import AdminUsage from "./AdminUsage";
 import AdminPlayers from './AdminPlayers';
 import AdminStoryScenes from './AdminStoryScenes';
 import AdminMainnetRelease from './AdminMainnetRelease';
-import AdminNftPreparation from './AdminNftPreparation';
+import AdminIntegrationHealth from './AdminIntegrationHealth';
 import { paymentEvidenceLinks } from "./paymentEvidenceLinks";
 import { useAdminLocale } from "../adminLocale";
 import { nftGalleryCopy } from "../locales/bossNftGallery";
@@ -50,14 +50,21 @@ const tabs = [
   ["usage", "Zugriffsstatistik"],
   ["checks", "Audio & Prüfung"],
   ["diagnostics", "Technischer Bericht"],
+  ["operations", "Betrieb & Zugriff"],
 ] as const;
 type AdminView = (typeof tabs)[number][0];
+const mainnetTabKeys: AdminView[] = ["overview", "payments", "usage", "players", "operations"];
+const visibleTabs = shipSaveNetwork === "mainnet"
+  ? mainnetTabKeys.map(key => tabs.find(tab => tab[0] === key)!)
+  : tabs.filter(tab => tab[0] !== "operations");
+const paymentNetworks: Network[] = shipSaveNetwork === "mainnet" ? ["mainnet", "unknown"] : ["mainnet", "testnet", "unknown"];
 type Network = "mainnet" | "testnet" | "unknown";
 type Status = "all" | "confirmed" | "pending" | "cancelled";
 type Phase = "normal" | "boss" | "bonus";
 type Payment = {
   username: string | null; quantity: number | null;
   purchasePrice: { availability: string; purchaseAt: string | null; usdPerPi: number | null; eurPerPi: number | null; usdAmount: number | null; eurAmount: number | null; source: string | null; quotedAt: string | null; eurMethod: string | null };
+  receiptPrice?: { availability: string; receivedAt: string | null; usdPerPi: number | null; eurPerPi: number | null; usdAmount: number | null; eurAmount: number | null; source: string | null; quotedAt: string | null };
   id: string;
   txid: string | null;
   network: string;
@@ -357,7 +364,7 @@ export default function AdminPage() {
   const auth = useAuth();
   const navigate = useNavigate();
   const [params, setParams] = useSearchParams();
-  const view = (tabs.some(([key]) => key === params.get("view")) ? params.get("view") : "overview") as AdminView;
+  const view = (visibleTabs.some(([key]) => key === params.get("view")) ? params.get("view") : "overview") as AdminView;
   const [skinId, setSkinId] = useState<PlayerSkinId>(
     () => playerSkins.find(skin => skin.id === sessionStorage.getItem(ADMIN_SHIP_SKIN_KEY))?.id || playerSkins[0].id
   );
@@ -370,7 +377,7 @@ export default function AdminPage() {
   const [weapon, setWeapon] = useState(1);
   const [power, setPower] = useState("");
   const [network, setNetwork] = useState<Network>("mainnet");
-  const [status, setStatus] = useState<Status>("all");
+  const [status, setStatus] = useState<Status>(shipSaveNetwork === "mainnet" ? "confirmed" : "all");
   const [page, setPage] = useState(1);
   const [ledger, setLedger] = useState<Ledger | null>(null);
   const [services, setServices] = useState<AdminStatus | null>(null);
@@ -677,9 +684,10 @@ export default function AdminPage() {
           <div className="admin-owner">
             <span>@{auth.user?.username}</span>
             <span>{t("Geschützter Eigentümerzugriff")}</span>
+            <span>{shipSaveNetwork === "mainnet" ? "Mainnet" : "Testnet"}</span>
           </div>
           <nav className="admin-nav" aria-label={t("Admin-Seiten")}>
-            {tabs.map(([key, label]) => (
+            {visibleTabs.map(([key, label]) => (
               <button
                 key={key}
                 className={view === key ? "active" : ""}
@@ -712,16 +720,19 @@ export default function AdminPage() {
           {view === 'story' && <AdminStoryScenes onStartPreview={stopAudio} />}
           {view === "overview" && (
             <>
-              {shipSaveNetwork === "mainnet" && <AdminMainnetRelease />}
-              {shipSaveNetwork === "mainnet" && <AdminNftPreparation />}
               <section className="admin-shortcuts" aria-label={t("Schnellzugriff")}>
-                {[
+                {(shipSaveNetwork === "mainnet" ? [
+                  ["payments", "Zahlungseingänge ansehen", "Echte Pi, Wallet-Eingangszeit, historische Kurse und CSV-Export"],
+                  ["usage", "Zugriffsstatistik", "Aufrufe und Nutzungszeiten im Mainnet"],
+                  ["players", "Spieler verwalten", "Spielkonten suchen und bestätigte Löschanfragen bearbeiten"],
+                  ["operations", "Betrieb & Zugriff", "Eigentümerkonto, Verbindung und Abmeldung"],
+                ] : [
                   ["ships", "Raumschiffe testen", "Alle 20 Modelle · Standard, Advanced und Elite"],
                   ["levels", "Level oder Boss starten", "Block, Bosskampf und Bonusrunde direkt öffnen"],
                   ["story", "Story-Szenen ansehen", "Spieleinleitung, Level-Briefings, Boss-Intros und Boss-Outros"],
                   ["payments", "Zahlungseingänge ansehen", "Echte Pi, Test-Pi, Details und CSV-Download"],
                   ["scores", "Eigene Rekorde", "Karrierepunkte und Best Run nur für dieses Netzwerk zurücksetzen"],
-                ].map(([key, title, description]) => (
+                ]).map(([key, title, description]) => (
                   <button key={key} onClick={() => openView(key as AdminView)}>
                     <strong>{t(title)}</strong>
                     <span>{t(description)}</span>
@@ -729,7 +740,7 @@ export default function AdminPage() {
                   </button>
                 ))}
               </section>
-              <section className="admin-panel">
+              {shipSaveNetwork === "testnet" && <section className="admin-panel">
                 <h2>{t("Bereit zum Testen")}</h2>
                 <div className="admin-metrics">
                   <div>
@@ -752,7 +763,7 @@ export default function AdminPage() {
                 <p>
                   {t("Der aktuelle Ablauf umfasst")} {levelCount} {t("angezeigte Level mit jeweils neun Blocks, Boss und Bonusrunde.")} </p>
                 <p>{t("Admin-Testläufe schreiben keine Rekorde, Shards, Käufe oder Belohnungen gut.")}</p>
-              </section>
+              </section>}
               <section className="admin-panel">
                 <h2>{t("Bestätigte Zahlungseingänge")}</h2>
                 {ledgerLoading ? (
@@ -761,7 +772,7 @@ export default function AdminPage() {
                   <p role="alert">{ledgerError}</p>
                 ) : (
                   <div className="admin-metrics">
-                    {(["mainnet", "testnet", "unknown"] as const).map(key => {
+                    {(shipSaveNetwork === "mainnet" ? ["mainnet"] as const : ["mainnet", "testnet", "unknown"] as const).map(key => {
                       const summary = ledger?.summary.find(item => item._id === key);
                       return (
                         <button
@@ -787,6 +798,8 @@ export default function AdminPage() {
                   </div>
                 )}
               </section>
+              {shipSaveNetwork === "mainnet" && <AdminMainnetRelease />}
+              {shipSaveNetwork === "mainnet" && <AdminIntegrationHealth />}
             </>
           )}
           {(view === "ships" || view === "levels") && (
@@ -946,7 +959,7 @@ export default function AdminPage() {
               <p>
                 {t("App-Käufe und ihre Zahlungseingänge. Andere Überweisungen in deine private Wallet sind hier nicht enthalten.")} </p>
               <div className="admin-network-switch" aria-label={t("Zahlungsnetzwerk")}>
-                {(["mainnet", "testnet", "unknown"] as const).map(key => (
+                {paymentNetworks.map(key => (
                   <button
                     key={key}
                     aria-pressed={network === key}
@@ -1003,6 +1016,12 @@ export default function AdminPage() {
                       ["Quantity", amount(selectedPayment.quantity)],
                       ["Username", selectedPayment.username || t("Not recorded")],
                       ["Purchase time", date(selectedPayment.purchasePrice.purchaseAt)],
+                      ["Pi-Kurs am Wallet-Eingang (EUR)", amount(selectedPayment.receiptPrice?.eurPerPi ?? null)],
+                      ["Eingangsgegenwert (EUR)", amount(selectedPayment.receiptPrice?.eurAmount ?? null)],
+                      ["Pi-Kurs am Wallet-Eingang (USD)", amount(selectedPayment.receiptPrice?.usdPerPi ?? null)],
+                      ["Eingangsgegenwert (USD)", amount(selectedPayment.receiptPrice?.usdAmount ?? null)],
+                      ["Kursquelle am Wallet-Eingang", selectedPayment.receiptPrice?.source || "Nicht verfügbar"],
+                      ["Kurszeit am Wallet-Eingang", date(selectedPayment.receiptPrice?.quotedAt ?? null)],
                       ["Historical Pi price (USD)", amount(selectedPayment.purchasePrice.usdPerPi)],
                       ["Historical Pi price (EUR)", amount(selectedPayment.purchasePrice.eurPerPi)],
                       ["Purchase value (USD)", amount(selectedPayment.purchasePrice.usdAmount)],
@@ -1035,6 +1054,7 @@ export default function AdminPage() {
                   </dl>
                   <p>
                     {t("Wallet-Eingang = bestätigter Blockchain-Zeitpunkt. Der App-Abschluss wird getrennt angezeigt. Alle Uhrzeiten: Wien.")} </p>
+                  {selectedPayment.network === "Pi Network" && <p>{t("Der Kurs am Wallet-Eingang wird als zeitnaher Referenzkurs gespeichert. Fehlt ein belegter Kurs, bleibt der Wert als nicht verfügbar gekennzeichnet. Der Kurs bei Zahlungsbeginn wird separat ausgewiesen.")}</p>}
                   {(evidenceLinks?.explorer || evidenceLinks?.api) && <div className="admin-actions">
                     {evidenceLinks.explorer && <a href={evidenceLinks.explorer} target="_blank" rel="noopener noreferrer" className="admin-button admin-primary">
                       {t("Im Pi-Blockchain-Explorer öffnen")} · {evidenceLinks.chain === "testnet" ? "Testnet" : "Mainnet"}
@@ -1180,8 +1200,9 @@ export default function AdminPage() {
               )}
             </section>
           )}
-          {view === "checks" && (
+          {(view === "checks" || view === "operations") && (
             <>
+              {view === "operations" && <AdminIntegrationHealth />}
               <section className="admin-panel">
                 <div className="admin-section-head">
                   <h2>{t("Zugriff & Verbindung")}</h2>
@@ -1219,7 +1240,7 @@ export default function AdminPage() {
                         : t("Wird geprüft …")}
                     </dd>
                   </div>
-                  <div>
+                  {shipSaveNetwork === "testnet" && <div>
                     <dt>{t("Testnet-Zahlungsanbindung")}</dt>
                     <dd>
                       {services
@@ -1228,11 +1249,16 @@ export default function AdminPage() {
                           : t("Nicht eingerichtet")
                         : t("Wird geprüft …")}
                     </dd>
-                  </div>
+                  </div>}
                 </dl>
                 <p>{t("Die Prüfung bestätigt den Zugriff und die Konfiguration. Sie führt keinen Kauf durch.")}</p>
+                {shipSaveNetwork === "mainnet" && <>
+                  <p>{t("Die Zahlungsanbindung zeigt die technische Konfiguration. Den Freigabestand der Käufe und NFTs findest du unter Übersicht.")}</p>
+                  <p>{t("Alle Verwaltungsaktionen erfordern dein serverseitig bestätigtes Pi-Eigentümerkonto. Eine normale Spieleranmeldung erteilt keine Admin-Rechte.")}</p>
+                  <div className="admin-actions"><button className="admin-button" onClick={() => void auth.signOut()}>{t("Abmelden")}</button></div>
+                </>}
               </section>
-              <section className="admin-panel">
+              {view === "checks" && <section className="admin-panel">
                 <div className="admin-section-head">
                   <h2>{t("Sounds & Musik testen")}</h2>
                   <button
@@ -1258,7 +1284,7 @@ export default function AdminPage() {
                     </button>
                   ))}
                 </div>
-              </section>
+              </section>}
             </>
           )}
         </>

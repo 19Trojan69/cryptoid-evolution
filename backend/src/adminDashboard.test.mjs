@@ -7,13 +7,16 @@ import receipt from "../build/paymentReceipt.js";
 import { createRequire } from "node:module";
 const axios = createRequire(import.meta.url)("axios");
 
-async function withApp(session, locals, run) {
+async function withApp(session, locals, run, network = "mainnet") {
   const previous = process.env.ADMIN_PI_UID;
+  const previousTestnet = process.env.ADMIN_PI_TESTNET_UID;
   process.env.ADMIN_PI_UID = "owner";
+  process.env.ADMIN_PI_TESTNET_UID = "owner";
   const app = express();
   app.use(express.json());
   app.use((req, _res, next) => {
     req.session = session;
+    req.headers["x-cryptoid-app-network"] = network;
     next();
   });
   Object.assign(app.locals, locals);
@@ -39,6 +42,8 @@ async function withApp(session, locals, run) {
     await new Promise((resolve) => server.close(resolve));
     if (previous === undefined) delete process.env.ADMIN_PI_UID;
     else process.env.ADMIN_PI_UID = previous;
+    if (previousTestnet === undefined) delete process.env.ADMIN_PI_TESTNET_UID;
+    else process.env.ADMIN_PI_TESTNET_UID = previousTestnet;
   }
 }
 
@@ -55,6 +60,7 @@ test("all dashboard routes require verified ownership, including downloads and w
         ["/nft-preparation?download=1"],
         ["/mainnet-release", { action: "release", revision: 0 }],
         ["/usage"],
+        ["/integration-health"],
         ["/payments"],
         ["/payments/export"],
         ["/start", {}],
@@ -86,6 +92,16 @@ test("owner statistics are bounded hourly aggregates, with no visitor joins", as
     assert.equal(limit, 13000);
     assert.doesNotMatch(JSON.stringify(data), /username|uid|session|ipAddress/);
     for (const filter of ["days=365", "days=-1", "network=other"]) assert.equal((await request(`/usage?${filter}`)).status, 400);
+  });
+});
+
+test("Mainnet owner cannot start a preview run", async () => {
+  const session = { currentUser: { uid: "owner" } };
+  await withApp(session, {}, async request => {
+    const response = await request("/start", { sector: 1 });
+    assert.equal(response.status, 403);
+    assert.equal((await response.json()).error, "preview_available_on_testnet_only");
+    assert.notEqual(session.adminMode, true);
   });
 });
 
@@ -133,7 +149,7 @@ test("boss and bonus tests expose the full fleet without creating orders, reward
       (await request("/start", { sector: 499, phase: "normal" })).status,
       200,
     );
-  });
+  }, "testnet");
 });
 
 test("EUR valuation requires a confirmed Mainnet receipt and uses its actual timestamp", async () => {

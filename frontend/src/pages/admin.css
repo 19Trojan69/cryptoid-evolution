@@ -594,3 +594,8 @@
   .admin-primary { background: var(--admin-gold); color: var(--admin-night); }
   .admin-usage-scroll th { color: var(--admin-gold); }
 }
+.admin-service-status { display: inline-block; border: 1px solid currentColor; border-radius: .4rem; padding: .15rem .45rem; margin-bottom: .3rem; font-size: 1rem; }
+.admin-service-status.ok { color: #79ebbc; }
+.admin-service-status.warning { color: #ffd583; }
+.admin-service-status.error { color: #ff9ca7; }
+.admin-service-status.unknown { color: #cfdae3; }

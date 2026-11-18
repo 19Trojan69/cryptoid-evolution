@@ -1,0 +1,15 @@
+# Mainnet owner console, 18 November 2026
+
+Prepared from the current Mainnet release `4089d2b172d64adecbaab54f87c9bb4db95f149c`, not the older default branch.
+
+The Mainnet console offers Overview, Payments, Usage, Players, and Operations. Ship/level/story/audio previews, personal score experiments and local diagnostics remain outside this Mainnet navigation, including direct view queries. The preview-start API rejects Mainnet requests. The established Pi-verified owner binding remains the sole server-side authorization for every admin endpoint, download and write; no public role or username supplied by a browser grants ownership.
+
+Payments default to confirmed Mainnet receipts, ordered by blockchain receipt time. CSV and payment details include a separate USD/EUR reference-price snapshot for the blockchain-confirmed receipt time, alongside the original initiation-time quote. Missing, stale or future quotes remain unavailable; old transactions are not assigned today's price. Account deletion retains the transaction evidence and price snapshots while removing the player UID, username, credentials, game data, community content and sessions under the existing reviewed, transactional deletion workflow.
+
+Pi integration status uses read-only queries to MongoDB, Pi account verification, the latest Mainnet ledger, and an existing completed payment when one exists. A missing completed payment is unknown, not a successful checkout. Responses include latency and an observation time; provider errors cannot leak tokens or API keys. No health history, NFT reservation, mint, payment, purchase fulfillment or owner release is written by these checks.
+
+NFT status uses the existing server-side release gates and explicitly reports missing contract issuance, wallet authorization, permanent metadata and checkout integration. Blockchain reachability does not prove NFT readiness. Actual Mainnet NFT issuance and purchase/delivery integration are still unfinished; the display does not create NFTs or change release readiness. The Mainnet metadata-template download is replaced in the navigation by operational status. All releases remain owner-controlled.
+
+Validation: backend TypeScript build, the complete backend suite (206 passing, one pre-existing skipped case after restoring source artwork to the sparse local checkout), frontend TypeScript/Vite build, five existing frontend admin/locale cases and targeted read-only health/receipt/deletion authorization checks. No physical iPhone/Pi Browser owner-login acceptance, real Pi transfer, mint, real player deletion or Mainnet release was performed. The deployment pipeline uses the repository's unchanged complete build commands.
+
+Atlas inspection is read-only: the connected `cryptoid-testnet` cluster is Free, AWS EU_CENTRAL_1, MongoDB 8.0.37. Application data plus indexes were 83,305,179 bytes at inspection, below the documented 512 MB Free storage budget. This is storage headroom, not a throughput or backup guarantee. No cluster, connection, tier, billing or access-list configuration was changed.

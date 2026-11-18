@@ -67,6 +67,7 @@
   ],
   "git": {
     "deploymentEnabled": {
+      "codex/mainnet-owner-console-20261118": false,
       "codex/mainnet-campaign-score-20261118": false,
       "codex/testnet-fleet-and-links-20261117": false,
       "codex/testnet-earned-boss-silhouettes-20261117": false,

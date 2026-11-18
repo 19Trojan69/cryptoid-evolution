@@ -121,10 +121,10 @@ export function mountAdminPlayerEndpoints(router: Router) {
         const orders = req.app.locals.orderCollection;
         for await (const order of orders.find({ user: target.uid }, opts)) {
           if (order.paid === true) {
-            // Keep only the technical receipt reference to prevent a previously
-            // fulfilled payment being credited to a recreated account again.
+            // Retain the transaction evidence and historical value without the
+            // deleted player identity. Never retain username, UID or access token.
             const receipt: Record<string, unknown> = { _id: order._id, playerUnlinked: true };
-            for (const field of ['pi_payment_id', 'paid', 'product_id', 'quantity', 'weapon_model', 'payment_network', 'payment_amount_pi', 'created_at', 'consumed_at'])
+            for (const field of ['pi_payment_id', 'paid', 'product_id', 'product_name', 'quantity', 'weapon_model', 'power_model', 'payment_network', 'payment_amount_pi', 'created_at', 'pi_created_at', 'approved_at', 'completed_at', 'wallet_received_at', 'receipt_source', 'txid', 'purchaseQuote', 'receiptQuote', 'valuation', 'consumed_at'])
               if (order[field] !== undefined) receipt[field] = order[field];
             await orders.replaceOne({ _id: order._id, user: target.uid }, receipt, opts);
           } else await orders.deleteOne({ _id: order._id, user: target.uid }, opts);

@@ -20,6 +20,7 @@ import { mountBossNftGallery } from "../bossNftGallery";
 import { mountAdminNftCollection } from "./adminNftCollection";
 import { mountMainnetRelease } from "../mainnetRelease";
 import { mountNftPreparation } from "../nftPreparation";
+import { mountPiIntegrationHealth } from "../piIntegrationHealth";
 
 const networks = ["all", "mainnet", "testnet", "unknown"] as const;
 const statuses = ["all", "confirmed", "pending", "cancelled"] as const;
@@ -41,6 +42,7 @@ export default function mountAdminEndpoints(router: Router) {
   router.use(requireOwner);
   mountMainnetRelease(router);
   mountNftPreparation(router);
+  mountPiIntegrationHealth(router);
   mountAdminPlayerEndpoints(router);
   mountBossNftGallery(router);
   mountAdminNftCollection(router);
@@ -93,6 +95,8 @@ export default function mountAdminEndpoints(router: Router) {
   });
 
   router.post("/start", async (req, res) => {
+    if (rewardNetwork(req) !== "testnet")
+      return res.status(403).json({ error: "preview_available_on_testnet_only" });
     const {
       sector = 1,
       shipStage = 1,
@@ -164,7 +168,7 @@ export default function mountAdminEndpoints(router: Router) {
       const [rows, total, summary] = await Promise.all([
         orders
           .find(filter)
-          .sort({ created_at: -1, pi_payment_id: -1 })
+          .sort({ wallet_received_at: -1, completed_at: -1, created_at: -1, pi_payment_id: -1 })
           .skip((page - 1) * 25)
           .limit(25)
           .toArray(),
@@ -242,7 +246,7 @@ export default function mountAdminEndpoints(router: Router) {
     try {
       const cursor = orders
         .find(ledgerFilter(network, status))
-        .sort({ created_at: 1, pi_payment_id: 1 });
+        .sort({ wallet_received_at: 1, completed_at: 1, created_at: 1, pi_payment_id: 1 });
       res.setHeader("Content-Type", "text/csv; charset=utf-8");
       res.setHeader(
         "Content-Disposition",
