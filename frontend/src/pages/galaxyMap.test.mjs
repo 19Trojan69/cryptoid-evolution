@@ -288,6 +288,11 @@ test('both native navigation entries show campaign stages and bosses and open th
   const menu=elements(Quick({onClose:()=>{},onAction:value=>actions.push(value),signedIn:false,canAdmin:false}));
   const quick=menu.find(node=>node.type==='button'&&text(node).includes('500'));
   assert.ok(quick);assert.match(text(quick),/500 Kampagnenabschnitte · 50 Bosse/);quick.props.onClick();assert.deepEqual(actions,['galaxy']);
+  const ownerMenu=elements(Quick({onClose:()=>{},onAction:value=>actions.push(value),signedIn:true,canAdmin:true,username:'19Trojan69'}));
+  const admin=ownerMenu.find(node=>node.type==='button'&&node.props.className==='quick-access-admin');
+  assert.ok(admin);assert.match(text(admin),/Admin-Zentrale/);admin.props.onClick();assert.equal(actions.at(-1),'admin');
+  const unverifiedMenu=elements(Quick({onClose:()=>{},onAction:()=>{},signedIn:true,canAdmin:false,username:'19Trojan69'}));
+  assert.equal(unverifiedMenu.some(node=>node.props.className==='quick-access-admin'),false,'an owner name alone never reveals the privileged shortcut');
 });
 
 test('all 19 selectable languages translate every new map string and retain their existing language choice',()=>{

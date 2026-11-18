@@ -58,6 +58,7 @@ export default function QuickAccessMenu({ onClose, onAction, signedIn, canAdmin,
       <nav aria-label={t("Game navigation")}>
         <div className="quick-access-direct">
           {([["hangar", "Your fleet"], ["shop", "Ship shop"]] as const).map(([action, label]) => <button type="button" key={action} onClick={() => onAction(action)}><BlockchainIcon kind={action}/><strong>{t(label)}</strong><i aria-hidden="true">›</i></button>)}
+          {canAdmin && <button type="button" className="quick-access-admin" onClick={() => onAction("admin")}><BlockchainIcon kind="admin"/><strong>{t("Admin center")}</strong><i aria-hidden="true">›</i></button>}
         </div>
         {groups.map(group => <div key={group.id} className="quick-access-category" data-category={group.id} data-open={openCategory === group.id}>
           <button className="quick-access-category-trigger" type="button" aria-expanded={openCategory === group.id} aria-controls={`quick-access-${group.id}`} onClick={() => toggleCategory(group.id)}><span className="category-icon"><BlockchainIcon kind={group.id} /></span><strong>{t(group.title)}</strong><i aria-hidden="true">⌄</i></button>

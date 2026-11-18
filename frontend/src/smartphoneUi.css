@@ -98,6 +98,7 @@
   touch-action: manipulation;
 }
 .quick-access-direct .blockchain-icon { width: 28px; height: 28px; flex: none; }
+.quick-access-direct .quick-access-admin { grid-column: 1 / -1; }
 .quick-access-direct strong { flex: 1; min-width: 0; }
 .quick-access-direct i { font-style: normal; }
 .quick-access-panel .quick-access-heading .close-button { width: 48px; height: 48px; min-width: 48px; min-height: 48px; }

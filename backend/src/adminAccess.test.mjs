@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { after, test } from "node:test";
 import express from "express";
-import { isAdminUid } from "../build/adminAccess.js";
+import { canAdmin, isAdminUid } from "../build/adminAccess.js";
 import hangarHandlers from "../build/handlers/hangar.js";
 import userHandlers from "../build/handlers/users.js";
 import paymentHandlers from "../build/handlers/payments.js";
@@ -56,6 +56,29 @@ test("first verified owner login binds the UID and rejects another account", asy
   const returning = { currentUser: { uid: "owner-app-uid", username: "new-name" } };
   assert.equal((await invoke(me, returning, {}, { adminCollection })).result.canAdmin, true);
   process.env.ADMIN_PI_UID = "verified-owner-uid";
+});
+
+test("a pinned Mainnet owner overrides an old Testnet binding without granting cross-network access", async () => {
+  const mainnetPin = process.env.ADMIN_PI_UID, testnetPin = process.env.ADMIN_PI_TESTNET_UID;
+  process.env.ADMIN_PI_UID = "verified-mainnet-owner";
+  delete process.env.ADMIN_PI_TESTNET_UID;
+  const binding = { uid: "verified-testnet-owner" };
+  const adminCollection = { async updateOne() {}, async findOne() { return binding; } };
+  const request = (uid, network) => ({
+    headers: network === "testnet" ? { "x-cryptoid-app-network": "testnet" } : {},
+    session: { currentUser: { uid, username: "19Trojan69" } }, app: { locals: { adminCollection } },
+  });
+  try {
+    assert.equal(await canAdmin(request("verified-mainnet-owner", "mainnet")), true);
+    assert.equal(await canAdmin(request("verified-testnet-owner", "mainnet")), false);
+    assert.equal(await canAdmin(request("verified-testnet-owner", "testnet")), true);
+    assert.equal(await canAdmin(request("verified-mainnet-owner", "testnet")), false);
+    assert.equal(await canAdmin(request("stranger", "mainnet")), false);
+    assert.equal(binding.uid, "verified-testnet-owner");
+  } finally {
+    if (mainnetPin === undefined) delete process.env.ADMIN_PI_UID; else process.env.ADMIN_PI_UID = mainnetPin;
+    if (testnetPin === undefined) delete process.env.ADMIN_PI_TESTNET_UID; else process.env.ADMIN_PI_TESTNET_UID = testnetPin;
+  }
 });
 
 test("admin toggle rejects another Pi account and clears an active run", async () => {
