@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { axiosClient } from "../lib/axiosClient";
-import { useAdminLocale } from "../adminLocale";
+import { adminText, useAdminLocale } from "../adminLocale";
 
 type ReleaseStatus = {
   enabled: boolean;
@@ -19,7 +19,7 @@ const checkLabels: Record<string, string> = {
 };
 
 export default function AdminMainnetRelease() {
-  const t = useAdminLocale();
+  useAdminLocale();
   const [status, setStatus] = useState<ReleaseStatus | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -56,24 +56,24 @@ export default function AdminMainnetRelease() {
 
   return (
     <section className="admin-panel" aria-labelledby="mainnet-release-title">
-      <h2 id="mainnet-release-title">{t("Mainnet-Freigabe")}</h2>
-      <p><strong>{t(status ? status.enabled ? "Vollbetrieb freigegeben" : "Vorbereitungsbetrieb" : "Status wird geprüft")}</strong></p>
-      <p>{t("Bis zur Vollfreigabe bleiben Grundspiel und Shard-Käufe verfügbar. Neue Pi-Käufe und die Ausgabe von NFTs sind gesperrt.")}</p>
-      <p>{t("Die Freigabe wird serverseitig geprüft. Der Button wird verfügbar, sobald alle Voraussetzungen erfüllt sind.")}</p>
+      <h2 id="mainnet-release-title">{adminText("Mainnet-Freigabe")}</h2>
+      <p><strong>{adminText(status ? status.enabled ? "Vollbetrieb freigegeben" : "Vorbereitungsbetrieb" : "Status wird geprüft")}</strong></p>
+      <p>{adminText("Bis zur Vollfreigabe bleiben Grundspiel und Shard-Käufe verfügbar. Neue Pi-Käufe und die Ausgabe von NFTs sind gesperrt.")}</p>
+      <p>{adminText("Die Freigabe wird serverseitig geprüft. Der Button wird verfügbar, sobald alle Voraussetzungen erfüllt sind.")}</p>
       {status && <ul>{status.checks.map(check => (
-        <li key={check.id}>{t(checkLabels[check.id] ?? check.id)} · <strong>{t(check.ready ? "Bereit" : "Offen")}</strong></li>
+        <li key={check.id}>{adminText(checkLabels[check.id] ?? check.id)} · <strong>{adminText(check.ready ? "Bereit" : "Offen")}</strong></li>
       ))}</ul>}
-      {error && <p className="admin-error" role="alert">{t(error)}</p>}
+      {error && <p className="admin-error" role="alert">{adminText(error)}</p>}
       <div className="admin-actions">
         <button type="button" className="admin-button" disabled={busy || !status || (!status.released && !status.ready)} onClick={() => void change()}>
-          {t(busy ? "Wird gespeichert…" : status?.released ? "Freigabe zurücknehmen" : "Mainnet vollständig freigeben")}
+          {adminText(busy ? "Wird gespeichert…" : status?.released ? "Freigabe zurücknehmen" : "Mainnet vollständig freigeben")}
         </button>
         <button type="button" className="admin-button" disabled={busy} onClick={() => {
           setError("");
           void load().catch(() => setError("Der Freigabestatus konnte nicht geladen werden."));
-        }}>{t("Status aktualisieren")}</button>
+        }}>{adminText("Status aktualisieren")}</button>
       </div>
-      {!status && !error && <p role="status">{t("Freigabestatus wird geladen…")}</p>}
+      {!status && !error && <p role="status">{adminText("Freigabestatus wird geladen…")}</p>}
     </section>
   );
 }
