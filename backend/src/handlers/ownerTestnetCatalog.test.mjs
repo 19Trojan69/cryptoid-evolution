@@ -211,12 +211,12 @@ test('owner earns Shards in a saved mission before buying the last Standard ship
   assert.equal(shipPrice('unknown'), null);
 });
 
-test('every Standard hull can be purchased, equipped and flown on a normal Testnet account', async t => {
+test('the verified owner can still purchase, equip and fly every Standard hull on Testnet', async t => {
   owner(t);
-  const request = { session: { currentUser: { uid: 'pilot-b', username: 'Pilot' } } };
+  const request = { session: { currentUser: { uid: 'pilot-a', username: 'Pilot' } } };
   const h = harness();
   await h.call('progress', '/me', null, { method: 'GET', ...request });
-  const save = () => h.docs[1].playerByNetwork.testnet;
+  const save = () => h.docs[0].playerByNetwork.testnet;
   for (const skin of standardShips) {
     if (skin !== 'grey-scout') {
       const price = shipPrice(skin);
@@ -232,10 +232,56 @@ test('every Standard hull can be purchased, equipped and flown on a normal Testn
     assert.equal(select.code, 200, skin);
     const start = await h.call('hangar', '/start', { action: 'new', version: save().version, startKey: `public-standard-${skin}`, rulesVersion: 2 }, request);
     assert.equal(start.code, 200, skin);
-    assert.deepEqual([start.body.profile.skin, start.body.shipStage, start.body.testnetCatalogAccess], [skin, 1, false], skin);
+    assert.deepEqual([start.body.profile.skin, start.body.shipStage, start.body.testnetCatalogAccess], [skin, 1, true], skin);
   }
-  assert.equal(h.docs[1].playerByNetwork.mainnet, undefined);
+  assert.equal(h.docs[0].playerByNetwork.mainnet, undefined);
   assert.equal(save().standardShipAcquisitions, undefined);
+});
+
+test('normal Testnet pilots can buy only Nova Wing and Solar Lance; forged owner flags cannot debit Shards or unlock other hulls', async t => {
+  owner(t); const h = harness();
+  const request = { session: { currentUser: { uid: 'pilot-b', username: '19Trojan69' }, adminUid: 'pilot-b' } };
+  await h.call('progress', '/me', null, { method: 'GET', ...request });
+  const save = () => h.docs[1].playerByNetwork.testnet;
+  save().balance = 10000;
+  assert.deepEqual(Object.keys(save().fleet), ['grey-scout']);
+  for (const [skin, price] of [['nova-wing', 150], ['solar-lance', 400]]) {
+    const balance = save().balance, selected = save().skin;
+    const bought = await h.call('progress', '/inventory', { action: 'buy', version: save().version, skin, color: 'gold' }, request);
+    assert.equal(bought.code, 200, skin);
+    assert.equal(save().balance, balance - price, skin);
+    assert.equal(save().skin, selected, 'buying never selects the new ship automatically');
+    assert.deepEqual(save().fleet[skin], { grey: 1 }, skin);
+    assert.equal((await h.call('progress', '/inventory', { action: 'select', version: save().version, skin, color: 'grey', shipStage: 1 }, request)).code, 200);
+    const start = await h.call('hangar', '/start', { action: 'new', version: save().version, startKey: `released-standard-${skin}`, rulesVersion: 2 }, request);
+    assert.equal(start.code, 200, skin);
+    assert.equal(start.body.testnetCatalogAccess, false);
+  }
+  for (const skin of standardShips.slice(3)) {
+    const before = structuredClone(h.docs[1]);
+    const denied = await h.call('progress', '/inventory', { action: 'buy', version: save().version, skin, color: 'grey', ownerTestnet: true, canAdmin: true, mainnetNftsEnabled: true }, request);
+    assert.equal(denied.code, 403, skin);
+    assert.equal(denied.body.error, 'testnet_ship_locked', skin);
+    assert.deepEqual(h.docs[1], before, 'a locked purchase leaves balance, fleet, version and mission untouched');
+  }
+  assert.equal(save().standardShipAcquisitions, undefined);
+  assert.equal(h.docs[1].playerByNetwork.mainnet, undefined);
+});
+
+test('the Testnet purchase restriction preserves previously owned hulls and their selection', async t => {
+  owner(t); const h = harness();
+  const request = { session: { currentUser: { uid: 'pilot-b' } } };
+  await h.call('progress', '/me', null, { method: 'GET', ...request });
+  const save = () => h.docs[1].playerByNetwork.testnet;
+  save().fleet['core-carrier'] = { grey: 1 };
+  save().balance = 500;
+  const selected = await h.call('progress', '/inventory', { action: 'select', version: save().version, skin: 'core-carrier', color: 'grey', shipStage: 1 }, request);
+  assert.equal(selected.code, 200);
+  const started = await h.call('hangar', '/start', { action: 'new', version: save().version, startKey: 'existing-owned-testnet-hull', rulesVersion: 2 }, request);
+  assert.equal(started.code, 200);
+  assert.equal(started.body.profile.skin, 'core-carrier');
+  assert.equal(save().balance, 500);
+  assert.deepEqual(save().fleet['core-carrier'], { grey: 1 });
 });
 
 test('Mainnet sells Standard hulls for earned Shards with the NFT launch disabled', async t => {
