@@ -80,12 +80,12 @@ test('the menu keeps confirmed stock and weapon choices usable during an invento
   assert.ok(!menu.nodes.some(n => n.type === 'b' && n.props.children.includes('…')));
   assert.equal(menu.card(2).props['data-owned'], true);
   const choices = menu.nodes.filter(n => n.props.className === 'mission-select' && !n.props.disabled);
-  assert.deepEqual(choices.map(n => n.props.children[0]), ['Select', 'Select', 'Active weapon']);
+  assert.deepEqual(choices.map(n => n.props.children[0]), ['Active weapon', 'Select', 'Select']);
   assert.equal(menu.nodes.find(n => n.props.className === 'mission-return').props.disabled, false);
   assert.equal(menu.nodes.find(n => n.type === 'WeaponPurchase').props.disabled, true);
 
   const unknown = weaponMenu({ stock: undefined, timers: [0, 0, 0, 12000], onSelect() {} }, { ready: false, refreshing: true });
-  assert.deepEqual(unknown.nodes.filter(n => n.props.className === 'mission-select' && !n.props.disabled).map(n => n.props.children[0]), ['Select', 'Active weapon']);
+  assert.deepEqual(unknown.nodes.filter(n => n.props.className === 'mission-select' && !n.props.disabled).map(n => n.props.children[0]), ['Active weapon', 'Select']);
 });
 
 test('a shared inventory request cannot overwrite a newer charge confirmation', async () => {

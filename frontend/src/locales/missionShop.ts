@@ -38,11 +38,11 @@ const paymentRows: Record<string, string[]> = {
 };
 for (const [locale, row] of Object.entries(paymentRows)) Object.assign(missionShopTranslations[locale], Object.fromEntries(paymentKeys.map((key, i) => [key, row[i]])));
 
-const selectionKeys = ["Shop & weapons","Owned weapons first · strongest first","Unlimited","Remaining time","Not in stock","Back to game"];
+const selectionKeys = ["Shop & weapons","Weakest first · strongest last","Unlimited","Remaining time","Not in stock","Back to game"];
 const selectionRows: Record<string, string[]> = {
   "de": [
     "Shop & Waffen",
-    "Vorhandene Waffen zuerst · stärkste zuerst",
+    "Schwächste zuerst · stärkste zuletzt",
     "Unbegrenzt",
     "Restlaufzeit",
     "Kein Vorrat",
@@ -50,7 +50,7 @@ const selectionRows: Record<string, string[]> = {
   ],
   "es": [
     "Tienda y armas",
-    "Armas disponibles primero · las más fuertes primero",
+    "De la más débil a la más potente",
     "Ilimitado",
     "Tiempo restante",
     "Sin existencias",
@@ -58,7 +58,7 @@ const selectionRows: Record<string, string[]> = {
   ],
   "fr": [
     "Boutique et armes",
-    "Armes disponibles d’abord · les plus puissantes d’abord",
+    "De la moins puissante à la plus puissante",
     "Illimité",
     "Temps restant",
     "Aucun stock",
@@ -66,7 +66,7 @@ const selectionRows: Record<string, string[]> = {
   ],
   "pt": [
     "Loja e armas",
-    "Armas disponíveis primeiro · mais fortes primeiro",
+    "Da mais fraca à mais forte",
     "Ilimitado",
     "Tempo restante",
     "Sem stock",
@@ -74,7 +74,7 @@ const selectionRows: Record<string, string[]> = {
   ],
   "it": [
     "Negozio e armi",
-    "Prima le armi disponibili · dalla più potente",
+    "Dalla più debole alla più potente",
     "Illimitato",
     "Tempo rimanente",
     "Nessuna carica",
@@ -82,7 +82,7 @@ const selectionRows: Record<string, string[]> = {
   ],
   "ru": [
     "Магазин и оружие",
-    "Сначала доступное оружие · от сильного к слабому",
+    "От слабого к сильному",
     "Без ограничений",
     "Осталось времени",
     "Нет зарядов",
@@ -90,7 +90,7 @@ const selectionRows: Record<string, string[]> = {
   ],
   "pl": [
     "Sklep i broń",
-    "Najpierw dostępna broń · od najsilniejszej",
+    "Od najsłabszej do najsilniejszej",
     "Bez limitu",
     "Pozostały czas",
     "Brak zapasu",
@@ -98,7 +98,7 @@ const selectionRows: Record<string, string[]> = {
   ],
   "tr": [
     "Mağaza ve silahlar",
-    "Önce mevcut silahlar · en güçlüden başlayarak",
+    "En zayıftan en güçlüye",
     "Sınırsız",
     "Kalan süre",
     "Stokta yok",
@@ -106,7 +106,7 @@ const selectionRows: Record<string, string[]> = {
   ],
   "ro": [
     "Magazin și arme",
-    "Armele disponibile întâi · cele mai puternice primele",
+    "De la cea mai slabă la cea mai puternică",
     "Nelimitat",
     "Timp rămas",
     "Fără stoc",
@@ -114,7 +114,7 @@ const selectionRows: Record<string, string[]> = {
   ],
   "hr": [
     "Trgovina i oružje",
-    "Prvo dostupno oružje · od najjačeg",
+    "Od najslabijeg do najjačeg",
     "Neograničeno",
     "Preostalo vrijeme",
     "Nema zaliha",
@@ -122,7 +122,7 @@ const selectionRows: Record<string, string[]> = {
   ],
   "cs": [
     "Obchod a zbraně",
-    "Nejprve dostupné zbraně · od nejsilnější",
+    "Od nejslabší po nejsilnější",
     "Neomezeně",
     "Zbývající čas",
     "Žádné zásoby",
@@ -130,7 +130,7 @@ const selectionRows: Record<string, string[]> = {
   ],
   "sk": [
     "Obchod a zbrane",
-    "Najprv dostupné zbrane · od najsilnejšej",
+    "Od najslabšej po najsilnejšiu",
     "Neobmedzene",
     "Zostávajúci čas",
     "Žiadne zásoby",
@@ -138,7 +138,7 @@ const selectionRows: Record<string, string[]> = {
   ],
   "hu": [
     "Bolt és fegyverek",
-    "Először az elérhető fegyverek · a legerősebbtől",
+    "A leggyengébbtől a legerősebbig",
     "Korlátlan",
     "Hátralévő idő",
     "Nincs készleten",
@@ -146,7 +146,7 @@ const selectionRows: Record<string, string[]> = {
   ],
   "sr": [
     "Продавница и оружје",
-    "Прво доступно оружје · од најјачег",
+    "Од најслабијег до најјачег",
     "Неограничено",
     "Преостало време",
     "Нема залиха",
@@ -154,7 +154,7 @@ const selectionRows: Record<string, string[]> = {
   ],
   "uk": [
     "Магазин і зброя",
-    "Спочатку доступна зброя · від найсильнішої",
+    "Від найслабшої до найсильнішої",
     "Необмежено",
     "Залишилося часу",
     "Немає зарядів",
@@ -162,7 +162,7 @@ const selectionRows: Record<string, string[]> = {
   ],
   "th": [
     "ร้านค้าและอาวุธ",
-    "อาวุธที่มีก่อน · เรียงจากแรงที่สุด",
+    "เรียงจากอ่อนที่สุดไปแรงที่สุด",
     "ไม่จำกัด",
     "เวลาที่เหลือ",
     "ไม่มีในคลัง",

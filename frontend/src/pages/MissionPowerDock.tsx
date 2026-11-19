@@ -1,11 +1,11 @@
 import { memo, useRef } from "react";
 import { useLocale } from "../i18n";
-import type { MissionPower, MissionPowerInventory } from "../../../backend/src/missionPower";
+import { missionPowerOffers, type MissionPower, type MissionPowerInventory } from "../../../backend/src/missionPower";
 import { powerUpNames } from "./powerUps";
 import { PowerOrb } from "./PowerPreview";
 import type { ControlHand } from "./controlPreferences";
 
-const powerOrder = ["shield", "overdrive", "rapid", "bomb", "emp"] as const;
+const powerOrder = missionPowerOffers.map(offer => offer.powerUp);
 type Props = {
   hand: ControlHand;
   inventory?: MissionPowerInventory;
