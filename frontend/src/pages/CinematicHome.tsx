@@ -63,11 +63,11 @@ export default function CinematicHome({paused,busy,rankName,musicEnabled,musicLa
         {children}
       </div>
     </div>
-    {notice}
     <div className="cinematic-actions">
       <div className="cinematic-launch-actions">
         <button className="cinematic-play" type="button" disabled={busy} onClick={onPlay}>{t("Play")}<span aria-hidden="true">→</span></button>
         <button className="cinematic-shop" type="button" disabled={busy} onClick={onShop}>{t("Shop")}</button>
+        {notice}
       </div>
       {nftLink}
       <button className="cinematic-career" type="button" onClick={onCareer}>

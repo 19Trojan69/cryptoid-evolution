@@ -14,5 +14,5 @@
 .mainnet-preview-notice summary { width:fit-content; min-height:2rem; color:#b7dbe7; cursor:pointer; font-size:.875rem; line-height:1.6; }
 .mainnet-preview-notice summary:focus-visible { outline:2px solid #42d4e9; outline-offset:4px; border-radius:3px; }
 .mainnet-preview-notice .mainnet-preview-progress { color:#b9ccd7; font-size:.875rem; }
-.cinematic-home-content > .mainnet-preview-notice { margin:.25rem 0 1rem; }
+.cinematic-launch-actions > .mainnet-preview-notice { grid-column:1 / -1; margin:0; }
 @media (max-width:480px) { .mainnet-preview-notice { padding:.875rem; } }
