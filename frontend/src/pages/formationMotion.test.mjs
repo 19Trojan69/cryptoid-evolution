@@ -10,7 +10,7 @@ import { entryPatternForSector, entryPosition, entryStartX } from './entryPatter
 import { attackDuration, attackPosition } from './attackPatterns.ts';
 import { bossEscortRosterIndex } from './bossEscorts.ts';
 import { enemyAppearance } from './shipFleet.ts';
-import { restoreMainnetCombatChange } from '../../scripts/mainnetCombatReviewedChanges.mjs';
+import { legacyFormationTargets, restoreMainnetCombatChange } from '../../scripts/mainnetCombatReviewedChanges.mjs';
 
 // Execute the actual component's simulation functions without changing exports
 // or adding test hooks to the shipped game.
@@ -36,7 +36,7 @@ function simulation(network = 'testnet') {
 const motion = simulation();
 test('the release normalizer reverses only one exact combat switch and rejects altered gates', () => {
   const before = restoreMainnetCombatChange(source);
-  assert.equal(before.replace('const combatVarietyEnabled = shipSaveNetwork === "testnet";', 'const combatVarietyEnabled = true;'), source);
+  assert.equal(before.replace('const combatVarietyEnabled = shipSaveNetwork === "testnet";', 'const combatVarietyEnabled = true;').replace(legacyFormationTargets, ''), source);
   assert.throws(() => restoreMainnetCombatChange(source.replace('const combatVarietyEnabled = true;', 'const combatVarietyEnabled = false;')), /one exact/);
   assert.throws(() => restoreMainnetCombatChange(source + '\nconst combatVarietyEnabled = true;'), /one exact/);
 });
@@ -112,4 +112,12 @@ test('normal arrivals take ten percent longer across all stages without changing
   }
   const escort = motion.spawnBossEscort(1, 390, 0, 10, [{ x: 100, y: 200, index: 0, entrySide: 1 }], 0);
   assert.equal(escort.entryDuration, 1850); assert.equal(escort.formationDuration, 300);
+});
+
+test('obsolete formation targets cannot render and their styles are retired', () => {
+  assert.doesNotMatch(source, /formation-target/);
+  const css = fs.readFileSync(new URL('../index.css', import.meta.url), 'utf8');
+  assert.doesNotMatch(css, /formation-target/);
+  assert.throws(() => restoreMainnetCombatChange(source + '\nformation-target'), /one exact/);
+  assert.throws(() => restoreMainnetCombatChange(source.replace('<BossHullView boss=', '<BossHullView altered=')), /one exact/);
 });

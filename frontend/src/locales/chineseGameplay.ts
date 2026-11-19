@@ -349,7 +349,7 @@ export const chineseGameplayTranslations: Record<string, string> = {
   "Turret {number}": "炮塔 {number}",
   "Twin": "双联",
   "Twin Laser": "双联激光",
-  "Two defeats within 500 ms: +50 Score and +20 Shards.": "500 毫秒内击败两架敌机：加 50 分和 20 枚碎片。",
+  "Two defeats within {window} ms: +{score} Score and +{shards} Shards.": "{window} 毫秒内击败两架敌机：加 {score} 分和 {shards} 枚碎片。",
   "Two parallel shots per volley. Active for 2 minutes after activation.": "每轮齐射发射两发平行弹。激活后持续 2 分钟。",
   "Two shots with faster automatic fire. Active for 2 minutes after activation.": "双发高速自动射击。激活后持续 2 分钟。",
   "Unlock {countdown}": "解锁 {countdown}",

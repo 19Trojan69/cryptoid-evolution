@@ -183,7 +183,9 @@
       "codex/mainnet-consumable-prices-20261118": false,
       "codex/testnet-public-shard-fleet-20261119": false,
       "codex/backend-testnet-shard-lock-20261119": false,
-      "codex/mainnet-playable-preview-20261119": false
+      "codex/mainnet-playable-preview-20261119": false,
+      "codex/shard-economy-mainnet-20261119": false,
+      "codex/shard-economy-testnet-20261119": false
     }
   }
 }

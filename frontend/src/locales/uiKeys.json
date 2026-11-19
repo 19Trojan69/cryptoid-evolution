@@ -465,7 +465,7 @@
   "Triple Laser",
   "Try again",
   "Twin Laser",
-  "Two defeats within 500 ms: +50 Score and +20 Shards.",
+  "Two defeats within {window} ms: +{score} Score and +{shards} Shards.",
   "Two parallel shots per volley. Active for 2 minutes after activation.",
   "Two shots with faster automatic fire. Active for 2 minutes after activation.",
   "Under finger",
