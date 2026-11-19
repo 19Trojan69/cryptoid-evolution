@@ -2,7 +2,8 @@ import { creditDefeat, creditReward } from './shardEarnings.ts';
 
 export const DOUBLE_KILL_WINDOW_MS = 500;
 export const DOUBLE_KILL_SCORE = 50;
-export const DOUBLE_KILL_SHARDS = 20;
+// Keep skill bonuses meaningful without letting them dominate ship progression.
+export const DOUBLE_KILL_SHARDS = 5;
 export type DoubleKillCombo = { pendingAt: number | null; total: number; level: number; remainingMs: number };
 export const createDoubleKillCombo = (): DoubleKillCombo => ({ pendingAt: null, total: 0, level: 0, remainingMs: 0 });
 

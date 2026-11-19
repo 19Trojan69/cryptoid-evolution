@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { DOUBLE_KILL_WINDOW_MS, DOUBLE_KILL_SCORE, DOUBLE_KILL_SHARDS } from "./doubleKillCombo";
 import BossPortrait from "./BossPortrait";
 import ShipPortrait from "./ShipPortrait";
 import { bossName } from "./bossNames";
@@ -84,7 +85,7 @@ const topics = [
     id: "earnings", label: "Rewards", title: "Shards, points and bonus targets",
     intro: "Defeated enemies earn points and in-game Shards. The HUD shows your previous Shard balance plus this mission's earnings.",
     details: [
-      "Two defeats within 500 ms: +50 Score and +20 Shards.",
+      "Two defeats within {window} ms: +{score} Score and +{shards} Shards.",
       "Every defeat counts in only one pair. Four simultaneous defeats earn two combos; an unpaired third defeat can start the next pair. Combos also apply in boss battles and bonus rounds.",
       "Combo rewards are already included in your score and earned Shards. The bonus-round and mission summaries show the earned totals without crediting them again.",
       "Different enemy classes pay different amounts. Linking all nine Blocks awards a chain reward, and beating the boss awards more.",
@@ -159,6 +160,7 @@ const GameGuide = ({ onClose, initialTopic, backLabel, onNavigate, nftPreviewAva
   const number = new Intl.NumberFormat(locale).format;
   const pi = new Intl.NumberFormat(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format;
   const values = {
+    window: DOUBLE_KILL_WINDOW_MS, score: DOUBLE_KILL_SCORE, shards: DOUBLE_KILL_SHARDS,
     ...powerSeconds, levels: BOSS_STICKER_COUNT, stages: MAX_DIFFICULTY_LEVEL,
     hulls: standardModelsAvailable,
     victory: number(bossNftEditions.victory.supply), holo: number(bossNftEditions.holo.supply),

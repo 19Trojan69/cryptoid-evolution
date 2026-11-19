@@ -133,7 +133,7 @@ export const vietnameseGuideTranslations: Record<string, string> = {
   "Total barrels": "Tổng số nòng",
   "Turrets": "Tháp pháo",
   "Twin fire": "Bắn đôi",
-  "Two defeats within 500 ms: +50 Score and +20 Shards.": "Tiêu diệt hai địch trong 500 mili giây: +50 điểm và +20 Mảnh vỡ.",
+  "Two defeats within {window} ms: +{score} Score and +{shards} Shards.": "Tiêu diệt hai địch trong {window} mili giây: +{score} điểm và +{shards} Mảnh vỡ.",
   "Use your equipment": "Sử dụng trang bị của bạn",
   "Volley delay": "Khoảng cách giữa các loạt bắn",
   "volley rows": "hàng bắn",
