@@ -284,26 +284,57 @@ test('the Testnet purchase restriction preserves previously owned hulls and thei
   assert.deepEqual(save().fleet['core-carrier'], { grey: 1 });
 });
 
-test('Mainnet sells Standard hulls for earned Shards with the NFT launch disabled', async t => {
-  t.mock.method(require('../../build/shipNftEligibility.js'), 'shipNftMainnetEnabled', () => false);
-  const h = harness();
-  const request = { network: 'mainnet' };
+test('Mainnet preview exposes only two Shard purchases and preserves earned balance and existing hulls', async t => {
+  const h = harness(), request = { network: 'mainnet' };
   await h.call('progress', '/me', null, { method: 'GET', ...request });
   const profile = () => h.docs[0].playerByNetwork.mainnet;
-  const buy = (skin = 'core-carrier') => h.call('progress', '/inventory', {
-    action: 'buy', version: profile().version, skin, color: 'grey',
+  profile().balance = 10000;
+  const buy = skin => h.call('progress', '/inventory', {
+    action: 'buy', version: profile().version, skin, color: 'grey', mainnetReleased: true, canAdmin: true,
   }, request);
   assert.equal((await buy('unknown')).body.error, 'invalid_ship');
-  assert.equal((await buy()).body.error, 'not_enough_shards');
-  profile().balance = 5000;
-  const purchase = await buy();
-  assert.equal(purchase.code, 200);
-  assert.equal(purchase.body.save.balance, 350);
-  assert.equal(purchase.body.save.totalShardsSpent, 4650);
-  assert.deepEqual(purchase.body.save.fleet['core-carrier'], { grey: 1 });
-  assert.equal((await buy()).body.error, 'ship_already_owned');
-  assert.equal(profile().balance, 350);
+  for (const [skin, price] of [['nova-wing',150],['solar-lance',400]]) {
+    const balance = profile().balance;
+    const bought = await buy(skin);
+    assert.equal(bought.code, 200, skin);
+    assert.equal(profile().balance, balance - price, skin);
+    assert.deepEqual(profile().fleet[skin], { grey: 1 }, skin);
+    assert.equal(profile().skin, 'grey-scout');
+    assert.ok(profile().standardShipAcquisitions[skin]);
+  }
+  for (const skin of standardShips.slice(3)) {
+    const before = structuredClone(profile());
+    const denied = await buy(skin);
+    assert.equal(denied.code, 403, skin);
+    assert.equal(denied.body.error, 'mainnet_ship_locked', skin);
+    assert.deepEqual(profile(), before, skin);
+  }
+  const catalog = await h.call('hangar', '/catalog', null, { method: 'GET', ...request });
+  assert.equal(catalog.body.mainnetReleased, false);
+  assert.equal(catalog.body.offers.length, 51);
+  profile().fleet['core-carrier'] = { grey: 1 };
+  const selected = await h.call('progress', '/inventory', { action: 'select', version: profile().version, skin: 'core-carrier', color: 'grey', shipStage: 1 }, request);
+  assert.equal(selected.code, 200);
+  const started = await h.call('hangar', '/start', { action: 'new', version: profile().version, startKey: 'mainnet-preview-existing-hull', rulesVersion: 2 }, request);
+  assert.equal(started.code, 200);
+  assert.equal(started.body.profile.skin, 'core-carrier');
+  assert.equal(profile().balance, 9450);
   assert.equal(h.docs[0].playerByNetwork.testnet, undefined);
+});
+
+test('only the server release opens later Mainnet hulls and reports the same public catalog state', async t => {
+  const release = require('../../build/mainnetRelease.js');
+  t.mock.method(release, 'mainnetPurchasesReleased', async req => req.headers['x-cryptoid-app-network'] === 'mainnet');
+  const h = harness(), request = { network: 'mainnet' };
+  await h.call('progress', '/me', null, { method: 'GET', ...request });
+  const profile = () => h.docs[0].playerByNetwork.mainnet;
+  profile().balance = 5000;
+  const purchase = await h.call('progress', '/inventory', { action: 'buy', version: 0, skin: 'core-carrier', color: 'grey' }, request);
+  assert.equal(purchase.code, 200);
+  assert.equal(profile().balance, 350);
+  assert.deepEqual(profile().fleet['core-carrier'], { grey: 1 });
+  assert.equal((await h.call('hangar', '/catalog', null, { method: 'GET', ...request })).body.mainnetReleased, true);
+  assert.equal((await h.call('hangar', '/catalog', null, { method: 'GET' })).body.mainnetReleased, false);
 });
 
 test('all paid catalog items require a confirmed Test-Pi payment, not free admin inventory', async t => {

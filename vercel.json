@@ -181,7 +181,8 @@
       "codex/nft-preparation-catalog-20261118": false,
       "codex/mainnet-consumable-prices-20261118": false,
       "codex/testnet-public-shard-fleet-20261119": false,
-      "codex/backend-testnet-shard-lock-20261119": false
+      "codex/backend-testnet-shard-lock-20261119": false,
+      "codex/mainnet-playable-preview-20261119": false
     }
   }
 }

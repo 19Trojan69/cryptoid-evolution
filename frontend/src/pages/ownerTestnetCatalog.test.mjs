@@ -44,18 +44,51 @@ test('owner permission expands every catalog item strictly on Pi Testnet',()=>{
  assert.equal(isTestnetWeaponPurchaseEnabled({id:'unknown',kind:'weapon'},true),false);
 });
 
-test('all Mainnet Standard hulls keep their original Shard prices while NFTs are disabled',()=>{
+test('the fully released Mainnet catalog keeps every original Shard price',()=>{
  for(const skin of fleet.playerSkins){
-  const props={...defaults(),skin,fleet:{}};
+  const props={...defaults(),skin,fleet:{},mainnetReleased:true};
   const buy=p=>nodes(Panel({...props,...p})).find(n=>n.props.className?.includes('ship-shard-button'));
   const price=fleet.standardShipPrice(skin);
   assert.equal(Boolean(buy({shards:price-1}).props.disabled),true);
   assert.equal(Boolean(buy({shards:price}).props.disabled),false);
   assert.equal(Boolean(buy({shards:price,purchaseBusy:true}).props.disabled),true);
  }
- assert.deepEqual(fleet.buyStandardShip('core-carrier', {}, 4650), {
+ assert.deepEqual(fleet.buyStandardShip('core-carrier', {}, 4650, true), {
   fleet: { 'core-carrier': { grey: 1 } }, balance: 0,
  });
+});
+
+test('Mainnet preview locks all later hulls even with enough Shards and preserves previously owned ships', () => {
+ assert.deepEqual(fleet.playerSkins.filter(skin => fleet.standardHullAvailable(skin.id)).map(skin => skin.id), ['grey-scout','nova-wing','solar-lance']);
+ for (const skin of fleet.playerSkins.slice(1)) {
+   const props = {...defaults(),skin,fleet:{},shards:10000};
+   const tree = nodes(Panel(props));
+   const button = tree.find(node => node.props.className?.includes('ship-shard-button'));
+   const allowed = ['nova-wing','solar-lance'].includes(skin.id);
+   assert.equal(Boolean(button.props.disabled), !allowed, skin.id);
+   const html = renderToStaticMarkup(jsx.jsx(Panel, props));
+   assert.ok(html.includes(skin.name));
+   assert.equal(html.includes('MAINNET READY'), !allowed, skin.id);
+ }
+ const owned = Panel({...defaults(),skin:fleet.playerSkins[19],fleet:{'core-carrier':{grey:1}}});
+ assert.ok(nodes(owned).some(node => node.props.className?.includes('ship-equip-button') && !node.props.disabled));
+ assert.equal(fleet.buyStandardShip('core-carrier', {}, 10000), null);
+ assert.equal(fleet.standardHullAvailableForNetwork('core-carrier','mainnet',false,true),false);
+ assert.equal(fleet.standardHullAvailableForNetwork('core-carrier','testnet',true,false),false);
+ assert.equal(fleet.standardHullAvailableForNetwork('core-carrier','testnet',false,true),true);
+});
+
+test('preview notice describes both release prerequisites and retained progress in all 19 languages', () => {
+ for (const locale of Object.keys(languages)) {
+   const Notice = component('./MainnetPreviewNotice.tsx', {'./mainnetPreviewNotice.css':{}, '../i18n':{useLocale:()=>({t:source=>translate(locale,source)})}});
+   const compact = renderToStaticMarkup(jsx.jsx(Notice, {}));
+   const expanded = renderToStaticMarkup(jsx.jsx(Notice, {expanded:true}));
+   assert.ok(compact.includes(translate(locale,'Mainnet preview')), locale);
+   assert.ok(compact.includes('Nova Wing') && compact.includes('Solar Lance'), locale);
+   assert.ok(compact.includes(translate(locale,'Mainnet progress is saved separately from Testnet and will be retained when the full version opens.')), locale);
+   assert.ok(!compact.includes('<details open'), locale);
+   assert.ok(expanded.includes('<details open'), locale);
+ }
 });
 
 test('Advanced and Elite list planned Pi prices and keep checkout locked',()=>{

@@ -19,7 +19,7 @@ test('guest purchases preserve the selected ship until explicit selection, and r
   assert.equal(buyStandardShip('iron-guard', JSON.parse(storage.getItem(SHIP_FLEET_KEY)), Number(storage.getItem(SHARD_BALANCE_KEY))), null);
   assert.equal(buyStandardShip('nova-wing', JSON.parse(storage.getItem(SHIP_FLEET_KEY)), Number(storage.getItem(SHARD_BALANCE_KEY))), null);
   assert.deepEqual([...data], before);
-  const purchase = buyStandardShip('dark-delta', JSON.parse(storage.getItem(SHIP_FLEET_KEY)), Number(storage.getItem(SHARD_BALANCE_KEY)));
+  const purchase = buyStandardShip('dark-delta', JSON.parse(storage.getItem(SHIP_FLEET_KEY)), Number(storage.getItem(SHARD_BALANCE_KEY)), true);
   assert.ok(purchase);
   fail = true;
   assert.throws(() => saveGuestShipPurchase(storage, 'dark-delta', purchase), /quota/);

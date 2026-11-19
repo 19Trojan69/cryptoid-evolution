@@ -43,6 +43,7 @@ import { primeGameAudio } from "./gameAudio";
 import { EFFECTS_VOLUME_KEY, MUSIC_STORAGE_KEY, MUSIC_VOLUME_KEY, readEffectsVolume, readMusicVolume, resetAudioVolumeDefaults } from "./musicPreferences";
 import { handoffGameMusic, MusicPlayer } from "./musicPlayback";
 import CinematicHome from "./CinematicHome";
+import MainnetPreviewNotice from "./MainnetPreviewNotice";
 import GameGuide from "./GameGuide";
 import WeaponTutorial from "./WeaponTutorial";
 import TestPiPurchase from "./TestPiPurchase";
@@ -303,6 +304,7 @@ const Shop = () => {
   const hangarMessageText = typeof hangarMessage === "string" ? t(hangarMessage) : `${hangarMessage.ship} · ${t(hangarMessage.status)}${hangarMessage.count ? ` ×${hangarMessage.count}` : ""}`;
   const [offers, setOffers] = useState<Offer[]>(() => [...hangarCatalog]);
   const [catalogReady, setCatalogReady] = useState(false);
+  const [mainnetReleased, setMainnetReleased] = useState(false);
   const [catalogFailed, setCatalogFailed] = useState(false);
   const [catalogAttempt, setCatalogAttempt] = useState(0);
   const [inventory, setInventory] = useState<Inventory | null>(null);
@@ -310,11 +312,11 @@ const Shop = () => {
   const [loadoutMessage, setLoadoutMessage] = useState("");
   const [shipQuery, setShipQuery] = useState("");
   const [shipFilter, setShipFilter] = useState<"all" | "owned" | "available">("all");
-  const standardModelsAvailable = playerSkins.filter(skin => standardHullAvailable(skin.id)).length;
+  const standardModelsAvailable = playerSkins.filter(skin => standardHullAvailable(skin.id, mainnetReleased, ownerTestnet || adminMode)).length;
   const shipSearchOptions = playerSkins.filter(skin => {
     const owned = fleetCount(visibleFleet, skin.id) > 0;
     return (shopView === "shop" || owned) && skin.name.toLocaleLowerCase(locale).includes(shipQuery.trim().toLocaleLowerCase(locale)) &&
-      (shopTarget?.skin === skin.id || shipFilter === "all" || (shipFilter === "owned" ? owned : standardHullAvailable(skin.id)));
+      (shopTarget?.skin === skin.id || shipFilter === "all" || (shipFilter === "owned" ? owned : standardHullAvailable(skin.id, mainnetReleased, ownerTestnet || adminMode)));
   });
   useEffect(() => {
     let active = true;
@@ -347,6 +349,7 @@ const Shop = () => {
   const purchaseStandard = (previewSkin: typeof playerSkins[number]) => {
     primeCardSound();
     if (adminMode) return;
+    if (!standardHullAvailable(previewSkin.id, mainnetReleased, ownerTestnet)) { setHangarMessage("MAINNET READY"); return; }
     if (user) {
       if (!account) { setAccountError("Account save is loading or unavailable."); return; }
       if (shipSaveNetwork === "testnet" && !sessionStorage.getItem(PI_ACCESS_TOKEN_KEY)) { void signIn(); return; }
@@ -362,7 +365,7 @@ const Shop = () => {
       setHangarMessage({ ship: previewSkin.name, status: "Owned", count: owned });
       return;
     }
-    const purchase = buyStandardShip(previewSkin.id, currentFleet, currentBalance);
+    const purchase = buyStandardShip(previewSkin.id, currentFleet, currentBalance, mainnetReleased);
     if (!purchase) { setHangarMessage("Not enough Shards yet. Earn them by defeating Cryptoids."); return; }
     try { saveGuestShipPurchase(localStorage, previewSkin.id, purchase); }
     catch { setHangarMessage("Could not save loadout. Please retry."); return; }
@@ -429,12 +432,13 @@ const Shop = () => {
   useEffect(() => {
     const request = new AbortController();
     setCatalogFailed(false);
-    void axiosClient.get<{ offers: Offer[] }>("/hangar/catalog", { signal: request.signal }).then(({ data }) => {
+    void axiosClient.get<{ offers: Offer[]; mainnetReleased?: boolean }>("/hangar/catalog", { signal: request.signal }).then(({ data }) => {
       if (request.signal.aborted) return;
       if (!Array.isArray(data.offers)) throw new Error("Invalid catalog");
       setOffers(data.offers);
+      setMainnetReleased(shipSaveNetwork === "mainnet" && data.mainnetReleased === true);
       setCatalogReady(true);
-    }).catch(() => { if (!request.signal.aborted) setCatalogFailed(true); });
+    }).catch(() => { if (!request.signal.aborted) { setCatalogFailed(true); setMainnetReleased(false); } });
     return () => request.abort();
   }, [catalogAttempt]);
   useEffect(() => {
@@ -585,6 +589,7 @@ const Shop = () => {
         onCommunity={() => openQuickAction("feedback")}
         onTerms={() => setTermsOpen(true)}
         onSound={toggleHomeMusic}
+        notice={shipSaveNetwork === "mainnet" && !mainnetReleased ? <MainnetPreviewNotice /> : undefined}
       >
           {adminMode && <div className="admin-level-picker" aria-label={t("Admin test start")}><label>{t("Level")} <select value={Math.floor((startSector - 1) / 10) + 1} onChange={event => setStartSector((Number(event.target.value) - 1) * 10 + (startSector - 1) % 10 + 1)}>{Array.from({ length: MAX_DIFFICULTY_LEVEL / 10 }, (_, index) => <option key={index} value={index + 1}>{index + 1}</option>)}</select></label><label>{t("Start at")} <select value={(startSector - 1) % 10 + 1} onChange={event => setStartSector((Math.floor((startSector - 1) / 10) * 10) + Number(event.target.value))}>{Array.from({ length: 9 }, (_, index) => <option key={index} value={index + 1}>{t("Block")} {index + 1}</option>)}<option value="10">{t("Boss")}</option></select></label></div>}
       </CinematicHome>
@@ -610,6 +615,7 @@ const Shop = () => {
           {([["shop", "Ships"], ["weapons", "Weapons"], ["powers", "Power-ups"]] as const).map(([view, label]) => <button key={view} type="button" aria-current={view === shopView ? "page" : undefined} onClick={() => openQuickAction(view)}>{t(label)}</button>)}
         </nav>}
           <div key={shopView} className="shop-modal-body">
+      {shipSaveNetwork === "mainnet" && !mainnetReleased && ["hangar", "shop", "weapons", "powers"].includes(shopView) && <MainnetPreviewNotice expanded />}
       {shopView === "progress" && <CareerDashboard progress={!user || rewardStatus === "ready" && rewardOwner === user.uid ? rewardProgress : null} scores={user ? personalScores : null} records={!user || account ? displayedRecords : null} accountId={user?.uid} localBest={!user ? records.bestScore : undefined} loading={!!user && rewardStatus === "loading"}/>}
 
       {shopView === "rewards" && <section className="dashboard-grid rewards-dashboard" aria-label={t("Rewards")}>
@@ -696,7 +702,7 @@ const Shop = () => {
         {!shipSearchOptions.length && <p role="status">{t("No ships match these filters.")}</p>}
         <div className="fleet-scroll-list">
           {shipSearchOptions.map(skin => <article id={`fleet-${skin.id}`} key={`${shopView}:${skin.id}`} className="fleet-list-entry">
-            <FleetShipPanel view={shopView} skin={skin} ownedStage={ownedShipStage(skin.sprite, inventory?.ownedShipUpgrades)} fleet={visibleFleet} shards={displayedShards} locale={locale} adminPreview={adminMode}
+            <FleetShipPanel view={shopView} skin={skin} ownedStage={ownedShipStage(skin.sprite, inventory?.ownedShipUpgrades)} fleet={visibleFleet} shards={displayedShards} locale={locale} adminPreview={adminMode} mainnetReleased={mainnetReleased} ownerTestnet={ownerTestnet}
               offers={offers.filter(offer => offer.kind === "ship_upgrade")} selectedSkinId={selected.skin.id} selectedColorId={selected.color.id} selectedStage={equippedStage} selectionConfirmed={!user || adminMode || account?.shipStage !== undefined}
               message={typeof hangarMessage === "object" && hangarMessage.ship === skin.name ? hangarMessageText : ""} t={t}
               requestedStage={shopTarget?.skin === skin.id ? shopTarget.stage : undefined}
@@ -728,7 +734,7 @@ const Shop = () => {
             const selected = kind === "weapon" ? false : inventory?.selectedPower === offer.id;
             const lockedWeapon = kind === "weapon" && !testnetWeaponEnabled;
             const powerPurchasable = kind === "power" && ownerTestnet && testPiPurchaseAllowed(offer, "Pi Testnet", true);
-            return <article key={offer.id} className={`hangar-offer hangar-offer-${kind}${selected ? " hangar-offer-selected" : ""}`}>{kind === "weapon" ? <WeaponPreview offerId={offer.id} sprite={selectedShip().skin.sprite} color={selectedShip().color.id} /> : <PowerPreview offerId={offer.id} />}<h4>{t(offer.name)}</h4><p>{t(offer.description)}</p><span className="offer-purchase-price">{lockedWeapon || kind === "power" && !powerPurchasable ? <>{t("Planned price")}: {piPrice(offer.pricePi)}</> : piPrice(offer.pricePi, true)}</span><span className={lockedWeapon || kind === "power" && !powerPurchasable ? "mainnet-ready-badge" : undefined}>{lockedWeapon ? shipSaveNetwork === "testnet" ? t("MAINNET READY") : t("Currently locked") : kind === "weapon" ? t("45 seconds per charge") : powerPurchasable ? t("Buy with Test-Pi") : t("MAINNET READY")}</span><strong>{lockedWeapon ? t("Locked") : selected ? t("EQUIPPED") : owned ? kind === "power" ? `${count} ${t("AVAILABLE")}` : t("Owned — activate in game") : kind === "power" && !powerPurchasable ? t("Locked") : t("NOT OWNED")}</strong>{lockedWeapon && <p className="testnet-shop-notice">{shipSaveNetwork === "testnet" ? t("Available only as a weapon pickup on Testnet.") : t("Available only as a weapon pickup.")}</p>}<div>
+            return <article key={offer.id} className={`hangar-offer hangar-offer-${kind}${selected ? " hangar-offer-selected" : ""}`}>{kind === "weapon" ? <WeaponPreview offerId={offer.id} sprite={selectedShip().skin.sprite} color={selectedShip().color.id} /> : <PowerPreview offerId={offer.id} />}<h4>{t(offer.name)}</h4><p>{t(offer.description)}</p><span className="offer-purchase-price">{lockedWeapon || kind === "power" && !powerPurchasable ? <>{t("Planned price")}: {piPrice(offer.pricePi)}</> : piPrice(offer.pricePi, true)}</span><span className={lockedWeapon || kind === "power" && !powerPurchasable ? "mainnet-ready-badge" : undefined}>{lockedWeapon ? t("MAINNET READY") : kind === "weapon" ? t("45 seconds per charge") : powerPurchasable ? t("Buy with Test-Pi") : t("MAINNET READY")}</span><strong>{lockedWeapon ? t("Locked") : selected ? t("EQUIPPED") : owned ? kind === "power" ? `${count} ${t("AVAILABLE")}` : t("Owned — activate in game") : kind === "power" && !powerPurchasable ? t("Locked") : t("NOT OWNED")}</strong>{lockedWeapon && <p className="testnet-shop-notice">{shipSaveNetwork === "testnet" ? t("Available only as a weapon pickup on Testnet.") : t("Available only as a weapon pickup.")}</p>}<div>
               {powerPurchasable && <WeaponPurchase id={offer.id} price={offer.pricePi} count={count} disabled={isLoading || !catalogReady}
                 pending={isLoading && activeProductId === offer.id} status={activeProductId === offer.id ? paymentStatus : undefined}
                 diagnostic={activeProductId === offer.id ? paymentDiagnostic : undefined}

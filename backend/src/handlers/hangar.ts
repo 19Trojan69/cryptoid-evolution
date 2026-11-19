@@ -6,6 +6,7 @@ import "../types/session";
 import { canUseOwnerTestnetCatalog, isAdminMode, ownerTestnetOrderScope } from "../adminAccess";
 import { isTestnetWeaponPurchaseEnabled } from "../paymentPolicy";
 import { rewardNetwork } from "../rewardNetwork";
+import { mainnetPurchasesReleased } from "../mainnetRelease";
 import { loadPlayerSave } from "./progress";
 import { selectedShipStage } from "../shipLoadout";
 import { cappedMission, publicSave, spriteForShip } from "../playerSave";
@@ -21,7 +22,10 @@ const weaponEnabledForRequest = (req: any, offer: typeof hangarCatalog[number], 
 
 export default function mountHangarEndpoints(router: Router) {
   mountMissionPowerEndpoints(router);
-  router.get("/catalog", (_req, res) => res.json({ offers: hangarCatalog }));
+  router.get("/catalog", async (req, res) => {
+    res.setHeader("Cache-Control", "no-store");
+    return res.json({ offers: hangarCatalog, mainnetReleased: await mainnetPurchasesReleased(req) });
+  });
 
   router.get("/inventory", async (req, res) => {
     const uid = req.session.currentUser?.uid;

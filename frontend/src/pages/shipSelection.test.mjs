@@ -65,7 +65,8 @@ test('Shard balance and busy state gate Standard purchases, and Pi upgrades stay
   assert.equal(Boolean(buy({shards:149}).props.disabled),true);
   assert.equal(Boolean(buy({shards:150}).props.disabled),false);
   assert.equal(Boolean(buy({purchaseBusy:true}).props.disabled),true);
-  assert.equal(Boolean(buy({skin:fleet.playerSkins[19],shards:4650}).props.disabled),false);
+  assert.equal(Boolean(buy({skin:fleet.playerSkins[19],shards:4650}).props.disabled),true);
+  assert.equal(Boolean(buy({skin:fleet.playerSkins[19],shards:4650,mainnetReleased:true}).props.disabled),false);
   assert.equal(buy({fleet:{'nova-wing':{gold:2}},shards:10000}),undefined);
   for(const focusStage of [2,3]){
     const buttons=nodes(Panel({...defaults(),focusStage})).filter(x=>x.type==='button'&&label(x).includes('Purchases locked'));

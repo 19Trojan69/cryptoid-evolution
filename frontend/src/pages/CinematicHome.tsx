@@ -14,10 +14,11 @@ type Props = {
   onPlay: () => void; onShop: () => void; onCareer: () => void; onCards: () => void; onCommunity: () => void;
   onTerms: () => void; onSound: () => void; onGalaxy?: () => void;
   nftLink?: ReactNode;
+  notice?: ReactNode;
   children?: ReactNode;
 };
 
-export default function CinematicHome({paused,busy,rankName,musicEnabled,musicLabel,onPlay,onShop,onCareer,onCards,onCommunity,onTerms,onSound,onGalaxy,nftLink,children}: Props) {
+export default function CinematicHome({paused,busy,rankName,musicEnabled,musicLabel,onPlay,onShop,onCareer,onCards,onCommunity,onTerms,onSound,onGalaxy,nftLink,notice,children}: Props) {
   const {t}=useLocale();
   const autoFullscreenTried=useRef(false);
   useEffect(()=>{
@@ -62,6 +63,7 @@ export default function CinematicHome({paused,busy,rankName,musicEnabled,musicLa
         {children}
       </div>
     </div>
+    {notice}
     <div className="cinematic-actions">
       <div className="cinematic-launch-actions">
         <button className="cinematic-play" type="button" disabled={busy} onClick={onPlay}>{t("Play")}<span aria-hidden="true">→</span></button>

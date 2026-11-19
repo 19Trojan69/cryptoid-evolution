@@ -1,3 +1,4 @@
+import { mainnetPreviewTranslations } from "./locales/mainnetPreview.ts";
 import { shipBalanceTranslations } from './locales/shipBalance.ts';
 import { ownerTestnetTranslations } from "./locales/ownerTestnet.ts";
 import { completionRecoveryTranslations } from "./locales/completionRecovery.ts";
@@ -17,6 +18,7 @@ import { collectionUiTranslations } from "./locales/collectionUi.ts";
 import { playerMenuTranslations } from "./locales/playerMenus.ts";
 import { missionEditionTranslations } from "./locales/missionEdition.ts";
 
+for (const [locale, entries] of Object.entries(mainnetPreviewTranslations)) Object.assign(localeCatalog[locale] ??= {}, entries);
 for (const [locale, entries] of Object.entries(ownerTestnetTranslations)) Object.assign(localeCatalog[locale] ??= {}, entries);
 for (const [locale, entries] of Object.entries(completionRecoveryTranslations)) Object.assign(localeCatalog[locale] ??= {}, entries);
 for (const [locale, entries] of Object.entries(controlCenterTranslations)) Object.assign(localeCatalog[locale] ??= {}, entries);
