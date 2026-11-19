@@ -205,7 +205,7 @@ export const chineseGameplayTranslations: Record<string, string> = {
   "Original document: German.": "原文：德语。",
   "OWNED": "已拥有",
   "Owned — activate in game": "已拥有，可在游戏中激活",
-  "Owned weapons first · strongest first": "已拥有武器优先 · 威力由高到低",
+  "Weakest first · strongest last": "威力由低到高 · 最强武器在最后",
   "Pay with IRRA": "使用 IRRA 支付",
   "Pay with Pi": "使用 Pi 支付",
   "Payment could not be confirmed. Check your account and retry.": "无法确认付款，请检查账户后重试。",

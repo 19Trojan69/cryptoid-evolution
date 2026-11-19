@@ -12,8 +12,8 @@ export const hangarCatalog = [
   { id: "start_shield", kind: "power", name: "Start Shield", description: `Continuous protection for ${START_POWER_DURATION_MS.shield / 1_000} seconds after activation. The timer pauses during mission transitions.`, pricePi: 0.15, powerUp: "shield" },
   { id: "start_rapid", kind: "power", name: "Start Rapid Fire", description: `Activate faster automatic fire from the screen-edge icon for ${START_POWER_DURATION_MS.rapid / 1_000} seconds.`, pricePi: 0.15, powerUp: "rapid" },
   { id: "start_overdrive", kind: "power", name: "Start Overdrive", description: `Activate stronger shots from the screen-edge icon for ${START_POWER_DURATION_MS.overdrive / 1_000} seconds.`, pricePi: 0.2, powerUp: "overdrive" },
-  { id: "start_bomb", kind: "power", name: "Nova Bomb", description: "One use per mission. Destroys visible enemies and hostile shots. Damages boss turrets first; later turrets withstand more damage. The exposed boss hull survives the blast.", pricePi: 0.5, powerUp: "bomb" },
   { id: "start_emp", kind: "power", name: "EMP Pulse", description: "One use per mission. Disables enemy and boss weapons for 7 seconds. Ships and existing shots keep moving; EMP deals no damage.", pricePi: 0.3, powerUp: "emp" },
+  { id: "start_bomb", kind: "power", name: "Nova Bomb", description: "One use per mission. Destroys visible enemies and hostile shots. Damages boss turrets first; later turrets withstand more damage. The exposed boss hull survives the blast.", pricePi: 0.5, powerUp: "bomb" },
   { id: "armor_hull_mk1", kind: "armor", name: "Reinforced Hull", description: "Permanent armor: +1 heart at the start of every mission. No shield needed.", pricePi: 19.9, bonusHearts: 1 },
   { id: "armor_hull_mk2", kind: "armor", name: "Titanium Plating", description: "Permanent armor: +2 more hearts at the start of every mission. Stacks with Reinforced Hull.", pricePi: 29.9, bonusHearts: 2, prerequisiteId: "armor_hull_mk1" },
 

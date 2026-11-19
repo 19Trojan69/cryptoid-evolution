@@ -98,7 +98,7 @@ export default function MissionWeaponShop({ reloadLevel, autoReload = {}, onAuto
     const pickup = pickupLevel === level && pickupMs > 0;
     const available = pendingLevel === level || level === 1 || admin || count > 0 || timer > 0 || timer === -1 || pickup;
     return { offer, level, count, timer, pickup, available };
-  }).sort((a, b) => Number(b.available) - Number(a.available) || b.level - a.level);
+  }).sort((a, b) => a.level - b.level);
   return <section className="mission-weapon-shop" aria-labelledby="mission-weapon-shop-title" aria-busy={busy}>
     <header>
       <small>{t('MISSION PAUSED')}</small>
@@ -107,7 +107,7 @@ export default function MissionWeaponShop({ reloadLevel, autoReload = {}, onAuto
         <button type="button" aria-pressed={tab === 'weapons'} disabled={busy} onClick={() => selectTab('weapons')}>{t('Weapons')}</button>
         <button type="button" aria-pressed={tab === 'powers'} disabled={busy} onClick={() => selectTab('powers')}>{t('Power-ups')}</button>
       </nav>}
-      {tab === 'weapons' && <p>{t('Owned weapons first · strongest first')}</p>}
+      {tab === 'weapons' && <p>{t('Weakest first · strongest last')}</p>}
       {tab === 'weapons' && reloadLevel !== undefined && <ReloadConfirmation level={reloadLevel} />}
     </header>
     <div ref={scrollRef} className="mission-shop-scroll" data-game-scroll>

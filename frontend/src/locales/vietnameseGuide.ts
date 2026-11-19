@@ -519,7 +519,7 @@ export const vietnameseGuideTranslations: Record<string, string> = {
   "Original document: German.": "Tài liệu gốc: tiếng Đức.",
   "OWNED": "ĐÃ SỞ HỮU",
   "Owned — activate in game": "Đã sở hữu — kích hoạt trong trò chơi",
-  "Owned weapons first · strongest first": "Vũ khí đã sở hữu trước · mạnh nhất trước",
+  "Weakest first · strongest last": "Yếu nhất trước · mạnh nhất cuối cùng",
   "Pay with IRRA": "Thanh toán bằng IRRA",
   "Pay with Pi": "Thanh toán bằng Pi",
   "Payment diagnostics:": "Chẩn đoán thanh toán:",
