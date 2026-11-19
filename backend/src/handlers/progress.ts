@@ -9,7 +9,8 @@ import { restoreScoreRun } from "../restoreScoreRun";
 import { Router } from "express";
 import { rewardNetwork } from "../rewardNetwork";
 import { shipNftMainnetEnabled } from "../shipNftEligibility";
-import { isAdminMode, ownerTestnetOrderScope } from "../adminAccess";
+import { canUseOwnerTestnetCatalog, isAdminMode, ownerTestnetOrderScope } from "../adminAccess";
+import { publicTestnetHullAvailable } from "../shipReleasePolicy";
 import { MAX_MISSION_HEARTS, maxMissionHearts } from "../lifeRules";
 import { standardHullInventoryColor } from "../shipLivery";
 import { emptyPlayerSave, firstMissionSnapshot, readSnapshot, legacyInventory, publicSave, shipPaintAvailable, shipPrice, validSelection, standardShips, spriteForShip, type PlayerSave } from "../playerSave";
@@ -200,6 +201,8 @@ export default function mountProgressEndpoints(router: Router) {
         const mainnetShipNfts = network === "mainnet" && shipNftMainnetEnabled();
         const price = shipPrice(skin, network === "testnet" || mainnetShipNfts);
         if (price === null || network === "mainnet" && !shipPaintAvailable(skin, color)) return res.status(400).json({ error: "invalid_ship" });
+        if (network === "testnet" && !publicTestnetHullAvailable(skin) && !await canUseOwnerTestnetCatalog(req))
+          return res.status(403).json({ error: "testnet_ship_locked" });
         if (Object.values(save.fleet[skin] ?? {}).some(count => count > 0))
           return res.status(409).json({ error: "ship_already_owned" });
         if (save.balance < price) return res.status(403).json({ error: "not_enough_shards" });

@@ -221,13 +221,11 @@ test('explicit import is one-time and each distinct hull is charged only once', 
   assert.equal(legacy.body.error, 'ship_already_owned');
   assert.equal(h.profile().balance, 800);
   assert.deepEqual(h.profile().fleet['nova-wing'], { gold: 2 });
+  const before = structuredClone(h.profile());
   const next = await h.call('progress', '/inventory', { ...purchase, version: h.profile().version, skin: 'dark-delta' });
-  assert.equal(next.code, 200);
-  assert.equal(next.body.save.balance, 150);
-  assert.equal(next.body.save.totalShardsSpent, 1050);
-  assert.deepEqual(next.body.save.fleet['dark-delta'], { grey: 1 });
-  assert.equal(next.body.save.skin, 'nova-wing');
-  assert.equal(next.body.save.color, 'gold');
+  assert.equal(next.code, 403);
+  assert.equal(next.body.error, 'testnet_ship_locked');
+  assert.deepEqual(h.profile(), before);
   const failed = await h.call('progress', '/inventory', { action: 'buy', version: h.profile().version, skin: 'gold-streak', color: 'gold' });
   assert.equal(failed.code, 403);
   assert.equal(h.profile().skin, 'nova-wing');

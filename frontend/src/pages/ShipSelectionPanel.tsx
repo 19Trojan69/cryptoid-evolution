@@ -21,6 +21,7 @@ type Props = {
   locale: string;
   offers: ShipUpgradeOffer[];
   adminPreview?: boolean;
+  ownerTestnet?: boolean;
   purchaseBusy?: boolean;
   message: string;
   selectedSkinId: string;
@@ -37,7 +38,7 @@ const stageLabel = (stage: ShipStage) => shipNftEditions[stage - 1].toUpperCase(
 
 export default function ShipSelectionPanel({
   view, skin, focusStage, ownedStage, fleet, shards, locale, offers,
-  adminPreview,
+  adminPreview, ownerTestnet = false,
   purchaseBusy, message, selectedSkinId, selectedStage = 1, selectionConfirmed = true, t, onStageChange,
   onBuyStandard, onEquipPreview, onOpenShop,
 }: Props) {
@@ -46,7 +47,7 @@ export default function ShipSelectionPanel({
   const price = standardShipPrice(skin);
   const shardPrice = price.toLocaleString(locale);
   const piPrice = (amount: number) => <PiPrice amount={amount} locale={locale} />;
-  const standardAvailable = standardHullAvailable(skin.id, shipNftMainnetVisible);
+  const standardAvailable = standardHullAvailable(skin.id, shipNftMainnetVisible, ownerTestnet || adminPreview);
   const offerFor = (level: ShipStage) => offers.find(offer => offer.shipIndex === skin.sprite && offer.stage === level);
   const focusedOffer = offerFor(stage);
   const nftCopy = shipNftCopy(locale);

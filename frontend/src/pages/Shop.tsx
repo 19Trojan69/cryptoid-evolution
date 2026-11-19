@@ -309,11 +309,11 @@ const Shop = () => {
   const [loadoutMessage, setLoadoutMessage] = useState("");
   const [shipQuery, setShipQuery] = useState("");
   const [shipFilter, setShipFilter] = useState<"all" | "owned" | "available">("all");
-  const standardModelsAvailable = playerSkins.filter(skin => standardHullAvailable(skin.id, shipNftMainnetVisible)).length;
+  const standardModelsAvailable = playerSkins.filter(skin => standardHullAvailable(skin.id, shipNftMainnetVisible, ownerTestnet || adminMode)).length;
   const shipSearchOptions = playerSkins.filter(skin => {
     const owned = fleetCount(visibleFleet, skin.id) > 0;
     return (shopView === "shop" || owned) && skin.name.toLocaleLowerCase(locale).includes(shipQuery.trim().toLocaleLowerCase(locale)) &&
-      (shopTarget?.skin === skin.id || shipFilter === "all" || (shipFilter === "owned" ? owned : standardHullAvailable(skin.id, shipNftMainnetVisible)));
+      (shopTarget?.skin === skin.id || shipFilter === "all" || (shipFilter === "owned" ? owned : standardHullAvailable(skin.id, shipNftMainnetVisible, ownerTestnet || adminMode)));
   });
   useEffect(() => {
     let active = true;
@@ -346,7 +346,7 @@ const Shop = () => {
   const purchaseStandard = (previewSkin: typeof playerSkins[number]) => {
     primeCardSound();
     if (adminMode) return;
-    if (!standardHullAvailable(previewSkin.id, shipNftMainnetVisible)) { setHangarMessage("MAINNET READY"); return; }
+    if (!standardHullAvailable(previewSkin.id, shipNftMainnetVisible, ownerTestnet)) { setHangarMessage("MAINNET READY"); return; }
     if (user) {
       if (!account) { setAccountError("Account save is loading or unavailable."); return; }
       if (shipSaveNetwork === "testnet" && !sessionStorage.getItem(PI_ACCESS_TOKEN_KEY)) { void signIn(); return; }
@@ -668,6 +668,7 @@ const Shop = () => {
       </section>}
 
       {(shopView === "hangar" || shopView === "shop") && <section className={`ship-selector ship-selector-${shopView}`} aria-labelledby="hangar-heading">
+        {shipSaveNetwork === "testnet" && !ownerTestnet && !adminMode && <p className="testnet-shop-notice" role="note">{t("Testnet: Grey Scout is free. Nova Wing and Solar Lance can be bought with Shards. Other ship purchases are locked until Mainnet.")}</p>}
         {shipSaveNetwork === "testnet" && <p className="ship-mainnet-notice" role="note">{t("Advanced and Elite upgrades will be available in the Mainnet app. The corresponding NFT is included.")}</p>}
         <div className="ship-panel-heading"><h2 id="hangar-heading">{t(shopView === "hangar" ? "Your fleet" : "Available ships")}</h2><strong className="shard-balance">◆ {number(displayedShards)} <small>{t("Shards")}</small></strong></div>
         <div className="fleet-toolbar">
@@ -691,7 +692,7 @@ const Shop = () => {
         {!shipSearchOptions.length && <p role="status">{t("No ships match these filters.")}</p>}
         <div className="fleet-scroll-list">
           {shipSearchOptions.map(skin => <article id={`fleet-${skin.id}`} key={`${shopView}:${skin.id}`} className="fleet-list-entry">
-            <FleetShipPanel view={shopView} skin={skin} ownedStage={ownedShipStage(skin.sprite, inventory?.ownedShipUpgrades)} fleet={visibleFleet} shards={displayedShards} locale={locale} adminPreview={adminMode}
+            <FleetShipPanel view={shopView} skin={skin} ownedStage={ownedShipStage(skin.sprite, inventory?.ownedShipUpgrades)} fleet={visibleFleet} shards={displayedShards} locale={locale} adminPreview={adminMode} ownerTestnet={ownerTestnet}
               offers={offers.filter(offer => offer.kind === "ship_upgrade")} selectedSkinId={selected.skin.id} selectedStage={selectedShipStage(selected.skin.sprite, inventory?.ownedShipUpgrades, account?.shipStage)} selectionConfirmed={!user || adminMode || account?.shipStage !== undefined}
               message={typeof hangarMessage === "object" && hangarMessage.ship === skin.name ? hangarMessageText : ""} t={t}
               requestedStage={shopTarget?.skin === skin.id ? shopTarget.stage : undefined}

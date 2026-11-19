@@ -57,6 +57,38 @@ test('all Standard hulls in the prepared Mainnet catalog keep their original Sha
  assert.equal(fleet.standardHullAvailable('core-carrier'),false);
 });
 
+test('public Testnet offers the free starter and exactly two Shard hulls, while owner and Mainnet catalogs remain separate', () => {
+ const available = (network, mainnet = false, owner = false) => fleet.playerSkins.filter(skin => fleet.standardHullAvailableForNetwork(skin.id, network, mainnet, owner));
+ assert.deepEqual(available('testnet').map(skin => skin.id), ['grey-scout', 'nova-wing', 'solar-lance']);
+ assert.deepEqual(available('testnet', true).map(skin => skin.id), ['grey-scout', 'nova-wing', 'solar-lance'], 'a Mainnet feature flag cannot expand public Testnet');
+ assert.deepEqual(available('testnet').filter(skin => skin.price > 0).map(skin => skin.price), [150, 400]);
+ assert.equal(available('testnet', false, true).length, 20);
+ assert.equal(available('mainnet').length, 10);
+ assert.equal(available('mainnet', false, true).length, 10, 'owner Testnet permission does not open Mainnet hulls');
+ assert.equal(available('mainnet', true).length, 20);
+ assert.equal(fleet.standardHullAvailableForNetwork('unknown', 'testnet', false, true), false);
+});
+
+test('the actual Testnet panel keeps all hull previews visible but locks new purchases beyond Solar Lance', () => {
+ const TestnetPanel = component('./ShipSelectionPanel.tsx', { './shipFleet': { ...fleet,
+   standardHullAvailable: (skin, mainnet, owner) => fleet.standardHullAvailableForNetwork(skin, 'testnet', mainnet, owner),
+ } });
+ for (const skin of fleet.playerSkins.slice(1)) {
+   const props = { ...defaults(), skin, fleet: {} };
+   const tree = nodes(TestnetPanel(props));
+   const button = tree.find(node => node.props.className?.includes('ship-shard-button'));
+   assert.ok(button, skin.id);
+   assert.equal(Boolean(button.props.disabled), !['nova-wing', 'solar-lance'].includes(skin.id), skin.id);
+   const html = renderToStaticMarkup(jsx.jsx(TestnetPanel, props));
+   assert.ok(html.includes(skin.name));
+   assert.equal(html.includes('MAINNET READY'), !['nova-wing', 'solar-lance'].includes(skin.id), skin.id);
+   const owner = nodes(TestnetPanel({ ...props, ownerTestnet: true }));
+   assert.equal(Boolean(owner.find(node => node.props.className?.includes('ship-shard-button')).props.disabled), false, skin.id);
+ }
+ const owned = TestnetPanel({ ...defaults(), skin: fleet.playerSkins[19], fleet: { 'core-carrier': { grey: 1 } }, selectedStage: 1, selectedSkinId: 'grey-scout' });
+ assert.ok(nodes(owned).some(node => node.props.className?.includes('ship-equip-button') && !node.props.disabled), 'previously owned hulls remain selectable');
+});
+
 test('Advanced and Elite list planned Pi prices and keep checkout locked',()=>{
  for (const [stage, price] of [[2, 9.9], [3, 19.9]]) {
   const props = { ...defaults(), focusStage: stage, ownedStage: stage - 1 };

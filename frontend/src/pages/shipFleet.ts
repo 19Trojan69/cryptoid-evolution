@@ -3,6 +3,7 @@ import type { ShipStage } from './shipEvolution';
 import type { CSSProperties } from "react";
 import type { CryptoidClass } from "./cryptoidRoster";
 import { originalLivery, shipFactoryPaint, shipPaintMatchesHull as shipPaintAvailable, standardHullInventoryColor, vanguardMetallic } from '../../../backend/src/shipLivery.ts';
+import { publicTestnetHullAvailable } from '../../../backend/src/shipReleasePolicy.ts';
 export { shipFactoryPaint, shipPaintAvailable };
 
 export const FLEET_IMAGE = "/ships/cryptoid-fleet.png";
@@ -58,10 +59,14 @@ export const playerSkins = [
   { id: "core-carrier", name: "Core Carrier", sprite: 19, price: 4650 },
 ] as const;
 export const RELEASED_STANDARD_SHIPS = 10;
-export const standardHullAvailable = (skinId: PlayerSkinId, mainnetNftsEnabled = false) => {
+export const standardHullAvailableForNetwork = (skinId: PlayerSkinId, network: ShipSaveNetwork, mainnetNftsEnabled = false, ownerTestnet = false) => {
   const index = playerSkins.findIndex(skin => skin.id === skinId);
-  return index >= 0 && (shipSaveNetwork === "testnet" || mainnetNftsEnabled || index < RELEASED_STANDARD_SHIPS);
+  return index >= 0 && (network === "testnet"
+    ? ownerTestnet === true || publicTestnetHullAvailable(skinId)
+    : mainnetNftsEnabled || index < RELEASED_STANDARD_SHIPS);
 };
+export const standardHullAvailable = (skinId: PlayerSkinId, mainnetNftsEnabled = false, ownerTestnet = false) =>
+  standardHullAvailableForNetwork(skinId, shipSaveNetwork, mainnetNftsEnabled, ownerTestnet);
 
 const legacyColors = [
   { id: "grey", name: "Graphite Grey", hue: "0deg", glow: "#a8b3c2" },
