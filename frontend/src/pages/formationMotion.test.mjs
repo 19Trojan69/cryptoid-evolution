@@ -10,12 +10,13 @@ import { entryPatternForSector, entryPosition, entryStartX } from './entryPatter
 import { attackDuration, attackPosition } from './attackPatterns.ts';
 import { bossEscortRosterIndex } from './bossEscorts.ts';
 import { enemyAppearance } from './shipFleet.ts';
+import { restoreMainnetCombatChange } from '../../scripts/mainnetCombatReviewedChanges.mjs';
 
 // Execute the actual component's simulation functions without changing exports
 // or adding test hooks to the shipped game.
 const source = fs.readFileSync(new URL('./GamePage.tsx', import.meta.url), 'utf8');
 const ast = ts.createSourceFile('GamePage.tsx', source, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
-const names = ['spawnAsteroid', 'spawnBossEscort', 'attackTime', 'moveAsteroid', 'RETURN_DURATION_MS', 'ENTRY_HUD_GAP_PX'];
+const names = ['combatVarietyEnabled', 'chooseCryptoid', 'spawnAsteroid', 'spawnBossEscort', 'attackTime', 'moveAsteroid', 'RETURN_DURATION_MS', 'ENTRY_HUD_GAP_PX'];
 const declarations = new Map();
 function visit(node) {
   if (ts.isVariableDeclaration(node) && names.includes(node.name.getText(ast))) declarations.set(node.name.getText(ast), node.getText(ast));
@@ -25,20 +26,26 @@ visit(ast);
 assert.equal(declarations.size, names.length);
 const code = ts.transpileModule([...declarations.values()].map(declaration => `const ${declaration};`).join('\n') +
   '\nglobalThis.motion = { spawnAsteroid, spawnBossEscort, moveAsteroid };', { compilerOptions: { target: ts.ScriptTarget.ES2022 } }).outputText;
-function simulation(testnet = true) {
-  const context = { combatVarietyEnabled: testnet, chooseCryptoid: testnet ? combatCryptoid : chooseCryptoid,
+function simulation(network = 'testnet') {
+  const context = { shipSaveNetwork: network, combatCryptoid, originalCryptoid: chooseCryptoid,
     combatEntryStage, combatTiming, FORMATION_SETTLE_MS, entryPatternForSector, entryPosition, entryStartX,
     attackDuration, attackPosition, bossEscortRosterIndex, enemyAppearance };
   vm.runInNewContext(code, context);
   return context.motion;
 }
 const motion = simulation();
+test('the release normalizer reverses only one exact combat switch and rejects altered gates', () => {
+  const before = restoreMainnetCombatChange(source);
+  assert.equal(before.replace('const combatVarietyEnabled = shipSaveNetwork === "testnet";', 'const combatVarietyEnabled = true;'), source);
+  assert.throws(() => restoreMainnetCombatChange(source.replace('const combatVarietyEnabled = true;', 'const combatVarietyEnabled = false;')), /one exact/);
+  assert.throws(() => restoreMainnetCombatChange(source + '\nconst combatVarietyEnabled = true;'), /one exact/);
+});
 function docked(width = 390, stage = 26) {
   const enemy = motion.spawnAsteroid(1, width, 90, 0, stage, formationLayout(stage, width, 844, stage));
   return { ...enemy, x: enemy.entryTargetX, y: enemy.entryTargetY, entryElapsed: enemy.entryDuration, formationElapsed: enemy.formationDuration };
 }
 
-test('resting Testnet enemies sway slowly in both directions, including legacy checkpoint entry identifiers', () => {
+test('resting enemies sway slowly in both directions, including legacy checkpoint entry identifiers', () => {
   for (const width of [320, 390, 768, 1280]) for (const entryStage of [undefined, 1, 2, 3, 4, 5, 6, 7, 8, 9, 26, 500]) {
     let enemy = { ...docked(width), entryStage }, min = Infinity, max = -Infinity, previousX = enemy.x;
     const original = { ...enemy };
@@ -55,7 +62,7 @@ test('resting Testnet enemies sway slowly in both directions, including legacy c
   }
 });
 
-test('sway is time-based; Mainnet and boss escorts retain their existing stationary formation behavior', () => {
+test('sway is time-based while boss escorts retain their stationary formation behavior', () => {
   const positions = [30, 60, 120].map(fps => {
     let enemy = docked(), elapsed = 0;
     while (elapsed < 6000) { const delta = Math.min(1000 / fps, 6000 - elapsed); enemy = motion.moveAsteroid(enemy, delta, 390, 844); elapsed += delta; }
@@ -63,13 +70,31 @@ test('sway is time-based; Mainnet and boss escorts retain their existing station
   });
   for (const x of positions) assert.ok(Math.abs(x - positions[0]) < 1e-7);
   const original = docked();
-  for (const [engine, enemy] of [[simulation(false), original], [motion, { ...original, escort: true }]]) {
+  for (const [engine, enemy] of [[simulation('mainnet'), { ...original, escort: true }], [motion, { ...original, escort: true }]]) {
     const after = engine.moveAsteroid(enemy, 1000, 390, 844);
     assert.equal(after.x, enemy.entryTargetX); assert.equal(after.y, enemy.entryTargetY);
   }
 });
 
-test('normal Testnet arrivals take ten percent longer across all stages without changing profiles or docking', () => {
+test('Mainnet uses the released Testnet arrivals, profiles and motion across every normal campaign block', () => {
+  const mainnet = simulation('mainnet');
+  for (let stage = 1; stage <= 500; stage++) {
+    if (stage % 10 === 0) continue;
+    const slots = formationLayout(stage, 390, 844, stage);
+    for (let index = 0; index < slots.length; index++) {
+      const released = motion.spawnAsteroid(index, 390, 90, index, stage, slots);
+      const preview = mainnet.spawnAsteroid(index, 390, 90, index, stage, slots);
+      assert.deepEqual(JSON.parse(JSON.stringify(preview)), JSON.parse(JSON.stringify(released)));
+      for (const delta of [16, 1500, 4000]) {
+        const a = mainnet.moveAsteroid(preview, delta, 390, 844);
+        const b = motion.moveAsteroid(released, delta, 390, 844);
+        assert.deepEqual(JSON.parse(JSON.stringify(a)), JSON.parse(JSON.stringify(b)));
+      }
+    }
+  }
+});
+
+test('normal arrivals take ten percent longer across all stages without changing profiles or docking', () => {
   for (let stage = 1; stage <= 500; stage++) {
     if (stage % 10 === 0) continue;
     const slots = formationLayout(stage, 390, 844, stage);
