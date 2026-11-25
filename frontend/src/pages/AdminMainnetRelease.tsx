@@ -19,13 +19,15 @@ export default function AdminMainnetRelease() {
 
   const load = useCallback(async (signal?: AbortSignal) => {
     const { data } = await axiosClient.get<ReleaseStatus>("/admin/mainnet-release", { signal });
-    setStatus(data);
+    if (!signal?.aborted) setStatus(data);
     return data;
   }, []);
 
   useEffect(() => {
     const controller = new AbortController();
-    void load(controller.signal).catch(() => {
+    void Promise.resolve().then(() => {
+      if (!controller.signal.aborted) return load(controller.signal);
+    }).catch(() => {
       if (!controller.signal.aborted) setError(adminText("Der Freigabestatus konnte nicht geladen werden."));
     });
     return () => controller.abort();

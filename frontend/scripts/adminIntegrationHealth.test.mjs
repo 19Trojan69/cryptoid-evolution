@@ -60,6 +60,7 @@ test('release view keeps the global gate disabled and explains actual unmet capa
     adminText, useAdminLocale: () => ({}), useCallback: fn => fn, readinessLabel, readinessReason,
     axiosClient: { get: () => new Promise(resolve => pending.push(resolve)), post: (...args) => { writes.push(args); throw Error('unexpected release'); } },
   });
+  await h.flush();
   pending[0]({data:{enabled:false,released:false,revision:2,ready:false,checks:[
     {id:'piPayments',ready:true,reason:'configured'},
     {id:'walletConnection',ready:false,reason:'approved_wallet_evidence_required'},
@@ -92,6 +93,7 @@ test('NFT preparation keeps prepared product mappings distinct from a working ch
     adminText, useAdminLocale: () => ({}), useCallback: fn => fn,
     axiosClient: {get: () => new Promise(resolve => {respond = resolve;})},
   });
+  await h.flush();
   respond({data:{phase:'preparation',publishable:false,catalogHash:'test',summary:{total:500,bosses:200,ships:60,retro:240,
     missingImageUris:500,missingMetadataUris:500,missingDescriptions:0,unlinkedNftProducts:0,preparedNftProducts:390,silhouetteDesigns:98}}});
   await h.flush();

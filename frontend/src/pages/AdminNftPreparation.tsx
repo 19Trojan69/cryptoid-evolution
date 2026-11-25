@@ -28,12 +28,14 @@ export default function AdminNftPreparation() {
 
   const load = useCallback(async (signal?: AbortSignal) => {
     const result = await axiosClient.get<Preparation>("/admin/nft-preparation", { signal });
-    setData(result.data);
+    if (!signal?.aborted) setData(result.data);
   }, []);
 
   useEffect(() => {
     const controller = new AbortController();
-    void load(controller.signal).catch(() => {
+    void Promise.resolve().then(() => {
+      if (!controller.signal.aborted) return load(controller.signal);
+    }).catch(() => {
       if (!controller.signal.aborted) setError(adminText("Die NFT-Vorbereitung konnte nicht geladen werden."));
     });
     return () => controller.abort();
