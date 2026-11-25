@@ -3,6 +3,9 @@ import assert from 'node:assert/strict';
 import { componentHost } from './componentTestHost.mjs';
 import { adminText } from '../src/adminLocale.ts';
 import { integrationQuality, INTEGRATION_REFRESH_MS, RESPONSE_SCALE_MS, startIntegrationPolling } from '../src/pages/adminIntegrationHealth.ts';
+import { readinessLabel, readinessReason, readinessLabels, readinessReasons } from '../src/pages/mainnetReadinessCopy.ts';
+import { mainnetReadinessTranslations } from '../src/locales/mainnetReadiness.ts';
+import { hasExplicitTranslation, translate } from '../src/i18n.ts';
 
 const check = (responseMs, status = 'ok') => ({ id: 'database', label: 'MongoDB-Verbindung', status, responseMs, detail: 'Leseabfrage' });
 const report = n => ({ checkedAt: `2026-11-19T09:03:${String(n).padStart(2, '0')}Z`, checks: [check(98)],
@@ -33,6 +36,46 @@ function clockHost() {
   };
 }
 const flush = async () => { for (let i = 0; i < 15; i++) await Promise.resolve(); };
+
+test('readiness distinguishes configuration, wallet, checkout, Pi approval and NFT evidence in every locale', () => {
+  assert.equal(Object.keys(readinessLabels).length, 8);
+  const keys = [...Object.values(readinessLabels), ...Object.values(readinessReasons), 'Alle Voraussetzungen bleiben gemeinsam verpflichtend.', 'Nachweis fehlt oder ist nicht prüfbar.'];
+  assert.equal(Object.keys(mainnetReadinessTranslations).length, 19);
+  for (const [locale, entries] of Object.entries(mainnetReadinessTranslations)) for (const key of keys) {
+    assert.equal(typeof entries[key], 'string', `${locale}: ${key}`);
+    assert.ok(entries[key].trim(), `${locale}: ${key}`);
+    assert.ok(hasExplicitTranslation(locale, key), `${locale}: ${key}`);
+    assert.equal(translate(locale, key), entries[key]);
+  }
+  assert.match(readinessReason({id:'piPayments',ready:true,reason:'configured'}), /kein Zahlungsnachweis/);
+  assert.notEqual(readinessReason({id:'piPayments',ready:true,reason:'configured'}), readinessReason({id:'walletCheckout',ready:true,reason:'verified_existing_receipt'}));
+  const unknown = {id:'provider-secret-token',ready:false,reason:'https://secret.invalid/key'};
+  assert.equal(readinessLabel(unknown.id), 'Nachweis fehlt oder ist nicht prüfbar.');
+  assert.equal(readinessReason(unknown), 'Nachweis fehlt oder ist nicht prüfbar.');
+});
+
+test('release view keeps the global gate disabled and explains actual unmet capabilities', async () => {
+  const pending = [], writes = [];
+  const h = componentHost('src/pages/AdminMainnetRelease.tsx', 'AdminMainnetRelease', {}, {
+    adminText, useAdminLocale: () => ({}), useCallback: fn => fn, readinessLabel, readinessReason,
+    axiosClient: { get: () => new Promise(resolve => pending.push(resolve)), post: (...args) => { writes.push(args); throw Error('unexpected release'); } },
+  });
+  pending[0]({data:{enabled:false,released:false,revision:2,ready:false,checks:[
+    {id:'piPayments',ready:true,reason:'configured'},
+    {id:'walletConnection',ready:false,reason:'approved_wallet_evidence_required'},
+    {id:'nftIssuance',ready:false,reason:'pi_nft_issuance_not_established'},
+  ]}});
+  await h.flush();
+  const text = JSON.stringify(h.nodes());
+  assert.match(text, /kein Zahlungsnachweis/);
+  assert.match(text, /App-Wallet muss belegt/);
+  assert.match(text, /Pi-NFT-Ausgabeweg ist noch nicht belegt/);
+  const release = h.nodes().find(n => n.type === 'button' && JSON.stringify(n.props.children).includes('Mainnet vollständig freigeben'));
+  assert.equal(release.props.disabled, true);
+  await release.props.onClick();
+  assert.equal(writes.length, 0);
+  h.unmount();
+});
 function polling() {
   const clock = clockHost(), requests = [], results = [], errors = [], busy = [], modes = [];
   const poll = startIntegrationPolling({ host: clock.host,
@@ -42,6 +85,21 @@ function polling() {
   });
   return { ...clock, clock, requests, results, errors, busy, modes, ...poll };
 }
+
+test('NFT preparation keeps prepared product mappings distinct from a working checkout', async () => {
+  let respond;
+  const h = componentHost('src/pages/AdminNftPreparation.tsx', 'AdminNftPreparation', {}, {
+    adminText, useAdminLocale: () => ({}), useCallback: fn => fn,
+    axiosClient: {get: () => new Promise(resolve => {respond = resolve;})},
+  });
+  respond({data:{phase:'preparation',publishable:false,catalogHash:'test',summary:{total:500,bosses:200,ships:60,retro:240,
+    missingImageUris:500,missingMetadataUris:500,missingDescriptions:0,unlinkedNftProducts:0,preparedNftProducts:390,silhouetteDesigns:98}}});
+  await h.flush();
+  const text = JSON.stringify(h.nodes());
+  assert.match(text, /390 NFT-Editionen brauchen noch eine Kaufanbindung/);
+  assert.equal(h.nodes().some(node => node.props.children?.includes('0 NFT-Editionen brauchen noch eine Kaufanbindung')), false);
+  h.unmount();
+});
 
 test('latency thresholds include the screenshot values and exact color boundaries', () => {
   for (const [ms, tone] of [[0, 'good'], [98, 'good'], [284, 'good'], [500, 'good'], [501, 'fair'], [592, 'fair'], [1000, 'fair'], [1001, 'slow'], [2500, 'slow'], [2501, 'bad'], [4000, 'bad'], [9000, 'bad']]) {

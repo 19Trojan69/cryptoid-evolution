@@ -4,14 +4,10 @@ import { axiosClient } from "../lib/axiosClient";
 import { adminText, useAdminLocale } from "../adminLocale";
 import { browserIntegrationPollingHost, integrationQuality, RESPONSE_SCALE_MS, startIntegrationPolling } from "./adminIntegrationHealth";
 import type { IntegrationCheck, IntegrationReport, IntegrationPollingMode } from "./adminIntegrationHealth";
+import { readinessLabel, readinessReason } from "./mainnetReadinessCopy";
 import "./AdminIntegrationHealth.css";
 
 const statusNames = { ok: "Erreichbar", warning: "Eingeschränkt", error: "Störung", unknown: "Nicht bestätigt" };
-const nftNames: Record<string, string> = {
-  walletCheckout: "Mainnet-Kaufablauf und Ziel-Wallet nachgewiesen",
-  nftIssuance: "NFT-Ausgabe durch Mainnet-Transaktion nachgewiesen",
-  nftMetadata: "Dauerhafte Bild- und Metadatenadressen vollständig",
-};
 
 function IntegrationHealthCheck({ check, stale = false }: { check: IntegrationCheck; stale?: boolean }) {
   const quality = integrationQuality(check, stale);
@@ -90,7 +86,10 @@ export default function AdminIntegrationHealth() {
         {adminText("Balken: 0 bis 4.000 ms; länger bedeutet langsamer. Eigene Richtwerte, keine Pi-Vorgabe. Fehlende Nachweise bleiben neutral; Einschränkungen mindestens orange.")}
       </p>
       <h3>{adminText("NFT-Käufe im Mainnet:")} {adminText(report.nfts.purchasable ? "Freigegeben" : "Noch nicht verfügbar")}</h3>
-      <ul>{report.nfts.checks.map(check => <li key={check.id}>{adminText(nftNames[check.id] || check.id)}: <strong>{adminText(check.ready ? "Nachgewiesen" : "Offen")}</strong></li>)}
+      <p>{adminText("Alle Voraussetzungen bleiben gemeinsam verpflichtend.")}</p>
+      <ul>{report.nfts.checks.map(check => <li key={check.id}>{adminText(readinessLabel(check.id))}: <strong>{adminText(check.ready ? "Nachgewiesen" : "Offen")}</strong>
+        <p>{adminText(readinessReason(check))}</p>
+      </li>)}
         <li>{adminText("Wallet-Signierung für NFT-Smart-Contracts:")} <strong>{adminText(report.nfts.walletSigning === "verified" ? "Nachgewiesen" : "Noch nicht nachgewiesen")}</strong></li>
         <li>{adminText("Deine Freigabe:")} <strong>{adminText(report.nfts.ownerReleased === null ? "Nicht abrufbar" : report.nfts.ownerReleased ? "Erteilt" : "Zurückgehalten")}</strong></li>
       </ul>

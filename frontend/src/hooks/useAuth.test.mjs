@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import vm from 'node:vm';
 import { readFileSync } from 'node:fs';
-import { createHash } from 'node:crypto';
+import { createHash, webcrypto } from 'node:crypto';
 import ts from 'typescript';
 
 const releasedSource = readFileSync(new URL('../../scripts/fixtures/useAuth-0ec94cf.ts.txt', import.meta.url), 'utf8');
@@ -40,24 +40,25 @@ function harness(authenticate, restore, options = {}) {
     useEffect: fn => { if (!mounted) effects.push(fn); },
   };
   const globals = {
-    setTimeout, clearTimeout, localStorage, sessionStorage,
+    setTimeout, clearTimeout, localStorage, sessionStorage, crypto: webcrypto, URL,
     navigator: { userAgent: options.userAgent ?? 'Mozilla PiBrowser Android Tablet' },
     window: { Pi: { authenticate, ...options.sdk }, setTimeout, clearTimeout, location: { pathname: '/', origin: 'https://cryptoid-evolution.vercel.app', hostname: 'cryptoid-evolution.vercel.app', assign: url => navigations.push(url) } },
     console: { error() {} },
   };
   function module(file, imports) {
     const exports = {};
-    const source = options.released && file === './useAuth.ts' ? releasedSource : readFileSync(new URL(file, import.meta.url), 'utf8');
+    const source = (options.released && file === './useAuth.ts' ? releasedSource : readFileSync(new URL(file, import.meta.url), 'utf8')).replaceAll('import.meta.env', JSON.stringify(options.oauthSettings ?? {}));
     const code = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText;
     vm.runInNewContext(code, { exports, require: name => { assert.ok(name in imports, `Unmapped import: ${name}`); return imports[name]; }, ...globals });
     return exports;
   }
   const timeout = module('../lib/piAuthTimeout.ts', {});
+  const oauth = module('../config/piOAuth.ts', {});
   const { useAuth } = module('./useAuth.ts', {
     react,
     '../lib/axiosClient': { axiosClient, PI_ACCESS_TOKEN_KEY: 'token' },
-    '../pages/shipFleet': { ADMIN_MODE_KEY: 'admin-mode' },
-    '../config/piOAuth': { PI_OAUTH_ORIGIN: 'https://cryptoid-evolution-testnet.vercel.app' },
+    '../pages/shipFleet': { ADMIN_MODE_KEY: 'admin-mode', shipSaveNetwork: options.network ?? 'mainnet' },
+    '../config/piOAuth': { ...oauth, PI_OAUTH_ORIGIN: 'https://cryptoid-evolution-testnet.vercel.app' },
     '../lib/piAuthTimeout': timeout,
     '../lib/ownerLifecycle': { updateOwnerLifecycleAccess: value => accessUpdates.push(value) },
     axios: { default: { isAxiosError: error => error?.isAxiosError === true } },
@@ -253,4 +254,35 @@ test('the pinned released hook reproduces all four retired-attempt counterexampl
   redirect.boot(); const manual = redirect.render().signIn(); await flush(); redirect.unmount();
   host.resolve({ hostApp: 'web' }); await manual; await flush();
   assert.equal(redirect.navigations.length, 1);
+});
+
+test('ordinary production browser login stays on its origin and explains missing portal configuration', async () => {
+  const h = harness(async () => authResult('unused'), undefined, { userAgent: 'Ordinary browser', authOptions: { autoSignIn: false } });
+  h.boot(); await flush(); await h.render().signIn();
+  assert.deepEqual(h.navigations, []); assert.equal(h.posts.length, 0);
+  assert.equal(h.render().authError, 'Browser sign-in is not configured for this environment. Open this page in Pi Browser to sign in.');
+});
+
+test('configured OAuth requests use this environment callback and persist a bounded state transaction', async () => {
+  const attempts = [];
+  const h = harness(async () => authResult('unused'), undefined, { userAgent: 'Ordinary browser', authOptions: { autoSignIn: false },
+    oauthSettings: { VITE_PI_OAUTH_CLIENT_ID: 'portal-configured-client', VITE_PI_OAUTH_ORIGIN: 'https://cryptoid-evolution.vercel.app', VITE_PI_OAUTH_NETWORK: 'mainnet' },
+    sdk: { signIn: options => attempts.push(options) } });
+  h.boot(); await flush(); await h.render().signIn();
+  assert.equal(attempts.length, 1); assert.equal(attempts[0].redirectUri, 'https://cryptoid-evolution.vercel.app/signin/callback');
+  assert.equal(attempts[0].clientId, 'portal-configured-client');
+  const stored = JSON.parse(h.sessionStorage.getItem('cryptoid_pi_oauth_state_v2'));
+  assert.equal(stored.network, 'mainnet'); assert.equal(stored.state, attempts[0].state); assert.equal(stored.returnTo, '/');
+  assert.deepEqual(h.navigations, []); assert.equal(h.posts.length, 0);
+});
+
+test('signout retires a pending native sign-in without touching guest progress or stored purchases', async () => {
+  const sdk = deferred(), h = harness(() => sdk.promise);
+  h.localStorage.setItem('cryptoid_guest_save_mainnet', 'guest-progress');
+  h.localStorage.setItem('cryptoid_owned_ship_skins_mainnet', 'existing-purchases');
+  h.boot(); await flush(); await h.render().signOut();
+  sdk.resolve(authResult('retired-token')); await flush();
+  assert.equal(h.posts.length, 0); assert.equal(h.render().isAuthenticated, false);
+  assert.equal(h.localStorage.getItem('cryptoid_guest_save_mainnet'), 'guest-progress');
+  assert.equal(h.localStorage.getItem('cryptoid_owned_ship_skins_mainnet'), 'existing-purchases');
 });

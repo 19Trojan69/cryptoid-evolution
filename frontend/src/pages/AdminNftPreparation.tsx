@@ -15,6 +15,7 @@ type Preparation = {
     missingMetadataUris: number;
     missingDescriptions: number;
     unlinkedNftProducts: number;
+    preparedNftProducts?: number;
     silhouetteDesigns: number;
   };
 };
@@ -70,7 +71,7 @@ export default function AdminNftPreparation() {
         <li>{adminText("{count} Entwürfe insgesamt", { count: data.summary.total })}</li>
         <li>{adminText("{count} öffentliche Bildadressen noch offen", { count: data.summary.missingImageUris })}</li>
         <li>{adminText("{count} Metadatenadressen noch offen", { count: data.summary.missingMetadataUris })}</li>
-        <li>{adminText("{count} NFT-Editionen brauchen noch eine Kaufanbindung", { count: data.summary.unlinkedNftProducts })}</li>
+        <li>{adminText("{count} NFT-Editionen brauchen noch eine Kaufanbindung", { count: data.summary.preparedNftProducts ?? data.summary.unlinkedNftProducts })}</li>
         {data.summary.missingDescriptions > 0 && <li>{adminText("{count} Kartengeschichten noch zu prüfen", { count: data.summary.missingDescriptions })}</li>}
         <li>{adminText("{count} Entwürfe verwenden bislang eine Silhouette.", { count: data.summary.silhouetteDesigns })}</li>
       </ul>

@@ -4,7 +4,7 @@ import { axiosClient } from "../lib/axiosClient";
 import { shipSaveNetwork } from "./shipFleet";
 
 type Row = { hour: string; browser: string; network: string; visits: number; activeSeconds: number; gameSeconds: number };
-type Result = { since: string; until: string; rows: Row[] };
+type Result = { since: string; until: string; rows: Row[]; evidence?: { unpausedShareOfActiveSeconds: number | null } };
 const names: Record<string, string> = { pi: "Pi Browser", external: "Externe Browser", unknown: "Nicht erkennbar" };
 const number = (n: number) => n.toLocaleString("de-AT", { maximumFractionDigits: 1 });
 const time = (s: number) => `${number(s / 60)} Min.`;
@@ -45,9 +45,14 @@ export default function AdminUsage() {
       <button className="admin-button" onClick={() => change(() => setReload(n => n + 1))}>{t("Aktualisieren")}</button>
     </div>
     {error ? <p role="alert">{t(error)}</p> : !result ? <p role="status">{t("Statistik wird geladen …")}</p> : <>
-      <p>{t("Erfasstes Zeitfenster:")} {stamp(result.since)} – {stamp(result.until)} {t("(Wien). Speicherung: 90 Tage.")}</p>
+      <p>{t("Abfragezeitraum:")} {stamp(result.since)} – {stamp(result.until)} {t("(Wien). Speicherung: 90 Tage.")}</p>
+      <p>{t("Alle Zeitwerte sind Schätzungen aus anonymen Meldungen, keine bestätigten Sitzungsdauern.")}</p>
       <div className="admin-actions"><strong>{number(total.visits)} {t("Aufrufe")}</strong><strong>{time(total.activeSeconds)} {t("aktive Nutzung")}</strong><strong>{time(total.gameSeconds)} {t("unpausierte Spielansicht")}</strong></div>
-      {rows.length === 0 && <p>{t("Noch keine Daten im ausgewählten Zeitraum. Die Erfassung beginnt erst mit dieser Veröffentlichung; frühere Besuche lassen sich nicht nachträglich rekonstruieren.")}</p>}
+      {typeof result.evidence?.unpausedShareOfActiveSeconds === "number" && <p>{t("Anteil der unpausierten Spielansicht an der geschätzten aktiven Zeit:")} {number(result.evidence.unpausedShareOfActiveSeconds * 100)}%</p>}
+      <h3>{t("Nachweisgrenzen")}</h3>
+      <p>{t("Eindeutige Spieler: nicht verfügbar.")} {t("Wiederkehrrate: nicht verfügbar.")}</p>
+      <p>{t("Ohne Besuchskennungen und Kontoverknüpfungen lassen sich einzelne Spieler und ihre Rückkehr aus diesen Summen nicht bestimmen.")}</p>
+      {rows.length === 0 && <p>{t("Keine Meldungen im ausgewählten Zeitraum.")}</p>}
       <h3>{t("Browser-Verteilung")}</h3>
       <div className="admin-usage-scroll"><table><thead><tr><th>{t("Browser")}</th><th>{t("Aufrufe")}</th><th>{t("Anteil")}</th><th>{t("Aktive Nutzung")}</th><th>{t("Spielansicht")}</th></tr></thead><tbody>{Object.entries(names).map(([key, label]) => { const s = totals(rows.filter(r => r.browser === key)); return <tr key={key}><th>{t(label)}</th><td>{number(s.visits)}</td><td>{total.visits ? number(s.visits / total.visits * 100) : 0}%</td><td>{time(s.activeSeconds)}</td><td>{time(s.gameSeconds)}</td></tr>; })}</tbody></table></div>
       <h3>{t("Tagesübersicht")}</h3>

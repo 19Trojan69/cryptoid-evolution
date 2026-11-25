@@ -14,7 +14,7 @@ export type IntegrationReport = {
     ownerReleased: boolean | null;
     walletSigning: string;
     reservationMode: false;
-    checks: { id: string; ready: boolean }[];
+    checks: { id: string; ready: boolean; reason?: string }[];
     explanation: string;
   };
 };
