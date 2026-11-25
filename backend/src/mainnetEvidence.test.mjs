@@ -35,6 +35,8 @@ function evidence() {
     keyFingerprint: createHash("sha256").update(key).digest("hex"),
     reviewedAt: new Date(Date.now() - 600_000).toISOString(), validUntil: new Date(Date.now() + 86400_000).toISOString(),
     walletApproval: { ...approval }, appApproval: { ...approval }, checkoutPaymentId: "checkout-verification-1",
+    walletConnection: { status: "connected", appId: "test-app-mainnet", network: "Pi Network",
+      walletAddress: wallet, codeRevision: revision, evidenceSha256: "e".repeat(64), sourceUrl: approval.sourceUrl },
     checkoutAcceptance: { kind: "end_to_end_u2a", codeRevision: revision, paymentId: "checkout-verification-1",
       reviewedBy: "verified-owner", verifiedAt: new Date(Date.now() - 1200_000).toISOString(), evidenceSha256: "d".repeat(64) },
   };
@@ -124,6 +126,39 @@ test("valid owner-reviewed proof probes only its existing receipt without issuin
   assert.equal(h.apiReads.length, 1);
   assert.equal(h.apiReads[0].url, "https://api.minepi.com/v2/payments/checkout-verification-1");
   assert.deepEqual(h.apiReads[0].options, { headers: { Authorization: `Key ${key}` }, timeout: 4000, maxRedirects: 0 });
+});
+
+test("wallet approval alone does not attest that the wallet was connected to this app", async t => {
+  environment(t);
+  const e = evidence();
+  delete e.walletConnection;
+  const h = fixture(t, { evidence: e });
+  const checks = await h.inspect();
+  assert.equal(checks.walletConnection.ready, false);
+  assert.equal(checks.walletConnection.reason, "approved_wallet_evidence_required");
+  assert.equal(checks.externalPiApproval.ready, true, "app approval remains a distinct fact");
+  assert.equal(checks.walletCheckout.ready, false);
+  assert.equal(h.orderReads.length + h.apiReads.length, 0);
+});
+
+test("connection evidence must explicitly match the reviewed app, network, wallet and revision", async t => {
+  environment(t);
+  for (const change of [
+    { status: "approved" }, { status: "pending" }, { appId: "another-app" }, { network: "Pi Testnet" },
+    { walletAddress: "G" + "B".repeat(55) }, { codeRevision: "2".repeat(40) },
+    { evidenceSha256: null }, { sourceUrl: "https://develop.pi.attacker.invalid/wallet" },
+    { sourceUrl: "http://develop.pi/wallet" }, { sourceUrl: "https://secret@develop.pi/wallet" },
+  ]) {
+    const e = evidence();
+    e.walletConnection = { status: "connected", appId: e.appId, network: e.network,
+      walletAddress: e.walletAddress, codeRevision: e.codeRevision,
+      evidenceSha256: "e".repeat(64), sourceUrl: "https://develop.pi/app/test-app-mainnet", ...change };
+    const h = fixture(t, { evidence: e });
+    const checks = await h.inspect();
+    assert.equal(checks.walletConnection.ready, false, JSON.stringify(change));
+    assert.equal(checks.walletCheckout.ready, false);
+    assert.equal(h.orderReads.length + h.apiReads.length, 0);
+  }
 });
 
 test("missing, stale, mismatched or unreviewed portal evidence cannot reach order or Pi reads", async t => {

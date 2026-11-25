@@ -41,6 +41,7 @@ server `adminCollection`.
 | `reviewedAt` | Actual review timestamp, no future time |
 | `validUntil` | Future expiry, after review and at most 90 days from review |
 | `walletApproval` | Object containing `status: approved`, an official source URL and SHA-256 of the retained review artifact |
+| `walletConnection` | Separate reviewed connection artifact: `status: connected`, exact `appId`, `network: Pi Network`, `walletAddress`, `codeRevision`, official `sourceUrl` and retained-artifact `evidenceSha256` |
 | `appApproval` | Same shape, recording the actual required Pi app/payment approval reviewed for this app |
 | `checkoutPaymentId` | Identifier of an existing completed, server-recorded Mainnet U2A payment for this app and revision |
 | `checkoutAcceptance` | Retained, reviewed acceptance of the actual end-to-end U2A flow for this exact revision, owner and payment; see below. |
@@ -50,6 +51,17 @@ Each approval object's `sourceUrl` must use HTTPS and exactly `develop.pi`,
 nonstandard port. `evidenceSha256` is the digest of the actual retained artifact,
 not invented placeholder data. Retain the artifact in authorized private storage
 with sufficient context to review the app, wallet and Pi approval involved.
+
+Incoming-wallet approval and connecting that wallet to the app are separate
+steps. An approval artifact alone cannot mark `walletConnection` ready. The
+connection artifact must explicitly record the actual connected state and match
+the outer record's app, Mainnet network, wallet and code revision. It follows the
+same official-source and retained-artifact rules as approvals; the outer verified
+owner review and expiry bind all of these facts. Missing, pending or mismatched
+connection evidence stops the checkout inspection before order or Pi reads.
+This remains a reviewed operator record, not a fabricated wallet-status API or
+an inference from a configured public address. A connected-wallet artifact also
+does not replace the independent end-to-end checkout acceptance below.
 
 The code treats this as **operator-reviewed evidence**. It does not fetch a
 portal status or infer Core Team approval from an official webpage's existence,
