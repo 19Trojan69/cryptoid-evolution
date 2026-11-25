@@ -372,12 +372,12 @@ test('local preview retains the existing Pi-key service for payments and payment
     return new Response('{}', { headers: { 'content-type': 'application/json' } });
   });
   const gateway = createApiGateway(async () => { throw new Error('must not load backend'); }, () => preview);
-  for (const path of ['payments/approve', 'payments/complete', 'payments/incomplete', 'admin/payments/id/refresh', 'admin/status', 'notifications/send']) {
+  for (const path of ['payments/approve', 'payments/complete', 'payments/incomplete', 'admin/payments/id/refresh', 'admin/status']) {
     const res = response();
     await gateway({ method: 'POST', url: `/api/index?path=${path}`, body: {}, headers: { host: 'preview.vercel.app' } }, res);
     assert.equal(res.headers['x-cryptoid-backend'], 'production-proxy');
   }
-  assert.equal(urls.length, 6);
+  assert.equal(urls.length, 5);
 });
 
 test('local score and reset routes stay Testnet and a failed startup can recover', async t => {

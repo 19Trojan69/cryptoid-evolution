@@ -11,8 +11,12 @@ export function creditWeaponOrders(stock: WeaponStock, orders: any[], network: s
   for (const order of orders) {
     const offer = hangarCatalog.find(item => item.id === order.product_id);
     if (!offer || offer.kind !== 'weapon' || !order.paid || order.cancelled || !order.pi_payment_id) continue;
-    if (network !== 'testnet' || !isTestnetWeaponPurchaseEnabled(offer, ownerTestnet)) continue;
-    if (order.payment_network !== 'Pi Testnet') continue;
+    if (network === 'testnet') {
+      if (!isTestnetWeaponPurchaseEnabled(offer, ownerTestnet) || order.payment_network !== 'Pi Testnet') continue;
+    } else if (network === 'mainnet') {
+      // Only server-confirmed Mainnet receipts, never imported/browser stock.
+      if (order.payment_network !== 'Pi Network' || !order.txid || !order.approved_at || !order.completed_at) continue;
+    } else continue;
     if (next.credited.includes(order.pi_payment_id)) continue;
     const quantity = order.weapon_model === 2 ? chargeQuantity(order.quantity) : 2;
     if (!quantity) continue;

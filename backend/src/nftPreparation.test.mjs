@@ -18,7 +18,12 @@ test("the preparation contains every existing design once and stays unpublished"
   assert.equal(result.catalogHash, nftPreparationManifest().catalogHash);
   assert.equal(result.summary.missingImageUris, 500);
   assert.equal(result.summary.missingMetadataUris, 500);
-  assert.equal(result.summary.unlinkedNftProducts, 390);
+  assert.equal(result.summary.unlinkedNftProducts, 0);
+  assert.equal(result.summary.preparedNftProducts, 390);
+  assert.equal(result.issuance.state, "unavailable");
+  assert.equal(result.issuance.blockchainOwnershipVerified, false);
+  assert.equal(result.issuance.ready, false);
+  assert.equal(result.metadata.ready, false);
   assert.equal(result.summary.silhouetteDesigns, 98);
   for (const card of result.cards) {
     assert.ok(Number.isSafeInteger(card.maxSupply) && card.maxSupply > 0, card.id);
@@ -48,7 +53,8 @@ test("paid boss editions require a purchase and preserve their individual victor
       assert.equal(card.acquisition.minimumWins, wins);
       assert.equal(card.maxSupply, supply);
       assert.equal(card.price.amount, price);
-      assert.equal(card.productId, null);
+      assert.equal(card.productId, `nft_boss_${String(boss).padStart(2, "0")}_${edition}`);
+      assert.equal(card.productState, "prepared");
     }
   }
 });
@@ -75,6 +81,8 @@ test("retro definitions preserve all six rank terms and the token-specific ship 
     assert.equal(card.maxSupply, retroNftTerms[card.edition].supply);
     assert.equal(card.price.amount, retroNftTerms[card.edition].pricePi);
     assert.equal(card.acquisition.kind, "retro_purchase");
+    assert.equal(card.productId, `nft_retro_${String(card.acquisition.level).padStart(3, "0")}_${card.edition}`);
+    assert.equal(card.productState, "prepared");
     assert.deepEqual(card.acquisition.requiredTokenTraits, ["modelId", "stage", "colorId"]);
   }
 });

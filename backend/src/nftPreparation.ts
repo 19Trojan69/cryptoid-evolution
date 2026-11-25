@@ -7,6 +7,7 @@ import { premiumBossCard, premiumBossEditions } from "./premiumBossNft";
 import { retroNftScenes } from "./retroNftScenes";
 import { rewardNetwork } from "./rewardNetwork";
 import { shipNftCatalog } from "./shipNftEligibility";
+import { inspectNftReadiness } from "./nftReadiness";
 
 type Acquisition =
   | { kind: "boss_victory"; bossId: number; minimumWins: number }
@@ -21,6 +22,9 @@ export type PreparedNftCard = {
   maxSupply: number;
   price: { currency: "Pi" | "Shards"; amount: number | null; nftIncluded: boolean };
   productId: string | null;
+  // A stable preparation ID is not an enabled payment offer. Only the released
+  // hangar catalog may accept a payment, and NFT delivery remains unavailable.
+  productState: "prepared" | "existing_ship_offer" | "not_required";
   metadataUri: null;
   acquisition: Acquisition;
   artwork: { network: "testnet"; ownerOnly: true; path: string; design: "referenced" | "silhouette" };
@@ -53,7 +57,8 @@ export function nftPreparationManifest(bossStories: ReadonlyMap<string, string> 
         edition,
         maxSupply: terms.supply,
         price: { currency: "Pi", amount: "pricePi" in terms ? terms.pricePi : 0, nftIncluded: false },
-        productId: null,
+        productId: free ? null : `nft_boss_${number}_${edition}`,
+        productState: free ? "not_required" : "prepared",
         metadataUri: null,
         acquisition: free
           ? { kind: "boss_victory", bossId, minimumWins: 1 }
@@ -76,7 +81,8 @@ export function nftPreparationManifest(bossStories: ReadonlyMap<string, string> 
         edition,
         maxSupply: card.supply,
         price: { currency: "Pi", amount: card.pricePi, nftIncluded: false },
-        productId: null,
+        productId: `nft_boss_${number}_${edition}`,
+        productState: "prepared",
         metadataUri: null,
         acquisition: { kind: "boss_purchase", bossId, minimumWins: card.requiredWins, requiresBossReached: true },
         artwork: preview(`/admin/nft-collection/bosses/${bossId}/${edition}`, card.showFullPreview ? "referenced" : "silhouette"),
@@ -99,6 +105,7 @@ export function nftPreparationManifest(bossStories: ReadonlyMap<string, string> 
     maxSupply: card.maxSupply,
     price: { currency: card.stage === 1 ? "Shards" : "Pi", amount: card.stage === 1 ? card.standardPriceShards : card.upgradePricePi, nftIncluded: true },
     productId: card.productId,
+    productState: card.productId ? "existing_ship_offer" : "not_required",
     metadataUri: null,
     acquisition: { kind: "ship", shipId: card.shipId, stage: card.stage, proof: card.acquisition, requiresProductId: card.requiresProductId },
     artwork: preview(`/admin/nft-collection/ships/${card.shipId}/${card.edition.toLowerCase()}`),
@@ -123,7 +130,8 @@ export function nftPreparationManifest(bossStories: ReadonlyMap<string, string> 
         edition,
         maxSupply: terms.supply,
         price: { currency: "Pi", amount: terms.pricePi, nftIncluded: false },
-        productId: null,
+        productId: `nft_retro_${level.padStart(3, "0")}_${edition}`,
+        productState: "prepared",
         metadataUri: null,
         acquisition: { kind: "retro_purchase", level: Number(level), rank, requiredTokenTraits: ["modelId", "stage", "colorId"] },
         artwork: preview(`/admin/nft-collection/retro/${level}/${edition}`),
@@ -139,6 +147,7 @@ export function nftPreparationManifest(bossStories: ReadonlyMap<string, string> 
   });
 
   const cards = [...bosses, ...ships, ...retro];
+  const readiness = inspectNftReadiness();
   const summary = {
     total: cards.length,
     bosses: bosses.length,
@@ -149,12 +158,15 @@ export function nftPreparationManifest(bossStories: ReadonlyMap<string, string> 
     missingDescriptions: cards.filter(card => !card.metadataDraft.description).length,
     unlinkedNftProducts: cards.filter(card => card.price.currency === "Pi" && (card.price.amount ?? 0) > 0 && !card.productId).length,
     silhouetteDesigns: cards.filter(card => card.artwork.design === "silhouette").length,
+    preparedNftProducts: cards.filter(card => card.productState === "prepared").length,
   };
   return {
     schemaVersion: 1,
     network: "mainnet",
     phase: "preparation",
     publishable: false,
+    issuance: { state: "unavailable", blockchainOwnershipVerified: false, ...readiness.issuance },
+    metadata: readiness.metadata,
     catalogHash: createHash("sha256").update(JSON.stringify(cards)).digest("hex"),
     summary,
     cards,
@@ -190,6 +202,8 @@ export function mountNftPreparation(router: Router) {
         schemaVersion: manifest.schemaVersion,
         phase: manifest.phase,
         publishable: manifest.publishable,
+        issuance: manifest.issuance,
+        metadata: manifest.metadata,
         catalogHash: manifest.catalogHash,
         summary: manifest.summary,
       });

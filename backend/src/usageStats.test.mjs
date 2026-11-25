@@ -45,3 +45,23 @@ test("collection writes aggregate counters only without consulting authenticatio
     assert.equal(writes.length, 1);
   } finally { await new Promise(r => server.close(r)); }
 });
+
+test("usage evidence derives only totals and a time share, with unknown people and return rate", () => {
+  const rows = [
+    { visits: 4, activeSeconds: 90, gameSeconds: 60 },
+    { visits: 1, activeSeconds: 30, gameSeconds: 0 },
+  ];
+  const snapshot = JSON.stringify(rows);
+  const evidence = stats.usageEvidence(rows);
+  assert.deepEqual(evidence.totals, { pageOpenings: 5, estimatedActiveSeconds: 120, estimatedUnpausedGameSeconds: 60 });
+  assert.equal(evidence.unpausedShareOfActiveSeconds, 0.5);
+  assert.equal(evidence.uniquePlayers.available, false);
+  assert.equal(evidence.uniquePlayers.value, null);
+  assert.equal(evidence.retentionRate.available, false);
+  assert.equal(evidence.retentionRate.value, null);
+  assert.equal(evidence.source, "anonymous_client_reports");
+  assert.equal(evidence.durations, "estimated");
+  assert.equal(stats.usageEvidence([]).unpausedShareOfActiveSeconds, null);
+  assert.equal(stats.usageEvidence([{ visits: 3, activeSeconds: 0, gameSeconds: 0 }]).unpausedShareOfActiveSeconds, null);
+  assert.equal(JSON.stringify(rows), snapshot);
+});

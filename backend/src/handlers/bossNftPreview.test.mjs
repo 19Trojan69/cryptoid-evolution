@@ -87,7 +87,7 @@ test("neither a mismatched token nor reaching a boss exposes artwork without a c
     rewardsByNetwork: { mainnet: { bossWins: { 1: 1 } } } });
   assert.equal((await f.request({ token: "another-token" })).code, 401);
   assert.equal((await f.request({ testnetSave: false })).code, 404);
-  assert.deepEqual((await f.request()).body, { owner: "pilot", total: 0, pageSize: 6, cards: [] });
+  assert.deepEqual((await f.request()).body, { state: "preview", blockchainOwnershipVerified: false, owner: "pilot", total: 0, pageSize: 6, cards: [] });
   assert.deepEqual(f.artLookups, []);
 });
 

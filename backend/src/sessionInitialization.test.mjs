@@ -242,7 +242,7 @@ if (fixture >= 0) {
     process.exitCode = 1;
   }
 } else {
-  test('a Testnet save verifies a new Pi token instead of using the previous local account', async () => {
+  for (const [testnetSave, path] of [[true, '/progress/checkpoint'], [false, '/user/me'], [false, '/hangar/power'], [false, '/payments/approve']]) test(`${path} verifies a new Pi token instead of using the previous cookie account`, async () => {
     const source = readFileSync(new URL('./index.ts', import.meta.url), 'utf8');
     const start = source.indexOf('app.use(async (req, _res, next) => {', source.indexOf('// If a proxied Pi Browser request'));
     const end = source.indexOf('app.use(restoreAdminPreview)', start);
@@ -250,15 +250,16 @@ if (fixture >= 0) {
     let authenticate;
     const user = { _id: 'pilot-b', uid: 'pilot-b', username: 'Pilot B', accessToken: 'new-token' };
     const verified = [];
-    new Function('app', 'deletedAccessToken', 'platformAPIClient', source.slice(start, end))(
+    const { notificationContext, verifiedNotificationIdentity } = require('../build/notificationSecurity.js');
+    new Function('app', 'deletedAccessToken', 'platformAPIClient', 'notificationContext', 'verifiedNotificationIdentity', source.slice(start, end))(
       { use(handler) { authenticate = handler; } }, async () => false,
       { async get(path, config) {
         verified.push([path, config.headers.Authorization]);
         return { data: user };
-      } },
+      } }, notificationContext, verifiedNotificationIdentity,
     );
     const req = {
-      testnetSave: true,
+      testnetSave, path,
       get: name => name === 'authorization' ? 'Bearer new-token' : undefined,
       session: { currentUser: { uid: 'pilot-a', accessToken: 'old-token' }, scoreRun: { id: 'old-run' }, adminMode: true, adminUid: 'pilot-a' },
       app: { locals: { userCollection: {

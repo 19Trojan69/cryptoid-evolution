@@ -3,6 +3,7 @@ import { communityLocale, translateCommunity } from "./communityTranslation";
 import { testnetAccountDeletionEnabled } from './playerAdministration';
 import { serveGalaxyArcade, servePublicGalaxyArcade, galaxyArcadeStationIndex } from "./galaxyArcade";
 import { standardHullInventoryColor } from './shipLivery';
+import { notificationServerNetwork } from './notificationSecurity';
 
 const productionBackendOrigin = "https://cryptoid-evolution.vercel.app";
 
@@ -12,6 +13,8 @@ type Backend = {
   proxyAccountAllowed?: (req: any) => Promise<boolean>;
 };
 type GatewayEnvironment = {
+  VERCEL?: string;
+  CRYPTOID_APP_NETWORK?: string;
   VERCEL_ENV?: string;
   VERCEL_PROJECT_PRODUCTION_URL?: string;
   CRYPTOID_TESTNET_BACKEND?: string;
@@ -129,6 +132,8 @@ const proxyToProduction = async (
 export const createApiGateway = (
   loadBackend: () => Promise<Backend>,
   environment: () => GatewayEnvironment = () => ({
+    VERCEL: process.env.VERCEL,
+    CRYPTOID_APP_NETWORK: process.env.CRYPTOID_APP_NETWORK,
     VERCEL_ENV: process.env.VERCEL_ENV,
     VERCEL_PROJECT_PRODUCTION_URL: process.env.VERCEL_PROJECT_PRODUCTION_URL,
     CRYPTOID_TESTNET_BACKEND: process.env.CRYPTOID_TESTNET_BACKEND,
@@ -147,6 +152,7 @@ export const createApiGateway = (
       const env = environment();
       const testnet = isTestnetDeployment(req, env);
       const localTestnet = localTestnetEnabled(env);
+      req.notificationNetwork = notificationServerNetwork(env) ?? undefined;
       if (testnet && /^ship-nft-preview(?:\/|$)/.test(path)) return res.status(404).json({ error: "not_found" });
       const arcade = /^admin\/galaxy-minigames(?:\/(.*))?$/.exec(path);
       if (arcade) {
@@ -205,7 +211,10 @@ export const createApiGateway = (
       if (testnet && /^(?:boss-nft-preview|testnet-ship-nft-preview)(?:\/|$)/i.test(path))
         return res.status(404).json({ error: "not_found" });
       // Serve network-scoped features locally. Account sign-in and payments use the existing proxy.
-      const localFeature = powerRoute || testnetSave || testnetInventory || bossNftGallery || adminNftCollection || !!arcadeRating || arcadeProgress || arcadeStickerBackup || testnet && (/^progress\/boss-summary\/(?:prepare|continue)$/.test(path)
+      // Never relay a notification request to another Pi app/backend. In
+      // particular an anonymous Testnet request must not reach a remote client.
+      const notificationRoute = /^notifications(?:\/|$)/.test(path);
+      const localFeature = notificationRoute || powerRoute || testnetSave || testnetInventory || bossNftGallery || adminNftCollection || !!arcadeRating || arcadeProgress || arcadeStickerBackup || testnet && (/^progress\/boss-summary\/(?:prepare|continue)$/.test(path)
         || /^admin\/players(?:\/|$)/.test(path));
       // The public catalog must match this deployment's Shop, even while
       // account and payment requests use the established Pi service.
@@ -291,9 +300,12 @@ export const createApiGateway = (
         }
         return await proxyToProduction(req, res, path, url);
       }
-      if (localTestnet || localFeature) {
+      if (localTestnet || testnet && localFeature) {
         req.headers ??= {};
         req.headers["x-cryptoid-app-network"] = "testnet";
+      } else if (notificationRoute) {
+        req.headers ??= {};
+        req.headers["x-cryptoid-app-network"] = req.notificationNetwork ?? "mainnet";
       }
       if (testnetSave || testnetInventory || bossNftGallery || adminNftCollection || powerRoute || arcadeRating || arcadeProgress || arcadeStickerBackup) req.testnetSave = true;
       ready ??= loadBackend().then(async (backend) => {
@@ -305,7 +317,7 @@ export const createApiGateway = (
       req.url = "/" + path + (query ? "?" + query : "");
       res.setHeader(
         "x-cryptoid-backend",
-        localTestnet || localFeature ? "testnet-local" : "local",
+        localTestnet || testnet && localFeature ? "testnet-local" : "local",
       );
       res.setHeader("x-cryptoid-score-api", "5");
       return backend.app(req, res);

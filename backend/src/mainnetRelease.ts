@@ -1,29 +1,36 @@
 import type { Request, Router } from "express";
 import { rewardNetwork } from "./rewardNetwork";
+import { inspectCheckoutEvidence, type CapabilityCheck } from "./mainnetEvidence";
+import { inspectNftReadiness } from "./nftReadiness";
 
 const releaseId = "mainnet-release:v1";
 
 export type MainnetReadiness = {
   ready: boolean;
-  checks: { id: "database" | "piPayments" | "walletCheckout" | "nftIssuance" | "nftMetadata"; ready: boolean }[];
+  checks: CapabilityCheck[];
 };
 
-export function inspectMainnetReadiness(req: Request): MainnetReadiness {
+export async function inspectMainnetReadiness(req: Request): Promise<MainnetReadiness> {
+  let database = false;
+  const locals = req.app.locals;
+  if (locals.adminCollection && locals.orderCollection && locals.userCollection && locals.databaseClient) {
+    try { await locals.databaseClient.db().command({ ping: 1, maxTimeMS: 3000 }); database = true; }
+    catch { /* A failed read-only probe keeps all new purchases locked. */ }
+  }
+  const nft = inspectNftReadiness(req);
   const checks: MainnetReadiness["checks"] = [
-    { id: "database", ready: Boolean(req.app.locals.adminCollection && req.app.locals.orderCollection && req.app.locals.userCollection) },
-    { id: "piPayments", ready: Boolean(process.env.PI_API_KEY?.trim()) },
-    { id: "walletCheckout", ready: false },
-    // The current application prepares artwork and eligibility. Actual issuance
-    // and immutable metadata must be integrated before either check can pass.
-    { id: "nftIssuance", ready: false },
-    { id: "nftMetadata", ready: false },
+    { id: "database", ready: database, reason: database ? "storage_available" : "storage_unavailable" },
+    ...await inspectCheckoutEvidence(req),
+    { id: "nftIssuance", ...nft.issuance },
+    { id: "nftMetadata", ...nft.metadata },
   ];
   return { ready: checks.every(check => check.ready), checks };
 }
 
 type ReleaseState = { released: boolean; revision: number };
 
-export async function readMainnetRelease(req: Request, readiness = inspectMainnetReadiness(req)) {
+export async function readMainnetRelease(req: Request, inspected: MainnetReadiness | Promise<MainnetReadiness> = inspectMainnetReadiness(req)) {
+  const readiness = await inspected;
   const collection = req.app.locals.adminCollection;
   if (!collection) throw new Error("release_database_unavailable");
   const saved = await collection.findOne({ _id: releaseId });
@@ -49,7 +56,7 @@ export async function mainnetPurchasesReleased(req: Request): Promise<boolean> {
 }
 
 // The parent Admin router performs a fresh verified-owner check on every route.
-export function mountMainnetRelease(router: Router, inspect = inspectMainnetReadiness) {
+export function mountMainnetRelease(router: Router, inspect: (req: Request) => MainnetReadiness | Promise<MainnetReadiness> = inspectMainnetReadiness) {
   router.get("/mainnet-release", async (req, res) => {
     res.setHeader("Cache-Control", "no-store");
     if (rewardNetwork(req) !== "mainnet") return res.status(403).json({ error: "mainnet_admin_required" });
@@ -65,7 +72,7 @@ export function mountMainnetRelease(router: Router, inspect = inspectMainnetRead
       return res.status(400).json({ error: "invalid_release_change" });
     }
     try {
-      const readiness = inspect(req);
+      const readiness = await inspect(req);
       const current = await readMainnetRelease(req, readiness);
       if (action === "release" && !readiness.ready) {
         return res.status(409).json({ error: "mainnet_not_ready", ...current });
