@@ -27,3 +27,14 @@ test('confirmed orders credit quantity once, retain legacy charge counts and iso
   assert.deepEqual(creditWeaponOrders(stock,orders,'testnet'),stock);
   assert.deepEqual(creditWeaponOrders(emptyWeaponStock(),orders,'mainnet').balances,{});
 });
+
+test('verified Mainnet weapon batches credit once into their own stock without changing Testnet', () => {
+  const receipt = { paid: true, product_id: 'weapon_plasma', payment_network: 'Pi Network',
+    pi_payment_id: 'mainnet-weapon-batch', txid: 'a'.repeat(64), approved_at: new Date(), completed_at: new Date(),
+    weapon_model: 2, quantity: 15 };
+  const stock = creditWeaponOrders(emptyWeaponStock(), [receipt], 'mainnet');
+  assert.equal(stock.balances.weapon_plasma, 15);
+  assert.deepEqual(creditWeaponOrders(stock, [receipt], 'mainnet'), stock);
+  assert.deepEqual(creditWeaponOrders(emptyWeaponStock(), [receipt], 'testnet', true).balances, {});
+  assert.deepEqual(creditWeaponOrders(emptyWeaponStock(), [{ ...receipt, txid: null }], 'mainnet').balances, {});
+});

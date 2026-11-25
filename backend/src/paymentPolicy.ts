@@ -11,3 +11,14 @@ export const isTestnetWeaponPurchaseEnabled = (offer: { id?: string; kind: strin
 export const testPiPurchaseAllowed = (offer: { id?: string; kind: string } | undefined, network: unknown, ownerTestnet = false) =>
   network === "Pi Testnet" && Boolean(offer && (isTestnetWeaponPurchaseEnabled(offer, ownerTestnet) ||
     ownerTestnet === true && ["power", "armor", "ship_upgrade"].includes(offer.kind)));
+
+// Mainnet keeps the existing all-capabilities release policy, including NFT
+// delivery for ships. A browser value can only change presentation; the server
+// separately evaluates its persisted operator release and actual readiness.
+export const piPurchaseAllowed = (
+  offer: { id?: string; kind: string } | undefined,
+  network: "Pi Network" | "Pi Testnet",
+  options: { ownerTestnet?: boolean; mainnetReleased?: boolean } = {},
+) => network === "Pi Testnet"
+  ? testPiPurchaseAllowed(offer, network, options.ownerTestnet)
+  : options.mainnetReleased === true && Boolean(offer && ["weapon", "power", "armor", "ship_upgrade"].includes(offer.kind));

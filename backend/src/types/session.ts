@@ -4,6 +4,8 @@ declare module 'express-serve-static-core' {
   export interface Request {
     // Set by the Testnet gateway after selecting the local save handler.
     testnetSave?: true;
+    // Assigned from trusted deployment configuration, never an HTTP header.
+    notificationNetwork?: import("../notificationSecurity").NotificationNetwork;
   }
 }
 

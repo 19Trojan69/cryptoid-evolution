@@ -18,6 +18,7 @@ import { bestRunField, careerField } from "../scoreRules";
 import { mountAdminPlayerEndpoints } from '../playerAdministration';
 import { mountBossNftGallery } from "../bossNftGallery";
 import { mountAdminNftCollection } from "./adminNftCollection";
+import { usageEvidence } from "../usageStats";
 
 const networks = ["all", "mainnet", "testnet", "unknown"] as const;
 const statuses = ["all", "confirmed", "pending", "cancelled"] as const;
@@ -53,7 +54,7 @@ export default function mountAdminEndpoints(router: Router) {
     try {
       const filter = { hour: { $gte: since, $lte: until }, ...(network === "all" ? {} : { network }) };
       const rows = await collection.find(filter, { projection: { _id: 0, hour: 1, browser: 1, network: 1, visits: 1, activeSeconds: 1, gameSeconds: 1 } }).sort({ hour: -1 }).limit(13_000).toArray();
-      return res.json({ since, until, days, rows, retentionDays: 90 });
+      return res.json({ since, until, days, rows, retentionDays: 90, evidence: usageEvidence(rows) });
     } catch { return res.status(503).json({ error: "statistics_unavailable" }); }
   });
 

@@ -23,6 +23,7 @@ function harness(path, priorOrders = [], { productId = 'armor_hull_mk2', paid = 
   const orders = structuredClone(priorOrders);
   if (path !== '/approve') orders.push({ pi_payment_id: paymentId, user: 'pilot-a', product_id: productId, paid });
   const writes = [], posts = [], reads = [];
+  let completed = false;
   const matches = (doc, query) => Object.entries(query).every(([key, value]) =>
     value && typeof value === 'object' && '$ne' in value ? doc[key] !== value.$ne : doc[key] === value);
   const orderCollection = {
@@ -45,11 +46,11 @@ function harness(path, priorOrders = [], { productId = 'armor_hull_mk2', paid = 
         identifier: paymentId, user_uid: 'pilot-a', direction: 'user_to_app',
         amount: productId === 'armor_hull_mk2' ? 29.9 : 19.9,
         metadata: { productId }, network: 'Pi Testnet',
-        status: { developer_approved: path !== '/approve', transaction_verified: true },
+        status: { developer_approved: path !== '/approve', developer_completed: completed, transaction_verified: true },
         transaction: { txid: 'verified-transaction' },
       } };
     },
-    async post(url, body) { posts.push({ url, body }); },
+    async post(url, body) { posts.push({ url, body }); if (url.endsWith('/complete')) completed = true; },
   };
   const routes = {};
   mountPayments({ post: (route, handler) => { routes[route] = handler; } });
@@ -57,7 +58,7 @@ function harness(path, priorOrders = [], { productId = 'armor_hull_mk2', paid = 
     orders, writes, posts, reads,
     async call() {
       const body = path === '/incomplete' ? { payment: { identifier: paymentId } } : { paymentId, txid: 'verified-transaction' };
-      const req = { body, session: { currentUser: { uid: 'pilot-a' } }, headers: {}, app: { locals: { orderCollection, pi } } };
+      const req = { body, session: { currentUser: { uid: 'pilot-a' } }, headers: { 'x-cryptoid-app-network': 'testnet' }, app: { locals: { orderCollection, pi } } };
       const res = { code: 200, status(code) { this.code = code; return this; }, json(body) { this.body = body; return this; } };
       await routes[path](req, res);
       return res;

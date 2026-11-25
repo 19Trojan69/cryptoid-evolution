@@ -34,6 +34,7 @@ import mountProgressEndpoints from "./handlers/progress";
 // https://stackoverflow.com/questions/65108033/property-user-does-not-exist-on-type-session-partialsessiondata#comment125163548_65381085
 import "./types/session";
 import mountNotificationEndpoints from "./handlers/notifications";
+import { notificationContext, verifiedNotificationIdentity } from "./notificationSecurity";
 
 const dbName = env.mongo_db_name;
 const mongoUri = env.mongo_uri || `mongodb://${env.mongo_host}/${dbName}`;
@@ -122,8 +123,10 @@ app.use(async (req, _res, next) => {
   const match = authorization.match(/^Bearer\s+(.+)$/i);
   const accessToken = match?.[1]?.trim();
   // A new Pi account may be signed in while a previously issued cookie survives.
-  const scopedBearer = req.testnetSave || req.path === "/ship-nft-preview" || req.path === "/ship-nft-preview/";
-  if (scopedBearer && accessToken && req.session.currentUser && req.session.currentUser.accessToken !== accessToken) {
+  // A verified account token takes precedence over a surviving account cookie
+  // on every route, including normal session reads and checkout. Notification
+  // requests below must sign in separately rather than rehydrate remotely.
+  if (accessToken && req.session.currentUser && req.session.currentUser.accessToken !== accessToken) {
     req.session.currentUser = null;
     req.session.scoreRun = null;
     req.session.adminMode = false;
@@ -141,7 +144,9 @@ app.use(async (req, _res, next) => {
     return next();
   }
 
-  if (!accessToken) return next();
+  // Notification dispatch requires an existing verified session. Do not turn
+  // arbitrary notification bearer input into a remote authentication request.
+  if (!accessToken || /^\/notifications(?:\/|$)/.test(req.path)) return next();
 
   const userCollection = req.app.locals.userCollection;
   if (!userCollection) return next();
@@ -158,11 +163,15 @@ app.use(async (req, _res, next) => {
       return _res.status(410).json({ error: 'account_deleted' });
     }
 
+    const notificationApp = notificationContext(req);
+    const notificationIdentity = verifiedNotificationIdentity(me.data, notificationApp);
     let currentUser = await userCollection.findOne({ uid });
     if (currentUser) {
       await userCollection.updateOne(
         { _id: currentUser._id },
-        { $set: { username, accessToken } },
+        { $set: { username, accessToken,
+          ...(notificationApp ? { [`notificationAuthByNetwork.${notificationApp.network}`]: notificationIdentity } : {}),
+        } },
       );
       currentUser = await userCollection.findOne({ uid });
     } else {
@@ -171,6 +180,7 @@ app.use(async (req, _res, next) => {
         username,
         roles: Array.isArray(me.data?.roles) ? me.data.roles : [],
         accessToken,
+        ...(notificationApp ? { notificationAuthByNetwork: { [notificationApp.network]: notificationIdentity } } : {}),
       });
       currentUser = await userCollection.findOne({ _id: inserted.insertedId });
     }

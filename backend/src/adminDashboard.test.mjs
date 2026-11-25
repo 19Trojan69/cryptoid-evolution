@@ -77,6 +77,10 @@ test("owner statistics are bounded hourly aggregates, with no visitor joins", as
     const data = await response.json();
     assert.equal(data.rows[0].visits, 4);
     assert.equal(data.retentionDays, 90);
+    assert.deepEqual(data.evidence.totals, { pageOpenings: 4, estimatedActiveSeconds: 90, estimatedUnpausedGameSeconds: 60 });
+    assert.equal(data.evidence.uniquePlayers.value, null);
+    assert.equal(data.evidence.retentionRate.available, false);
+    assert.equal(data.evidence.unpausedShareOfActiveSeconds, 60 / 90);
     assert.equal(query.network, "testnet");
     assert.equal(projection._id, 0);
     assert.equal(limit, 13000);

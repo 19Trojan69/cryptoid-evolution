@@ -20,3 +20,26 @@ export function usageIncrement(body: unknown, now = new Date(), network = "mainn
     counters: { visits: visit ? 1 : 0, activeSeconds: seconds, gameSeconds: b.playing === true ? seconds : 0 },
   };
 }
+
+export type UsageCounters = { visits: number; activeSeconds: number; gameSeconds: number };
+
+// These are sums of client-reported contributions, not sessions or people.
+// Derive only facts retained by the existing hourly counters: never join accounts
+// or infer individual histories from hours with activity.
+export function usageEvidence(rows: readonly UsageCounters[]) {
+  const totals = rows.reduce((sum, row) => ({
+    pageOpenings: sum.pageOpenings + row.visits,
+    estimatedActiveSeconds: sum.estimatedActiveSeconds + row.activeSeconds,
+    estimatedUnpausedGameSeconds: sum.estimatedUnpausedGameSeconds + row.gameSeconds,
+  }), { pageOpenings: 0, estimatedActiveSeconds: 0, estimatedUnpausedGameSeconds: 0 });
+  return {
+    totals,
+    unpausedShareOfActiveSeconds: totals.estimatedActiveSeconds > 0
+      ? totals.estimatedUnpausedGameSeconds / totals.estimatedActiveSeconds
+      : null,
+    uniquePlayers: { available: false, value: null, reason: "aggregate_counters_without_identifiers" },
+    retentionRate: { available: false, value: null, reason: "aggregate_counters_without_return_history" },
+    source: "anonymous_client_reports",
+    durations: "estimated",
+  } as const;
+}
