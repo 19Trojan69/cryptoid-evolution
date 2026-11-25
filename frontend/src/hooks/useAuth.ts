@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { axiosClient, PI_ACCESS_TOKEN_KEY } from "../lib/axiosClient";
 import type { AuthResult, PaymentDTO, SessionUser, User } from "../types/pi";
-import { ADMIN_MODE_KEY } from "../pages/shipFleet";
-import { createPiOAuthState, PI_OAUTH_CLIENT_ID, PI_OAUTH_ORIGIN, PI_OAUTH_REDIRECT_URI, PI_OAUTH_STATE_KEY } from "../config/piOAuth";
+import { ADMIN_MODE_KEY, shipSaveNetwork } from "../pages/shipFleet";
+import { beginPiAuthAttempt, getPiOAuthConfiguration, PI_AUTH_ATTEMPT_KEY, PI_OAUTH_STATE_KEY, safePiReturnPath, storePiOAuthTransaction } from "../config/piOAuth";
 import axios from "axios";
 import { withPiAuthTimeout } from "../lib/piAuthTimeout";
 
@@ -50,15 +50,22 @@ export const useAuth = ({ autoSignIn = true }: { autoSignIn?: boolean } = {}) =>
   const [authError, setAuthError] = useState("");
 
   const refreshSession = useCallback(async () => {
+    const generation = authLifecycle.current.generation;
+    const tokenBefore = sessionStorage.getItem(PI_ACCESS_TOKEN_KEY);
+    const authAttempt = sessionStorage.getItem(PI_AUTH_ATTEMPT_KEY);
+    const current = () => authLifecycle.current.active && authLifecycle.current.generation === generation
+      && sessionStorage.getItem(PI_AUTH_ATTEMPT_KEY) === authAttempt && sessionStorage.getItem(PI_ACCESS_TOKEN_KEY) === tokenBefore;
     setAuthError("");
     try {
       const { data } = await axiosClient.get<SessionUser>("/user/me");
+      if (!current()) return;
       setUser(data.user);
       setCanAdmin(data.canAdmin);
-      updateOwnerLifecycleAccess(data.canAdmin === true);
+    updateOwnerLifecycleAccess(data.canAdmin === true);
       setAdminMode(data.adminMode);
       sessionStorage.setItem(ADMIN_MODE_KEY, data.adminMode ? "1" : "0");
     } catch (error) {
+      if (!current()) return;
       updateOwnerLifecycleAccess(false);
       if (axios.isAxiosError(error) && error.response?.status === 401) {
         localStorage.removeItem("cryptoid_pi_session");
@@ -70,7 +77,7 @@ export const useAuth = ({ autoSignIn = true }: { autoSignIn?: boolean } = {}) =>
         setAuthError("Could not verify the Pi session. Please retry.");
       }
       throw error;
-    } finally { setAuthReady(true); }
+    } finally { if (current()) setAuthReady(true); }
   }, []);
 
   const onIncompletePaymentFound = useCallback(async (payment: PaymentDTO) => {
@@ -79,27 +86,27 @@ export const useAuth = ({ autoSignIn = true }: { autoSignIn?: boolean } = {}) =>
 
   const signInUser = useCallback(async (authResult: AuthResult, current: () => boolean) => {
     if (!current()) return;
-    sessionStorage.setItem(PI_ACCESS_TOKEN_KEY, authResult.accessToken);
     try {
-      const { data } = await axiosClient.post<SessionUser>("/user/signin", { authResult });
+      const { data } = await axiosClient.post<SessionUser>("/user/signin", { authResult }, { headers: { Authorization: `Bearer ${authResult.accessToken}` } });
       if (!current()) return;
+      sessionStorage.setItem(PI_ACCESS_TOKEN_KEY, authResult.accessToken);
       localStorage.setItem("cryptoid_pi_session", "1");
       sessionStorage.removeItem("cryptoid_pi_auto_signed_out");
       setUser(data.user);
       setCanAdmin(data.canAdmin);
-      updateOwnerLifecycleAccess(data.canAdmin === true);
+    updateOwnerLifecycleAccess(data.canAdmin === true);
       setAdminMode(false);
       sessionStorage.removeItem(ADMIN_MODE_KEY);
       setShowSignIn(false);
       setAuthError("");
       setAuthReady(true);
       for (const payment of pendingPayments.current.splice(0)) {
+        if (!current()) break;
         try { await axiosClient.post("/payments/incomplete", { payment }); }
         catch (err) { console.error("Could not resume incomplete payment", err); }
       }
     } catch (err) {
       if (!current()) return;
-      sessionStorage.removeItem(PI_ACCESS_TOKEN_KEY);
       console.error("Error signing in:", err);
       throw err;
     }
@@ -107,15 +114,18 @@ export const useAuth = ({ autoSignIn = true }: { autoSignIn?: boolean } = {}) =>
 
   const signIn = useCallback(async () => {
     const generation = authLifecycle.current.generation;
-    const current = () => authLifecycle.current.active && authLifecycle.current.generation === generation;
-    if (signingIn.current || !current()) return;
+    const lifecycleCurrent = () => authLifecycle.current.active && authLifecycle.current.generation === generation;
+    if (signingIn.current || !lifecycleCurrent()) return;
+    const attempt = beginPiAuthAttempt(sessionStorage);
+    const tokenBefore = sessionStorage.getItem(PI_ACCESS_TOKEN_KEY);
+    const current = () => lifecycleCurrent() && sessionStorage.getItem(PI_AUTH_ATTEMPT_KEY) === attempt
+      && sessionStorage.getItem(PI_ACCESS_TOKEN_KEY) === tokenBefore;
     signingIn.current = true;
     setIsLoading(true);
     setAuthError("");
     try {
       const isPiBrowser = confirmedPiBrowser.current || await detectPiBrowser();
       if (!current()) return;
-      if (window.location.pathname === "/admin") sessionStorage.setItem("cryptoid_pi_return_to", "/admin");
 
       // Pi Apps running inside Pi Browser must use the Browser SDK authentication
       // flow. Pi.signIn is the separate OAuth flow intended for ordinary browsers.
@@ -130,34 +140,29 @@ export const useAuth = ({ autoSignIn = true }: { autoSignIn?: boolean } = {}) =>
           onIncompletePaymentFound,
         ));
         if (!current()) return;
-        await signInUser(authResult, current);
+        await signInUser(authResult, () => lifecycleCurrent() && sessionStorage.getItem(PI_AUTH_ATTEMPT_KEY) === attempt);
         return;
       }
 
-      if (window.location.origin !== PI_OAUTH_ORIGIN && !["localhost", "127.0.0.1"].includes(window.location.hostname)) {
-        window.location.assign(`${PI_OAUTH_ORIGIN}/?pi_signin=1${window.location.pathname === "/admin" ? "&return_to=admin" : ""}`);
+      const configuration = getPiOAuthConfiguration(window.location.origin, shipSaveNetwork);
+      if (!configuration || typeof window.Pi?.signIn !== "function") {
+        setAuthError("Browser sign-in is not configured for this environment. Open this page in Pi Browser to sign in.");
         return;
       }
-
-      if (typeof window.Pi?.signIn === "function") {
-        const state = createPiOAuthState();
-        sessionStorage.setItem(PI_OAUTH_STATE_KEY, state);
-        window.Pi.signIn({
-          clientId: PI_OAUTH_CLIENT_ID,
-          redirectUri: PI_OAUTH_REDIRECT_URI,
-          scopes: ["username", "wallet_address"],
-          state,
-        });
-        return;
-      }
-
-      throw new Error("Pi sign-in is unavailable in this browser.");
+      const returnTo = safePiReturnPath(window.location.pathname);
+      storePiOAuthTransaction(sessionStorage, configuration, attempt, returnTo);
+      window.Pi.signIn({
+        clientId: configuration.clientId,
+        redirectUri: configuration.redirectUri,
+        scopes: ["username", "wallet_address"],
+        state: attempt,
+      });
     } catch (err) {
       if (!current()) return;
       console.error("Error authenticating:", err);
       setAuthError("Could not sign in with Pi. Please retry.");
     } finally {
-      if (current()) {
+      if (lifecycleCurrent()) {
         signingIn.current = false;
         setIsLoading(false);
         setAuthReady(true);
@@ -168,18 +173,21 @@ export const useAuth = ({ autoSignIn = true }: { autoSignIn?: boolean } = {}) =>
   useEffect(() => {
     let active = true;
     const start = async () => {
+      const tokenBefore = sessionStorage.getItem(PI_ACCESS_TOKEN_KEY);
+      const authAttempt = sessionStorage.getItem(PI_AUTH_ATTEMPT_KEY);
+      const current = () => active && sessionStorage.getItem(PI_AUTH_ATTEMPT_KEY) === authAttempt && sessionStorage.getItem(PI_ACCESS_TOKEN_KEY) === tokenBefore;
       try {
         if (localStorage.getItem("cryptoid_pi_session") || sessionStorage.getItem(PI_ACCESS_TOKEN_KEY)) {
           try {
             const { data } = await axiosClient.get<SessionUser>("/user/me");
-            if (!active) return;
+            if (!current()) return;
             setUser(data.user); setCanAdmin(data.canAdmin); setAdminMode(data.adminMode);
             updateOwnerLifecycleAccess(data.canAdmin === true);
             sessionStorage.setItem(ADMIN_MODE_KEY, data.adminMode ? "1" : "0");
             return;
           } catch (error) {
+            if (!current()) return;
             updateOwnerLifecycleAccess(false);
-            if (!active) return;
             if (!axios.isAxiosError(error) || error.response?.status !== 401) {
               setAuthError("Could not verify the Pi session. Please retry.");
               return;
@@ -204,10 +212,16 @@ export const useAuth = ({ autoSignIn = true }: { autoSignIn?: boolean } = {}) =>
   }, [autoSignIn, signIn]);
 
   const signOut = useCallback(async () => {
+    authLifecycle.current.generation++;
+    signingIn.current = false;
+    const attempt = beginPiAuthAttempt(sessionStorage);
+    sessionStorage.removeItem(PI_OAUTH_STATE_KEY);
+    const current = () => authLifecycle.current.active && sessionStorage.getItem(PI_AUTH_ATTEMPT_KEY) === attempt;
     updateOwnerLifecycleAccess(false);
     setIsLoading(true);
     try {
       await axiosClient.get("/user/signout");
+      if (!current()) return;
       sessionStorage.setItem("cryptoid_pi_auto_signed_out", "1");
       setUser(null);
       setCanAdmin(false); updateOwnerLifecycleAccess(false);
@@ -218,14 +232,17 @@ export const useAuth = ({ autoSignIn = true }: { autoSignIn?: boolean } = {}) =>
     } catch (err) {
       console.error("Error signing out:", err);
     } finally {
-      setIsLoading(false);
+      if (current()) setIsLoading(false);
     }
   }, []);
 
   const setAdminPreview = useCallback(async (enabled: boolean) => {
+    const generation = authLifecycle.current.generation, token = sessionStorage.getItem(PI_ACCESS_TOKEN_KEY), attempt = sessionStorage.getItem(PI_AUTH_ATTEMPT_KEY);
     const { data } = await axiosClient.post<{ canAdmin: boolean; adminMode: boolean }>("/user/admin-mode", { enabled });
+    if (!authLifecycle.current.active || authLifecycle.current.generation !== generation
+      || sessionStorage.getItem(PI_ACCESS_TOKEN_KEY) !== token || sessionStorage.getItem(PI_AUTH_ATTEMPT_KEY) !== attempt) return;
     setCanAdmin(data.canAdmin);
-      updateOwnerLifecycleAccess(data.canAdmin === true);
+    updateOwnerLifecycleAccess(data.canAdmin === true);
     setAdminMode(data.adminMode);
     sessionStorage.setItem(ADMIN_MODE_KEY, data.adminMode ? "1" : "0");
   }, []);

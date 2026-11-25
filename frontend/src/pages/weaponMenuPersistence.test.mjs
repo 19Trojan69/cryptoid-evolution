@@ -3,11 +3,12 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {transformSync} from 'esbuild';
-import {automaticStartWeapon} from './weaponAutoReload.ts';
+import {automaticStartWeapon, shouldAutoReload} from './weaponAutoReload.ts';
 import {hangarCatalog} from '../../../backend/src/hangarCatalog.ts';
 import {isTestnetWeaponPurchaseEnabled} from '../../../backend/src/paymentPolicy.ts';
 import {restoreWeaponMenuGameChanges} from '../../scripts/weaponMenuReviewedChanges.mjs';
 import {weaponMenu} from '../../scripts/weaponReloadRecoveryHost.mjs';
+import {restoreMainnetOwnedWeaponChanges, mainnetOwnedWeaponChanges} from '../../scripts/mainnetOwnedWeaponReviewedChanges.mjs';
 
 const source=readFileSync(new URL('./GamePage.tsx',import.meta.url),'utf8');
 const start=source.indexOf('  useEffect(() => {\n    const state = stateRef.current, runId = scoreRunRef.current;');
@@ -28,10 +29,46 @@ test('the actual confirmed-run effect honors saved Auto once without polling or 
   const f=startHost();f.env.stateRef.current.status=status;f.run();assert.deepEqual(f.requests,[]);assert.equal(f.env.automaticStartRunRef.current,null);
  }
  for(const source of ['paid','pickup']){const f=startHost();f.env.stateRef.current.weaponSource=source;f.run();assert.deepEqual(f.requests,[],'saved/manual selection remains authoritative');}
- for(const patch of [{accountRun:false},{adminRunRef:{current:true}},{scoreRunRef:{current:null}},{shipSaveNetwork:'mainnet'},{ownerDiagnostics:false},{autoReloadRef:{current:{5:false}}},{stockRef:{current:{}}}]){
+ for(const patch of [{accountRun:false},{adminRunRef:{current:true}},{scoreRunRef:{current:null}},{shipSaveNetwork:'unknown'},{ownerDiagnostics:false},{autoReloadRef:{current:{5:false}}},{stockRef:{current:{}}}]){
   const f=startHost(patch);f.run();assert.deepEqual(f.requests,[]);
  }
  const failed=startHost({reloadRequestRef:{current:()=>false}});failed.run();assert.equal(failed.env.automaticStartRunRef.current,'run-a','a denied automatic attempt does not become an API retry loop');
+});
+
+test('confirmed Mainnet stock honors saved Auto without enabling an unknown network or a free grant', () => {
+  const f = startHost({shipSaveNetwork:'mainnet',ownerDiagnostics:false});
+  f.run(); f.run(); assert.deepEqual(f.requests,[5]);
+  for (const patch of [{stockRef:{current:{}}},{autoReloadRef:{current:{5:false}}},{accountRun:false},{adminRunRef:{current:true}},{shipSaveNetwork:'unknown'}]) {
+    const denied = startHost({shipSaveNetwork:'mainnet',ownerDiagnostics:false,...patch});
+    denied.run(); assert.deepEqual(denied.requests,[]);
+  }
+});
+
+test('actual expiry condition only requests owned paid charges for the intended network', () => {
+  const statement = source.split('\n').find(line => line.includes('if (shouldAutoReload('));
+  const code = transformSync(statement,{loader:'tsx'}).code;
+  const run = (network, overrides = {}) => {
+    const requests = [];
+    const env = {shouldAutoReload,isTestnetWeaponPurchaseEnabled,shipSaveNetwork:network,ownerDiagnostics:false,
+      expiringLevel:5,expiringSource:'paid',expiringMs:1,state:{weaponTimers:[0,0,0,0,0,0]},
+      autoReloadRef:{current:{5:true}},stockRef:{current:{weapon_plasma:1}},
+      reloadOffer:hangarCatalog.find(offer=>offer.id==='weapon_plasma'),reloadRequestRef:{current:level=>requests.push(level)},...overrides};
+    new Function('env','with(env){'+code+'}')(env); return requests;
+  };
+  assert.deepEqual(run('mainnet'),[5]);
+  for (const network of ['testnet','unknown']) assert.deepEqual(run(network),[]);
+  assert.deepEqual(run('testnet',{ownerDiagnostics:true}),[5]);
+  for (const patch of [{expiringSource:'pickup'},{expiringSource:'standard'},{expiringMs:0},{stockRef:{current:{}}},{autoReloadRef:{current:{5:false}}},{reloadOffer:undefined},{state:{weaponTimers:[0,0,0,0,0,100]}}]) assert.deepEqual(run('mainnet',patch),[]);
+});
+
+test('only the two reviewed Mainnet stock permissions restore the full published controller', () => {
+  const hash = text=>createHash('sha256').update(text).digest('hex');
+  const restored = restoreMainnetOwnedWeaponChanges(source);
+  assert.equal(hash(restored),'a9744063c943510ed15d25229f45c493fc4e45e417078c3531cb0146b9a776db');
+  assert.equal(restoreMainnetOwnedWeaponChanges(restored),restored);
+  assert.throws(()=>restoreMainnetOwnedWeaponChanges(source+mainnetOwnedWeaponChanges[0].after),/one exact/);
+  assert.throws(()=>restoreMainnetOwnedWeaponChanges(source.replace("shipSaveNetwork === 'mainnet') ?", "true) ?")),/one exact/);
+  assert.notEqual(hash(restoreMainnetOwnedWeaponChanges(source.replace('watch: callback => window.setInterval(callback, 500)','watch: callback => window.setInterval(callback, 1000)'))),hash(restored));
 });
 
 test('the real drawer marks only its scrollable offer body for the existing route touch lock',()=>{
