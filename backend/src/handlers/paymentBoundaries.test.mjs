@@ -111,3 +111,30 @@ test('an order bound to the other network cannot be replayed into this inventory
   assert.equal((await h.call()).body.error, 'payment_network_mismatch');
   assert.equal(h.reads.length, 0); assert.equal(h.writes.length, 0);
 });
+
+test('even simulated release cannot approve payment to a different Mainnet wallet', async t => {
+  const original = process.env.PI_MAINNET_WALLET_ADDRESS;
+  process.env.PI_MAINNET_WALLET_ADDRESS = 'G' + 'A'.repeat(55);
+  t.after(() => { if (original === undefined) delete process.env.PI_MAINNET_WALLET_ADDRESS; else process.env.PI_MAINNET_WALLET_ADDRESS = original; });
+  const h = harness(t, { order: false, released: true });
+  h.payment().to_address = 'G' + 'B'.repeat(55);
+  assert.equal((await h.call('/approve')).body.error, 'mainnet_wallet_unverified');
+  assert.equal(h.orders.length, 0); assert.equal(h.posts.length, 0);
+});
+
+test('simulated released Mainnet checkout preserves matching product, quantity, amount and one credit', async t => {
+  const original = process.env.PI_MAINNET_WALLET_ADDRESS;
+  process.env.PI_MAINNET_WALLET_ADDRESS = 'G' + 'A'.repeat(55);
+  t.after(() => { if (original === undefined) delete process.env.PI_MAINNET_WALLET_ADDRESS; else process.env.PI_MAINNET_WALLET_ADDRESS = original; });
+  const h = harness(t, { order: false, released: true });
+  h.payment().to_address = process.env.PI_MAINNET_WALLET_ADDRESS;
+  assert.equal((await h.call('/approve')).code, 200);
+  assert.equal(h.orders[0].paid, false);
+  assert.equal((await h.call()).code, 200);
+  assert.equal(h.orders[0].paid, true);
+  assert.equal(h.orders[0].product_id, 'weapon_twin');
+  assert.equal(h.orders[0].quantity, 5);
+  assert.equal(h.orders[0].payment_amount_pi, h.payment().amount);
+  assert.equal(h.orders[0].payment_network, 'Pi Network');
+  assert.equal(h.writes.filter(w => w.$set?.paid === true).length, 1);
+});

@@ -73,6 +73,7 @@ export const usePayments = ({ isAuthenticated, accountId, network, onRequireAuth
   const diagnosticRef = useRef(paymentDiagnostic);
   const incomplete = useRef(new Map<string, PaymentDTO>());
   const recovering = useRef(new Map<string, Promise<void>>());
+  const recoveryReceiver = useRef<((payment: PaymentDTO) => void) | null>(null);
   const authEpoch = sessionStorage.getItem(PI_AUTH_ATTEMPT_KEY);
   useEffect(() => {
     identity.current = { isAuthenticated, accountId, network };
@@ -82,6 +83,7 @@ export const usePayments = ({ isAuthenticated, accountId, network, onRequireAuth
     sdkToken.current = null;
     incomplete.current.clear();
     recovering.current.clear();
+    recoveryReceiver.current = null;
     void Promise.resolve().then(() => {
       if (!active || attemptVersion.current !== retiredVersion) return;
       setIsLoading(false); setActiveProductId(null); setPaymentStatus("");
@@ -153,6 +155,11 @@ export const usePayments = ({ isAuthenticated, accountId, network, onRequireAuth
       recovering.current.set(payment.identifier, pending);
       return pending;
     };
+    recoveryReceiver.current = payment => {
+      if (!current()) return;
+      incomplete.current.set(payment.identifier, payment);
+      if (sdkToken.current) void recoverPayment(payment).then(done).catch(error => failed("Recovery", error));
+    };
     paymentPending.current = true;
     setIsLoading(true);
     setPaymentStatus("Connecting to Pi…");
@@ -163,11 +170,9 @@ export const usePayments = ({ isAuthenticated, accountId, network, onRequireAuth
       if (!sdkToken.current || sdkToken.current !== token) {
         sdkToken.current = null;
         const authResult = await window.Pi.authenticate(["username", "payments"], payment => {
-          if (!current()) return;
-          incomplete.current.set(payment.identifier, payment);
-          // Keep the original payment ID. A later discovery resumes that order;
-          // it never silently creates another checkout.
-          if (sdkToken.current) void recoverPayment(payment).then(done).catch(error => failed("Recovery", error));
+          // A cached SDK session keeps this native callback between orders. Route
+          // discoveries to the latest context, which rechecks account/network.
+          recoveryReceiver.current?.(payment);
         });
         if (!current()) return;
         if (!authResult.accessToken) throw new Error("Pi authentication did not return an access token");

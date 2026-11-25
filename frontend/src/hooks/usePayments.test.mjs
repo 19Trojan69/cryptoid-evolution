@@ -153,3 +153,14 @@ test('incomplete SDK payments for a different account never reach recovery API',
   assert.equal(f.requests.length, 0); assert.equal(f.payments.length, 0); assert.equal(confirmed, 0);
   assert.match(f.diagnostic, /payment_account_mismatch/);
 });
+
+test('cached SDK discovery resumes an incomplete payment in the latest same-account order', async () => {
+  const f = paymentHost(); let discovered, confirmed = 0;
+  f.env.window.Pi.authenticate = async (_scopes, incomplete) => { discovered = incomplete; return { accessToken: 'isolated-token', user: { uid: 'isolated-user' } }; };
+  f.env.mode = 'complete'; await f.order();
+  f.env.mode = undefined; await f.order(() => { confirmed++; });
+  discovered({ identifier: 'unfinished-latest-order', user_uid: 'isolated-user' });
+  for (let i = 0; i < 30; i++) await Promise.resolve();
+  assert.equal(f.requests.filter(request => request.path === '/payments/incomplete').length, 1);
+  assert.equal(confirmed, 1); assert.equal(f.loading, false);
+});
