@@ -26,7 +26,10 @@ async function collector() {
   };
   vm.runInNewContext(compiled, context);
   await context.exports.startAggregateUsage();
-  return { context, sent, document, location, events, intervals, advance(ms) { now += ms; intervals[0](); } };
+  return { context, sent, document, location, events, intervals,
+    advance(ms) { now += ms; intervals[0](); },
+    interactAfter(ms, event = 'pointerdown') { now += ms; events.get(event)(); },
+  };
 }
 
 test('anonymous usage sends only counters without credentials, identifiers, URLs or storage', async () => {
@@ -61,6 +64,25 @@ test('anonymous usage sends only counters without credentials, identifiers, URLs
   host.events.get('visibilitychange')();
   host.advance(30_000);
   assert.equal(host.sent.length, beforeIdle);
+});
+
+test('resuming input after the idle cutoff does not backfill idle time between ticks', async () => {
+  for (const event of ['pointerdown', 'pointermove', 'keydown', 'touchmove', 'pageshow']) {
+    const host = await collector();
+    host.advance(30_000);
+    host.advance(30_000);
+    const beforeResume = host.sent.filter(request => request.body.kind === 'active');
+    assert.equal(beforeResume.reduce((sum, request) => sum + request.body.seconds, 0), 60);
+
+    host.interactAfter(15_000, event); // Input at t75; t60–75 was beyond the idle cutoff.
+    host.advance(15_000); // Existing interval at t90 sees only t75–90 as active.
+    const resumed = host.sent.filter(request => request.body.kind === 'active');
+    assert.equal(resumed.at(-1).body.seconds, 15, event);
+    assert.equal(resumed.reduce((sum, request) => sum + request.body.seconds, 0), 75, event);
+
+    host.advance(30_000);
+    assert.equal(host.sent.at(-1).body.seconds, 30, `${event}: later active intervals retain their usual bound`);
+  }
 });
 
 test('evidence limits are translated for all 19 supported languages', () => {

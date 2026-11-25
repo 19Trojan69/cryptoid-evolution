@@ -7,7 +7,7 @@ import { transformSync } from 'esbuild';
 // are local substitutes; no account, wallet or live payment is contacted.
 const source = readFileSync(new URL('./usePayments.ts', import.meta.url), 'utf8');
 const code = transformSync(source.replace(/^import .*;\r?\n/gm, '').replace(/^export /gm, ''), { loader: 'ts' }).code;
-function paymentHost({ denyRead = false, denyWrite = false, denyRemove = false, stored = '' } = {}) {
+function paymentHost({ denyRead = false, denyWrite = false, denyRemove = false, stored = '', omitAccountId = false } = {}) {
   const values = new Map([['cryptoid_pi_access_token', 'isolated-token'], ['cryptoid_payment_diagnostic', stored]]);
   const states = [], requests = [], payments = [], effects = [], scope = { denyRead, denyWrite, denyRemove };
   let stateIndex = 0;
@@ -22,7 +22,10 @@ function paymentHost({ denyRead = false, denyWrite = false, denyRemove = false, 
       setItem(key, value) { if (key === 'cryptoid_payment_diagnostic' && scope.denyWrite) throw new DOMException('private-write', 'QuotaExceededError'); values.set(key, value); },
       removeItem(key) { if (key === 'cryptoid_payment_diagnostic' && scope.denyRemove) throw new DOMException('private-remove', 'SecurityError'); values.delete(key); },
     },
-    axiosClient: { async post(path, body) {
+    axiosClient: { async get(path) {
+      requests.push({ path });
+      return { data: { user: { uid: 'isolated-user' } } };
+    }, async post(path, body) {
       requests.push({ path, body });
       if (env.rejectPath === path) throw { response: { status: 503, data: { error: 'isolated_unavailable' } } };
       return { data: { approved: true, completed: true } };
@@ -38,7 +41,7 @@ function paymentHost({ denyRead = false, denyWrite = false, denyRemove = false, 
     } },
   };
   const factory = new Function('env', 'with (env) {\n' + code + '\nreturn usePayments; }')(env);
-  const api = factory({ isAuthenticated: true, accountId: 'isolated-user', network: 'testnet', onRequireAuth() { throw Error('unexpected login'); } });
+  const api = factory({ isAuthenticated: true, accountId: omitAccountId ? undefined : 'isolated-user', network: 'testnet', onRequireAuth() { throw Error('unexpected login'); } });
   const cleanups = effects.map(fn => fn());
   return { env, api, states, values, payments, requests, scope, unmount: () => cleanups.forEach(fn => fn?.()),
     get loading() { return states[0]; }, get diagnostic() { return states[3]; },
@@ -163,4 +166,53 @@ test('cached SDK discovery resumes an incomplete payment in the latest same-acco
   for (let i = 0; i < 30; i++) await Promise.resolve();
   assert.equal(f.requests.filter(request => request.path === '/payments/incomplete').length, 1);
   assert.equal(confirmed, 1); assert.equal(f.loading, false);
+});
+
+test('mission checkout without an account prop verifies the SDK account even with the same cached token', async () => {
+  const f = paymentHost({ omitAccountId: true });
+  f.env.window.Pi.authenticate = async () => ({ accessToken: 'isolated-token', user: { uid: 'different-user' } });
+  await f.order();
+  assert.deepEqual(f.requests.map(request => request.path), ['/user/me']);
+  assert.equal(f.payments.length, 0);
+  assert.equal(f.values.get('cryptoid_pi_access_token'), 'isolated-token');
+  assert.match(f.diagnostic, /payment_account_mismatch/);
+  assert.equal(f.states[2], 'Your Pi Browser account does not match this game session. Sign in with the same Pi account before retrying.');
+});
+
+test('mission checkout binds incomplete-payment recovery to the verified session account', async () => {
+  const f = paymentHost({ omitAccountId: true }); let discovered;
+  f.env.window.Pi.authenticate = async (_scopes, incomplete) => {
+    discovered = incomplete;
+    return { accessToken: 'isolated-token', user: { uid: 'isolated-user' } };
+  };
+  await f.order();
+  assert.equal(f.payments.length, 1);
+  discovered({ identifier: 'foreign-payment', user_uid: 'different-user' });
+  for (let i = 0; i < 30; i++) await Promise.resolve();
+  assert.deepEqual(f.requests.map(request => request.path), ['/user/me']);
+  assert.match(f.diagnostic, /payment_account_mismatch/);
+});
+
+test('a same-token SDK reply without the authenticated user cannot open a mission checkout', async () => {
+  const f = paymentHost();
+  f.env.window.Pi.authenticate = async () => ({ accessToken: 'isolated-token' });
+  await f.order();
+  assert.equal(f.payments.length, 0); assert.equal(f.requests.length, 0);
+  assert.match(f.diagnostic, /payment_account_mismatch/);
+});
+
+test('a verified mission SDK session retains its account binding across cached checkouts', async () => {
+  const f = paymentHost({ omitAccountId: true }); let discovered, confirmed = 0;
+  f.env.window.Pi.authenticate = async (_scopes, incomplete) => {
+    discovered = incomplete;
+    return { accessToken: 'isolated-token', user: { uid: 'isolated-user' } };
+  };
+  f.env.mode = 'complete'; await f.order(() => { confirmed++; });
+  assert.equal(confirmed, 1); assert.equal(f.loading, false);
+  f.env.mode = undefined; await f.order();
+  discovered({ identifier: 'foreign-cached-payment', user_uid: 'different-user' });
+  for (let i = 0; i < 30; i++) await Promise.resolve();
+  assert.deepEqual(f.requests.map(request => request.path), ['/user/me', '/payments/complete']);
+  assert.equal(f.payments.length, 2);
+  assert.match(f.diagnostic, /payment_account_mismatch/);
 });

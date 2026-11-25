@@ -22,6 +22,15 @@ A future unique-player or returning-player analysis would require a separately a
 
 - Backend build (`npm run build --prefix backend`): passed.
 - Usage and owner-dashboard handler tests: 13 passed, including identifier rejection, credential-free collection, fixed summary derivation and owner-only access.
-- Frontend collector and 19-language evidence-copy tests: 2 passed, exercising document counting, bounded activity, hidden/idle/admin exclusions and credential/referrer omission with simulated browser/network interfaces.
+- Frontend collector and 19-language evidence-copy tests: 3 passed, exercising document counting, bounded activity, hidden/idle/admin exclusions and credential/referrer omission with simulated browser/network interfaces.
 
 These checks use local simulated transports. They do not establish actual player counts, retention, production analytics completeness or physical-device timing accuracy.
+
+Continuation review on 25 November 2026 reproduced an idle-boundary error in the
+actual collector: input at second 75 after the prior 60-second activity window
+made the next interval report 30 seconds instead of 15. An input after that
+cutoff now starts a fresh measured interval, so preceding idle seconds are not
+backfilled. This can discard a partial eligible interval; durations remain
+estimates. No requests, identifiers, event history or collection fields were
+added. The collector suite now includes the resumption case for all five existing
+activity event types.

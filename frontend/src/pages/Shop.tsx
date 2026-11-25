@@ -62,6 +62,7 @@ type Offer = { id: string; kind: "weapon" | "power" | "armor" | "ship_upgrade"; 
 type Inventory = { testnetCatalogAccess?: boolean; weaponStock?: Record<string, number>; ownedWeapons: string[]; ownedArmor: string[]; ownedShipUpgrades?: string[]; consumables: { id: string; count: number }[]; equippedWeapon: string | null; selectedPower: string | null };
 type Leader = { avatar?: Avatar; rank: number; username: string; score: number; careerScore?: number; bestRun?: { score: number; level: number | null }; runLevel?: number | null; profileLevel?: number; serviceRank: { name: string; symbol: string } };
 type PersonalScores = { careerScore: number; bestRun: { score: number; level: number | null } };
+type CardRevealQueue = { owner: string; adminMode: boolean; cards: CardReward[] };
 
 const shopTabs = [
   ["hangar", "Hangar", "◇"],
@@ -98,7 +99,9 @@ const Shop = () => {
   const closeQuickMenu = useCallback(() => setQuickGroup(null), []);
   const [shopView, setShopView] = useState<"hangar" | "shop" | "weapons" | "powers" | "progress" | "rewards" | "leaders" | null>(() => location.state?.openShopView === "shop" ? "shop" : location.state?.openShopView === "hangar" ? "hangar" : null);
   const [termsOpen, setTermsOpen] = useState(false);
-  const [newCards,setNewCards]=useState<CardReward[]>([]);
+  const [newCardQueue, setNewCardQueue] = useState<CardRevealQueue | null>(null);
+  const newCards = newCardQueue?.owner === (user?.uid ?? 'guest') && newCardQueue.adminMode === adminMode
+    ? newCardQueue.cards : [];
   const [feedbackOpen,setFeedbackOpen]=useState(false);
   const [leaderRefresh,setLeaderRefresh]=useState(0);
   const [pilotOpen,setPilotOpen]=useState<string|null>(null);
@@ -253,13 +256,19 @@ const Shop = () => {
   const accountUid = user?.uid;
   const inventoryOwnerRef = useRef(accountUid);
   inventoryOwnerRef.current = accountUid;
+  const inventoryRequestVersion = useRef(0);
+  const inventoryContextRef = useRef({ owner: accountUid, adminMode, active: false });
+  const continueNewCard = () => {
+    if (inventoryOwnerRef.current !== accountUid || (user && inventoryContextRef.current.adminMode !== adminMode)) return;
+    setNewCardQueue(queue => queue && queue === newCardQueue ? { ...queue, cards: queue.cards.slice(1) } : queue);
+  };
   const firstNewCardKey = newCards[0]?.key;
   useEffect(() => {
-    if (!firstNewCardKey) return;
+    if (!firstNewCardKey || adminMode) return;
     const owner = accountUid ?? 'guest';
     rememberCard(owner, firstNewCardKey);
     void syncCardReveals(owner).catch(() => { /* Retried when this account is next loaded. */ });
-  }, [firstNewCardKey, accountUid]);
+  }, [firstNewCardKey, accountUid, adminMode]);
   useEffect(() => {
     setAccountBusy(false);
     if (!accountUid || adminMode) return;
@@ -284,7 +293,7 @@ const Shop = () => {
       mergeCardReveals(owner, save.cardReveals || []);
       const acquired = availableShipCards(playerSkins, save.fleet, save.usedShipSkins || [], inventory?.ownedShipUpgrades || [], ownerTestnet)
         .filter(card => card.ship && !fleetCount(account.fleet as ShipFleet, card.ship as typeof playerSkins[number]['id']));
-      if (acquired.length) setNewCards(unseenShipCards(acquired, mergeCardReveals(owner, [])));
+      if (acquired.length) setNewCardQueue({ owner, adminMode: false, cards: unseenShipCards(acquired, mergeCardReveals(owner, [])) });
     };
     try {
       const save = await mutateAccountInventory(account, command);
@@ -368,7 +377,7 @@ const Shop = () => {
     try { saveGuestShipPurchase(localStorage, previewSkin.id, purchase); }
     catch { setHangarMessage("Could not save loadout. Please retry."); return; }
     setFleet(purchase.fleet);
-    setNewCards(unseenShipCards([{key:`${previewSkin.id}-1`,ship:previewSkin.id,stage:1}],readCardReveals('guest')));
+    setNewCardQueue({ owner: 'guest', adminMode: false, cards: unseenShipCards([{key:`${previewSkin.id}-1`,ship:previewSkin.id,stage:1}],readCardReveals('guest')) });
 
     setShards(purchase.balance);
     setHangarMessage({ ship: previewSkin.name, status: "Owned", count: fleetCount(purchase.fleet, previewSkin.id) });
@@ -412,18 +421,25 @@ const Shop = () => {
     onRequireAuth: requireAuth,
   });
   const refreshInventory = async () => {
+    const owner = user?.uid;
+    const context = inventoryContextRef.current;
+    if (!context.active || context.owner !== owner || context.adminMode !== adminMode) return;
+    const version = ++inventoryRequestVersion.current;
+    const current = () => context.active && inventoryContextRef.current === context
+      && inventoryOwnerRef.current === owner && inventoryRequestVersion.current === version;
     try {
       const { data } = await axiosClient.get<Inventory>("/hangar/inventory");
       if (!Array.isArray(data.ownedWeapons) || !Array.isArray(data.ownedArmor) || !Array.isArray(data.consumables)) throw new Error("Invalid inventory");
+      if (!current()) return;
 
       if(user&&!adminMode&&account&&inventory){
         const before=availableShipCards(playerSkins,account.fleet,account.usedShipSkins||[],inventory?.ownedShipUpgrades||[],ownerTestnet).map(c=>c.key);
         const acquired=availableShipCards(playerSkins,account.fleet,account.usedShipSkins||[],data.ownedShipUpgrades||[],ownerTestnet).filter(c=>!before.includes(c.key));
-        if(acquired.length)setNewCards(unseenShipCards(acquired,readCardReveals(user.uid)));
+        if(acquired.length)setNewCardQueue({ owner: user.uid, adminMode: false, cards: unseenShipCards(acquired,readCardReveals(user.uid)) });
       }
       setInventory(data);
     }
-    catch { setLoadoutMessage('Connect your Pi account to see your saved loadout.'); }
+    catch { if (current()) setLoadoutMessage('Connect your Pi account to see your saved loadout.'); }
   };
   useEffect(() => {
     const request = new AbortController();
@@ -440,32 +456,50 @@ const Shop = () => {
   useEffect(() => {
     if (!isAuthenticated) return;
     let active = true;
+    const owner = accountUid;
+    const contextRef = inventoryContextRef;
+    const context = { owner, adminMode, active: true };
+    contextRef.current = context;
+    const requestVersionRef = inventoryRequestVersion;
+    const version = ++requestVersionRef.current;
+    const current = () => active && context.active && contextRef.current === context
+      && inventoryOwnerRef.current === owner && requestVersionRef.current === version;
     axiosClient.get<Inventory>("/hangar/inventory").then(({ data }) => {
       if (!Array.isArray(data.ownedWeapons) || !Array.isArray(data.ownedArmor) || !Array.isArray(data.consumables)) throw new Error("Invalid inventory");
-      if (active) setInventory(data);
-    }).catch(() => { if (active) setLoadoutMessage('Connect your Pi account to see your saved loadout.'); });
-    return () => { active = false; };
-  }, [isAuthenticated, adminMode]);
+      if (current()) setInventory(data);
+    }).catch(() => { if (current()) setLoadoutMessage('Connect your Pi account to see your saved loadout.'); });
+    return () => { active = false; context.active = false; requestVersionRef.current++; };
+  }, [isAuthenticated, adminMode, accountUid]);
   const equip = async (weapon: string | null, power: string | null) => {
     if (!isAuthenticated) { requireAuth(); return; }
+    const owner = user?.uid;
+    const context = inventoryContextRef.current;
+    const current = () => context.active && inventoryContextRef.current === context && inventoryOwnerRef.current === owner;
+    if (!current() || context.adminMode !== adminMode) return;
     try {
       await axiosClient.post("/hangar/equip", { weapon, power });
+      if (!current()) return;
       await refreshInventory();
+      if (!current()) return;
       setLoadoutMessage('Loadout saved for the next mission.');
-    } catch { setLoadoutMessage('Could not save loadout. Please retry.'); }
+    } catch { if (current()) setLoadoutMessage('Could not save loadout. Please retry.'); }
   };
 
   const buyPiOffer = (offer: { id: string; name?: string; kind: string; pricePi: number }, batch?: { quantity: number; total: number }) => {
     if (adminMode || !catalogReady || isLoading || !piPurchaseAllowed(offer, shipSaveNetwork === "mainnet" ? "Pi Network" : "Pi Testnet", { ownerTestnet, mainnetReleased })) return;
     if (!isAuthenticated) { requireAuth(); return; }
     const owner = user?.uid;
+    const context = inventoryContextRef.current;
+    const current = () => context.active && inventoryContextRef.current === context && inventoryOwnerRef.current === owner;
+    if (!current() || context.adminMode !== adminMode) return;
     const units = batch ? `${batch.quantity} × · ` : '';
     void orderProduct(`Cryptoid ${offer.name || offer.id} · ${units}${shipSaveNetwork === "testnet" ? "Test-Pi" : "Pi"}`, batch?.total ?? offer.pricePi, {
       productId: offer.id,
       ...(batch ? { quantity: batch.quantity, powerModel: 1 } : {}),
     }, async () => {
-      if (inventoryOwnerRef.current !== owner) return;
+      if (!current()) return;
       await refreshInventory();
+      if (!current()) return;
       setLoadoutMessage("purchase confirmed.");
     });
   };
@@ -524,7 +558,7 @@ const Shop = () => {
   useModalNavigation(entryPanel ? null : modalLayer, () => {
     if (pilotOpen !== null) setPilotOpen(null);
     else if (collectionOpen) setCollectionOpen(false);
-    else if (newCards.length) setNewCards(cards => cards.slice(1));
+    else if (newCards.length) continueNewCard();
     else if (showSignIn) closeSignIn();
     else if (feedbackOpen) setFeedbackOpen(false);
     else if (termsOpen) setTermsOpen(false);
@@ -536,7 +570,7 @@ const Shop = () => {
   });
   return (
     <main data-shop-area={shopView ?? "home"} className="app-shell landing-shell cinematic-home" data-home-paused={homePaused} onPointerDownCapture={primeCardSound}>
-      {newCards[0] && <CardReveal key={user?.uid ?? "guest"} reward={newCards[0]} remaining={newCards.length} onContinue={()=>{setNewCards(cards=>cards.slice(1));}}/>}
+      {newCards[0] && <CardReveal key={user?.uid ?? "guest"} reward={newCards[0]} remaining={newCards.length} onContinue={continueNewCard}/>}
       {collectionOpen && <Collection key={user?.uid ?? "guest"} uid={user?.uid} onClose={() => setCollectionOpen(false)} nftPreviewPath={nftPreviewPath} />}
       <Header
         user={user}
@@ -727,7 +761,7 @@ const Shop = () => {
                 diagnostic={activeProductId === offer.id ? paymentDiagnostic : undefined}
                 onBuy={(quantity, total) => buyPiOffer(offer, { quantity, total })} />}
               {owned && kind === "power" ? <button className="button button-secondary" type="button" disabled={Boolean(selected)} onClick={() => equip(null, offer.id)}>{t(selected ? "Selected" : "Equip for next mission")}</button> : null}
-              {kind === "weapon" && !lockedWeapon && <WeaponPurchase network={shipSaveNetwork} id={offer.id} price={offer.pricePi} count={inventory?.weaponStock?.[offer.id] || 0} pending={isLoading && activeProductId === offer.id} status={activeProductId === offer.id ? paymentStatus : undefined} diagnostic={activeProductId === offer.id ? paymentDiagnostic : undefined} disabled={adminMode || isLoading || !catalogReady} onBuy={(quantity, total) => { void orderProduct(`Cryptoid ${offer.name} · ${quantity} × 45s · ${shipSaveNetwork === "testnet" ? "Test-Pi" : "Pi"}`, total, { productId: offer.id, quantity, weaponModel: 2 }, async () => { if (inventoryOwnerRef.current !== user?.uid) return; setLoadoutMessage("purchase confirmed."); await refreshInventory(); }); }} />}
+              {kind === "weapon" && !lockedWeapon && <WeaponPurchase network={shipSaveNetwork} id={offer.id} price={offer.pricePi} count={inventory?.weaponStock?.[offer.id] || 0} pending={isLoading && activeProductId === offer.id} status={activeProductId === offer.id ? paymentStatus : undefined} diagnostic={activeProductId === offer.id ? paymentDiagnostic : undefined} disabled={adminMode || isLoading || !catalogReady} onBuy={(quantity, total) => { const context = inventoryContextRef.current; if (!context.active || context.adminMode !== adminMode) return; void orderProduct(`Cryptoid ${offer.name} · ${quantity} × 45s · ${shipSaveNetwork === "testnet" ? "Test-Pi" : "Pi"}`, total, { productId: offer.id, quantity, weaponModel: 2 }, async () => { if (!context.active || inventoryContextRef.current !== context || inventoryOwnerRef.current !== user?.uid) return; setLoadoutMessage("purchase confirmed."); await refreshInventory(); }); }} />}
             </div></article>;
           })}
         </div></div>)}

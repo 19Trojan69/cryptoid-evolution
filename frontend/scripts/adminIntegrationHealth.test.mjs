@@ -38,7 +38,7 @@ function clockHost() {
 const flush = async () => { for (let i = 0; i < 15; i++) await Promise.resolve(); };
 
 test('readiness distinguishes configuration, wallet, checkout, Pi approval and NFT evidence in every locale', () => {
-  assert.equal(Object.keys(readinessLabels).length, 8);
+  assert.equal(Object.keys(readinessLabels).length, 9);
   const keys = [...Object.values(readinessLabels), ...Object.values(readinessReasons), 'Alle Voraussetzungen bleiben gemeinsam verpflichtend.', 'Nachweis fehlt oder ist nicht prüfbar.'];
   assert.equal(Object.keys(mainnetReadinessTranslations).length, 19);
   for (const [locale, entries] of Object.entries(mainnetReadinessTranslations)) for (const key of keys) {
@@ -77,6 +77,41 @@ test('release view keeps the global gate disabled and explains actual unmet capa
   assert.equal(writes.length, 0);
   h.unmount();
 });
+
+test('a confirmed operator hold explains an unavailable readiness inspection and keeps new release disabled', async () => {
+  const writes = [], reads = [];
+  const h = componentHost('src/pages/AdminMainnetRelease.tsx', 'AdminMainnetRelease', {}, {
+    adminText, useAdminLocale: () => ({}), useCallback: fn => fn, readinessLabel, readinessReason,
+    axiosClient: {
+      get: () => new Promise(resolve => reads.push(resolve)),
+      post: async (path, body) => {
+        writes.push({ path, body });
+        return { data: { enabled: false, released: false, revision: 8, ready: false,
+          checks: [{ id: 'readinessInspection', ready: false, reason: 'readiness_inspection_unavailable' }] } };
+      },
+    },
+  });
+  await h.flush();
+  reads[0]({ data: { enabled: false, released: true, revision: 7, ready: false,
+    checks: [{ id: 'readinessInspection', ready: false, reason: 'readiness_inspection_unavailable' }] } });
+  await h.flush();
+  const hold = h.nodes().find(n => n.type === 'button' && JSON.stringify(n.props.children).includes('Freigabe zurücknehmen'));
+  assert.equal(hold.props.disabled, false);
+  hold.props.onClick();
+  await h.flush();
+  assert.deepEqual(writes, [{ path: '/admin/mainnet-release', body: { action: 'hold', revision: 7 } }]);
+  const text = JSON.stringify(h.nodes());
+  assert.match(text, /Prüfung der Mainnet-Bereitschaft/);
+  assert.match(text, /Die Mainnet-Bereitschaft kann derzeit nicht geprüft werden\. Neue Käufe bleiben gesperrt\./);
+  assert.doesNotMatch(text, /Vollbetrieb freigegeben|readiness_inspection_unavailable/);
+  const blocked = h.nodes().find(n => n.type === 'button' && JSON.stringify(n.props.children).includes('Mainnet vollständig freigeben'));
+  assert.equal(blocked.props.disabled, true);
+  blocked.props.onClick();
+  await h.flush();
+  assert.equal(writes.length, 1);
+  h.unmount();
+});
+
 function polling() {
   const clock = clockHost(), requests = [], results = [], errors = [], busy = [], modes = [];
   const poll = startIntegrationPolling({ host: clock.host,

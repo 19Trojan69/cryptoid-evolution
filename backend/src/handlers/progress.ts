@@ -97,11 +97,21 @@ export default function mountProgressEndpoints(router: Router) {
   // Presentation preferences never grant inventory, cards, rewards or progress.
   // Atomic union is independent of the version used for account transactions.
   router.post("/card-reveals", async (req, res) => {
+    const uid = req.session.currentUser!.uid, network = rewardNetwork(req);
+    const has = (field: string) => Object.prototype.hasOwnProperty.call(req.body ?? {}, field);
+    // These optional client expectations only reject a stale context. The
+    // authenticated server identity and network remain the source of authority.
+    if (has('expectedUid') && (typeof req.body.expectedUid !== 'string' || !req.body.expectedUid))
+      return res.status(400).json({ error: 'invalid_card_owner' });
+    if (has('expectedNetwork') && !['testnet', 'mainnet'].includes(req.body.expectedNetwork))
+      return res.status(400).json({ error: 'invalid_card_network' });
+    if ((has('expectedUid') && req.body.expectedUid !== uid) || (has('expectedNetwork') && req.body.expectedNetwork !== network))
+      return res.status(403).json({ error: 'card_context_changed' });
     const ids = req.body?.ids;
     const valid = new Set([...standardShips.flatMap(ship => [1, 2, 3].map(stage => `${ship}-${stage}`)), ...Array.from({ length: 50 }, (_, i) => `boss-${i + 1}`)]);
     if (!Array.isArray(ids) || ids.length > 110 || ids.some(id => typeof id !== 'string' || !valid.has(id))) return res.status(400).json({ error: 'invalid_cards' });
     try {
-      const users = req.app.locals.userCollection, uid = req.session.currentUser!.uid, network = rewardNetwork(req);
+      const users = req.app.locals.userCollection;
       await loadPlayerSave(users, uid, network);
       if (ids.length) await users.updateOne({ uid }, { $addToSet: { [`playerByNetwork.${network}.cardReveals`]: { $each: ids } } });
       return res.json({ saved: true });

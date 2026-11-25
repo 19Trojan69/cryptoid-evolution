@@ -3,6 +3,7 @@
 export type ReadinessCheck = { id: string; ready: boolean; reason?: string };
 
 export const readinessLabels: Record<string, string> = {
+  readinessInspection: "Prüfung der Mainnet-Bereitschaft",
   database: "Datenbank und Kontospeicherung",
   appNetwork: "Mainnet-App und Netzwerk",
   piPayments: "Serverseitiger Mainnet-Schlüssel",
@@ -14,6 +15,7 @@ export const readinessLabels: Record<string, string> = {
 };
 
 export const readinessReasons: Record<string, string> = {
+  readiness_inspection_unavailable: "Die Mainnet-Bereitschaft kann derzeit nicht geprüft werden. Neue Käufe bleiben gesperrt.",
   storage_available: "Kontospeicherung ist verfügbar.",
   storage_unavailable: "Kontospeicherung ist nicht verfügbar.",
   mainnet_app_configuration_required: "Mainnet-App und Netzwerk müssen serverseitig zugeordnet sein.",

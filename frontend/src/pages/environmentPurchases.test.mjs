@@ -16,6 +16,15 @@ import { shipNftCopy } from '../locales/shipNft.ts';
 import { chargeQuantity, chargeTotal, MAX_CHARGE_QUANTITY } from '../../../backend/src/chargePurchase.ts';
 import { piPurchaseAllowed, testPiPurchaseAllowed } from '../../../backend/src/paymentPolicy.ts';
 const Price = ({ amount, testnet }) => jsx.jsxs('span', { children: [amount, testnet ? ' Test-Pi' : ' Pi'] });
+
+test('account mismatch guidance has explicit translations for every supported language', () => {
+  const source = 'Your Pi Browser account does not match this game session. Sign in with the same Pi account before retrying.';
+  for (const locale of Object.keys(languages)) {
+    const text = translate(locale, source);
+    assert.ok(text.trim(), locale);
+    if (locale !== 'en') assert.notEqual(text, source, locale);
+  }
+});
 function component(file, imports = {}) {
   const exports = {};
   const code = ts.transpileModule(readFileSync(new URL(file, import.meta.url), 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, jsx: ts.JsxEmit.ReactJSX } }).outputText;
