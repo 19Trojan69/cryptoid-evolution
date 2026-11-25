@@ -3,7 +3,7 @@ export type PiOAuthConfiguration = { clientId: string; origin: string; redirectU
 export const PI_OAUTH_STATE_KEY = "cryptoid_pi_oauth_state_v2";
 export const PI_AUTH_ATTEMPT_KEY = "cryptoid_pi_auth_attempt_v1";
 export const PI_OAUTH_MAX_AGE_MS = 10 * 60_000;
-const returnPaths = new Set(["/", "/admin", "/game", "/galaxy", "/shop"]);
+const returnPaths = new Set(["/", "/admin", "/game", "/galaxy"]);
 
 // Only exact local routes can be returned to. Query parameters, fragments,
 // encoded paths and external/protocol-relative URLs are never carried through.

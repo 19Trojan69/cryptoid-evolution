@@ -31,8 +31,8 @@ test('OAuth requires actual portal configuration bound to exact origin and netwo
 });
 
 test('OAuth return routes reject absolute, encoded, query and protocol-relative targets', () => {
-  for (const safe of ['/', '/admin', '/game', '/galaxy', '/shop']) assert.equal(oauth.safePiReturnPath(safe), safe);
-  for (const value of ['//attacker.example', 'https://attacker.example', '/admin?next=//attacker.example', '/%2f%2fattacker.example', '/admin#x', '/signin/callback', undefined]) {
+  for (const safe of ['/', '/admin', '/game', '/galaxy']) assert.equal(oauth.safePiReturnPath(safe), safe);
+  for (const value of ['//attacker.example', 'https://attacker.example', '/admin?next=//attacker.example', '/%2f%2fattacker.example', '/admin#x', '/signin/callback', '/shop', undefined]) {
     assert.equal(oauth.safePiReturnPath(value), '/');
   }
 });
