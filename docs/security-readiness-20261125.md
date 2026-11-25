@@ -78,6 +78,56 @@ a claim that Pi can never support NFTs.
 
 ## Verification record
 
+### Continuation review of the draft changes
+
+A separate review of draft PRs 208 and 209 on 25 November 2026 reproduced
+additional defects before applying narrow corrections. The drafts had not been
+deployed; these findings do not establish contamination of live data.
+
+| Confirmed defect | Correction and relevant files |
+| --- | --- |
+| The established Testnet proxy could store Pi permission information in the production server's Mainnet notification namespace. | Consent capture now rejects mismatched network intent, clears only that server namespace and requires fresh `provenanceVersion: 2` proof. A request hint cannot select credentials. `backend/src/notificationSecurity.ts`, `handlers/users.ts`, `index.ts`, `notificationConsentProvenance.test.mjs` and existing notification/session tests. Authentication failures also use fixed log messages. |
+| A failed readiness inspector could prevent persisting Hold or hide the revision needed by the Admin Hold button. | A verified-owner Hold uses the existing revision comparison before readiness services. Readable release status remains available with all readiness marked unverified on inspection failure. Missing/corrupt/unwritable storage cannot produce a successful Hold, and failed inspection cannot authorize release. `backend/src/mainnetRelease.ts` and tests; `frontend/src/pages/mainnetReadinessCopy.ts`, its 19-language bundle and actual Admin component tests. |
+| Wallet approval alone could mark the separate wallet-connection capability ready. | Both an approved-wallet record and a separate reviewed `connected` record are now required. The latter must match the app, Mainnet, wallet address and source revision; approved-only or mismatched evidence cannot reach order or Pi probes. `backend/src/mainnetEvidence.ts`, tests and the evidence contract. No actual approval or connection was performed. |
+| The publication candidate could supply its own replacement-image bytes and matching digest without proving the approved original. | The offline validator now requires a separate trusted original-art record bound to the card, catalog, artwork revision and image digest. No real records or hashes were invented. `backend/src/nftPublication.ts` and tests; the issuance/publication lock remains. |
+| The paused mission could omit a UID when reusing an SDK token, leaving its checkout/recovery account unbound. | The hook resolves the existing server-session UID before using that SDK session and retains the verified UID for cached orders. A mismatched/missing SDK UID does not open checkout or recovery. `frontend/src/hooks/usePayments.ts` and tests; explanatory account guidance covers all 19 languages. |
+| An authenticated A-to-B switch could clear the Shop inventory without refetching, then accept a late A response; a same-account Admin-mode switch could also accept an old-context reply. | The inventory effect also depends on the UID. Version and active owner/mode context checks reject old inventory, error, equip and post-refresh purchase responses. `frontend/src/pages/Shop.tsx`, `shopInventoryContext.test.mjs` and the required purchase test group. Confirmed server purchases are preserved. |
+| An already queued reveal or delayed preference retry could display an A card in B or mark it seen for B. | Reveal queues are owner/mode tagged before render and before remembering a card. Retired Continue callbacks cannot consume the next account's queue. `cardRevealMemory.ts` verifies the current server UID, keeps a captured bearer when present and retires retries after auth/network/mode changes. Cookie-only syncing remains available. The `/progress/card-reveals` handler compares optional `expectedUid`/`expectedNetwork` with the authenticated server context before any storage; these fields can only deny a write, never grant privileges. New real-source and helper tests cover both authentication paths and preserve existing local seen records. |
+| Input after the collector's idle cutoff could retroactively count elapsed idle seconds. | The existing collector starts a fresh measured interval after that cutoff. The reproduced 30-second report becomes 15 seconds; the test covers all five existing input events. `frontend/src/lib/aggregateUsage.ts` and tests. No new requests, identifiers, collection fields or reconstructed history. |
+
+No gameplay rules, prices, supplies, gameplay save schema, routes, menus, artwork, audio or
+actual release/configuration values were changed by this continuation. The
+Testnet-specific payment policy and unmounted Mainnet preparation modules remain.
+The account-switch/collector/UI tests are included in the existing required
+frontend build pipeline. All new defects were reproduced with simulated
+interfaces or actual local source fragments, without real Pi operations.
+
+The existing Testnet gateway uses the common production backend for ordinary
+`/progress/card-reveals` requests. Any later authorized rollout must include the
+matching server guard in that common backend before the updated Testnet client.
+Legacy payloads remain accepted; the new helper always supplies its account and
+network expectations. No rollout, proxy change or deployment occurred here.
+
+### Continuation verification
+
+| Complete required check | Mainnet review | Testnet review |
+| --- | ---: | ---: |
+| Backend build and tests | 281 passed, one existing skip | 272 passed, one existing skip |
+| Frontend release pipeline | 598 passed | 596 passed |
+| Frontend TypeScript and Vite | Passed | Passed |
+| Whole-project ESLint | 102 errors, five warnings | 102 errors, five warnings |
+
+The lint rule-count distribution is unchanged from the initial drafts; this is
+not a claim that the repository is lint-clean. No existing tests were removed
+or weakened. The new regression cases failed against the prior draft behavior
+and then passed with the corrections. The full builds include the new actual
+Shop/reveal-helper cases, the owner Hold component case and the collector case.
+Existing large-bundle warnings remain. Test transports, server sessions, storage
+and Pi interfaces are simulated; physical-device/live-payment acceptance remains
+outside this work.
+
+### Initial draft verification
+
 Production baseline `645a445`: full backend build/test, 210 passed, one existing
 skip; full frontend release pipeline, 539 passed, TypeScript and Vite passed.
 
