@@ -39,8 +39,8 @@ export default function mountUserEndpoints(router: Router) {
       if (await deletedAccessToken(req.app.locals.adminCollection, verifiedUid, auth.accessToken)) return res.status(410).json({ error: 'account_deleted' });
       verifiedRoles = Array.isArray(me.data.roles) ? me.data.roles : [];
       notificationIdentity = verifiedNotificationIdentity(me.data, notificationApp);
-    } catch (err) {
-      console.error("Error verifying access token:", err);
+    } catch {
+      console.error("Pi token verification failed");
       return res.status(401).json({ error: "invalid_token", message: "Invalid access token" });
     }
 
@@ -82,8 +82,8 @@ export default function mountUserEndpoints(router: Router) {
       req.session.adminLoadout = null;
       req.session.scoreRun = null;
       return res.status(200).json({ message: "User signed in", user: publicUser(currentUser), canAdmin: await canAdmin(req), adminMode: false });
-    } catch (err) {
-      console.error("Error during signin:", err);
+    } catch {
+      console.error("Pi sign-in storage failed");
       return res.status(500).json({ error: "internal_error", message: "Failed to sign in" });
     }
   });
