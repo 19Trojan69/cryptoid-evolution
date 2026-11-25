@@ -29,7 +29,7 @@ test('real Express authentication and notification routing reject unauthorized r
     const context = security.notificationContext(req);
     req.session.currentUser = {
       uid, username: owner ? '19Trojan69' : 'ordinary', roles: ['admin'], accessToken: `verified-${uid}`,
-      notificationAuthByNetwork: { mainnet: { uid, namespace: context.namespace, scopes: ['username'], validUntil: req.params.kind === 'expired' ? 1 : Date.now() + 60_000 } },
+      notificationAuthByNetwork: { mainnet: { provenanceVersion: 2, uid, namespace: context.namespace, scopes: ['username'], validUntil: req.params.kind === 'expired' ? 1 : Date.now() + 60_000 } },
     };
     res.json({ ok: true });
   });

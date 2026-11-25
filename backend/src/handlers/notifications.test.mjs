@@ -38,7 +38,7 @@ function setup(t) {
   const routes = {}; mount({ post(path, handler) { routes[path] = handler; } });
   const claims = store();
   const context = security.notificationContext({ notificationNetwork: 'mainnet' });
-  const identity = uid => ({ uid, notificationAuthByNetwork: { mainnet: { uid, namespace: context.namespace, scopes: ['username','in_app_notifications'], validUntil: Date.now() + 600_000 } } });
+  const identity = uid => ({ uid, notificationAuthByNetwork: { mainnet: { provenanceVersion: 2, uid, namespace: context.namespace, scopes: ['username','in_app_notifications'], validUntil: Date.now() + 600_000 } } });
   const users = [identity('recipient')];
   const req = {
     notificationNetwork: 'mainnet',
@@ -74,6 +74,7 @@ test('server context determines owner and credential namespace despite browser n
 test('missing, expired or different-key identities fail closed and mismatched bearer is rejected', async t => {
   for (const mutation of [
     h => { delete h.req.session.currentUser.notificationAuthByNetwork; },
+    h => { delete h.req.session.currentUser.notificationAuthByNetwork.mainnet.provenanceVersion; },
     h => { h.req.session.currentUser.notificationAuthByNetwork.mainnet.validUntil = 1; },
     h => { h.req.session.currentUser.notificationAuthByNetwork.mainnet.namespace = 'another-app'; },
     h => { h.req.headers.authorization = 'Bearer another-account'; },
@@ -95,6 +96,7 @@ test('dispatch needs explicit enabled network credentials and durable storage', 
 test('unknown, unconsented, expired and other-app recipients cannot be sent to', async t => {
   for (const mutation of [
     h => { h.users.length = 0; },
+    h => { delete h.users[0].notificationAuthByNetwork.mainnet.provenanceVersion; },
     h => { h.users[0].notificationAuthByNetwork.mainnet.scopes = ['username']; },
     h => { h.users[0].notificationAuthByNetwork.mainnet.validUntil = 1; },
     h => { h.users[0].notificationAuthByNetwork.mainnet.namespace = 'testnet-or-another-key'; },

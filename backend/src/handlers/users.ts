@@ -3,7 +3,7 @@ import { Router } from "express";
 import platformAPIClient from "../services/platformAPIClient";
 import { canAdmin, isAdminMode } from "../adminAccess";
 import { deletedAccessToken } from '../playerAdministration';
-import { notificationContext, verifiedNotificationIdentity } from '../notificationSecurity';
+import { notificationConsentContext, notificationContext, verifiedNotificationIdentity } from '../notificationSecurity';
 
 export default function mountUserEndpoints(router: Router) {
   const publicUser = (user: { uid: string; username: string; roles?: string[] }) => ({
@@ -38,7 +38,7 @@ export default function mountUserEndpoints(router: Router) {
       if (!verifiedUsername || typeof verifiedUsername !== "string") return res.status(401).json({ error: "invalid_token" });
       if (await deletedAccessToken(req.app.locals.adminCollection, verifiedUid, auth.accessToken)) return res.status(410).json({ error: 'account_deleted' });
       verifiedRoles = Array.isArray(me.data.roles) ? me.data.roles : [];
-      notificationIdentity = verifiedNotificationIdentity(me.data, notificationApp);
+      notificationIdentity = verifiedNotificationIdentity(me.data, notificationConsentContext(req, notificationApp));
     } catch {
       console.error("Pi token verification failed");
       return res.status(401).json({ error: "invalid_token", message: "Invalid access token" });

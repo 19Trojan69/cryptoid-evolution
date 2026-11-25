@@ -110,6 +110,20 @@ blocked. A valid checkout record or stored operator release cannot bypass them.
 The explicit owner release, revision checks and safe error behavior remain in
 `mainnetRelease.ts`.
 
+An explicit verified-owner `hold` is persisted with the same revision comparison
+before contacting readiness services. If the subsequent inspection fails, the
+response still acknowledges the stored hold and reports `enabled: false`,
+`released: false`, `ready: false` and `readiness_inspection_unavailable`. It does
+not claim that any prerequisite was verified. An already-held state is
+idempotent. A stale revision cannot change the stored release, and an unreadable,
+corrupt or unwritable release record is never acknowledged as successfully held.
+Inspection failures still prevent new release actions and purchases.
+The owner status read likewise returns the actual persisted `released` choice
+and revision with `ready: false` and `enabled: false` when only readiness
+inspection is unavailable. This keeps the Hold control usable even after loading
+the Admin page during an outage. Unreadable or corrupt release storage still
+returns an error; no release state or revision is invented.
+
 ## Relevant official documentation
 
 - [Launch checklist and approved Incoming Multisig Wallet](https://developers.minepi.com/docs/build-first-app/Launch)
