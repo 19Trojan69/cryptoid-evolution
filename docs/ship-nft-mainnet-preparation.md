@@ -24,7 +24,82 @@ Build the backend and verify the extracted artwork bundle with `node backend/scr
 
 ## Blockchain integration still to do
 
+### Owner release control
+
+The Mainnet control and preparation sections below describe the Mainnet review
+branch. These modules are not mounted in the Testnet Admin interface; Testnet
+keeps its existing menus and rejects Mainnet payments.
+
+The Mainnet Admin overview contains a Mainnet release control. The server stores
+the requested state and revision in the existing owner-access collection. A
+missing record starts in preparation. Every request uses the existing verified
+owner authorization. Testnet requests cannot change the Mainnet release.
+Updates compare the displayed revision with the stored revision, so an older
+screen cannot overwrite a newer change.
+
+As of 25 November 2026, readiness separately checks account storage, the Mainnet
+app/network and scoped server key, approved connected wallet evidence, an existing
+completed checkout and required Pi approval evidence. The existing payment is
+read from Pi with the scoped key and compared against the saved receipt, product,
+quantity, amount, user, network, destination and transaction. No new payment is
+created. The exact reviewed-evidence contract is in
+[mainnet-evidence-contract.md](mainnet-evidence-contract.md).
+
+NFT issuance and final public metadata remain unestablished. The release control
+therefore stays blocked. A stored release flag and browser-supplied readiness
+fields cannot enable purchases while these server checks remain incomplete. The
+original joint release policy remains: readiness of ordinary Pi payments alone
+does not release offers with an included NFT or bypass NFT prerequisites.
+
+New Mainnet payment approvals consult this release state. Previously approved,
+verified Mainnet transactions can still be completed and recovered while the
+application is in preparation. Existing Test-Pi policy continues to apply to
+Testnet purchases. Basic gameplay and earned-Shard purchases use their existing
+paths. The gate establishes controlled activation. Mainnet wallet checkout,
+on-chain issue verification and device acceptance remain release work.
+
 Confirm the Mainnet ship checkout and the wallet destination before enabling the feature. Use the successful server-side acquisition or payment completion as the trigger to persist an issuance job once per Mainnet account and card. Persist it with the acquisition or reconcile the verified record if completion is retried. Submit to the reviewed Mainnet contract, reconcile retries with the chain and mark the NFT issued only after verifying the chain transaction. Confirm the issuance policy for pre-launch purchases and imported saves. Verify those flows with real approved Mainnet test cases before going live.
+
+## Owner preparation catalog
+
+The Mainnet Admin overview also provides a read-only metadata draft for the
+existing 500 designs: 200 boss editions, 60 ship editions and 240 Retro editions.
+Shared terms preserve the existing prices, supply caps and acquisition conditions.
+The export carries a SHA-256 content fingerprint, stable card IDs and the original
+boss stories when present in the preview collection. It reads only the story and
+ID fields from that collection.
+
+The draft is explicitly unpublished: `publishable` is false, each `metadataUri`
+is null and every metadata `image` is null. Owner-only Testnet artwork paths are
+labelled preview references, never public NFT image addresses. The status lists
+missing hosted addresses, descriptions and 98 premium designs currently represented
+by silhouettes. All 430 paid designs now have stable product mappings: 40 retain
+the existing ship offer IDs, and 390 boss/Retro editions use preparation IDs.
+Those 390 IDs are marked `productState: prepared`, are not inserted into the live
+checkout catalog, and still need an operational acquisition/delivery flow. The
+Admin pending-checkout count uses prepared products, not missing mappings.
+
+The offline versioned publication-candidate validator requires matching card IDs,
+catalog hash, exact image and metadata SHA-256 hashes, complete matching metadata
+and an operator-allowed HTTPS origin. Validation creates no final publication:
+public reachability and a supported authorized issuance path are still unverified,
+so even a valid candidate remains `publishable: false`. It cannot turn an owner-only
+preview address into a final NFT image URI. See
+[pi-next-readiness-20261125.md](pi-next-readiness-20261125.md) for the official-source
+research and exact external prerequisites.
+
+Preview responses explicitly identify `state: preview` and
+`blockchainOwnershipVerified: false`. A verified acquisition-evidence helper checks
+server-side eligibility; it does not claim blockchain ownership. No live supply
+reservation, issuance queue or transaction is created. Parallel issue attempts
+remain blocked until the supported issuer, durable supply accounting and chain
+reconciliation have been implemented and reviewed.
+
+Both summary and JSON download require the existing fresh verified-owner check
+and Mainnet context. Preparing or downloading them creates no ownership records,
+supply reservations, issuance jobs, payments or blockchain transactions. Existing
+Mainnet eligibility helpers remain authoritative for account-specific acquisition.
+No release-readiness flag changes as a result of this catalog.
 
 ## Verification
 
