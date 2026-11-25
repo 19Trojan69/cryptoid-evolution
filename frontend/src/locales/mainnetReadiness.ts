@@ -78,4 +78,32 @@ const entries: Record<string, string[]> = {
   ],
 };
 
-export const mainnetReadinessTranslations = Object.fromEntries(Object.entries(entries).map(([locale, values]) => [locale, Object.fromEntries(sources.map((source, index) => [source, values[index]]))]));
+const inspectionLabel = "Prüfung der Mainnet-Bereitschaft";
+const inspectionReason = "Die Mainnet-Bereitschaft kann derzeit nicht geprüft werden. Neue Käufe bleiben gesperrt.";
+const inspectionEntries: Record<string, readonly [string, string]> = {
+  de: [inspectionLabel, inspectionReason],
+  en: ["Mainnet readiness inspection", "Mainnet readiness cannot currently be checked. New purchases remain locked."],
+  es: ["Comprobación de preparación de Mainnet", "Ahora no se puede comprobar si Mainnet está listo. Las nuevas compras siguen bloqueadas."],
+  fr: ["Vérification de la préparation Mainnet", "La préparation Mainnet ne peut pas être vérifiée actuellement. Les nouveaux achats restent bloqués."],
+  pt: ["Verificação da preparação da Mainnet", "Não é possível verificar a preparação da Mainnet neste momento. Novas compras continuam bloqueadas."],
+  it: ["Verifica della preparazione Mainnet", "Al momento non è possibile verificare la preparazione Mainnet. I nuovi acquisti restano bloccati."],
+  pl: ["Sprawdzanie gotowości Mainnet", "Obecnie nie można sprawdzić gotowości Mainnet. Nowe zakupy pozostają zablokowane."],
+  tr: ["Mainnet hazırlık denetimi", "Mainnet hazırlığı şu anda denetlenemiyor. Yeni satın alımlar kilitli kalır."],
+  ru: ["Проверка готовности Mainnet", "Сейчас невозможно проверить готовность Mainnet. Новые покупки остаются заблокированными."],
+  hr: ["Provjera spremnosti Mainneta", "Spremnost Mainneta trenutačno se ne može provjeriti. Nove kupnje ostaju zaključane."],
+  cs: ["Kontrola připravenosti Mainnetu", "Připravenost Mainnetu nyní nelze ověřit. Nové nákupy zůstávají uzamčené."],
+  sk: ["Kontrola pripravenosti Mainnetu", "Pripravenosť Mainnetu momentálne nemožno overiť. Nové nákupy zostávajú uzamknuté."],
+  hu: ["A Mainnet felkészültségének ellenőrzése", "A Mainnet felkészültsége jelenleg nem ellenőrizhető. Az új vásárlások zárolva maradnak."],
+  ro: ["Verificarea pregătirii Mainnet", "Pregătirea Mainnet nu poate fi verificată momentan. Achizițiile noi rămân blocate."],
+  sr: ["Провера спремности Mainnet-а", "Спремност Mainnet-а тренутно не може да се провери. Нове куповине остају закључане."],
+  uk: ["Перевірка готовності Mainnet", "Наразі неможливо перевірити готовність Mainnet. Нові покупки залишаються заблокованими."],
+  th: ["การตรวจสอบความพร้อมของ Mainnet", "ขณะนี้ไม่สามารถตรวจสอบความพร้อมของ Mainnet ได้ การซื้อใหม่ยังคงถูกล็อก"],
+  zh: ["主网就绪状态检查", "目前无法检查主网是否就绪。新购买仍被锁定。"],
+  vi: ["Kiểm tra mức độ sẵn sàng của Mainnet", "Hiện không thể kiểm tra mức độ sẵn sàng của Mainnet. Các giao dịch mua mới vẫn bị khóa."],
+};
+
+export const mainnetReadinessTranslations = Object.fromEntries(Object.entries(entries).map(([locale, values]) => [locale, {
+  ...Object.fromEntries(sources.map((source, index) => [source, values[index]])),
+  [inspectionLabel]: inspectionEntries[locale][0],
+  [inspectionReason]: inspectionEntries[locale][1],
+}]));

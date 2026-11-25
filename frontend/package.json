@@ -49,7 +49,7 @@
     "test:owner-catalog": "node --experimental-strip-types --test src/pages/ownerTestnetCatalog.test.mjs src/pages/shipSelection.test.mjs src/pages/shipLoadoutSelection.test.mjs src/pages/modestShipBalance.test.mjs src/pages/shipAttributes.test.mjs src/pages/shipEvolution.test.mjs src/pages/fairShipStages.test.mjs",
     "test:shard-economy": "node --experimental-strip-types --test src/pages/doubleKillCombo.test.mjs src/pages/shardEarnings.test.mjs",
     "test:usage": "node --experimental-strip-types --test src/lib/aggregateUsage.test.mjs",
-    "test:purchase-environment": "node --experimental-strip-types --test src/pages/environmentPurchases.test.mjs"
+    "test:purchase-environment": "node --experimental-strip-types --test src/pages/environmentPurchases.test.mjs src/pages/shopInventoryContext.test.mjs src/pages/cardRevealMemory.test.mjs"
   },
   "dependencies": {
     "@mui/icons-material": "^7.3.8",

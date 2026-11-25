@@ -34,7 +34,11 @@ export async function startAggregateUsage() {
   const eligible = () => !document.hidden && !/^\/(admin|privacy|terms)(\/|$)/.test(location.pathname);
   const count = () => { if (!counted && eligible()) { counted = true; send({ kind: "visit" }); } };
   const activity = () => {
-    interacted = performance.now();
+    const now = performance.now();
+    // Input after an idle cutoff starts a new measured interval. Replacing the
+    // cutoff alone would retroactively count idle seconds before this input.
+    if (now - interacted > 60_000) last = now;
+    interacted = now;
     if (previousPath !== location.pathname) { previousPath = location.pathname; last = interacted; }
     count();
   };

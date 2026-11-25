@@ -31,6 +31,7 @@ type PaymentDiagnosticResponse = {
 };
 
 const PAYMENT_DIAGNOSTIC_KEY = "cryptoid_payment_diagnostic";
+const PAYMENT_ACCOUNT_MESSAGE = "Your Pi Browser account does not match this game session. Sign in with the same Pi account before retrying.";
 
 const formatPaymentDiagnostic = (error: unknown) => {
   const response = (error as { response?: { status?: number; data?: PaymentDiagnosticResponse } })?.response;
@@ -66,6 +67,7 @@ export const usePayments = ({ isAuthenticated, accountId, network, onRequireAuth
   const attemptVersion = useRef(0);
   // A saved server login does not authenticate a freshly loaded Pi SDK.
   const sdkToken = useRef<string | null>(null);
+  const sdkUid = useRef<string | null>(null);
   const [paymentDiagnostic, setPaymentDiagnostic] = useState(() => {
     try { return sessionStorage.getItem(PAYMENT_DIAGNOSTIC_KEY) || ""; }
     catch { return ""; }
@@ -81,6 +83,7 @@ export const usePayments = ({ isAuthenticated, accountId, network, onRequireAuth
     let active = true;
     paymentPending.current = false;
     sdkToken.current = null;
+    sdkUid.current = null;
     incomplete.current.clear();
     recovering.current.clear();
     recoveryReceiver.current = null;
@@ -104,9 +107,12 @@ export const usePayments = ({ isAuthenticated, accountId, network, onRequireAuth
     setIsLoading(false);
   }, []);
   const fail = useCallback((stage: string, error: unknown) => {
-    rememberDiagnostic(`${stage}: ${formatPaymentDiagnostic(error)}`);
-    setPaymentStatus("");
+    const detail = formatPaymentDiagnostic(error);
+    rememberDiagnostic(`${stage}: ${detail}`);
+    setPaymentStatus(detail === "payment_account_mismatch" || detail === "payment_account_verification_failed"
+      ? PAYMENT_ACCOUNT_MESSAGE : "");
     sdkToken.current = null;
+    sdkUid.current = null;
     finish();
   }, [finish, rememberDiagnostic]);
 
@@ -129,7 +135,7 @@ export const usePayments = ({ isAuthenticated, accountId, network, onRequireAuth
       && sessionStorage.getItem(PI_AUTH_ATTEMPT_KEY) === authAttempt && sessionStorage.getItem(PI_ACCESS_TOKEN_KEY) === token;
     const done = () => { if (current()) finish(); };
     const failed = (stage: string, error: unknown) => { if (current()) fail(stage, error); };
-    let verifiedUid = accountId;
+    let verifiedUid = accountId || (sdkToken.current === token ? sdkUid.current : null);
     const confirmedPayments = new Set<string>();
     const confirmOnce = async (paymentId: string) => {
       if (!current() || confirmedPayments.has(paymentId)) return;
@@ -169,6 +175,7 @@ export const usePayments = ({ isAuthenticated, accountId, network, onRequireAuth
       }
       if (!sdkToken.current || sdkToken.current !== token) {
         sdkToken.current = null;
+        sdkUid.current = null;
         const authResult = await window.Pi.authenticate(["username", "payments"], payment => {
           // A cached SDK session keeps this native callback between orders. Route
           // discoveries to the latest context, which rechecks account/network.
@@ -176,22 +183,25 @@ export const usePayments = ({ isAuthenticated, accountId, network, onRequireAuth
         });
         if (!current()) return;
         if (!authResult.accessToken) throw new Error("Pi authentication did not return an access token");
-        if (accountId && authResult.user?.uid && authResult.user.uid !== accountId) throw new Error("payment_account_mismatch");
+        // The paused mission supplies authentication state but may not pass its
+        // UID. Bind it to the existing server session even when Pi reuses the
+        // same token; neither an SDK field nor a token cache proves that UID.
+        if (!verifiedUid) {
+          const { data: session } = await axiosClient.get("/user/me");
+          if (!current()) return;
+          verifiedUid = session?.user?.uid;
+        }
+        if (!verifiedUid || authResult.user?.uid !== verifiedUid) throw new Error("payment_account_mismatch");
         // Changing the SDK token must not silently switch the account of an
         // active mission. Verify the current server account before rebinding.
         if (token !== authResult.accessToken) {
-          if (!verifiedUid) {
-            const { data: session } = await axiosClient.get("/user/me");
-            if (!current()) return;
-            verifiedUid = session?.user?.uid;
-          }
-          if (!verifiedUid || authResult.user?.uid !== verifiedUid) throw new Error("payment_account_mismatch");
           const { data: session } = await axiosClient.post("/user/signin", { authResult }, { headers: { Authorization: `Bearer ${authResult.accessToken}` } });
           if (!current()) return;
           if (session?.user?.uid !== verifiedUid) throw new Error("payment_account_verification_failed");
           sessionStorage.setItem(PI_ACCESS_TOKEN_KEY, authResult.accessToken);
           token = authResult.accessToken;
         }
+        sdkUid.current = verifiedUid;
         sdkToken.current = authResult.accessToken;
       }
       if (!current()) return;
