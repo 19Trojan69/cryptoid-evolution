@@ -34,7 +34,7 @@ import mountProgressEndpoints from "./handlers/progress";
 // https://stackoverflow.com/questions/65108033/property-user-does-not-exist-on-type-session-partialsessiondata#comment125163548_65381085
 import "./types/session";
 import mountNotificationEndpoints from "./handlers/notifications";
-import { notificationContext, verifiedNotificationIdentity } from "./notificationSecurity";
+import { notificationConsentContext, notificationContext, verifiedNotificationIdentity } from "./notificationSecurity";
 
 const dbName = env.mongo_db_name;
 const mongoUri = env.mongo_uri || `mongodb://${env.mongo_host}/${dbName}`;
@@ -164,7 +164,7 @@ app.use(async (req, _res, next) => {
     }
 
     const notificationApp = notificationContext(req);
-    const notificationIdentity = verifiedNotificationIdentity(me.data, notificationApp);
+    const notificationIdentity = verifiedNotificationIdentity(me.data, notificationConsentContext(req, notificationApp));
     let currentUser = await userCollection.findOne({ uid });
     if (currentUser) {
       await userCollection.updateOne(
@@ -192,8 +192,8 @@ app.use(async (req, _res, next) => {
       req.session.adminLoadout = null;
       req.session.scoreRun = null;
     }
-  } catch (error) {
-    console.warn("Pi session rehydration failed", error instanceof Error ? error.message : "unknown error");
+  } catch {
+    console.warn("Pi session rehydration failed");
   }
 
   return next();

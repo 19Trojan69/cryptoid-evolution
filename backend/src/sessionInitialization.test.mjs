@@ -250,13 +250,13 @@ if (fixture >= 0) {
     let authenticate;
     const user = { _id: 'pilot-b', uid: 'pilot-b', username: 'Pilot B', accessToken: 'new-token' };
     const verified = [];
-    const { notificationContext, verifiedNotificationIdentity } = require('../build/notificationSecurity.js');
-    new Function('app', 'deletedAccessToken', 'platformAPIClient', 'notificationContext', 'verifiedNotificationIdentity', source.slice(start, end))(
+    const { notificationConsentContext, notificationContext, verifiedNotificationIdentity } = require('../build/notificationSecurity.js');
+    new Function('app', 'deletedAccessToken', 'platformAPIClient', 'notificationContext', 'notificationConsentContext', 'verifiedNotificationIdentity', source.slice(start, end))(
       { use(handler) { authenticate = handler; } }, async () => false,
       { async get(path, config) {
         verified.push([path, config.headers.Authorization]);
         return { data: user };
-      } }, notificationContext, verifiedNotificationIdentity,
+      } }, notificationContext, notificationConsentContext, verifiedNotificationIdentity,
     );
     const req = {
       testnetSave, path,

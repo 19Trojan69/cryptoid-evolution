@@ -15,18 +15,30 @@ const hash = bytes => createHash("sha256").update(bytes).digest("hex");
 const origin = "https://assets.cryptoid-evolution.app";
 
 function publication() {
-  // Local test bytes are never published or mistaken for the original artwork.
+  // Artificial bytes model a separately reviewed original-art record for this
+  // test only. No actual art approval, hash record or publication is created.
   const image = Uint8Array.from([1, 2, 3]);
   const imageSha256 = hash(image);
   const imageUri = `${origin}/nft/${imageSha256}/image.webp`;
   const metadata = JSON.stringify({ ...card.metadataDraft, image: imageUri });
   const metadataSha256 = hash(metadata);
   return {
-    candidate: { id: card.id, catalogHash: manifest.catalogHash, version: "v1", imageSha256, imageUri,
+    candidate: { id: card.id, catalogHash: manifest.catalogHash, version: "v1", artworkRevision: "original-v1", imageSha256, imageUri,
       metadataSha256, metadataUri: `${origin}/nft/${metadataSha256}/metadata.json` },
     content: { image, metadata },
+    approved: { cardId: card.id, catalogHash: manifest.catalogHash, revision: "original-v1", kind: "original", imageSha256 },
   };
 }
+
+test("publication cannot certify caller-selected bytes without a separate original-art approval", () => {
+  const p = publication();
+  const result = validateNftPublicationCandidate(card, manifest.catalogHash, p.candidate, p.content, [origin]);
+  assert.deepEqual(result, { valid: false, publishable: false, reason: "publication_original_art_unverified" });
+  assert.equal(validateNftPublicationCandidate(card, manifest.catalogHash, {
+    ...p.candidate, approvedArtwork: { cardId: card.id, catalogHash: manifest.catalogHash,
+      revision: "original-v1", kind: "original", imageSha256: p.candidate.imageSha256 },
+  }, p.content, [origin]).valid, false, "a claim inside the candidate is not a trusted approval");
+});
 
 test("every paid NFT has one stable product mapping without enabling new checkout offers", () => {
   const paid = manifest.cards.filter(card => card.price.currency === "Pi" && card.price.amount > 0);
@@ -45,17 +57,43 @@ test("every paid NFT has one stable product mapping without enabling new checkou
 
 test("offline publication validates exact hashes and catalog metadata but cannot certify reachability or issuance", () => {
   const p = publication();
-  const result = validateNftPublicationCandidate(card, manifest.catalogHash, p.candidate, p.content, [origin]);
+  const result = validateNftPublicationCandidate(card, manifest.catalogHash, p.candidate, p.content, [origin], p.approved);
   assert.deepEqual(result, { valid: true, publishable: false, reason: "public_reachability_and_issuance_unverified" });
   assert.equal(manifest.cards.every(card => card.metadataUri === null && card.metadataDraft.image === null), true);
-  assert.equal(validateNftPublicationCandidate(card, "a".repeat(64), p.candidate, p.content, [origin]).valid, false);
-  assert.equal(validateNftPublicationCandidate(card, manifest.catalogHash, { ...p.candidate, id: "other" }, p.content, [origin]).valid, false);
-  assert.equal(validateNftPublicationCandidate(card, manifest.catalogHash, { ...p.candidate, version: undefined }, p.content, [origin]).valid, false);
-  assert.equal(validateNftPublicationCandidate(card, manifest.catalogHash, null, p.content, [origin]).valid, false);
-  assert.equal(validateNftPublicationCandidate(card, manifest.catalogHash, p.candidate, { ...p.content, image: Uint8Array.from([4]) }, [origin]).reason, "publication_content_mismatch");
+  assert.equal(validateNftPublicationCandidate(card, "a".repeat(64), p.candidate, p.content, [origin], p.approved).valid, false);
+  assert.equal(validateNftPublicationCandidate(card, manifest.catalogHash, { ...p.candidate, id: "other" }, p.content, [origin], p.approved).valid, false);
+  assert.equal(validateNftPublicationCandidate(card, manifest.catalogHash, { ...p.candidate, version: undefined }, p.content, [origin], p.approved).valid, false);
+  assert.equal(validateNftPublicationCandidate(card, manifest.catalogHash, null, p.content, [origin], p.approved).valid, false);
+  assert.equal(validateNftPublicationCandidate(card, manifest.catalogHash, p.candidate, { ...p.content, image: Uint8Array.from([4]) }, [origin], p.approved).reason, "publication_content_mismatch");
   const changed = JSON.stringify({ ...JSON.parse(p.content.metadata), name: "Wrong design" });
   const changedHash = hash(changed);
-  assert.equal(validateNftPublicationCandidate(card, manifest.catalogHash, { ...p.candidate, metadataSha256: changedHash, metadataUri: `${origin}/nft/${changedHash}/metadata.json` }, { ...p.content, metadata: changed }, [origin]).reason, "publication_metadata_mismatch");
+  assert.equal(validateNftPublicationCandidate(card, manifest.catalogHash, { ...p.candidate, metadataSha256: changedHash, metadataUri: `${origin}/nft/${changedHash}/metadata.json` }, { ...p.content, metadata: changed }, [origin], p.approved).reason, "publication_metadata_mismatch");
+});
+
+test("the trusted original-art record binds card, catalog, revision, kind and digest", () => {
+  const p = publication();
+  for (const change of [
+    { cardId: "another-card" }, { catalogHash: "a".repeat(64) }, { revision: "another-revision" },
+    { revision: "" }, { kind: "preview" }, { imageSha256: "b".repeat(64) }, { imageSha256: undefined },
+  ]) {
+    const result = validateNftPublicationCandidate(card, manifest.catalogHash, p.candidate, p.content, [origin], { ...p.approved, ...change });
+    assert.equal(result.reason, "publication_original_art_unverified");
+    assert.equal(result.valid, false);
+    assert.equal(result.publishable, false);
+  }
+  const replacement = publication();
+  replacement.content.image = Uint8Array.from([7, 8, 9]);
+  replacement.candidate.imageSha256 = hash(replacement.content.image);
+  replacement.candidate.imageUri = `${origin}/nft/${replacement.candidate.imageSha256}/image.webp`;
+  replacement.content.metadata = JSON.stringify({ ...card.metadataDraft, image: replacement.candidate.imageUri });
+  replacement.candidate.metadataSha256 = hash(replacement.content.metadata);
+  replacement.candidate.metadataUri = `${origin}/nft/${replacement.candidate.metadataSha256}/metadata.json`;
+  assert.equal(validateNftPublicationCandidate(card, manifest.catalogHash, replacement.candidate, replacement.content,
+    [origin], p.approved).reason, "publication_original_art_unverified", "self-consistent replacement bytes cannot replace approved art");
+  for (const content of [null, undefined, {}, { image: null, metadata: null }]) {
+    assert.equal(validateNftPublicationCandidate(card, manifest.catalogHash, p.candidate, content, [origin], p.approved).reason,
+      "publication_content_mismatch", "malformed content is rejected without throwing");
+  }
 });
 
 test("preview, temporary, protected, unversioned and unauthorized references cannot become final metadata", () => {
@@ -70,9 +108,9 @@ test("preview, temporary, protected, unversioned and unauthorized references can
     p.candidate.imageUri.replace("https://", "https://secret@"),
     `${origin}/nft/${p.candidate.imageSha256}/preview/image.webp`, "ipfs://invented-cid/image.webp",
   ]) {
-    assert.equal(validateNftPublicationCandidate(card, manifest.catalogHash, { ...p.candidate, imageUri }, p.content, [origin]).valid, false, imageUri);
+    assert.equal(validateNftPublicationCandidate(card, manifest.catalogHash, { ...p.candidate, imageUri }, p.content, [origin], p.approved).valid, false, imageUri);
   }
-  assert.equal(validateNftPublicationCandidate(card, manifest.catalogHash, p.candidate, p.content, []).valid, false);
+  assert.equal(validateNftPublicationCandidate(card, manifest.catalogHash, p.candidate, p.content, [], p.approved).valid, false);
 });
 
 test("unverified flags, clients or wallets cannot activate the unavailable NFT adapter", async () => {

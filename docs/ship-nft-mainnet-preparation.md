@@ -84,6 +84,18 @@ preview address into a final NFT image URI. See
 [pi-next-readiness-20261125.md](pi-next-readiness-20261125.md) for the official-source
 research and exact external prerequisites.
 
+The candidate's own image hash is not proof that it contains the approved
+original artwork. The validator additionally requires a separate trusted
+`ApprovedNftOriginalArtwork` record, bound to the card ID, catalog hash, original
+artwork revision and image SHA-256, with `kind: original`. A future authorized
+server pipeline must obtain that record from its reviewed original-art manifest,
+not from the candidate, browser fields or a preview-image digest. The candidate's
+`artworkRevision` must match the trusted revision. Missing approval, a different
+card/revision or replacement bytes with their own self-consistent hashes are
+rejected. This change creates no real original-art approvals or digest records;
+the test records use artificial bytes only. Hosting, issuance and release remain
+independent unresolved prerequisites even after a candidate passes these checks.
+
 Preview responses explicitly identify `state: preview` and
 `blockchainOwnershipVerified: false`. A verified acquisition-evidence helper checks
 server-side eligibility; it does not claim blockchain ownership. No live supply

@@ -4,7 +4,7 @@ import type { Request } from "express";
 
 export type NotificationNetwork = "mainnet" | "testnet";
 export type NotificationContext = { network: NotificationNetwork; namespace: string; key: string };
-export type VerifiedNotificationIdentity = { uid: string; namespace: string; scopes: string[]; validUntil: number };
+export type VerifiedNotificationIdentity = { provenanceVersion: 2; uid: string; namespace: string; scopes: string[]; validUntil: number };
 export type AppNotification = { title: string; body: string; user_uid: string; subroute: string };
 
 // Neither Host nor x-cryptoid-app-network is proof of the selected Pi app.
@@ -29,6 +29,18 @@ export function notificationContext(req: Request): NotificationContext | null {
   return { network, namespace, key };
 }
 
+// The established Testnet proxy authenticates on the production server too.
+// A browser/proxy network hint may deny consent capture for the server app,
+// but must never select another credential or grant cross-app consent. Callers
+// still clear that server namespace when capture is denied, retiring an older
+// incorrectly scoped proof instead of silently keeping it alive.
+export function notificationConsentContext(req: Request, context = notificationContext(req)): NotificationContext | null {
+  if (!context) return null;
+  const requested = req.headers?.["x-cryptoid-app-network"];
+  return requested === undefined || typeof requested === "string" && requested.trim().toLowerCase() === context.network
+    ? context : null;
+}
+
 // Call only with the server-verified Pi /me response, never with authResult.user.
 export function verifiedNotificationIdentity(me: any, context: NotificationContext | null): VerifiedNotificationIdentity | null {
   if (!context || typeof me?.uid !== "string" || !me.uid) return null;
@@ -39,14 +51,16 @@ export function verifiedNotificationIdentity(me: any, context: NotificationConte
     : Date.parse(credentials?.valid_until?.iso8601 || "");
   if (!Number.isFinite(validUntil) || validUntil <= Date.now() || !Array.isArray(credentials?.scopes)) return null;
   return {
-    uid: me.uid, namespace: context.namespace, validUntil,
+    provenanceVersion: 2, uid: me.uid, namespace: context.namespace, validUntil,
     scopes: credentials.scopes.filter((scope: unknown): scope is string => typeof scope === "string"),
   };
 }
 
 export function currentNotificationIdentity(user: any, context: NotificationContext, now = Date.now()): VerifiedNotificationIdentity | null {
   const identity = user?.notificationAuthByNetwork?.[context.network];
-  return identity && typeof user?.uid === "string" && identity.uid === user.uid && identity.namespace === context.namespace
+  // Older draft snapshots did not check app intent at capture time. Require a
+  // fresh matching-context capture without migrating or rewriting user data.
+  return identity && identity.provenanceVersion === 2 && typeof user?.uid === "string" && identity.uid === user.uid && identity.namespace === context.namespace
     && Number.isFinite(identity.validUntil) && identity.validUntil > now && Array.isArray(identity.scopes)
     ? identity : null;
 }

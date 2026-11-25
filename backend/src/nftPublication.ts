@@ -13,12 +13,26 @@ export type NftPublicationCandidate = {
   imageUri: string;
   metadataSha256: string;
   imageSha256: string;
+  artworkRevision: string;
+};
+
+// Trusted policy input, separate from the publication candidate just like the
+// allowed-origin list. A future server publication pipeline must load it from
+// the reviewed original-art catalog/manifest, never from a browser payload or
+// by copying the candidate's self-selected digest. Preview hashes are not an
+// approval of the original. This module creates no such records or hashes.
+export type ApprovedNftOriginalArtwork = {
+  cardId: string;
+  catalogHash: string;
+  revision: string;
+  kind: "original";
+  imageSha256: string;
 };
 
 // Pure, offline checks for a future authorized publication pipeline. Only a
 // public origin explicitly configured by the operator may be referenced. A
-// content hash in the path plus byte verification prevents preview links,
-// expiring query credentials and accidental references to a different image.
+// content hash in the path plus the separately approved original-art digest
+// prevents preview links, expiring credentials and replacement-image claims.
 // This check cannot prove hosting durability or public reachability.
 const versionedPublicUri = (value: unknown, hash: string, origins: readonly string[]) => {
   if (typeof value !== "string" || !sha256(hash)) return false;
@@ -41,15 +55,21 @@ export function validateNftPublicationCandidate(
   rawCandidate: unknown,
   content: { image: Uint8Array; metadata: string },
   allowedOrigins: readonly string[],
+  approvedArtwork?: ApprovedNftOriginalArtwork,
 ) {
   const invalid = (reason: string) => ({ valid: false, reason, publishable: false as const });
   if (!rawCandidate || typeof rawCandidate !== "object" || Array.isArray(rawCandidate)) return invalid("publication_catalog_mismatch");
   const candidate = rawCandidate as NftPublicationCandidate;
   if (candidate.id !== card.id || !sha256(catalogHash) || candidate.catalogHash !== catalogHash ||
       typeof candidate.version !== "string" || !/^[a-z0-9][a-z0-9._-]{0,63}$/i.test(candidate.version)) return invalid("publication_catalog_mismatch");
+  if (!approvedArtwork || approvedArtwork.kind !== "original" || approvedArtwork.cardId !== card.id ||
+      approvedArtwork.catalogHash !== catalogHash || typeof approvedArtwork.revision !== "string" ||
+      !/^[a-z0-9][a-z0-9._-]{0,63}$/i.test(approvedArtwork.revision) ||
+      candidate.artworkRevision !== approvedArtwork.revision || !sha256(approvedArtwork.imageSha256) ||
+      candidate.imageSha256 !== approvedArtwork.imageSha256) return invalid("publication_original_art_unverified");
   if (!versionedPublicUri(candidate.imageUri, candidate.imageSha256, allowedOrigins) ||
       !versionedPublicUri(candidate.metadataUri, candidate.metadataSha256, allowedOrigins)) return invalid("publication_uri_invalid");
-  if (!(content.image instanceof Uint8Array) || !content.image.byteLength || content.image.byteLength > 16_000_000 ||
+  if (!content || typeof content !== "object" || !(content.image instanceof Uint8Array) || !content.image.byteLength || content.image.byteLength > 16_000_000 ||
       typeof content.metadata !== "string" || Buffer.byteLength(content.metadata) > 64_000 ||
       digest(content.image) !== candidate.imageSha256 || digest(content.metadata) !== candidate.metadataSha256) return invalid("publication_content_mismatch");
   try {

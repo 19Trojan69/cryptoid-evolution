@@ -10,6 +10,19 @@ export type MainnetReadiness = {
   checks: CapabilityCheck[];
 };
 
+const unavailableReadiness = (): MainnetReadiness => ({
+  ready: false,
+  checks: [{ id: "readinessInspection", ready: false, reason: "readiness_inspection_unavailable" }],
+});
+
+// Reporting an inspection failure must not hide a readable operator release
+// and revision: the owner still needs them to explicitly put the app on hold.
+// This fallback never authorizes a release or marks a capability ready.
+const inspectStatus = async (req: Request, inspect: (req: Request) => MainnetReadiness | Promise<MainnetReadiness>) => {
+  try { return await inspect(req); }
+  catch { return unavailableReadiness(); }
+};
+
 export async function inspectMainnetReadiness(req: Request): Promise<MainnetReadiness> {
   let database = false;
   const locals = req.app.locals;
@@ -60,7 +73,7 @@ export function mountMainnetRelease(router: Router, inspect: (req: Request) => M
   router.get("/mainnet-release", async (req, res) => {
     res.setHeader("Cache-Control", "no-store");
     if (rewardNetwork(req) !== "mainnet") return res.status(403).json({ error: "mainnet_admin_required" });
-    try { return res.json(await readMainnetRelease(req, inspect(req))); }
+    try { return res.json(await readMainnetRelease(req, inspectStatus(req, inspect))); }
     catch { return res.status(503).json({ error: "mainnet_release_unavailable" }); }
   });
 
@@ -72,14 +85,18 @@ export function mountMainnetRelease(router: Router, inspect: (req: Request) => M
       return res.status(400).json({ error: "invalid_release_change" });
     }
     try {
-      const readiness = await inspect(req);
+      const inspectResponse = () => action === "hold" ? inspectStatus(req, inspect) : inspect(req);
+      // A verified owner's explicit hold must reach the revision-protected
+      // storage write before optional readiness services. Unavailable evidence
+      // can never authorize release, but it must not prevent stopping purchases.
+      const readiness = action === "hold" ? unavailableReadiness() : await inspectResponse();
       const current = await readMainnetRelease(req, readiness);
       if (action === "release" && !readiness.ready) {
         return res.status(409).json({ error: "mainnet_not_ready", ...current });
       }
       const released = action === "release";
-      if (current.released === released) return res.json(current);
-      if (current.revision !== revision) return res.status(409).json({ error: "release_changed", ...current });
+      if (current.released === released) return res.json(action === "hold" ? await readMainnetRelease(req, inspectResponse()) : current);
+      if (current.revision !== revision) return res.status(409).json({ error: "release_changed", ...(action === "hold" ? await readMainnetRelease(req, inspectResponse()) : current) });
       const collection = req.app.locals.adminCollection;
       try {
         await collection.updateOne({ _id: releaseId }, {
@@ -95,9 +112,9 @@ export function mountMainnetRelease(router: Router, inspect: (req: Request) => M
         },
       });
       if (result.matchedCount !== 1) {
-        return res.status(409).json({ error: "release_changed", ...await readMainnetRelease(req, inspect(req)) });
+        return res.status(409).json({ error: "release_changed", ...await readMainnetRelease(req, inspectResponse()) });
       }
-      return res.json(await readMainnetRelease(req, inspect(req)));
+      return res.json(await readMainnetRelease(req, inspectResponse()));
     } catch { return res.status(503).json({ error: "mainnet_release_unavailable" }); }
   });
 }
