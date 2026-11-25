@@ -9,8 +9,8 @@ export type CapabilityCheck = { id: string; ready: boolean; reason: string };
 const check = (id: string, ready: boolean, reason: string): CapabilityCheck => ({ id, ready, reason });
 const publicKey = (value: unknown): value is string => typeof value === "string" && /^G[A-Z2-7]{55}$/.test(value);
 const digest = (value: unknown): value is string => typeof value === "string" && /^[a-f0-9]{64}$/.test(value);
-const officialEvidence = (value: any) => {
-  if (value?.status !== "approved" || !digest(value?.evidenceSha256)) return false;
+const officialEvidence = (value: any, status: "approved" | "connected" = "approved") => {
+  if (value?.status !== status || !digest(value?.evidenceSha256)) return false;
   try {
     const url = new URL(value.sourceUrl);
     return url.protocol === "https:" && !url.username && !url.password && !url.port &&
@@ -49,7 +49,13 @@ export async function inspectCheckoutEvidence(req: Request): Promise<CapabilityC
     Number.isFinite(reviewed) && reviewed <= now && Number.isFinite(expires) && expires > now &&
     expires > reviewed && expires - reviewed <= 90 * 86400_000;
   if (!bound) return checks;
-  checks[2] = check("walletConnection", officialEvidence(evidence.walletApproval), "approved_wallet_evidence_required");
+  // Approval to use an incoming wallet is not proof it was connected to this
+  // app. Require a separate reviewed connection artifact for the same bound
+  // configuration. Neither value is inferred from a key or a successful probe.
+  const connection = evidence.walletConnection;
+  const connected = officialEvidence(connection, "connected") && connection.appId === appId &&
+    connection.network === "Pi Network" && connection.walletAddress === wallet && connection.codeRevision === revision;
+  checks[2] = check("walletConnection", officialEvidence(evidence.walletApproval) && connected, "approved_wallet_evidence_required");
   checks[4] = check("externalPiApproval", officialEvidence(evidence.appApproval), "reviewed_pi_approval_evidence_required");
   for (const item of [checks[2], checks[4]]) if (item.ready) item.reason = "reviewed_evidence";
   if (!checks[0].ready || !checks[1].ready || !checks[2].ready || !checks[4].ready ||
