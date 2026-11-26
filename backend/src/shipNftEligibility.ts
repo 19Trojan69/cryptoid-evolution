@@ -52,18 +52,29 @@ export type ShipNftOrder = {
   pi_payment_id: string;
   txid: string;
   completed_at: Date;
+  quantity?: number;
 };
 
 export function confirmedMainnetShipUpgrades(uid: string, orders: readonly ShipNftOrder[]) {
-  return orders.filter(order => {
+  // Order rows are server records. Neither imported fleet data nor a browser
+  // receipt is input to this helper. Reject ambiguous duplicate payment IDs.
+  const productsByPayment = new Map<string, Set<string>>();
+  for (const order of orders) {
+    const products = productsByPayment.get(order.pi_payment_id) ?? new Set<string>();
+    products.add(order.product_id);
+    productsByPayment.set(order.pi_payment_id, products);
+  }
+  return [...new Set(orders.filter(order => {
     const offer = offersById.get(order.product_id);
     return offer && order.user === uid && order.paid === true && !order.cancelled &&
       order.payment_network === "Pi Network" && !order.owner_testnet_catalog &&
       order.payment_amount_pi === offer.pricePi &&
+      (order.quantity === undefined || order.quantity === 1) &&
+      productsByPayment.get(order.pi_payment_id)?.size === 1 &&
       typeof order.pi_payment_id === "string" && /^[a-z0-9_-]{1,100}$/i.test(order.pi_payment_id) &&
       typeof order.txid === "string" && /^[a-f0-9]{64}$/i.test(order.txid) &&
       order.completed_at instanceof Date && Number.isFinite(order.completed_at.getTime());
-  }).map(order => order.product_id);
+  }).map(order => order.product_id))];
 }
 
 export function shipNftStatus(card: typeof shipNftCatalog[number], save: MainnetSave | undefined, confirmedUpgrades: readonly string[]) {
@@ -71,7 +82,9 @@ export function shipNftStatus(card: typeof shipNftCatalog[number], save: Mainnet
   if (card.stage === 1) {
     // A non-imported save only gains hulls through server-side Shard purchases.
     // In imported saves, use the explicit receipt so a browser import alone cannot grant a card.
-    return card.shipId === "grey-scout" || save?.legacyImported === false || save?.standardShipAcquisitions?.[card.shipId]
+    const proof = save?.standardShipAcquisitions?.[card.shipId];
+    const recordedAcquisition = typeof proof === "string" && Number.isFinite(Date.parse(proof));
+    return card.shipId === "grey-scout" || save?.legacyImported === false || recordedAcquisition
       ? "eligible" : "needs-hull-proof";
   }
   const stage = ownedShipStage(card.sprite, confirmedUpgrades);

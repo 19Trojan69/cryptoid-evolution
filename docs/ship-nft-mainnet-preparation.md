@@ -33,12 +33,19 @@ owner authorization. Testnet requests cannot change the Mainnet release.
 Updates compare the displayed revision with the stored revision, so an older
 screen cannot overwrite a newer change.
 
-The current readiness checks report real Mainnet checkout and wallet acceptance,
-NFT issuance and immutable NFT metadata as unfinished. The release control
-therefore stays blocked. A stored release flag
-and browser-supplied readiness fields cannot enable purchases while these server
-checks remain incomplete. Future implementation must connect these checks to
-the actual issuer and the verified, permanently hosted metadata.
+As of 25 November 2026, readiness separately checks account storage, the Mainnet
+app/network and scoped server key, approved connected wallet evidence, an existing
+completed checkout and required Pi approval evidence. The existing payment is
+read from Pi with the scoped key and compared against the saved receipt, product,
+quantity, amount, user, network, destination and transaction. No new payment is
+created. The exact reviewed-evidence contract is in
+[mainnet-evidence-contract.md](mainnet-evidence-contract.md).
+
+NFT issuance and final public metadata remain unestablished. The release control
+therefore stays blocked. A stored release flag and browser-supplied readiness
+fields cannot enable purchases while these server checks remain incomplete. The
+original joint release policy remains: readiness of ordinary Pi payments alone
+does not release offers with an included NFT or bypass NFT prerequisites.
 
 New Mainnet payment approvals consult this release state. Previously approved,
 verified Mainnet transactions can still be completed and recovered while the
@@ -62,8 +69,39 @@ The draft is explicitly unpublished: `publishable` is false, each `metadataUri`
 is null and every metadata `image` is null. Owner-only Testnet artwork paths are
 labelled preview references, never public NFT image addresses. The status lists
 missing hosted addresses, descriptions and 98 premium designs currently represented
-by silhouettes. The 390 paid boss and Retro editions still need purchase linkage;
-this count does not prescribe a separate checkout product for every edition.
+by silhouettes. All 430 paid designs now have stable product mappings: 40 retain
+the existing ship offer IDs, and 390 boss/Retro editions use preparation IDs.
+Those 390 IDs are marked `productState: prepared`, are not inserted into the live
+checkout catalog, and still need an operational acquisition/delivery flow. The
+Admin pending-checkout count uses prepared products, not missing mappings.
+
+The offline versioned publication-candidate validator requires matching card IDs,
+catalog hash, exact image and metadata SHA-256 hashes, complete matching metadata
+and an operator-allowed HTTPS origin. Validation creates no final publication:
+public reachability and a supported authorized issuance path are still unverified,
+so even a valid candidate remains `publishable: false`. It cannot turn an owner-only
+preview address into a final NFT image URI. See
+[pi-next-readiness-20261125.md](pi-next-readiness-20261125.md) for the official-source
+research and exact external prerequisites.
+
+The candidate's own image hash is not proof that it contains the approved
+original artwork. The validator additionally requires a separate trusted
+`ApprovedNftOriginalArtwork` record, bound to the card ID, catalog hash, original
+artwork revision and image SHA-256, with `kind: original`. A future authorized
+server pipeline must obtain that record from its reviewed original-art manifest,
+not from the candidate, browser fields or a preview-image digest. The candidate's
+`artworkRevision` must match the trusted revision. Missing approval, a different
+card/revision or replacement bytes with their own self-consistent hashes are
+rejected. This change creates no real original-art approvals or digest records;
+the test records use artificial bytes only. Hosting, issuance and release remain
+independent unresolved prerequisites even after a candidate passes these checks.
+
+Preview responses explicitly identify `state: preview` and
+`blockchainOwnershipVerified: false`. A verified acquisition-evidence helper checks
+server-side eligibility; it does not claim blockchain ownership. No live supply
+reservation, issuance queue or transaction is created. Parallel issue attempts
+remain blocked until the supported issuer, durable supply accounting and chain
+reconciliation have been implemented and reviewed.
 
 Both summary and JSON download require the existing fresh verified-owner check
 and Mainnet context. Preparing or downloading them creates no ownership records,

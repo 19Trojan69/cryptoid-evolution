@@ -59,7 +59,7 @@ export async function inspectPiIntegration(req: Request) {
       return { status: age <= 120 ? "ok" : "warning", detail: `Letzter gemeldeter Block vor ${age} Sekunden. Das bestätigt die Erreichbarkeit, nicht die NFT-Freigabe.` };
     }),
     integrationCheck("piPayments", "Pi-Zahlungsdienst", async () => {
-      if (!process.env.PI_API_KEY?.trim()) return { status: "error", detail: "Mainnet-Zahlungszugang nicht eingerichtet." };
+      if (!process.env.PI_MAINNET_API_KEY?.trim()) return { status: "unknown", detail: "Mainnet-Zahlungszugang nicht bestätigt." };
       const orders = req.app.locals.orderCollection;
       const order = orders && await orders.findOne({ payment_network: "Pi Network", paid: true, txid: { $type: "string" } }, {
         sort: { completed_at: -1 }, projection: { pi_payment_id: 1, txid: 1 },
@@ -75,7 +75,7 @@ export async function inspectPiIntegration(req: Request) {
         : { status: "warning", detail: "Der vorhandene Mainnet-Beleg konnte nicht vollständig mit Pi abgeglichen werden." };
     }),
   ]);
-  const readiness = inspectMainnetReadiness(req);
+  const readiness = await inspectMainnetReadiness(req);
   let release: Awaited<ReturnType<typeof readMainnetRelease>> | null = null;
   try { release = await readMainnetRelease(req, readiness); } catch { /* Unavailable remains unknown. */ }
   return {

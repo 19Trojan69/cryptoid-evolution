@@ -9,7 +9,6 @@ import WolfLogo from "./WolfLogo";
 interface HeaderProps {
   onSignIn: () => void;
   onSignOut: () => void;
-  onSendTestNotification: () => void;
   canAdmin?: boolean;
   adminMode?: boolean;
   onToggleAdmin?: () => void;
@@ -22,7 +21,7 @@ interface HeaderProps {
   onOpenProfile?: () => void;
 }
 
-const Header = ({ user, serviceRank, onSignIn, onSignOut, onSendTestNotification, canAdmin, adminMode, onToggleAdmin, isLoading, authPending, onOpenQuickAccess, quickAccessOpen, onOpenProfile }: HeaderProps) => {
+const Header = ({ user, serviceRank, onSignIn, onSignOut, canAdmin, adminMode, onToggleAdmin, isLoading, authPending, onOpenQuickAccess, quickAccessOpen, onOpenProfile }: HeaderProps) => {
   const { t } = useLocale();
   return (
     <header className={`site-header${onOpenQuickAccess ? " header-with-quick-access" : ""}`}>
@@ -47,9 +46,6 @@ const Header = ({ user, serviceRank, onSignIn, onSignOut, onSendTestNotification
             {canAdmin && <Link className="header-action" to="/admin">{t("Admin center")}</Link>}
             {canAdmin && adminMode && <button className="header-action" type="button" onClick={onToggleAdmin} disabled={isLoading}>{t("End test mode")}</button>}
             <button className="header-action" type="button" onClick={onSignOut} disabled={isLoading}>{t('Sign out')}</button>
-            {user.roles.includes("core_team") && (
-              <button className="header-action" onClick={onSendTestNotification}>{t('Notify')}</button>
-            )}
           </>
         ) : authPending || isLoading ? (
           <div className="header-auth-status" role="status">

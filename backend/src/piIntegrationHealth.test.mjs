@@ -52,7 +52,12 @@ test("live status uses reads only and never turns an available blockchain into N
     assert.equal(report.nfts.purchasable, false);
     assert.equal(report.nfts.reservationMode, false);
     assert.equal(report.nfts.ownerReleased, false);
-    assert.equal(calls.length, 3);
+    assert.deepEqual(calls.filter(call => typeof call === "object"), [
+      { ping: 1, maxTimeMS: 3000 }, { ping: 1, maxTimeMS: 3000 },
+    ], "integration observation and release readiness both probe storage read-only");
+    assert.deepEqual(calls.filter(call => typeof call === "string").sort(), [
+      "/v2/me", "https://api.mainnet.minepi.com/ledgers?order=desc&limit=1",
+    ]);
     assert.doesNotMatch(JSON.stringify(report), /private-server-key|private-pi-token/);
   } finally {
     axios.get = previousGet; clients.default.get = previousApiGet;

@@ -63,7 +63,7 @@ export default function mountBossNftPreview(router: Router) {
         { $sort: { _id: 1 } },
         { $project: { _id: 0, id: "$_id", count: 1 } },
       ]).toArray() : undefined;
-      const response = { owner: user.uid, total: Object.keys(wins).length, pageSize, ...(interestSummary && { interestSummary }) };
+      const response = { state: "preview", blockchainOwnershipVerified: false, owner: user.uid, total: Object.keys(wins).length, pageSize, ...(interestSummary && { interestSummary }) };
       if (!bossIds.length) return res.json({ ...response, cards: [] });
 
       const artIds = bossIds.map(id => `${BOSS_NFT_PREVIEW_ART_REVISION}:${edition}:${id}`);

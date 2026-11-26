@@ -3,6 +3,8 @@ import { getBaseURL } from "./axiosClient";
 type BrowserKind = "pi" | "external" | "unknown";
 let started = false;
 // Only fixed categories leave the device. No IDs, cookies, login data or URLs.
+// One visit per document (a reload counts again); activity contributions are
+// estimates. Neither unique players, sessions nor return visits can be derived.
 async function browserKind(): Promise<BrowserKind> {
   if (/pibrowser|pi-browser/i.test(navigator.userAgent)) return "pi";
   for (let attempt = 0; attempt < 8; attempt++) {
@@ -32,7 +34,11 @@ export async function startAggregateUsage() {
   const eligible = () => !document.hidden && !/^\/(admin|privacy|terms)(\/|$)/.test(location.pathname);
   const count = () => { if (!counted && eligible()) { counted = true; send({ kind: "visit" }); } };
   const activity = () => {
-    interacted = performance.now();
+    const now = performance.now();
+    // Input after an idle cutoff starts a new measured interval. Replacing the
+    // cutoff alone would retroactively count idle seconds before this input.
+    if (now - interacted > 60_000) last = now;
+    interacted = now;
     if (previousPath !== location.pathname) { previousPath = location.pathname; last = interacted; }
     count();
   };

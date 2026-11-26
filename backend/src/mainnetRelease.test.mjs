@@ -148,3 +148,89 @@ test("invalid changes and corrupt stored state fail closed", async () => {
   assert.equal((await corrupt.call()).code, 503);
   assert.equal(await release.mainnetPurchasesReleased(corrupt.req), false);
 });
+
+test("an explicit hold persists before a failed readiness inspection and is acknowledged", async () => {
+  const inspectedReleaseStates = [];
+  const h = harness({ _id: "mainnet-release:v1", released: true, revision: 3 }, async () => {
+    inspectedReleaseStates.push(h.state().released);
+    throw new Error("simulated private readiness failure");
+  });
+  const response = await h.call("POST", { action: "hold", revision: 3 });
+  assert.equal(response.code, 200);
+  assert.equal(h.state().released, false);
+  assert.equal(h.state().revision, 4);
+  assert.equal(h.state().updatedBy, "owner");
+  assert.deepEqual(inspectedReleaseStates, [false], "readiness cannot block the persisted hold");
+  assert.equal(response.body.enabled, false);
+  assert.equal(response.body.released, false);
+  assert.equal(response.body.ready, false);
+  assert.equal(response.body.revision, 4);
+  assert.deepEqual(response.body.checks, [{ id: "readinessInspection", ready: false, reason: "readiness_inspection_unavailable" }]);
+  assert.doesNotMatch(JSON.stringify(response.body), /private readiness failure/);
+});
+
+test("readiness failure cannot authorize a new release or bypass its revision", async () => {
+  const unavailable = async () => { throw new Error("simulated unavailable evidence"); };
+  const h = harness({ _id: "mainnet-release:v1", released: false, revision: 5 }, unavailable);
+  assert.equal((await h.call("POST", { action: "release", revision: 5 })).code, 503);
+  assert.equal(h.state().released, false);
+  assert.equal(h.writes.length, 0);
+  const status = await h.call();
+  assert.equal(status.code, 200);
+  assert.equal(status.body.released, false);
+  assert.equal(status.body.revision, 5);
+  assert.equal(status.body.enabled, false);
+  assert.equal(status.body.ready, false);
+
+  const stale = harness({ _id: "mainnet-release:v1", released: true, revision: 5 }, unavailable);
+  const response = await stale.call("POST", { action: "hold", revision: 4 });
+  assert.equal(response.code, 409);
+  assert.equal(response.body.error, "release_changed");
+  assert.equal(stale.state().released, true);
+  assert.equal(stale.state().revision, 5);
+  assert.equal(stale.writes.length, 0);
+});
+
+test("an already-held state remains idempotent during readiness failure", async () => {
+  const h = harness({ _id: "mainnet-release:v1", released: false, revision: 5 }, () => { throw new Error("unavailable"); });
+  const response = await h.call("POST", { action: "hold", revision: 5 });
+  assert.equal(response.code, 200);
+  assert.equal(response.body.released, false);
+  assert.equal(response.body.enabled, false);
+  assert.equal(response.body.ready, false);
+  assert.equal(response.body.revision, 5);
+  assert.equal(h.writes.length, 0);
+});
+
+test("readable release state and revision remain available to the owner during inspection failure", async () => {
+  const h = harness({ _id: "mainnet-release:v1", released: true, revision: 7 }, async () => {
+    throw new Error("simulated secret-bearing readiness error");
+  });
+  const response = await h.call();
+  assert.equal(response.code, 200);
+  assert.equal(response.body.released, true, "report the actual stored choice without calling it enabled");
+  assert.equal(response.body.revision, 7);
+  assert.equal(response.body.enabled, false);
+  assert.equal(response.body.ready, false);
+  assert.deepEqual(response.body.checks, [{ id: "readinessInspection", ready: false, reason: "readiness_inspection_unavailable" }]);
+  assert.equal(h.writes.length, 0);
+  assert.doesNotMatch(JSON.stringify(response.body), /secret-bearing readiness error/);
+});
+
+test("a hold is never acknowledged when release storage cannot be read or written", async () => {
+  const h = harness({ _id: "mainnet-release:v1", released: true, revision: 2 }, () => { throw new Error("unavailable"); });
+  delete h.req.app.locals.adminCollection;
+  assert.equal((await h.call("POST", { action: "hold", revision: 2 })).code, 503);
+  assert.equal(h.state().released, true);
+  assert.equal(h.writes.length, 0);
+
+  const failedWrite = harness({ _id: "mainnet-release:v1", released: true, revision: 2 }, () => { throw new Error("unavailable"); });
+  failedWrite.req.app.locals.adminCollection.updateOne = async () => { throw new Error("write unavailable"); };
+  assert.equal((await failedWrite.call("POST", { action: "hold", revision: 2 })).code, 503);
+  assert.equal(failedWrite.state().released, true);
+  assert.equal(failedWrite.writes.length, 0);
+
+  const corrupt = harness({ released: "yes", revision: 2 }, () => { throw new Error("unavailable"); });
+  assert.equal((await corrupt.call("POST", { action: "hold", revision: 2 })).code, 503);
+  assert.equal(corrupt.writes.length, 0);
+});

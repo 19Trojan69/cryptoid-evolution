@@ -1,21 +1,14 @@
 import { useCallback, useEffect, useState } from "react";
 import { axiosClient } from "../lib/axiosClient";
 import { adminText, useAdminLocale } from "../adminLocale";
+import { readinessLabel, readinessReason, type ReadinessCheck } from "./mainnetReadinessCopy";
 
 type ReleaseStatus = {
   enabled: boolean;
   released: boolean;
   revision: number;
   ready: boolean;
-  checks: { id: string; ready: boolean }[];
-};
-
-const checkLabels: Record<string, string> = {
-  database: "Datenbank und Kontospeicherung",
-  piPayments: "Mainnet-Zahlungszugang konfiguriert",
-  walletCheckout: "Mainnet-Kaufablauf und Ziel-Wallet geprüft",
-  nftIssuance: "NFT-Ausgabe mit bestätigter Blockchain-Transaktion",
-  nftMetadata: "Dauerhafte Metadaten-Adressen aller NFT-Editionen",
+  checks: ReadinessCheck[];
 };
 
 export default function AdminMainnetRelease() {
@@ -26,13 +19,15 @@ export default function AdminMainnetRelease() {
 
   const load = useCallback(async (signal?: AbortSignal) => {
     const { data } = await axiosClient.get<ReleaseStatus>("/admin/mainnet-release", { signal });
-    setStatus(data);
+    if (!signal?.aborted) setStatus(data);
     return data;
   }, []);
 
   useEffect(() => {
     const controller = new AbortController();
-    void load(controller.signal).catch(() => {
+    void Promise.resolve().then(() => {
+      if (!controller.signal.aborted) return load(controller.signal);
+    }).catch(() => {
       if (!controller.signal.aborted) setError(adminText("Der Freigabestatus konnte nicht geladen werden."));
     });
     return () => controller.abort();
@@ -60,8 +55,11 @@ export default function AdminMainnetRelease() {
       <p><strong>{adminText(status ? status.enabled ? "Vollbetrieb freigegeben" : "Vorbereitungsbetrieb" : "Status wird geprüft")}</strong></p>
       <p>{adminText("Bis zur Vollfreigabe bleiben Grundspiel und Shard-Käufe verfügbar. Neue Pi-Käufe und die Ausgabe von NFTs sind gesperrt.")}</p>
       <p>{adminText("Die Freigabe wird serverseitig geprüft. Der Button wird verfügbar, sobald alle Voraussetzungen erfüllt sind.")}</p>
+      <p>{adminText("Alle Voraussetzungen bleiben gemeinsam verpflichtend.")}</p>
       {status && <ul>{status.checks.map(check => (
-        <li key={check.id}>{adminText(checkLabels[check.id] ?? check.id)} · <strong>{adminText(check.ready ? "Bereit" : "Offen")}</strong></li>
+        <li key={check.id}>{adminText(readinessLabel(check.id))} · <strong>{adminText(check.ready ? "Bereit" : "Offen")}</strong>
+          <p>{adminText(readinessReason(check))}</p>
+        </li>
       ))}</ul>}
       {error && <p className="admin-error" role="alert">{adminText(error)}</p>}
       <div className="admin-actions">

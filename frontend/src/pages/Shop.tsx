@@ -38,7 +38,7 @@ import { saveGuestShipPurchase } from "./shipFleet";
 import TermsDialog from "../components/TermsDialog";
 import { shipNftMainnetVisible } from "./shipNftVisibility";
 import { hangarCatalog, purchasePrerequisite } from "../../../backend/src/hangarCatalog";
-import { isTestnetWeaponPurchaseEnabled, testPiPurchaseAllowed } from "../../../backend/src/paymentPolicy";
+import { piPurchaseAllowed } from "../../../backend/src/paymentPolicy";
 import { primeGameAudio } from "./gameAudio";
 import { EFFECTS_VOLUME_KEY, MUSIC_STORAGE_KEY, MUSIC_VOLUME_KEY, readEffectsVolume, readMusicVolume, resetAudioVolumeDefaults } from "./musicPreferences";
 import { handoffGameMusic, MusicPlayer } from "./musicPlayback";
@@ -63,6 +63,7 @@ type Offer = { id: string; kind: "weapon" | "power" | "armor" | "ship_upgrade"; 
 type Inventory = { testnetCatalogAccess?: boolean; weaponStock?: Record<string, number>; ownedWeapons: string[]; ownedArmor: string[]; ownedShipUpgrades?: string[]; consumables: { id: string; count: number }[]; equippedWeapon: string | null; selectedPower: string | null };
 type Leader = { avatar?: Avatar; rank: number; username: string; score: number; careerScore?: number; bestRun?: { score: number; level: number | null }; runLevel?: number | null; profileLevel?: number; serviceRank: { name: string; symbol: string } };
 type PersonalScores = { careerScore: number; bestRun: { score: number; level: number | null } };
+type CardRevealQueue = { owner: string; adminMode: boolean; cards: CardReward[] };
 
 const shopTabs = [
   ["hangar", "Hangar", "◇"],
@@ -99,7 +100,9 @@ const Shop = () => {
   const closeQuickMenu = useCallback(() => setQuickGroup(null), []);
   const [shopView, setShopView] = useState<"hangar" | "shop" | "weapons" | "powers" | "progress" | "rewards" | "leaders" | null>(() => location.state?.openShopView === "shop" ? "shop" : location.state?.openShopView === "hangar" ? "hangar" : null);
   const [termsOpen, setTermsOpen] = useState(false);
-  const [newCards,setNewCards]=useState<CardReward[]>([]);
+  const [newCardQueue, setNewCardQueue] = useState<CardRevealQueue | null>(null);
+  const newCards = newCardQueue?.owner === (user?.uid ?? 'guest') && newCardQueue.adminMode === adminMode
+    ? newCardQueue.cards : [];
   const [feedbackOpen,setFeedbackOpen]=useState(false);
   const [leaderRefresh,setLeaderRefresh]=useState(0);
   const [pilotOpen,setPilotOpen]=useState<string|null>(null);
@@ -254,13 +257,19 @@ const Shop = () => {
   const accountUid = user?.uid;
   const inventoryOwnerRef = useRef(accountUid);
   inventoryOwnerRef.current = accountUid;
+  const inventoryRequestVersion = useRef(0);
+  const inventoryContextRef = useRef({ owner: accountUid, adminMode, active: false });
+  const continueNewCard = () => {
+    if (inventoryOwnerRef.current !== accountUid || (user && inventoryContextRef.current.adminMode !== adminMode)) return;
+    setNewCardQueue(queue => queue && queue === newCardQueue ? { ...queue, cards: queue.cards.slice(1) } : queue);
+  };
   const firstNewCardKey = newCards[0]?.key;
   useEffect(() => {
-    if (!firstNewCardKey) return;
+    if (!firstNewCardKey || adminMode) return;
     const owner = accountUid ?? 'guest';
     rememberCard(owner, firstNewCardKey);
     void syncCardReveals(owner).catch(() => { /* Retried when this account is next loaded. */ });
-  }, [firstNewCardKey, accountUid]);
+  }, [firstNewCardKey, accountUid, adminMode]);
   useEffect(() => {
     setAccountBusy(false);
     if (!accountUid || adminMode) return;
@@ -285,7 +294,7 @@ const Shop = () => {
       mergeCardReveals(owner, save.cardReveals || []);
       const acquired = availableShipCards(playerSkins, save.fleet, save.usedShipSkins || [], inventory?.ownedShipUpgrades || [], ownerTestnet)
         .filter(card => card.ship && !fleetCount(account.fleet as ShipFleet, card.ship as typeof playerSkins[number]['id']));
-      if (acquired.length) setNewCards(unseenShipCards(acquired, mergeCardReveals(owner, [])));
+      if (acquired.length) setNewCardQueue({ owner, adminMode: false, cards: unseenShipCards(acquired, mergeCardReveals(owner, [])) });
     };
     try {
       const save = await mutateAccountInventory(account, command);
@@ -371,7 +380,7 @@ const Shop = () => {
     catch { setHangarMessage("Could not save loadout. Please retry."); return; }
     setFleet(purchase.fleet);
     if (shipCardAvailable(previewSkin.sprite, 1)) {
-      setNewCards(unseenShipCards([{key:`${previewSkin.id}-1`,ship:previewSkin.id,stage:1}],readCardReveals('guest')));
+      setNewCardQueue({ owner: 'guest', adminMode: false, cards: unseenShipCards([{key:`${previewSkin.id}-1`,ship:previewSkin.id,stage:1}],readCardReveals('guest')) });
     }
 
     setShards(purchase.balance);
@@ -412,22 +421,29 @@ const Shop = () => {
   }, [signIn]);
 
   const { orderProduct, isLoading, paymentDiagnostic, activeProductId, paymentStatus } = usePayments({
-    isAuthenticated,
+    isAuthenticated, accountId: user?.uid, network: shipSaveNetwork,
     onRequireAuth: requireAuth,
   });
   const refreshInventory = async () => {
+    const owner = user?.uid;
+    const context = inventoryContextRef.current;
+    if (!context.active || context.owner !== owner || context.adminMode !== adminMode) return;
+    const version = ++inventoryRequestVersion.current;
+    const current = () => context.active && inventoryContextRef.current === context
+      && inventoryOwnerRef.current === owner && inventoryRequestVersion.current === version;
     try {
       const { data } = await axiosClient.get<Inventory>("/hangar/inventory");
       if (!Array.isArray(data.ownedWeapons) || !Array.isArray(data.ownedArmor) || !Array.isArray(data.consumables)) throw new Error("Invalid inventory");
+      if (!current()) return;
 
       if(user&&!adminMode&&account&&inventory){
         const before=availableShipCards(playerSkins,account.fleet,account.usedShipSkins||[],inventory?.ownedShipUpgrades||[],ownerTestnet).map(c=>c.key);
         const acquired=availableShipCards(playerSkins,account.fleet,account.usedShipSkins||[],data.ownedShipUpgrades||[],ownerTestnet).filter(c=>!before.includes(c.key));
-        if(acquired.length)setNewCards(unseenShipCards(acquired,readCardReveals(user.uid)));
+        if(acquired.length)setNewCardQueue({ owner: user.uid, adminMode: false, cards: unseenShipCards(acquired,readCardReveals(user.uid)) });
       }
       setInventory(data);
     }
-    catch { setLoadoutMessage('Connect your Pi account to see your saved loadout.'); }
+    catch { if (current()) setLoadoutMessage('Connect your Pi account to see your saved loadout.'); }
   };
   useEffect(() => {
     const request = new AbortController();
@@ -444,44 +460,54 @@ const Shop = () => {
   useEffect(() => {
     if (!isAuthenticated) return;
     let active = true;
+    const owner = accountUid;
+    const contextRef = inventoryContextRef;
+    const context = { owner, adminMode, active: true };
+    contextRef.current = context;
+    const requestVersionRef = inventoryRequestVersion;
+    const version = ++requestVersionRef.current;
+    const current = () => active && context.active && contextRef.current === context
+      && inventoryOwnerRef.current === owner && requestVersionRef.current === version;
     axiosClient.get<Inventory>("/hangar/inventory").then(({ data }) => {
       if (!Array.isArray(data.ownedWeapons) || !Array.isArray(data.ownedArmor) || !Array.isArray(data.consumables)) throw new Error("Invalid inventory");
-      if (active) setInventory(data);
-    }).catch(() => { if (active) setLoadoutMessage('Connect your Pi account to see your saved loadout.'); });
-    return () => { active = false; };
-  }, [isAuthenticated, adminMode]);
+      if (current()) setInventory(data);
+    }).catch(() => { if (current()) setLoadoutMessage('Connect your Pi account to see your saved loadout.'); });
+    return () => { active = false; context.active = false; requestVersionRef.current++; };
+  }, [isAuthenticated, adminMode, accountUid]);
   const equip = async (weapon: string | null, power: string | null) => {
     if (!isAuthenticated) { requireAuth(); return; }
+    const owner = user?.uid;
+    const context = inventoryContextRef.current;
+    const current = () => context.active && inventoryContextRef.current === context && inventoryOwnerRef.current === owner;
+    if (!current() || context.adminMode !== adminMode) return;
     try {
       await axiosClient.post("/hangar/equip", { weapon, power });
+      if (!current()) return;
       await refreshInventory();
+      if (!current()) return;
       setLoadoutMessage('Loadout saved for the next mission.');
-    } catch { setLoadoutMessage('Could not save loadout. Please retry.'); }
+    } catch { if (current()) setLoadoutMessage('Could not save loadout. Please retry.'); }
   };
 
-  const buyTestPiOffer = (offer: { id: string; name?: string; pricePi: number }, batch?: { quantity: number; total: number }) => {
-    if (!ownerTestnet || !catalogReady || isLoading) return;
+  const buyPiOffer = (offer: { id: string; name?: string; kind: string; pricePi: number }, batch?: { quantity: number; total: number }) => {
+    if (adminMode || !catalogReady || isLoading || !piPurchaseAllowed(offer, shipSaveNetwork === "mainnet" ? "Pi Network" : "Pi Testnet", { ownerTestnet, mainnetReleased })) return;
+    if (!isAuthenticated) { requireAuth(); return; }
     const owner = user?.uid;
+    const context = inventoryContextRef.current;
+    const current = () => context.active && inventoryContextRef.current === context && inventoryOwnerRef.current === owner;
+    if (!current() || context.adminMode !== adminMode) return;
     const units = batch ? `${batch.quantity} × · ` : '';
-    void orderProduct(`Cryptoid ${offer.name || offer.id} · ${units}Test-Pi`, batch?.total ?? offer.pricePi, {
+    void orderProduct(`Cryptoid ${offer.name || offer.id} · ${units}${shipSaveNetwork === "testnet" ? "Test-Pi" : "Pi"}`, batch?.total ?? offer.pricePi, {
       productId: offer.id,
       ...(batch ? { quantity: batch.quantity, powerModel: 1 } : {}),
     }, async () => {
-      if (inventoryOwnerRef.current !== owner) return;
+      if (!current()) return;
       await refreshInventory();
+      if (!current()) return;
       setLoadoutMessage("purchase confirmed.");
     });
   };
 
-  const onSendTestNotification = () => {
-    const notification = {
-      title: "Test Notification",
-      body: "This is a test notification",
-      user_uid: user?.uid,
-      subroute: "/shop",
-    };
-    axiosClient.post("/notifications/send", { notifications: [notification] });
-  };
 
   useEffect(() => {
     if (!shopView || !quickTarget) return;
@@ -536,7 +562,7 @@ const Shop = () => {
   useModalNavigation(entryPanel ? null : modalLayer, () => {
     if (pilotOpen !== null) setPilotOpen(null);
     else if (collectionOpen) setCollectionOpen(false);
-    else if (newCards.length) setNewCards(cards => cards.slice(1));
+    else if (newCards.length) continueNewCard();
     else if (showSignIn) closeSignIn();
     else if (feedbackOpen) setFeedbackOpen(false);
     else if (termsOpen) setTermsOpen(false);
@@ -548,7 +574,7 @@ const Shop = () => {
   });
   return (
     <main data-shop-area={shopView ?? "home"} className="app-shell landing-shell cinematic-home" data-home-paused={homePaused} onPointerDownCapture={primeCardSound}>
-      {newCards[0] && <CardReveal key={user?.uid ?? "guest"} reward={newCards[0]} remaining={newCards.length} onContinue={()=>{setNewCards(cards=>cards.slice(1));}}/>}
+      {newCards[0] && <CardReveal key={user?.uid ?? "guest"} reward={newCards[0]} remaining={newCards.length} onContinue={continueNewCard}/>}
       {collectionOpen && <Collection key={user?.uid ?? "guest"} uid={user?.uid} onClose={() => setCollectionOpen(false)} nftPreviewPath={nftPreviewPath} />}
       <Header
         user={user}
@@ -559,7 +585,6 @@ const Shop = () => {
         onToggleAdmin={() => { void toggleAdmin(); }}
         onSignIn={signIn}
         onSignOut={() => { setInventory(null); void signOut(); }}
-        onSendTestNotification={onSendTestNotification}
         isLoading={isAuthLoading}
         authPending={!authReady}
         onOpenQuickAccess={() => setQuickGroup(current => current === null ? "mission" : null)}
@@ -708,6 +733,9 @@ const Shop = () => {
               requestedStage={shopTarget?.skin === skin.id ? shopTarget.stage : undefined}
               purchaseBusy={accountBusy || isLoading || Boolean(user && !account)}
               onBuy={() => purchaseStandard(skin)}
+              paymentNetwork={shipSaveNetwork}
+              upgradesPurchasable={!adminMode && catalogReady && (shipSaveNetwork === "mainnet" ? mainnetReleased : ownerTestnet)}
+              onBuyUpgrade={stage => { const offer = offers.find(item => item.kind === "ship_upgrade" && item.shipIndex === skin.sprite && item.stage === stage); if (offer) buyPiOffer(offer); }}
               onEquip={(stage, color) => equipShip(skin, stage, color)}
               onStage={stage => { if (adminMode) sessionStorage.setItem(ADMIN_SHIP_STAGE_KEY, String(stage)); }}
               onUpgrade={stage => { setShipQuery(""); setShipFilter("all"); setShopTarget({ skin: skin.id, stage }); setShopView("shop"); }} />
@@ -722,25 +750,26 @@ const Shop = () => {
         </div>}
         <div className="section-heading"><div><p className="eyebrow">{t('POWER LAB')}</p><h2 id="upgrade-heading">{t('Weapons and start power-ups')}</h2></div><span className="section-line" /></div>
         {shopView === "weapons" ? <>
-          <p className="testnet-shop-notice">{ownerTestnet ? t('Admin Testnet: earn Shards for all 20 ships. Paid items use Test-Pi only.') : shipSaveNetwork === "testnet" ? t("Testnet: Twin Laser and Rapid Twin can be bought with Test-Pi. Triple Laser and Plasma purchases are locked.") : t("Pi purchases are currently locked. Collect weapon upgrades in game.")}</p>
-          <p>{shipSaveNetwork === "testnet" ? t("45 seconds per charge") : t("The single laser is free. Collect other weapons as power-ups during the mission.")}</p>
+          <p className="testnet-shop-notice">{ownerTestnet ? t('Admin Testnet: earn Shards for all 20 ships. Paid items use Test-Pi only.') : shipSaveNetwork === "testnet" ? t("Testnet: Twin Laser and Rapid Twin can be bought with Test-Pi. Triple Laser and Plasma purchases are locked.") : mainnetReleased ? t("45 seconds per charge") : t("Pi purchases are currently locked. Collect weapon upgrades in game.")}</p>
+          <p>{(shipSaveNetwork === "testnet" || mainnetReleased) ? t("45 seconds per charge") : t("The single laser is free. Collect other weapons as power-ups during the mission.")}</p>
           <WeaponTutorial />
         </> : <p>{t("Fly through glowing drops to collect boosts that activate immediately.")}</p>}
         {([shopView === "weapons" ? "weapon" : "power"] as const).map(kind => <div key={kind} className="hangar-offers"><h3>{t(kind === "weapon" ? "Time-limited weapons" : "One-mission start bonuses")}</h3><div className="hangar-offer-grid">
           {offers.filter(offer => offer.kind === kind).map(offer => {
             const count = inventory?.consumables.find(item => item.id === offer.id)?.count ?? 0;
-            const testnetWeaponEnabled = kind !== "weapon" || shipSaveNetwork === "testnet" && isTestnetWeaponPurchaseEnabled(offer, ownerTestnet);
-            const owned = kind === "weapon" ? testnetWeaponEnabled && (inventory?.weaponStock?.[offer.id] || 0) > 0 : count > 0;
+            const testnetWeaponEnabled = kind !== "weapon" || piPurchaseAllowed(offer, shipSaveNetwork === "mainnet" ? "Pi Network" : "Pi Testnet", { ownerTestnet, mainnetReleased });
+            const owned = kind === "weapon" ? (inventory?.weaponStock?.[offer.id] || 0) > 0 : count > 0;
             const selected = kind === "weapon" ? false : inventory?.selectedPower === offer.id;
             const lockedWeapon = kind === "weapon" && !testnetWeaponEnabled;
-            const powerPurchasable = kind === "power" && ownerTestnet && testPiPurchaseAllowed(offer, "Pi Testnet", true);
-            return <article key={offer.id} className={`hangar-offer hangar-offer-${kind}${selected ? " hangar-offer-selected" : ""}`}>{kind === "weapon" ? <WeaponPreview offerId={offer.id} sprite={selectedShip().skin.sprite} color={selectedShip().color.id} /> : <PowerPreview offerId={offer.id} />}<h4>{t(offer.name)}</h4><p>{t(offer.description)}</p><span className="offer-purchase-price">{lockedWeapon || kind === "power" && !powerPurchasable ? <>{t("Planned price")}: {piPrice(offer.pricePi)}</> : piPrice(offer.pricePi, true)}</span><span className={lockedWeapon || kind === "power" && !powerPurchasable ? "mainnet-ready-badge" : undefined}>{lockedWeapon ? t("MAINNET READY") : kind === "weapon" ? t("45 seconds per charge") : powerPurchasable ? t("Buy with Test-Pi") : t("MAINNET READY")}</span><strong>{lockedWeapon ? t("Locked") : selected ? t("EQUIPPED") : owned ? kind === "power" ? `${count} ${t("AVAILABLE")}` : t("Owned — activate in game") : kind === "power" && !powerPurchasable ? t("Locked") : t("NOT OWNED")}</strong>{lockedWeapon && <p className="testnet-shop-notice">{shipSaveNetwork === "testnet" ? t("Available only as a weapon pickup on Testnet.") : t("Available only as a weapon pickup.")}</p>}<div>
-              {powerPurchasable && <WeaponPurchase id={offer.id} price={offer.pricePi} count={count} disabled={isLoading || !catalogReady}
+            const powerPurchasable = kind === "power" && piPurchaseAllowed(offer, shipSaveNetwork === "mainnet" ? "Pi Network" : "Pi Testnet", { ownerTestnet, mainnetReleased });
+            return <article key={offer.id} className={`hangar-offer hangar-offer-${kind}${selected ? " hangar-offer-selected" : ""}`}>{kind === "weapon" ? <WeaponPreview offerId={offer.id} sprite={selectedShip().skin.sprite} color={selectedShip().color.id} /> : <PowerPreview offerId={offer.id} />}<h4>{t(offer.name)}</h4><p>{t(offer.description)}</p><span className="offer-purchase-price">{lockedWeapon || kind === "power" && !powerPurchasable ? <>{t("Planned price")}: {piPrice(offer.pricePi)}</> : piPrice(offer.pricePi, shipSaveNetwork === "testnet")}</span><span className={lockedWeapon || kind === "power" && !powerPurchasable ? "mainnet-ready-badge" : undefined}>{lockedWeapon ? t("MAINNET READY") : kind === "weapon" ? t("45 seconds per charge") : powerPurchasable ? t(shipSaveNetwork === "testnet" ? "Buy with Test-Pi" : "Buy with Pi") : t("MAINNET READY")}</span><strong>{kind === "weapon" && owned ? t("Owned — activate in game") : lockedWeapon ? t("Locked") : selected ? t("EQUIPPED") : owned ? kind === "power" ? `${count} ${t("AVAILABLE")}` : t("Owned — activate in game") : kind === "power" && !powerPurchasable ? t("Locked") : t("NOT OWNED")}</strong>{lockedWeapon && !owned && <p className="testnet-shop-notice">{shipSaveNetwork === "testnet" ? t("Available only as a weapon pickup on Testnet.") : t("Available only as a weapon pickup.")}</p>}<div>
+              {kind === "weapon" && lockedWeapon && owned && <p className="weapon-stock-count">{t("Charges")}: <strong>{inventory?.weaponStock?.[offer.id]}</strong></p>}
+              {powerPurchasable && <WeaponPurchase network={shipSaveNetwork} id={offer.id} price={offer.pricePi} count={count} disabled={isLoading || !catalogReady || adminMode}
                 pending={isLoading && activeProductId === offer.id} status={activeProductId === offer.id ? paymentStatus : undefined}
                 diagnostic={activeProductId === offer.id ? paymentDiagnostic : undefined}
-                onBuy={(quantity, total) => buyTestPiOffer(offer, { quantity, total })} />}
+                onBuy={(quantity, total) => buyPiOffer(offer, { quantity, total })} />}
               {owned && kind === "power" ? <button className="button button-secondary" type="button" disabled={Boolean(selected)} onClick={() => equip(null, offer.id)}>{t(selected ? "Selected" : "Equip for next mission")}</button> : null}
-              {kind === "weapon" && !lockedWeapon && <WeaponPurchase id={offer.id} price={offer.pricePi} count={inventory?.weaponStock?.[offer.id] || 0} pending={isLoading && activeProductId === offer.id} status={activeProductId === offer.id ? paymentStatus : undefined} diagnostic={activeProductId === offer.id ? paymentDiagnostic : undefined} disabled={adminMode || isLoading || !catalogReady} onBuy={(quantity, total) => { void orderProduct(`Cryptoid ${offer.name} · ${quantity} × 45s · Test-Pi`, total, { productId: offer.id, quantity, weaponModel: 2 }, async () => { setLoadoutMessage("purchase confirmed."); await refreshInventory(); }); }} />}
+              {kind === "weapon" && !lockedWeapon && <WeaponPurchase network={shipSaveNetwork} id={offer.id} price={offer.pricePi} count={inventory?.weaponStock?.[offer.id] || 0} pending={isLoading && activeProductId === offer.id} status={activeProductId === offer.id ? paymentStatus : undefined} diagnostic={activeProductId === offer.id ? paymentDiagnostic : undefined} disabled={adminMode || isLoading || !catalogReady} onBuy={(quantity, total) => { const context = inventoryContextRef.current; if (!context.active || context.adminMode !== adminMode) return; void orderProduct(`Cryptoid ${offer.name} · ${quantity} × 45s · ${shipSaveNetwork === "testnet" ? "Test-Pi" : "Pi"}`, total, { productId: offer.id, quantity, weaponModel: 2 }, async () => { if (!context.active || inventoryContextRef.current !== context || inventoryOwnerRef.current !== user?.uid) return; setLoadoutMessage("purchase confirmed."); await refreshInventory(); }); }} />}
             </div></article>;
           })}
         </div></div>)}
@@ -748,15 +777,16 @@ const Shop = () => {
           {offers.filter(offer => offer.kind === "armor").map(offer => {
             const owned = inventory?.ownedArmor.includes(offer.id);
             const prerequisite = offers.find(item => item.id === purchasePrerequisite(offer));
+            const purchasable = piPurchaseAllowed(offer, shipSaveNetwork === "mainnet" ? "Pi Network" : "Pi Testnet", { ownerTestnet, mainnetReleased });
             return <article key={offer.id} className={`hangar-offer hangar-offer-armor${owned ? " hangar-offer-selected" : ""}`}>
               <div className="offer-preview power-preview power-preview-shield" aria-hidden="true"><span className="preview-grid" /><span className="power-preview-orbit"><i>♥</i></span><small>{t("Permanent hull")}</small></div>
               <h4>{t(offer.name)}</h4><p>{t(offer.description)}</p>
               {prerequisite && <p><strong>{t("Requires Reinforced Hull")}</strong></p>}
-              <span className="offer-purchase-price">{!ownerTestnet && `${t("Planned price")}: `}{piPrice(offer.pricePi, ownerTestnet)}</span>
+              <span className="offer-purchase-price">{!purchasable && `${t("Planned price")}: `}{piPrice(offer.pricePi, purchasable && shipSaveNetwork === "testnet")}</span>
               {prerequisite && <span className="offer-purchase-price">{t("Total with Reinforced Hull")}: {piPrice(Math.round((prerequisite.pricePi + offer.pricePi) * 100) / 100)}</span>}
-              <span className={!owned && !ownerTestnet ? "mainnet-ready-badge" : undefined}>{owned || ownerTestnet ? t("Permanent · every mission") : t("MAINNET READY")}</span>
-              <strong>{owned ? t("OWNED") : ownerTestnet ? t("NOT OWNED") : t("Locked")}</strong>
-              {ownerTestnet && !owned && <TestPiPurchase price={offer.pricePi} disabled={isLoading || !catalogReady || Boolean(prerequisite && !inventory?.ownedArmor.includes(prerequisite.id))} reason={prerequisite && !inventory?.ownedArmor.includes(prerequisite.id) ? "Requires Reinforced Hull" : undefined} pending={isLoading && activeProductId === offer.id} status={activeProductId === offer.id ? paymentStatus : undefined} diagnostic={activeProductId === offer.id ? paymentDiagnostic : undefined} onBuy={() => buyTestPiOffer(offer)} />}
+              <span className={!owned && !purchasable ? "mainnet-ready-badge" : undefined}>{owned || purchasable ? t("Permanent · every mission") : t("MAINNET READY")}</span>
+              <strong>{owned ? t("OWNED") : purchasable ? t("NOT OWNED") : t("Locked")}</strong>
+              {purchasable && !owned && <TestPiPurchase network={shipSaveNetwork} price={offer.pricePi} disabled={adminMode || isLoading || !catalogReady || Boolean(prerequisite && !inventory?.ownedArmor.includes(prerequisite.id))} reason={prerequisite && !inventory?.ownedArmor.includes(prerequisite.id) ? "Requires Reinforced Hull" : undefined} pending={isLoading && activeProductId === offer.id} status={activeProductId === offer.id ? paymentStatus : undefined} diagnostic={activeProductId === offer.id ? paymentDiagnostic : undefined} onBuy={() => buyPiOffer(offer)} />}
             </article>;
           })}
         </div></div>}
