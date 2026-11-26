@@ -189,7 +189,8 @@
       "codex/shard-economy-mainnet-20261119": false,
       "codex/shard-economy-testnet-20261119": false,
       "codex/security-readiness-mainnet-20261125": false,
-      "codex/security-readiness-testnet-20261125": false
+      "codex/security-readiness-testnet-20261125": false,
+      "codex/nft-issuance-bookkeeping-20261126": false
     }
   }
 }
