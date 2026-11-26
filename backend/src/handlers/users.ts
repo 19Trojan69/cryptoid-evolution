@@ -3,6 +3,7 @@ import { Router } from "express";
 import platformAPIClient from "../services/platformAPIClient";
 import { canAdmin, isAdminMode } from "../adminAccess";
 import { deletedAccessToken } from '../playerAdministration';
+import { notificationConsentContext, notificationContext, verifiedNotificationIdentity } from '../notificationSecurity';
 
 export default function mountUserEndpoints(router: Router) {
   const publicUser = (user: { uid: string; username: string; roles?: string[] }) => ({
@@ -26,6 +27,8 @@ export default function mountUserEndpoints(router: Router) {
     let verifiedUid: string;
     let verifiedUsername: string;
     let verifiedRoles: string[];
+    const notificationApp = notificationContext(req);
+    let notificationIdentity: ReturnType<typeof verifiedNotificationIdentity> = null;
     try {
       // Verify the user's access token with the /me endpoint:
       const me = await platformAPIClient.get(`/v2/me`, { headers: { Authorization: `Bearer ${auth.accessToken}` } });
@@ -34,9 +37,10 @@ export default function mountUserEndpoints(router: Router) {
       verifiedUsername = me.data.username;
       if (!verifiedUsername || typeof verifiedUsername !== "string") return res.status(401).json({ error: "invalid_token" });
       if (await deletedAccessToken(req.app.locals.adminCollection, verifiedUid, auth.accessToken)) return res.status(410).json({ error: 'account_deleted' });
-      verifiedRoles = Array.isArray(auth.user?.roles) ? auth.user.roles : Array.isArray(me.data.roles) ? me.data.roles : [];
-    } catch (err) {
-      console.error("Error verifying access token:", err);
+      verifiedRoles = Array.isArray(me.data.roles) ? me.data.roles : [];
+      notificationIdentity = verifiedNotificationIdentity(me.data, notificationConsentContext(req, notificationApp));
+    } catch {
+      console.error("Pi token verification failed");
       return res.status(401).json({ error: "invalid_token", message: "Invalid access token" });
     }
 
@@ -52,7 +56,8 @@ export default function mountUserEndpoints(router: Router) {
             $set: {
               accessToken: auth.accessToken,
               username: verifiedUsername,
-              ...(verifiedRoles.length ? { roles: verifiedRoles } : {}),
+              roles: verifiedRoles,
+              ...(notificationApp ? { [`notificationAuthByNetwork.${notificationApp.network}`]: notificationIdentity } : {}),
             },
           },
         );
@@ -63,6 +68,7 @@ export default function mountUserEndpoints(router: Router) {
           uid: verifiedUid,
           roles: verifiedRoles,
           accessToken: auth.accessToken,
+          ...(notificationApp ? { notificationAuthByNetwork: { [notificationApp.network]: notificationIdentity } } : {}),
         });
 
         currentUser = await userCollection.findOne({ _id: insertResult.insertedId });
@@ -76,8 +82,8 @@ export default function mountUserEndpoints(router: Router) {
       req.session.adminLoadout = null;
       req.session.scoreRun = null;
       return res.status(200).json({ message: "User signed in", user: publicUser(currentUser), canAdmin: await canAdmin(req), adminMode: false });
-    } catch (err) {
-      console.error("Error during signin:", err);
+    } catch {
+      console.error("Pi sign-in storage failed");
       return res.status(500).json({ error: "internal_error", message: "Failed to sign in" });
     }
   });

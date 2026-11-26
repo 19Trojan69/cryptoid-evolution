@@ -62,6 +62,7 @@ export default function mountShipNftPreview(router: Router, enabled = shipNftMai
       }, { projection: {
         user: 1, product_id: 1, paid: 1, cancelled: 1, payment_network: 1, owner_testnet_catalog: 1,
         payment_amount_pi: 1, pi_payment_id: 1, txid: 1, completed_at: 1,
+        quantity: 1,
       } }).toArray());
       const statuses = selected.map(card => shipNftStatus(card, account.playerByNetwork?.mainnet, confirmed));
       const artworkId = (id: string) => `${SHIP_NFT_ART_REVISION}:${id}`;
@@ -69,7 +70,7 @@ export default function mountShipNftPreview(router: Router, enabled = shipNftMai
       const artwork: Collection<Artwork> = req.app.locals.shipNftPreviewCollection;
       const artRows = eligibleArt.length ? await artwork.find({ _id: { $in: eligibleArt } }, { projection: { webp: 1 } }).toArray() : [];
       const artById = new Map(artRows.map(art => [art._id, art.webp]));
-      return res.json({ owner: user.uid, total, pageSize, cards: selected.map((card, index) => {
+      return res.json({ state: "preview", blockchainOwnershipVerified: false, owner: user.uid, total, pageSize, cards: selected.map((card, index) => {
         const summary = { id: card.id, name: card.name, maxSupply: card.maxSupply, status: statuses[index] };
         if (summary.status !== "eligible") return summary;
         const webp = artById.get(artworkId(card.id));
@@ -130,7 +131,7 @@ export function mountTestnetShipNftPreview(router: Router, readArtwork = package
         id: card.id, name: card.name, maxSupply: card.maxSupply, status: "eligible" as const,
         story: card.story, livery: card.livery, webp: await readArtwork(card),
       })));
-      return res.json({ owner: user.uid, total: selection.total, pageSize, cards });
+      return res.json({ state: "preview", blockchainOwnershipVerified: false, owner: user.uid, total: selection.total, pageSize, cards });
     } catch {
       return res.status(503).json({ error: "gallery_unavailable" });
     }

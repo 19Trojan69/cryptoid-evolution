@@ -99,6 +99,35 @@ test('seen cards persist as a union per player and network without changing inve
  for(const ids of [['bogus'],['boss-0'],['boss-51'],[null],Array(111).fill('boss-1')])assert.equal((await h.call('progress','/card-reveals',{ids})).code,400);
 });
 
+test('card presentation receipts reject stale or malformed owner/network context before touching storage', async () => {
+  for (const [context, expectedCode] of [
+    [{ expectedUid: 'pilot-a' }, 403], [{ expectedUid: null }, 400], [{ expectedUid: 7 }, 400],
+    [{ expectedUid: '' }, 400], [{ expectedNetwork: 'mainnet' }, 403], [{ expectedNetwork: 'other' }, 400],
+  ]) {
+    const h = harness(); let reads = 0, writes = 0;
+    h.locals.userCollection = { findOne: async () => { reads++; }, updateOne: async () => { writes++; } };
+    const result = await h.call('progress', '/card-reveals', { ids: ['grey-scout-1'], ...context },
+      { session: { currentUser: { uid: 'pilot-b' } } });
+    assert.equal(result.code, expectedCode, JSON.stringify(context));
+    assert.equal(reads, 0); assert.equal(writes, 0);
+    assert.equal(h.docs[0].playerByNetwork, undefined); assert.equal(h.docs[1].playerByNetwork, undefined);
+  }
+});
+
+test('verified card receipt context works for cookie sessions while preserving legacy callers and network separation', async () => {
+  const h = harness(); await init(h); const before = structuredClone(h.profile());
+  const body = { ids: ['grey-scout-1'], expectedUid: 'pilot-a', expectedNetwork: 'testnet' };
+  assert.equal((await h.call('progress', '/card-reveals', body)).code, 200);
+  assert.equal((await h.call('progress', '/card-reveals', body)).code, 200);
+  assert.deepEqual(h.profile().cardReveals, ['grey-scout-1']);
+  assert.equal(h.profile().version, before.version); assert.deepEqual(h.profile().fleet, before.fleet);
+  assert.equal((await h.call('progress', '/card-reveals', { ids: ['boss-1'] })).code, 200);
+  assert.equal((await h.call('progress', '/card-reveals', { ...body, expectedNetwork: 'mainnet' }, { network: 'mainnet' })).code, 200);
+  assert.deepEqual(h.docs[0].playerByNetwork.mainnet.cardReveals, ['grey-scout-1']);
+  assert.deepEqual(h.profile().cardReveals, ['grey-scout-1', 'boss-1']);
+  assert.equal(h.docs[1].playerByNetwork, undefined);
+});
+
 test('full-heart boss Shards credit once, survive resume, and never increase maximum lives', async () => {
   for (const [armorIds,maxHearts] of [[[],3],[['armor_hull_mk1'],4],[['armor_hull_mk1','armor_hull_mk2'],6]]) {
     const h = harness(); await init(h);

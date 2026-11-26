@@ -1,4 +1,5 @@
 import { restoreMainnetCombatChange } from './mainnetCombatReviewedChanges.mjs';
+import { restoreMainnetOwnedWeaponChanges } from './mainnetOwnedWeaponReviewedChanges.mjs';
 // Restore exact story changes before the historical gameplay fingerprints.
 const changes = [
   {
@@ -188,6 +189,7 @@ const changes = [
 ];
 
 export function restoreStoryBriefingChanges(source) {
+  source = restoreMainnetOwnedWeaponChanges(source);
   source = restoreMainnetCombatChange(source);
   if (!source.includes('import StoryBriefing from "./story/StoryBriefing";')) return source;
   for (const { before, after } of changes) {

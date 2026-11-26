@@ -23,6 +23,9 @@ type Props = {
   adminPreview?: boolean;
   ownerTestnet?: boolean;
   purchaseBusy?: boolean;
+  paymentNetwork?: "mainnet" | "testnet";
+  upgradesPurchasable?: boolean;
+  onBuyUpgrade?: (stage: 2 | 3) => void;
   message: string;
   selectedSkinId: string;
   selectedStage?: ShipStage;
@@ -39,14 +42,14 @@ const stageLabel = (stage: ShipStage) => shipNftEditions[stage - 1].toUpperCase(
 export default function ShipSelectionPanel({
   view, skin, focusStage, ownedStage, fleet, shards, locale, offers,
   adminPreview, ownerTestnet = false,
-  purchaseBusy, message, selectedSkinId, selectedStage = 1, selectionConfirmed = true, t, onStageChange,
+  purchaseBusy, paymentNetwork = "mainnet", upgradesPurchasable = false, onBuyUpgrade, message, selectedSkinId, selectedStage = 1, selectionConfirmed = true, t, onStageChange,
   onBuyStandard, onEquipPreview, onOpenShop,
 }: Props) {
   const hullCount = fleetCount(fleet, skin.id);
   const stage = focusStage;
   const price = standardShipPrice(skin);
   const shardPrice = price.toLocaleString(locale);
-  const piPrice = (amount: number) => <PiPrice amount={amount} locale={locale} />;
+  const piPrice = (amount: number) => <PiPrice amount={amount} locale={locale} testnet={paymentNetwork === "testnet"} />;
   const standardAvailable = standardHullAvailable(skin.id, shipNftMainnetVisible, ownerTestnet || adminPreview);
   const offerFor = (level: ShipStage) => offers.find(offer => offer.shipIndex === skin.sprite && offer.stage === level);
   const focusedOffer = offerFor(stage);
@@ -57,7 +60,8 @@ export default function ShipSelectionPanel({
   const metallic = factoryPaint.id === vanguardMetallic.id;
   const description = stage === 1 ? t("Single fire. No free enemy projectile hits. An active shield protects against shots and ship collisions.") : t(focusedOffer?.description ?? "");
   const stageOwned = hullCount > 0 && ownedStage >= stage;
-  const locked = stage === 1 ? !standardAvailable : !stageOwned;
+  const upgradeAvailable = Boolean(upgradesPurchasable && focusedOffer && onBuyUpgrade);
+  const locked = stage === 1 ? !standardAvailable : !stageOwned && !upgradeAvailable;
   const status = stageOwned ? t("Stage owned") : t("Stage not owned");
   const attributes = attributesForHull(skin.id);
   const firepower = shipBaseFirepower(skin.id, stage);
@@ -99,7 +103,7 @@ export default function ShipSelectionPanel({
           {locked && <p className="ship-lock-notice"><strong>{t("Purchases locked")}</strong> · <span className="mainnet-ready-badge">{t("MAINNET READY")}</span></p>}
           {(stage > 1 || !hullCount) && <span className="ship-purchase-price">{stage === 1
             ? `◆ ${shardPrice} ${t("Shards")}`
-            : focusedOffer ? <>{t("Planned price")} · {piPrice(focusedOffer.pricePi)}</> : t("Price unavailable")}</span>}
+            : focusedOffer ? <>{!upgradeAvailable && <>{t("Planned price")} · </>}{piPrice(focusedOffer.pricePi)}</> : t("Price unavailable")}</span>}
           {shipNftMainnetVisible && (stage === 1 || focusedOffer) && <small className="ship-nft-purchase-note">
             <strong>{`${skin.name} ${shipNftEditions[stage - 1]} NFT`}</strong> · {metallic ? factoryPaint.name : nftCopy.livery}. {nftPurchaseNote} {nftCopy.account}
           </small>}
@@ -109,7 +113,11 @@ export default function ShipSelectionPanel({
             </button>
             {standardAvailable && shards < price && <small className="ship-shortfall">◆ {(price - shards).toLocaleString(locale)} {t("more Shards needed")}</small>}
           </> : <>
-            {!stageOwned && <button className="button button-secondary" type="button" disabled>{t("Purchases locked")}</button>}
+            {!stageOwned && (upgradeAvailable ? <button className="button button-secondary" type="button"
+              disabled={purchaseBusy || hullCount === 0 || stage === 3 && ownedStage < 2}
+              onClick={() => { if (stage > 1 && hullCount > 0 && (stage === 2 || ownedStage >= 2)) onBuyUpgrade?.(stage); }}>
+              {t("Buy for")} {focusedOffer && piPrice(focusedOffer.pricePi)}
+            </button> : <button className="button button-secondary" type="button" disabled>{t("Purchases locked")}</button>)}
             {stage === 3 && advancedOffer && focusedOffer && <small>{t("Requires Stage 2")} · {t("Total with Advanced")}: {piPrice(advancedOffer.pricePi + focusedOffer.pricePi)}</small>}
           </>}
         </div>}

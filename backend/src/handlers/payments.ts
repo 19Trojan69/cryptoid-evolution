@@ -11,6 +11,13 @@ import { chargePayment } from "../chargePurchase";
 import { loadPlayerSave } from "./progress";
 import { shipForSprite } from "../playerSave";
 
+// A Pi-confirmed network must match the app inventory selected for this request.
+// A browser network hint is never proof of the network of a payment.
+const expectedNetwork = (req: any) => String(req.headers?.["x-cryptoid-app-network"] || "").toLowerCase() === "testnet" ? "Pi Testnet" : "Pi Network";
+const networkMatches = (req: any, payment: any, order?: any) => payment?.network === expectedNetwork(req) &&
+  (!order?.payment_network || order.payment_network === payment.network) &&
+  (!order?.to_address || order.to_address === payment.to_address);
+
 const identifier = (value: unknown) => typeof value === "string" && /^[a-zA-Z0-9_-]{1,100}$/.test(value) ? value : null;
 const fetchPayment = async (req: any, id: string) => (await platformAPIClientForRequest(req).get(`/v2/payments/${id}`)).data;
 const prerequisiteMessage = (prerequisite: string) => prerequisite === "armor_hull_mk1"
@@ -24,37 +31,17 @@ const ownsStandardHull = async (req: any, offer: ReturnType<typeof findOffer>) =
 };
 
 
-const safeDiagnosticText = (value: unknown) => {
-  if (typeof value !== "string") return undefined;
-  return value
-    .replace(/Key\s+[A-Za-z0-9._-]+/gi, "Key [redacted]")
-    .replace(/Bearer\s+[A-Za-z0-9._-]+/gi, "Bearer [redacted]")
-    .slice(0, 180);
-};
-
 const paymentFailureDiagnostic = (error: any) => {
   if (error instanceof Error && error.message === "PI_TESTNET_API_KEY is not configured") {
     return { code: "testnet_api_key_missing" };
   }
 
   const status = Number(error?.response?.status);
-  const data = error?.response?.data;
-  const piCode = safeDiagnosticText(
-    typeof data?.error === "string" ? data.error :
-    typeof data?.code === "string" ? data.code :
-    undefined
-  );
-  const piMessage = safeDiagnosticText(
-    typeof data?.message === "string" ? data.message :
-    typeof data === "string" ? data :
-    undefined
-  );
-
+  // Do not copy upstream response bodies or Axios request configuration into a
+  // public error or log: either may contain credentials or private data.
   return {
     code: status ? "pi_api_error" : "server_error",
-    ...(status ? { piStatus: status } : {}),
-    ...(piCode ? { piCode } : {}),
-    ...(piMessage ? { piMessage } : {}),
+    ...(Number.isInteger(status) && status >= 400 && status <= 599 ? { piStatus: status } : {}),
   };
 };
 
@@ -69,14 +56,14 @@ export default function mountPaymentsEndpoints(router: Router) {
       const payment = await fetchPayment(req, id);
       const offer = findOffer(payment.metadata?.productId);
       const purchase = offer && chargePayment(offer, payment.metadata);
-      if (!offer || !purchase || payment.identifier !== id || payment.user_uid !== uid || payment.direction !== "user_to_app" || payment.amount !== purchase.amount || payment.status?.cancelled || payment.status?.user_cancelled) {
+      if (!offer || !purchase || !networkMatches(req, payment) || payment.identifier !== id || payment.user_uid !== uid || payment.direction !== "user_to_app" || payment.amount !== purchase.amount || payment.status?.cancelled || payment.status?.user_cancelled) {
         return res.status(400).json({ error: "payment_catalog_mismatch", stage: "approval", message: "Payment data does not match the signed-in user or catalog" });
       }
       const ownerTestnet = await canUseOwnerTestnetCatalog(req);
       if (!testPiPurchaseAllowed(offer, payment.network, ownerTestnet)) return res.status(403).json({ error: "testnet_policy_rejected", stage: "approval", network: payment.network, message: "This Test-Pi purchase is not enabled for this account" });
       const orders = req.app.locals.orderCollection;
       const existing = await orders.findOne({ pi_payment_id: id });
-      if (existing && (existing.user !== uid || existing.product_id !== offer.id || existing.cancelled)) return res.status(409).json({ error: "payment_conflict", stage: "approval", message: "Payment is already assigned or cancelled" });
+      if (existing && (existing.user !== uid || existing.product_id !== offer.id || existing.cancelled || !networkMatches(req, payment, existing))) return res.status(409).json({ error: "payment_conflict", stage: "approval", message: "Payment is already assigned or cancelled" });
       const terms = {
         quantity: purchase.quantity,
         weapon_model: payment.metadata?.weaponModel === 2 ? 2 : 1,
@@ -110,6 +97,7 @@ export default function mountPaymentsEndpoints(router: Router) {
       const orders = req.app.locals.orderCollection;
       const order = await orders.findOne({ pi_payment_id: id, user: uid });
       if (!order || order.cancelled) return res.status(404).json({ error: "Approved order not found" });
+      if (order.payment_network && order.payment_network !== expectedNetwork(req)) return res.status(400).json({ error: "payment_network_mismatch" });
       if (order.paid) return res.json({ completed: true });
       const payment = await fetchPayment(req, id);
       const offer = findOffer(order.product_id);
@@ -117,19 +105,32 @@ export default function mountPaymentsEndpoints(router: Router) {
       const txid = payment.transaction?.txid;
       const ownerTestnet = await canUseOwnerTestnetCatalog(req);
       if (!testPiPurchaseAllowed(offer, payment.network, ownerTestnet)) return res.status(403).json({ error: "This Test-Pi purchase is not enabled for this account" });
-      if (!offer || !purchase || purchase.quantity !== (order.quantity ?? 1) || (payment.metadata?.weaponModel === 2 ? 2 : 1) !== (order.weapon_model ?? 1) || payment.metadata?.powerModel !== order.power_model || payment.identifier !== id || payment.user_uid !== uid || payment.metadata?.productId !== offer.id || payment.direction !== "user_to_app" || payment.amount !== purchase.amount || !payment.status?.developer_approved || payment.status?.cancelled || payment.status?.user_cancelled || !payment.status?.transaction_verified || !txid || (suppliedTxid && suppliedTxid !== txid)) {
+      if (!offer || !purchase || !networkMatches(req, payment, order) || purchase.quantity !== (order.quantity ?? 1) || (payment.metadata?.weaponModel === 2 ? 2 : 1) !== (order.weapon_model ?? 1) || payment.metadata?.powerModel !== order.power_model || payment.identifier !== id || payment.user_uid !== uid || payment.metadata?.productId !== offer.id || payment.direction !== "user_to_app" || payment.amount !== purchase.amount || !payment.status?.developer_approved || payment.status?.cancelled || payment.status?.user_cancelled || !payment.status?.transaction_verified || !txid || (suppliedTxid && suppliedTxid !== txid)) {
         return res.status(400).json({ error: "Payment not verified" });
       }
       const prerequisite = purchasePrerequisite(offer);
       if (prerequisite && !await orders.findOne({ user: uid, product_id: prerequisite, paid: true, cancelled: { $ne: true }, ...ownerTestnetOrderScope(req) })) return res.status(403).json({ error: prerequisiteMessage(prerequisite), prerequisite });
       if (ownerTestnet && !await ownsStandardHull(req, offer)) return res.status(403).json({ error: "standard_ship_required" });
-      if (!payment.status?.developer_completed) await platformAPIClientForRequest(req).post(`/v2/payments/${id}/complete`, { txid });
+      if (!payment.status?.developer_completed) {
+        await platformAPIClientForRequest(req).post(`/v2/payments/${id}/complete`, { txid });
+        const confirmed = await fetchPayment(req, id);
+        if (confirmed?.identifier !== id || confirmed.user_uid !== uid || !networkMatches(req, confirmed, order) ||
+            confirmed.metadata?.productId !== offer.id || confirmed.direction !== "user_to_app" ||
+            confirmed.amount !== purchase.amount || !confirmed.status?.developer_completed ||
+            !confirmed.status?.developer_approved || !confirmed.status?.transaction_verified ||
+            confirmed.status?.cancelled || confirmed.status?.user_cancelled || confirmed.transaction?.txid !== txid ||
+            confirmed.metadata?.quantity !== payment.metadata?.quantity ||
+            confirmed.metadata?.weaponModel !== payment.metadata?.weaponModel ||
+            confirmed.metadata?.powerModel !== payment.metadata?.powerModel) {
+          return res.status(409).json({ error: "payment_completion_not_confirmed" });
+        }
+      }
       // Credit only after Pi has confirmed /complete (or reported already completed).
       const receipt = await readPaymentReceipt(payment);
       await orders.updateOne({ pi_payment_id: id, user: uid, paid: false, cancelled: { $ne: true } }, { $set: { paid: true, txid, completed_at: new Date(), ...paymentSnapshot(payment, offer.name), ...receipt } });
       return res.json({ completed: true });
     } catch (error) {
-      console.error("Payment completion failed", error);
+      console.error("Payment completion failed", paymentFailureDiagnostic(error));
       return res.status(502).json({ error: "Payment could not be confirmed" });
     }
   };
@@ -151,7 +152,7 @@ export default function mountPaymentsEndpoints(router: Router) {
     if (!id) return res.status(400).json({ error: "Invalid payment" });
     try {
       const payment = await fetchPayment(req, id);
-      if (payment.user_uid !== uid || !payment.status?.user_cancelled && !payment.status?.cancelled) return res.status(400).json({ error: "Payment is not cancelled" });
+      if (!networkMatches(req, payment) || payment.identifier !== id || payment.user_uid !== uid || !payment.status?.user_cancelled && !payment.status?.cancelled) return res.status(400).json({ error: "Payment is not cancelled" });
       await req.app.locals.orderCollection.updateOne({ pi_payment_id: id, user: uid, paid: false }, { $set: { cancelled: true, cancelled_at: new Date() } });
       return res.json({ cancelled: true });
     } catch (error) { return res.status(502).json({ error: "Could not verify cancellation" }); }

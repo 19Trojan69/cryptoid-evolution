@@ -67,7 +67,7 @@ function pi(t, h) {
   h.locals.payment = null;
   t.mock.method(platform, 'platformAPIClientForRequest', () => ({
     get: async () => ({ data: structuredClone(h.locals.payment) }),
-    post: async url => { posts.push(url); },
+    post: async url => { posts.push(url); if (url.endsWith('/complete')) h.locals.payment.status.developer_completed = true; },
   }));
   t.mock.method(quotes, 'capturePurchaseQuote', async () => ({ availability: 'test_payment' }));
   t.mock.method(receipts, 'readPaymentReceipt', async () => ({}));

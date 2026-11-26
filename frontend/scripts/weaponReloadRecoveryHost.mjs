@@ -3,7 +3,7 @@ import { build, transformSync } from 'esbuild';
 import { execFileSync } from 'node:child_process';
 import { createRequire } from 'node:module';
 import { hangarCatalog } from '../../backend/src/hangarCatalog.ts';
-import { isTestnetWeaponPurchaseEnabled } from '../../backend/src/paymentPolicy.ts';
+import { isTestnetWeaponPurchaseEnabled, piPurchaseAllowed } from '../../backend/src/paymentPolicy.ts';
 import { weaponSymbols } from '../src/pages/weaponSymbols.ts';
 import { updateWeaponReloadNotice } from '../src/pages/weaponSpentNotice.ts';
 
@@ -77,7 +77,7 @@ export function weaponMenu(props, { ready = true, refreshing = false } = {}) {
   const env = {
     useState(initial) {
       const index = hook++;
-      const value = index === readyIndex ? ready : index === readyIndex + 2 ? refreshing : typeof initial === 'function' ? initial() : initial;
+      const value = index === readyIndex ? ready : index === readyIndex + (process.env.CRYPTOID_WEAPON_BEFORE === '1' ? 2 : 3) ? refreshing : typeof initial === 'function' ? initial() : initial;
       return [value, () => {}];
     },
     useRef: value => ({ current: value }), useCallback: fn => fn, useEffect() {},
@@ -86,7 +86,7 @@ export function weaponMenu(props, { ready = true, refreshing = false } = {}) {
     usePayments: () => ({ orderProduct() {}, isLoading: false }),
     element: (type, props, ...children) => ({ type, props: { ...props, children: children.flat(Infinity) } }),
     fragment: 'fragment',
-    hangarCatalog, isTestnetWeaponPurchaseEnabled, shipSaveNetwork: 'testnet',
+    hangarCatalog, isTestnetWeaponPurchaseEnabled, piPurchaseAllowed, shipSaveNetwork: 'testnet',
     ReloadConfirmation: 'ReloadConfirmation', weaponSymbols, WeaponPreview: 'WeaponPreview', WeaponPurchase: 'WeaponPurchase', WeaponTutorial: 'WeaponTutorial', PiPrice: 'PiPrice',
   };
   const component = new Function('env', 'with (env) {\n' + code + '\nreturn MissionWeaponShop; }')(env);
